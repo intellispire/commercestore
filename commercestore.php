@@ -5,10 +5,10 @@
  * Description: The easiest way to sell digital products with WordPress.
  * Author: CommerceStore
  * Author URI: https://commercestore.com
- * Version: 3.0-rc1
+ * Version: 4.0-a1
  * Text Domain: commercestore
  * Domain Path: languages
- * Requires PHP: 5.6
+ * Requires PHP: 7.0
  *
  * CommerceStore is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  * @package CS
  * @category Core
  * @author CommerceStore
- * @version 3.0-rc1
+ * @version 4.0-a1
  */
 
 // Exit if accessed directly.
@@ -66,7 +66,7 @@ final class CS_Requirements_Check {
 
 		// PHP
 		'php' => array(
-			'minimum' => '5.6',
+			'minimum' => '7.0',
 			'name'    => 'PHP',
 			'exists'  => true,
 			'current' => false,
@@ -76,7 +76,7 @@ final class CS_Requirements_Check {
 
 		// WordPress
 		'wp' => array(
-			'minimum' => '4.9.0',
+			'minimum' => '5.9.0',
 			'name'    => 'WordPress',
 			'exists'  => true,
 			'current' => false,

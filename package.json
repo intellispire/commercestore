@@ -1,7 +1,7 @@
 {
 	"name": "commercestore",
-	"version": "2.11.5",
-	"description": "The easiest way to sell digital products with WordPress.",
+	"version": "4.0.0-a1",
+	"description": "The easiest way to sell digital information with WordPress.",
 	"private": true,
 	"author": "CommerceStore",
 	"license": "GPL-2.0-or-later",
@@ -12,10 +12,10 @@
 	"homepage": "https://commercestore.com",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/commercestore/commercestore/"
+		"url": "https://github.com/intellispire/commercestore/"
 	},
 	"bugs": {
-		"url": "https://github.com/commercestore/commercestore/issues"
+		"url": "https://github.com/intellispire/commercestore/issues"
 	},
 	"engines": {
 		"node": ">=10.0.0",

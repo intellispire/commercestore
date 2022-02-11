@@ -1,12 +1,12 @@
 {
-    "name": "easydigitaldownloads/easy-digital-downloads",
+    "name": "intellispire/commercestore",
     "type": "wordpress-plugin",
-    "description": "The easiest way to sell digital products with WordPress.",
-    "keywords": ["edd", "eddwp", "easy digital downloads"],
-    "homepage": "https://easydigitaldownloads.com/",
+    "description": "The easiest way to sell digital information with WordPress.",
+    "keywords": ["cs", "cswp", "commercestore"],
+    "homepage": "https://commercestore.com/",
     "license": "GPL-2.0+",
     "support": {
-        "issues": "https://easydigitaldownloads.com/support"
+        "issues": "https://commercestore.com.com/support"
     },
     "config": {
         "disable-tls": true,
@@ -16,7 +16,7 @@
         }
     },
     "require": {
-        "php": ">=5.6",
+        "php": ">=7.0",
         "composer/installers": "~1.0"
     },
     "require-dev": {
