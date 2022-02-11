@@ -2,22 +2,22 @@
 /**
  * PayPal Tests
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Tests\Gateways;
+namespace CS\Tests\Gateways;
 
-use EDD\Gateways\PayPal\MerchantAccount;
-use EDD\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed;
-use EDD\Gateways\PayPal\Webhooks\Events\Payment_Capture_Denied;
-use EDD\Gateways\PayPal\Webhooks\Webhook_Handler;
-use EDD\Orders\Order;
-use EDD_UnitTestCase;
+use CS\Gateways\PayPal\MerchantAccount;
+use CS\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed;
+use CS\Gateways\PayPal\Webhooks\Events\Payment_Capture_Denied;
+use CS\Gateways\PayPal\Webhooks\Webhook_Handler;
+use CS\Orders\Order;
+use CS_UnitTestCase;
 
-class Tests_PayPal extends EDD_UnitTestCase {
+class Tests_PayPal extends CS_UnitTestCase {
 
 	const TRANSACTION_ID = '27M47624FP291604U';
 
@@ -29,12 +29,12 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$order_id = \EDD_Helper_Payment::create_simple_payment();
-		edd_set_payment_transaction_id( $order_id, self::TRANSACTION_ID );
+		$order_id = \CS_Helper_Payment::create_simple_payment();
+		cs_set_payment_transaction_id( $order_id, self::TRANSACTION_ID );
 
 		wp_cache_flush();
 
-		$this->order = edd_get_order( $order_id );
+		$this->order = cs_get_order( $order_id );
 	}
 
 	/**
@@ -233,7 +233,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::process_event
+	 * @covers \CS\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::process_event
 	 */
 	public function test_payment_capture_completed_marks_payment_complete() {
 		// Status should be pending at first.
@@ -246,13 +246,13 @@ class Tests_PayPal extends EDD_UnitTestCase {
 		$event->handle();
 
 		// Refresh order object.
-		$order = edd_get_order( $this->order->id );
+		$order = cs_get_order( $this->order->id );
 		$this->assertEquals( 'complete', $order->status );
 	}
 
 	/**
 	 * @expectedException \Exception
-	 * @covers \EDD\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::handle
+	 * @covers \CS\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::handle
 	 */
 	public function test_payment_capture_completed_with_mismatching_amount_throws_exception() {
 		$event = new Payment_Capture_Completed( $this->build_rest_request( $this->get_payment_capture_completed_payload( array(
@@ -271,7 +271,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 
 	/**
 	 * @expectedException \Exception
-	 * @covers \EDD\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::handle
+	 * @covers \CS\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::handle
 	 */
 	public function test_payment_capture_completed_with_mismatching_currency_throws_exception() {
 		$event = new Payment_Capture_Completed( $this->build_rest_request( $this->get_payment_capture_completed_payload( array(
@@ -290,7 +290,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 
 	/**
 	 * @expectedException \Exception
-	 * @covers \EDD\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::get_payment_from_capture
+	 * @covers \CS\Gateways\PayPal\Webhooks\Events\Payment_Capture_Completed::get_payment_from_capture
 	 * @throws \Exception
 	 */
 	public function test_payment_capture_completed_with_correct_custom_id_but_wrong_transaction_id_throws_exception() {
@@ -309,7 +309,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Gateways\PayPal\Webhooks\Events\Payment_Capture_Denied::handle
+	 * @covers \CS\Gateways\PayPal\Webhooks\Events\Payment_Capture_Denied::handle
 	 * @throws \Exception
 	 */
 	public function test_payment_capture_denied_marks_payment_failed() {
@@ -321,13 +321,13 @@ class Tests_PayPal extends EDD_UnitTestCase {
 		$event->handle();
 
 		// Refresh order object.
-		$order = edd_get_order( $this->order->id );
+		$order = cs_get_order( $this->order->id );
 		$this->assertEquals( 'failed', $order->status );
 	}
 
 	/**
-	 * @covers \EDD\Gateways\PayPal\MerchantAccount::__construct()
-	 * @expectedException \EDD\Gateways\PayPal\Exceptions\MissingMerchantDetails
+	 * @covers \CS\Gateways\PayPal\MerchantAccount::__construct()
+	 * @expectedException \CS\Gateways\PayPal\Exceptions\MissingMerchantDetails
 	 */
 	public function test_merchant_account_missing_merchant_id_throws_exception() {
 		$merchant = new MerchantAccount( array(
@@ -335,15 +335,15 @@ class Tests_PayPal extends EDD_UnitTestCase {
 		) );
 
 		if ( method_exists( $this, 'expectException' ) ) {
-			$this->expectException( '\EDD\Gateways\PayPal\Exceptions\MissingMerchantDetails' );
+			$this->expectException( '\CS\Gateways\PayPal\Exceptions\MissingMerchantDetails' );
 		}
 
 		$merchant->validate();
 	}
 
 	/**
-	 * @covers \EDD\Gateways\PayPal\MerchantAccount::__construct()
-	 * @expectedException \EDD\Gateways\PayPal\Exceptions\InvalidMerchantDetails
+	 * @covers \CS\Gateways\PayPal\MerchantAccount::__construct()
+	 * @expectedException \CS\Gateways\PayPal\Exceptions\InvalidMerchantDetails
 	 */
 	public function test_merchant_account_missing_required_fields_throws_exception() {
 		$merchant = new MerchantAccount( array(
@@ -351,14 +351,14 @@ class Tests_PayPal extends EDD_UnitTestCase {
 		) );
 
 		if ( method_exists( $this, 'expectException' ) ) {
-			$this->expectException( '\EDD\Gateways\PayPal\Exceptions\InvalidMerchantDetails' );
+			$this->expectException( '\CS\Gateways\PayPal\Exceptions\InvalidMerchantDetails' );
 		}
 
 		$merchant->validate();
 	}
 
 	/**
-	 * @covers \EDD\Gateways\PayPal\MerchantAccount::is_account_ready
+	 * @covers \CS\Gateways\PayPal\MerchantAccount::is_account_ready
 	 */
 	public function test_merchant_account_not_ready_email_not_confirmed() {
 		$merchant = new MerchantAccount( array(
@@ -374,7 +374,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Gateways\PayPal\MerchantAccount::is_account_ready
+	 * @covers \CS\Gateways\PayPal\MerchantAccount::is_account_ready
 	 */
 	public function test_merchant_account_not_ready_payments_not_receivable() {
 		$merchant = new MerchantAccount( array(
@@ -390,7 +390,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Gateways\PayPal\MerchantAccount::is_account_ready
+	 * @covers \CS\Gateways\PayPal\MerchantAccount::is_account_ready
 	 */
 	public function test_merchant_account_is_ready() {
 		$merchant = new MerchantAccount( array(
@@ -404,21 +404,21 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::\EDD\Gateways\PayPal\_is_item_total_mismatch()
+	 * @covers ::\CS\Gateways\PayPal\_is_item_total_mismatch()
 	 */
 	public function test_item_total_mismatch_detected() {
 		$api_response = '{"name":"UNPROCESSABLE_ENTITY","details":[{"field":"\/purchase_units\/@reference_id==\'f4b51d81164ab4338fb9aa0911c94701\'\/amount\/breakdown\/item_total\/value","value":"0","issue":"ITEM_TOTAL_MISMATCH","description":"Should equal sum of (unit_amount * quantity) across all items for a given purchase_unit"}],"message":"The requested action could not be performed, semantically incorrect, or failed business validation.","debug_id":"123456789","links":[{"href":"https:\/\/developer.paypal.com\/docs\/api\/orders\/v2\/#error-ITEM_TOTAL_MISMATCH","rel":"information_link","method":"GET"}]}';
 
-		$this->assertTrue( \EDD\Gateways\PayPal\_is_item_total_mismatch( json_decode( $api_response ) ) );
+		$this->assertTrue( \CS\Gateways\PayPal\_is_item_total_mismatch( json_decode( $api_response ) ) );
 	}
 
 	/**
-	 * @covers ::\EDD\Gateways\PayPal\_is_item_total_mismatch()
+	 * @covers ::\CS\Gateways\PayPal\_is_item_total_mismatch()
 	 */
 	public function test_item_total_mismatch_not_detected_on_success() {
 		$api_response = '{"id":"5GY4996685035442T","status":"CREATED","links":[{"href":"https:\/\/api.sandbox.paypal.com\/v2\/checkout\/orders\/5GY4996685035442T","rel":"self","method":"GET"},{"href":"https:\/\/www.sandbox.paypal.com\/checkoutnow?token=5GY4996685035442T","rel":"approve","method":"GET"},{"href":"https:\/\/api.sandbox.paypal.com\/v2\/checkout\/orders\/5GY4996685035442T","rel":"update","method":"PATCH"},{"href":"https:\/\/api.sandbox.paypal.com\/v2\/checkout\/orders\/5GY4996685035442T\/capture","rel":"capture","method":"POST"}]}';
 
-		$this->assertFalse( \EDD\Gateways\PayPal\_is_item_total_mismatch( json_decode( $api_response ) ) );
+		$this->assertFalse( \CS\Gateways\PayPal\_is_item_total_mismatch( json_decode( $api_response ) ) );
 	}
 
 	/**
@@ -426,7 +426,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	 * Two added to cart (quantity: 2)
 	 * 50% discount applied.
 	 *
-	 * @covers ::\EDD\Gateways\PayPal\get_order_purchase_units()
+	 * @covers ::\CS\Gateways\PayPal\get_order_purchase_units()
 	 */
 	public function test_purchase_units_with_quantities_and_discount() {
 		$purchase_data = array(
@@ -476,7 +476,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 			)
 		);
 
-		$actual = \EDD\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
+		$actual = \CS\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
 
 		$this->assertEqualSetsWithIndex( $expected, $actual[0] );
 	}
@@ -485,7 +485,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	 * Product costs $10.
 	 * $5 "handling fee" applied to the product.
 	 *
-	 * @covers ::\EDD\Gateways\PayPal\get_order_purchase_units()
+	 * @covers ::\CS\Gateways\PayPal\get_order_purchase_units()
 	 */
 	public function test_purchase_units_with_positive_fee() {
 		$purchase_data = array(
@@ -544,7 +544,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 			),
 		);
 
-		$actual = \EDD\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
+		$actual = \CS\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
 
 		$this->assertEqualSetsWithIndex( $expected, $actual[0] );
 	}
@@ -553,7 +553,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	 * Product costs $10.
 	 * $5 negative "fee" applied to the order.
 	 *
-	 * @covers ::\EDD\Gateways\PayPal\get_order_purchase_units()
+	 * @covers ::\CS\Gateways\PayPal\get_order_purchase_units()
 	 */
 	public function test_purchase_units_with_negative_fee() {
 		$purchase_data = array(
@@ -615,7 +615,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 			),
 		);
 
-		$actual = \EDD\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
+		$actual = \CS\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
 
 		$this->assertEqualSetsWithIndex( $expected, $actual[0] );
 	}
@@ -624,7 +624,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 	 * Product costs $10.
 	 * 10% tax rate applied to the order.
 	 *
-	 * @covers ::\EDD\Gateways\PayPal\get_order_purchase_units()
+	 * @covers ::\CS\Gateways\PayPal\get_order_purchase_units()
 	 */
 	public function test_purchase_units_with_tax() {
 		$purchase_data = array(
@@ -679,7 +679,7 @@ class Tests_PayPal extends EDD_UnitTestCase {
 			),
 		);
 
-		$actual = \EDD\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
+		$actual = \CS\Gateways\PayPal\get_order_purchase_units( 1, $purchase_data, $payment_args );
 
 		$this->assertEqualSetsWithIndex( $expected, $actual[0] );
 	}

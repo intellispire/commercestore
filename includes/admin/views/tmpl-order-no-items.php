@@ -2,7 +2,7 @@
 /**
  * Order Overview: No Items
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -11,5 +11,5 @@
 ?>
 
 <td colspan="{{ data.config.colspan }}">
-	<?php esc_html_e( 'No order items', 'easy-digital-downloads' ); ?>
+	<?php esc_html_e( 'No order items', 'commercestore' ); ?>
 </td>

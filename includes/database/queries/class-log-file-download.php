@@ -2,25 +2,25 @@
 /**
  * File Download Log Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying items.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Log_File_Download::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Log_File_Download::__construct() for accepted arguments.
  */
 class Log_File_Download extends Query {
 
@@ -51,7 +51,7 @@ class Log_File_Download extends Query {
 	 * @access public
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Logs_File_Downloads';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Logs_File_Downloads';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Log_File_Download extends Query {
 	 * @access public
 	 * @var mixed
 	 */
-	protected $item_shape = 'EDD\\Logs\\File_Download_Log';
+	protected $item_shape = 'CS\\Logs\\File_Download_Log';
 
 	/** Cache *****************************************************************/
 

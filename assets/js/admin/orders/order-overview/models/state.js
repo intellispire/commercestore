@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import { Currency, NumberFormat } from '@easy-digital-downloads/currency';
+import { Currency, NumberFormat } from '@commercestore/currency';
 
 /**
  * State
@@ -192,8 +192,8 @@ export const State = Backbone.Model.extend(
 
 			if ( true === this.hasInclusiveTax() ) {
 				// Fees always have tax added exclusively.
-				// @link https://github.com/easydigitaldownloads/easy-digital-downloads/issues/2445#issuecomment-53215087
-				// @link https://github.com/easydigitaldownloads/easy-digital-downloads/blob/f97f4f6f5454921a2014dc1fa8f4caa5f550108c/includes/cart/class-edd-cart.php#L1306-L1311
+				// @link https://github.com/commercestore/commercestore/issues/2445#issuecomment-53215087
+				// @link https://github.com/commercestore/commercestore/blob/f97f4f6f5454921a2014dc1fa8f4caa5f550108c/includes/cart/class-cs-cart.php#L1306-L1311
 				return adjustedSubtotal + this.getFeesTax();
 			}
 

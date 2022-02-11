@@ -1,20 +1,20 @@
 <?php
 /**
- * EDD Utilities Bootstrap
+ * CommerceStore Utilities Bootstrap
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Utilities
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD;
+namespace CS;
 
-use EDD\Utils as Utils;
-use EDD\Reports as Reports;
+use CS\Utils as Utils;
+use CS\Reports as Reports;
 
 /**
- * Class that bootstraps various utilities leveraged in EDD core.
+ * Class that bootstraps various utilities leveraged in CommerceStore core.
  *
  * @since 3.0
  */
@@ -71,14 +71,14 @@ class Utilities {
 	 * @since 3.0
 	 */
 	private function includes() {
-		$utils_dir = EDD_PLUGIN_DIR . 'includes/utils/';
+		$utils_dir = CS_PLUGIN_DIR . 'includes/utils/';
 
 		// Interfaces.
 		require_once $utils_dir . 'interface-static-registry.php';
 		require_once $utils_dir . 'interface-error-logger.php';
 
 		// Exceptions.
-		require_once $utils_dir . 'class-edd-exception.php';
+		require_once $utils_dir . 'class-cs-exception.php';
 		require_once $utils_dir . 'exceptions/class-attribute-not-found.php';
 		require_once $utils_dir . 'exceptions/class-invalid-argument.php';
 		require_once $utils_dir . 'exceptions/class-invalid-parameter.php';
@@ -96,30 +96,30 @@ class Utilities {
 	 * @since 3.0
 	 *
 	 * @param string $name Registry name.
-	 * @return \EDD\Utils\Registry|\WP_Error The registry instance if it exists, otherwise a WP_Error..
+	 * @return \CS\Utils\Registry|\WP_Error The registry instance if it exists, otherwise a WP_Error..
 	 */
 	public function get_registry( $name ) {
 		switch ( $name ) {
 			case 'reports':
-				if ( ! did_action( 'edd_reports_init' ) ) {
-					_doing_it_wrong( __FUNCTION__, 'The Report registry cannot be retrieved prior to the edd_reports_init hook.', 'EDD 3.0' );
-				} elseif ( class_exists( '\EDD\Reports\Data\Report_Registry' ) ) {
+				if ( ! did_action( 'cs_reports_init' ) ) {
+					_doing_it_wrong( __FUNCTION__, 'The Report registry cannot be retrieved prior to the cs_reports_init hook.', 'CS 3.0' );
+				} elseif ( class_exists( '\CS\Reports\Data\Report_Registry' ) ) {
 					$registry = Reports\Data\Report_Registry::instance();
 				}
 				break;
 
 			case 'reports:endpoints':
-				if ( ! did_action( 'edd_reports_init' ) ) {
-					_doing_it_wrong( __FUNCTION__, 'The Endpoints registry cannot be retrieved prior to the edd_reports_init hook.', 'EDD 3.0' );
-				} elseif ( class_exists( '\EDD\Reports\Data\Endpoint_Registry' ) ) {
+				if ( ! did_action( 'cs_reports_init' ) ) {
+					_doing_it_wrong( __FUNCTION__, 'The Endpoints registry cannot be retrieved prior to the cs_reports_init hook.', 'CS 3.0' );
+				} elseif ( class_exists( '\CS\Reports\Data\Endpoint_Registry' ) ) {
 					$registry = Reports\Data\Endpoint_Registry::instance();
 				}
 				break;
 
 			case 'reports:endpoints:views':
-				if ( ! did_action( 'edd_reports_init' ) ) {
-					_doing_it_wrong( __FUNCTION__, 'The Endpoint Views registry cannot be retrieved prior to the edd_reports_init hook.', 'EDD 3.0' );
-				} elseif ( class_exists( '\EDD\Reports\Data\Endpoint_View_Registry' ) ) {
+				if ( ! did_action( 'cs_reports_init' ) ) {
+					_doing_it_wrong( __FUNCTION__, 'The Endpoint Views registry cannot be retrieved prior to the cs_reports_init hook.', 'CS 3.0' );
+				} elseif ( class_exists( '\CS\Reports\Data\Endpoint_View_Registry' ) ) {
 					$registry = Reports\Data\Endpoint_View_Registry::instance();
 				}
 				break;
@@ -135,8 +135,8 @@ class Utilities {
 	/**
 	 * Retrieves a date format string based on a given short-hand format.
 	 *
-	 * @see edd_get_date_format()
-	 * @see edd_get_date_picker_format()
+	 * @see cs_get_date_format()
+	 * @see cs_get_date_picker_format()
 	 *
 	 * @since 3.0
 	 *
@@ -217,7 +217,7 @@ class Utilities {
 	 * @param bool   $localize     Optional. Whether to apply the offset in seconds to the generated
 	 *                             date. Default false.
 	 *
-	 * @return \EDD\Utils\Date Date instance. Time is returned as UTC.
+	 * @return \CS\Utils\Date Date instance. Time is returned as UTC.
 	 * @throws \Exception
 	 */
 	public function date( $date_string = 'now', $timezone = null, $localize = false ) {

@@ -3,11 +3,11 @@
  * 3.0 Data Migration - Tax Rates.
  *
  * @subpackage  Admin/Upgrades/v3
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +27,7 @@ class Tax_Rates extends Base {
 	public function __construct( $step = 1 ) {
 		parent::__construct( $step );
 
-		$this->completed_message = __( 'Tax rates migration completed successfully.', 'easy-digital-downloads' );
+		$this->completed_message = __( 'Tax rates migration completed successfully.', 'commercestore' );
 		$this->upgrade           = 'migrate_tax_rates';
 	}
 
@@ -41,7 +41,7 @@ class Tax_Rates extends Base {
 	public function get_data() {
 		$offset = ( $this->step - 1 ) * $this->per_step;
 
-		$results = get_option( 'edd_tax_rates', array() );
+		$results = get_option( 'cs_tax_rates', array() );
 		$results = array_slice( $results, $offset, $this->per_step, true );
 
 		if ( ! empty( $results ) ) {
@@ -63,7 +63,7 @@ class Tax_Rates extends Base {
 	 * @return float Percentage.
 	 */
 	public function get_percentage_complete() {
-		$total = count( get_option( 'edd_tax_rates', array() ) );
+		$total = count( get_option( 'cs_tax_rates', array() ) );
 
 		if ( empty( $total ) ) {
 			$total = 0;

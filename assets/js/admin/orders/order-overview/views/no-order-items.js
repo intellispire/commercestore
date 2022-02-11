@@ -20,7 +20,7 @@ export const NoOrderItems = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-no-items' ),
+	template: wp.template( 'cs-admin-order-no-items' ),
 
 	/**
 	 * Prepares data to be used in `render` method.

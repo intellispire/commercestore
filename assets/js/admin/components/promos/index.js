@@ -4,7 +4,7 @@ jQuery( document ).ready( function( $ ) {
 	/**
 	 * Display notices
 	 */
-	const topOfPageNotice = $( '.edd-admin-notice-top-of-page' );
+	const topOfPageNotice = $( '.cs-admin-notice-top-of-page' );
 	if ( topOfPageNotice ) {
 		const topOfPageNoticeEl = topOfPageNotice.detach();
 
@@ -15,10 +15,10 @@ jQuery( document ).ready( function( $ ) {
 	/**
 	 * Dismiss notices
 	 */
-	$( '.edd-promo-notice' ).each( function() {
+	$( '.cs-promo-notice' ).each( function() {
 		const notice = $( this );
 
-		notice.on( 'click', '.edd-promo-notice-dismiss', function( e ) {
+		notice.on( 'click', '.cs-promo-notice-dismiss', function( e ) {
 			// Only prevent default behavior for buttons, not links.
 			if ( ! $( this ).attr( 'href' ) ) {
 				e.preventDefault();
@@ -27,7 +27,7 @@ jQuery( document ).ready( function( $ ) {
 			$.ajax( {
 				type: 'POST',
 				data: {
-					action: 'edd_dismiss_promo_notice',
+					action: 'cs_dismiss_promo_notice',
 					notice_id: notice.data( 'id' ),
 					nonce: notice.data( 'nonce' ),
 					lifespan: notice.data( 'lifespan' )

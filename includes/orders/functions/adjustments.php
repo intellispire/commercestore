@@ -2,9 +2,9 @@
 /**
  * Order Adjustment Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders\Adjustments
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
@@ -30,12 +30,12 @@ defined( 'ABSPATH' ) || exit;
  *                                 be an ID that corresponds to the object type
  *                                 specified. E.g. an object ID of 25 with object
  *                                 type of `order` refers to order 25 in the
- *                                 `edd_orders` table. Default empty.
+ *                                 `cs_orders` table. Default empty.
  *     @type string $object_type   Object type that the adjustment refers to.
  *                                 E.g. `order` or `order_item`. Default empty.
  *     @type int    $type_id       Object ID of the adjustment type. E.g. a type
  *                                 ID of 25 with type of `discount` refers to
- *                                 discount 25 in te `edd_discounts` table.
+ *                                 discount 25 in te `cs_discounts` table.
  *                                 Default empty.
  *     @type string $type          Object type of the adjustment type. E.g. `discount`.
  *                                 Default empty.
@@ -52,7 +52,7 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @return int|false ID of newly created order adjustment, false on error.
  */
-function edd_add_order_adjustment( $data ) {
+function cs_add_order_adjustment( $data ) {
 
 	// An object ID and object ID must be supplied for every order that is
 	// inserted into the database.
@@ -61,7 +61,7 @@ function edd_add_order_adjustment( $data ) {
 	}
 
 	// Instantiate a query object
-	$order_adjustments = new EDD\Database\Queries\Order_Adjustment();
+	$order_adjustments = new CS\Database\Queries\Order_Adjustment();
 
 	return $order_adjustments->add_item( $data );
 }
@@ -74,8 +74,8 @@ function edd_add_order_adjustment( $data ) {
  * @param int $order_adjustment_id Order adjustment ID.
  * @return int|false `1` if the adjustment was deleted successfully, false on error.
  */
-function edd_delete_order_adjustment( $order_adjustment_id = 0 ) {
-	$order_adjustments = new EDD\Database\Queries\Order_Adjustment();
+function cs_delete_order_adjustment( $order_adjustment_id = 0 ) {
+	$order_adjustments = new CS\Database\Queries\Order_Adjustment();
 
 	return $order_adjustments->delete_item( $order_adjustment_id );
 }
@@ -93,12 +93,12 @@ function edd_delete_order_adjustment( $order_adjustment_id = 0 ) {
  *                                 be an ID that corresponds to the object type
  *                                 specified. E.g. an object ID of 25 with object
  *                                 type of `order` refers to order 25 in the
- *                                 `edd_orders` table. Default empty.
+ *                                 `cs_orders` table. Default empty.
  *     @type string $object_type   Object type that the adjustment refers to.
  *                                 E.g. `order` or `order_item`. Default empty.
  *     @type int    $type_id       Object ID of the adjustment type. E.g. a type
  *                                 ID of 25 with type of `discount` refers to
- *                                 discount 25 in te `edd_discounts` table.
+ *                                 discount 25 in te `cs_discounts` table.
  *                                 Default empty.
  *     @type string $type          Object type of the adjustment type. E.g. `discount`.
  *                                 Default empty.
@@ -116,8 +116,8 @@ function edd_delete_order_adjustment( $order_adjustment_id = 0 ) {
  *
  * @return int|false Number of rows updated if successful, false otherwise.
  */
-function edd_update_order_adjustment( $order_adjustment_id = 0, $data = array() ) {
-	$order_adjustments = new EDD\Database\Queries\Order_Adjustment();
+function cs_update_order_adjustment( $order_adjustment_id = 0, $data = array() ) {
+	$order_adjustments = new CS\Database\Queries\Order_Adjustment();
 
 	return $order_adjustments->update_item( $order_adjustment_id, $data );
 }
@@ -128,11 +128,11 @@ function edd_update_order_adjustment( $order_adjustment_id = 0, $data = array() 
  * @since 3.0
  *
  * @param int $order_adjustment_id Order adjustment ID.
- * @return EDD\Orders\Order_Adjustment|false Order_Adjustment object if successful,
+ * @return CS\Orders\Order_Adjustment|false Order_Adjustment object if successful,
  *                                           false otherwise.
  */
-function edd_get_order_adjustment( $order_adjustment_id = 0 ) {
-	$order_adjustments = new EDD\Database\Queries\Order_Adjustment();
+function cs_get_order_adjustment( $order_adjustment_id = 0 ) {
+	$order_adjustments = new CS\Database\Queries\Order_Adjustment();
 
 	// Return order adjustment
 	return $order_adjustments->get_item( $order_adjustment_id );
@@ -146,11 +146,11 @@ function edd_get_order_adjustment( $order_adjustment_id = 0 ) {
  * @param string $field Database table field.
  * @param string $value Value of the row.
  *
- * @return EDD\Orders\Order_Adjustment|false Order_Adjustment object if successful,
+ * @return CS\Orders\Order_Adjustment|false Order_Adjustment object if successful,
  *                                           false otherwise.
  */
-function edd_get_order_adjustment_by( $field = '', $value = '' ) {
-	$order_adjustments = new EDD\Database\Queries\Order_Adjustment();
+function cs_get_order_adjustment_by( $field = '', $value = '' ) {
+	$order_adjustments = new CS\Database\Queries\Order_Adjustment();
 
 	// Return order adjustment
 	return $order_adjustments->get_item_by( $field, $value );
@@ -159,15 +159,15 @@ function edd_get_order_adjustment_by( $field = '', $value = '' ) {
 /**
  * Query for order adjustments.
  *
- * @see \EDD\Database\Queries\Order_Adjustment::__construct()
+ * @see \CS\Database\Queries\Order_Adjustment::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Adjustment` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Adjustment` for
  *                    accepted arguments.
- * @return \EDD\Orders\Order_Adjustment[] Array of `Order_Adjustment` objects.
+ * @return \CS\Orders\Order_Adjustment[] Array of `Order_Adjustment` objects.
  */
-function edd_get_order_adjustments( $args = array() ) {
+function cs_get_order_adjustments( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -175,7 +175,7 @@ function edd_get_order_adjustments( $args = array() ) {
 	) );
 
 	// Instantiate a query object
-	$order_adjustments = new EDD\Database\Queries\Order_Adjustment();
+	$order_adjustments = new CS\Database\Queries\Order_Adjustment();
 
 	// Return orders
 	return $order_adjustments->query( $r );
@@ -184,15 +184,15 @@ function edd_get_order_adjustments( $args = array() ) {
 /**
  * Count order adjustments.
  *
- * @see \EDD\Database\Queries\Order_Adjustment::__construct()
+ * @see \CS\Database\Queries\Order_Adjustment::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Adjustment` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Adjustment` for
  *                    accepted arguments.
  * @return int Number of order adjustments returned based on query arguments passed.
  */
-function edd_count_order_adjustments( $args = array() ) {
+function cs_count_order_adjustments( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -200,7 +200,7 @@ function edd_count_order_adjustments( $args = array() ) {
 	) );
 
 	// Query for count(s)
-	$order_adjustments = new EDD\Database\Queries\Order_Adjustment( $r );
+	$order_adjustments = new CS\Database\Queries\Order_Adjustment( $r );
 
 	// Return count(s)
 	return absint( $order_adjustments->found_items );
@@ -209,16 +209,16 @@ function edd_count_order_adjustments( $args = array() ) {
 /**
  * Query for and return array of order adjustment counts, keyed by status.
  *
- * @see \EDD\Database\Queries\Order_Adjustment::__construct()
+ * @see \CS\Database\Queries\Order_Adjustment::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Adjustment` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Adjustment` for
  *                    accepted arguments.
  *
  * @return array Order adjustment counts keyed by status.
  */
-function edd_get_order_adjustment_counts( $args = array() ) {
+function cs_get_order_adjustment_counts( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -229,8 +229,8 @@ function edd_get_order_adjustment_counts( $args = array() ) {
 	) );
 
 	// Query for count
-	$counts = new EDD\Database\Queries\Order_Adjustment( $r );
+	$counts = new CS\Database\Queries\Order_Adjustment( $r );
 
 	// Format & return
-	return edd_format_counts( $counts, $r['groupby'] );
+	return cs_format_counts( $counts, $r['groupby'] );
 }

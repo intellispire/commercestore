@@ -2,9 +2,9 @@
 /**
  * Base Log List Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.4.4
  * @since       3.0 Updated to use the custom tables.
@@ -13,14 +13,14 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Admin\List_Table;
+use CS\Admin\List_Table;
 
 /**
- * EDD_Base_Log_List_Table Class
+ * CS_Base_Log_List_Table Class
  *
  * @since 3.0
  */
-class EDD_Base_Log_List_Table extends List_Table {
+class CS_Base_Log_List_Table extends List_Table {
 
 	/**
 	 * Log type
@@ -75,8 +75,8 @@ class EDD_Base_Log_List_Table extends List_Table {
 	 * @since 3.0
 	 */
 	private function filter_bar_hooks() {
-		add_action( 'edd_admin_filter_bar_logs',       array( $this, 'filter_bar_items'     ) );
-		add_action( 'edd_after_admin_filter_bar_logs', array( $this, 'filter_bar_searchbox' ) );
+		add_action( 'cs_admin_filter_bar_logs',       array( $this, 'filter_bar_items'     ) );
+		add_action( 'cs_after_admin_filter_bar_logs', array( $this, 'filter_bar_searchbox' ) );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 	 * @return string
 	 */
 	public function get_filtered_view() {
-		return isset( $_GET['view'] ) && array_key_exists( $_GET['view'], edd_log_default_views() )
+		return isset( $_GET['view'] ) && array_key_exists( $_GET['view'], cs_log_default_views() )
 			? sanitize_text_field( $_GET['view'] )
 			: 'file_downloads';
 	}
@@ -123,7 +123,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 		$ret = false;
 
 		if ( isset( $_GET['customer'] ) ) {
-			$customer = new EDD_Customer( sanitize_text_field( $_GET['customer'] ) );
+			$customer = new CS_Customer( sanitize_text_field( $_GET['customer'] ) );
 			if ( ! empty( $customer->id ) ) {
 				$ret = $customer->id;
 			}
@@ -205,10 +205,10 @@ class EDD_Base_Log_List_Table extends List_Table {
 	 * @return void
 	 */
 	public function log_views() {
-		$views        = edd_log_default_views();
+		$views        = cs_log_default_views();
 		$current_view = $this->get_filtered_view(); ?>
 
-		<select id="edd-logs-view" name="view">
+		<select id="cs-logs-view" name="view">
 			<?php foreach ( $views as $view_id => $label ) : ?>
 				<option value="<?php echo esc_attr( $view_id ); ?>" <?php selected( $view_id, $current_view ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
@@ -220,12 +220,12 @@ class EDD_Base_Log_List_Table extends List_Table {
 		 *
 		 * @since 3.0
 		 */
-		do_action( 'edd_log_view_actions' );
+		do_action( 'cs_log_view_actions' );
 		?>
 
 		<input type="hidden" name="customer" value="<?php echo $this->get_filtered_customer(); ?>" />
 		<input type="hidden" name="post_type" value="download" />
-		<input type="hidden" name="page" value="edd-tools" />
+		<input type="hidden" name="page" value="cs-tools" />
 		<input type="hidden" name="tab" value="logs" />
 
 		<?php
@@ -249,8 +249,8 @@ class EDD_Base_Log_List_Table extends List_Table {
 		) );
 
 		if ( $downloads ) {
-			echo '<select name="download" id="edd-log-download-filter">';
-				echo '<option value="0">' . __( 'All Downloads', 'easy-digital-downloads' ) . '</option>';
+			echo '<select name="download" id="cs-log-download-filter">';
+				echo '<option value="0">' . __( 'All Downloads', 'commercestore' ) . '</option>';
 				foreach ( $downloads as $download ) {
 					echo '<option value="' . $download . '"' . selected( $download, $this->get_filtered_download() ) . '>' . esc_html( get_the_title( $download ) ) . '</option>';
 				}
@@ -364,7 +364,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 					}
 				} else {
 					// All other logs are linked to customers.
-					$customer = edd_get_customer_by( 'email', $search );
+					$customer = cs_get_customer_by( 'email', $search );
 					if ( ! empty( $customer->id ) ) {
 						$retval['customer_id'] = $customer->id;
 					} else {
@@ -389,7 +389,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 					}
 				} else {
 					// All other logs are linked to customers.
-					$customer = edd_get_customer( $search );
+					$customer = cs_get_customer( $search );
 					if ( ! empty( $customer->id ) ) {
 						$retval['customer_id'] = $customer->id;
 					} elseif ( 'file_downloads' === $this->log_type ) {
@@ -419,7 +419,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 			if ( ! empty( $start_date ) ) {
 				$retval['date_created_query'][] = array(
 					'column' => 'date_created',
-					'after'  => \Carbon\Carbon::parse( date( 'Y-m-d H:i:s', strtotime( "{$start_date} midnight" ) ), edd_get_timezone_id() )->setTimezone( 'UTC' )->toDateTimeString(),
+					'after'  => \Carbon\Carbon::parse( date( 'Y-m-d H:i:s', strtotime( "{$start_date} midnight" ) ), cs_get_timezone_id() )->setTimezone( 'UTC' )->toDateTimeString(),
 				);
 			}
 
@@ -427,7 +427,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 			if ( ! empty( $end_date ) ) {
 				$retval['date_created_query'][] = array(
 					'column' => 'date_created',
-					'before' => \Carbon\Carbon::parse( date( 'Y-m-d H:i:s', strtotime( "{$end_date} + 1 day" ) ), edd_get_timezone_id() )->setTimezone( 'UTC' )->toDateTimeString(),
+					'before' => \Carbon\Carbon::parse( date( 'Y-m-d H:i:s', strtotime( "{$end_date} + 1 day" ) ), cs_get_timezone_id() )->setTimezone( 'UTC' )->toDateTimeString(),
 				);
 			}
 		}
@@ -446,7 +446,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function advanced_filters() {
-		edd_admin_filter_bar( 'logs' );
+		cs_admin_filter_bar( 'logs' );
 	}
 
 	/**
@@ -462,52 +462,52 @@ class EDD_Base_Log_List_Table extends List_Table {
 		$download   = $this->get_filtered_download();
 		$customer   = $this->get_filtered_customer();
 		$view       = $this->get_filtered_view();
-		$clear_url  = edd_get_admin_url( array(
-			'page' => 'edd-tools',
+		$clear_url  = cs_get_admin_url( array(
+			'page' => 'cs-tools',
 			'tab'  => 'logs',
 			'view' => $view
 		) ); ?>
 
-		<span id="edd-type-filter">
+		<span id="cs-type-filter">
 			<?php $this->log_views(); ?>
 		</span>
 
-		<span id="edd-date-filters" class="edd-from-to-wrapper">
+		<span id="cs-date-filters" class="cs-from-to-wrapper">
 			<?php
 
-			echo EDD()->html->date_field( array(
+			echo CS()->html->date_field( array(
 				'id'          => 'start-date',
 				'name'        => 'start-date',
-				'placeholder' => _x( 'From', 'date filter', 'easy-digital-downloads' ),
+				'placeholder' => _x( 'From', 'date filter', 'commercestore' ),
 				'value'       => $start_date
 			) );
 
-			echo EDD()->html->date_field( array(
+			echo CS()->html->date_field( array(
 				'id'          => 'end-date',
 				'name'        => 'end-date',
-				'placeholder' => _x( 'To', 'date filter', 'easy-digital-downloads' ),
+				'placeholder' => _x( 'To', 'date filter', 'commercestore' ),
 				'value'       => $end_date
 			) );
 
 		?></span>
 
-		<span id="edd-download-filter">
+		<span id="cs-download-filter">
 			<?php $this->downloads_filter(); ?>
 		</span>
 
 		<?php if ( ! empty( $customer ) ) : ?>
 
-			<span id="edd-customer-filter">
-				<?php printf( esc_html__( 'Customer ID: %d', 'easy-digital-downloads' ), $customer ); ?>
+			<span id="cs-customer-filter">
+				<?php printf( esc_html__( 'Customer ID: %d', 'commercestore' ), $customer ); ?>
 			</span>
 
 		<?php endif; ?>
 
-		<input type="submit" class="button-secondary" value="<?php esc_attr_e( 'Filter', 'easy-digital-downloads' ); ?>"/>
+		<input type="submit" class="button-secondary" value="<?php esc_attr_e( 'Filter', 'commercestore' ); ?>"/>
 
 		<?php if ( ! empty( $start_date ) || ! empty( $end_date ) || ! empty( $download ) || ! empty( $customer ) ) : ?>
 			<a href="<?php echo esc_url( $clear_url ); ?>" class="button-secondary">
-				<?php esc_html_e( 'Clear', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'Clear', 'commercestore' ); ?>
 			</a>
 		<?php endif; ?>
 
@@ -520,9 +520,9 @@ class EDD_Base_Log_List_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function filter_bar_searchbox() {
-		do_action( 'edd_logs_advanced_filters_row' );
+		do_action( 'cs_logs_advanced_filters_row' );
 
-		$this->search_box( __( 'Search', 'easy-digital-downloads' ), 'edd-logs' );
+		$this->search_box( __( 'Search', 'commercestore' ), 'cs-logs' );
 	}
 
 	/**
@@ -556,7 +556,7 @@ class EDD_Base_Log_List_Table extends List_Table {
 
 		<p class="search-form">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $text ); ?>:</label>
-			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" value="<?php _admin_search_query(); ?>" placeholder="<?php esc_html_e( 'Search logs...', 'easy-digital-downloads' ); ?>" />
+			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" value="<?php _admin_search_query(); ?>" placeholder="<?php esc_html_e( 'Search logs...', 'commercestore' ); ?>" />
 		</p>
 
 		<?php

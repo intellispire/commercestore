@@ -2,19 +2,19 @@
 /**
  * Notifications Database
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\Database;
+namespace CS\Database;
 
-use EDD\Models\Notification;
-use EDD\Utils\EnvironmentChecker;
-use EDD\Utils\NotificationImporter;
+use CS\Models\Notification;
+use CS\Utils\EnvironmentChecker;
+use CS\Utils\NotificationImporter;
 
-class NotificationsDB extends \EDD_DB {
+class NotificationsDB extends \CS_DB {
 
 	/**
 	 * Constructor
@@ -22,11 +22,11 @@ class NotificationsDB extends \EDD_DB {
 	public function __construct() {
 		global $wpdb;
 
-		$this->table_name  = $wpdb->prefix . 'edd_notifications';
+		$this->table_name  = $wpdb->prefix . 'cs_notifications';
 		$this->primary_key = 'id';
 		$this->version     = '1.0';
 
-		add_action( 'edd_daily_scheduled_events', array( $this, 'schedule_daily_notification_checks' ) );
+		add_action( 'cs_daily_scheduled_events', array( $this, 'schedule_daily_notification_checks' ) );
 
 		$db_version = get_option( "{$this->table_name}_db_version" );
 		if ( version_compare( $db_version, $this->version, '>=' ) ) {
@@ -118,7 +118,7 @@ class NotificationsDB extends \EDD_DB {
 	public function insert( $data, $type = 'notification' ) {
 		$result = parent::insert( $this->maybeJsonEncode( $data ), $type );
 
-		wp_cache_delete( 'edd_active_notification_count', 'edd_notifications' );
+		wp_cache_delete( 'cs_active_notification_count', 'cs_notifications' );
 
 		return $result;
 	}
@@ -215,11 +215,11 @@ class NotificationsDB extends \EDD_DB {
 	 * @return int
 	 */
 	public function countActiveNotifications() {
-		$numberActive = wp_cache_get( 'edd_active_notification_count', 'edd_notifications' );
+		$numberActive = wp_cache_get( 'cs_active_notification_count', 'cs_notifications' );
 		if ( false === $numberActive ) {
 			$numberActive = count( $this->getActiveNotifications( true ) );
 
-			wp_cache_set( 'edd_active_notification_count', $numberActive, 'edd_notifications' );
+			wp_cache_set( 'cs_active_notification_count', $numberActive, 'cs_notifications' );
 		}
 
 		return $numberActive;

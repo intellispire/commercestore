@@ -15,12 +15,12 @@ export const OrderTax = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	className: 'edd-order-overview-summary__tax',
+	className: 'cs-order-overview-summary__tax',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-tax' ),
+	template: wp.template( 'cs-admin-order-tax' ),
 
 	/**
 	 * @since 3.0

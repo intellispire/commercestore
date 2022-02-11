@@ -2,10 +2,10 @@
 
 
 /**
- * @group edd_misc
- * @group edd_functions
+ * @group cs_misc
+ * @group cs_functions
  */
-class Test_Misc extends EDD_UnitTestCase {
+class Test_Misc extends CS_UnitTestCase {
 
 	/**
 	 * Download fixture.
@@ -16,7 +16,7 @@ class Test_Misc extends EDD_UnitTestCase {
 	 * Set up fixtures once.
 	 */
 	public static function wpSetUpBeforeClass() {
-		self::$download = EDD_Helper_Download::create_simple_download();
+		self::$download = CS_Helper_Download::create_simple_download();
 	}
 
 	public function setUp() {
@@ -24,103 +24,103 @@ class Test_Misc extends EDD_UnitTestCase {
 	}
 
 	public function test_test_mode() {
-		$this->assertFalse( edd_is_test_mode() );
+		$this->assertFalse( cs_is_test_mode() );
 	}
 
 	public function test_guest_checkout() {
-		$this->assertFalse( edd_no_guest_checkout() );
+		$this->assertFalse( cs_no_guest_checkout() );
 	}
 
 	public function test_logged_in_only() {
-		$this->assertFalse( edd_logged_in_only() );
+		$this->assertFalse( cs_logged_in_only() );
 	}
 
 	public function test_straight_to_checkout() {
-		$this->assertFalse( edd_straight_to_checkout() );
+		$this->assertFalse( cs_straight_to_checkout() );
 	}
 
 	public function test_no_redownload() {
-		$this->assertFalse( edd_no_redownload() );
+		$this->assertFalse( cs_no_redownload() );
 	}
 
 	public function test_is_cc_verify_enabled() {
-		$this->assertTrue( edd_is_cc_verify_enabled() );
+		$this->assertTrue( cs_is_cc_verify_enabled() );
 	}
 
 	public function test_is_odd() {
-		$this->assertTrue( edd_is_odd( 3 ) );
-		$this->assertFalse( edd_is_odd( 4 ) );
+		$this->assertTrue( cs_is_odd( 3 ) );
+		$this->assertFalse( cs_is_odd( 4 ) );
 	}
 
 	public function test_get_file_extension() {
-		$this->assertEquals( 'php', edd_get_file_extension( 'file.php' ) );
+		$this->assertEquals( 'php', cs_get_file_extension( 'file.php' ) );
 	}
 
 	public function test_get_file_extension_with_query_string() {
-		$this->assertEquals( 'pdf', edd_get_file_extension( 'file.pdf?test=1' ) );
+		$this->assertEquals( 'pdf', cs_get_file_extension( 'file.pdf?test=1' ) );
 	}
 
 	public function test_string_is_image_url() {
-		$this->assertTrue( edd_string_is_image_url( 'jpg' ) );
-		$this->assertTrue( edd_string_is_image_url( 'webp' ) );
-		$this->assertFalse( edd_string_is_image_url( 'php' ) );
+		$this->assertTrue( cs_string_is_image_url( 'jpg' ) );
+		$this->assertTrue( cs_string_is_image_url( 'webp' ) );
+		$this->assertFalse( cs_string_is_image_url( 'php' ) );
 	}
 
 	public function test_get_ip() {
-		$this->assertEquals( '127.0.0.1', edd_get_ip() );
+		$this->assertEquals( '127.0.0.1', cs_get_ip() );
 
 		$_SERVER['REMOTE_ADDR'] = '172.217.6.46';
-		$this->assertEquals( '172.217.6.46', edd_get_ip() );
+		$this->assertEquals( '172.217.6.46', cs_get_ip() );
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 	}
 
 	public function test_get_ip_reverse_proxies() {
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '123.123.123.123, 10.0.0.2';
-		$this->assertEquals( '123.123.123.123', edd_get_ip() );
+		$this->assertEquals( '123.123.123.123', cs_get_ip() );
 		unset($_SERVER['HTTP_X_FORWARDED_FOR']);
 	}
 
 	public function test_get_ip_reverse_proxy() {
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '123.123.123.123';
-		$this->assertEquals( '123.123.123.123', edd_get_ip() );
+		$this->assertEquals( '123.123.123.123', cs_get_ip() );
 		unset($_SERVER['HTTP_X_FORWARDED_FOR']);
 	}
 
 
 	public function test_get_currencies() {
 		$expected = array(
-			'USD'  => __( 'US Dollars (&#36;)', 'easy-digital-downloads' ),
-			'EUR'  => __( 'Euros (&euro;)', 'easy-digital-downloads' ),
-			'GBP'  => __( 'Pound Sterling (&pound;)', 'easy-digital-downloads' ),
-			'AUD'  => __( 'Australian Dollars (&#36;)', 'easy-digital-downloads' ),
-			'BRL'  => __( 'Brazilian Real (R&#36;)', 'easy-digital-downloads' ),
-			'CAD'  => __( 'Canadian Dollars (&#36;)', 'easy-digital-downloads' ),
-			'CZK'  => __( 'Czech Koruna', 'easy-digital-downloads' ),
-			'DKK'  => __( 'Danish Krone', 'easy-digital-downloads' ),
-			'HKD'  => __( 'Hong Kong Dollar (&#36;)', 'easy-digital-downloads' ),
-			'HUF'  => __( 'Hungarian Forint', 'easy-digital-downloads' ),
-			'ILS'  => __( 'Israeli Shekel (&#8362;)', 'easy-digital-downloads' ),
-			'JPY'  => __( 'Japanese Yen (&yen;)', 'easy-digital-downloads' ),
-			'MYR'  => __( 'Malaysian Ringgits', 'easy-digital-downloads' ),
-			'MXN'  => __( 'Mexican Peso (&#36;)', 'easy-digital-downloads' ),
-			'NZD'  => __( 'New Zealand Dollar (&#36;)', 'easy-digital-downloads' ),
-			'NOK'  => __( 'Norwegian Krone', 'easy-digital-downloads' ),
-			'PHP'  => __( 'Philippine Pesos', 'easy-digital-downloads' ),
-			'PLN'  => __( 'Polish Zloty', 'easy-digital-downloads' ),
-			'SGD'  => __( 'Singapore Dollar (&#36;)', 'easy-digital-downloads' ),
-			'SEK'  => __( 'Swedish Krona', 'easy-digital-downloads' ),
-			'CHF'  => __( 'Swiss Franc', 'easy-digital-downloads' ),
-			'TWD'  => __( 'Taiwan New Dollars', 'easy-digital-downloads' ),
-			'THB'  => __( 'Thai Baht (&#3647;)', 'easy-digital-downloads' ),
-			'INR'  => __( 'Indian Rupee (&#8377;)', 'easy-digital-downloads' ),
-			'TRY'  => __( 'Turkish Lira (&#8378;)', 'easy-digital-downloads' ),
-			'RIAL' => __( 'Iranian Rial (&#65020;)', 'easy-digital-downloads' ),
-			'RUB'  => __( 'Russian Rubles', 'easy-digital-downloads' ),
-			'AOA'  => __( 'Angolan Kwanza', 'easy-digital-downloads' ),
+			'USD'  => __( 'US Dollars (&#36;)', 'commercestore' ),
+			'EUR'  => __( 'Euros (&euro;)', 'commercestore' ),
+			'GBP'  => __( 'Pound Sterling (&pound;)', 'commercestore' ),
+			'AUD'  => __( 'Australian Dollars (&#36;)', 'commercestore' ),
+			'BRL'  => __( 'Brazilian Real (R&#36;)', 'commercestore' ),
+			'CAD'  => __( 'Canadian Dollars (&#36;)', 'commercestore' ),
+			'CZK'  => __( 'Czech Koruna', 'commercestore' ),
+			'DKK'  => __( 'Danish Krone', 'commercestore' ),
+			'HKD'  => __( 'Hong Kong Dollar (&#36;)', 'commercestore' ),
+			'HUF'  => __( 'Hungarian Forint', 'commercestore' ),
+			'ILS'  => __( 'Israeli Shekel (&#8362;)', 'commercestore' ),
+			'JPY'  => __( 'Japanese Yen (&yen;)', 'commercestore' ),
+			'MYR'  => __( 'Malaysian Ringgits', 'commercestore' ),
+			'MXN'  => __( 'Mexican Peso (&#36;)', 'commercestore' ),
+			'NZD'  => __( 'New Zealand Dollar (&#36;)', 'commercestore' ),
+			'NOK'  => __( 'Norwegian Krone', 'commercestore' ),
+			'PHP'  => __( 'Philippine Pesos', 'commercestore' ),
+			'PLN'  => __( 'Polish Zloty', 'commercestore' ),
+			'SGD'  => __( 'Singapore Dollar (&#36;)', 'commercestore' ),
+			'SEK'  => __( 'Swedish Krona', 'commercestore' ),
+			'CHF'  => __( 'Swiss Franc', 'commercestore' ),
+			'TWD'  => __( 'Taiwan New Dollars', 'commercestore' ),
+			'THB'  => __( 'Thai Baht (&#3647;)', 'commercestore' ),
+			'INR'  => __( 'Indian Rupee (&#8377;)', 'commercestore' ),
+			'TRY'  => __( 'Turkish Lira (&#8378;)', 'commercestore' ),
+			'RIAL' => __( 'Iranian Rial (&#65020;)', 'commercestore' ),
+			'RUB'  => __( 'Russian Rubles', 'commercestore' ),
+			'AOA'  => __( 'Angolan Kwanza', 'commercestore' ),
 		);
 
-		$this->assertEquals( $expected, edd_get_currencies() );
+		$this->assertEquals( $expected, cs_get_currencies() );
 
 	}
 
@@ -381,7 +381,7 @@ class Test_Misc extends EDD_UnitTestCase {
 			'ZW' => 'Zimbabwe'
 		);
 
-		$this->assertEquals( $expected, edd_get_country_list() );
+		$this->assertEquals( $expected, cs_get_country_list() );
 	}
 
 	public function test_states_list() {
@@ -455,7 +455,7 @@ class Test_Misc extends EDD_UnitTestCase {
 			'AP' => 'Armed Forces - Pacific',
 		);
 
-		$this->assertEquals( $expected, edd_get_states_list() );
+		$this->assertEquals( $expected, cs_get_states_list() );
 	}
 
 	public function test_provinces_list() {
@@ -476,7 +476,7 @@ class Test_Misc extends EDD_UnitTestCase {
 			'YT' => 'Yukon',
 		);
 
-		$this->assertEquals( $expected, edd_get_provinces_list() );
+		$this->assertEquals( $expected, cs_get_provinces_list() );
 	}
 
 	public function test_angola_provinces_list() {
@@ -502,261 +502,261 @@ class Test_Misc extends EDD_UnitTestCase {
 			'ZAI' => 'Zaire'
 		);
 
-		$this->assertSame( $expected, edd_get_angola_provinces_list() );
+		$this->assertSame( $expected, cs_get_angola_provinces_list() );
 	}
 
 	public function test_netherlands_provinces_list() {
 		$expected = array(
 			''   => '',
-			'DR' => __( 'Drenthe', 'easy-digital-downloads' ),
-			'FL' => __( 'Flevoland', 'easy-digital-downloads' ),
-			'FR' => __( 'Friesland', 'easy-digital-downloads' ),
-			'GE' => __( 'Gelderland', 'easy-digital-downloads' ),
-			'GR' => __( 'Groningen', 'easy-digital-downloads' ),
-			'LI' => __( 'Limburg', 'easy-digital-downloads' ),
-			'NB' => __( 'North Brabant', 'easy-digital-downloads' ),
-			'NH' => __( 'North Holland', 'easy-digital-downloads' ),
-			'OV' => __( 'Overijssel', 'easy-digital-downloads' ),
-			'ZH' => __( 'South Holland', 'easy-digital-downloads' ),
-			'UT' => __( 'Utrecht', 'easy-digital-downloads' ),
-			'ZE' => __( 'Zeeland', 'easy-digital-downloads' ),
-			'BO' => __( 'Bonaire', 'easy-digital-downloads' ),
-			'SA' => __( 'Saba', 'easy-digital-downloads' ),
-			'SE' => __( 'Sint Eustatius', 'easy-digital-downloads' ),
+			'DR' => __( 'Drenthe', 'commercestore' ),
+			'FL' => __( 'Flevoland', 'commercestore' ),
+			'FR' => __( 'Friesland', 'commercestore' ),
+			'GE' => __( 'Gelderland', 'commercestore' ),
+			'GR' => __( 'Groningen', 'commercestore' ),
+			'LI' => __( 'Limburg', 'commercestore' ),
+			'NB' => __( 'North Brabant', 'commercestore' ),
+			'NH' => __( 'North Holland', 'commercestore' ),
+			'OV' => __( 'Overijssel', 'commercestore' ),
+			'ZH' => __( 'South Holland', 'commercestore' ),
+			'UT' => __( 'Utrecht', 'commercestore' ),
+			'ZE' => __( 'Zeeland', 'commercestore' ),
+			'BO' => __( 'Bonaire', 'commercestore' ),
+			'SA' => __( 'Saba', 'commercestore' ),
+			'SE' => __( 'Sint Eustatius', 'commercestore' ),
 		);
 
-		$this->assertSame( $expected, edd_get_netherlands_provinces_list() );
+		$this->assertSame( $expected, cs_get_netherlands_provinces_list() );
 	}
 
 	public function test_month_num_to_name() {
-		$this->assertEquals( 'Jan', edd_month_num_to_name( 1 ) );
+		$this->assertEquals( 'Jan', cs_month_num_to_name( 1 ) );
 	}
 
 	/**
-	 * @covers ::edd_month_num_to_name()
+	 * @covers ::cs_month_num_to_name()
 	 */
 	public function test_month_num_to_long_name() {
-		$this->assertEquals( 'January', edd_month_num_to_name( 1, true ) );
+		$this->assertEquals( 'January', cs_month_num_to_name( 1, true ) );
 	}
 
 	public function test_get_php_arg_separator_output() {
-		$this->assertEquals( '&', edd_get_php_arg_separator_output() );
+		$this->assertEquals( '&', cs_get_php_arg_separator_output() );
 	}
 
 	public function test_let_to_num() {
-		$this->assertEquals( 0, edd_let_to_num( WP_MEMORY_LIMIT ) / ( 1024*1024 ) );
+		$this->assertEquals( 0, cs_let_to_num( WP_MEMORY_LIMIT ) / ( 1024*1024 ) );
 	}
 
 	/**
-	 * @covers ::edd_get_symlink_dir
+	 * @covers ::cs_get_symlink_dir
 	 */
 	public function test_get_symlink_url() {
-		$this->assertEquals( 'http://example.org/wp-content/uploads/edd/symlinks', edd_get_symlink_url() );
+		$this->assertEquals( 'http://example.org/wp-content/uploads/commercestore/symlinks', cs_get_symlink_url() );
 	}
 
 	public function test_use_skus() {
-		$this->assertFalse( edd_use_skus() );
+		$this->assertFalse( cs_use_skus() );
 	}
 
-	public function test_edd_is_host() {
-		$this->assertFalse( edd_is_host( 'wpengine' ) );
-		$this->assertFalse( edd_is_host( 'wp engine' ) );
-		$this->assertFalse( edd_is_host( 'WP Engine' ) );
-		$this->assertFalse( edd_is_host( 'WPEngine' ) );
+	public function test_cs_is_host() {
+		$this->assertFalse( cs_is_host( 'wpengine' ) );
+		$this->assertFalse( cs_is_host( 'wp engine' ) );
+		$this->assertFalse( cs_is_host( 'WP Engine' ) );
+		$this->assertFalse( cs_is_host( 'WPEngine' ) );
 
 		define( 'WPE_APIKEY', 'testkey' );
 
-		$this->assertTrue( edd_is_host( 'wpengine' ) );
-		$this->assertTrue( edd_is_host( 'wp engine' ) );
-		$this->assertTrue( edd_is_host( 'WP Engine' ) );
-		$this->assertTrue( edd_is_host( 'WPEngine' ) );
+		$this->assertTrue( cs_is_host( 'wpengine' ) );
+		$this->assertTrue( cs_is_host( 'wp engine' ) );
+		$this->assertTrue( cs_is_host( 'WP Engine' ) );
+		$this->assertTrue( cs_is_host( 'WPEngine' ) );
 	}
 
-	public function test_edd_update_option(){
+	public function test_cs_update_option(){
 		$key   = 'some-setting';
 		$value = 'some-value';
-		$isset = edd_get_option( $key, false );
+		$isset = cs_get_option( $key, false );
 
 		// The option shouldn't exist
 		$this->assertFalse( $isset );
 
-		$updated = edd_update_option( $key, $value );
+		$updated = cs_update_option( $key, $value );
 
 		// The option should have successfully updated
 		$this->assertTrue( $updated );
 
 		// The option retrieve should be equal to the one we set
-		$this->assertEquals( $value, edd_get_option( $key, false ) );
+		$this->assertEquals( $value, cs_get_option( $key, false ) );
 
 		$key   = 'some-setting2';
 		$value = null;
-		$isset = edd_get_option( $key, false );
+		$isset = cs_get_option( $key, false );
 
 		// The option shouldn't exist
 		$this->assertFalse( $isset );
 
-		$updated = edd_update_option( $key, $value );
+		$updated = cs_update_option( $key, $value );
 
 		// The option should return false due to the null value
 		$this->assertFalse( $updated );
 
 		// The option retrieve should be false since it doesn't exist
-		$this->assertFalse( edd_get_option( $key, false ) );
+		$this->assertFalse( cs_get_option( $key, false ) );
 
 	}
 
 	public function test_add_cache_busting() {
-		add_filter( 'edd_is_caching_plugin_active', '__return_true' );
-		$this->assertEquals( 'http://example.org/?nocache=true', edd_add_cache_busting( home_url( '/') ) );
-		remove_filter( 'edd_is_caching_plugin_active', '__return_true' );
-		$this->assertEquals( 'http://example.org/', edd_add_cache_busting( home_url( '/' ) ) );
+		add_filter( 'cs_is_caching_plugin_active', '__return_true' );
+		$this->assertEquals( 'http://example.org/?nocache=true', cs_add_cache_busting( home_url( '/') ) );
+		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
+		$this->assertEquals( 'http://example.org/', cs_add_cache_busting( home_url( '/' ) ) );
 	}
 
 	/**
-	 * @covers ::edd_get_current_page_url()
+	 * @covers ::cs_get_current_page_url()
 	 */
 	public function test_get_current_page_url_if_home_should_return_home_url() {
 		$this->go_to( home_url( '/' ) );
-		$this->assertEquals( 'http://example.org/', edd_get_current_page_url() );
+		$this->assertEquals( 'http://example.org/', cs_get_current_page_url() );
 	}
 
 	/**
-	 * @covers ::edd_get_current_page_url()
+	 * @covers ::cs_get_current_page_url()
 	 */
 	public function test_get_current_page_url_if_a_download_page_should_return_that_url() {
 		$this->go_to( get_permalink( self::$download->ID ) );
-		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?download=test-download-product', edd_get_current_page_url() );
+		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?download=test-download-product', cs_get_current_page_url() );
 	}
 
 	/**
-	 * @covers ::edd_get_current_page_url()
+	 * @covers ::cs_get_current_page_url()
 	 */
 	public function test_get_current_page_url_if_no_caching_should_return_url_with_nocache_true() {
-		add_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		add_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
 			$this->go_to( get_permalink( self::$download->ID ) );
 
-			$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?download=test-download-product&nocache=true', edd_get_current_page_url( true ) );
+			$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?download=test-download-product&nocache=true', cs_get_current_page_url( true ) );
 
-		remove_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
 	}
 
 	/**
-	 * @covers ::edd_get_current_page_url()
+	 * @covers ::cs_get_current_page_url()
 	 */
 	public function test_get_current_page_url_if_no_cache_checkout_then_current_url_should_match() {
-		global $edd_options;
+		global $cs_options;
 
-		add_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		add_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
-			$edd_options['no_cache_checkout'] = true;
+			$cs_options['no_cache_checkout'] = true;
 
-			$this->go_to( get_permalink( $edd_options['purchase_page'] ) );
+			$this->go_to( get_permalink( $cs_options['purchase_page'] ) );
 
-			$this->assertEquals( edd_get_checkout_uri(), edd_get_current_page_url( true ) );
+			$this->assertEquals( cs_get_checkout_uri(), cs_get_current_page_url( true ) );
 
-		remove_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
 	}
 
 	public function test_cart_url_formats() {
-		global $edd_options;
-		$post = EDD_Helper_Download::create_simple_download();
+		global $cs_options;
+		$post = CS_Helper_Download::create_simple_download();
 
-		edd_add_to_cart( $post->ID );
+		cs_add_to_cart( $post->ID );
 
-		$this->assertTrue( edd_item_in_cart( $post->ID ) );
+		$this->assertTrue( cs_item_in_cart( $post->ID ) );
 
-		$item_position = edd_get_item_position_in_cart( $post->ID );
+		$item_position = cs_get_item_position_in_cart( $post->ID );
 
 		// Go to checkout
-		$this->go_to( edd_get_checkout_uri() );
+		$this->go_to( cs_get_checkout_uri() );
 
-		add_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		add_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
-		$remove_url = edd_remove_item_url( $item_position );
+		$remove_url = cs_remove_item_url( $item_position );
 
-		$this->assertContains( 'page_id=' . $edd_options['purchase_page'], $remove_url );
-		$this->assertContains( 'edd_action=remove', $remove_url );
+		$this->assertContains( 'page_id=' . $cs_options['purchase_page'], $remove_url );
+		$this->assertContains( 'cs_action=remove', $remove_url );
 		$this->assertContains( 'nocache=true', $remove_url );
 		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
 
-		remove_filter( 'edd_is_caching_plugin_active', '__return_true' );
-		unset( $edd_options['no_cache_checkout'] );
-		$remove_url = edd_remove_item_url( $item_position );
+		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
+		unset( $cs_options['no_cache_checkout'] );
+		$remove_url = cs_remove_item_url( $item_position );
 
-		$this->assertContains( 'page_id=' . $edd_options['purchase_page'], $remove_url );
-		$this->assertContains( 'edd_action=remove', $remove_url );
+		$this->assertContains( 'page_id=' . $cs_options['purchase_page'], $remove_url );
+		$this->assertContains( 'cs_action=remove', $remove_url );
 		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
 		$this->assertNotContains( 'nocache=true', $remove_url );
 
 		// Go home and test again
 		$this->go_to( home_url( '/' ) );
 
-		add_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		add_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
-		$expected_url = 'http://example.org/?cart_item=' . $item_position . '&edd_action=remove&nocache=true';
-		$remove_url   = edd_remove_item_url( $item_position );
+		$expected_url = 'http://example.org/?cart_item=' . $item_position . '&cs_action=remove&nocache=true';
+		$remove_url   = cs_remove_item_url( $item_position );
 
 		$this->assertNotContains( 'page_id=', $remove_url );
-		$this->assertContains( 'edd_action=remove', $remove_url );
+		$this->assertContains( 'cs_action=remove', $remove_url );
 		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
 		$this->assertContains( 'nocache=true', $remove_url );
 
-		remove_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
-		$remove_url = edd_remove_item_url( $item_position );
+		$remove_url = cs_remove_item_url( $item_position );
 
 		$this->assertNotContains( 'page_id=', $remove_url );
-		$this->assertContains( 'edd_action=remove', $remove_url );
+		$this->assertContains( 'cs_action=remove', $remove_url );
 		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
 		$this->assertNotContains( 'nocache=true', $remove_url );
 
 		// Go home and test again
 		$this->go_to( home_url( '/' ) );
 
-		add_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		add_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
-		$expected_url  = 'http://example.org/?cart_item=' . $item_position . '&edd_action=remove&nocache=true';
-		$remove_url    = edd_remove_item_url( $item_position );
+		$expected_url  = 'http://example.org/?cart_item=' . $item_position . '&cs_action=remove&nocache=true';
+		$remove_url    = cs_remove_item_url( $item_position );
 
 		$this->assertEquals( $expected_url, $remove_url );
-		remove_filter( 'edd_is_caching_plugin_active', '__return_true' );
+		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
-		$remove_url    = edd_remove_item_url( $item_position );
-		$expected_url  = 'http://example.org/?cart_item=' . $item_position . '&edd_action=remove';
+		$remove_url    = cs_remove_item_url( $item_position );
+		$expected_url  = 'http://example.org/?cart_item=' . $item_position . '&cs_action=remove';
 
-		EDD_Helper_Download::delete_download( $post->ID );
+		CS_Helper_Download::delete_download( $post->ID );
 	}
 
 	public function test_array_convert() {
-		$customer1_id = edd_add_customer( array( 'email' => 'test10@example.com' ) );
+		$customer1_id = cs_add_customer( array( 'email' => 'test10@example.com' ) );
 
 		// Test sending a single object in
-		$customer_object = new EDD_Customer( $customer1_id );
-		$customer_array  = edd_object_to_array( $customer_object );
+		$customer_object = new CS_Customer( $customer1_id );
+		$customer_array  = cs_object_to_array( $customer_object );
 		$this->assertInternalType( 'array', $customer_array );
 		$this->assertEquals( $customer_object->id, $customer_array['id'] );
 		$this->assertEquals( $customer_object->email, $customer_array['email'] );
 		$this->assertEquals( $customer_object->purchase_count, $customer_array['purchase_count'] );
 
 		// Negative tests (no alterations should occur)
-		$this->assertEquals( 'string', edd_object_to_array( 'string' ) );
-		$this->assertEquals( array( 'foo', 'bar', 'baz' ), edd_object_to_array( array( 'foo', 'bar', 'baz' ) ) );
+		$this->assertEquals( 'string', cs_object_to_array( 'string' ) );
+		$this->assertEquals( array( 'foo', 'bar', 'baz' ), cs_object_to_array( array( 'foo', 'bar', 'baz' ) ) );
 
 		// Test sending in an array of objects
-		$customers = edd_get_customers();
-		$converted = edd_object_to_array( $customers );
+		$customers = cs_get_customers();
+		$converted = cs_object_to_array( $customers );
 		$this->assertInternalType( 'array', $converted[0] );
 
 		// Test payments
-		$payment_1 = EDD_Helper_Payment::create_simple_payment();
-		$payment_2 = EDD_Helper_Payment::create_simple_payment();
+		$payment_1 = CS_Helper_Payment::create_simple_payment();
+		$payment_2 = CS_Helper_Payment::create_simple_payment();
 
-		$payment_1_obj = new EDD_Payment( $payment_1 );
-		$payment_2_obj = new EDD_Payment( $payment_2 );
+		$payment_1_obj = new CS_Payment( $payment_1 );
+		$payment_2_obj = new CS_Payment( $payment_2 );
 
 		// Test a single convert
-		$payment_1_array = edd_object_to_array( $payment_1_obj );
+		$payment_1_array = cs_object_to_array( $payment_1_obj );
 		$this->assertInternalType( 'array',  $payment_1_array );
 		$this->assertEquals( $payment_1_obj->ID, $payment_1_array['ID'] );
 
@@ -765,81 +765,81 @@ class Test_Misc extends EDD_UnitTestCase {
 			$payment_2_obj,
 		);
 
-		$payments_array = edd_object_to_array( $payments );
+		$payments_array = cs_object_to_array( $payments );
 		$this->assertInternalType( 'array', $payments_array[0] );
 		$this->assertEquals( 2, count( $payments_array ) );
 	}
 
 	// Test getting currency symols:
 	function test_gbp_symbol() {
-		$this->assertEquals( '&pound;', edd_currency_symbol( 'GBP' ) );
+		$this->assertEquals( '&pound;', cs_currency_symbol( 'GBP' ) );
 	}
 
 	function test_brl_symbol() {
-		$this->assertEquals( 'R&#36;', edd_currency_symbol( 'BRL' ) );
+		$this->assertEquals( 'R&#36;', cs_currency_symbol( 'BRL' ) );
 	}
 
 	function test_us_dollar_symbol() {
-		$this->assertEquals( '&#36;', edd_currency_symbol( 'USD' ) );
+		$this->assertEquals( '&#36;', cs_currency_symbol( 'USD' ) );
 	}
 
 	function test_au_dollar_symbol() {
-		$this->assertEquals( '&#36;', edd_currency_symbol( 'AUD' ) );
+		$this->assertEquals( '&#36;', cs_currency_symbol( 'AUD' ) );
 	}
 
 	function test_nz_dollar_symbol() {
-		$this->assertEquals( '&#36;', edd_currency_symbol( 'NZD' ) );
+		$this->assertEquals( '&#36;', cs_currency_symbol( 'NZD' ) );
 	}
 
 	function test_ca_dollar_symbol() {
-		$this->assertEquals( '&#36;', edd_currency_symbol( 'CAD' ) );
+		$this->assertEquals( '&#36;', cs_currency_symbol( 'CAD' ) );
 	}
 
 	function test_hk_dollar_symbol() {
-		$this->assertEquals( '&#36;', edd_currency_symbol( 'HKD' ) );
+		$this->assertEquals( '&#36;', cs_currency_symbol( 'HKD' ) );
 	}
 
 	function test_mx_dollar_symbol() {
-		$this->assertEquals( '&#36;', edd_currency_symbol( 'MXN' ) );
+		$this->assertEquals( '&#36;', cs_currency_symbol( 'MXN' ) );
 	}
 
 	function test_sg_dollar_symbol() {
-		$this->assertEquals( '&#36;', edd_currency_symbol( 'SGD' ) );
+		$this->assertEquals( '&#36;', cs_currency_symbol( 'SGD' ) );
 	}
 
 	function test_yen_symbol() {
-		$this->assertEquals( '&yen;', edd_currency_symbol( 'JPY' ) );
+		$this->assertEquals( '&yen;', cs_currency_symbol( 'JPY' ) );
 	}
 
 	function test_aoa_symbol() {
-		$this->assertEquals( 'Kz', edd_currency_symbol( 'AOA' ) );
+		$this->assertEquals( 'Kz', cs_currency_symbol( 'AOA' ) );
 	}
 
 	function test_default_symbol() {
-		$this->assertEquals( 'CZK', edd_currency_symbol( 'CZK' ) );
+		$this->assertEquals( 'CZK', cs_currency_symbol( 'CZK' ) );
 	}
 
 	function test_country_name_blank() {
-		$this->assertSame( '', edd_get_country_name( '' ) );
+		$this->assertSame( '', cs_get_country_name( '' ) );
 	}
 
 	function test_country_name_us() {
-		$this->assertSame( 'United States', edd_get_country_name( 'US' ) );
+		$this->assertSame( 'United States', cs_get_country_name( 'US' ) );
 	}
 
-	function test_edd_delete_option() {
-		edd_update_option( 'test_setting', 'testing' );
-		edd_delete_option( 'test_setting' );
+	function test_cs_delete_option() {
+		cs_update_option( 'test_setting', 'testing' );
+		cs_delete_option( 'test_setting' );
 
-		$this->assertFalse( edd_get_option( 'test_setting' ) );
+		$this->assertFalse( cs_get_option( 'test_setting' ) );
 	}
 
-	function test_should_allow_file_download_edd_uploaded_file_url() {
-		$file_details   = array ( 'scheme' => 'https', 'host' => site_url(), 'path' => '/wp-content/uploads/edd/2019/04/test-file.jpg' );
+	function test_should_allow_file_download_cs_uploaded_file_url() {
+		$file_details   = array ( 'scheme' => 'https', 'host' => site_url(), 'path' => '/wp-content/uploads/commercestore/2019/04/test-file.jpg' );
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
-		$requested_file = trailingslashit( site_url() ) . 'wp-content/uploads/edd/2019/04/test-file.jpg';
+		$requested_file = trailingslashit( site_url() ) . 'wp-content/uploads/commercestore/2019/04/test-file.jpg';
 
-		$this->assertTrue( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertTrue( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 	}
 
 	function test_should_allow_file_download_uploaded_file_in_content_url() {
@@ -847,7 +847,7 @@ class Test_Misc extends EDD_UnitTestCase {
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
 		$requested_file = trailingslashit( site_url() ) . '/wp-content/my-files/test-file.jpg';
 
-		$this->assertTrue( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertTrue( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 	}
 
 	function test_should_allow_file_download_uploaded_file_in_content_absolute_in_content() {
@@ -856,7 +856,7 @@ class Test_Misc extends EDD_UnitTestCase {
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
 		$requested_file =  trailingslashit( WP_CONTENT_DIR ) . 'test-file.jpg';
 
-		$this->assertTrue( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertTrue( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 		$this->delete_test_file( trailingslashit( WP_CONTENT_DIR ) . 'test-file.jpg' );
 	}
 
@@ -866,7 +866,7 @@ class Test_Misc extends EDD_UnitTestCase {
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
 		$requested_file =  trailingslashit( ABSPATH ) . 'test-file.jpg';
 
-		$this->assertFalse( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertFalse( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 		$this->delete_test_file( trailingslashit( ABSPATH ) . 'test-file.jpg' );
 	}
 
@@ -875,7 +875,7 @@ class Test_Misc extends EDD_UnitTestCase {
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
 		$requested_file = trailingslashit( site_url() ) . '/wp-content/my-files/test-file.jpg';
 
-		$this->assertTrue( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertTrue( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 	}
 
 	function test_should_allow_file_download_uploaded_file_in_content_absolute_outside_of_content_on_windows_WAMP() {
@@ -883,7 +883,7 @@ class Test_Misc extends EDD_UnitTestCase {
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
 		$requested_file = 'E:\wamp\www\site\wp/test-file.jpg';
 
-		$this->assertFalse( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertFalse( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 	}
 
 	function test_should_allow_file_download_uploaded_file_in_content_url_on_windows_IIS() {
@@ -891,7 +891,7 @@ class Test_Misc extends EDD_UnitTestCase {
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
 		$requested_file = trailingslashit( site_url() ) . '/wp-content/my-files/test-file.jpg';
 
-		$this->assertTrue( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertTrue( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 	}
 
 	function test_should_allow_file_download_uploaded_file_in_content_absolute_outside_of_content_on_windows_IIS() {
@@ -899,7 +899,7 @@ class Test_Misc extends EDD_UnitTestCase {
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
 		$requested_file = 'C:\inetpub\wwwroot\mysite/test-file.jpg';
 
-		$this->assertFalse( edd_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
+		$this->assertFalse( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 	}
 
 	function test_is_countable_defined() {

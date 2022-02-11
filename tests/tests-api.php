@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @group edd_api
+ * @group cs_api
  */
-class Tests_API extends EDD_UnitTestCase {
+class Tests_API extends CS_UnitTestCase {
 
 	protected static $post;
 
 	/**
-	 * @var EDD_API
+	 * @var CS_API
 	 */
 	protected static $api;
 
@@ -28,18 +28,18 @@ class Tests_API extends EDD_UnitTestCase {
 		$GLOBALS['wp_rewrite']->init();
 		flush_rewrite_rules( false );
 
-		self::$api = new EDD_API();
+		self::$api = new CS_API();
 
 		self::$user_id = self::factory()->user->create( array(
 			'role' => 'administrator',
 		) );
-		EDD()->api->user_id = self::$user_id;
+		CS()->api->user_id = self::$user_id;
 		$user = new WP_User( self::$user_id );
 		$user->add_cap( 'view_shop_reports' );
 		$user->add_cap( 'view_shop_sensitive_data' );
 		$user->add_cap( 'manage_shop_discounts' );
 
-		$roles = new EDD_Roles;
+		$roles = new CS_Roles;
 		$roles->add_roles();
 		$roles->add_caps();
 
@@ -78,18 +78,18 @@ class Tests_API extends EDD_UnitTestCase {
 		);
 
 		$meta = array(
-			'edd_price'                      => '0.00',
+			'cs_price'                      => '0.00',
 			'_variable_pricing'              => 1,
-			'_edd_price_options_mode'        => 'on',
-			'edd_variable_prices'            => array_values( $_variable_pricing ),
-			'edd_download_files'             => array_values( $_download_files ),
-			'_edd_download_limit'            => 20,
-			'_edd_hide_purchase_link'        => 1,
-			'edd_product_notes'              => 'Purchase Notes',
-			'_edd_product_type'              => 'default',
-			'_edd_download_earnings'         => 129.43,
-			'_edd_download_sales'            => 59,
-			'_edd_download_limit_override_1' => 1,
+			'_cs_price_options_mode'        => 'on',
+			'cs_variable_prices'            => array_values( $_variable_pricing ),
+			'cs_download_files'             => array_values( $_download_files ),
+			'_cs_download_limit'            => 20,
+			'_cs_hide_purchase_link'        => 1,
+			'cs_product_notes'              => 'Purchase Notes',
+			'_cs_product_type'              => 'default',
+			'_cs_download_earnings'         => 129.43,
+			'_cs_download_sales'            => 59,
+			'_cs_download_limit_override_1' => 1,
 		);
 		foreach ( $meta as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );
@@ -117,7 +117,7 @@ class Tests_API extends EDD_UnitTestCase {
 		);
 
 		$total      = 0;
-		$prices     = get_post_meta( $download_details[0]['id'], 'edd_variable_prices', true );
+		$prices     = get_post_meta( $download_details[0]['id'], 'cs_variable_prices', true );
 		$item_price = $prices[1]['amount'];
 		$total      += $item_price;
 
@@ -153,17 +153,17 @@ class Tests_API extends EDD_UnitTestCase {
 
 		$_SERVER['REMOTE_ADDR'] = '10.0.0.0';
 
-		self::$payment_id = edd_insert_payment( $purchase_data );
+		self::$payment_id = cs_insert_payment( $purchase_data );
 
-		edd_update_payment_status( self::$payment_id, 'complete' );
+		cs_update_payment_status( self::$payment_id, 'complete' );
 
 		self::$api_output       = self::$api->get_products();
 		self::$api_output_sales = self::$api->get_recent_sales();
 
 //		$wp_query->query_vars['format'] = 'override';
 
-		$_POST['edd_set_api_key'] = 1;
-		EDD()->api->update_key( self::$user_id );
+		$_POST['cs_set_api_key'] = 1;
+		CS()->api->update_key( self::$user_id );
 	}
 
 	public function setUp() {
@@ -171,15 +171,15 @@ class Tests_API extends EDD_UnitTestCase {
 
 		wp_set_current_user( self::$user_id );
 
-		add_filter( 'edd_api_output_format', function() {
+		add_filter( 'cs_api_output_format', function() {
 			return 'override';
 		} );
 
-		// Prevents edd_die() from running.
-		add_action( 'edd_api_output_override', function () {
-			// Prevent edd_die() from stopping tests.
-			if ( ! defined( 'EDD_UNIT_TESTS' ) ) {
-				define( 'EDD_UNIT_TESTS', true );
+		// Prevents cs_die() from running.
+		add_action( 'cs_api_output_override', function () {
+			// Prevent cs_die() from stopping tests.
+			if ( ! defined( 'CS_UNIT_TESTS' ) ) {
+				define( 'CS_UNIT_TESTS', true );
 			}
 		}, 10 );
 
@@ -190,7 +190,7 @@ class Tests_API extends EDD_UnitTestCase {
 		parent::tearDown();
 
 		// Revoke key to ensure `update_key()` will generate a new one.
-		EDD()->api->revoke_api_key( self::$user_id );
+		CS()->api->revoke_api_key( self::$user_id );
 
 		self::$api->flush_api_output();
 	}
@@ -198,7 +198,7 @@ class Tests_API extends EDD_UnitTestCase {
 	public function test_endpoints() {
 		global $wp_rewrite;
 
-		$this->assertEquals( 'edd-api', $wp_rewrite->endpoints[0][1] );
+		$this->assertEquals( 'cs-api', $wp_rewrite->endpoints[0][1] );
 	}
 
 	public function test_query_vars() {
@@ -239,7 +239,7 @@ class Tests_API extends EDD_UnitTestCase {
 
 		$this->assertEquals( 'v2', self::$api->get_default_version() );
 
-		define( 'EDD_API_VERSION', 'v1' );
+		define( 'CS_API_VERSION', 'v1' );
 		$this->assertEquals( 'v1', self::$api->get_default_version() );
 
 	}
@@ -248,13 +248,13 @@ class Tests_API extends EDD_UnitTestCase {
 
 		global $wp_query;
 
-		$_POST['edd_set_api_key'] = 1;
-		EDD()->api->update_key( self::$user_id );
+		$_POST['cs_set_api_key'] = 1;
+		CS()->api->update_key( self::$user_id );
 
-		$wp_query->query_vars['key']   = get_user_meta( self::$user_id, 'edd_user_public_key', true );
-		$wp_query->query_vars['token'] = hash( 'md5', get_user_meta( self::$user_id, 'edd_user_secret_key', true ) . get_user_meta( self::$user_id, 'edd_user_public_key', true ) );
+		$wp_query->query_vars['key']   = get_user_meta( self::$user_id, 'cs_user_public_key', true );
+		$wp_query->query_vars['token'] = hash( 'md5', get_user_meta( self::$user_id, 'cs_user_secret_key', true ) . get_user_meta( self::$user_id, 'cs_user_public_key', true ) );
 
-		$wp_query->query_vars['edd-api'] = 'v1/sales';
+		$wp_query->query_vars['cs-api'] = 'v1/sales';
 
 		try {
 			self::$api->process_query();
@@ -262,7 +262,7 @@ class Tests_API extends EDD_UnitTestCase {
 		$this->assertEquals( 'v1', self::$api->get_queried_version() );
 
 		try {
-			$wp_query->query_vars['edd-api'] = 'v2/sales';
+			$wp_query->query_vars['cs-api'] = 'v2/sales';
 			self::$api->process_query();
 		} catch ( WPDieException $e ) {}
 		$this->assertEquals( 'v2', self::$api->get_queried_version() );
@@ -369,9 +369,9 @@ class Tests_API extends EDD_UnitTestCase {
 
 	public function test_update_key() {
 
-		$_POST['edd_set_api_key'] = 1;
+		$_POST['cs_set_api_key'] = 1;
 
-		EDD()->api->update_key( self::$user_id );
+		CS()->api->update_key( self::$user_id );
 
 		$user_public = self::$api->get_user_public_key( self::$user_id );
 		$user_secret = self::$api->get_user_secret_key( self::$user_id );
@@ -380,22 +380,22 @@ class Tests_API extends EDD_UnitTestCase {
 		$this->assertNotEmpty( $user_secret );
 
 		// Backwards compatibilty check for API Keys
-		$this->assertEquals( $user_public, get_user_meta( self::$user_id, 'edd_user_public_key', true ) );
-		$this->assertEquals( $user_secret, get_user_meta( self::$user_id, 'edd_user_secret_key', true ) );
+		$this->assertEquals( $user_public, get_user_meta( self::$user_id, 'cs_user_public_key', true ) );
+		$this->assertEquals( $user_secret, get_user_meta( self::$user_id, 'cs_user_secret_key', true ) );
 
 	}
 
 	public function test_get_user() {
-		$_POST['edd_set_api_key'] = 1;
+		$_POST['cs_set_api_key'] = 1;
 
-		EDD()->api->update_key( self::$user_id );
+		CS()->api->update_key( self::$user_id );
 		$this->assertEquals( self::$user_id, self::$api->get_user( self::$api->get_user_public_key( self::$user_id ) ) );
 
 	}
 
 	public function test_get_customers() {
 		try {
-			$out = EDD()->api->get_customers();
+			$out = CS()->api->get_customers();
 
 			$this->assertArrayHasKey( 'customers', $out );
 			$this->assertArrayHasKey( 'info', $out['customers'][0] );
@@ -424,7 +424,7 @@ class Tests_API extends EDD_UnitTestCase {
 
 		$wp_query->query_vars['key']      = '';
 		$wp_query->query_vars['token']    = '';
-		$wp_query->query_vars['edd-api'] = 'sales';
+		$wp_query->query_vars['cs-api'] = 'sales';
 
 		try {
 			self::$api->process_query();
@@ -440,12 +440,12 @@ class Tests_API extends EDD_UnitTestCase {
 
 		global $wp_query;
 
-		$_POST['edd_set_api_key'] = 1;
-		EDD()->api->update_key( self::$user_id );
+		$_POST['cs_set_api_key'] = 1;
+		CS()->api->update_key( self::$user_id );
 
 		$wp_query->query_vars['key']     = self::$api->get_user_public_key( self::$user_id );
 		$wp_query->query_vars['token']   = 'bad-token-val';
-		$wp_query->query_vars['edd-api'] = 'sales';
+		$wp_query->query_vars['cs-api'] = 'sales';
 
 		try {
 			self::$api->process_query();
@@ -460,12 +460,12 @@ class Tests_API extends EDD_UnitTestCase {
 	public function test_invalid_key() {
 		global $wp_query;
 
-		$_POST['edd_set_api_key'] = 1;
-		EDD()->api->update_key( self::$user_id );
+		$_POST['cs_set_api_key'] = 1;
+		CS()->api->update_key( self::$user_id );
 		$wp_query->query_vars['key']   = 'bad-key-val';
-		$wp_query->query_vars['token'] = hash( 'md5', get_user_meta( self::$user_id, 'edd_user_secret_key', true ) . get_user_meta( self::$user_id, 'edd_user_public_key', true ) );
+		$wp_query->query_vars['token'] = hash( 'md5', get_user_meta( self::$user_id, 'cs_user_secret_key', true ) . get_user_meta( self::$user_id, 'cs_user_public_key', true ) );
 
-		$wp_query->query_vars['edd-api'] = 'sales';
+		$wp_query->query_vars['cs-api'] = 'sales';
 
 		try {
 			self::$api->process_query();
@@ -478,7 +478,7 @@ class Tests_API extends EDD_UnitTestCase {
 	}
 
 	public function test_info() {
-		$out = EDD()->api->get_info();
+		$out = CS()->api->get_info();
 
 		$this->assertArrayHasKey( 'info', $out );
 		$this->assertArrayHasKey( 'site', $out['info'] );
@@ -498,12 +498,12 @@ class Tests_API extends EDD_UnitTestCase {
 	public function test_process_query() {
 		global $wp_query;
 
-		$_POST['edd_set_api_key'] = 1;
+		$_POST['cs_set_api_key'] = 1;
 		self::$api->update_key( self::$user_id );
 
-		$wp_query->query_vars['edd-api'] = 'products';
-		$wp_query->query_vars['key']     = get_user_meta( self::$user_id, 'edd_user_public_key', true );
-		$wp_query->query_vars['token']   = hash( 'md5', get_user_meta( self::$user_id, 'edd_user_secret_key', true ) . get_user_meta( self::$user_id, 'edd_user_public_key', true ) );
+		$wp_query->query_vars['cs-api'] = 'products';
+		$wp_query->query_vars['key']     = get_user_meta( self::$user_id, 'cs_user_public_key', true );
+		$wp_query->query_vars['token']   = hash( 'md5', get_user_meta( self::$user_id, 'cs_user_secret_key', true ) . get_user_meta( self::$user_id, 'cs_user_public_key', true ) );
 
 		try {
 			self::$api->process_query();
@@ -565,23 +565,23 @@ class Tests_API extends EDD_UnitTestCase {
 	/**
 	 * Ensures the correct discount amount is included in the recent sales endpoint.
 	 *
-	 * @link https://github.com/easydigitaldownloads/easy-digital-downloads/issues/8246
+	 * @link https://github.com/commercestore/commercestore/issues/8246
 	 *
-	 * @covers EDD_API_V2::get_recent_sales
-	 * @covers EDD_Cart::get_item_discount_amount
+	 * @covers CS_API_V2::get_recent_sales
+	 * @covers CS_Cart::get_item_discount_amount
 	 */
 	public function test_recent_sales_contains_correct_discount_amount() {
 		// Create a 20% off discount code with code `20OFF`.
-		EDD_Helper_Discount::create_simple_percent_discount();
+		CS_Helper_Discount::create_simple_percent_discount();
 
 		// Update the payment information.
-		$payment                    = edd_get_payment( self::$payment_id );
+		$payment                    = cs_get_payment( self::$payment_id );
 		$payment->discounted_amount = 20;
 		$payment->total             = 80;
 		$payment->discounts         = '20OFF';
 		$payment->save();
 
-		$api_v2       = new EDD_API_V2();
+		$api_v2       = new CS_API_V2();
 		$sales_output = $api_v2->get_recent_sales();
 
 		$this->assertEquals( 20, $sales_output['sales'][0]['discounts']['20OFF'] );

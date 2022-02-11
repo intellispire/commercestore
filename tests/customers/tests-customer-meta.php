@@ -1,20 +1,20 @@
 <?php
-namespace EDD\Customers;
+namespace CS\Customers;
 
 /**
  * Customer Meta Tests.
  *
- * @group edd_customers_db
+ * @group cs_customers_db
  * @group database
- * @group edd_customers
+ * @group cs_customers
  */
-class Tests_Customer_Meta extends \EDD_UnitTestCase {
+class Tests_Customer_Meta extends \CS_UnitTestCase {
 
 	/**
 	 * Customer fixture.
 	 *
 	 * @access protected
-	 * @var    \EDD_Customer
+	 * @var    \CS_Customer
 	 */
 	protected static $customer = null;
 
@@ -22,17 +22,17 @@ class Tests_Customer_Meta extends \EDD_UnitTestCase {
 	 * Set up fixtures once.
 	 */
 	public static function wpSetUpBeforeClass() {
-		self::$customer = parent::edd()->customer->create_and_get();
+		self::$customer = parent::cs()->customer->create_and_get();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
 
-		edd_get_component_interface( 'customer', 'meta' )->truncate();
+		cs_get_component_interface( 'customer', 'meta' )->truncate();
 	}
 
 	/**
-	 * @covers \EDD\Database\Queries\Notes::add_meta()
+	 * @covers \CS\Database\Queries\Notes::add_meta()
 	 * @covers Note::add_meta()
 	 */
 	public function test_add_metadata_with_empty_key_value_should_return_false() {

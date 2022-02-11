@@ -4,13 +4,13 @@
  *
  * Manages automatic installation/activation for WP Mail SMTP.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  WP_SMTP
- * @copyright   Copyright (c) 2021, Easy Digital Downloads
+ * @copyright   Copyright (c) 2021, CommerceStore
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.11.4
  */
-namespace EDD\Admin\Settings;
+namespace CS\Admin\Settings;
 
 class WP_SMTP {
 
@@ -31,15 +31,15 @@ class WP_SMTP {
 	/**
 	 * The Extension Manager
 	 *
-	 * @var \EDD\Admin\Extensions\Extension_Manager
+	 * @var \CS\Admin\Extensions\Extension_Manager
 	 */
 	private $manager;
 
 	public function __construct() {
-		add_filter( 'edd_settings_emails', array( $this, 'register_setting' ) );
-		add_action( 'edd_wpsmtp', array( $this, 'settings_field' ) );
+		add_filter( 'cs_settings_emails', array( $this, 'register_setting' ) );
+		add_action( 'cs_wpsmtp', array( $this, 'settings_field' ) );
 
-		$this->manager = new \EDD\Admin\Extensions\Extension_Manager();
+		$this->manager = new \CS\Admin\Extensions\Extension_Manager();
 	}
 
 	/**
@@ -54,7 +54,7 @@ class WP_SMTP {
 		}
 		$settings['main']['wpsmtp'] = array(
 			'id'   => 'wpsmtp',
-			'name' => __( 'Improve Email Deliverability', 'easy-digital-downloads' ),
+			'name' => __( 'Improve Email Deliverability', 'commercestore' ),
 			'desc' => '',
 			'type' => 'hook',
 		);
@@ -71,13 +71,13 @@ class WP_SMTP {
 	public function settings_field( $args ) {
 		$this->manager->enqueue();
 		?>
-		<div class="edd-extension-manager__body">
-			<p class="edd-extension-manager__description">
-				<?php esc_html_e( 'WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including sales notifications.', 'easy-digital-downloads' ); ?>
+		<div class="cs-extension-manager__body">
+			<p class="cs-extension-manager__description">
+				<?php esc_html_e( 'WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including sales notifications.', 'commercestore' ); ?>
 			</p>
 
-			<div class="edd-extension-manager__group">
-				<div class="edd-extension-manager__step">
+			<div class="cs-extension-manager__group">
+				<div class="cs-extension-manager__step">
 					<?php $this->manager->button( $this->get_button_parameters() ); ?>
 				</div>
 
@@ -86,7 +86,7 @@ class WP_SMTP {
 					return;
 				}
 				?>
-				<div class="edd-extension-manager__step" style="display:none;">
+				<div class="cs-extension-manager__step" style="display:none;">
 					<?php $this->manager->link( $this->get_link_parameters() ); ?>
 				</div>
 			</div>
@@ -105,12 +105,12 @@ class WP_SMTP {
 		if ( ! $this->manager->is_plugin_installed( $this->config['lite_plugin'] ) && ! $this->manager->is_plugin_installed( $this->config['pro_plugin'] ) ) {
 			$button['plugin']      = $this->config['lite_download_url'];
 			$button['action']      = 'install';
-			$button['button_text'] = __( 'Install & Activate WP Mail SMTP', 'easy-digital-downloads' );
+			$button['button_text'] = __( 'Install & Activate WP Mail SMTP', 'commercestore' );
 		} elseif ( ! $this->is_smtp_activated() ) {
 			// If one of the SMTP plugins is installed, but not activated, the button will prompt to activate it.
 			$button['plugin']      = $this->config['lite_plugin'];
 			$button['action']      = 'activate';
-			$button['button_text'] = __( 'Activate WP Mail SMTP', 'easy-digital-downloads' );
+			$button['button_text'] = __( 'Activate WP Mail SMTP', 'commercestore' );
 		} elseif ( ! $this->is_smtp_configured() ) {
 			// If the plugin is active, but not configured, the button will send them to the setup wizard.
 			$button = $this->get_link_parameters();
@@ -128,11 +128,11 @@ class WP_SMTP {
 	private function get_link_parameters() {
 		return $this->is_smtp_configured() ?
 		array(
-			'button_text' => __( 'Configure WP Mail SMTP', 'easy-digital-downloads' ),
+			'button_text' => __( 'Configure WP Mail SMTP', 'commercestore' ),
 			'href'        => admin_url( $this->config['smtp_settings'] ),
 		) :
 		array(
-			'button_text' => __( 'Run the WP Mail SMTP Setup Wizard', 'easy-digital-downloads' ),
+			'button_text' => __( 'Run the WP Mail SMTP Setup Wizard', 'commercestore' ),
 			'href'        => admin_url( $this->config['smtp_wizard'] ),
 		);
 	}

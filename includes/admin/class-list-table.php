@@ -2,13 +2,13 @@
 /**
  * List Table Base Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin;
+namespace CS\Admin;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -123,7 +123,7 @@ abstract class List_Table extends \WP_List_Table {
 		$current = $this->get_status();
 
 		// Args to remove
-		$remove = array( 'edd-message', 'status', 'paged', '_wpnonce' );
+		$remove = array( 'cs-message', 'status', 'paged', '_wpnonce' );
 
 		// Base URL
 		$url = remove_query_arg( $remove, $this->get_base_url() );
@@ -135,7 +135,7 @@ abstract class List_Table extends \WP_List_Table {
 
 		// All
 		$count = '&nbsp;<span class="count">(' . esc_attr( $this->counts['total'] ) . ')</span>';
-		$label = __( 'All', 'easy-digital-downloads' ) . $count;
+		$label = __( 'All', 'commercestore' ) . $count;
 		$views = array(
 			'all' => sprintf( '<a href="%s"%s>%s</a>', $url, $class, $label ),
 		);
@@ -158,7 +158,7 @@ abstract class List_Table extends \WP_List_Table {
 
 				$count = '&nbsp;<span class="count">(' . absint( $this->counts[ $status ] ) . ')</span>';
 
-				$label            = edd_get_status_label( $status ) . $count;
+				$label            = cs_get_status_label( $status ) . $count;
 				$views[ $status ] = sprintf( '<a href="%s"%s>%s</a>', $count_url, $class, $label );
 			}
 		}

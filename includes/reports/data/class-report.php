@@ -2,16 +2,16 @@
 /**
  * Reports API - Report object
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Reports;
-use EDD\Utils;
+use CS\Reports;
+use CS\Utils;
 
 /**
  * Represents an encapsulated report for the Reports API.
@@ -50,7 +50,7 @@ final class Report extends Base_Object {
 	 * @since 3.0
 	 * @var   callable
 	 */
-	private $display_callback = '\EDD\Reports\default_display_report';
+	private $display_callback = '\CS\Reports\default_display_report';
 
 	/**
 	 * Represents filters the report has opted into.
@@ -118,8 +118,8 @@ final class Report extends Base_Object {
 			try {
 				$this->parse_endpoints( $this->raw_endpoints );
 
-			} catch ( \EDD_Exception $exception ) {
-				edd_debug_log_exception( $exception );
+			} catch ( \CS_Exception $exception ) {
+				cs_debug_log_exception( $exception );
 			}
 
 		} else {
@@ -132,13 +132,13 @@ final class Report extends Base_Object {
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 *
 	 * @param array $endpoints Endpoints, keyed by view type.
 	 */
 	public function parse_endpoints( $report_endpoints ) {
-		/** @var \EDD\Reports\Data\Endpoint_Registry|\WP_Error $registry */
-		$registry = EDD()->utils->get_registry( 'reports:endpoints' );
+		/** @var \CS\Reports\Data\Endpoint_Registry|\WP_Error $registry */
+		$registry = CS()->utils->get_registry( 'reports:endpoints' );
 
 		if ( is_wp_error( $registry ) ) {
 			throw new Utils\Exception( $registry->get_error_message() );
@@ -195,7 +195,7 @@ final class Report extends Base_Object {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Reports\Data\Report::$valid_endpoints
+	 * @see \CS\Reports\Data\Report::$valid_endpoints
 	 *
 	 * @param string                  $view_group View group corresponding to the endpoint view.
 	 * @param Data\Endpoint|\WP_Error $endpoint   Endpoint object.

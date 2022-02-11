@@ -1,19 +1,19 @@
 <?php
-namespace EDD\Orders;
+namespace CS\Orders;
 
 use Carbon\Carbon;
-use EDD\Utils\Exceptions\Invalid_Argument;
+use CS\Utils\Exceptions\Invalid_Argument;
 
 /**
  * Refund Tests.
  *
- * @group edd_orders
- * @group edd_refunds
+ * @group cs_orders
+ * @group cs_refunds
  * @group database
  *
- * @coversDefaultClass \EDD\Orders\Order
+ * @coversDefaultClass \CS\Orders\Order
  */
-class Refunds_Tests extends \EDD_UnitTestCase {
+class Refunds_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Orders fixture.
@@ -27,10 +27,10 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 	 * Set up fixtures once.
 	 */
 	public static function wpSetUpBeforeClass() {
-		self::$orders = parent::edd()->order->create_many( 5 );
+		self::$orders = parent::cs()->order->create_many( 5 );
 
 		foreach ( self::$orders as $order ) {
-			edd_add_order_adjustment( array(
+			cs_add_order_adjustment( array(
 				'object_type' => 'order',
 				'object_id'   => $order,
 				'type'        => 'discount',
@@ -42,67 +42,67 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_is_order_refundable
+	 * @covers ::cs_is_order_refundable
 	 */
 	public function test_is_order_refundable_should_return_true() {
-		$this->assertTrue( edd_is_order_refundable( self::$orders[0] ) );
+		$this->assertTrue( cs_is_order_refundable( self::$orders[0] ) );
 	}
 
 	/**
-	 * @covers ::edd_is_order_refund_window_passed
+	 * @covers ::cs_is_order_refund_window_passed
 	 */
 	public function test_is_order_refund_window_passed_return_true() {
-		$order = parent::edd()->order->create_and_get( array(
+		$order = parent::cs()->order->create_and_get( array(
 			'date_refundable' => '2000-01-01 00:00:00',
 		) );
 
-		$this->assertTrue( edd_is_order_refund_window_passed( $order->id ) );
+		$this->assertTrue( cs_is_order_refund_window_passed( $order->id ) );
 	}
 
 	/**
-	 * @covers ::edd_is_order_refundable_by_override
+	 * @covers ::cs_is_order_refundable_by_override
 	 */
 	public function test_is_order_refundable_by_override_return_true() {
-		$order = parent::edd()->order->create_and_get( array(
+		$order = parent::cs()->order->create_and_get( array(
 			'date_refundable' => '2000-01-01 00:00:00',
 		) );
 
-		add_filter( 'edd_is_order_refundable_by_override', '__return_true' );
+		add_filter( 'cs_is_order_refundable_by_override', '__return_true' );
 
-		$this->assertTrue( edd_is_order_refundable_by_override( $order->id ) );
+		$this->assertTrue( cs_is_order_refundable_by_override( $order->id ) );
 	}
 
 	/**
-	 * @covers ::edd_get_order_total
+	 * @covers ::cs_get_order_total
 	 */
 	public function test_get_order_total_should_be_120() {
-		$this->assertSame( 120.0, edd_get_order_total( self::$orders[0] ) );
+		$this->assertSame( 120.0, cs_get_order_total( self::$orders[0] ) );
 	}
 
 	/**
-	 * @covers ::edd_get_order_item_total
+	 * @covers ::cs_get_order_item_total
 	 */
 	public function test_get_order_item_total_should_be_120() {
-		$this->assertSame( 120.0, edd_get_order_item_total( array( self::$orders[0] ), 1 ) );
+		$this->assertSame( 120.0, cs_get_order_item_total( array( self::$orders[0] ), 1 ) );
 	}
 
 	/**
-	 * @covers ::edd_refund_order
+	 * @covers ::cs_refund_order
 	 */
 	public function test_refund_order() {
 
 		// Refund order entirely.
-		$refunded_order = edd_refund_order( self::$orders[0] );
+		$refunded_order = cs_refund_order( self::$orders[0] );
 
 		// Check that a new order ID was returned.
 		$this->assertNotInstanceOf( 'WP_Error', $refunded_order );
 		$this->assertGreaterThan( 0, $refunded_order );
 
 		// Fetch original order.
-		$o = edd_get_order( self::$orders[0] );
+		$o = cs_get_order( self::$orders[0] );
 
 		// Check a valid Order object was returned.
-		$this->assertInstanceOf( 'EDD\Orders\Order', $o );
+		$this->assertInstanceOf( 'CS\Orders\Order', $o );
 
 		// Verify status.
 		$this->assertSame( 'refunded', $o->status );
@@ -114,10 +114,10 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 		$this->assertSame( 120.0, floatval( $o->total ) );
 
 		// Fetch refunded order.
-		$r = edd_get_order( $refunded_order );
+		$r = cs_get_order( $refunded_order );
 
 		// Check a valid Order object was returned.
-		$this->assertInstanceOf( 'EDD\Orders\Order', $r );
+		$this->assertInstanceOf( 'CS\Orders\Order', $r );
 
 		// Verify status.
 		$this->assertSame( 'complete', $r->status );
@@ -130,10 +130,10 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_refund_order
+	 * @covers ::cs_refund_order
 	 */
 	public function test_refund_order_returns_wp_error_if_refund_amount_exceeds_max() {
-		$order = edd_get_order( self::$orders[1] );
+		$order = cs_get_order( self::$orders[1] );
 
 		$to_refund = array();
 
@@ -146,7 +146,7 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 			);
 		}
 
-		$refund_id = edd_refund_order( $order->id, $to_refund );
+		$refund_id = cs_refund_order( $order->id, $to_refund );
 
 		$this->assertInstanceOf( 'WP_Error', $refund_id );
 
@@ -155,11 +155,11 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_refund_order
-	 * @covers ::edd_get_order_total
+	 * @covers ::cs_refund_order
+	 * @covers ::cs_get_order_total
 	 */
 	public function test_partially_refund_order() {
-		$order = edd_get_order( self::$orders[1] );
+		$order = cs_get_order( self::$orders[1] );
 
 		$to_refund = array();
 
@@ -173,15 +173,15 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 			);
 		}
 
-		$refund_id = edd_refund_order( $order->id, $to_refund );
+		$refund_id = cs_refund_order( $order->id, $to_refund );
 
 		$this->assertGreaterThan( 0, $refund_id );
 
 		// Fetch original order.
-		$o = edd_get_order( $order->id );
+		$o = cs_get_order( $order->id );
 
 		// Check a valid Order object was returned.
-		$this->assertInstanceOf( 'EDD\Orders\Order', $o );
+		$this->assertInstanceOf( 'CS\Orders\Order', $o );
 
 		// Verify status.
 		$this->assertSame( 'partially_refunded', $o->status );
@@ -193,13 +193,13 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 		$this->assertEquals( 120.0, floatval( $o->total ) );
 
 		// Verify total minus refunded amount.
-		$this->assertEquals( 60.0, edd_get_order_total( $o->id ) );
+		$this->assertEquals( 60.0, cs_get_order_total( $o->id ) );
 
 		// Fetch refunded order.
-		$r = edd_get_order( $refund_id );
+		$r = cs_get_order( $refund_id );
 
 		// Check a valid Order object was returned.
-		$this->assertInstanceOf( 'EDD\Orders\Order', $r );
+		$this->assertInstanceOf( 'CS\Orders\Order', $r );
 
 		// Verify status.
 		$this->assertSame( 'complete', $r->status );
@@ -212,35 +212,35 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_refundability_types
+	 * @covers ::cs_get_refundability_types
 	 */
 	public function test_get_refundability_types() {
 		$expected = array(
-			'refundable'    => __( 'Refundable', 'easy-digital-downloads' ),
-			'nonrefundable' => __( 'Non-Refundable', 'easy-digital-downloads' ),
+			'refundable'    => __( 'Refundable', 'commercestore' ),
+			'nonrefundable' => __( 'Non-Refundable', 'commercestore' ),
 		);
 
-		$this->assertEqualSetsWithIndex( $expected, edd_get_refundability_types() );
+		$this->assertEqualSetsWithIndex( $expected, cs_get_refundability_types() );
 	}
 
 	/**
-	 * @covers ::edd_get_refund_date()
+	 * @covers ::cs_get_refund_date()
 	 */
 	public function test_get_refund_date() {
 
 		// Static date to ensure unit tests don't fail if this test runs for longer than 1 second.
 		$date = '2010-01-01 00:00:00';
 
-		$this->assertSame( Carbon::parse( $date )->addDays( 30 )->toDateTimeString(), edd_get_refund_date( $date ) );
+		$this->assertSame( Carbon::parse( $date )->addDays( 30 )->toDateTimeString(), cs_get_refund_date( $date ) );
 	}
 
 	/**
-	 * @covers \EDD\Orders\Refund_Validator::validate_and_calculate_totals
-	 * @covers \EDD\Orders\Refund_Validator::get_refunded_order_items
+	 * @covers \CS\Orders\Refund_Validator::validate_and_calculate_totals
+	 * @covers \CS\Orders\Refund_Validator::get_refunded_order_items
 	 * @throws \Exception
 	 */
 	public function test_refund_validator_all_returns_original_amounts() {
-		$order     = edd_get_order( self::$orders[1] );
+		$order     = cs_get_order( self::$orders[1] );
 		$validator = new Refund_Validator( $order, 'all', 'all' );
 		$validator->validate_and_calculate_totals();
 
@@ -260,10 +260,10 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 	/**
 	 * An Invalid_Argument exception is thrown if the `order_item_id` argument is missing.
 	 *
-	 * @covers \EDD\Orders\Refund_Validator::validate_and_format_order_items
+	 * @covers \CS\Orders\Refund_Validator::validate_and_format_order_items
 	 */
 	public function test_refund_validator_throws_exception_missing_order_item_id() {
-		$order = edd_get_order( self::$orders[1] );
+		$order = cs_get_order( self::$orders[1] );
 
 		$this->expectException( Invalid_Argument::class );
 
@@ -282,11 +282,11 @@ class Refunds_Tests extends \EDD_UnitTestCase {
 	/**
 	 * An Invalid_Argument exception is thrown if the `subtotal` argument is missing.
 	 *
-	 * @covers \EDD\Orders\Refund_Validator::validate_and_format_order_items
-	 * @covers \EDD\Orders\Refund_Validator::validate_required_fields
+	 * @covers \CS\Orders\Refund_Validator::validate_and_format_order_items
+	 * @covers \CS\Orders\Refund_Validator::validate_required_fields
 	 */
 	public function test_refund_validator_throws_exception_missing_subtotal() {
-		$order = edd_get_order( self::$orders[1] );
+		$order = cs_get_order( self::$orders[1] );
 
 		$this->expectException( Invalid_Argument::class );
 

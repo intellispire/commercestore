@@ -5,7 +5,7 @@
  */
 const TableMeta = wp.Backbone.View.extend( {
 	// See https://codex.wordpress.org/Javascript_Reference/wp.template
-	template: wp.template( 'edd-admin-tax-rates-table-meta' ),
+	template: wp.template( 'cs-admin-tax-rates-table-meta' ),
 
 	// Watch events.
 	events: {

@@ -2,9 +2,9 @@
 /**
  * Payment Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Payments
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -13,24 +13,24 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Retrieves an instance of EDD_Payment for a specified ID.
+ * Retrieves an instance of CS_Payment for a specified ID.
  *
  * @since 2.7
  *
- * @param mixed int|EDD_Payment|WP_Post $payment Payment ID, EDD_Payment object or WP_Post object.
+ * @param mixed int|CS_Payment|WP_Post $payment Payment ID, CS_Payment object or WP_Post object.
  * @param bool                          $by_txn  Is the ID supplied as the first parameter
  *
- * @return EDD_Payment|false false|object EDD_Payment if a valid payment ID, false otherwise.
+ * @return CS_Payment|false false|object CS_Payment if a valid payment ID, false otherwise.
  */
-function edd_get_payment( $payment_or_txn_id = null, $by_txn = false ) {
-	if ( $payment_or_txn_id instanceof WP_Post || $payment_or_txn_id instanceof EDD_Payment ) {
+function cs_get_payment( $payment_or_txn_id = null, $by_txn = false ) {
+	if ( $payment_or_txn_id instanceof WP_Post || $payment_or_txn_id instanceof CS_Payment ) {
 		$payment_id = $payment_or_txn_id->ID;
 	} elseif ( $by_txn ) {
 		if ( empty( $payment_or_txn_id ) ) {
 			return false;
 		}
 
-		$payment_id = edd_get_order_id_from_transaction_id( $payment_or_txn_id );
+		$payment_id = cs_get_order_id_from_transaction_id( $payment_or_txn_id );
 
 		if ( empty( $payment_id ) ) {
 			return false;
@@ -43,7 +43,7 @@ function edd_get_payment( $payment_or_txn_id = null, $by_txn = false ) {
 		return false;
 	}
 
-	$payment = new EDD_Payment( $payment_id );
+	$payment = new CS_Payment( $payment_id );
 
 	if ( empty( $payment->ID ) || ( ! $by_txn && (int) $payment->ID !== (int) $payment_id ) ) {
 		return false;
@@ -63,14 +63,14 @@ function edd_get_payment( $payment_or_txn_id = null, $by_txn = false ) {
  * $user = null, $status = 'any', $meta_key = null
  *
  * @since 1.0
- * @since 1.8 Refactored to be a wrapper for EDD_Payments_Query.
+ * @since 1.8 Refactored to be a wrapper for CS_Payments_Query.
  *
  * @param array $args Arguments passed to get payments.
- * @return EDD_Payment[]|int $payments Payments retrieved from the database.
+ * @return CS_Payment[]|int $payments Payments retrieved from the database.
  */
-function edd_get_payments( $args = array() ) {
-	$args     = apply_filters( 'edd_get_payments_args', $args );
-	$payments = new EDD_Payments_Query( $args );
+function cs_get_payments( $args = array() ) {
+	$args     = apply_filters( 'cs_get_payments_args', $args );
+	$payments = new CS_Payments_Query( $args );
 	return $payments->get_payments();
 }
 
@@ -84,23 +84,23 @@ function edd_get_payments( $args = array() ) {
  *
  * @return mixed
  */
-function edd_get_payment_by( $field = '', $value = '' ) {
+function cs_get_payment_by( $field = '', $value = '' ) {
 	$payment = false;
 
 	if ( ! empty( $field ) && ! empty( $value ) ) {
 		switch ( strtolower( $field ) ) {
 			case 'id':
-				$payment = edd_get_payment( $value );
+				$payment = cs_get_payment( $value );
 
 				if ( ! $payment->ID > 0 ) {
 					$payment = false;
 				}
 				break;
 			case 'key':
-				$order = edd_get_order_by( 'payment_key', $value );
+				$order = cs_get_order_by( 'payment_key', $value );
 
 				if ( $order ) {
-					$payment = edd_get_payment( $order->id );
+					$payment = cs_get_payment( $order->id );
 
 					if ( ! $payment->ID > 0 ) {
 						$payment = false;
@@ -108,10 +108,10 @@ function edd_get_payment_by( $field = '', $value = '' ) {
 				}
 				break;
 			case 'payment_number':
-				$order = edd_get_order_by( 'order_number', $value );
+				$order = cs_get_order_by( 'order_number', $value );
 
 				if ( $order ) {
-					$payment = edd_get_payment( $order->id );
+					$payment = cs_get_payment( $order->id );
 
 					if ( ! $payment->ID > 0 ) {
 						$payment = false;
@@ -133,12 +133,12 @@ function edd_get_payment_by( $field = '', $value = '' ) {
  * @param array $order_data Order data to process.
  * @return int|bool Order ID if the order was successfully inserted, false otherwise.
  */
-function edd_insert_payment( $order_data = array() ) {
+function cs_insert_payment( $order_data = array() ) {
 	if ( empty( $order_data ) ) {
 		return false;
 	}
 
-	return edd_build_order( $order_data );
+	return cs_build_order( $order_data );
 }
 
 /**
@@ -152,8 +152,8 @@ function edd_insert_payment( $order_data = array() ) {
  *
  * @return bool True if the status was updated successfully, false otherwise.
  */
-function edd_update_payment_status( $order_id = 0, $new_status = 'complete' ) {
-	return edd_update_order_status( $order_id, $new_status );
+function cs_update_payment_status( $order_id = 0, $new_status = 'complete' ) {
+	return cs_update_order_status( $order_id, $new_status );
 }
 
 /**
@@ -166,8 +166,8 @@ function edd_update_payment_status( $order_id = 0, $new_status = 'complete' ) {
  * @param bool $update_customer      If we should update the customer stats. Default true.
  * @param bool $delete_download_logs If we should remove all file download logs associated with the payment. Default false.
  */
-function edd_delete_purchase( $payment_id = 0, $update_customer = true, $delete_download_logs = false ) {
-	$payment = edd_get_payment( $payment_id );
+function cs_delete_purchase( $payment_id = 0, $update_customer = true, $delete_download_logs = false ) {
+	$payment = cs_get_payment( $payment_id );
 
 	// Bail if an order does not exist.
 	if ( ! $payment ) {
@@ -175,23 +175,23 @@ function edd_delete_purchase( $payment_id = 0, $update_customer = true, $delete_
 	}
 
 	// Update sale counts and earnings for all purchased products
-	edd_undo_purchase( false, $payment_id );
+	cs_undo_purchase( false, $payment_id );
 
-	$amount      = edd_get_payment_amount( $payment_id );
+	$amount      = cs_get_payment_amount( $payment_id );
 	$status      = $payment->post_status;
-	$customer_id = edd_get_payment_customer_id( $payment_id );
+	$customer_id = cs_get_payment_customer_id( $payment_id );
 
-	$customer = edd_get_customer( $customer_id );
+	$customer = cs_get_customer( $customer_id );
 
 	// Only decrease earnings if they haven't already been decreased (or were never increased for this payment).
 	if ( 'revoked' === $status || 'complete' === $status ) {
-		edd_decrease_total_earnings( $amount );
+		cs_decrease_total_earnings( $amount );
 
 		// Clear the This Month earnings (this_monththis_month is NOT a typo)
-		delete_transient( md5( 'edd_earnings_this_monththis_month' ) );
+		delete_transient( md5( 'cs_earnings_this_monththis_month' ) );
 	}
 
-	do_action( 'edd_payment_delete', $payment_id );
+	do_action( 'cs_payment_delete', $payment_id );
 
 	if ( $customer && $customer->id && $update_customer ) {
 
@@ -200,17 +200,17 @@ function edd_delete_purchase( $payment_id = 0, $update_customer = true, $delete_
 	}
 
 	// Remove the order.
-	edd_delete_order( $payment_id );
+	cs_delete_order( $payment_id );
 
 	// Delete file download logs.
 	if ( $delete_download_logs ) {
-		$logs = edd_get_file_download_logs( array(
+		$logs = cs_get_file_download_logs( array(
 			'order_id' => $payment_id,
 		) );
 
 		if ( $logs ) {
 			foreach ( $logs as $log ) {
-				edd_delete_file_download_log( $log->id );
+				cs_delete_file_download_log( $log->id );
 			}
 		}
 	}
@@ -219,7 +219,7 @@ function edd_delete_purchase( $payment_id = 0, $update_customer = true, $delete_
 		$customer->recalculate_stats();
 	}
 
-	do_action( 'edd_payment_deleted', $payment_id );
+	do_action( 'cs_payment_deleted', $payment_id );
 }
 
 /**
@@ -237,7 +237,7 @@ function edd_delete_purchase( $payment_id = 0, $update_customer = true, $delete_
  *
  * @return int|false Refunded order ID, false otherwise.
  */
-function edd_undo_purchase( $download_id = 0, $order_id = 0 ) {
+function cs_undo_purchase( $download_id = 0, $order_id = 0 ) {
 
 	/**
 	 * In 2.5.7, a bug was found that $download_id was an incorrect usage. Passing it in
@@ -245,7 +245,7 @@ function edd_undo_purchase( $download_id = 0, $order_id = 0 ) {
 	 */
 
 	if ( ! empty( $download_id ) ) {
-		_edd_deprected_argument( 'download_id', 'edd_undo_purchase', '2.5.7' );
+		_cs_deprected_argument( 'download_id', 'cs_undo_purchase', '2.5.7' );
 	}
 
 	// Bail if no order ID was passed.
@@ -253,13 +253,13 @@ function edd_undo_purchase( $download_id = 0, $order_id = 0 ) {
 		return false;
 	}
 
-	$payment = edd_get_payment( $order_id );
+	$payment = cs_get_payment( $order_id );
 
 	$cart_details = $payment->cart_details;
 	$user_info    = $payment->user_info;
 
 	// Refund the order.
-	$new_order_id = edd_refund_order( $order_id );
+	$new_order_id = cs_refund_order( $order_id );
 
 	if ( is_array( $cart_details ) ) {
 
@@ -275,19 +275,19 @@ function edd_undo_purchase( $download_id = 0, $order_id = 0 ) {
 			for ( $i = 0; $i < $item['quantity']; $i++ ) {
 
 				// Handle variable priced downloads.
-				if ( false === $amount && edd_has_variable_prices( $item['id'] ) ) {
+				if ( false === $amount && cs_has_variable_prices( $item['id'] ) ) {
 					$price_id = isset( $item['item_number']['options']['price_id'] )
 						? $item['item_number']['options']['price_id']
 						: null;
 
 					$amount = ! isset( $item['price'] ) && 0 !== $item['price']
-						? edd_get_price_option_amount( $item['id'], $price_id )
+						? cs_get_price_option_amount( $item['id'], $price_id )
 						: $item['price'];
 				}
 
 				if ( ! $amount ) {
 					// This function is only used on payments with near 1.0 cart data structure.
-					$amount = edd_get_download_final_price( $item['id'], $user_info, $amount );
+					$amount = cs_get_download_final_price( $item['id'], $user_info, $amount );
 				}
 			}
 
@@ -303,18 +303,18 @@ function edd_undo_purchase( $download_id = 0, $order_id = 0 ) {
 				}
 			}
 
-			$maybe_decrease_earnings = apply_filters( 'edd_decrease_earnings_on_undo', true, $payment, $item['id'] );
+			$maybe_decrease_earnings = apply_filters( 'cs_decrease_earnings_on_undo', true, $payment, $item['id'] );
 			if ( true === $maybe_decrease_earnings ) {
 
 				// Decrease earnings.
-				edd_decrease_earnings( $item['id'], $amount );
+				cs_decrease_earnings( $item['id'], $amount );
 			}
 
-			$maybe_decrease_sales = apply_filters( 'edd_decrease_sales_on_undo', true, $payment, $item['id'] );
+			$maybe_decrease_sales = apply_filters( 'cs_decrease_sales_on_undo', true, $payment, $item['id'] );
 			if ( true === $maybe_decrease_sales ) {
 
 				// Decrease purchase count.
-				edd_decrease_purchase_count( $item['id'], $item['quantity'] );
+				cs_decrease_purchase_count( $item['id'], $item['quantity'] );
 			}
 		}
 	}
@@ -328,13 +328,13 @@ function edd_undo_purchase( $download_id = 0, $order_id = 0 ) {
  * Returns the total number of payments recorded.
  *
  * @since 1.0
- * @since 3.0 Refactored to work with edd_orders table.
+ * @since 3.0 Refactored to work with cs_orders table.
  *
  * @param array $args List of arguments to base the payments count on.
  *
  * @return object $stats Number of orders grouped by order status.
  */
-function edd_count_payments( $args = array() ) {
+function cs_count_payments( $args = array() ) {
 	global $wpdb;
 
 	$args = wp_parse_args( $args, array(
@@ -348,27 +348,27 @@ function edd_count_payments( $args = array() ) {
 		'type'       => 'sale',
 	) );
 
-	$select  = 'SELECT edd_o.status, COUNT(*) AS count';
-	$from    = "FROM {$wpdb->edd_orders} edd_o";
+	$select  = 'SELECT cs_o.status, COUNT(*) AS count';
+	$from    = "FROM {$wpdb->cs_orders} cs_o";
 	$join    = '';
 	$where   = 'WHERE 1=1';
 	$orderby = '';
-	$groupby = 'GROUP BY edd_o.status';
+	$groupby = 'GROUP BY cs_o.status';
 
-	// Hold the query arguments passed to edd_count_orders().
+	// Hold the query arguments passed to cs_count_orders().
 	$query_args = array();
 
 	// Count orders for a specific user.
 	if ( ! empty( $args['user'] ) ) {
 		if ( is_email( $args['user'] ) ) {
-			$where .= $wpdb->prepare( ' AND edd_o.email = %s', sanitize_email( $args['user'] ) );
+			$where .= $wpdb->prepare( ' AND cs_o.email = %s', sanitize_email( $args['user'] ) );
 		} elseif ( is_numeric( $args['user'] ) ) {
-			$where .= $wpdb->prepare( ' AND edd_o.user_id = %d', absint( $args['user'] ) );
+			$where .= $wpdb->prepare( ' AND cs_o.user_id = %d', absint( $args['user'] ) );
 		}
 
 		// Count orders for a specific customer.
 	} elseif ( ! empty( $args['customer'] ) ) {
-		$where .= $wpdb->prepare( ' AND edd_o.customer_id = %d', absint( $args['customer'] ) );
+		$where .= $wpdb->prepare( ' AND cs_o.customer_id = %d', absint( $args['customer'] ) );
 
 		// Count payments for a search
 	} elseif ( ! empty( $args['s'] ) ) {
@@ -376,19 +376,19 @@ function edd_count_payments( $args = array() ) {
 
 		// Filter by email address
 		if ( is_email( $args['s'] ) ) {
-			$where .= $wpdb->prepare( ' AND edd_o.email = %s', sanitize_email( $args['s'] ) );
+			$where .= $wpdb->prepare( ' AND cs_o.email = %s', sanitize_email( $args['s'] ) );
 
 			// Filter by payment key.
 		} elseif ( 32 === strlen( $args['s'] ) ) {
-			$where .= $wpdb->prepare( ' AND edd_o.payment_key = %s', sanitize_email( $args['s'] ) );
+			$where .= $wpdb->prepare( ' AND cs_o.payment_key = %s', sanitize_email( $args['s'] ) );
 
 			// Filter by download ID.
 		} elseif ( '#' === substr( $args['s'], 0, 1 ) ) {
 			$search = str_replace( '#:', '', $args['s'] );
 			$search = str_replace( '#', '', $search );
 
-			$join   = "INNER JOIN {$wpdb->edd_order_items} edd_oi ON edd_o.id = edd_oi.order_id";
-			$where .= $wpdb->prepare( ' AND edd_oi.product_id = %d', $search );
+			$join   = "INNER JOIN {$wpdb->cs_order_items} cs_oi ON cs_o.id = cs_oi.order_id";
+			$where .= $wpdb->prepare( ' AND cs_oi.product_id = %d', $search );
 
 			// Filter by user ID.
 		} elseif ( is_numeric( $args['s'] ) ) {
@@ -398,22 +398,22 @@ function edd_count_payments( $args = array() ) {
 		} elseif ( 0 === strpos( $args['s'], 'discount:' ) ) {
 			$search = str_replace( 'discount:', '', $args['s'] );
 
-			$join   = "INNER JOIN {$wpdb->edd_order_adjustments} edd_oa ON edd_o.id = edd_oa.order_id";
-			$where .= $wpdb->prepare( " AND edd_oa.description = %s AND edd_oa.type = 'discount'", $search );
+			$join   = "INNER JOIN {$wpdb->cs_order_adjustments} cs_oa ON cs_o.id = cs_oa.order_id";
+			$where .= $wpdb->prepare( " AND cs_oa.description = %s AND cs_oa.type = 'discount'", $search );
 		}
 	}
 
 	if ( ! empty( $args['download'] ) && is_numeric( $args['download'] ) ) {
-		$join   = "INNER JOIN {$wpdb->edd_order_items} edd_oi ON edd_o.id = edd_oi.order_id";
-		$where .= $wpdb->prepare( ' AND edd_oi.product_id = %d', absint( $args['download'] ) );
+		$join   = "INNER JOIN {$wpdb->cs_order_items} cs_oi ON cs_o.id = cs_oi.order_id";
+		$where .= $wpdb->prepare( ' AND cs_oi.product_id = %d', absint( $args['download'] ) );
 	}
 
 	if ( ! empty( $args['gateway'] ) ) {
-		$where .= $wpdb->prepare( ' AND edd_o.gateway = %s', sanitize_text_field( $args['gateway'] ) );
+		$where .= $wpdb->prepare( ' AND cs_o.gateway = %s', sanitize_text_field( $args['gateway'] ) );
 	}
 
 	if ( ! empty( $args['type'] ) ) {
-		$where .= $wpdb->prepare( ' AND edd_o.type = %s', sanitize_text_field( $args['type'] ) );
+		$where .= $wpdb->prepare( ' AND cs_o.type = %s', sanitize_text_field( $args['type'] ) );
 	}
 
 	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '/' ) ) {
@@ -425,7 +425,7 @@ function edd_count_payments( $args = array() ) {
 		$is_date = checkdate( $month, $day, $year );
 		if ( false !== $is_date ) {
 			$date   = new DateTime( $args['start-date'] );
-			$where .= $wpdb->prepare( ' AND edd_o.date_created >= %s', $date->format( 'Y-m-d 00:00:00' ) );
+			$where .= $wpdb->prepare( ' AND cs_o.date_created >= %s', $date->format( 'Y-m-d 00:00:00' ) );
 		}
 
 		// Fixes an issue with the payments list table counts when no end date is specified (partly with stats class).
@@ -444,12 +444,12 @@ function edd_count_payments( $args = array() ) {
 		$is_date = checkdate( $month, $day, $year );
 		if ( false !== $is_date ) {
 			$date   = date( 'Y-m-d', strtotime( '+1 day', mktime( 0, 0, 0, $month, $day, $year ) ) );
-			$where .= $wpdb->prepare( ' AND edd_o.date_created < %s', $date );
+			$where .= $wpdb->prepare( ' AND cs_o.date_created < %s', $date );
 		}
 	}
 
-	$where = apply_filters( 'edd_count_payments_where', $where );
-	$join  = apply_filters( 'edd_count_payments_join', $join );
+	$where = apply_filters( 'cs_count_payments_where', $where );
+	$join  = apply_filters( 'cs_count_payments_join', $join );
 
 	$query = "{$select} {$from} {$join} {$where} {$orderby} {$groupby}";
 
@@ -463,7 +463,7 @@ function edd_count_payments( $args = array() ) {
 	$counts = $wpdb->get_results( $query, ARRAY_A );
 
 	// Here for backwards compatibility.
-	$statuses = array_merge( get_post_stati(), edd_get_payment_status_keys() );
+	$statuses = array_merge( get_post_stati(), cs_get_payment_status_keys() );
 	if ( isset( $statuses['private'] ) && empty( $args['s'] ) ) {
 		unset( $statuses['private'] );
 	}
@@ -494,15 +494,15 @@ function edd_count_payments( $args = array() ) {
  * Check for existing payment.
  *
  * @since 1.0
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return bool True if payment exists, false otherwise.
  */
-function edd_check_for_existing_payment( $order_id ) {
+function cs_check_for_existing_payment( $order_id ) {
 	$exists = false;
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	// Bail if an order was not found.
 	if ( ! $order ) {
@@ -520,30 +520,30 @@ function edd_check_for_existing_payment( $order_id ) {
  * Get order status.
  *
  * @since 1.0
- * @since 3.0 Updated to use new EDD\Order\Order class.
+ * @since 3.0 Updated to use new CS\Order\Order class.
  *
- * @param mixed $order        Payment post object, EDD_Payment object, or payment/post ID.
+ * @param mixed $order        Payment post object, CS_Payment object, or payment/post ID.
  * @param bool  $return_label Whether to return the payment status or not
  *
  * @return bool|mixed if payment status exists, false otherwise
  */
-function edd_get_payment_status( $order, $return_label = false ) {
+function cs_get_payment_status( $order, $return_label = false ) {
 	if ( is_numeric( $order ) ) {
-		$order = edd_get_order( $order );
+		$order = cs_get_order( $order );
 
 		if ( ! $order ) {
 			return false;
 		}
 	}
 
-	if ( $order instanceof EDD_Payment ) {
-		/** @var EDD_Payment $order */
-		$order = edd_get_order( $order->id );
+	if ( $order instanceof CS_Payment ) {
+		/** @var CS_Payment $order */
+		$order = cs_get_order( $order->id );
 	}
 
 	if ( $order instanceof WP_Post ) {
 		/** @var WP_Post $order */
-		$order = edd_get_order( $order->ID );
+		$order = cs_get_order( $order->ID );
 	}
 
 	if ( ! is_object( $order ) ) {
@@ -557,9 +557,9 @@ function edd_get_payment_status( $order, $return_label = false ) {
 	}
 
 	if ( true === $return_label ) {
-		$status = edd_get_payment_status_label( $status );
+		$status = cs_get_payment_status_label( $status );
 	} else {
-		$keys      = edd_get_payment_status_keys();
+		$keys      = cs_get_payment_status_keys();
 		$found_key = array_search( strtolower( $status ), $keys );
 		$status    = $found_key && array_key_exists( $found_key, $keys ) ? $keys[ $found_key ] : false;
 	}
@@ -575,10 +575,10 @@ function edd_get_payment_status( $order, $return_label = false ) {
  *
  * @return bool|mixed
  */
-function edd_get_payment_status_label( $status = '' ) {
+function cs_get_payment_status_label( $status = '' ) {
 	$default  = str_replace( '_', ' ', $status );
 	$default  = ucwords( $default );
-	$statuses = edd_get_payment_statuses();
+	$statuses = cs_get_payment_statuses();
 
 	if ( ! is_array( $statuses ) || empty( $statuses ) ) {
 		return $default;
@@ -599,16 +599,16 @@ function edd_get_payment_status_label( $status = '' ) {
  *
  * @return array $payment_status All the available payment statuses.
  */
-function edd_get_payment_statuses() {
-	return apply_filters( 'edd_payment_statuses', array(
-		'pending'            => __( 'Pending',    'easy-digital-downloads' ),
-		'processing'         => __( 'Processing', 'easy-digital-downloads' ),
-		'complete'           => __( 'Completed',  'easy-digital-downloads' ),
-		'refunded'           => __( 'Refunded',   'easy-digital-downloads' ),
-		'partially_refunded' => __( 'Partially Refunded', 'easy-digital-downloads' ),
-		'revoked'            => __( 'Revoked',    'easy-digital-downloads' ),
-		'failed'             => __( 'Failed',     'easy-digital-downloads' ),
-		'abandoned'          => __( 'Abandoned',  'easy-digital-downloads' )
+function cs_get_payment_statuses() {
+	return apply_filters( 'cs_payment_statuses', array(
+		'pending'            => __( 'Pending',    'commercestore' ),
+		'processing'         => __( 'Processing', 'commercestore' ),
+		'complete'           => __( 'Completed',  'commercestore' ),
+		'refunded'           => __( 'Refunded',   'commercestore' ),
+		'partially_refunded' => __( 'Partially Refunded', 'commercestore' ),
+		'revoked'            => __( 'Revoked',    'commercestore' ),
+		'failed'             => __( 'Failed',     'commercestore' ),
+		'abandoned'          => __( 'Abandoned',  'commercestore' )
 	) );
 }
 
@@ -619,8 +619,8 @@ function edd_get_payment_statuses() {
  *
  * @return array $payment_status All the available payment statuses.
  */
-function edd_get_payment_status_keys() {
-	$statuses = array_keys( edd_get_payment_statuses() );
+function cs_get_payment_status_keys() {
+	$statuses = array_keys( cs_get_payment_statuses() );
 	asort( $statuses );
 
 	return array_values( $statuses );
@@ -630,13 +630,13 @@ function edd_get_payment_status_keys() {
  * Checks whether a payment has been marked as complete.
  *
  * @since 1.0.8
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID to check against.
  * @return bool True if complete, false otherwise.
  */
-function edd_is_payment_complete( $order_id = 0 ) {
-	$order = edd_get_order( $order_id );
+function cs_is_payment_complete( $order_id = 0 ) {
+	$order = cs_get_order( $order_id );
 
 	$ret    = false;
 	$status = null;
@@ -648,7 +648,7 @@ function edd_is_payment_complete( $order_id = 0 ) {
 		}
 	}
 
-	return apply_filters( 'edd_is_payment_complete', $ret, $order_id, $status );
+	return apply_filters( 'cs_is_payment_complete', $ret, $order_id, $status );
 }
 
 /**
@@ -658,8 +658,8 @@ function edd_is_payment_complete( $order_id = 0 ) {
  *
  * @return int $count Total sales
  */
-function edd_get_total_sales() {
-	$payments = edd_count_payments( array( 'type' => 'sale' ) );
+function cs_get_total_sales() {
+	$payments = cs_count_payments( array( 'type' => 'sale' ) );
 
 	return $payments->revoked + $payments->complete;
 }
@@ -673,14 +673,14 @@ function edd_get_total_sales() {
  * @param bool $include_taxes Whether taxes should be included. Default true.
  * @return float $total Total earnings.
  */
-function edd_get_total_earnings( $include_taxes = true ) {
+function cs_get_total_earnings( $include_taxes = true ) {
 	global $wpdb;
 
-	$total = get_option( 'edd_earnings_total', false );
+	$total = get_option( 'cs_earnings_total', false );
 
 	// If no total stored in the database, use old method of calculating total earnings.
 	if ( false === $total ) {
-		$total = get_transient( 'edd_earnings_total' );
+		$total = get_transient( 'cs_earnings_total' );
 
 		if ( false === $total ) {
 			$exclude_taxes_sql = false === $include_taxes
@@ -689,17 +689,17 @@ function edd_get_total_earnings( $include_taxes = true ) {
 
 			$total = $wpdb->get_var( "
 				SELECT SUM(total) {$exclude_taxes_sql} AS total
-				FROM {$wpdb->edd_orders}
+				FROM {$wpdb->cs_orders}
 				WHERE status IN ('complete', 'revoked')
 			" );
 
-			$total = (float) edd_number_not_negative( (float) $total );
+			$total = (float) cs_number_not_negative( (float) $total );
 
 			// Cache results for 1 day. This cache is cleared automatically when a payment is made
-			set_transient( 'edd_earnings_total', $total, 86400 );
+			set_transient( 'cs_earnings_total', $total, 86400 );
 
 			// Store the total for the first time
-			update_option( 'edd_earnings_total', $total );
+			update_option( 'cs_earnings_total', $total );
 		}
 	}
 
@@ -708,7 +708,7 @@ function edd_get_total_earnings( $include_taxes = true ) {
 		$total = 0;
 	}
 
-	return apply_filters( 'edd_total_earnings', round( $total, edd_currency_decimal_filter() ) );
+	return apply_filters( 'cs_total_earnings', round( $total, cs_currency_decimal_filter() ) );
 }
 
 /**
@@ -719,11 +719,11 @@ function edd_get_total_earnings( $include_taxes = true ) {
  * @param $amount int The amount you would like to increase the total earnings by.
  * @return float $total Total earnings
  */
-function edd_increase_total_earnings( $amount = 0 ) {
-	$total  = floatval( edd_get_total_earnings() );
+function cs_increase_total_earnings( $amount = 0 ) {
+	$total  = floatval( cs_get_total_earnings() );
 	$total += floatval( $amount );
 
-	update_option( 'edd_earnings_total', $total );
+	update_option( 'cs_earnings_total', $total );
 
 	return $total;
 }
@@ -736,15 +736,15 @@ function edd_increase_total_earnings( $amount = 0 ) {
  * @param $amount int The amount you would like to decrease the total earnings by.
  * @return float $total Total earnings.
  */
-function edd_decrease_total_earnings( $amount = 0 ) {
-	$total  = edd_get_total_earnings();
+function cs_decrease_total_earnings( $amount = 0 ) {
+	$total  = cs_get_total_earnings();
 	$total -= $amount;
 
 	if ( $total < 0 ) {
 		$total = 0;
 	}
 
-	update_option( 'edd_earnings_total', $total );
+	update_option( 'cs_earnings_total', $total );
 
 	return $total;
 }
@@ -754,18 +754,18 @@ function edd_decrease_total_earnings( $amount = 0 ) {
  *
  * @since 1.2
  *
- * @internal This needs to continue making a call to EDD_Payment::get_meta() as it handles the backwards compatibility for
- *           _edd_payment_meta if requested.
+ * @internal This needs to continue making a call to CS_Payment::get_meta() as it handles the backwards compatibility for
+ *           _cs_payment_meta if requested.
  *
  * @param int     $payment_id Payment ID.
- * @param string  $key        Optional. The meta key to retrieve. By default, returns data for all keys. Default '_edd_payment_meta'.
+ * @param string  $key        Optional. The meta key to retrieve. By default, returns data for all keys. Default '_cs_payment_meta'.
  * @param bool    $single     Optional, default is false. If true, return only the first value of the specified meta_key.
  *                            This parameter has no effect if meta_key is not specified.
  *
  * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
  */
-function edd_get_payment_meta( $payment_id = 0, $key = '_edd_payment_meta', $single = true ) {
-	$payment = edd_get_payment( $payment_id );
+function cs_get_payment_meta( $payment_id = 0, $key = '_cs_payment_meta', $single = true ) {
+	$payment = cs_get_payment( $payment_id );
 
 	return $payment
 		? $payment->get_meta( $key, $single )
@@ -782,8 +782,8 @@ function edd_get_payment_meta( $payment_id = 0, $key = '_edd_payment_meta', $sin
  *
  * @since 1.2
  *
- * @internal This needs to continue making a call to EDD_Payment::update_meta() as it handles the backwards compatibility for
- *           _edd_payment_meta.
+ * @internal This needs to continue making a call to CS_Payment::update_meta() as it handles the backwards compatibility for
+ *           _cs_payment_meta.
  *
  * @param int     $payment_id Payment ID.
  * @param string  $meta_key   Meta data key.
@@ -792,8 +792,8 @@ function edd_get_payment_meta( $payment_id = 0, $key = '_edd_payment_meta', $sin
  *
  * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
  */
-function edd_update_payment_meta( $payment_id = 0, $meta_key = '', $meta_value = '', $prev_value = '' ) {
-	$payment = edd_get_payment( $payment_id );
+function cs_update_payment_meta( $payment_id = 0, $meta_key = '', $meta_value = '', $prev_value = '' ) {
+	$payment = cs_get_payment( $payment_id );
 
 	return $payment
 		? $payment->update_meta( $meta_key, $meta_value, $prev_value )
@@ -807,13 +807,13 @@ function edd_update_payment_meta( $payment_id = 0, $meta_key = '', $meta_value =
  *
  * @since 1.2
  *
- * @internal This needs to continue retrieving from EDD_Payment as it handles backwards compatibility.
+ * @internal This needs to continue retrieving from CS_Payment as it handles backwards compatibility.
  *
  * @param int $payment_id Payment ID.
  * @return array User Information.
  */
-function edd_get_payment_meta_user_info( $payment_id ) {
-	$payment = edd_get_payment( $payment_id );
+function cs_get_payment_meta_user_info( $payment_id ) {
+	$payment = cs_get_payment( $payment_id );
 
 	return $payment
 		? $payment->user_info
@@ -830,8 +830,8 @@ function edd_get_payment_meta_user_info( $payment_id ) {
  * @param int $payment_id Payment ID.
  * @return array Downloads.
  */
-function edd_get_payment_meta_downloads( $payment_id ) {
-	$payment = edd_get_payment( $payment_id );
+function cs_get_payment_meta_downloads( $payment_id ) {
+	$payment = cs_get_payment( $payment_id );
 
 	return $payment
 		? $payment->downloads
@@ -845,15 +845,15 @@ function edd_get_payment_meta_downloads( $payment_id ) {
  *
  * @since 1.2
  *
- * @internal This needs to continue retrieving from EDD_Payment as it handles backwards compatibility.
+ * @internal This needs to continue retrieving from CS_Payment as it handles backwards compatibility.
  *
  * @param int  $payment_id           Payment ID
  * @param bool $include_bundle_files Whether to retrieve product IDs associated with a bundled product and return them in the array
  *
  * @return array $cart_details Cart Details Meta Values
  */
-function edd_get_payment_meta_cart_details( $payment_id, $include_bundle_files = false ) {
-	$payment      = edd_get_payment( $payment_id );
+function cs_get_payment_meta_cart_details( $payment_id, $include_bundle_files = false ) {
+	$payment      = cs_get_payment( $payment_id );
 	$cart_details = $payment->cart_details;
 
 	$payment_currency = $payment->currency;
@@ -868,12 +868,12 @@ function edd_get_payment_meta_cart_details( $payment_id, $include_bundle_files =
 			}
 
 			if ( $include_bundle_files ) {
-				if ( 'bundle' !== edd_get_download_type( $cart_item['id'] ) ) {
+				if ( 'bundle' !== cs_get_download_type( $cart_item['id'] ) ) {
 					continue;
 				}
 
-				$price_id = edd_get_cart_item_price_id( $cart_item );
-				$products = edd_get_bundled_products( $cart_item['id'], $price_id );
+				$price_id = cs_get_cart_item_price_id( $cart_item );
+				$products = cs_get_bundled_products( $cart_item['id'], $price_id );
 
 				if ( empty( $products ) ) {
 					continue;
@@ -905,26 +905,26 @@ function edd_get_payment_meta_cart_details( $payment_id, $include_bundle_files =
 		}
 	}
 
-	return apply_filters( 'edd_payment_meta_cart_details', $cart_details, $payment_id );
+	return apply_filters( 'cs_payment_meta_cart_details', $cart_details, $payment_id );
 }
 
 /**
  * Get the user email associated with a payment
  *
  * @since 1.2
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string $email User email.
  */
-function edd_get_payment_user_email( $order_id = 0 ) {
+function cs_get_payment_user_email( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return '';
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->email
@@ -935,45 +935,45 @@ function edd_get_payment_user_email( $order_id = 0 ) {
  * Check if the order is associated with a user.
  *
  * @since 2.4.4
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return bool True if the payment is **not** associated with a user, false otherwise.
  */
-function edd_is_guest_payment( $order_id = 0 ) {
+function cs_is_guest_payment( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return false;
 	}
 
-	$order   = edd_get_order( $order_id );
+	$order   = cs_get_order( $order_id );
 	$user_id = $order->user_id;
 
 	$is_guest_payment = ! empty( $user_id ) && $user_id > 0
 		? false
 		: true;
 
-	return (bool) apply_filters( 'edd_is_guest_payment', $is_guest_payment, $order_id );
+	return (bool) apply_filters( 'cs_is_guest_payment', $is_guest_payment, $order_id );
 }
 
 /**
  * Get the user ID associated with an order.
  *
  * @since 1.5.1
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string $user_id User ID.
  */
-function edd_get_payment_user_id( $order_id = 0 ) {
+function cs_get_payment_user_id( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return 0;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->user_id
@@ -984,19 +984,19 @@ function edd_get_payment_user_id( $order_id = 0 ) {
  * Get the customer ID associated with an order.
  *
  * @since 2.1
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return int $customer_id Customer ID.
  */
-function edd_get_payment_customer_id( $order_id = 0 ) {
+function cs_get_payment_customer_id( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return 0;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->customer_id
@@ -1007,19 +1007,19 @@ function edd_get_payment_customer_id( $order_id = 0 ) {
  * Get the status of the unlimited downloads flag
  *
  * @since 2.0
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return bool True if the payment has unlimited downloads, false otherwise.
  */
-function edd_payment_has_unlimited_downloads( $order_id = 0 ) {
+function cs_payment_has_unlimited_downloads( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return false;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->has_unlimited_downloads()
@@ -1030,19 +1030,19 @@ function edd_payment_has_unlimited_downloads( $order_id = 0 ) {
  * Get the IP address used to make a purchase.
  *
  * @since 1.9
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string User's IP address.
  */
-function edd_get_payment_user_ip( $order_id = 0 ) {
+function cs_get_payment_user_ip( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return '';
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->ip
@@ -1058,8 +1058,8 @@ function edd_get_payment_user_ip( $order_id = 0 ) {
  * @param int $order_id Order ID.
  * @return string The date the order was completed.
  */
-function edd_get_payment_completed_date( $order_id = 0 ) {
-	$payment = edd_get_payment( $order_id );
+function cs_get_payment_completed_date( $order_id = 0 ) {
+	$payment = cs_get_payment( $order_id );
 	return $payment->completed_date;
 }
 
@@ -1067,19 +1067,19 @@ function edd_get_payment_completed_date( $order_id = 0 ) {
  * Get the gateway associated with an order.
  *
  * @since 1.2
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string Payment gateway used for the order.
  */
-function edd_get_payment_gateway( $order_id = 0 ) {
+function cs_get_payment_gateway( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return '';
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->gateway
@@ -1090,19 +1090,19 @@ function edd_get_payment_gateway( $order_id = 0 ) {
  * Get the currency code an order was made in.
  *
  * @since 2.2
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string $currency The currency code
  */
-function edd_get_payment_currency_code( $order_id = 0 ) {
+function cs_get_payment_currency_code( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return '';
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->currency
@@ -1118,8 +1118,8 @@ function edd_get_payment_currency_code( $order_id = 0 ) {
  * @param int $order_id Order ID.
  * @return string $currency The currency name.
  */
-function edd_get_payment_currency( $order_id = 0 ) {
-	$currency = edd_get_payment_currency_code( $order_id );
+function cs_get_payment_currency( $order_id = 0 ) {
+	$currency = cs_get_payment_currency_code( $order_id );
 
 	/**
 	 * Allow the currency to be filtered.
@@ -1129,26 +1129,26 @@ function edd_get_payment_currency( $order_id = 0 ) {
 	 * @param string $currency Currency name.
 	 * @param int    $order_id Order ID.
 	 */
-	return apply_filters( 'edd_payment_currency', edd_get_currency_name( $currency ), $order_id );
+	return apply_filters( 'cs_payment_currency', cs_get_currency_name( $currency ), $order_id );
 }
 
 /**
  * Get the payment key for an order.
  *
  * @since 1.2
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string $key Purchase key.
  */
-function edd_get_payment_key( $order_id = 0 ) {
+function cs_get_payment_key( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return '';
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->payment_key
@@ -1161,19 +1161,19 @@ function edd_get_payment_key( $order_id = 0 ) {
  * This will return the order ID if sequential order numbers are not enabled or the order number does not exist.
  *
  * @since 2.0
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return int|string Payment order number.
  */
-function edd_get_payment_number( $order_id = 0 ) {
+function cs_get_payment_number( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return 0;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->get_number()
@@ -1188,8 +1188,8 @@ function edd_get_payment_number( $order_id = 0 ) {
  * @param int $number The order number to format.
  * @return string The formatted order number
  */
-function edd_format_payment_number( $number ) {
-	if ( ! edd_get_option( 'enable_sequential' ) ) {
+function cs_format_payment_number( $number ) {
+	if ( ! cs_get_option( 'enable_sequential' ) ) {
 		return $number;
 	}
 
@@ -1197,13 +1197,13 @@ function edd_format_payment_number( $number ) {
 		return $number;
 	}
 
-	$prefix  = edd_get_option( 'sequential_prefix' );
+	$prefix  = cs_get_option( 'sequential_prefix' );
 	$number  = absint( $number );
-	$postfix = edd_get_option( 'sequential_postfix' );
+	$postfix = cs_get_option( 'sequential_postfix' );
 
 	$formatted_number = $prefix . $number . $postfix;
 
-	return apply_filters( 'edd_format_payment_number', $formatted_number, $prefix, $number, $postfix );
+	return apply_filters( 'cs_format_payment_number', $formatted_number, $prefix, $number, $postfix );
 }
 
 /**
@@ -1215,13 +1215,13 @@ function edd_format_payment_number( $number ) {
  *
  * @return string $number The next available order number.
  */
-function edd_get_next_payment_number() {
-	if ( ! edd_get_option( 'enable_sequential' ) ) {
+function cs_get_next_payment_number() {
+	if ( ! cs_get_option( 'enable_sequential' ) ) {
 		return false;
 	}
 
-	$number           = get_option( 'edd_last_payment_number' );
-	$start            = edd_get_option( 'sequential_start', 1 );
+	$number           = get_option( 'cs_last_payment_number' );
+	$start            = cs_get_option( 'sequential_start', 1 );
 	$increment_number = true;
 
 	if ( false !== $number ) {
@@ -1230,31 +1230,31 @@ function edd_get_next_payment_number() {
 			$increment_number = false;
 		}
 	} else {
-		$last_order = edd_get_orders( array(
+		$last_order = cs_get_orders( array(
 			'number'  => 1,
 			'orderby' => 'id',
 			'order'   => 'desc',
 		) );
 
-		if ( ! empty( $last_order ) && $last_order[0] instanceof EDD\Orders\Order ) {
+		if ( ! empty( $last_order ) && $last_order[0] instanceof CS\Orders\Order ) {
 			$number = (int) $last_order[0]->get_number();
 		}
 
 		if ( ! empty( $number ) && $number !== (int) $last_order[0]->id ) {
-			$number = edd_remove_payment_prefix_postfix( $number );
+			$number = cs_remove_payment_prefix_postfix( $number );
 		} else {
 			$number = $start;
 			$increment_number = false;
 		}
 	}
 
-	$increment_number = apply_filters( 'edd_increment_payment_number', $increment_number, $number );
+	$increment_number = apply_filters( 'cs_increment_payment_number', $increment_number, $number );
 
 	if ( $increment_number ) {
 		$number++;
 	}
 
-	return apply_filters( 'edd_get_next_payment_number', $number );
+	return apply_filters( 'cs_get_next_payment_number', $number );
 }
 
 /**
@@ -1265,9 +1265,9 @@ function edd_get_next_payment_number() {
  * @param string $number The formatted number to increment.
  * @return string  The new order number without prefix and postfix.
  */
-function edd_remove_payment_prefix_postfix( $number ) {
-	$prefix  = (string) edd_get_option( 'sequential_prefix' );
-	$postfix = (string) edd_get_option( 'sequential_postfix' );
+function cs_remove_payment_prefix_postfix( $number ) {
+	$prefix  = (string) cs_get_option( 'sequential_prefix' );
+	$postfix = (string) cs_get_option( 'sequential_postfix' );
 
 	// Remove prefix
 	$number = preg_replace( '/' . $prefix . '/', '', $number, 1 );
@@ -1282,13 +1282,13 @@ function edd_remove_payment_prefix_postfix( $number ) {
 	// Ensure it's a whole number
 	$number = intval( $number );
 
-	return apply_filters( 'edd_remove_payment_prefix_postfix', $number, $prefix, $postfix );
+	return apply_filters( 'cs_remove_payment_prefix_postfix', $number, $prefix, $postfix );
 }
 
 /**
  * Get the fully formatted order amount. The order amount is retrieved using
- * edd_get_payment_amount() and is then sent through edd_currency_filter() and
- * edd_format_amount() to format the amount correctly.
+ * cs_get_payment_amount() and is then sent through cs_currency_filter() and
+ * cs_format_amount() to format the amount correctly.
  *
  * @since 1.4
  * @since 3.0 Parameter renamed to $order_id.
@@ -1297,27 +1297,27 @@ function edd_remove_payment_prefix_postfix( $number ) {
  *
  * @return string $amount Fully formatted payment amount
  */
-function edd_payment_amount( $order_id = 0 ) {
-	return edd_display_amount( edd_get_payment_amount( $order_id ), edd_get_payment_currency_code( $order_id ) );
+function cs_payment_amount( $order_id = 0 ) {
+	return cs_display_amount( cs_get_payment_amount( $order_id ), cs_get_payment_currency_code( $order_id ) );
 }
 
 /**
  * Get the amount associated with an order.
  *
  * @since 1.2
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return float Order amount.
  */
-function edd_get_payment_amount( $order_id = 0 ) {
+function cs_get_payment_amount( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return '';
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	$total = $order
 		? $order->total
@@ -1331,13 +1331,13 @@ function edd_get_payment_amount( $order_id = 0 ) {
 	 * @param float $total    Order total.
 	 * @param int   $order_id Order ID.
 	 */
-	return apply_filters( 'edd_payment_amount', floatval( $total ), $order_id );
+	return apply_filters( 'cs_payment_amount', floatval( $total ), $order_id );
 }
 
 /**
  * Retrieves subtotal for an order (this is the amount before taxes) and then
  * returns a full formatted amount. This function essentially calls
- * edd_get_payment_subtotal().
+ * cs_get_payment_subtotal().
  *
  * @since 1.3.3
  * @since 3.0 Parameter renamed to $order_id.
@@ -1346,10 +1346,10 @@ function edd_get_payment_amount( $order_id = 0 ) {
  *
  * @return string Fully formatted order subtotal.
  */
-function edd_payment_subtotal( $order_id = 0 ) {
-	$subtotal = edd_get_payment_subtotal( $order_id );
+function cs_payment_subtotal( $order_id = 0 ) {
+	$subtotal = cs_get_payment_subtotal( $order_id );
 
-	return edd_display_amount( $subtotal, edd_get_payment_currency_code( $order_id ) );
+	return cs_display_amount( $subtotal, cs_get_payment_currency_code( $order_id ) );
 }
 
 /**
@@ -1357,19 +1357,19 @@ function edd_payment_subtotal( $order_id = 0 ) {
  * returns a non formatted amount.
  *
  * @since 1.3.3
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return float $subtotal Subtotal for the order (non formatted).
  */
-function edd_get_payment_subtotal( $order_id = 0 ) {
+function cs_get_payment_subtotal( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return 0.00;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->subtotal
@@ -1378,7 +1378,7 @@ function edd_get_payment_subtotal( $order_id = 0 ) {
 
 /**
  * Retrieves taxed amount for payment and then returns a full formatted amount
- * This function essentially calls edd_get_payment_tax()
+ * This function essentially calls cs_get_payment_tax()
  *
  * @since 1.3.3
  * @since 3.0 Parameter renamed to $order_id.
@@ -1388,31 +1388,31 @@ function edd_get_payment_subtotal( $order_id = 0 ) {
  *
  * @return string $tax Fully formatted tax amount.
  */
-function edd_payment_tax( $order_id = 0, $payment_meta = null ) {
-	$tax = edd_get_payment_tax( $order_id, false );
+function cs_payment_tax( $order_id = 0, $payment_meta = null ) {
+	$tax = cs_get_payment_tax( $order_id, false );
 
-	return edd_display_amount( $tax, edd_get_payment_currency_code( $order_id ) );
+	return cs_display_amount( $tax, cs_get_payment_currency_code( $order_id ) );
 }
 
 /**
  * Retrieves taxed amount for payment and then returns a non formatted amount
  *
  * @since 1.3.3
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int  $order_id     Order ID.
  * @param bool $payment_meta Parameter no longer used.
  *
  * @return float $tax Tax for payment (non formatted)
  */
-function edd_get_payment_tax( $order_id = 0, $payment_meta = null ) {
+function cs_get_payment_tax( $order_id = 0, $payment_meta = null ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return 0.00;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->tax
@@ -1423,21 +1423,21 @@ function edd_get_payment_tax( $order_id = 0, $payment_meta = null ) {
  * Retrieve the tax for a cart item by the cart key.
  *
  * @since 2.5
- * @since 3.0 Refactored to use EDD\Orders\Order_Item.
+ * @since 3.0 Refactored to use CS\Orders\Order_Item.
  *
  * @param  int $order_id   Order ID.
  * @param  int $cart_index Cart index.
  *
  * @return float Cart item tax amount.
  */
-function edd_get_payment_item_tax( $order_id = 0, $cart_index = 0 ) {
+function cs_get_payment_item_tax( $order_id = 0, $cart_index = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return 0.00;
 	}
 
-	$order_item_tax = edd_get_order_items( array(
+	$order_item_tax = cs_get_order_items( array(
 		'number'     => 1,
 		'order_id'   => $order_id,
 		'cart_index' => $cart_index,
@@ -1462,14 +1462,14 @@ function edd_get_payment_item_tax( $order_id = 0, $cart_index = 0 ) {
  *
  * @return array Order fees.
  */
-function edd_get_payment_fees( $order_id = 0, $type = 'all' ) {
+function cs_get_payment_fees( $order_id = 0, $type = 'all' ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return array();
 	}
 
-	$payment = edd_get_payment( $order_id );
+	$payment = cs_get_payment( $order_id );
 
 	return $payment
 		? $payment->get_fees( $type )
@@ -1480,19 +1480,19 @@ function edd_get_payment_fees( $order_id = 0, $type = 'all' ) {
  * Retrieves the transaction ID for an order.
  *
  * @since 2.1
- * @since 3.0 Refactored to use EDD\Orders\Order.
+ * @since 3.0 Refactored to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string Transaction ID.
  */
-function edd_get_payment_transaction_id( $order_id = 0 ) {
+function cs_get_payment_transaction_id( $order_id = 0 ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) ) {
 		return '';
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	return $order
 		? $order->get_transaction_id()
@@ -1512,7 +1512,7 @@ function edd_get_payment_transaction_id( $order_id = 0 ) {
  *
  * @return mixed Meta ID if successful, false if unsuccessful.
  */
-function edd_set_payment_transaction_id( $order_id = 0, $transaction_id = '', $amount = false ) {
+function cs_set_payment_transaction_id( $order_id = 0, $transaction_id = '', $amount = false ) {
 
 	// Bail if nothing was passed.
 	if ( empty( $order_id ) || empty( $transaction_id ) ) {
@@ -1527,16 +1527,16 @@ function edd_set_payment_transaction_id( $order_id = 0, $transaction_id = '', $a
 	 * @param string $transaction_id Transaction ID.
 	 * @param int    $order_id       Order ID.
 	 */
-	$transaction_id = apply_filters( 'edd_set_payment_transaction_id', $transaction_id, $order_id );
+	$transaction_id = apply_filters( 'cs_set_payment_transaction_id', $transaction_id, $order_id );
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	if ( $order ) {
 		$amount = false === $amount
 			? $order->total
 			: floatval( $amount );
 
-		$transaction_ids = array_values( edd_get_order_transactions( array(
+		$transaction_ids = array_values( cs_get_order_transactions( array(
 			'fields'      => 'ids',
 			'number'      => 1,
 			'object_id'   => $order_id,
@@ -1546,13 +1546,13 @@ function edd_set_payment_transaction_id( $order_id = 0, $transaction_id = '', $a
 		) ) );
 
 		if ( $transaction_ids && isset( $transaction_ids[0] ) ) {
-			return edd_update_order_transaction( $transaction_ids[0], array(
+			return cs_update_order_transaction( $transaction_ids[0], array(
 				'transaction_id' => $transaction_id,
 				'gateway'        => $order->gateway,
 				'total'          => $amount,
 			) );
 		} else {
-			return edd_add_order_transaction( array(
+			return cs_add_order_transaction( array(
 				'object_id'      => $order_id,
 				'object_type'    => 'order',
 				'transaction_id' => $transaction_id,
@@ -1575,16 +1575,16 @@ function edd_set_payment_transaction_id( $order_id = 0, $transaction_id = '', $a
  * @param string $payment_key Payment key to search for.
  * @return int Order ID.
  */
-function edd_get_purchase_id_by_key( $payment_key ) {
-	$global_key_string = 'edd_purchase_id_by_key' . $payment_key;
+function cs_get_purchase_id_by_key( $payment_key ) {
+	$global_key_string = 'cs_purchase_id_by_key' . $payment_key;
 	global $$global_key_string;
 
 	if ( null !== $$global_key_string ) {
 		return $$global_key_string;
 	}
 
-	/** @var EDD\Orders\Order $order */
-	$order = edd_get_order_by( 'payment_key', $payment_key );
+	/** @var CS\Orders\Order $order */
+	$order = cs_get_order_by( 'payment_key', $payment_key );
 
 	if ( false !== $order ) {
 		$$global_key_string = $order->id;
@@ -1598,28 +1598,28 @@ function edd_get_purchase_id_by_key( $payment_key ) {
  * Retrieve the order ID based on the transaction ID.
  *
  * @since 2.4
- * @since 3.0 Dispatch to edd_get_order_id_from_transaction_id().
+ * @since 3.0 Dispatch to cs_get_order_id_from_transaction_id().
  *
- * @see edd_get_order_id_from_transaction_id()
+ * @see cs_get_order_id_from_transaction_id()
  *
  * @param string $transaction_id Transaction ID to search for.
  * @return int Order ID.
  */
-function edd_get_purchase_id_by_transaction_id( $transaction_id ) {
-	return edd_get_order_id_from_transaction_id( $transaction_id );
+function cs_get_purchase_id_by_transaction_id( $transaction_id ) {
+	return cs_get_order_id_from_transaction_id( $transaction_id );
 }
 
 /**
  * Retrieve all notes attached to an order.
  *
  * @since 1.4
- * @since 3.0 Updated to use the edd_notes custom table to store notes.
+ * @since 3.0 Updated to use the cs_notes custom table to store notes.
  *
  * @param int    $order_id   The order ID to retrieve notes for.
  * @param string $search     Search for notes that contain a search term.
  * @return array|bool $notes Order notes, false otherwise.
  */
-function edd_get_payment_notes( $order_id = 0, $search = '' ) {
+function cs_get_payment_notes( $order_id = 0, $search = '' ) {
 
 	// Bail if nothing passed.
 	if ( empty( $order_id ) && empty( $search ) ) {
@@ -1639,24 +1639,24 @@ function edd_get_payment_notes( $order_id = 0, $search = '' ) {
 		$args['search'] = sanitize_text_field( $search );
 	}
 
-	return edd_get_notes( $args );
+	return cs_get_notes( $args );
 }
 
 /**
  * Add a note to an order.
  *
  * @since 1.4
- * @since 3.0 Updated to use the edd_notes custom table to store notes.
+ * @since 3.0 Updated to use the cs_notes custom table to store notes.
  *
  * @param int    $order_id The order ID to store a note for.
  * @param string $note     The content of the note.
  * @return int|false The new note ID, false otherwise.
  */
-function edd_insert_payment_note( $order_id = 0, $note = '' ) {
+function cs_insert_payment_note( $order_id = 0, $note = '' ) {
 
 	// Sanitize note contents
 	if ( ! empty( $note ) ) {
-		$note = trim( wp_kses( $note, edd_get_allowed_tags() ) );
+		$note = trim( wp_kses( $note, cs_get_allowed_tags() ) );
 	}
 
 	// Bail if no order ID or note.
@@ -1664,7 +1664,7 @@ function edd_insert_payment_note( $order_id = 0, $note = '' ) {
 		return false;
 	}
 
-	do_action( 'edd_pre_insert_payment_note', $order_id, $note );
+	do_action( 'cs_pre_insert_payment_note', $order_id, $note );
 
 	/**
 	 * For backwards compatibility purposes, we need to pass the data to
@@ -1683,18 +1683,18 @@ function edd_insert_payment_note( $order_id = 0, $note = '' ) {
 		'comment_author_IP'    => '',
 		'comment_author_url'   => '',
 		'comment_author_email' => '',
-		'comment_type'         => 'edd_payment_note'
+		'comment_type'         => 'cs_payment_note'
 	) );
 
 	// Add the note
-	$note_id = edd_add_note( array(
+	$note_id = cs_add_note( array(
 		'object_id'   => $filtered_data['comment_post_ID'],
 		'content'     => $filtered_data['comment_content'],
 		'user_id'     => $filtered_data['user_id'],
 		'object_type' => 'order',
 	) );
 
-	do_action( 'edd_insert_payment_note', $note_id, $order_id, $note );
+	do_action( 'cs_insert_payment_note', $note_id, $order_id, $note );
 
 	// Return the ID of the new note
 	return $note_id;
@@ -1704,22 +1704,22 @@ function edd_insert_payment_note( $order_id = 0, $note = '' ) {
  * Deletes an order note.
  *
  * @since 1.6
- * @since 3.0 Updated to use the edd_notes custom table to store notes.
+ * @since 3.0 Updated to use the cs_notes custom table to store notes.
  *
  * @param int $note_id  Note ID.
  * @param int $order_id Order ID.
  * @return bool True on success, false otherwise.
  */
-function edd_delete_payment_note( $note_id = 0, $order_id = 0 ) {
+function cs_delete_payment_note( $note_id = 0, $order_id = 0 ) {
 	if ( empty( $note_id ) ) {
 		return false;
 	}
 
-	do_action( 'edd_pre_delete_payment_note', $note_id, $order_id );
+	do_action( 'cs_pre_delete_payment_note', $note_id, $order_id );
 
-	$ret = edd_delete_note( $note_id );
+	$ret = cs_delete_note( $note_id );
 
-	do_action( 'edd_post_delete_payment_note', $note_id, $order_id );
+	do_action( 'cs_post_delete_payment_note', $note_id, $order_id );
 
 	return $ret;
 }
@@ -1728,26 +1728,26 @@ function edd_delete_payment_note( $note_id = 0, $order_id = 0 ) {
  * Gets the payment note HTML.
  *
  * @since 1.9
- * @since 3.0 Deprecated & unused (use edd_admin_get_note_html())
+ * @since 3.0 Deprecated & unused (use cs_admin_get_note_html())
  *
  * @param object|int $note       The note object or ID.
  * @param int        $payment_id The payment ID the note is connected to.
  *
  * @return string Payment note HTML.
  */
-function edd_get_payment_note_html( $note, $payment_id = 0 ) {
-	return edd_admin_get_note_html( $note );
+function cs_get_payment_note_html( $note, $payment_id = 0 ) {
+	return cs_admin_get_note_html( $note );
 }
 
 /**
- * Exclude notes (comments) on edd_payment post type from showing in Recent
+ * Exclude notes (comments) on cs_payment post type from showing in Recent
  * Comments widgets.
  *
  * @since 1.4.1
  *
  * @param object $query WordPress Comment Query Object
  */
-function edd_hide_payment_notes( $query ) {
+function cs_hide_payment_notes( $query ) {
 	global $wp_version;
 
 	if ( version_compare( floatval( $wp_version ), '4.1', '>=' ) ) {
@@ -1757,15 +1757,15 @@ function edd_hide_payment_notes( $query ) {
 			$types = array( $types );
 		}
 
-		$types[] = 'edd_payment_note';
+		$types[] = 'cs_payment_note';
 
 		$query->query_vars['type__not_in'] = $types;
 	}
 }
-add_action( 'pre_get_comments', 'edd_hide_payment_notes', 10 );
+add_action( 'pre_get_comments', 'cs_hide_payment_notes', 10 );
 
 /**
- * Exclude notes (comments) on edd_payment post type from showing in Recent
+ * Exclude notes (comments) on cs_payment post type from showing in Recent
  * Comments widgets
  *
  * @since 2.2
@@ -1775,19 +1775,19 @@ add_action( 'pre_get_comments', 'edd_hide_payment_notes', 10 );
  *
  * @return array $clauses Updated comment clauses.
  */
-function edd_hide_payment_notes_pre_41( $clauses, $wp_comment_query ) {
+function cs_hide_payment_notes_pre_41( $clauses, $wp_comment_query ) {
 	global $wp_version;
 
 	if ( version_compare( floatval( $wp_version ), '4.1', '<' ) ) {
-		$clauses['where'] .= ' AND comment_type != "edd_payment_note"';
+		$clauses['where'] .= ' AND comment_type != "cs_payment_note"';
 	}
 
 	return $clauses;
 }
-add_filter( 'comments_clauses', 'edd_hide_payment_notes_pre_41', 10, 2 );
+add_filter( 'comments_clauses', 'cs_hide_payment_notes_pre_41', 10, 2 );
 
 /**
- * Exclude notes (comments) on edd_payment post type from showing in comment feeds.
+ * Exclude notes (comments) on cs_payment post type from showing in comment feeds.
  *
  * @since 1.5.1
  *
@@ -1796,17 +1796,17 @@ add_filter( 'comments_clauses', 'edd_hide_payment_notes_pre_41', 10, 2 );
  *
  * @return string $where Updated WHERE clause.
  */
-function edd_hide_payment_notes_from_feeds( $where, $wp_comment_query ) {
+function cs_hide_payment_notes_from_feeds( $where, $wp_comment_query ) {
 	global $wpdb;
 
-	$where .= $wpdb->prepare( ' AND comment_type != %s', 'edd_payment_note' );
+	$where .= $wpdb->prepare( ' AND comment_type != %s', 'cs_payment_note' );
 
 	return $where;
 }
-add_filter( 'comment_feed_where', 'edd_hide_payment_notes_from_feeds', 10, 2 );
+add_filter( 'comment_feed_where', 'cs_hide_payment_notes_from_feeds', 10, 2 );
 
 /**
- * Remove EDD Comments from the wp_count_comments function
+ * Remove CommerceStore Comments from the wp_count_comments function
  *
  * @since 1.5.2
  *
@@ -1815,7 +1815,7 @@ add_filter( 'comment_feed_where', 'edd_hide_payment_notes_from_feeds', 10, 2 );
  *
  * @return object Comment counts.
 */
-function edd_remove_payment_notes_in_comment_counts( $stats, $post_id ) {
+function cs_remove_payment_notes_in_comment_counts( $stats, $post_id ) {
 	global $wpdb, $pagenow;
 
 	$array_excluded_pages = array( 'index.php', 'edit-comments.php' );
@@ -1825,7 +1825,7 @@ function edd_remove_payment_notes_in_comment_counts( $stats, $post_id ) {
 
 	$post_id = (int) $post_id;
 
-	if ( apply_filters( 'edd_count_payment_notes_in_comments', false ) ) {
+	if ( apply_filters( 'cs_count_payment_notes_in_comments', false ) ) {
 		return $stats;
 	}
 
@@ -1835,7 +1835,7 @@ function edd_remove_payment_notes_in_comment_counts( $stats, $post_id ) {
 		return $stats;
 	}
 
-	$where = 'WHERE comment_type != "edd_payment_note"';
+	$where = 'WHERE comment_type != "cs_payment_note"';
 
 	if ( $post_id > 0 ) {
 		$where .= $wpdb->prepare( " AND comment_post_ID = %d", $post_id );
@@ -1878,7 +1878,7 @@ function edd_remove_payment_notes_in_comment_counts( $stats, $post_id ) {
 
 	return $stats;
 }
-add_filter( 'wp_count_comments', 'edd_remove_payment_notes_in_comment_counts', 10, 2 );
+add_filter( 'wp_count_comments', 'cs_remove_payment_notes_in_comment_counts', 10, 2 );
 
 /**
  * Filter where older than one week.
@@ -1888,7 +1888,7 @@ add_filter( 'wp_count_comments', 'edd_remove_payment_notes_in_comment_counts', 1
  * @param string $where Where clause.
  * @return string $where Modified where clause.
 */
-function edd_filter_where_older_than_week( $where = '' ) {
+function cs_filter_where_older_than_week( $where = '' ) {
 
 	// Payments older than one week.
 	$start = date( 'Y-m-d', strtotime( '-7 days' ) );

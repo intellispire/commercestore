@@ -2,13 +2,13 @@
  * Sortables
  *
  * This makes certain settings sortable, and attempts to stash the results
- * in the nearest .edd-order input value.
+ * in the nearest .cs-order input value.
  */
 jQuery( document ).ready( function( $ ) {
-	const edd_sortables = $( 'ul.edd-sortable-list' );
+	const cs_sortables = $( 'ul.cs-sortable-list' );
 
-	if ( edd_sortables.length > 0 ) {
-		edd_sortables.sortable( {
+	if ( cs_sortables.length > 0 ) {
+		cs_sortables.sortable( {
 			axis: 'y',
 			items: 'li',
 			cursor: 'move',
@@ -27,7 +27,7 @@ jQuery( document ).ready( function( $ ) {
 					 return $( el ).data( 'key' );
 				} );
 
-				$( this ).prev( 'input.edd-order' ).val( keys );
+				$( this ).prev( 'input.cs-order' ).val( keys );
 			},
 		} );
 	}

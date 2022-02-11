@@ -4,13 +4,13 @@
  *
  * Formats an amount of money in various ways, according to the provided currency.
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     3.0
  */
 
-namespace EDD\Currency;
+namespace CS\Currency;
 
 class Money_Formatter {
 
@@ -91,7 +91,7 @@ class Money_Formatter {
 		 * @param int|string $amount        Amount being formatted.
 		 * @param string     $currency_code Currency code being formatted.
 		 */
-		$decimals = apply_filters( 'edd_format_amount_decimals', $decimals ? $this->currency->number_decimals : 0, $amount, $this->currency->code );
+		$decimals = apply_filters( 'cs_format_amount_decimals', $decimals ? $this->currency->number_decimals : 0, $amount, $this->currency->code );
 
 		// Format amount using decimals and separators (also rounds up or down)
 		$formatted = number_format( (float) $amount, $decimals, $this->currency->decimal_separator, $this->currency->thousands_separator );
@@ -108,7 +108,7 @@ class Money_Formatter {
 		 * @param string $thousands_separator Default ','. Thousands separator.
 		 * @param string $currency_code       Currency used for formatting.
 		 */
-		$this->amount = apply_filters( 'edd_format_amount', $formatted, $amount, $decimals, $this->currency->decimal_separator, $this->currency->thousands_separator, $this->currency->code );
+		$this->amount = apply_filters( 'cs_format_amount', $formatted, $amount, $decimals, $this->currency->decimal_separator, $this->currency->thousands_separator, $this->currency->code );
 
 		return $this;
 	}
@@ -147,7 +147,7 @@ class Money_Formatter {
 			 * @param string $currency_code
 			 * @param string $amount
 			 */
-			$formatted = apply_filters( 'edd_' . strtolower( $this->currency->code ) . '_currency_filter_before', $formatted, $this->currency->code, $amount );
+			$formatted = apply_filters( 'cs_' . strtolower( $this->currency->code ) . '_currency_filter_before', $formatted, $this->currency->code, $amount );
 		}
 
 		if ( ! empty( $this->currency->suffix ) ) {
@@ -158,7 +158,7 @@ class Money_Formatter {
 			 * @param string $currency_code
 			 * @param string $amount
 			 */
-			$formatted = apply_filters( 'edd_' . strtolower( $this->currency->code ) . '_currency_filter_after', $formatted, $this->currency->code, $amount );
+			$formatted = apply_filters( 'cs_' . strtolower( $this->currency->code ) . '_currency_filter_after', $formatted, $this->currency->code, $amount );
 		}
 
 		// Add the "-" sign back to the start of the string.

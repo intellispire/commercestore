@@ -2,15 +2,15 @@
 /**
  * Reports API - Endpoint View object
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Reports;
+use CS\Reports;
 
 /**
  * Represents a data endpoint for the Reports API.
@@ -121,7 +121,7 @@ abstract class Endpoint extends Base_Object {
 		 * @param mixed|string $data Endpoint data.
 		 * @param Endpoint     $this Endpoint object.
 		 */
-		return apply_filters( 'edd_reports_endpoint_data', $data, $this );
+		return apply_filters( 'cs_reports_endpoint_data', $data, $this );
 	}
 
 	/**
@@ -263,7 +263,7 @@ abstract class Endpoint extends Base_Object {
 		 * @param array    $display_args Display arguments.
 		 * @param Endpoint $this         Endpoint object.
 		 */
-		return apply_filters( 'edd_reports_endpoint_display_args', $this->display_args, $this );
+		return apply_filters( 'cs_reports_endpoint_display_args', $this->display_args, $this );
 	}
 
 	/**
@@ -302,7 +302,7 @@ abstract class Endpoint extends Base_Object {
 		 * @param callable $display_callback Display callback.
 		 * @param Endpoint $this             Endpoint object.
 		 */
-		return apply_filters( 'edd_reports_endpoint_display_callback', $this->display_callback, $this );
+		return apply_filters( 'cs_reports_endpoint_display_callback', $this->display_callback, $this );
 	}
 
 	/**
@@ -349,7 +349,7 @@ abstract class Endpoint extends Base_Object {
 		 * @param callable $data_callback Data callback.
 		 * @param Endpoint $this          Endpoint object.
 		 */
-		return apply_filters( 'edd_reports_endpoint_data_callback', $this->data_callback, $this );
+		return apply_filters( 'cs_reports_endpoint_data_callback', $this->data_callback, $this );
 	}
 
 	/**

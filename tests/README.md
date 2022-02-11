@@ -1,7 +1,7 @@
-# Easy Digital Downloads Unit Tests [![Build status](https://badge.buildkite.com/e318e1649f3a28f4029272231b926126d5664837d575cd507a.svg)](https://buildkite.com/sandhills-development-llc/easy-digital-downloads)
+# CommerceStore Unit Tests [![Build status](https://badge.buildkite.com/e318e1649f3a28f4029272231b926126d5664837d575cd507a.svg)](https://buildkite.com/sandhills-development-llc/commercestore)
 
 
-This folder contains all the tests for Easy Digital Downloads.
+This folder contains all the tests for CommerceStore.
 
 ## Running Tests
 ### How to run the tests locally

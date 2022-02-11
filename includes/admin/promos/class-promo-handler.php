@@ -4,15 +4,15 @@
  *
  * Handles logic for displaying and dismissing promotional notices.
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.10.6
  */
 
-namespace EDD\Admin\Promos;
+namespace CS\Admin\Promos;
 
-use EDD\Admin\Promos\Notices\Notice;
+use CS\Admin\Promos\Notices\Notice;
 use Sandhills\Utils\Persistent_Dismissible;
 
 class PromoHandler {
@@ -23,16 +23,16 @@ class PromoHandler {
 	 * @var string[]
 	 */
 	private $notices = array(
-		'\\EDD\\Admin\\Promos\\Notices\\License_Upgrade_Notice',
-		'\\EDD\\Admin\\Promos\\Notices\\Five_Star_Review_Dashboard',
-		'\\EDD\\Admin\\Promos\\Notices\\Five_Star_Review_Settings',
+		'\\CS\\Admin\\Promos\\Notices\\License_Upgrade_Notice',
+		'\\CS\\Admin\\Promos\\Notices\\Five_Star_Review_Dashboard',
+		'\\CS\\Admin\\Promos\\Notices\\Five_Star_Review_Settings',
 	);
 
 	/**
 	 * Notices constructor.
 	 */
 	public function __construct() {
-		add_action( 'wp_ajax_edd_dismiss_promo_notice', array( $this, 'dismiss_notice' ) );
+		add_action( 'wp_ajax_cs_dismiss_promo_notice', array( $this, 'dismiss_notice' ) );
 
 		$this->load_notices();
 	}
@@ -43,12 +43,12 @@ class PromoHandler {
 	 * @since 2.10.6
 	 */
 	private function load_notices() {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/promos/notices/abstract-notice.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/promos/notices/abstract-notice.php';
 
 		foreach ( $this->notices as $notice_class_name ) {
 			if ( ! class_exists( $notice_class_name ) ) {
 				$file_name = strtolower( str_replace( '_', '-', basename( str_replace( '\\', '/', $notice_class_name ) ) ) );
-				$file_path = EDD_PLUGIN_DIR . 'includes/admin/promos/notices/class-' . $file_name . '.php';
+				$file_path = CS_PLUGIN_DIR . 'includes/admin/promos/notices/class-' . $file_name . '.php';
 
 				if ( file_exists( $file_path ) ) {
 					require_once $file_path;
@@ -80,7 +80,7 @@ class PromoHandler {
 	 */
 	public static function is_dismissed( $id ) {
 		$is_dismissed = (bool) Persistent_Dismissible::get( array(
-			'id' => 'edd-' . $id
+			'id' => 'cs-' . $id
 		) );
 
 		return true === $is_dismissed;
@@ -96,7 +96,7 @@ class PromoHandler {
 	 */
 	public static function dismiss( $id, $dismissal_length = 0 ) {
 		Persistent_Dismissible::set( array(
-			'id'   => 'edd-' . $id,
+			'id'   => 'cs-' . $id,
 			'life' => $dismissal_length
 		) );
 	}
@@ -109,23 +109,23 @@ class PromoHandler {
 	public function dismiss_notice() {
 		$notice_id = ! empty( $_POST['notice_id'] ) ? sanitize_text_field( $_POST['notice_id'] ) : false;
 		if ( empty( $notice_id ) ) {
-			wp_send_json_error( __( 'Missing notice ID.', 'easy-digital-downloads' ), 400 );
+			wp_send_json_error( __( 'Missing notice ID.', 'commercestore' ), 400 );
 		}
 
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'edd-dismiss-notice-' . sanitize_key( $_POST['notice_id'] ) ) ) {
-			wp_send_json_error( __( 'You do not have permission to perform this action.', 'easy-digital-downloads' ), 403 );
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'cs-dismiss-notice-' . sanitize_key( $_POST['notice_id'] ) ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', 'commercestore' ), 403 );
 		}
 
 		$notice_class_name = $this->get_notice_class_name( $notice_id );
 
 		// No matching notice class was found.
 		if ( ! $notice_class_name ) {
-			wp_send_json_error( __( 'You do not have permission to perform this action.', 'easy-digital-downloads' ), 403 );
+			wp_send_json_error( __( 'You do not have permission to perform this action.', 'commercestore' ), 403 );
 		}
 
 		// Check whether the current user can dismiss the notice.
 		if ( ! defined( $notice_class_name . '::CAPABILITY' ) || ! current_user_can( $notice_class_name::CAPABILITY ) ) {
-			wp_send_json_error( __( 'You do not have permission to perform this action.', 'easy-digital-downloads' ), 403 );
+			wp_send_json_error( __( 'You do not have permission to perform this action.', 'commercestore' ), 403 );
 		}
 
 		$dismissal_length = ! empty( $_POST['lifespan'] ) ? absint( $_POST['lifespan'] ) : 0;
@@ -148,7 +148,7 @@ class PromoHandler {
 		foreach ( $this->notices as $notice_class_to_check ) {
 			if ( ! class_exists( $notice_class_to_check ) ) {
 				$file_name = strtolower( str_replace( '_', '-', basename( str_replace( '\\', '/', $notice_class_to_check ) ) ) );
-				$file_path = EDD_PLUGIN_DIR . 'includes/admin/promos/notices/class-' . $file_name . '.php';
+				$file_path = CS_PLUGIN_DIR . 'includes/admin/promos/notices/class-' . $file_name . '.php';
 
 				if ( file_exists( $file_path ) ) {
 					require_once $file_path;

@@ -2,62 +2,62 @@
 /**
  * Licensing Functions
  *
- * Functions used for saving and/or retrieving information about EDD licensed products
+ * Functions used for saving and/or retrieving information about CommerceStore licensed products
  * running on the site.
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\Extensions;
+namespace CS\Extensions;
 
 /**
- * Saves an option in the database with the information from the `$edd_licensed_products`
+ * Saves an option in the database with the information from the `$cs_licensed_products`
  * global. This only runs in the context of WP-Admin, because that's the only place we
  * can be certain that the information is accurate.
  *
- * @link https://github.com/awesomemotive/easy-digital-downloads/issues/8969
+ * @link https://github.com/awesomemotive/commercestore/issues/8969
  *
- * @global $edd_licensed_products
+ * @global $cs_licensed_products
  */
 add_action( 'admin_init', function () {
 	if ( ! is_admin() ) {
 		return;
 	}
 
-	$saved_products = get_option( 'edd_licensed_extensions', array() );
+	$saved_products = get_option( 'cs_licensed_extensions', array() );
 
 	/*
 	 * We only want to update this option once per day. If the timeout has expired
 	 * then update it with product information.
 	 *
-	 * Note: We always save this option, even if `$edd_licensed_products` is empty.
+	 * Note: We always save this option, even if `$cs_licensed_products` is empty.
 	 * This is to help designate that the information has been checked and saved,
 	 * even if there are no licensed products.
 	 */
 	if ( empty( $saved_products['timeout'] ) || $saved_products['timeout'] < time() ) {
-		global $edd_licensed_products;
+		global $cs_licensed_products;
 
-		update_option( 'edd_licensed_extensions', json_encode( array(
+		update_option( 'cs_licensed_extensions', json_encode( array(
 			'timeout'  => strtotime( '+1 day' ),
-			'products' => $edd_licensed_products,
+			'products' => $cs_licensed_products,
 		) ) );
 	}
 }, 200 );
 
 /**
- * Returns licensed EDD extensions that are active on this site.
- * Array values are the `$item_shortname` from `\EDD_License`
+ * Returns licensed CommerceStore extensions that are active on this site.
+ * Array values are the `$item_shortname` from `\CS_License`
  *
- * @see \EDD_License::$item_shortname
+ * @see \CS_License::$item_shortname
  *
  * @since 2.11.4
  * @return array
  */
 function get_licensed_extension_slugs() {
-	$products = get_option( 'edd_licensed_extensions' );
+	$products = get_option( 'cs_licensed_extensions' );
 
 	/*
 	 * If this isn't set for some reason, fall back to trying the global. There are
@@ -65,10 +65,10 @@ function get_licensed_extension_slugs() {
 	 * the global is not, but worth a shot.
 	 */
 	if ( empty( $products ) ) {
-		global $edd_licensed_products;
+		global $cs_licensed_products;
 
-		return ! empty( $edd_licensed_products ) && is_array( $edd_licensed_products )
-			? $edd_licensed_products
+		return ! empty( $cs_licensed_products ) && is_array( $cs_licensed_products )
+			? $cs_licensed_products
 			: array();
 	}
 
@@ -93,5 +93,5 @@ add_action( 'plugins_loaded', function() {
 	 *
 	 * @param ExtensionRegistry
 	 */
-	do_action( 'edd_extension_license_init', EDD()->extensionRegistry );
+	do_action( 'cs_extension_license_init', CS()->extensionRegistry );
 }, PHP_INT_MAX );

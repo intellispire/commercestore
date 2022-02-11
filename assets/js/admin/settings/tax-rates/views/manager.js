@@ -11,7 +11,7 @@ import BulkActions from './bulk-actions.js';
  */
 const Manager = wp.Backbone.View.extend( {
 	// Append to this element.
-	el: '#edd-admin-tax-rates',
+	el: '#cs-admin-tax-rates',
 
 	/**
 	 * Set bind changes to collection.
@@ -20,7 +20,7 @@ const Manager = wp.Backbone.View.extend( {
 		this.listenTo( this.collection, 'add change', this.makeDirty );
 
 		// Clear unload confirmation when submitting parent form.
-		document.querySelector( '.edd-settings-form #submit' ).addEventListener( 'click', this.makeClean );
+		document.querySelector( '.cs-settings-form #submit' ).addEventListener( 'click', this.makeClean );
 	},
 
 	/**

@@ -2,13 +2,13 @@
 /**
  * Reports API - Tile Endpoint Handler
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
 /**
  * Handler for building a tile endpoint in the Reports API.
@@ -34,7 +34,7 @@ final class Tile_Endpoint extends Endpoint {
 	 */
 	public function display() {
 		$classnames = array(
-			'edd-reports-tile',
+			'cs-reports-tile',
 		);
 
 		echo '<div id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( implode( ' ', $classnames ) ) . '">';

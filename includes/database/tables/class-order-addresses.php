@@ -2,21 +2,21 @@
 /**
  * Order Addresses Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Tables
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Tables;
+namespace CS\Database\Tables;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 /**
- * Setup the global "edd_order_addresses" database table
+ * Setup the global "cs_order_addresses" database table
  *
  * @since 3.0
  */

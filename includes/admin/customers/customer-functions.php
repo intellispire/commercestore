@@ -2,9 +2,9 @@
 /**
  * Customers - Admin Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Customers
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.3
  */
@@ -19,15 +19,15 @@ defined( 'ABSPATH' ) || exit;
  * @param  array $views An array of existing views
  * @return array        The altered list of views
  */
-function edd_register_default_customer_views( $views ) {
+function cs_register_default_customer_views( $views ) {
 	return array_merge( $views, array(
-		'overview' => 'edd_customers_view',
-		'delete'   => 'edd_customers_delete_view',
-		'notes'    => 'edd_customer_notes_view',
-		'tools'    => 'edd_customer_tools_view'
+		'overview' => 'cs_customers_view',
+		'delete'   => 'cs_customers_delete_view',
+		'notes'    => 'cs_customer_notes_view',
+		'tools'    => 'cs_customer_tools_view'
 	) );
 }
-add_filter( 'edd_customer_views', 'edd_register_default_customer_views', 1, 1 );
+add_filter( 'cs_customer_views', 'cs_register_default_customer_views', 1, 1 );
 
 /**
  * Register a tab for the single customer view
@@ -36,14 +36,14 @@ add_filter( 'edd_customer_views', 'edd_register_default_customer_views', 1, 1 );
  * @param  array $tabs An array of existing tabs
  * @return array       The altered list of tabs
  */
-function edd_register_default_customer_tabs( $tabs ) {
+function cs_register_default_customer_tabs( $tabs ) {
 	return array_merge( $tabs, array(
-		'overview' => array( 'dashicon' => 'dashicons-admin-users',    'title' => _x( 'Profile', 'Customer Details tab title', 'easy-digital-downloads' ) ),
-		'notes'    => array( 'dashicon' => 'dashicons-admin-comments', 'title' => _x( 'Notes',   'Customer Notes tab title',   'easy-digital-downloads' ) ),
-		'tools'    => array( 'dashicon' => 'dashicons-admin-tools',    'title' => _x( 'Tools',   'Customer Tools tab title',   'easy-digital-downloads' ) )
+		'overview' => array( 'dashicon' => 'dashicons-admin-users',    'title' => _x( 'Profile', 'Customer Details tab title', 'commercestore' ) ),
+		'notes'    => array( 'dashicon' => 'dashicons-admin-comments', 'title' => _x( 'Notes',   'Customer Notes tab title',   'commercestore' ) ),
+		'tools'    => array( 'dashicon' => 'dashicons-admin-tools',    'title' => _x( 'Tools',   'Customer Tools tab title',   'commercestore' ) )
 	) );
 }
-add_filter( 'edd_customer_tabs', 'edd_register_default_customer_tabs', 1, 1 );
+add_filter( 'cs_customer_tabs', 'cs_register_default_customer_tabs', 1, 1 );
 
 /**
  * Register the Delete icon as late as possible so it's at the bottom
@@ -52,16 +52,16 @@ add_filter( 'edd_customer_tabs', 'edd_register_default_customer_tabs', 1, 1 );
  * @param  array $tabs An array of existing tabs
  * @return array       The altered list of tabs, with 'delete' at the bottom
  */
-function edd_register_delete_customer_tab( $tabs ) {
+function cs_register_delete_customer_tab( $tabs ) {
 
 	$tabs['delete'] = array(
 		'dashicon' => 'dashicons-trash',
-		'title'    => _x( 'Delete', 'Delete Customer tab title', 'easy-digital-downloads' )
+		'title'    => _x( 'Delete', 'Delete Customer tab title', 'commercestore' )
 	);
 
 	return $tabs;
 }
-add_filter( 'edd_customer_tabs', 'edd_register_delete_customer_tab', PHP_INT_MAX, 1 );
+add_filter( 'cs_customer_tabs', 'cs_register_delete_customer_tab', PHP_INT_MAX, 1 );
 
 /**
  * Remove the admin bar edit profile link when the user is not verified
@@ -69,18 +69,18 @@ add_filter( 'edd_customer_tabs', 'edd_register_delete_customer_tab', PHP_INT_MAX
  * @since  2.4.4
  * @return void
  */
-function edd_maybe_remove_adminbar_profile_link() {
+function cs_maybe_remove_adminbar_profile_link() {
 
 	if ( current_user_can( 'manage_shop_settings' ) ) {
 		return;
 	}
 
-	if ( edd_user_pending_verification() ) {
+	if ( cs_user_pending_verification() ) {
 		global $wp_admin_bar;
 		$wp_admin_bar->remove_menu( 'edit-profile', 'user-actions' );
 	}
 }
-add_action( 'wp_before_admin_bar_render', 'edd_maybe_remove_adminbar_profile_link' );
+add_action( 'wp_before_admin_bar_render', 'cs_maybe_remove_adminbar_profile_link' );
 
 /**
  * Remove the admin menus and disable profile access for non-verified users
@@ -88,9 +88,9 @@ add_action( 'wp_before_admin_bar_render', 'edd_maybe_remove_adminbar_profile_lin
  * @since  2.4.4
  * @return void
  */
-function edd_maybe_remove_menu_profile_links() {
+function cs_maybe_remove_menu_profile_links() {
 
-	if ( edd_doing_ajax() ) {
+	if ( cs_doing_ajax() ) {
 		return;
 	}
 
@@ -98,12 +98,12 @@ function edd_maybe_remove_menu_profile_links() {
 		return;
 	}
 
-	if ( edd_user_pending_verification() ) {
+	if ( cs_user_pending_verification() ) {
 
 		if( defined( 'IS_PROFILE_PAGE' ) && true === IS_PROFILE_PAGE ) {
-			$url     = esc_url( edd_get_user_verification_request_url() );
-			$message = sprintf( __( 'Your account is pending verification. Please click the link in your email to activate your account. No email? <a href="%s">Click here</a> to send a new activation code.', 'easy-digital-downloads' ), $url );
-			$title   = __( 'Account Pending Verification', 'easy-digital-downloads' );
+			$url     = esc_url( cs_get_user_verification_request_url() );
+			$message = sprintf( __( 'Your account is pending verification. Please click the link in your email to activate your account. No email? <a href="%s">Click here</a> to send a new activation code.', 'commercestore' ), $url );
+			$title   = __( 'Account Pending Verification', 'commercestore' );
 			$args    = array(
 				'response' => 403,
 			);
@@ -114,7 +114,7 @@ function edd_maybe_remove_menu_profile_links() {
 		remove_submenu_page( 'users.php', 'profile.php' );
 	}
 }
-add_action( 'admin_init', 'edd_maybe_remove_menu_profile_links' );
+add_action( 'admin_init', 'cs_maybe_remove_menu_profile_links' );
 
 /**
  * Add Customer column to Users list table.
@@ -125,11 +125,11 @@ add_action( 'admin_init', 'edd_maybe_remove_menu_profile_links' );
  *
  * @return array $columns Columns with `Customer` added.
  */
-function edd_add_customer_column_to_users_table( $columns ) {
-	$columns['edd_customer'] = __( 'Customer', 'easy-digital-downloads' );
+function cs_add_customer_column_to_users_table( $columns ) {
+	$columns['cs_customer'] = __( 'Customer', 'commercestore' );
 	return $columns;
 }
-add_filter( 'manage_users_columns', 'edd_add_customer_column_to_users_table' );
+add_filter( 'manage_users_columns', 'cs_add_customer_column_to_users_table' );
 
 /**
  * Display customer details on Users list table.
@@ -142,14 +142,14 @@ add_filter( 'manage_users_columns', 'edd_add_customer_column_to_users_table' );
  *
  * @return string URL to Customer page, existing value otherwise.
  */
-function edd_render_customer_column( $value, $column_name, $user_id ) {
-	if ( 'edd_customer' === $column_name ) {
-		$customer = new EDD_Customer( $user_id, true );
+function cs_render_customer_column( $value, $column_name, $user_id ) {
+	if ( 'cs_customer' === $column_name ) {
+		$customer = new CS_Customer( $user_id, true );
 
 		if ( $customer->id > 0 ) {
 			$name     = '#' . $customer->id . ' ';
-			$name     .= ! empty( $customer->name ) ? $customer->name : '<em>' . __( 'Unnamed Customer', 'easy-digital-downloads' ) . '</em>';
-			$view_url = admin_url( 'edit.php?post_type=download&page=edd-customers&view=overview&id=' . $customer->id );
+			$name     .= ! empty( $customer->name ) ? $customer->name : '<em>' . __( 'Unnamed Customer', 'commercestore' ) . '</em>';
+			$view_url = admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id );
 
 			return '<a href="' . esc_url( $view_url ) . '">' . $name . '</a>';
 		}
@@ -157,4 +157,4 @@ function edd_render_customer_column( $value, $column_name, $user_id ) {
 
 	return $value;
 }
-add_action( 'manage_users_custom_column',  'edd_render_customer_column', 10, 3 );
+add_action( 'manage_users_custom_column',  'cs_render_customer_column', 10, 3 );

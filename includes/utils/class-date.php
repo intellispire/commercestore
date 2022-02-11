@@ -2,20 +2,20 @@
 /**
  * Class for date management
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Classes/Date
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Utils;
+namespace CS\Utils;
 
 if ( ! class_exists( '\\Carbon\\Carbon' ) ) {
-	require_once EDD_PLUGIN_DIR . 'includes/libraries/Carbon.php';
+	require_once CS_PLUGIN_DIR . 'includes/libraries/Carbon.php';
 }
 
 /**
- * Implements date formatting helpers for EDD.
+ * Implements date formatting helpers for CS.
  *
  * @since 3.0
  *
@@ -32,7 +32,7 @@ final class Date extends \Carbon\Carbon {
 	 */
 	public function __construct( $time = null, $timezone = null ) {
 		if ( null === $timezone ) {
-			$timezone = new \DateTimeZone( edd_get_timezone_id() );
+			$timezone = new \DateTimeZone( cs_get_timezone_id() );
 		}
 
 		parent::__construct( $time, $timezone );
@@ -74,7 +74,7 @@ final class Date extends \Carbon\Carbon {
 			case 'time':
 			case 'datetime':
 			case 'mysql':
-				$formatted = parent::format( edd_get_date_format( $format ) );
+				$formatted = parent::format( cs_get_date_format( $format ) );
 				break;
 
 			case 'object':
@@ -110,6 +110,6 @@ final class Date extends \Carbon\Carbon {
 	 * @return int WordPress "local" timestamp.
 	 */
 	public function getWPTimestamp() {
-		return $this->getTimestamp() + EDD()->utils->get_gmt_offset();
+		return $this->getTimestamp() + CS()->utils->get_gmt_offset();
 	}
 }

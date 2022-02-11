@@ -2,24 +2,24 @@
 /**
  * Reports API - Endpoint View Registry
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2019, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2019, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Utils;
-use EDD\Reports;
+use CS\Utils;
+use CS\Reports;
 
 /**
  * Implements a singleton registry for registering endpoint views.
  *
  * @since 3.0
  *
- * @see \EDD\Reports\Registry
- * @see \EDD\Utils\Static_Registry
+ * @see \CS\Reports\Registry
+ * @see \CS\Utils\Static_Registry
  *
  * @method array get_endpoint_view( string $view_id )
  */
@@ -61,7 +61,7 @@ final class Endpoint_View_Registry extends Reports\Registry implements Utils\Sta
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception in get_item() if the item does not exist.
+	 * @throws \CS_Exception in get_item() if the item does not exist.
 	 *
 	 * @param string $name      Method name.
 	 * @param array  $arguments Method arguments (if any)
@@ -83,10 +83,10 @@ final class Endpoint_View_Registry extends Reports\Registry implements Utils\Sta
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the `$view_id` doesn't match a core view.
-	 * @throws \EDD_Exception if attributes other than 'group_callback', 'handler', or 'display_callback'
+	 * @throws \CS_Exception if the `$view_id` doesn't match a core view.
+	 * @throws \CS_Exception if attributes other than 'group_callback', 'handler', or 'display_callback'
 	 *                        are defined.
-	 * @throws \EDD_Exception if one or more attributes are not of a valid specification.
+	 * @throws \CS_Exception if one or more attributes are not of a valid specification.
 	 *
 	 * @param string $view_id   Endpoint view ID.
 	 * @param array  $attributes {
@@ -122,7 +122,7 @@ final class Endpoint_View_Registry extends Reports\Registry implements Utils\Sta
 
 		try {
 			$this->validate_attributes( $view_atts, $view_id );
-		} catch ( \EDD_Exception $exception ) {
+		} catch ( \CS_Exception $exception ) {
 			$error = true;
 
 			throw $exception;
@@ -200,22 +200,22 @@ final class Endpoint_View_Registry extends Reports\Registry implements Utils\Sta
 		return array(
 			'tile'  => array(
 				'group'          => 'tiles',
-				'group_callback' => 'EDD\Reports\default_display_tiles_group',
-				'handler'        => 'EDD\Reports\Data\Tile_Endpoint',
+				'group_callback' => 'CS\Reports\default_display_tiles_group',
+				'handler'        => 'CS\Reports\Data\Tile_Endpoint',
 				'fields'         => array(
 					'data_callback'    => '::get_data',
-					'display_callback' => 'EDD\Reports\default_display_tile',
+					'display_callback' => 'CS\Reports\default_display_tile',
 					'display_args'     => array(
 						'type'             => '',
 						'context'          => 'primary',
-						'comparison_label' => __( 'All time', 'easy-digital-downloads' ),
+						'comparison_label' => __( 'All time', 'commercestore' ),
 					),
 				),
 			),
 			'chart' => array(
 				'group'          => 'charts',
-				'group_callback' => 'EDD\Reports\default_display_charts_group',
-				'handler'        => 'EDD\Reports\Data\Chart_Endpoint',
+				'group_callback' => 'CS\Reports\default_display_charts_group',
+				'handler'        => 'CS\Reports\Data\Chart_Endpoint',
 				'fields'         => array(
 					'type'             => 'line',
 					'options'          => array(),
@@ -228,8 +228,8 @@ final class Endpoint_View_Registry extends Reports\Registry implements Utils\Sta
 			),
 			'table' => array(
 				'group'          => 'tables',
-				'group_callback' => 'EDD\Reports\default_display_tables_group',
-				'handler'        => 'EDD\Reports\Data\Table_Endpoint',
+				'group_callback' => 'CS\Reports\default_display_tables_group',
+				'handler'        => 'CS\Reports\Data\Table_Endpoint',
 				'fields'         => array(
 					'data_callback'    => '::prepare_items',
 					'display_callback' => '::display',

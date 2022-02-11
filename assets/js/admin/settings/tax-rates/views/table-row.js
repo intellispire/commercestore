@@ -9,11 +9,11 @@ const TableRow = wp.Backbone.View.extend( {
 
 	// Set class.
 	className: function() {
-		return 'edd-tax-rate-row edd-tax-rate-row--' + this.model.get( 'status' );
+		return 'cs-tax-rate-row cs-tax-rate-row--' + this.model.get( 'status' );
 	},
 
 	// See https://codex.wordpress.org/Javascript_Reference/wp.template
-	template: wp.template( 'edd-admin-tax-rates-table-row' ),
+	template: wp.template( 'cs-admin-tax-rates-table-row' ),
 
 	// Watch events.
 	events: {

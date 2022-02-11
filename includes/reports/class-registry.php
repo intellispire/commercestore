@@ -2,16 +2,16 @@
 /**
  * Reports API - Reports Base Registry
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports;
+namespace CS\Reports;
 
-use EDD\Utils;
-use EDD\Reports\Exceptions as Reports_Exceptions;
+use CS\Utils;
+use CS\Reports\Exceptions as Reports_Exceptions;
 
 /**
  * Defines the construct for building a reports item registry.
@@ -35,7 +35,7 @@ class Registry extends Utils\Registry {
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if an attribute was empty.
+	 * @throws \CS_Exception if an attribute was empty.
 	 *
 	 * @param array  $attributes List of attributes to check for emptiness.
 	 * @param string $item_id    Item ID.

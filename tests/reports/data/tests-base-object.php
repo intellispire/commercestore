@@ -1,22 +1,22 @@
 <?php
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Endpoint object.
  *
- * @group edd_reports
- * @group edd_reports_endpoints
- * @group edd_objects
+ * @group cs_reports
+ * @group cs_reports_endpoints
+ * @group cs_objects
  *
- * @coversDefaultClass \EDD\Reports\Data\Base_Object
+ * @coversDefaultClass \CS\Reports\Data\Base_Object
  */
-class Base_Object_Tests extends \EDD_UnitTestCase {
+class Base_Object_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * @covers ::display()
@@ -80,7 +80,7 @@ class Base_Object_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_props_with_missing_id_should_flag_WP_Error() {
 		$object = $this->mock_Base_Object( array(
@@ -99,7 +99,7 @@ class Base_Object_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_props_with_missing_id_should_flag_WP_Error_including_code_missing_object_id() {
 		$object = $this->mock_Base_Object( array(
@@ -111,7 +111,7 @@ class Base_Object_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_props_with_missing_object_label_should_flag_WP_Error() {
 		$object = $this->mock_Base_Object( array(
@@ -123,7 +123,7 @@ class Base_Object_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_props_with_missing_object_label_should_flag_WP_Error_including_code_missing_object_label() {
 		$object = $this->mock_Base_Object( array(
@@ -168,10 +168,10 @@ class Base_Object_Tests extends \EDD_UnitTestCase {
 	 * Mocks a copy of the Base_Object abstract class.
 	 *
 	 * @param array $args
-	 * @return \EDD\Reports\Data\Base_Object Mocked Base_Object instance.
+	 * @return \CS\Reports\Data\Base_Object Mocked Base_Object instance.
 	 */
 	protected function mock_Base_Object( $args ) {
-		return $this->getMockForAbstractClass( '\EDD\Reports\Data\Base_Object', array( $args ) );
+		return $this->getMockForAbstractClass( '\CS\Reports\Data\Base_Object', array( $args ) );
 	}
 
 }

@@ -2,21 +2,21 @@
 /**
  * Orders Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Tables
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Tables;
+namespace CS\Database\Tables;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 /**
- * Setup the global "edd_orders" database table
+ * Setup the global "cs_orders" database table
  *
  * @since 3.0
  */
@@ -113,7 +113,7 @@ final class Orders extends Table {
 		// After successful creation, we need to set the auto_increment for legacy orders.
 		if ( ! empty( $created ) ) {
 
-			$result = $this->get_db()->get_var( "SELECT ID FROM {$this->get_db()->prefix}posts WHERE post_type = 'edd_payment' ORDER BY ID DESC LIMIT 1;" );
+			$result = $this->get_db()->get_var( "SELECT ID FROM {$this->get_db()->prefix}posts WHERE post_type = 'cs_payment' ORDER BY ID DESC LIMIT 1;" );
 
 			if ( ! empty( $result )  ) {
 				$auto_increment = $result + 1;

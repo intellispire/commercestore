@@ -10,7 +10,7 @@ import { searchItems } from './utils.js';
  */
 function setupEmailTags() {
 	// Find all of the buttons.
-	const insertButtons = document.querySelectorAll( '.edd-email-tags-list-button' );
+	const insertButtons = document.querySelectorAll( '.cs-email-tags-list-button' );
 	if ( ! insertButtons ) {
 		return;
 	}
@@ -37,8 +37,8 @@ function setupEmailTags() {
  * Filter tags.
  */
 function filterEmailTags() {
-	const filterInput = document.querySelector( '.edd-email-tags-filter-search' );
-	const tagItems = document.querySelectorAll( '.edd-email-tags-list-item' );
+	const filterInput = document.querySelector( '.cs-email-tags-filter-search' );
+	const tagItems = document.querySelectorAll( '.cs-email-tags-list-item' );
 
 	if ( ! filterInput ) {
 		return;
@@ -61,7 +61,7 @@ function filterEmailTags() {
  */
 document.addEventListener( 'DOMContentLoaded', function() {
 	// Resize Thickbox when media button is clicked.
-	const mediaButton = document.querySelector( '.edd-email-tags-inserter' );
+	const mediaButton = document.querySelector( '.cs-email-tags-inserter' );
 	if ( ! mediaButton ) {
 		return;
 	}

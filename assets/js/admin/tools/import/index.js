@@ -1,7 +1,7 @@
 /**
  * Import screen JS
  */
-var EDD_Import = {
+var CS_Import = {
 
 	init: function() {
 		this.submit();
@@ -10,7 +10,7 @@ var EDD_Import = {
 	submit: function() {
 		const self = this;
 
-		$( '.edd-import-form' ).ajaxForm( {
+		$( '.cs-import-form' ).ajaxForm( {
 			beforeSubmit: self.before_submit,
 			success: self.success,
 			complete: self.complete,
@@ -21,7 +21,7 @@ var EDD_Import = {
 
 	before_submit: function( arr, form, options ) {
 		form.find( '.notice-wrap' ).remove();
-		form.append( '<div class="notice-wrap"><div class="edd-progress"><div></div></div></div>' );
+		form.append( '<div class="notice-wrap"><div class="cs-progress"><div></div></div></div>' );
 
 		//check whether client browser fully supports all File API
 		if ( window.File && window.FileReader && window.FileList && window.Blob ) {
@@ -29,13 +29,13 @@ var EDD_Import = {
 			// HTML5 File API is supported by browser
 
 		} else {
-			const import_form = $( '.edd-import-form' ).find( '.edd-progress' ).parent().parent();
+			const import_form = $( '.cs-import-form' ).find( '.cs-progress' ).parent().parent();
 			const notice_wrap = import_form.find( '.notice-wrap' );
 
 			import_form.find( '.button:disabled' ).attr( 'disabled', false );
 
 			//Error for older unsupported browsers that doesn't support HTML5 File API
-			notice_wrap.html( '<div class="update error"><p>' + edd_vars.unsupported_browser + '</p></div>' );
+			notice_wrap.html( '<div class="update error"><p>' + cs_vars.unsupported_browser + '</p></div>' );
 			return false;
 		}
 	},
@@ -47,13 +47,13 @@ var EDD_Import = {
 			response = jQuery.parseJSON( xhr.responseText );
 
 		if ( response.success ) {
-			const form = $( '.edd-import-form .notice-wrap' ).parent();
+			const form = $( '.cs-import-form .notice-wrap' ).parent();
 
-			form.find( '.edd-import-file-wrap,.notice-wrap' ).remove();
-			form.find( '.edd-import-options' ).slideDown();
+			form.find( '.cs-import-file-wrap,.notice-wrap' ).remove();
+			form.find( '.cs-import-options' ).slideDown();
 
 			// Show column mapping
-			let select = form.find( 'select.edd-import-csv-column' ),
+			let select = form.find( 'select.cs-import-csv-column' ),
 				row = select.parents( 'tr' ).first(),
 				options = '',
 				columns = response.data.columns.sort( function( a, b ) {
@@ -88,18 +88,18 @@ var EDD_Import = {
 				$( this ).val( $( this ).attr( 'data-field' ) ).change();
 			} );
 
-			$( document.body ).on( 'click', '.edd-import-proceed', function( e ) {
+			$( document.body ).on( 'click', '.cs-import-proceed', function( e ) {
 				e.preventDefault();
 
-				form.find( '.edd-import-proceed.button-primary' ).addClass( 'updating-message' );
-				form.append( '<div class="notice-wrap"><div class="edd-progress"><div></div></div></div>' );
+				form.find( '.cs-import-proceed.button-primary' ).addClass( 'updating-message' );
+				form.append( '<div class="notice-wrap"><div class="cs-progress"><div></div></div></div>' );
 
 				response.data.mapping = form.serialize();
 
-				EDD_Import.process_step( 1, response.data, self );
+				CS_Import.process_step( 1, response.data, self );
 			} );
 		} else {
-			EDD_Import.error( xhr );
+			CS_Import.error( xhr );
 		}
 	},
 
@@ -107,7 +107,7 @@ var EDD_Import = {
 		// Something went wrong. This will display error on form
 
 		const response = jQuery.parseJSON( xhr.responseText );
-		const import_form = $( '.edd-import-form' ).find( '.edd-progress' ).parent().parent();
+		const import_form = $( '.cs-import-form' ).find( '.cs-progress' ).parent().parent();
 		const notice_wrap = import_form.find( '.notice-wrap' );
 
 		import_form.find( '.button:disabled' ).attr( 'disabled', false );
@@ -129,14 +129,14 @@ var EDD_Import = {
 				class: import_data.class,
 				upload: import_data.upload,
 				mapping: import_data.mapping,
-				action: 'edd_do_ajax_import',
+				action: 'cs_do_ajax_import',
 				step: step,
 			},
 			dataType: 'json',
 			success: function( response ) {
 				if ( 'done' === response.data.step || response.data.error ) {
 					// We need to get the actual in progress form, not all forms on the page
-					const import_form = $( '.edd-import-form' ).find( '.edd-progress' ).parent().parent();
+					const import_form = $( '.cs-import-form' ).find( '.cs-progress' ).parent().parent();
 					const notice_wrap = import_form.find( '.notice-wrap' );
 
 					import_form.find( '.button:disabled' ).attr( 'disabled', false );
@@ -144,7 +144,7 @@ var EDD_Import = {
 					if ( response.data.error ) {
 						notice_wrap.html( '<div class="update error"><p>' + response.data.error + '</p></div>' );
 					} else {
-						import_form.find( '.edd-import-options' ).hide();
+						import_form.find( '.cs-import-options' ).hide();
 						$( 'html, body' ).animate( {
 							scrollTop: import_form.parent().offset().top,
 						}, 500 );
@@ -152,13 +152,13 @@ var EDD_Import = {
 						notice_wrap.html( '<div class="updated"><p>' + response.data.message + '</p></div>' );
 					}
 				} else {
-					$( '.edd-progress div' ).animate( {
+					$( '.cs-progress div' ).animate( {
 						width: response.data.percentage + '%',
 					}, 50, function() {
 						// Animation complete.
 					} );
 
-					EDD_Import.process_step( parseInt( response.data.step ), import_data, self );
+					CS_Import.process_step( parseInt( response.data.step ), import_data, self );
 				}
 			},
 		} ).fail( function( response ) {
@@ -170,5 +170,5 @@ var EDD_Import = {
 };
 
 jQuery( document ).ready( function( $ ) {
-	EDD_Import.init();
+	CS_Import.init();
 } );

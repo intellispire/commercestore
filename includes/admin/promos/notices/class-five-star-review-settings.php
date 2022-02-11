@@ -2,13 +2,13 @@
 /**
  * Settings Review Notice
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\Admin\Promos\Notices;
+namespace CS\Admin\Promos\Notices;
 
 class Five_Star_Review_Settings extends Five_Star_Review_Dashboard {
 
@@ -39,9 +39,9 @@ class Five_Star_Review_Settings extends Five_Star_Review_Dashboard {
 	public function display() {
 		?>
 		<div
-			id="edd-admin-notice-<?php echo esc_attr( $this->get_id() ); ?>"
-			class="notice notice-info edd-admin-notice-<?php echo esc_attr( sanitize_html_class( static::TYPE ) ); ?> edd-promo-notice"
-			data-nonce="<?php echo esc_attr( wp_create_nonce( 'edd-dismiss-notice-' . $this->get_id() ) ); ?>"
+			id="cs-admin-notice-<?php echo esc_attr( $this->get_id() ); ?>"
+			class="notice notice-info cs-admin-notice-<?php echo esc_attr( sanitize_html_class( static::TYPE ) ); ?> cs-promo-notice"
+			data-nonce="<?php echo esc_attr( wp_create_nonce( 'cs-dismiss-notice-' . $this->get_id() ) ); ?>"
 			data-id="<?php echo esc_attr( $this->get_id() ); ?>"
 			data-lifespan="<?php echo esc_attr( static::dismiss_duration() ); ?>"
 		>
@@ -54,13 +54,13 @@ class Five_Star_Review_Settings extends Five_Star_Review_Dashboard {
 
 	/**
 	 * Whether the notice should display.
-	 * This extends the general method as this notice should only display on EDD settings screens.
+	 * This extends the general method as this notice should only display on CommerceStore settings screens.
 	 *
 	 * @since 2.11.4
 	 * @return bool
 	 */
 	protected function _should_display() {
-		if ( ! edd_is_admin_page( 'settings' ) ) {
+		if ( ! cs_is_admin_page( 'settings' ) ) {
 			return false;
 		}
 		return parent::_should_display();

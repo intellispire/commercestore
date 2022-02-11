@@ -2,43 +2,43 @@
 /**
  * Exports Functions
  *
- * These are functions are used for exporting data from Easy Digital Downloads.
+ * These are functions are used for exporting data from CommerceStore.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Export
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/class-export.php';
-require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/export-actions.php';
+require_once CS_PLUGIN_DIR . 'includes/admin/reporting/class-export.php';
+require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/export-actions.php';
 
 /**
  * Process batch exports via AJAX.
  *
  * @since 2.4
  */
-function edd_do_ajax_export() {
-	require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export.php';
+function cs_do_ajax_export() {
+	require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export.php';
 
 	parse_str( $_POST['form'], $form ); // WPCS: CSRF ok.
 
 	$_REQUEST = $form;
 	$form     = (array) $form;
 
-	if ( ! wp_verify_nonce( $_REQUEST['edd_ajax_export'], 'edd_ajax_export' ) ) {
+	if ( ! wp_verify_nonce( $_REQUEST['cs_ajax_export'], 'cs_ajax_export' ) ) {
 		die( '-2' );
 	}
 
-	do_action( 'edd_batch_export_class_include', $form['edd-export-class'] );
+	do_action( 'cs_batch_export_class_include', $form['cs-export-class'] );
 
 	$step  = absint( $_POST['step'] );
-	$class = sanitize_text_field( $form['edd-export-class'] );
+	$class = sanitize_text_field( $form['cs-export-class'] );
 
-	/** @var \EDD_Batch_Export $export */
+	/** @var \CS_Batch_Export $export */
 	$export = new $class( $step );
 
 	if ( ! $export->can_export() ) {
@@ -48,7 +48,7 @@ function edd_do_ajax_export() {
 	if ( ! $export->is_writable ) {
 		echo wp_json_encode( array(
 			'error'   => true,
-			'message' => __( 'Export location or file not writable', 'easy-digital-downloads' ),
+			'message' => __( 'Export location or file not writable', 'commercestore' ),
 		));
 
 		exit;
@@ -75,14 +75,14 @@ function edd_do_ajax_export() {
 	} elseif ( true === $export->is_empty ) {
 		echo wp_json_encode( array(
 			'error'   => true,
-			'message' => __( 'No data found for export parameters', 'easy-digital-downloads' ),
+			'message' => __( 'No data found for export parameters', 'commercestore' ),
 		) );
 
 		exit;
 	} elseif ( true === $export->done && true === $export->is_void ) {
 		$message = ! empty( $export->message )
 			? $export->message
-			: __( 'Batch Processing Complete', 'easy-digital-downloads' );
+			: __( 'Batch Processing Complete', 'commercestore' );
 
 		echo wp_json_encode( array(
 			'success' => true,
@@ -95,8 +95,8 @@ function edd_do_ajax_export() {
 		$args = array_merge( $_REQUEST, array(
 			'step'       => $step,
 			'class'      => $class,
-			'nonce'      => wp_create_nonce( 'edd-batch-export' ),
-			'edd_action' => 'download_batch_export',
+			'nonce'      => wp_create_nonce( 'cs-batch-export' ),
+			'cs_action' => 'download_batch_export',
 		) );
 
 		$download_url = add_query_arg( $args, admin_url() );
@@ -109,4 +109,4 @@ function edd_do_ajax_export() {
 		exit;
 	}
 }
-add_action( 'wp_ajax_edd_do_ajax_export', 'edd_do_ajax_export' );
+add_action( 'wp_ajax_cs_do_ajax_export', 'cs_do_ajax_export' );

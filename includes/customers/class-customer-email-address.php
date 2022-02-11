@@ -2,15 +2,15 @@
 /**
  * Customers API - Email Address Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Customers
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Customers;
+namespace CS\Customers;
 
-use EDD\Base_Object;
+use CS\Base_Object;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;

@@ -4,8 +4,8 @@
  *
  * This is the footer used if no others are available
  *
- * @author 		Easy Digital Downloads
- * @package 	Easy Digital Downloads/Templates/Emails
+ * @author 		CommerceStore
+ * @package 	CommerceStore/Templates/Emails
  * @version     2.1
  */
 

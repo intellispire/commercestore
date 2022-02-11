@@ -2,9 +2,9 @@
 /**
  * Admin Add-ons
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Add-ons
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -20,13 +20,13 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0
  * @return void
  */
-function edd_add_ons_page() {
+function cs_add_ons_page() {
 
 	// Filter the add-ons tabs
-	$add_ons_tabs = apply_filters( 'edd_add_ons_tabs', array(
-		'popular' => __( 'Popular', 'easy-digital-downloads' ),
-		'new'     => __( 'New',     'easy-digital-downloads' ),
-		'all'     => __( 'All',     'easy-digital-downloads' )
+	$add_ons_tabs = apply_filters( 'cs_add_ons_tabs', array(
+		'popular' => __( 'Popular', 'commercestore' ),
+		'new'     => __( 'New',     'commercestore' ),
+		'all'     => __( 'All',     'commercestore' )
 	) );
 
 	// Active tab
@@ -36,8 +36,8 @@ function edd_add_ons_page() {
 
 	// Set a new campaign for tracking purposes
 	$campaign = isset( $_GET['view'] ) && strtolower( $_GET['view'] ) === 'integrations'
-		? 'EDDIntegrationsPage'
-		: 'EDDAddonsPage';
+		? 'CSIntegrationsPage'
+		: 'CSAddonsPage';
 
 	// Empty tabs array
 	$tabs = array();
@@ -47,7 +47,7 @@ function edd_add_ons_page() {
 
 		// "All"
 		if ( 'all' === $tab_id ) {
-			$tab_url = 'https://easydigitaldownloads.com/downloads/?utm_source=plugin-addons-page&utm_medium=plugin&utm_campaign=' . $campaign . '&utm_content=All%20Extensions';
+			$tab_url = 'https://commercestore.com/downloads/?utm_source=plugin-addons-page&utm_medium=plugin&utm_campaign=' . $campaign . '&utm_content=All%20Extensions';
 
 		// All other tabs besides "All"
 		} else {
@@ -91,22 +91,22 @@ function edd_add_ons_page() {
 	// Start a buffer
 	ob_start(); ?>
 
-	<div class="wrap" id="edd-add-ons">
+	<div class="wrap" id="cs-add-ons">
 		<h1>
-			<?php _e( 'Apps and Integrations for Easy Digital Downloads', 'easy-digital-downloads' ); ?>
+			<?php _e( 'Apps and Integrations for CommerceStore', 'commercestore' ); ?>
 			<span>
-				&nbsp;&nbsp;<a href="https://easydigitaldownloads.com/downloads/?utm_source=plugin-addons-page&utm_medium=plugin&utm_campaign=<?php echo $campaign; ?>&utm_content=All%20Extensions" class="button-primary" target="_blank"><?php _e( 'Browse All Integrations', 'easy-digital-downloads' ); ?></a>
+				&nbsp;&nbsp;<a href="https://commercestore.com/downloads/?utm_source=plugin-addons-page&utm_medium=plugin&utm_campaign=<?php echo $campaign; ?>&utm_content=All%20Extensions" class="button-primary" target="_blank"><?php _e( 'Browse All Integrations', 'commercestore' ); ?></a>
 			</span>
 		</h1>
-		<p><?php _e( 'These <em><strong>add functionality</strong></em> to your Easy Digital Downloads powered store.', 'easy-digital-downloads' ); ?></p>
+		<p><?php _e( 'These <em><strong>add functionality</strong></em> to your CommerceStore powered store.', 'commercestore' ); ?></p>
 
 		<ul class="subsubsub"><?php echo implode( ' | ', $tabs ); ?></ul>
 
-		<div class="edd-add-ons-container">
+		<div class="cs-add-ons-container">
 			<?php
 
 			// Display a promotional element before all add ons if a promotion is active.
-			$is_promo_active = edd_is_promo_active();
+			$is_promo_active = cs_is_promo_active();
 			if ( true === $is_promo_active ) {
 
 				// Build the main URL for the promotion.
@@ -116,28 +116,28 @@ function edd_add_ons_page() {
 					'utm_campaign' => 'bfcm2019',
 					'utm_content'  => 'first-feed-element-' . $active_tab,
 				);
-				$url  = add_query_arg( $args, 'https://easydigitaldownloads.com/pricing/' );
+				$url  = add_query_arg( $args, 'https://commercestore.com/pricing/' );
 				?>
-				<div class="edd-add-ons-promo edd-extension">
-					<h3 class="edd-extension-title">Black Friday & Cyber Monday sale!</h3>
+				<div class="cs-add-ons-promo cs-extension">
+					<h3 class="cs-extension-title">Black Friday & Cyber Monday sale!</h3>
 					<a href="<?php echo esc_url( $url ); ?>" title="Black Friday & Cyber Monday sale">
-						<img class="attachment-download-grid-thumb size-download-grid-thumb wp-post-image" src="<?php echo esc_url( EDD_PLUGIN_URL . 'assets/images/promo/edd-25-percent-off.png' ); ?>">
+						<img class="attachment-download-grid-thumb size-download-grid-thumb wp-post-image" src="<?php echo esc_url( CS_PLUGIN_URL . 'assets/images/promo/cs-25-percent-off.png' ); ?>">
 					</a>
-					<p><?php echo wp_kses_post( __( 'Save 25% on all Easy Digital Downloads purchases <strong>this week</strong>, including renewals and upgrades! Use code <span class="bfcm-code">BFCM2019</span> at checkout.', 'easy-digital-downloads' ) ); ?></p>
-					<a class="button-secondary" href="<?php echo esc_url( $url ); ?>" target="_blank"><?php esc_html_e( 'Don\'t miss out!', 'easy-digital-downloads' ); ?></a>
-					<span class="sale-ends"><?php esc_html_e( 'Sale ends 23:59 PM December 6th CST', 'easy-digital-downloads' ); ?></span>
+					<p><?php echo wp_kses_post( __( 'Save 25% on all CommerceStore purchases <strong>this week</strong>, including renewals and upgrades! Use code <span class="bfcm-code">BFCM2019</span> at checkout.', 'commercestore' ) ); ?></p>
+					<a class="button-secondary" href="<?php echo esc_url( $url ); ?>" target="_blank"><?php esc_html_e( 'Don\'t miss out!', 'commercestore' ); ?></a>
+					<span class="sale-ends"><?php esc_html_e( 'Sale ends 23:59 PM December 6th CST', 'commercestore' ); ?></span>
 				</div>
 				<?php
 			}
 
 			// Display all add ons.
-			echo wp_kses_post( edd_add_ons_get_feed( $active_tab ) );
+			echo wp_kses_post( cs_add_ons_get_feed( $active_tab ) );
 			?>
 			<div class="clear"></div>
 		</div>
 
-		<div class="edd-add-ons-footer">
-			<a href="https://easydigitaldownloads.com/downloads/?utm_source=plugin-addons-page&utm_medium=plugin&utm_campaign=<?php echo esc_attr( $campaign ); ?>&utm_content=All%20Extensions" class="button-primary" target="_blank"><?php esc_html_e( 'Browse All Integrations', 'easy-digital-downloads' ); ?></a>
+		<div class="cs-add-ons-footer">
+			<a href="https://commercestore.com/downloads/?utm_source=plugin-addons-page&utm_medium=plugin&utm_campaign=<?php echo esc_attr( $campaign ); ?>&utm_content=All%20Extensions" class="button-primary" target="_blank"><?php esc_html_e( 'Browse All Integrations', 'commercestore' ); ?></a>
 		</div>
 	</div>
 
@@ -155,15 +155,15 @@ function edd_add_ons_page() {
  * @since 1.0
  * @return void
  */
-function edd_add_ons_get_feed( $tab = 'popular' ) {
+function cs_add_ons_get_feed( $tab = 'popular' ) {
 
 	// Transient
-	$trans_key = 'easydigitaldownloads_add_ons_feed_' . $tab;
+	$trans_key = 'commercestore_add_ons_feed_' . $tab;
 	$cache     = get_transient( $trans_key );
 
 	// No add ons, so reach out and get some
 	if ( false === $cache ) {
-		$url = 'https://easydigitaldownloads.com/?feed=addons';
+		$url = 'https://commercestore.com/?feed=addons';
 
 		// Popular
 		if ( 'popular' !== $tab ) {
@@ -175,7 +175,7 @@ function edd_add_ons_get_feed( $tab = 'popular' ) {
 
 		// Handle error
 		if ( empty( $feed ) || is_wp_error( $feed ) ) {
-			$cache = '<div class="error"><p>' . __( 'These extensions could not be retrieved from the server. Please try again later.', 'easy-digital-downloads' ) . '</div>';
+			$cache = '<div class="error"><p>' . __( 'These extensions could not be retrieved from the server. Please try again later.', 'commercestore' ) . '</div>';
 
 		// Cache the results
 		} elseif ( isset( $feed['body'] ) && strlen( $feed['body'] ) > 0 ) {
@@ -186,7 +186,7 @@ function edd_add_ons_get_feed( $tab = 'popular' ) {
 
 	// Set a new campaign for tracking purposes
 	if ( isset( $_GET['view'] ) && 'integrations' === $_GET['view'] ) {
-		$cache = str_replace( 'EDDAddonsPage', 'EDDIntegrationsPage', $cache );
+		$cache = str_replace( 'CSAddonsPage', 'CSIntegrationsPage', $cache );
 	}
 
 	return $cache;

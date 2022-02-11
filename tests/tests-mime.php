@@ -2,9 +2,9 @@
 
 
 /**
- * @group edd_mime
+ * @group cs_mime
  */
-class Tests_Mime extends EDD_UnitTestCase {
+class Tests_Mime extends CS_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();

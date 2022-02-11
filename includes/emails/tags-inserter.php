@@ -2,9 +2,9 @@
 /**
  * Add a button to wp_editor() instances to allow easier tag insertion.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Email
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
@@ -21,8 +21,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return array $emails Registered emails.
  */
-function edd_email_tags_inserter_get_registered_emails() {
-	$settings = edd_get_registered_settings();
+function cs_email_tags_inserter_get_registered_emails() {
+	$settings = cs_get_registered_settings();
 	$emails   = $settings['emails'];
 
 	unset( $emails['main'] );
@@ -31,35 +31,35 @@ function edd_email_tags_inserter_get_registered_emails() {
 }
 
 /**
- * Wait until the admin has loaded (so edd_get_registered_settings() works)
+ * Wait until the admin has loaded (so cs_get_registered_settings() works)
  * and hook in to WordPress for each registered email.
  *
  * @since 3.0
  */
-function edd_email_tags_inserter_register() {
-	foreach ( edd_email_tags_inserter_get_registered_emails() as $email ) {
+function cs_email_tags_inserter_register() {
+	foreach ( cs_email_tags_inserter_get_registered_emails() as $email ) {
 
 		// Add Thickbox button.
-		add_action( 'edd_settings_tab_top_emails_' . $email, 'edd_email_tags_inserter_media_button' );
+		add_action( 'cs_settings_tab_top_emails_' . $email, 'cs_email_tags_inserter_media_button' );
 
 		// Output Thickbox content.
-		add_action( 'edd_settings_tab_top_emails_' . $email, 'edd_email_tags_inserter_thickbox_content' );
+		add_action( 'cs_settings_tab_top_emails_' . $email, 'cs_email_tags_inserter_thickbox_content' );
 
 		// Enqueue scripts.
-		add_action( 'edd_settings_tab_top_emails_' . $email, 'edd_email_tags_inserter_enqueue_scripts' );
+		add_action( 'cs_settings_tab_top_emails_' . $email, 'cs_email_tags_inserter_enqueue_scripts' );
 	}
 }
-add_action( 'admin_menu', 'edd_email_tags_inserter_register' );
+add_action( 'admin_menu', 'cs_email_tags_inserter_register' );
 
 /**
  * Wait until `media_buttons` action is called.
  *
- * @see edd_email_tags_inserter_media_button_output()
+ * @see cs_email_tags_inserter_media_button_output()
  *
  * @since 3.0
  */
-function edd_email_tags_inserter_media_button() {
-	add_action( 'media_buttons', 'edd_email_tags_inserter_media_button_output' );
+function cs_email_tags_inserter_media_button() {
+	add_action( 'media_buttons', 'cs_email_tags_inserter_media_button_output' );
 }
 
 /**
@@ -68,11 +68,11 @@ function edd_email_tags_inserter_media_button() {
  *
  * @since 3.0
  */
-function edd_email_tags_inserter_media_button_output() {
+function cs_email_tags_inserter_media_button_output() {
 	?>
-	<a href="#TB_inline?width=640&inlineId=edd-insert-email-tag" class="edd-email-tags-inserter thickbox button edd-thickbox" style="padding-left: 0.4em;">
+	<a href="#TB_inline?width=640&inlineId=cs-insert-email-tag" class="cs-email-tags-inserter thickbox button cs-thickbox" style="padding-left: 0.4em;">
 		<span class="wp-media-buttons-icon dashicons dashicons-editor-code"></span>
-		<?php esc_html_e( 'Insert Marker', 'easy-digital-downloads' ); ?>
+		<?php esc_html_e( 'Insert Marker', 'commercestore' ); ?>
 	</a>
 	<?php
 }
@@ -82,14 +82,14 @@ function edd_email_tags_inserter_media_button_output() {
  *
  * @since 3.0
  */
-function edd_email_tags_inserter_enqueue_scripts() {
+function cs_email_tags_inserter_enqueue_scripts() {
 
-	wp_enqueue_style( 'edd-admin-email-tags' );
-	wp_enqueue_script( 'edd-admin-email-tags' ) ;
+	wp_enqueue_style( 'cs-admin-email-tags' );
+	wp_enqueue_script( 'cs-admin-email-tags' ) ;
 
 	// Send information about tags to script.
 	$items = array();
-	$tags  = edd_get_email_tags();
+	$tags  = cs_get_email_tags();
 
 	foreach ( $tags as $tag ) {
 		$items[] = array(
@@ -103,8 +103,8 @@ function edd_email_tags_inserter_enqueue_scripts() {
 	}
 
 	wp_localize_script(
-		'edd-admin-email-tags',
-		'eddEmailTagsInserter',
+		'cs-admin-email-tags',
+		'csEmailTagsInserter',
 		array(
 			'items' => $items,
 		)
@@ -116,18 +116,18 @@ function edd_email_tags_inserter_enqueue_scripts() {
  *
  * @since 3.0
  */
-function edd_email_tags_inserter_thickbox_content() {
-	$tags = edd_get_email_tags();
+function cs_email_tags_inserter_thickbox_content() {
+	$tags = cs_get_email_tags();
 	?>
-	<div id="edd-insert-email-tag" style="display: none;">
-		<div class="edd-email-tags-filter">
-			<input type="search" class="edd-email-tags-filter-search" placeholder="<?php echo esc_attr( __( 'Find a tag...', 'easy-digital-downloads' ) ); ?>" />
+	<div id="cs-insert-email-tag" style="display: none;">
+		<div class="cs-email-tags-filter">
+			<input type="search" class="cs-email-tags-filter-search" placeholder="<?php echo esc_attr( __( 'Find a tag...', 'commercestore' ) ); ?>" />
 		</div>
 
-		<ul class="edd-email-tags-list">
+		<ul class="cs-email-tags-list">
 			<?php foreach ( $tags as $tag ) : ?>
-			<li id="<?php echo esc_attr( $tag['tag'] ); ?>" data-tag="<?php echo esc_attr( $tag['tag'] ); ?>" class="edd-email-tags-list-item">
-				<button class="edd-email-tags-list-button" data-to_insert="{<?php echo esc_attr( $tag['tag'] ); ?>}">
+			<li id="<?php echo esc_attr( $tag['tag'] ); ?>" data-tag="<?php echo esc_attr( $tag['tag'] ); ?>" class="cs-email-tags-list-item">
+				<button class="cs-email-tags-list-button" data-to_insert="{<?php echo esc_attr( $tag['tag'] ); ?>}">
 					<strong><?php echo esc_html( $tag['label'] ); ?></strong><code><?php echo '{' . esc_html( $tag['tag'] ) . '}'; ?></code>
 					<span><?php echo esc_html( $tag['description'] ); ?></span>
 				</button>

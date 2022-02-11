@@ -2,15 +2,15 @@
 /**
  * Notifications API Endpoint
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\API\v3;
+namespace CS\API\v3;
 
-use EDD\Models\Notification;
+use CS\Models\Notification;
 
 class Notifications extends Endpoint {
 
@@ -42,11 +42,11 @@ class Notifications extends Endpoint {
 					'permission_callback' => array( $this, 'canViewNotification' ),
 					'args'                => array(
 						'id' => array(
-							'description'       => __( 'ID of the notification.', 'easy-digital-downloads' ),
+							'description'       => __( 'ID of the notification.', 'commercestore' ),
 							'type'              => 'integer',
 							'required'          => true,
 							'validate_callback' => function ( $param, $request, $key ) {
-								$notification = EDD()->notifications->get( intval( $param ) );
+								$notification = CS()->notifications->get( intval( $param ) );
 
 								return ! empty( $notification );
 							},
@@ -83,12 +83,12 @@ class Notifications extends Endpoint {
 	public function listNotifications( \WP_REST_Request $request ) {
 		$active = array_map( function ( Notification $notification ) {
 			return $notification->toArray();
-		}, EDD()->notifications->getActiveNotifications() );
+		}, CS()->notifications->getActiveNotifications() );
 
 		// @todo At a later date we may want to receive dismissed notifications too.
 		/*$dismissed = array_map( function ( Notification $notification ) {
 			return $notification->toArray();
-		}, EDD()->notifications->getDismissedNotifications() );*/
+		}, CS()->notifications->getDismissedNotifications() );*/
 
 		return new \WP_REST_Response( array(
 			'active'    => $active,
@@ -106,18 +106,18 @@ class Notifications extends Endpoint {
 	 * @return \WP_REST_Response
 	 */
 	public function dismissNotification( \WP_REST_Request $request ) {
-		$result = EDD()->notifications->update(
+		$result = CS()->notifications->update(
 			$request->get_param( 'id' ),
 			array( 'dismissed' => 1 )
 		);
 
 		if ( ! $result ) {
 			return new \WP_REST_Response( array(
-				'error' => __( 'Failed to dismiss notification.', 'easy-digital-downloads' ),
+				'error' => __( 'Failed to dismiss notification.', 'commercestore' ),
 			), 500 );
 		}
 
-		wp_cache_delete( 'edd_active_notification_count', 'edd_notifications' );
+		wp_cache_delete( 'cs_active_notification_count', 'cs_notifications' );
 
 		return new \WP_REST_Response( null, 204 );
 	}

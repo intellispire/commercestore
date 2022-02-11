@@ -1,8 +1,8 @@
 <?php
 
-namespace EDD\Admin\Extensions;
+namespace CS\Admin\Extensions;
 
-use \EDD\Admin\Pass_Manager;
+use \CS\Admin\Pass_Manager;
 
 abstract class Extension {
 
@@ -31,7 +31,7 @@ abstract class Extension {
 	/**
 	 * The Extension Manager
 	 *
-	 * @var \EDD\Admin\Extensions\Extension_Manager
+	 * @var \CS\Admin\Extensions\Extension_Manager
 	 */
 	protected $manager;
 
@@ -44,7 +44,7 @@ abstract class Extension {
 	protected $settings_section = 'general';
 
 	public function __construct() {
-		$this->manager = new \EDD\Admin\Extensions\Extension_Manager( static::PASS_LEVEL );
+		$this->manager = new \CS\Admin\Extensions\Extension_Manager( static::PASS_LEVEL );
 	}
 
 	/**
@@ -97,7 +97,7 @@ abstract class Extension {
 	 * @return bool|ProductData|array False if there is no data; product data object if there is, or possibly an array of arrays.
 	 */
 	public function get_product_data( $item_id = false ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/extensions/class-extensions-api.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/extensions/class-extensions-api.php';
 		$api          = new ExtensionsAPI();
 		$body         = $this->get_api_body();
 		$api_item_id  = $item_id ?: $this->item_id;
@@ -140,13 +140,13 @@ abstract class Extension {
 	}
 
 	/**
-	 * Whether the current screen is an EDD setings screen.
+	 * Whether the current screen is an CommerceStore setings screen.
 	 *
 	 * @since 2.11.4
 	 * @return bool
 	 */
-	protected function is_edd_settings_screen() {
-		return edd_is_admin_page( 'settings', $this->settings_tab );
+	protected function is_cs_settings_screen() {
+		return cs_is_admin_page( 'settings', $this->settings_tab );
 	}
 
 	/**
@@ -156,7 +156,7 @@ abstract class Extension {
 	 * @return bool
 	 */
 	protected function is_download_edit_screen() {
-		return edd_is_admin_page( 'download', 'edit' ) || edd_is_admin_page( 'download', 'new' );
+		return cs_is_admin_page( 'download', 'edit' ) || cs_is_admin_page( 'download', 'new' );
 	}
 
 	/**
@@ -166,7 +166,7 @@ abstract class Extension {
 	 * @return bool
 	 */
 	protected function can_show_product_section() {
-		if ( ! $this->is_edd_settings_screen() ) {
+		if ( ! $this->is_cs_settings_screen() ) {
 			return false;
 		}
 		if ( $this->is_activated() ) {
@@ -240,7 +240,7 @@ abstract class Extension {
 			if ( $this->manager->pass_can_download() ) {
 				$button = array(
 					/* translators: The extension name. */
-					'button_text' => sprintf( __( 'Log In to Your Account to Download %s', 'easy-digital-downloads' ), $product_data->title ),
+					'button_text' => sprintf( __( 'Log In to Your Account to Download %s', 'commercestore' ), $product_data->title ),
 					'href'        => $this->get_upgrade_url( $product_data, $item_id, true ),
 					'new_tab'     => true,
 					'type'        => $type,
@@ -248,7 +248,7 @@ abstract class Extension {
 			} else {
 				$button = array(
 					/* translators: The extension name. */
-					'button_text' => sprintf( __( 'Upgrade Today to Access %s!', 'easy-digital-downloads' ), $product_data->title ),
+					'button_text' => sprintf( __( 'Upgrade Today to Access %s!', 'commercestore' ), $product_data->title ),
 					'href'        => $this->get_upgrade_url( $product_data, $item_id ),
 					'new_tab'     => true,
 					'type'        => $type,
@@ -259,7 +259,7 @@ abstract class Extension {
 			$button['plugin'] = $product_data->basename;
 			$button['action'] = 'activate';
 			/* translators: The extension name. */
-			$button['button_text'] = sprintf( __( 'Activate %s', 'easy-digital-downloads' ), $product_data->title );
+			$button['button_text'] = sprintf( __( 'Activate %s', 'commercestore' ), $product_data->title );
 		}
 
 		return $button;
@@ -275,7 +275,7 @@ abstract class Extension {
 	 * @return string
 	 */
 	private function get_upgrade_url( ProductData $product_data, $item_id, $has_access = false ) {
-		$url            = 'https://easydigitaldownloads.com/pricing';
+		$url            = 'https://commercestore.com/pricing';
 		$utm_parameters = array(
 			'p'            => urlencode( $item_id ),
 			'utm_source'   => 'settings',
@@ -285,7 +285,7 @@ abstract class Extension {
 		);
 
 		if ( $has_access ) {
-			$url = 'https://easydigitaldownloads.com/your-account/your-downloads/';
+			$url = 'https://commercestore.com/your-account/your-downloads/';
 			unset( $utm_parameters['p'] );
 		} elseif ( ! empty( $product_data->upgrade_url ) ) {
 			$url = esc_url_raw( $product_data->upgrade_url );
@@ -312,7 +312,7 @@ abstract class Extension {
 		if ( empty( $tab ) && empty( $section ) ) {
 			return array(
 				/* translators: the plural Downloads label. */
-				'button_text' => sprintf( __( 'View %s', 'easy-digital-downloads' ), edd_get_label_plural() ),
+				'button_text' => sprintf( __( 'View %s', 'commercestore' ), cs_get_label_plural() ),
 				'href'        => add_query_arg(
 					array(
 						'post_type' => 'download',
@@ -324,11 +324,11 @@ abstract class Extension {
 
 		return array(
 			/* translators: The extension name. */
-			'button_text' => sprintf( __( 'Configure %s', 'easy-digital-downloads' ), $product_data->title ),
+			'button_text' => sprintf( __( 'Configure %s', 'commercestore' ), $product_data->title ),
 			'href'        => add_query_arg(
 				array(
 					'post_type' => 'download',
-					'page'      => 'edd-settings',
+					'page'      => 'cs-settings',
 					'tab'       => urlencode( $tab ),
 					'section'   => urlencode( $section ),
 				),

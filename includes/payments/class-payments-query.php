@@ -2,9 +2,9 @@
 /**
  * Payments Query
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Payments
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.8
  */
@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Payments_Query Class.
+ * CS_Payments_Query Class.
  *
  * This class is for retrieving payments data.
  *
@@ -22,10 +22,10 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.8
  * @since 3.0 Updated to use the new query classes and custom tables.
  */
-class EDD_Payments_Query extends EDD_Stats {
+class CS_Payments_Query extends CS_Stats {
 
 	/**
-	 * The args to pass to the edd_get_payments() query
+	 * The args to pass to the cs_get_payments() query
 	 *
 	 * @var array
 	 * @since 1.8
@@ -70,7 +70,7 @@ class EDD_Payments_Query extends EDD_Stats {
 	public function __construct( $args = array() ) {
 		$defaults = array(
 			'output'          => 'payments', // Use 'posts' to get standard post objects
-			'post_type'       => array( 'edd_payment' ),
+			'post_type'       => array( 'cs_payment' ),
 			'post_parent'     => null,
 			'start_date'      => false,
 			'end_date'        => false,
@@ -80,7 +80,7 @@ class EDD_Payments_Query extends EDD_Stats {
 			'order'           => 'DESC',
 			'user'            => null,
 			'customer'        => null,
-			'status'          => edd_get_payment_status_keys(),
+			'status'          => cs_get_payment_status_keys(),
 			'mode'            => null,
 			'type'            => 'sale',
 			'meta_key'        => null,
@@ -105,7 +105,7 @@ class EDD_Payments_Query extends EDD_Stats {
 		// We need to store an array of the args used to instantiate the class, so that we can use it in later hooks.
 		$this->args = wp_parse_args( $args, $defaults );
 
-		// In EDD 3.0 we switched from 'publish' to 'complete' for the final state of a completed payment, this accounts for that change.
+		// In CommerceStore 3.0 we switched from 'publish' to 'complete' for the final state of a completed payment, this accounts for that change.
 		if ( is_array( $this->args['status'] ) && in_array( 'publish', $this->args['status'] ) ) {
 
 			foreach ( $this->args['status'] as $key => $status ) {
@@ -155,7 +155,7 @@ class EDD_Payments_Query extends EDD_Stats {
 	 * @since 1.8
 	 * @since 3.0 Updated to use the new query classes and custom tables.
 	 *
-	 * @return EDD_Payment[]|EDD\Orders\Order[]|int
+	 * @return CS_Payment[]|CS\Orders\Order[]|int
 	 */
 	public function get_payments() {
 
@@ -175,7 +175,7 @@ class EDD_Payments_Query extends EDD_Stats {
 		$this->download();
 		$this->post__in();
 
-		do_action( 'edd_pre_get_payments', $this );
+		do_action( 'cs_pre_get_payments', $this );
 
 		$should_output_wp_post_objects = false;
 		$should_output_order_objects   = false;
@@ -193,7 +193,7 @@ class EDD_Payments_Query extends EDD_Stats {
 			return array();
 		}
 
-		$this->items = edd_get_orders( $this->args );
+		$this->items = cs_get_orders( $this->args );
 
 		if ( ! empty( $this->args['count'] ) && is_numeric( $this->items ) ) {
 			return intval( $this->items );
@@ -210,12 +210,12 @@ class EDD_Payments_Query extends EDD_Stats {
 				$p = new WP_Post( new stdClass() );
 
 				$p->ID                = $order->id;
-				$p->post_date         = EDD()->utils->date( $order->date_created, null, true )->toDateTimeString();
+				$p->post_date         = CS()->utils->date( $order->date_created, null, true )->toDateTimeString();
 				$p->post_date_gmt     = $order->date_created;
 				$p->post_status       = $order->status;
-				$p->post_modified     = EDD()->utils->date( $order->date_modified, null, true )->toDateTimeString();
+				$p->post_modified     = CS()->utils->date( $order->date_modified, null, true )->toDateTimeString();
 				$p->post_modified_gmt = $order->date_modified;
-				$p->post_type         = 'edd_payment';
+				$p->post_type         = 'cs_payment';
 
 				$posts[] = $p;
 			}
@@ -224,17 +224,17 @@ class EDD_Payments_Query extends EDD_Stats {
 		}
 
 		foreach ( $this->items as $order ) {
-			$payment = edd_get_payment( $order->id );
+			$payment = cs_get_payment( $order->id );
 
-			if ( edd_get_option( 'enable_sequential' ) ) {
+			if ( cs_get_option( 'enable_sequential' ) ) {
 				// Backwards compatibility, needs to set `payment_number` attribute
 				$payment->payment_number = $payment->number;
 			}
 
-			$this->payments[] = apply_filters( 'edd_payment', $payment, $order->id, $this );
+			$this->payments[] = apply_filters( 'cs_payment', $payment, $order->id, $this );
 		}
 
-		do_action( 'edd_post_get_payments', $this );
+		do_action( 'cs_post_get_payments', $this );
 
 		return $this->payments;
 	}
@@ -322,7 +322,7 @@ class EDD_Payments_Query extends EDD_Stats {
 		switch ( $this->args['orderby'] ) {
 			case 'amount':
 				$this->__set( 'orderby', 'meta_value_num' );
-				$this->__set( 'meta_key', '_edd_payment_total' );
+				$this->__set( 'meta_key', '_cs_payment_total' );
 				break;
 			default:
 				$this->__set( 'orderby', $this->args['orderby'] );
@@ -341,9 +341,9 @@ class EDD_Payments_Query extends EDD_Stats {
 		}
 
 		if ( is_numeric( $this->args['user'] ) ) {
-			$user_key = '_edd_payment_user_id';
+			$user_key = '_cs_payment_user_id';
 		} else {
-			$user_key = '_edd_payment_user_email';
+			$user_key = '_cs_payment_user_email';
 		}
 
 		$this->__set( 'meta_query', array(
@@ -363,7 +363,7 @@ class EDD_Payments_Query extends EDD_Stats {
 		}
 
 		$this->__set( 'meta_query', array(
-			'key'   => '_edd_payment_customer_id',
+			'key'   => '_cs_payment_customer_id',
 			'value' => (int) $this->args['customer'],
 		) );
 	}
@@ -379,7 +379,7 @@ class EDD_Payments_Query extends EDD_Stats {
 		}
 
 		$this->__set( 'meta_query', array(
-			'key'   => '_edd_payment_gateway',
+			'key'   => '_cs_payment_gateway',
 			'value' => $this->args['gateway'],
 		) );
 	}
@@ -418,7 +418,7 @@ class EDD_Payments_Query extends EDD_Stats {
 
 
 		if ( ! empty( $this->args['search_in_notes'] ) ) {
-			$notes = edd_get_payment_notes( 0, $search );
+			$notes = cs_get_payment_notes( 0, $search );
 
 			if ( ! empty( $notes ) ) {
 				$payment_ids = wp_list_pluck( (array) $notes, 'object_id' );
@@ -444,13 +444,13 @@ class EDD_Payments_Query extends EDD_Stats {
 			$this->__set( 'user', trim( str_replace( 'user:', '', strtolower( $search ) ) ) );
 
 			$this->__unset( 's' );
-		} elseif ( edd_get_option( 'enable_sequential' ) && ( false !== strpos( $search, edd_get_option( 'sequential_prefix' ) ) || false !== strpos( $search, edd_get_option( 'sequential_postfix' ) ) ) ) {
+		} elseif ( cs_get_option( 'enable_sequential' ) && ( false !== strpos( $search, cs_get_option( 'sequential_prefix' ) ) || false !== strpos( $search, cs_get_option( 'sequential_postfix' ) ) ) ) {
 			$this->__set( 'order_number', $search );
 			$this->__unset( 's' );
 		} elseif ( is_numeric( $search ) ) {
 			$this->__set( 'post__in', array( $search ) );
 
-			if ( edd_get_option( 'enable_sequential' ) ) {
+			if ( cs_get_option( 'enable_sequential' ) ) {
 				$this->__set( 'order_number', $search );
 			}
 
@@ -459,7 +459,7 @@ class EDD_Payments_Query extends EDD_Stats {
 			$search = str_replace( '#:', '', $search );
 			$search = str_replace( '#', '', $search );
 
-			$ids = edd_get_order_items( array(
+			$ids = cs_get_order_items( array(
 				'fields'     => 'order_id',
 				'product_id' => $search,
 			) );
@@ -470,7 +470,7 @@ class EDD_Payments_Query extends EDD_Stats {
 		} elseif ( 0 === strpos( $search, 'discount:' ) ) {
 			$search = trim( str_replace( 'discount:', '', $search ) );
 
-			$ids = edd_get_order_adjustments( array(
+			$ids = cs_get_order_adjustments( array(
 				'fields'      => 'object_id',
 				'type'        => 'discount',
 				'description' => $search,
@@ -496,7 +496,7 @@ class EDD_Payments_Query extends EDD_Stats {
 		}
 
 		$this->__set( 'meta_query', array(
-			'key'   => '_edd_payment_mode',
+			'key'   => '_cs_payment_mode',
 			'value' => $this->args['mode'],
 		) );
 	}
@@ -527,21 +527,21 @@ class EDD_Payments_Query extends EDD_Stats {
 		$order_ids = array();
 
 		if ( is_array( $this->args['download'] ) ) {
-			$orders = edd_get_order_items( array(
+			$orders = cs_get_order_items( array(
 				'product_id__in' => (array) $this->args['download'],
 			) );
 
 			foreach ( $orders as $order ) {
-				/** @var $order EDD\Orders\Order_Item */
+				/** @var $order CS\Orders\Order_Item */
 				$order_ids[] = $order->order_id;
 			}
 		} else {
-			$orders = edd_get_order_items( array(
+			$orders = cs_get_order_items( array(
 				'product_id' => $this->args['download'],
 			) );
 
 			foreach ( $orders as $order ) {
-				/** @var $order EDD\Orders\Order_Item */
+				/** @var $order CS\Orders\Order_Item */
 				$order_ids[] = $order->id;
 			}
 		}
@@ -552,7 +552,7 @@ class EDD_Payments_Query extends EDD_Stats {
 	}
 
 	/**
-	 * As of EDD 3.0, we have introduced new query classes and custom tables so we need to remap the arguments so we can
+	 * As of CommerceStore 3.0, we have introduced new query classes and custom tables so we need to remap the arguments so we can
 	 * pass them to the new query classes.
 	 *
 	 * @since  3.0
@@ -594,7 +594,7 @@ class EDD_Payments_Query extends EDD_Stats {
 				$this->start_date = \Carbon\Carbon::createFromTimestamp( $this->start_date )->toDateTimeString();
 			}
 
-			$this->start_date = \Carbon\Carbon::parse( $this->start_date, edd_get_timezone_id() )->setTimezone( 'UTC' )->timestamp;
+			$this->start_date = \Carbon\Carbon::parse( $this->start_date, cs_get_timezone_id() )->setTimezone( 'UTC' )->timestamp;
 
 			$arguments['date_created_query']['after'] = array(
 				'year'  => date( 'Y', $this->start_date ),
@@ -610,7 +610,7 @@ class EDD_Payments_Query extends EDD_Stats {
 				$this->end_date = \Carbon\Carbon::createFromTimestamp( $this->end_date )->toDateTimeString();
 			}
 
-			$this->end_date = \Carbon\Carbon::parse( $this->end_date, edd_get_timezone_id() )->setTimezone( 'UTC' )->timestamp;
+			$this->end_date = \Carbon\Carbon::parse( $this->end_date, cs_get_timezone_id() )->setTimezone( 'UTC' )->timestamp;
 
 			$arguments['date_created_query']['before'] = array(
 				'year'  => date( 'Y', $this->end_date ),
@@ -623,7 +623,7 @@ class EDD_Payments_Query extends EDD_Stats {
 
 		if ( isset( $this->initial_args['number'] ) ) {
 			if ( -1 == $this->initial_args['number'] ) {
-				_doing_it_wrong( __FUNCTION__, esc_html__( 'Do not use -1 to retrieve all results.', 'easy-digital-downloads' ), '3.0' );
+				_doing_it_wrong( __FUNCTION__, esc_html__( 'Do not use -1 to retrieve all results.', 'commercestore' ), '3.0' );
 				$this->args['nopaging'] = true;
 			} else {
 				$arguments['number'] = $this->initial_args['number'];
@@ -745,34 +745,34 @@ class EDD_Payments_Query extends EDD_Stats {
 
 		// If the status includes `any`, we should set the status to our whitelisted keys.
 		if ( isset( $arguments['status'] ) && ( 'any' === $arguments['status'] || ( is_array( $arguments['status'] ) && in_array( 'any', $arguments['status'], true ) ) ) ) {
-			$arguments['status'] = edd_get_payment_status_keys();
+			$arguments['status'] = cs_get_payment_status_keys();
 		}
 
 		if ( isset( $arguments['meta_query'] ) && is_array( $arguments['meta_query'] ) ) {
 			foreach ( $arguments['meta_query'] as $meta_index => $meta ) {
 				if ( ! empty( $meta['key'] ) ) {
 					switch ( $meta['key'] ) {
-						case '_edd_payment_customer_id':
+						case '_cs_payment_customer_id':
 							$arguments['customer_id'] = absint( $meta['value'] );
 							unset( $arguments['meta_query'][ $meta_index ] );
 							break;
 
-						case '_edd_payment_user_id':
+						case '_cs_payment_user_id':
 							$arguments['user_id'] = absint( $meta['value'] );
 							unset( $arguments['meta_query'][ $meta_index ] );
 							break;
 
-						case '_edd_payment_user_email':
+						case '_cs_payment_user_email':
 							$arguments['email'] = sanitize_email( $meta['value'] );
 							unset( $arguments['meta_query'][ $meta_index ] );
 							break;
 
-						case '_edd_payment_gateway':
+						case '_cs_payment_gateway':
 							$arguments['gateway'] = sanitize_text_field( $meta['value'] );
 							unset( $arguments['meta_query'][ $meta_index ] );
 							break;
 
-						case '_edd_payment_purchase_key' :
+						case '_cs_payment_purchase_key' :
 							$arguments['payment_key'] = sanitize_text_field( $meta['value'] );
 							unset( $arguments['meta_query'][ $meta_index ] );
 							break;
@@ -791,11 +791,11 @@ class EDD_Payments_Query extends EDD_Stats {
 		}
 
 		if ( isset( $this->args['country'] ) && ! empty( $this->args['country'] ) && 'all' !== $this->args['country'] ) {
-			$country = $wpdb->prepare( 'AND edd_oa.country = %s', esc_sql( $this->args['country'] ) );
+			$country = $wpdb->prepare( 'AND cs_oa.country = %s', esc_sql( $this->args['country'] ) );
 			$region  = ! empty( $this->args['region'] ) && 'all' !== $this->args['region']
-				? $wpdb->prepare( 'AND edd_oa.region = %s', esc_sql( $this->args['region'] ) )
+				? $wpdb->prepare( 'AND cs_oa.region = %s', esc_sql( $this->args['region'] ) )
 				: '';
-			$join    = "INNER JOIN {$wpdb->edd_order_addresses} edd_oa ON edd_o.id = edd_oa.order_id";
+			$join    = "INNER JOIN {$wpdb->cs_order_addresses} cs_oa ON cs_o.id = cs_oa.order_id";
 
 			$date_query = '';
 
@@ -803,7 +803,7 @@ class EDD_Payments_Query extends EDD_Stats {
 				$date_query = ' AND ';
 
 				if ( ! empty( $this->start_date ) ) {
-					$date_query .= $wpdb->prepare( 'edd_o.date_created >= %s', $this->start_date );
+					$date_query .= $wpdb->prepare( 'cs_o.date_created >= %s', $this->start_date );
 				}
 
 				// Join dates with `AND` if start and end date set.
@@ -812,21 +812,21 @@ class EDD_Payments_Query extends EDD_Stats {
 				}
 
 				if ( ! empty( $this->end_date ) ) {
-					$date_query .= $wpdb->prepare( 'edd_o.date_created <= %s', $this->end_date );
+					$date_query .= $wpdb->prepare( 'cs_o.date_created <= %s', $this->end_date );
 				}
 			}
 
 			$gateway = ! empty( $arguments['gateway'] )
-				? $wpdb->prepare( 'AND edd_o.gateway = %s', esc_sql( $arguments['gateway'] ) )
+				? $wpdb->prepare( 'AND cs_o.gateway = %s', esc_sql( $arguments['gateway'] ) )
 				: '';
 
 			$mode = ! empty( $arguments['mode'] )
-				? $wpdb->prepare( 'AND edd_o.mode = %s', esc_sql( $arguments['mode'] ) )
+				? $wpdb->prepare( 'AND cs_o.mode = %s', esc_sql( $arguments['mode'] ) )
 				: '';
 
 			$sql = "
-				SELECT edd_o.id
-				FROM {$wpdb->edd_orders} edd_o
+				SELECT cs_o.id
+				FROM {$wpdb->cs_orders} cs_o
 				{$join}
 				WHERE 1=1 {$country} {$region} {$mode} {$gateway} {$date_query}
 			";

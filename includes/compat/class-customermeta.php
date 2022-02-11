@@ -2,15 +2,15 @@
 /**
  * Backwards Compatibility Handler for Customer Meta.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
  * @copyright   Copyright (c) 2021, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 class CustomerMeta extends Base {
 
@@ -29,13 +29,13 @@ class CustomerMeta extends Base {
 		switch( $property ) {
 			case 'table_name' :
 				global $wpdb;
-				return $wpdb->edd_customermeta;
+				return $wpdb->cs_customermeta;
 
 			case 'primary_key' :
 				return 'meta_id';
 
 			case 'version' :
-				$table = edd_get_component_interface( 'customer', 'meta' );
+				$table = cs_get_component_interface( 'customer', 'meta' );
 
 				return $table instanceof Table ? $table->get_version() : false;
 		}
@@ -55,14 +55,14 @@ class CustomerMeta extends Base {
 	public function __call( $name, $arguments ) {
 		switch ( $name ) {
 			case 'get_meta' :
-				return edd_get_customer_meta(
+				return cs_get_customer_meta(
 					isset( $arguments[0] ) ? $arguments[0] : 0,
 					isset( $arguments[1] ) ? $arguments[1] : '',
 					isset( $arguments[2] ) ? $arguments[2] : false
 				);
 
 			case 'add_meta' :
-				return edd_add_customer_meta(
+				return cs_add_customer_meta(
 					isset( $arguments[0] ) ? $arguments[0] : 0,
 					isset( $arguments[1] ) ? $arguments[1] : '',
 					isset( $arguments[2] ) ? $arguments[2] : false,
@@ -70,7 +70,7 @@ class CustomerMeta extends Base {
 				);
 
 			case 'update_meta' :
-				return edd_update_customer_meta(
+				return cs_update_customer_meta(
 					isset( $arguments[0] ) ? $arguments[0] : 0,
 					isset( $arguments[1] ) ? $arguments[1] : '',
 					isset( $arguments[2] ) ? $arguments[2] : false,
@@ -78,7 +78,7 @@ class CustomerMeta extends Base {
 				);
 
 			case 'delete_meta' :
-				return edd_delete_customer_meta(
+				return cs_delete_customer_meta(
 					isset( $arguments[0] ) ? $arguments[0] : 0,
 					isset( $arguments[1] ) ? $arguments[1] : '',
 					isset( $arguments[2] ) ? $arguments[2] : ''

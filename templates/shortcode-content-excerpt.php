@@ -4,14 +4,14 @@
  *
  * @since 1.2
  *
- * @package EDD
+ * @package CS
  * @category Template
- * @author Easy Digital Downloads
+ * @author CommerceStore
  * @version 2.0
- * @version 3.0 Uses the new `edd_download_shortcode_except()` function
+ * @version 3.0 Uses the new `cs_download_shortcode_except()` function
  */
 ?>
 
-<div class="edd_download_excerpt">
-	<?php echo edd_download_shortcode_excerpt(); ?>
+<div class="cs_download_excerpt">
+	<?php echo cs_download_shortcode_excerpt(); ?>
 </div>

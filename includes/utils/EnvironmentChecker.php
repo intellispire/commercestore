@@ -5,18 +5,18 @@
  * Checks to see if the environment matches the passed conditions.
  * Supported conditions include:
  *
- * - EDD version number -- either specific versions or wildcards (e.g. "2.x").
+ * - CommerceStore version number -- either specific versions or wildcards (e.g. "2.x").
  * - Type of license (pass level, à la carte, free).
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\Utils;
+namespace CS\Utils;
 
-use EDD\Admin\Pass_Manager;
+use CS\Admin\Pass_Manager;
 
 class EnvironmentChecker {
 
@@ -65,9 +65,9 @@ class EnvironmentChecker {
 		if ( array_key_exists( $condition, $this->validLicenseConditions ) ) {
 			return $this->hasLicenseType( $condition );
 		} elseif ( $this->isPaymentGateway( $condition ) ) {
-			return $this->paymentGatewayMatch( array_keys( edd_get_enabled_payment_gateways() ), $condition );
+			return $this->paymentGatewayMatch( array_keys( cs_get_enabled_payment_gateways() ), $condition );
 		} elseif ( $this->isVersionNumber( $condition ) ) {
-			return $this->versionNumbersMatch( EDD_VERSION, $condition );
+			return $this->versionNumbersMatch( CS_VERSION, $condition );
 		}
 
 		throw new \InvalidArgumentException( 'Invalid condition. Must either be a type of license or a version number.' );

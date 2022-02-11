@@ -2,9 +2,9 @@
 /**
  * Payment Actions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Payments
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -16,7 +16,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * Complete a purchase
  *
  * Performs all necessary actions to complete a purchase.
- * Triggered by the edd_update_payment_status() function.
+ * Triggered by the cs_update_payment_status() function.
  *
  * @since 1.0.8.3
  * @since 3.0 Updated to use new order methods.
@@ -25,7 +25,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @param string $new_status New order status.
  * @param string $old_status Old order status.
 */
-function edd_complete_purchase( $order_id, $new_status, $old_status ) {
+function cs_complete_purchase( $order_id, $new_status, $old_status ) {
 
 	// Make sure that payments are only completed once.
 	if ( 'publish' === $old_status || 'complete' === $old_status || 'completed' === $old_status ) {
@@ -37,7 +37,7 @@ function edd_complete_purchase( $order_id, $new_status, $old_status ) {
 		return;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	if ( ! $order ) {
 		return;
@@ -51,7 +51,7 @@ function edd_complete_purchase( $order_id, $new_status, $old_status ) {
 	$amount      = $order->total;
 	$order_items = $order->items;
 
-	do_action( 'edd_pre_complete_purchase', $order_id );
+	do_action( 'cs_pre_complete_purchase', $order_id );
 
 	if ( is_array( $order_items ) ) {
 
@@ -59,7 +59,7 @@ function edd_complete_purchase( $order_id, $new_status, $old_status ) {
 		foreach ( $order_items as $item ) {
 
 			// "bundle" or "default"
-			$download_type = edd_get_download_type( $item->product_id );
+			$download_type = cs_get_download_type( $item->product_id );
 
 			// Increase earnings and fire actions once per quantity number.
 			for ( $i = 0; $i < $item->quantity; $i++ ) {
@@ -68,11 +68,11 @@ function edd_complete_purchase( $order_id, $new_status, $old_status ) {
 				if ( empty( $completed_date ) ) {
 
 					// For backwards compatibility purposes, we need to construct an array and pass it
-					// to edd_complete_download_purchase.
+					// to cs_complete_download_purchase.
 					$item_fees = array();
 
 					foreach ( $item->get_fees() as $key => $item_fee ) {
-						/** @var EDD\Orders\Order_Adjustment $item_fee */
+						/** @var CS\Orders\Order_Adjustment $item_fee */
 
 						$download_id = $item->product_id;
 						$price_id    = $item->price_id;
@@ -102,7 +102,7 @@ function edd_complete_purchase( $order_id, $new_status, $old_status ) {
 					 * While saving, we've migrated these values to order item meta, but people may still be looking
 					 * for them in this cart details array, so we need to fill them back in.
 					 */
-					$order_item_meta = edd_get_order_item_meta( $item->id );
+					$order_item_meta = cs_get_order_item_meta( $item->id );
 					if ( ! empty( $order_item_meta ) ) {
 						foreach ( $order_item_meta as $item_meta_key => $item_meta_value ) {
 							if ( '_option_' === substr( $item_meta_key, 0, 8 ) && isset( $item_meta_value[0] ) ) {
@@ -128,108 +128,108 @@ function edd_complete_purchase( $order_id, $new_status, $old_status ) {
 						'price'       => $item->amount,
 					);
 
-					do_action( 'edd_complete_download_purchase', $item->product_id, $order_id, $download_type, $cart_details, $item->cart_index );
+					do_action( 'cs_complete_download_purchase', $item->product_id, $order_id, $download_type, $cart_details, $item->cart_index );
 				}
 			}
 
 			// Increase the earnings for this download ID
-			edd_increase_earnings( $item->product_id, $item->total );
-			edd_increase_purchase_count( $item->product_id, $item->quantity );
+			cs_increase_earnings( $item->product_id, $item->total );
+			cs_increase_purchase_count( $item->product_id, $item->quantity );
 		}
 
 		// Clear the total earnings cache
-		delete_transient( 'edd_earnings_total' );
+		delete_transient( 'cs_earnings_total' );
 
 		// Clear the This Month earnings (this_monththis_month is NOT a typo)
-		delete_transient( md5( 'edd_earnings_this_monththis_month' ) );
-		delete_transient( md5( 'edd_earnings_todaytoday' ) );
+		delete_transient( md5( 'cs_earnings_this_monththis_month' ) );
+		delete_transient( md5( 'cs_earnings_todaytoday' ) );
 	}
 
 	// Increase the customer's purchase stats
-	$customer = new EDD_Customer( $customer_id );
+	$customer = new CS_Customer( $customer_id );
 	$customer->recalculate_stats();
 
-	edd_increase_total_earnings( $amount );
+	cs_increase_total_earnings( $amount );
 
 	// Check for discount codes and increment their use counts
 	$discounts = $order->get_discounts();
 	foreach ( $discounts as $adjustment ) {
-		/** @var EDD\Orders\Order_Adjustment $adjustment */
+		/** @var CS\Orders\Order_Adjustment $adjustment */
 
-		edd_increase_discount_usage( $adjustment->description );
+		cs_increase_discount_usage( $adjustment->description );
 	}
 
 	// Ensure this action only runs once ever
 	if ( empty( $completed_date ) ) {
-		$date = EDD()->utils->date()->format( 'mysql' );
+		$date = CS()->utils->date()->format( 'mysql' );
 
-		$date_refundable = edd_get_refund_date( $date );
+		$date_refundable = cs_get_refund_date( $date );
 		$date_refundable = false === $date_refundable
 			? ''
 			: $date_refundable;
 
 		// Save the completed date
-		edd_update_order( $order_id, array(
+		cs_update_order( $order_id, array(
 			'date_completed'  => $date,
 			'date_refundable' => $date_refundable,
 		) );
 
 		// Required for backwards compatibility.
-		$payment = edd_get_payment( $order_id );
+		$payment = cs_get_payment( $order_id );
 
 		/**
 		 * Runs **when** a purchase is marked as "complete".
 		 *
-		 * @since 2.8 Added EDD_Payment and EDD_Customer object to action.
+		 * @since 2.8 Added CS_Payment and CS_Customer object to action.
 		 *
 		 * @param int          $order_id Payment ID.
-		 * @param EDD_Payment  $payment    EDD_Payment object containing all payment data.
-		 * @param EDD_Customer $customer   EDD_Customer object containing all customer data.
+		 * @param CS_Payment  $payment    CS_Payment object containing all payment data.
+		 * @param CS_Customer $customer   CS_Customer object containing all customer data.
 		 */
-		do_action( 'edd_complete_purchase', $order_id, $payment, $customer );
+		do_action( 'cs_complete_purchase', $order_id, $payment, $customer );
 
 		// If cron doesn't work on a site, allow the filter to use __return_false and run the events immediately.
-		$use_cron = apply_filters( 'edd_use_after_payment_actions', true, $order_id );
+		$use_cron = apply_filters( 'cs_use_after_payment_actions', true, $order_id );
 		if ( false === $use_cron ) {
 			/**
 			 * Runs **after** a purchase is marked as "complete".
 			 *
-			 * @see edd_process_after_payment_actions()
+			 * @see cs_process_after_payment_actions()
 			 *
-			 * @since 2.8 - Added EDD_Payment and EDD_Customer object to action.
+			 * @since 2.8 - Added CS_Payment and CS_Customer object to action.
 			 *
 			 * @param int          $order_id Payment ID.
-			 * @param EDD_Payment  $payment    EDD_Payment object containing all payment data.
-			 * @param EDD_Customer $customer   EDD_Customer object containing all customer data.
+			 * @param CS_Payment  $payment    CS_Payment object containing all payment data.
+			 * @param CS_Customer $customer   CS_Customer object containing all customer data.
 			 */
-			do_action( 'edd_after_payment_actions', $order_id, $payment, $customer );
+			do_action( 'cs_after_payment_actions', $order_id, $payment, $customer );
 		}
 	}
 
 	// Empty the shopping cart
-	edd_empty_cart();
+	cs_empty_cart();
 }
-add_action( 'edd_update_payment_status', 'edd_complete_purchase', 100, 3 );
+add_action( 'cs_update_payment_status', 'cs_complete_purchase', 100, 3 );
 
 /**
  * Schedules the one time event via WP_Cron to fire after purchase actions.
  *
- * Is run on the edd_complete_purchase action.
+ * Is run on the cs_complete_purchase action.
  *
  * @since 2.8
  * @param $payment_id
  */
-function edd_schedule_after_payment_action( $payment_id ) {
-	$use_cron = apply_filters( 'edd_use_after_payment_actions', true, $payment_id );
+function cs_schedule_after_payment_action( $payment_id ) {
+	$use_cron = apply_filters( 'cs_use_after_payment_actions', true, $payment_id );
 	if ( $use_cron ) {
-		$after_payment_delay = apply_filters( 'edd_after_payment_actions_delay', 30, $payment_id );
+		$after_payment_delay = apply_filters( 'cs_after_payment_actions_delay', 30, $payment_id );
 
 		// Use time() instead of current_time( 'timestamp' ) to avoid scheduling the event in the past when server time
 		// and WordPress timezone are different.
-		wp_schedule_single_event( time() + $after_payment_delay, 'edd_after_payment_scheduled_actions', array( $payment_id, false ) );
+		wp_schedule_single_event( time() + $after_payment_delay, 'cs_after_payment_scheduled_actions', array( $payment_id, false ) );
 	}
 }
-add_action( 'edd_complete_purchase', 'edd_schedule_after_payment_action', 10, 1 );
+add_action( 'cs_complete_purchase', 'cs_schedule_after_payment_action', 10, 1 );
 
 /**
  * Executes the one time event used for after purchase actions.
@@ -238,23 +238,23 @@ add_action( 'edd_complete_purchase', 'edd_schedule_after_payment_action', 10, 1 
  * @param $payment_id
  * @param $force
  */
-function edd_process_after_payment_actions( $payment_id = 0, $force = false ) {
+function cs_process_after_payment_actions( $payment_id = 0, $force = false ) {
 	if ( empty( $payment_id ) ) {
 		return;
 	}
 
-	$payment   = new EDD_Payment( $payment_id );
-	$has_fired = $payment->get_meta( '_edd_complete_actions_run' );
+	$payment   = new CS_Payment( $payment_id );
+	$has_fired = $payment->get_meta( '_cs_complete_actions_run' );
 	if ( ! empty( $has_fired ) && false === $force ) {
 		return;
 	}
 
-	$payment->add_note( __( 'After payment actions processed.', 'easy-digital-downloads' ) );
-	$payment->update_meta( '_edd_complete_actions_run', time() ); // This is in GMT
+	$payment->add_note( __( 'After payment actions processed.', 'commercestore' ) );
+	$payment->update_meta( '_cs_complete_actions_run', time() ); // This is in GMT
 
-	do_action( 'edd_after_payment_actions', $payment_id, $payment, new EDD_Customer( $payment->customer_id ) );
+	do_action( 'cs_after_payment_actions', $payment_id, $payment, new CS_Customer( $payment->customer_id ) );
 }
-add_action( 'edd_after_payment_scheduled_actions', 'edd_process_after_payment_actions', 10, 1 );
+add_action( 'cs_after_payment_scheduled_actions', 'cs_process_after_payment_actions', 10, 1 );
 
 /**
  * Record order status change
@@ -265,26 +265,26 @@ add_action( 'edd_after_payment_scheduled_actions', 'edd_process_after_payment_ac
  * @param int    $order_id the ID number of the order.
  * @return void
  */
-function edd_record_order_status_change( $old_status, $new_status, $order_id ) {
+function cs_record_order_status_change( $old_status, $new_status, $order_id ) {
 
 	// Get the list of statuses so that status in the payment note can be translated.
-	$stati      = edd_get_payment_statuses();
+	$stati      = cs_get_payment_statuses();
 	$old_status = isset( $stati[ $old_status ] ) ? $stati[ $old_status ] : $old_status;
 	$new_status = isset( $stati[ $new_status ] ) ? $stati[ $new_status ] : $new_status;
 
 	$status_change = sprintf(
 		/* translators: %1$s Old order status. %2$s New order status. */
-		__( 'Status changed from %1$s to %2$s', 'easy-digital-downloads' ),
+		__( 'Status changed from %1$s to %2$s', 'commercestore' ),
 		$old_status,
 		$new_status
 	);
 
-	edd_insert_payment_note( $order_id, $status_change );
+	cs_insert_payment_note( $order_id, $status_change );
 }
-add_action( 'edd_transition_order_status', 'edd_record_order_status_change', 100, 3 );
+add_action( 'cs_transition_order_status', 'cs_record_order_status_change', 100, 3 );
 
 /**
- * Triggers `edd_update_payment_status` hook when an order status changes
+ * Triggers `cs_update_payment_status` hook when an order status changes
  * for backwards compatibility.
  *
  * @since 3.0
@@ -293,12 +293,12 @@ add_action( 'edd_transition_order_status', 'edd_record_order_status_change', 100
  * @param int    $order_id the ID number of the order.
  * @return void
  */
-add_action( 'edd_transition_order_status', function( $old_status, $new_status, $order_id ) {
+add_action( 'cs_transition_order_status', function( $old_status, $new_status, $order_id ) {
 	// Trigger the payment status action hook for backwards compatibility.
-	do_action( 'edd_update_payment_status', $order_id, $new_status, $old_status );
+	do_action( 'cs_update_payment_status', $order_id, $new_status, $old_status );
 	if ( 'complete' === $old_status ) {
 		// Trigger the action again to account for add-ons listening for status changes from "publish".
-		do_action( 'edd_update_payment_status', $order_id, $new_status, 'publish' );
+		do_action( 'cs_update_payment_status', $order_id, $new_status, 'publish' );
 	}
 }, 10, 3 );
 
@@ -312,14 +312,14 @@ add_action( 'edd_transition_order_status', function( $old_status, $new_status, $
  * @param string $new_status the status of the payment, probably "publish"
  * @param string $old_status the status of the payment prior to being marked as "complete", probably "pending"
  */
-function edd_clear_user_history_cache( $payment_id, $new_status, $old_status ) {
-	$payment = new EDD_Payment( $payment_id );
+function cs_clear_user_history_cache( $payment_id, $new_status, $old_status ) {
+	$payment = new CS_Payment( $payment_id );
 
 	if( ! empty( $payment->user_id ) ) {
-		delete_transient( 'edd_user_' . $payment->user_id . '_purchases' );
+		delete_transient( 'cs_user_' . $payment->user_id . '_purchases' );
 	}
 }
-add_action( 'edd_update_payment_status', 'edd_clear_user_history_cache', 10, 3 );
+add_action( 'cs_update_payment_status', 'cs_clear_user_history_cache', 10, 3 );
 
 /**
  * Updates all old payments, prior to 1.2, with new
@@ -331,16 +331,16 @@ add_action( 'edd_update_payment_status', 'edd_clear_user_history_cache', 10, 3 )
  * @param array $data Arguments passed
  * @return void
 */
-function edd_update_old_payments_with_totals( $data ) {
-	if ( ! wp_verify_nonce( $data['_wpnonce'], 'edd_upgrade_payments_nonce' ) ) {
+function cs_update_old_payments_with_totals( $data ) {
+	if ( ! wp_verify_nonce( $data['_wpnonce'], 'cs_upgrade_payments_nonce' ) ) {
 		return;
 	}
 
-	if ( get_option( 'edd_payment_totals_upgraded' ) ) {
+	if ( get_option( 'cs_payment_totals_upgraded' ) ) {
 		return;
 	}
 
-	$payments = edd_get_payments( array(
+	$payments = cs_get_payments( array(
 		'offset' => 0,
 		'number' => 9999999,
 		'mode'   => 'all',
@@ -349,7 +349,7 @@ function edd_update_old_payments_with_totals( $data ) {
 	if ( $payments ) {
 		foreach ( $payments as $payment ) {
 
-			$payment = new EDD_Payment( $payment->ID );
+			$payment = new CS_Payment( $payment->ID );
 			$meta    = $payment->get_meta();
 
 			$payment->total = $meta['amount'];
@@ -357,9 +357,9 @@ function edd_update_old_payments_with_totals( $data ) {
 		}
 	}
 
-	add_option( 'edd_payment_totals_upgraded', 1 );
+	add_option( 'cs_payment_totals_upgraded', 1 );
 }
-add_action( 'edd_upgrade_payments', 'edd_update_old_payments_with_totals' );
+add_action( 'cs_upgrade_payments', 'cs_update_old_payments_with_totals' );
 
 /**
  * Updates week-old+ 'pending' orders to 'abandoned'
@@ -369,24 +369,24 @@ add_action( 'edd_upgrade_payments', 'edd_update_old_payments_with_totals' );
  * @since 1.6
  * @return void
 */
-function edd_mark_abandoned_orders() {
+function cs_mark_abandoned_orders() {
 
 	// Bail if not in WordPress cron
-	if ( ! edd_doing_cron() ) {
+	if ( ! cs_doing_cron() ) {
 		return;
 	}
 
 	$args = array(
 		'status' => 'pending',
 		'number' => 9999999,
-		'output' => 'edd_payments',
+		'output' => 'cs_payments',
 	);
 
-	add_filter( 'posts_where', 'edd_filter_where_older_than_week' );
+	add_filter( 'posts_where', 'cs_filter_where_older_than_week' );
 
-	$payments = edd_get_payments( $args );
+	$payments = cs_get_payments( $args );
 
-	remove_filter( 'posts_where', 'edd_filter_where_older_than_week' );
+	remove_filter( 'posts_where', 'cs_filter_where_older_than_week' );
 
 	if( $payments ) {
 		foreach( $payments as $payment ) {
@@ -397,7 +397,7 @@ function edd_mark_abandoned_orders() {
 		}
 	}
 }
-add_action( 'edd_weekly_scheduled_events', 'edd_mark_abandoned_orders' );
+add_action( 'cs_weekly_scheduled_events', 'cs_mark_abandoned_orders' );
 
 /**
  * Listens to the updated_postmeta hook for our backwards compatible payment_meta updates, and runs through them
@@ -409,9 +409,9 @@ add_action( 'edd_weekly_scheduled_events', 'edd_mark_abandoned_orders' );
  * @param  string|int|float $meta_value The Value being updated
  * @return bool|int             If successful the number of rows updated, if it fails, false
  */
-function edd_update_payment_backwards_compat( $meta_id, $object_id, $meta_key, $meta_value ) {
+function cs_update_payment_backwards_compat( $meta_id, $object_id, $meta_key, $meta_value ) {
 
-	$meta_keys = array( '_edd_payment_meta', '_edd_payment_tax' );
+	$meta_keys = array( '_cs_payment_meta', '_cs_payment_tax' );
 
 	if ( ! in_array( $meta_key, $meta_keys ) ) {
 		return;
@@ -420,7 +420,7 @@ function edd_update_payment_backwards_compat( $meta_id, $object_id, $meta_key, $
 	global $wpdb;
 	switch( $meta_key ) {
 
-		case '_edd_payment_meta':
+		case '_cs_payment_meta':
 			$meta_value   = maybe_unserialize( $meta_value );
 
 			if( ! isset( $meta_value['tax'] ) ){
@@ -430,20 +430,20 @@ function edd_update_payment_backwards_compat( $meta_id, $object_id, $meta_key, $
 			$tax_value    = $meta_value['tax'];
 
 			$data         = array( 'meta_value' => $tax_value );
-			$where        = array( 'post_id'  => $object_id, 'meta_key' => '_edd_payment_tax' );
+			$where        = array( 'post_id'  => $object_id, 'meta_key' => '_cs_payment_tax' );
 			$data_format  = array( '%f' );
 			$where_format = array( '%d', '%s' );
 			break;
 
-		case '_edd_payment_tax':
+		case '_cs_payment_tax':
 			$tax_value    = ! empty( $meta_value ) ? $meta_value : 0;
-			$current_meta = edd_get_payment_meta( $object_id, '_edd_payment_meta', true );
+			$current_meta = cs_get_payment_meta( $object_id, '_cs_payment_meta', true );
 
 			$current_meta['tax'] = $tax_value;
 			$new_meta            = maybe_serialize( $current_meta );
 
 			$data         = array( 'meta_value' => $new_meta );
-			$where        = array( 'post_id' => $object_id, 'meta_key' => '_edd_payment_meta' );
+			$where        = array( 'post_id' => $object_id, 'meta_key' => '_cs_payment_meta' );
 			$data_format  = array( '%s' );
 			$where_format = array( '%d', '%s' );
 
@@ -462,15 +462,15 @@ function edd_update_payment_backwards_compat( $meta_id, $object_id, $meta_key, $
 
 
 }
-add_action( 'updated_postmeta', 'edd_update_payment_backwards_compat', 10, 4 );
+add_action( 'updated_postmeta', 'cs_update_payment_backwards_compat', 10, 4 );
 
 /**
- * Deletes edd_stats_ transients that have expired to prevent database clogs
+ * Deletes cs_stats_ transients that have expired to prevent database clogs
  *
  * @since 2.6.7
  * @return void
 */
-function edd_cleanup_stats_transients() {
+function cs_cleanup_stats_transients() {
 	global $wpdb;
 
 	if ( defined( 'WP_SETUP_CONFIG' ) ) {
@@ -482,7 +482,7 @@ function edd_cleanup_stats_transients() {
 	}
 
 	$now        = current_time( 'timestamp' );
-	$transients = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout\_edd\_stats\_%' AND option_value+0 < $now LIMIT 0, 200;" );
+	$transients = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options WHERE option_name LIKE '%\_transient_timeout\_cs\_stats\_%' AND option_value+0 < $now LIMIT 0, 200;" );
 	$to_delete  = array();
 
 	if( ! empty( $transients ) ) {
@@ -504,7 +504,7 @@ function edd_cleanup_stats_transients() {
 	}
 
 }
-add_action( 'edd_daily_scheduled_events', 'edd_cleanup_stats_transients' );
+add_action( 'cs_daily_scheduled_events', 'cs_cleanup_stats_transients' );
 
 /**
  * Process an attempt to complete a recoverable payment.
@@ -512,12 +512,12 @@ add_action( 'edd_daily_scheduled_events', 'edd_cleanup_stats_transients' );
  * @since  2.7
  * @return void
  */
-function edd_recover_payment() {
+function cs_recover_payment() {
 	if ( empty( $_GET['payment_id'] ) ) {
 		return;
 	}
 
-	$payment = new EDD_Payment( $_GET['payment_id'] );
+	$payment = new CS_Payment( $_GET['payment_id'] );
 	if ( $payment->ID !== (int) $_GET['payment_id'] ) {
 		return;
 	}
@@ -536,25 +536,25 @@ function edd_recover_payment() {
 		// Logged out, but payment is for a user
 		( ! is_user_logged_in() && ! empty( $payment->user_id ) )
 	) {
-		$redirect = get_permalink( edd_get_option( 'purchase_history_page' ) );
-		edd_set_error( 'edd-payment-recovery-user-mismatch', __( 'Error resuming payment.', 'easy-digital-downloads' ) );
-		edd_redirect( $redirect );
+		$redirect = get_permalink( cs_get_option( 'purchase_history_page' ) );
+		cs_set_error( 'cs-payment-recovery-user-mismatch', __( 'Error resuming payment.', 'commercestore' ) );
+		cs_redirect( $redirect );
 	}
 
-	$payment->add_note( __( 'Payment recovery triggered URL', 'easy-digital-downloads' ) );
+	$payment->add_note( __( 'Payment recovery triggered URL', 'commercestore' ) );
 
 	// Empty out the cart.
-	EDD()->cart->empty_cart();
+	CS()->cart->empty_cart();
 
 	// Recover any downloads.
 	foreach ( $payment->cart_details as $download ) {
-		edd_add_to_cart( $download['id'], $download['item_number']['options'] );
+		cs_add_to_cart( $download['id'], $download['item_number']['options'] );
 
 		// Recover any item specific fees.
 		if ( ! empty( $download['fees'] ) ) {
 			foreach ( $download['fees'] as $key => $fee ) {
 				$fee['id'] = ! empty( $fee['id'] ) ? $fee['id'] : $key;
-				EDD()->fees->add_fee( $fee );
+				CS()->fees->add_fee( $fee );
 			}
 		}
 	}
@@ -562,7 +562,7 @@ function edd_recover_payment() {
 	// Recover any global fees.
 	foreach ( $payment->fees as $key => $fee ) {
 		$fee['id'] = ! empty( $fee['id'] ) ? $fee['id'] : $key;
-		EDD()->fees->add_fee( $fee );
+		CS()->fees->add_fee( $fee );
 	}
 
 	// Recover any discounts.
@@ -570,17 +570,17 @@ function edd_recover_payment() {
 		$discounts = ! is_array( $payment->discounts ) ? explode( ',', $payment->discounts ) : $payment->discounts;
 
 		foreach ( $discounts as $discount ) {
-			edd_set_cart_discount( $discount );
+			cs_set_cart_discount( $discount );
 		}
 	}
 
-	EDD()->session->set( 'edd_resume_payment', $payment->ID );
+	CS()->session->set( 'cs_resume_payment', $payment->ID );
 
 	$redirect_args = array( 'payment-mode' => $payment->gateway );
-	$redirect      = add_query_arg( $redirect_args, edd_get_checkout_uri() );
-	edd_redirect( $redirect );
+	$redirect      = add_query_arg( $redirect_args, cs_get_checkout_uri() );
+	cs_redirect( $redirect );
 }
-add_action( 'edd_recover_payment', 'edd_recover_payment' );
+add_action( 'cs_recover_payment', 'cs_recover_payment' );
 
 /**
  * If the payment trying to be recovered has a User ID associated with it, be sure it's the same user.
@@ -588,22 +588,22 @@ add_action( 'edd_recover_payment', 'edd_recover_payment' );
  * @since  2.7
  * @return void
  */
-function edd_recovery_user_mismatch() {
-	if ( ! edd_is_checkout() ) {
+function cs_recovery_user_mismatch() {
+	if ( ! cs_is_checkout() ) {
 		return;
 	}
 
-	$resuming_payment = EDD()->session->get( 'edd_resume_payment' );
+	$resuming_payment = CS()->session->get( 'cs_resume_payment' );
 	if ( $resuming_payment ) {
-		$payment = new EDD_Payment( $resuming_payment );
+		$payment = new CS_Payment( $resuming_payment );
 		if ( is_user_logged_in() && $payment->user_id != get_current_user_id() ) {
-			edd_empty_cart();
-			edd_set_error( 'edd-payment-recovery-user-mismatch', __( 'Error resuming payment.', 'easy-digital-downloads' ) );
-			edd_redirect( get_permalink( edd_get_option( 'purchase_page' ) ) );
+			cs_empty_cart();
+			cs_set_error( 'cs-payment-recovery-user-mismatch', __( 'Error resuming payment.', 'commercestore' ) );
+			cs_redirect( get_permalink( cs_get_option( 'purchase_page' ) ) );
 		}
 	}
 }
-add_action( 'template_redirect', 'edd_recovery_user_mismatch' );
+add_action( 'template_redirect', 'cs_recovery_user_mismatch' );
 
 /**
  * If the payment trying to be recovered has a User ID associated with it, we need them to log in.
@@ -611,32 +611,32 @@ add_action( 'template_redirect', 'edd_recovery_user_mismatch' );
  * @since  2.7
  * @return void
  */
-function edd_recovery_force_login_fields() {
-	$resuming_payment = EDD()->session->get( 'edd_resume_payment' );
+function cs_recovery_force_login_fields() {
+	$resuming_payment = CS()->session->get( 'cs_resume_payment' );
 	if ( $resuming_payment ) {
-		$payment        = new EDD_Payment( $resuming_payment );
-		$requires_login = edd_no_guest_checkout();
+		$payment        = new CS_Payment( $resuming_payment );
+		$requires_login = cs_no_guest_checkout();
 		if ( ( $requires_login && ! is_user_logged_in() ) && ( $payment->user_id > 0 && ( ! is_user_logged_in() ) ) ) {
 			?>
-			<div class="edd-alert edd-alert-info">
-				<p><?php _e( 'To complete this payment, please login to your account.', 'easy-digital-downloads' ); ?></p>
+			<div class="cs-alert cs-alert-info">
+				<p><?php _e( 'To complete this payment, please login to your account.', 'commercestore' ); ?></p>
 				<p>
-					<a href="<?php echo esc_url( edd_get_lostpassword_url() ); ?>" title="<?php esc_attr_e( 'Lost Password', 'easy-digital-downloads' ); ?>">
-						<?php _e( 'Lost Password?', 'easy-digital-downloads' ); ?>
+					<a href="<?php echo esc_url( cs_get_lostpassword_url() ); ?>" title="<?php esc_attr_e( 'Lost Password', 'commercestore' ); ?>">
+						<?php _e( 'Lost Password?', 'commercestore' ); ?>
 					</a>
 				</p>
 			</div>
 			<?php
-			$show_register_form = edd_get_option( 'show_register_form', 'none' );
+			$show_register_form = cs_get_option( 'show_register_form', 'none' );
 
 			if ( 'both' === $show_register_form || 'login' === $show_register_form ) {
 				return;
 			}
-			do_action( 'edd_purchase_form_login_fields' );
+			do_action( 'cs_purchase_form_login_fields' );
 		}
 	}
 }
-add_action( 'edd_purchase_form_before_register_login', 'edd_recovery_force_login_fields' );
+add_action( 'cs_purchase_form_before_register_login', 'cs_recovery_force_login_fields' );
 
 /**
  * When processing the payment, check if the resuming payment has a user id and that it matches the logged in user.
@@ -645,16 +645,16 @@ add_action( 'edd_purchase_form_before_register_login', 'edd_recovery_force_login
  * @param $verified_data
  * @param $post_data
  */
-function edd_recovery_verify_logged_in( $verified_data, $post_data ) {
-	$resuming_payment = EDD()->session->get( 'edd_resume_payment' );
+function cs_recovery_verify_logged_in( $verified_data, $post_data ) {
+	$resuming_payment = CS()->session->get( 'cs_resume_payment' );
 	if ( $resuming_payment ) {
-		$payment    = new EDD_Payment( $resuming_payment );
+		$payment    = new CS_Payment( $resuming_payment );
 		$same_user  = ! empty( $payment->user_id ) && ( is_user_logged_in() && $payment->user_id == get_current_user_id() );
-		$same_email = strtolower( $payment->email ) === strtolower( $post_data['edd_email'] );
+		$same_email = strtolower( $payment->email ) === strtolower( $post_data['cs_email'] );
 
 		if ( ( is_user_logged_in() && ! $same_user ) || ( ! is_user_logged_in() && (int) $payment->user_id > 0 && ! $same_email ) ) {
-			edd_set_error( 'recovery_requires_login', __( 'To complete this payment, please login to your account.', 'easy-digital-downloads' ) );
+			cs_set_error( 'recovery_requires_login', __( 'To complete this payment, please login to your account.', 'commercestore' ) );
 		}
 	}
 }
-add_action( 'edd_checkout_error_checks', 'edd_recovery_verify_logged_in', 10, 2 );
+add_action( 'cs_checkout_error_checks', 'cs_recovery_verify_logged_in', 10, 2 );

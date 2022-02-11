@@ -5,13 +5,13 @@
  * A class for generating tokens as an alternative to nonce verification.
  * This is designed to work a little better with full page caching.
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Utils;
+namespace CS\Utils;
 
 class Tokenizer {
 
@@ -37,7 +37,7 @@ class Tokenizer {
 	 * @return string
 	 */
 	private function get_signing_key() {
-		$key = get_option( 'edd_tokenizer_signing_key' );
+		$key = get_option( 'cs_tokenizer_signing_key' );
 		if ( empty( $key ) ) {
 			$key = $this->generate_and_save_signing_key();
 		}
@@ -65,7 +65,7 @@ class Tokenizer {
 			$key = function_exists( 'openssl_random_pseudo_bytes' ) ? bin2hex( openssl_random_pseudo_bytes( 32 ) ) : md5( uniqid() );
 		}
 
-		update_option( 'edd_tokenizer_signing_key', $key );
+		update_option( 'cs_tokenizer_signing_key', $key );
 
 		return $key;
 	}

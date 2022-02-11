@@ -2,13 +2,13 @@
 /**
  * Reports API
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports;
+namespace CS\Reports;
 
 /**
  * Core class that initializes the Reports API.
@@ -23,7 +23,7 @@ final class Init {
 	 * @since 3.0
 	 */
 	public static function bootstrap() {
-		$reports_dir = EDD_PLUGIN_DIR . 'includes/reports/';
+		$reports_dir = CS_PLUGIN_DIR . 'includes/reports/';
 
 		// Functions.
 		require_once $reports_dir . 'reports-functions.php';
@@ -65,7 +65,7 @@ final class Init {
 	public function __construct() {
 
 		// Avoid multiple initializations
-		if ( did_action( 'edd_reports_init' ) ) {
+		if ( did_action( 'cs_reports_init' ) ) {
 			return;
 		}
 
@@ -84,7 +84,7 @@ final class Init {
 		 *
 		 * Example:
 		 *
-		 *     add_action( 'edd_reports_init', function( $reports ) {
+		 *     add_action( 'cs_reports_init', function( $reports ) {
 		 *
 		 *         try {
 		 *             $reports->add_report( 'test', array(
@@ -113,9 +113,9 @@ final class Init {
 		 *                     'table' => array( ... ),
 		 *                 ),
 		 *             ) );
-		 *         } catch ( \EDD_Exception $exception ) {
+		 *         } catch ( \CS_Exception $exception ) {
 		 *
-		 *             edd_debug_log_exception( $exception );
+		 *             cs_debug_log_exception( $exception );
 		 *
 		 *         }
 		 *
@@ -123,11 +123,11 @@ final class Init {
 		 *
 		 * Reports and endpoints can also be registered using standalone functions:
 		 *
-		 *     add_action( 'edd_reports_init', function() {
+		 *     add_action( 'cs_reports_init', function() {
 		 *
-		 *         \EDD\Reports\add_report( 'test', array( ... ) );
+		 *         \CS\Reports\add_report( 'test', array( ... ) );
 		 *
-		 *         \EDD\Reports\register_endpoint( 'test_endpoint', array( ... ) );
+		 *         \CS\Reports\register_endpoint( 'test_endpoint', array( ... ) );
 		 *
 		 *     } );
 		 *
@@ -136,7 +136,7 @@ final class Init {
 		 * @param Data\Report_Registry $reports Report registry instance,
 		 *                                       passed by reference.
 		 */
-		do_action_ref_array( 'edd_reports_init', array( &$reports ) );
+		do_action_ref_array( 'cs_reports_init', array( &$reports ) );
 	}
 
 	/**
@@ -150,7 +150,7 @@ final class Init {
 	private function legacy_reports( $reports ) {
 
 		// Bail if no legacy reports
-		if ( ! has_filter( 'edd_report_views' ) ) {
+		if ( ! has_filter( 'cs_report_views' ) ) {
 			return $reports;
 		}
 
@@ -158,12 +158,12 @@ final class Init {
 		 * Filters legacy 'Reports' tab views.
 		 *
 		 * @since 1.4
-		 * @deprecated 3.0 Use {@see 'edd_reports_get_reports'}
-		 * @see 'edd_reports_get_reports'
+		 * @deprecated 3.0 Use {@see 'cs_reports_get_reports'}
+		 * @see 'cs_reports_get_reports'
 		 *
 		 * @param array $views 'Reports' tab views.
 		 */
-		$legacy_views = edd_apply_filters_deprecated( 'edd_report_views', array( array() ), '3.0', 'edd_reports_get_reports' );
+		$legacy_views = cs_apply_filters_deprecated( 'cs_report_views', array( array() ), '3.0', 'cs_reports_get_reports' );
 
 		// Bail if no legacy views
 		if ( empty( $legacy_views ) ) {
@@ -177,12 +177,12 @@ final class Init {
 		foreach ( $legacy_views as $report_id => $label ) {
 
 			// Legacy "_tab_" action
-			if ( has_action( "edd_reports_tab_{$report_id}" ) ) {
-				$hook = "edd_reports_tab_{$report_id}";
+			if ( has_action( "cs_reports_tab_{$report_id}" ) ) {
+				$hook = "cs_reports_tab_{$report_id}";
 
 			// Legacy "_view_" action
-			} elseif ( has_action( "edd_reports_view_{$report_id}" ) ) {
-				$hook = "edd_reports_view_{$report_id}";
+			} elseif ( has_action( "cs_reports_view_{$report_id}" ) ) {
+				$hook = "cs_reports_view_{$report_id}";
 
 			// Skip
 			} else {
@@ -199,16 +199,16 @@ final class Init {
 				 *
 				 * @since 1.0
 				 * @deprecated 3.0 Use the new Reports API to register new tabs.
-				 * @see \EDD\Reports\add_report()
+				 * @see \CS\Reports\add_report()
 				 *
-				 * @param \EDD\Reports\Data\Report|\WP_Error $report The current report object,
+				 * @param \CS\Reports\Data\Report|\WP_Error $report The current report object,
 				 *                                                   or WP_Error if invalid.
 				 */
-				edd_do_action_deprecated( $hook, array(), '3.0', '\EDD\Reports\add_report' );
+				cs_do_action_deprecated( $hook, array(), '3.0', '\CS\Reports\add_report' );
 			};
 
 			// Legacy label
-			$legacy_label = $label . '<span class="edd-legacy-label edd-chip">' . __( 'Legacy', 'easy-digital-downloads' ) . '</span>';
+			$legacy_label = $label . '<span class="cs-legacy-label cs-chip">' . __( 'Legacy', 'commercestore' ) . '</span>';
 
 			try {
 				// Add report
@@ -223,8 +223,8 @@ final class Init {
 						'taxes',
 					),
 				) );
-			} catch ( \EDD_Exception $exception ) {
-				edd_debug_log_exception( $exception );
+			} catch ( \CS_Exception $exception ) {
+				cs_debug_log_exception( $exception );
 			}
 
 			// Bump the priority
@@ -250,8 +250,8 @@ final class Init {
 			foreach ( $core_views as $view_id => $atts ) {
 				$views->register_endpoint_view( $view_id, $atts );
 			}
-		} catch ( \EDD_Exception $exception ) {
-			edd_debug_log_exception( $exception );
+		} catch ( \CS_Exception $exception ) {
+			cs_debug_log_exception( $exception );
 		}
 
 		return $reports;

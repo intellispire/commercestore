@@ -16,12 +16,12 @@ export const CopyDownloadLink = Dialog.extend( {
 	/**
 	 * @since 3.0
 	 */
-	el: '#edd-admin-order-copy-download-link-dialog',
+	el: '#cs-admin-order-copy-download-link-dialog',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-copy-download-link' ),
+	template: wp.template( 'cs-admin-order-copy-download-link' ),
 
 	/**
 	 * "Copy Download Link" view.
@@ -87,13 +87,13 @@ export const CopyDownloadLink = Dialog.extend( {
 
 		// Retrieve and set link.
 		//
-		// We can't use wp.ajax.send because the `edd_ajax_generate_file_download_link()`
+		// We can't use wp.ajax.send because the `cs_ajax_generate_file_download_link()`
 		// does not send back JSON responses.
 		$.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
-				action: 'edd_get_file_download_link',
+				action: 'cs_get_file_download_link',
 				payment_id: orderId,
 				download_id: productId,
 				price_id: priceId,

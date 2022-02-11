@@ -4,9 +4,9 @@
  *
  * This class handles Sales logs export
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.7
  */
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Sales_Export Class
+ * CS_Batch_Sales_Export Class
  *
  * @since 2.7
  */
-class EDD_Batch_Sales_Export extends EDD_Batch_Export {
+class CS_Batch_Sales_Export extends CS_Batch_Export {
 	/**
 	 * Our export type. Used for export-type specific filters/actions
 	 *
@@ -36,18 +36,18 @@ class EDD_Batch_Sales_Export extends EDD_Batch_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'ID'          => __( 'Log ID', 'easy-digital-downloads' ),
-			'user_id'     => __( 'User', 'easy-digital-downloads' ),
-			'customer_id' => __( 'Customer ID', 'easy-digital-downloads' ),
-			'email'       => __( 'Email', 'easy-digital-downloads' ),
-			'first_name'  => __( 'First Name', 'easy-digital-downloads' ),
-			'last_name'   => __( 'Last Name', 'easy-digital-downloads' ),
-			'download'    => edd_get_label_singular(),
-			'quantity'    => __( 'Quantity', 'easy-digital-downloads' ),
-			'amount'      => __( 'Item Amount', 'easy-digital-downloads' ),
-			'payment_id'  => __( 'Payment ID', 'easy-digital-downloads' ),
-			'price_id'    => __( 'Price ID', 'easy-digital-downloads' ),
-			'date'        => __( 'Date', 'easy-digital-downloads' ),
+			'ID'          => __( 'Log ID', 'commercestore' ),
+			'user_id'     => __( 'User', 'commercestore' ),
+			'customer_id' => __( 'Customer ID', 'commercestore' ),
+			'email'       => __( 'Email', 'commercestore' ),
+			'first_name'  => __( 'First Name', 'commercestore' ),
+			'last_name'   => __( 'Last Name', 'commercestore' ),
+			'download'    => cs_get_label_singular(),
+			'quantity'    => __( 'Quantity', 'commercestore' ),
+			'amount'      => __( 'Item Amount', 'commercestore' ),
+			'payment_id'  => __( 'Payment ID', 'commercestore' ),
+			'price_id'    => __( 'Price ID', 'commercestore' ),
+			'date'        => __( 'Date', 'commercestore' ),
 		);
 
 		return $cols;
@@ -78,19 +78,19 @@ class EDD_Batch_Sales_Export extends EDD_Batch_Export {
 			$args['product_id'] = $this->download_id;
 		}
 
-		$items = edd_get_order_items( $args );
+		$items = cs_get_order_items( $args );
 
 		foreach ( $items as $item ) {
-			/** @var EDD\Orders\Order_Item $item */
-			$order     = edd_get_order( $item->order_id );
-			$download  = edd_get_download( $item->product_id );
+			/** @var CS\Orders\Order_Item $item */
+			$order     = cs_get_order( $item->order_id );
+			$download  = cs_get_download( $item->product_id );
 			$user_info = $order->get_user_info();
 
 			$download_title = $item->product_name;
 
 			// Maybe append variable price name.
 			if ( $download->has_variable_prices() ) {
-				$price_option = edd_get_price_option_name( $item->product_id, $item->price_id, $order->id );
+				$price_option = cs_get_price_option_name( $item->product_id, $item->price_id, $order->id );
 
 				$download_title .= ! empty( $price_option )
 					? ' - ' . $price_option
@@ -113,8 +113,8 @@ class EDD_Batch_Sales_Export extends EDD_Batch_Export {
 			);
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return ! empty( $data )
 			? $data
@@ -141,7 +141,7 @@ class EDD_Batch_Sales_Export extends EDD_Batch_Export {
 			$args['product_id'] = $this->download_id;
 		}
 
-		$total = edd_count_order_items( $args );
+		$total = cs_count_order_items( $args );
 		$percentage = 100;
 
 		if ( $total > 0 ) {

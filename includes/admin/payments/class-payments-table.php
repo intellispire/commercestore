@@ -2,9 +2,9 @@
 /**
  * Order History Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Payments
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.4
  */
@@ -12,10 +12,10 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Admin\List_Table;
+use CS\Admin\List_Table;
 
 /**
- * EDD_Payment_History_Table Class
+ * CS_Payment_History_Table Class
  *
  * Displays a list of orders on the 'Orders' page.
  *
@@ -23,7 +23,7 @@ use EDD\Admin\List_Table;
  * @since 3.0 Updated to use new query methods.
  *            Updated to use new nomenclature.
  */
-class EDD_Payment_History_Table extends List_Table {
+class CS_Payment_History_Table extends List_Table {
 
 	/**
 	 * Determines the current Order type.
@@ -53,13 +53,13 @@ class EDD_Payment_History_Table extends List_Table {
 
 		// Set parent defaults
 		parent::__construct( array(
-			'singular' => __( 'Order',  'easy-digital-downloads' ),
-			'plural'   => __( 'Orders', 'easy-digital-downloads' ),
+			'singular' => __( 'Order',  'commercestore' ),
+			'plural'   => __( 'Orders', 'commercestore' ),
 			'ajax'     => false
 		) );
 
 		// Use registered types
-		$types = array_keys( edd_get_order_types() );
+		$types = array_keys( cs_get_order_types() );
 		if ( ! empty( $_GET['order_type'] ) && in_array( $_GET['order_type'], $types, true ) ) {
 			$this->type = sanitize_key( $_GET['order_type'] );
 
@@ -82,8 +82,8 @@ class EDD_Payment_History_Table extends List_Table {
 	 */
 	private function set_base_url() {
 		// Carry the type over to the base URL
-		$this->base_url = edd_get_admin_url( array(
-			'page'       => 'edd-payment-history',
+		$this->base_url = cs_get_admin_url( array(
+			'page'       => 'cs-payment-history',
 			'order_type' => $this->type
 		) );
 	}
@@ -94,8 +94,8 @@ class EDD_Payment_History_Table extends List_Table {
 	 * @since 3.0
 	 */
 	private function filter_bar_hooks() {
-		add_action( 'edd_admin_filter_bar_orders',       array( $this, 'filter_bar_items'     ) );
-		add_action( 'edd_after_admin_filter_bar_orders', array( $this, 'filter_bar_searchbox' ) );
+		add_action( 'cs_admin_filter_bar_orders',       array( $this, 'filter_bar_items'     ) );
+		add_action( 'cs_after_admin_filter_bar_orders', array( $this, 'filter_bar_searchbox' ) );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class EDD_Payment_History_Table extends List_Table {
 			return;
 		}
 
-		edd_admin_filter_bar( 'orders' );
+		cs_admin_filter_bar( 'orders' );
 	}
 
 	/**
@@ -136,8 +136,8 @@ class EDD_Payment_History_Table extends List_Table {
 		$clear_url  = $this->base_url;
 
 		// Filters
-		$all_modes    = edd_get_payment_modes();
-		$all_gateways = edd_get_payment_gateways();
+		$all_modes    = cs_get_payment_modes();
+		$all_gateways = cs_get_payment_gateways();
 
 		// No modes
 		if ( empty( $all_modes ) ) {
@@ -146,7 +146,7 @@ class EDD_Payment_History_Table extends List_Table {
 		// Add "All" and pluck labels
 		} else {
 			$modes = array_merge( array(
-				'all' => __( 'All modes', 'easy-digital-downloads' )
+				'all' => __( 'All modes', 'commercestore' )
 			), wp_list_pluck( $all_modes, 'admin_label' ) );
 		}
 
@@ -157,7 +157,7 @@ class EDD_Payment_History_Table extends List_Table {
 		// Add "All" and pluck labels
 		} else {
 			$gateways = array_merge( array(
-				'all' => __( 'All gateways', 'easy-digital-downloads' )
+				'all' => __( 'All gateways', 'commercestore' )
 			), wp_list_pluck( $all_gateways, 'admin_label' ) );
 		}
 
@@ -166,13 +166,13 @@ class EDD_Payment_History_Table extends List_Table {
 		 *
 		 * @since 2.8.11
 		 */
-		$gateways = apply_filters( 'edd_payments_table_gateways', $gateways );
+		$gateways = apply_filters( 'cs_payments_table_gateways', $gateways );
 
 		// Output the items
 		if ( ! empty( $modes ) ) : ?>
 
-			<span id="edd-mode-filter">
-				<?php echo EDD()->html->select( array(
+			<span id="cs-mode-filter">
+				<?php echo CS()->html->select( array(
 					'options'          => $modes,
 					'name'             => 'mode',
 					'id'               => 'mode',
@@ -184,20 +184,20 @@ class EDD_Payment_History_Table extends List_Table {
 
 		<?php endif; ?>
 
-		<span id="edd-date-filters" class="edd-from-to-wrapper">
+		<span id="cs-date-filters" class="cs-from-to-wrapper">
 			<?php
 
-			echo EDD()->html->date_field( array(
+			echo CS()->html->date_field( array(
 				'id'          => 'start-date',
 				'name'        => 'start-date',
-				'placeholder' => _x( 'From', 'date filter', 'easy-digital-downloads' ),
+				'placeholder' => _x( 'From', 'date filter', 'commercestore' ),
 				'value'       => $start_date
 			) );
 
-			echo EDD()->html->date_field( array(
+			echo CS()->html->date_field( array(
 				'id'          => 'end-date',
 				'name'        => 'end-date',
-				'placeholder' => _x( 'To', 'date filter', 'easy-digital-downloads' ),
+				'placeholder' => _x( 'To', 'date filter', 'commercestore' ),
 				'value'       => $end_date
 			) );
 
@@ -205,8 +205,8 @@ class EDD_Payment_History_Table extends List_Table {
 
 		if ( ! empty( $gateways ) ) : ?>
 
-			<span id="edd-gateway-filter">
-				<?php echo EDD()->html->select( array(
+			<span id="cs-gateway-filter">
+				<?php echo CS()->html->select( array(
 					'options'          => $gateways,
 					'name'             => 'gateway',
 					'id'               => 'gateway',
@@ -218,20 +218,20 @@ class EDD_Payment_History_Table extends List_Table {
 
 		<?php endif; ?>
 
-		<span id="edd-advanced-filters">
-			<input type="button" class="button edd-advanced-filters-button button-secondary" value="<?php esc_html_e( 'More', 'easy-digital-downloads' ); ?>"/>
+		<span id="cs-advanced-filters">
+			<input type="button" class="button cs-advanced-filters-button button-secondary" value="<?php esc_html_e( 'More', 'commercestore' ); ?>"/>
 
 			<div class="inside">
 				<fieldset>
-					<legend for="order-amount-filter-type"><?php esc_html_e( 'Total is', 'easy-digital-downloads' ); ?></legend>
+					<legend for="order-amount-filter-type"><?php esc_html_e( 'Total is', 'commercestore' ); ?></legend>
 					<?php
 					$options = array(
-						'eq' => __( 'equal to', 'easy-digital-downloads' ),
-						'gt' => __( 'greater than', 'easy-digital-downloads' ),
-						'lt' => __( 'less than', 'easy-digital-downloads' ),
+						'eq' => __( 'equal to', 'commercestore' ),
+						'gt' => __( 'greater than', 'commercestore' ),
+						'lt' => __( 'less than', 'commercestore' ),
 					);
 
-					echo EDD()->html->select( array(
+					echo CS()->html->select( array(
 						'id'               => 'order-amount-filter-type',
 						'name'             => 'order-amount-filter-type',
 						'options'          => $options,
@@ -245,9 +245,9 @@ class EDD_Payment_History_Table extends List_Table {
 				</fieldset>
 
 				<fieldset>
-					<legend><?php esc_html_e( 'Product', 'easy-digital-downloads' ); ?></legend>
+					<legend><?php esc_html_e( 'Product', 'commercestore' ); ?></legend>
 					<?php
-					echo EDD()->html->product_dropdown( array(
+					echo CS()->html->product_dropdown( array(
 						'id'         => 'orders-filter-product-id',
 						'name'       => 'product-id',
 						'chosen'     => true,
@@ -258,15 +258,15 @@ class EDD_Payment_History_Table extends List_Table {
 				</fieldset>
 
 				<fieldset>
-					<legend><?php esc_html_e( 'Country & Region', 'easy-digital-downloads' ); ?></legend>
+					<legend><?php esc_html_e( 'Country & Region', 'commercestore' ); ?></legend>
 					<?php
-					echo EDD()->html->country_select(
+					echo CS()->html->country_select(
 						array(
 							'name' => 'order-country-filter-value',
 						),
 						esc_html( $country )
 					);
-					echo EDD()->html->region_select(
+					echo CS()->html->region_select(
 						array(
 							'name' => 'order-region-filter-value',
 						),
@@ -279,12 +279,12 @@ class EDD_Payment_History_Table extends List_Table {
 				<?php
 
 				// Third party plugin support
-				if ( has_action( 'edd_payment_advanced_filters_after_fields' ) ) : ?>
+				if ( has_action( 'cs_payment_advanced_filters_after_fields' ) ) : ?>
 
-					<fieldset class="edd-add-on-filters">
-						<legend><?php esc_html_e( 'Extras', 'easy-digital-downloads' ); ?></legend>
+					<fieldset class="cs-add-on-filters">
+						<legend><?php esc_html_e( 'Extras', 'commercestore' ); ?></legend>
 
-						<?php do_action( 'edd_payment_advanced_filters_after_fields' ); ?>
+						<?php do_action( 'cs_payment_advanced_filters_after_fields' ); ?>
 
 					</fieldset>
 
@@ -292,12 +292,12 @@ class EDD_Payment_History_Table extends List_Table {
 			</div>
 		</span>
 
-		<span id="edd-after-core-filters">
-			<input type="submit" class="button button-secondary" value="<?php esc_html_e( 'Filter', 'easy-digital-downloads' ); ?>"/>
+		<span id="cs-after-core-filters">
+			<input type="submit" class="button button-secondary" value="<?php esc_html_e( 'Filter', 'commercestore' ); ?>"/>
 
 			<?php if ( ! empty( $start_date ) || ! empty( $end_date ) || ! empty( $order_total_filter_type ) || ( 'all' !== $gateway ) ) : ?>
 				<a href="<?php echo esc_url( $clear_url ); ?>" class="button-secondary">
-					<?php esc_html_e( 'Clear', 'easy-digital-downloads' ); ?>
+					<?php esc_html_e( 'Clear', 'commercestore' ); ?>
 				</a>
 			<?php endif; ?>
 		</span>
@@ -313,9 +313,9 @@ class EDD_Payment_History_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function filter_bar_searchbox() {
-		do_action( 'edd_payment_advanced_filters_row' );
+		do_action( 'cs_payment_advanced_filters_row' );
 
-		$this->search_box( esc_html__( 'Search', 'easy-digital-downloads' ), 'edd-payments' );
+		$this->search_box( esc_html__( 'Search', 'commercestore' ), 'cs-payments' );
 	}
 
 	/**
@@ -346,9 +346,9 @@ class EDD_Payment_History_Table extends List_Table {
 		?>
 
 		<p class="search-form">
-			<?php do_action( 'edd_payment_history_search' ); ?>
+			<?php do_action( 'cs_payment_history_search' ); ?>
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $text ); ?>:</label>
-			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" placeholder="<?php esc_html_e( 'Search orders...', 'easy-digital-downloads' ); ?>" value="<?php _admin_search_query(); ?>" />
+			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" placeholder="<?php esc_html_e( 'Search orders...', 'commercestore' ); ?>" value="<?php _admin_search_query(); ?>" />
 		</p>
 
 		<?php
@@ -360,15 +360,15 @@ class EDD_Payment_History_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function no_items() {
-		if ( ! edd_has_upgrade_completed( 'migrate_orders' ) ) {
+		if ( ! cs_has_upgrade_completed( 'migrate_orders' ) ) {
 			global $wpdb;
-			$orders = $wpdb->get_var( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'edd_payment' LIMIT 1" );
+			$orders = $wpdb->get_var( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'cs_payment' LIMIT 1" );
 			if ( ! empty( $orders ) ) {
-				esc_html_e( 'Easy Digital Downloads needs to upgrade the database. Orders will be available when that has completed.', 'easy-digital-downloads' );
+				esc_html_e( 'CommerceStore needs to upgrade the database. Orders will be available when that has completed.', 'commercestore' );
 				return;
 			}
 		}
-		esc_html_e( 'No orders found.', 'easy-digital-downloads' );
+		esc_html_e( 'No orders found.', 'commercestore' );
 	}
 
 	/**
@@ -381,12 +381,12 @@ class EDD_Payment_History_Table extends List_Table {
 	public function get_columns() {
 		$columns = array(
 			'cb'       => '<input type="checkbox" />', // Render a checkbox instead of text
-			'number'   => __( 'Number',    'easy-digital-downloads' ),
-			'customer' => __( 'Customer',  'easy-digital-downloads' ),
-			'gateway'  => __( 'Gateway',   'easy-digital-downloads' ),
-			'amount'   => __( 'Total',    'easy-digital-downloads' ),
-			'date'     => __( 'Date', 'easy-digital-downloads' ),
-			'status'   => __( 'Status', 'easy-digital-downloads' ),
+			'number'   => __( 'Number',    'commercestore' ),
+			'customer' => __( 'Customer',  'commercestore' ),
+			'gateway'  => __( 'Gateway',   'commercestore' ),
+			'amount'   => __( 'Total',    'commercestore' ),
+			'date'     => __( 'Date', 'commercestore' ),
+			'status'   => __( 'Status', 'commercestore' ),
 		);
 
 		if ( 'refund' === $this->type ) {
@@ -400,7 +400,7 @@ class EDD_Payment_History_Table extends List_Table {
 		 *
 		 * @param array $columns Table columns.
 		 */
-		$columns = apply_filters( 'edd_payments_table_columns', $columns );
+		$columns = apply_filters( 'cs_payments_table_columns', $columns );
 
 		return $columns;
 	}
@@ -413,7 +413,7 @@ class EDD_Payment_History_Table extends List_Table {
 	 * @return array Array of all the sortable columns.
 	 */
 	public function get_sortable_columns() {
-		return apply_filters( 'edd_payments_table_sortable_columns', array(
+		return apply_filters( 'cs_payments_table_sortable_columns', array(
 			'number'   => array( 'id',           true  ),
 			'status'   => array( 'status',       false ),
 			'customer' => array( 'customer_id',  false ),
@@ -439,24 +439,24 @@ class EDD_Payment_History_Table extends List_Table {
 	 * This function renders most of the columns in the list table.
 	 *
 	 * @since 1.4
-	 * @since 3.0 Updated to use the new EDD\Orders\Order class.
+	 * @since 3.0 Updated to use the new CS\Orders\Order class.
 	 *
-	 * @param EDD\Orders\Order $order       Order object.
+	 * @param CS\Orders\Order $order       Order object.
 	 * @param string           $column_name The name of the column.
 	 *
 	 * @return string Column name.
 	 */
 	public function column_default( $order, $column_name ) {
-		$timezone_abbreviation = edd_get_timezone_abbr();
+		$timezone_abbreviation = cs_get_timezone_abbr();
 		switch ( $column_name ) {
 			case 'amount':
-				$value = edd_display_amount( $order->total, $order->currency );
+				$value = cs_display_amount( $order->total, $order->currency );
 				break;
 			case 'date':
-				$value = '<time datetime="' . esc_attr( EDD()->utils->date( $order->date_created, null, true )->toDateTimeString() ) . '">' . edd_date_i18n( $order->date_created, 'M. d, Y' ) . '<br>' . edd_date_i18n( strtotime( $order->date_created ), 'H:i' ) . ' ' . $timezone_abbreviation . '</time>';
+				$value = '<time datetime="' . esc_attr( CS()->utils->date( $order->date_created, null, true )->toDateTimeString() ) . '">' . cs_date_i18n( $order->date_created, 'M. d, Y' ) . '<br>' . cs_date_i18n( strtotime( $order->date_created ), 'H:i' ) . ' ' . $timezone_abbreviation . '</time>';
 				break;
 			case 'gateway':
-				$value = edd_get_gateway_admin_label( $order->gateway );
+				$value = cs_get_gateway_admin_label( $order->gateway );
 
 				if ( empty( $value ) ) {
 					$value = '&mdash;';
@@ -464,7 +464,7 @@ class EDD_Payment_History_Table extends List_Table {
 
 				break;
 			case 'status':
-				$value = edd_get_order_status_badge( $order->status );
+				$value = cs_get_order_status_badge( $order->status );
 				break;
 			default:
 				$value = method_exists( $order, 'get_' . $column_name )
@@ -473,16 +473,16 @@ class EDD_Payment_History_Table extends List_Table {
 				break;
 		}
 
-		return apply_filters( 'edd_payments_table_column', $value, $order->id, $column_name );
+		return apply_filters( 'cs_payments_table_column', $value, $order->id, $column_name );
 	}
 
 	/**
 	 * Render the checkbox column.
 	 *
 	 * @since 1.4
-	 * @since 3.0 Updated to use the new EDD\Orders\Order class.
+	 * @since 3.0 Updated to use the new CS\Orders\Order class.
 	 *
-	 * @param EDD\Orders\Order $order Order object.
+	 * @param CS\Orders\Order $order Order object.
 	 * @return string Displays a checkbox.
 	 */
 	public function column_cb( $order ) {
@@ -492,7 +492,7 @@ class EDD_Payment_History_Table extends List_Table {
 			'order',
 			esc_attr( $order->id ),
 			/* translators: the order number */
-			esc_html( sprintf( __( 'Select %s', 'easy-digital-downloads' ), $order_number ) )
+			esc_html( sprintf( __( 'Select %s', 'commercestore' ), $order_number ) )
 		);
 	}
 
@@ -500,17 +500,17 @@ class EDD_Payment_History_Table extends List_Table {
 	 * Render the ID column.
 	 *
 	 * @since 2.0
-	 * @since 3.0 Updated to use the new EDD\Orders\Order class.
+	 * @since 3.0 Updated to use the new CS\Orders\Order class.
 	 *
-	 * @param EDD\Orders\Order $order Order object.
+	 * @param CS\Orders\Order $order Order object.
 	 * @return string Displays a checkbox.
 	 */
 	public function column_number( $order ) {
 		$status = $this->get_status();
 
 		// View URL
-		$view_url = edd_get_admin_url( array(
-			'page' => 'edd-payment-history',
+		$view_url = cs_get_admin_url( array(
+			'page' => 'cs-payment-history',
 			'view' => 'sale' === $order->type
 				? 'view-order-details'
 				: 'view-refund-details',
@@ -519,42 +519,42 @@ class EDD_Payment_History_Table extends List_Table {
 
 		// Default row actions
 		$row_actions = array(
-			'view' => '<a href="' . esc_url( $view_url ) . '">' . esc_html__( 'Edit', 'easy-digital-downloads' ) . '</a>',
+			'view' => '<a href="' . esc_url( $view_url ) . '">' . esc_html__( 'Edit', 'commercestore' ) . '</a>',
 		);
 
 		// Resend Receipt
 		if ( 'sale' === $this->type && 'complete' === $order->status && ! empty( $order->email ) ) {
 			$row_actions['email_links'] = '<a href="' . esc_url( add_query_arg( array(
-					'edd-action'  => 'email_links',
+					'cs-action'  => 'email_links',
 					'purchase_id' => $order->id
-				), $this->base_url ) ) . '">' . __( 'Resend Receipt', 'easy-digital-downloads' ) . '</a>';
+				), $this->base_url ) ) . '">' . __( 'Resend Receipt', 'commercestore' ) . '</a>';
 		}
 
 		// Keep Delete at the end
-		if ( edd_is_order_trashable( $order->id ) ) {
+		if ( cs_is_order_trashable( $order->id ) ) {
 			$trash_url = wp_nonce_url( add_query_arg( array(
-				'edd-action'  => 'trash_order',
+				'cs-action'  => 'trash_order',
 				'purchase_id' => $order->id,
-			), $this->base_url ), 'edd_payment_nonce' );
-			$row_actions['trash'] = '<a href="' . esc_url( $trash_url ) . '">' . esc_html__( 'Trash', 'easy-digital-downloads' ) . '</a>';
-		} elseif ( edd_is_order_restorable( $order->id ) ) {
+			), $this->base_url ), 'cs_payment_nonce' );
+			$row_actions['trash'] = '<a href="' . esc_url( $trash_url ) . '">' . esc_html__( 'Trash', 'commercestore' ) . '</a>';
+		} elseif ( cs_is_order_restorable( $order->id ) ) {
 			$restore_url = wp_nonce_url( add_query_arg( array(
-				'edd-action'  => 'restore_order',
+				'cs-action'  => 'restore_order',
 				'purchase_id' => $order->id,
-			), $this->base_url ), 'edd_payment_nonce' );
-			$row_actions['restore'] = '<a href="' . esc_url( $restore_url ) . '">' . esc_html__( 'Restore', 'easy-digital-downloads' ) . '</a>';
+			), $this->base_url ), 'cs_payment_nonce' );
+			$row_actions['restore'] = '<a href="' . esc_url( $restore_url ) . '">' . esc_html__( 'Restore', 'commercestore' ) . '</a>';
 
 			$delete_url = wp_nonce_url( add_query_arg( array(
-				'edd-action'  => 'delete_order',
+				'cs-action'  => 'delete_order',
 				'purchase_id' => $order->id,
-			), $this->base_url ), 'edd_payment_nonce' );
-			$row_actions['delete'] = '<a href="' . esc_url( $delete_url ) . '">' . esc_html__( 'Delete Permanently', 'easy-digital-downloads' ) . '</a>';
+			), $this->base_url ), 'cs_payment_nonce' );
+			$row_actions['delete'] = '<a href="' . esc_url( $delete_url ) . '">' . esc_html__( 'Delete Permanently', 'commercestore' ) . '</a>';
 
 			unset( $row_actions['view'] );
 		}
 
-		if ( has_filter( 'edd_payment_row_actions' ) ) {
-			$payment = edd_get_payment( $order->id );
+		if ( has_filter( 'cs_payment_row_actions' ) ) {
+			$payment = cs_get_payment( $order->id );
 
 			/**
 			 * Filters the row actions.
@@ -562,27 +562,27 @@ class EDD_Payment_History_Table extends List_Table {
 			 * @deprecated 3.0
 			 *
 			 * @param array             $row_actions
-			 * @param EDD_Payment|false $payment
+			 * @param CS_Payment|false $payment
 			 */
-			$row_actions = apply_filters_deprecated( 'edd_payment_row_actions', array( $row_actions, $payment ), '3.0', 'edd_order_row_actions' );
+			$row_actions = apply_filters_deprecated( 'cs_payment_row_actions', array( $row_actions, $payment ), '3.0', 'cs_order_row_actions' );
 		}
 
 		/**
 		 * Filters the row actions.
 		 *
 		 * @param array            $row_actions Array of row actions.
-		 * @param EDD\Orders\Order $order       Order object.
+		 * @param CS\Orders\Order $order       Order object.
 		 *
 		 * @since 3.0
 		 */
-		$row_actions = apply_filters( 'edd_order_row_actions', $row_actions, $order );
+		$row_actions = apply_filters( 'cs_order_row_actions', $row_actions, $order );
 
 		// Row actions
 		$actions = $this->row_actions( $row_actions );
 
 		// Primary link
 		$order_number = 'sale' === $order->type ? $order->get_number() : $order->order_number;
-		$link         = edd_is_order_restorable( $order->id ) ? '<span class="row-title">' . esc_html( $order_number ) . '</span>' : '<a class="row-title" href="' . esc_url( $view_url ) . '">' . esc_html( $order_number ) . '</a>';
+		$link         = cs_is_order_restorable( $order->id ) ? '<span class="row-title">' . esc_html( $order_number ) . '</span>' : '<a class="row-title" href="' . esc_url( $view_url ) . '">' . esc_html( $order_number ) . '</a>';
 
 		// Concatenate & return the results
 		return $link . $actions;
@@ -592,14 +592,14 @@ class EDD_Payment_History_Table extends List_Table {
 	 * Render the Customer column.
 	 *
 	 * @since 2.4.3
-	 * @since 3.0 Updated to use the new EDD\Orders\Order class.
+	 * @since 3.0 Updated to use the new CS\Orders\Order class.
 	 *
-	 * @param EDD\Orders\Order $order Order object.
+	 * @param CS\Orders\Order $order Order object.
 	 * @return string Data shown in the Customer column.
 	 */
 	public function column_customer( $order ) {
 		$customer_id = $order->customer_id;
-		$customer    = edd_get_customer( $customer_id );
+		$customer    = cs_get_customer( $customer_id );
 
 		// Actions if exists
 		if ( ! empty( $customer ) ) {
@@ -607,11 +607,11 @@ class EDD_Payment_History_Table extends List_Table {
 			// Use customer name, if exists
 			$name = ! empty( $customer->name )
 				? $customer->name
-				: __( 'No Name', 'easy-digital-downloads' );
+				: __( 'No Name', 'commercestore' );
 
 			// Link to View Customer
-			$url = edd_get_admin_url( array(
-				'page' => 'edd-customers',
+			$url = cs_get_admin_url( array(
+				'page' => 'cs-customers',
 				'view' => 'overview',
 				'id'   => $customer_id,
 			) );
@@ -631,7 +631,7 @@ class EDD_Payment_History_Table extends List_Table {
 		 * @param int    $order_id ID of the Payment/Order.
 		 * @param string $column_name Name of the current column (email).
 		 */
-		$name = apply_filters( 'edd_payments_table_column', $name, $order->id, 'email' );
+		$name = apply_filters( 'cs_payments_table_column', $name, $order->id, 'email' );
 
 		return $name;
 	}
@@ -646,15 +646,15 @@ class EDD_Payment_History_Table extends List_Table {
 	public function get_bulk_actions() {
 		if ( 'refund' !== $this->type ) {
 			$action = array(
-				'set-status-complete'     => __( 'Mark Completed',   'easy-digital-downloads' ),
-				'set-status-pending'     => __( 'Mark Pending',     'easy-digital-downloads' ),
-				'set-status-processing'  => __( 'Mark Processing',  'easy-digital-downloads' ),
-				'set-status-revoked'     => __( 'Mark Revoked',     'easy-digital-downloads' ),
-				'set-status-failed'      => __( 'Mark Failed',      'easy-digital-downloads' ),
-				'set-status-abandoned'   => __( 'Mark Abandoned',   'easy-digital-downloads' ),
-				'set-status-preapproval' => __( 'Mark Preapproved', 'easy-digital-downloads' ),
-				'set-status-cancelled'   => __( 'Mark Cancelled',   'easy-digital-downloads' ),
-				'resend-receipt'         => __( 'Resend Receipts', 'easy-digital-downloads' ),
+				'set-status-complete'     => __( 'Mark Completed',   'commercestore' ),
+				'set-status-pending'     => __( 'Mark Pending',     'commercestore' ),
+				'set-status-processing'  => __( 'Mark Processing',  'commercestore' ),
+				'set-status-revoked'     => __( 'Mark Revoked',     'commercestore' ),
+				'set-status-failed'      => __( 'Mark Failed',      'commercestore' ),
+				'set-status-abandoned'   => __( 'Mark Abandoned',   'commercestore' ),
+				'set-status-preapproval' => __( 'Mark Preapproved', 'commercestore' ),
+				'set-status-cancelled'   => __( 'Mark Cancelled',   'commercestore' ),
+				'resend-receipt'         => __( 'Resend Receipts', 'commercestore' ),
 			);
 		} else {
 			$action = array();
@@ -662,13 +662,13 @@ class EDD_Payment_History_Table extends List_Table {
 
 		if ( 'trash' === $this->get_status() ) {
 			$action = array(
-				'restore' => __( 'Restore', 'easy-digital-downloads' ),
+				'restore' => __( 'Restore', 'commercestore' ),
 			);
 		} else {
-			$action['trash'] = __( 'Move to Trash', 'easy-digital-downloads' );
+			$action['trash'] = __( 'Move to Trash', 'commercestore' );
 		}
 
-		return apply_filters( 'edd_payments_table_bulk_actions', $action );
+		return apply_filters( 'cs_payments_table_bulk_actions', $action );
 	}
 
 	/**
@@ -677,10 +677,10 @@ class EDD_Payment_History_Table extends List_Table {
 	 * @since 1.4
 	 * @since 3.0 Updated to display _doing_it_wrong().
 	 *
-	 * @see edd_orders_list_table_process_bulk_actions()
+	 * @see cs_orders_list_table_process_bulk_actions()
 	 */
 	public function process_bulk_action() {
-		_doing_it_wrong( __FUNCTION__, 'Orders list table bulk actions are now handled by edd_orders_list_table_process_bulk_actions(). Please do not call this method directly.', 'EDD 3.0' );
+		_doing_it_wrong( __FUNCTION__, 'Orders list table bulk actions are now handled by cs_orders_list_table_process_bulk_actions(). Please do not call this method directly.', 'CS 3.0' );
 	}
 
 	/**
@@ -696,7 +696,7 @@ class EDD_Payment_History_Table extends List_Table {
 		unset( $args['status'], $args['status__not_in'], $args['status__in'] );
 
 		// Get order counts by type
-		$this->counts = edd_get_order_counts( $args );
+		$this->counts = cs_get_order_counts( $args );
 	}
 
 	/**
@@ -708,7 +708,7 @@ class EDD_Payment_History_Table extends List_Table {
 	 * @return array $payment_data Array of all the data for the orders.
 	 */
 	public function payments_data() {
-		_edd_deprecated_function( __METHOD__, '3.0', 'EDD_Payment_History_Table::get_data()' );
+		_cs_deprecated_function( __METHOD__, '3.0', 'CS_Payment_History_Table::get_data()' );
 
 		return $this->get_data();
 	}
@@ -725,7 +725,7 @@ class EDD_Payment_History_Table extends List_Table {
 		// Parse args (with pagination)
 		$this->args = $this->parse_args( true );
 
-		// Force EDD\Orders\Order objects to be returned
+		// Force CS\Orders\Order objects to be returned
 		$this->args['output'] = 'orders';
 
 		if ( empty( $this->args['status'] ) ) {
@@ -733,7 +733,7 @@ class EDD_Payment_History_Table extends List_Table {
 		}
 
 		// Get data
-		$items = edd_get_orders( $this->args );
+		$items = cs_get_orders( $this->args );
 
 		// Get customer IDs and count from payments
 		$customer_ids = array_unique( wp_list_pluck( $items, 'customer_id' ) );
@@ -741,7 +741,7 @@ class EDD_Payment_History_Table extends List_Table {
 
 		// Maybe prime customer objects (if more than number of queries)
 		if ( $cust_count > 1 ) {
-			edd_get_customers( array(
+			cs_get_customers( array(
 				'id__in'        => $customer_ids,
 				'no_found_rows' => true,
 				'number'        => $cust_count
@@ -769,7 +769,7 @@ class EDD_Payment_History_Table extends List_Table {
 		 *
 		 * @param array $views Payment table's views.
 		 */
-		$views = apply_filters( 'edd_payments_table_views', $views );
+		$views = apply_filters( 'cs_payments_table_views', $views );
 
 		return $views;
 	}
@@ -797,12 +797,12 @@ class EDD_Payment_History_Table extends List_Table {
 		/**
 		 * Introduced as part of #6063. Allow a gateway to specified based on the context.
 		 *
-		 * @see   https://github.com/easydigitaldownloads/easy-digital-downloads/issues/6063
+		 * @see   https://github.com/commercestore/commercestore/issues/6063
 		 * @since 2.8.11
 		 *
 		 * @param string $gateway
 		 */
-		$gateway = apply_filters( 'edd_payments_table_search_gateway', $gateway );
+		$gateway = apply_filters( 'cs_payments_table_search_gateway', $gateway );
 
 		if ( $gateway === 'all' ) {
 			$gateway = null;

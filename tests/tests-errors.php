@@ -2,17 +2,17 @@
 
 
 /**
- * @group edd_errors
+ * @group cs_errors
  */
-class Tests_Errors extends EDD_UnitTestCase {
+class Tests_Errors extends CS_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
 
-		edd_set_error( 'invalid_email', 'Please enter a valid email address.' );
-		edd_set_error( 'invalid_user', 'The user information is invalid.' );
-		edd_set_error( 'username_incorrect', 'The username you entered does not exist' );
-		edd_set_error( 'password_incorrect', 'The password you entered is incorrect' );
+		cs_set_error( 'invalid_email', 'Please enter a valid email address.' );
+		cs_set_error( 'invalid_user', 'The user information is invalid.' );
+		cs_set_error( 'username_incorrect', 'The username you entered does not exist' );
+		cs_set_error( 'password_incorrect', 'The password you entered is incorrect' );
 	}
 
 	public function tearDown() {
@@ -20,7 +20,7 @@ class Tests_Errors extends EDD_UnitTestCase {
 	}
 
 	public function test_set_errors() {
-		$errors = EDD()->session->get( 'edd_errors' );
+		$errors = CS()->session->get( 'cs_errors' );
 
 		$this->assertArrayHasKey( 'invalid_email', $errors );
 		$this->assertArrayHasKey( 'invalid_user', $errors );
@@ -29,13 +29,13 @@ class Tests_Errors extends EDD_UnitTestCase {
 	}
 
 	public function test_clear_errors() {
-		$errors = edd_clear_errors();
-		$this->assertFalse( EDD()->session->get( 'edd_errors' ) );
+		$errors = cs_clear_errors();
+		$this->assertFalse( CS()->session->get( 'cs_errors' ) );
 	}
 
 	public function test_unset_error() {
-		$error = edd_unset_error( 'invalid_email' );
-		$errors = EDD()->session->get( 'edd_errors' );
+		$error = cs_unset_error( 'invalid_email' );
+		$errors = CS()->session->get( 'cs_errors' );
 
 		$expected = array(
 			'invalid_user' => 'The user information is invalid.',

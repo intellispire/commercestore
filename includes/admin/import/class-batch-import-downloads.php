@@ -4,9 +4,9 @@
  *
  * This class handles importing downloads with the batch processing API
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Import
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.6
  */
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Downloads_Import Class
+ * CS_Batch_Downloads_Import Class
  *
  * @since 2.6
  */
-class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
+class CS_Batch_Downloads_Import extends CS_Batch_Import {
 
 	/**
 	 * Set up our import config.
@@ -62,7 +62,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 		$more = false;
 
 		if ( ! $this->can_import() ) {
-			wp_die( __( 'You do not have permission to import data.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+			wp_die( __( 'You do not have permission to import data.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		$i      = 1;
@@ -213,31 +213,31 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 				// File download limit
 				if( ! empty( $this->field_mapping['download_limit'] ) && ! empty( $row[ $this->field_mapping['download_limit'] ] ) ) {
 
-					update_post_meta( $download_id, '_edd_download_limit', absint( $row[ $this->field_mapping['download_limit'] ] ) );
+					update_post_meta( $download_id, '_cs_download_limit', absint( $row[ $this->field_mapping['download_limit'] ] ) );
 				}
 
 				// Sale count
 				if( ! empty( $this->field_mapping['sales'] ) && ! empty( $row[ $this->field_mapping['sales'] ] ) ) {
 
-					update_post_meta( $download_id, '_edd_download_sales', absint( $row[ $this->field_mapping['sales'] ] ) );
+					update_post_meta( $download_id, '_cs_download_sales', absint( $row[ $this->field_mapping['sales'] ] ) );
 				}
 
 				// Earnings
 				if( ! empty( $this->field_mapping['earnings'] ) && ! empty( $row[ $this->field_mapping['earnings'] ] ) ) {
 
-					update_post_meta( $download_id, '_edd_download_earnings', edd_sanitize_amount( $row[ $this->field_mapping['earnings'] ] ) );
+					update_post_meta( $download_id, '_cs_download_earnings', cs_sanitize_amount( $row[ $this->field_mapping['earnings'] ] ) );
 				}
 
 				// Notes
 				if( ! empty( $this->field_mapping['notes'] ) && ! empty( $row[ $this->field_mapping['notes'] ] ) ) {
 
-					update_post_meta( $download_id, 'edd_product_notes', sanitize_text_field( $row[ $this->field_mapping['notes'] ] ) );
+					update_post_meta( $download_id, 'cs_product_notes', sanitize_text_field( $row[ $this->field_mapping['notes'] ] ) );
 				}
 
 				// SKU
 				if( ! empty( $this->field_mapping[ 'sku' ] ) && ! empty( $row[ $this->field_mapping[ 'sku' ] ] ) ) {
 
-					update_post_meta( $download_id, 'edd_sku', sanitize_text_field( $row[ $this->field_mapping['sku'] ] ) );
+					update_post_meta( $download_id, 'cs_sku', sanitize_text_field( $row[ $this->field_mapping['sku'] ] ) );
 				}
 
 				// Custom fields
@@ -280,7 +280,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 
 		if( is_numeric( $price ) ) {
 
-			update_post_meta( $download_id, 'edd_price', edd_sanitize_amount( $price ) );
+			update_post_meta( $download_id, 'cs_price', cs_sanitize_amount( $price ) );
 
 		} else {
 
@@ -292,7 +292,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 				$price_id        = 1;
 				foreach( $prices as $price ) {
 
-					// See if this matches the EDD Download export for variable prices
+					// See if this matches the CommerceStore Download export for variable prices
 					if( false !== strpos( $price, ':' ) ) {
 
 						$price = array_map( 'trim', explode( ':', $price ) );
@@ -305,7 +305,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 				}
 
 				update_post_meta( $download_id, '_variable_pricing', 1 );
-				update_post_meta( $download_id, 'edd_variable_prices', $variable_prices );
+				update_post_meta( $download_id, 'cs_variable_prices', $variable_prices );
 
 			}
 
@@ -353,7 +353,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 
 			}
 
-			update_post_meta( $download_id, 'edd_download_files', $download_files );
+			update_post_meta( $download_id, 'cs_download_files', $download_files );
 
 		}
 
@@ -369,7 +369,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 
 		$is_url   = false !== filter_var( $image, FILTER_VALIDATE_URL );
 		$is_local = $is_url && false !== strpos( site_url(), $image );
-		$ext      = edd_get_file_extension( $image );
+		$ext      = cs_get_file_extension( $image );
 
 		if( $is_url && $is_local ) {
 
@@ -394,7 +394,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 			}
 
 
-		} elseif( false === strpos( $image, '/' ) && edd_get_file_extension( $image ) ) {
+		} elseif( false === strpos( $image, '/' ) && cs_get_file_extension( $image ) ) {
 
 			// Image given by name only
 
@@ -560,7 +560,7 @@ class EDD_Batch_Downloads_Import extends EDD_Batch_Import {
 	 * @return void
 	 */
 	public function get_import_type_label() {
-		return edd_get_label_plural( true );
+		return cs_get_label_plural( true );
 	}
 
 }

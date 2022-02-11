@@ -2,13 +2,13 @@
 /**
  * PayPal Admin Notices
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Gateways\PayPal\Admin;
+namespace CS\Gateways\PayPal\Admin;
 
 add_action( 'admin_notices', function () {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -16,11 +16,11 @@ add_action( 'admin_notices', function () {
 	}
 
 	// Bail if this notice has already been dismissed.
-	if ( get_user_meta( get_current_user_id(), '_edd_paypal_commerce_dismissed' ) ) {
+	if ( get_user_meta( get_current_user_id(), '_cs_paypal_commerce_dismissed' ) ) {
 		return;
 	}
 
-	$enabled_gateways = array_keys( edd_get_enabled_payment_gateways() );
+	$enabled_gateways = array_keys( cs_get_enabled_payment_gateways() );
 	$enabled_gateways = array_diff( $enabled_gateways, array( 'paypal_commerce' ) );
 
 	// Show a notice if any PayPal gateway is enabled, other than PayPal Commerce.
@@ -33,33 +33,33 @@ add_action( 'admin_notices', function () {
 	}
 
 	$dismiss_url = wp_nonce_url( add_query_arg( array(
-		'edd_action' => 'dismiss_notices',
-		'edd_notice' => 'paypal_commerce'
-	) ), 'edd_notice_nonce' );
+		'cs_action' => 'dismiss_notices',
+		'cs_notice' => 'paypal_commerce'
+	) ), 'cs_notice_nonce' );
 
 	$setup_url = add_query_arg( array(
 		'post_type' => 'download',
-		'page'      => 'edd-settings',
+		'page'      => 'cs-settings',
 		'tab'       => 'gateways',
 		'section'   => 'paypal_commerce'
 	), admin_url( 'edit.php' ) );
 
 	?>
 	<div class="notice notice-info">
-		<h2><?php esc_html_e( 'Enable the new PayPal gateway for Easy Digital Downloads', 'easy-digital-downloads' ); ?></h2>
+		<h2><?php esc_html_e( 'Enable the new PayPal gateway for CommerceStore', 'commercestore' ); ?></h2>
 		<p>
 			<?php
 			echo wp_kses( sprintf(
 				/* Translators: %1$s opening anchor tag; %2$s closing anchor tag */
-				__( 'A new, improved PayPal experience is now available in Easy Digital Downloads. You can learn more about the new integration in %1$sour documentation%2$s.', 'easy-digital-downloads' ),
-				'<a href="https://docs.easydigitaldownloads.com/article/2410-paypal#migration" target="_blank">',
+				__( 'A new, improved PayPal experience is now available in CommerceStore. You can learn more about the new integration in %1$sour documentation%2$s.', 'commercestore' ),
+				'<a href="https://docs.commercestore.com/article/2410-paypal#migration" target="_blank">',
 				'</a>'
 			), array( 'a' => array( 'href' => true, 'target' => true ) ) );
 			?>
 		</p>
 		<p>
-			<a href="<?php echo esc_url( $setup_url ); ?>" class="button button-primary"><?php esc_html_e( 'Activate the New PayPal', 'easy-digital-downloads' ); ?></a>
-			<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button"><?php esc_html_e( 'Dismiss Notice', 'easy-digital-downloads' ); ?></a>
+			<a href="<?php echo esc_url( $setup_url ); ?>" class="button button-primary"><?php esc_html_e( 'Activate the New PayPal', 'commercestore' ); ?></a>
+			<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button"><?php esc_html_e( 'Dismiss Notice', 'commercestore' ); ?></a>
 		</p>
 	</div>
 	<?php

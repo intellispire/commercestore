@@ -2,21 +2,21 @@
 /**
  * Log Meta Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Tables
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Tables;
+namespace CS\Database\Tables;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 /**
- * Setup the global "edd_logs_api_requestmeta" database table
+ * Setup the global "cs_logs_api_requestmeta" database table
  *
  * @since 3.0
  */
@@ -50,11 +50,11 @@ final class Logs_Api_Request_Meta extends Table {
 	protected function set_schema() {
 		$max_index_length = 191;
 		$this->schema     = "meta_id bigint(20) unsigned NOT NULL auto_increment,
-			edd_logs_api_request_id bigint(20) unsigned NOT NULL default '0',
+			cs_logs_api_request_id bigint(20) unsigned NOT NULL default '0',
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext DEFAULT NULL,
 			PRIMARY KEY (meta_id),
-			KEY edd_logs_api_request_id (edd_logs_api_request_id),
+			KEY cs_logs_api_request_id (cs_logs_api_request_id),
 			KEY meta_key (meta_key({$max_index_length}))";
 	}
 }

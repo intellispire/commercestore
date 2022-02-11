@@ -1,8 +1,8 @@
 <?php
 
-namespace EDD\Admin\Extensions;
+namespace CS\Admin\Extensions;
 
-use \EDD\Admin\Pass_Manager;
+use \CS\Admin\Pass_Manager;
 
 class Extension_Manager {
 
@@ -35,8 +35,8 @@ class Extension_Manager {
 		}
 		$this->pass_manager = new Pass_Manager();
 
-		add_action( 'wp_ajax_edd_activate_extension', array( $this, 'activate' ) );
-		add_action( 'wp_ajax_edd_install_extension', array( $this, 'install' ) );
+		add_action( 'wp_ajax_cs_activate_extension', array( $this, 'activate' ) );
+		add_action( 'wp_ajax_cs_install_extension', array( $this, 'install' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 	}
 
@@ -47,26 +47,26 @@ class Extension_Manager {
 	 * @return void
 	 */
 	public function register_assets() {
-		if ( wp_script_is( 'edd-extension-manager', 'registered' ) ) {
+		if ( wp_script_is( 'cs-extension-manager', 'registered' ) ) {
 			return;
 		}
 		$minify = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_register_style( 'edd-extension-manager', EDD_PLUGIN_URL . "assets/css/edd-admin-extension-manager.min.css", array(), EDD_VERSION );
-		wp_register_script( 'edd-extension-manager', EDD_PLUGIN_URL . "assets/js/edd-admin-extension-manager.js", array( 'jquery' ), EDD_VERSION, true );
+		wp_register_style( 'cs-extension-manager', CS_PLUGIN_URL . "assets/css/cs-admin-extension-manager.min.css", array(), CS_VERSION );
+		wp_register_script( 'cs-extension-manager', CS_PLUGIN_URL . "assets/js/cs-admin-extension-manager.js", array( 'jquery' ), CS_VERSION, true );
 		wp_localize_script(
-			'edd-extension-manager',
-			'EDDExtensionManager',
+			'cs-extension-manager',
+			'CSExtensionManager',
 			array(
-				'activating'               => __( 'Activating', 'easy-digital-downloads' ),
-				'installing'               => __( 'Installing', 'easy-digital-downloads' ),
-				'plugin_install_failed'    => __( 'Could not install the plugin. Please download and install it manually via Plugins > Add New.', 'easy-digital-downloads' ),
+				'activating'               => __( 'Activating', 'commercestore' ),
+				'installing'               => __( 'Installing', 'commercestore' ),
+				'plugin_install_failed'    => __( 'Could not install the plugin. Please download and install it manually via Plugins > Add New.', 'commercestore' ),
 				'extension_install_failed' => sprintf(
 					/* translators: 1. opening anchor tag, do not translate; 2. closing anchor tag, do not translate */
-					__( 'Could not install the extension. Please %1$sdownload it from your account%2$s and install it manually.', 'easy-digital-downloads' ),
-					'<a href="https://easydigitaldownloads.com/your-account/" target="_blank" rel="noopener noreferrer">',
+					__( 'Could not install the extension. Please %1$sdownload it from your account%2$s and install it manually.', 'commercestore' ),
+					'<a href="https://commercestore.com/your-account/" target="_blank" rel="noopener noreferrer">',
 					'</a>'
 				),
-				'extension_manager_nonce'  => wp_create_nonce( 'edd_extensionmanager' ),
+				'extension_manager_nonce'  => wp_create_nonce( 'cs_extensionmanager' ),
 			)
 		);
 	}
@@ -78,8 +78,8 @@ class Extension_Manager {
 	 * @return void
 	 */
 	public function enqueue() {
-		wp_enqueue_style( 'edd-extension-manager' );
-		wp_enqueue_script( 'edd-extension-manager' );
+		wp_enqueue_style( 'cs-extension-manager' );
+		wp_enqueue_script( 'cs-extension-manager' );
 	}
 
 	/**
@@ -99,18 +99,18 @@ class Extension_Manager {
 		}
 		?>
 		<div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $this->get_card_classes( $product ) ) ) ); ?>">
-			<h3 class="edd-extension-manager__title"><?php echo esc_html( $product->title ); ?></h3>
-			<div class="edd-extension-manager__body">
+			<h3 class="cs-extension-manager__title"><?php echo esc_html( $product->title ); ?></h3>
+			<div class="cs-extension-manager__body">
 				<?php if ( ! empty( $product->image ) ) : ?>
-					<div class="edd-extension-manager__image">
+					<div class="cs-extension-manager__image">
 						<img alt="" src="<?php echo esc_url( $product->image ); ?>" />
 					</div>
 				<?php endif; ?>
 				<?php if ( ! empty( $product->description ) ) : ?>
-					<div class="edd-extension-manager__description"><?php echo wp_kses_post( wpautop( $product->description ) ); ?></div>
+					<div class="cs-extension-manager__description"><?php echo wp_kses_post( wpautop( $product->description ) ); ?></div>
 				<?php endif; ?>
 				<?php if ( ! empty( $product->features ) && is_array( $product->features ) ) : ?>
-					<div class="edd-extension-manager__features">
+					<div class="cs-extension-manager__features">
 						<ul>
 						<?php foreach ( $product->features as $feature ) : ?>
 							<li><span class="dashicons dashicons-yes"></span><?php echo esc_html( $feature ); ?></li>
@@ -118,17 +118,17 @@ class Extension_Manager {
 						</ul>
 					</div>
 				<?php endif; ?>
-				<div class="edd-extension-manager__group">
+				<div class="cs-extension-manager__group">
 					<?php
 					if ( ! empty( $product->basename ) && ! $this->is_plugin_active( $product->basename ) ) {
 						?>
-						<div class="edd-extension-manager__step">
+						<div class="cs-extension-manager__step">
 							<?php $this->button( $inactive_parameters ); ?>
 						</div>
 						<?php
 					}
 					?>
-					<div class="edd-extension-manager__step">
+					<div class="cs-extension-manager__step">
 						<?php $this->link( $active_parameters ); ?>
 					</div>
 				</div>
@@ -145,7 +145,7 @@ class Extension_Manager {
 	 * @return array The array of CSS classes.
 	 */
 	private function get_card_classes( $product ) {
-		$base_class   = 'edd-extension-manager__card';
+		$base_class   = 'cs-extension-manager__card';
 		$card_classes = array(
 			$base_class,
 		);
@@ -190,7 +190,7 @@ class Extension_Manager {
 		}
 		?>
 		<button
-			class="button <?php echo esc_attr( $args['button_class'] ); ?> edd-extension-manager__action"
+			class="button <?php echo esc_attr( $args['button_class'] ); ?> cs-extension-manager__action"
 			<?php
 			foreach ( $args as $key => $attribute ) {
 				if ( empty( $attribute ) || in_array( $key, array( 'button_class', 'button_text' ), true ) ) {
@@ -243,9 +243,9 @@ class Extension_Manager {
 	public function install() {
 
 		// Run a security check.
-		check_ajax_referer( 'edd_extensionmanager', 'nonce', true );
+		check_ajax_referer( 'cs_extensionmanager', 'nonce', true );
 
-		$generic_error = esc_html__( 'There was an error while performing your request.', 'easy-digital-downloads' );
+		$generic_error = esc_html__( 'There was an error while performing your request.', 'commercestore' );
 		$type          = ! empty( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : '';
 		$required_pass = ! empty( $_POST['pass'] ) ? sanitize_text_field( $_POST['pass'] ) : '';
 		$result        = array(
@@ -262,11 +262,11 @@ class Extension_Manager {
 		}
 
 		$result['message'] = 'plugin' === $type
-			? __( 'Could not install the plugin. Please download and install it manually via Plugins > Add New.', 'easy-digital-downloads' )
+			? __( 'Could not install the plugin. Please download and install it manually via Plugins > Add New.', 'commercestore' )
 			: sprintf(
 				/* translators: 1. opening anchor tag, do not translate; 2. closing anchor tag, do not translate */
-				__( 'Could not install the extension. Please %1$sdownload it from your account%2$s and install it manually.', 'easy-digital-downloads' ),
-				'<a href="https://easydigitaldownloads.com/your-account/" target="_blank" rel="noopener noreferrer">',
+				__( 'Could not install the extension. Please %1$sdownload it from your account%2$s and install it manually.', 'commercestore' ),
+				'<a href="https://commercestore.com/your-account/" target="_blank" rel="noopener noreferrer">',
 				'</a>'
 			);
 
@@ -276,14 +276,14 @@ class Extension_Manager {
 		}
 
 		// Set the current screen to avoid undefined notices.
-		set_current_screen( 'download_page_edd-settings' );
+		set_current_screen( 'download_page_cs-settings' );
 
 		// Prepare variables.
 		$url = esc_url_raw(
 			add_query_arg(
 				array(
 					'post_type' => 'download',
-					'page'      => 'edd-addons',
+					'page'      => 'cs-addons',
 				),
 				admin_url( 'edit.php' )
 			)
@@ -307,15 +307,15 @@ class Extension_Manager {
 		/*
 		 * We do not need any extra credentials if we have gotten this far, so let's install the plugin.
 		 */
-		require_once EDD_PLUGIN_DIR . 'includes/admin/installers/class-plugin-silent-upgrader.php';
-		require_once EDD_PLUGIN_DIR . 'includes/admin/installers/class-plugin-silent-upgrader-skin.php';
-		require_once EDD_PLUGIN_DIR . 'includes/admin/installers/class-install-skin.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/installers/class-plugin-silent-upgrader.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/installers/class-plugin-silent-upgrader-skin.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/installers/class-install-skin.php';
 
 		// Do not allow WordPress to search/download translations, as this will break JS output.
 		remove_action( 'upgrader_process_complete', array( 'Language_Pack_Upgrader', 'async_upgrade' ), 20 );
 
 		// Create the plugin upgrader with our custom skin.
-		$installer = new \EDD\Admin\Installers\PluginSilentUpgrader( new \EDD\Admin\Installers\Install_Skin() );
+		$installer = new \CS\Admin\Installers\PluginSilentUpgrader( new \CS\Admin\Installers\Install_Skin() );
 
 		// Error check.
 		if ( ! method_exists( $installer, 'install' ) || empty( $plugin ) ) {
@@ -331,7 +331,7 @@ class Extension_Manager {
 
 		// Check for permissions.
 		if ( ! current_user_can( 'activate_plugins' ) ) {
-			$result['message'] = 'plugin' === $type ? esc_html__( 'Plugin installed.', 'easy-digital-downloads' ) : esc_html__( 'Extension installed.', 'easy-digital-downloads' );
+			$result['message'] = 'plugin' === $type ? esc_html__( 'Plugin installed.', 'commercestore' ) : esc_html__( 'Extension installed.', 'commercestore' );
 
 			wp_send_json_error( $result );
 		}
@@ -348,13 +348,13 @@ class Extension_Manager {
 	public function activate( $plugin_basename = '' ) {
 
 		$result = array(
-			'message'      => __( 'There was an error while performing your request.', 'easy-digital-downloads' ),
+			'message'      => __( 'There was an error while performing your request.', 'commercestore' ),
 			'is_activated' => false,
 		);
 
 		// Check for permissions.
-		if ( ! check_ajax_referer( 'edd_extensionmanager', 'nonce', false ) || ! current_user_can( 'activate_plugins' ) ) {
-			$result['message'] = __( 'Plugin activation is not available for you on this site.', 'easy-digital-downloads' );
+		if ( ! check_ajax_referer( 'cs_extensionmanager', 'nonce', false ) || ! current_user_can( 'activate_plugins' ) ) {
+			$result['message'] = __( 'Plugin activation is not available for you on this site.', 'commercestore' );
 			wp_send_json_error( $result );
 		}
 
@@ -371,7 +371,7 @@ class Extension_Manager {
 		}
 		$result = array(
 			/* translators: "extension" or "plugin" as defined by $type */
-			'message'      => sprintf( __( 'Could not activate the %s.', 'easy-digital-downloads' ), esc_html( $type ) ),
+			'message'      => sprintf( __( 'Could not activate the %s.', 'commercestore' ), esc_html( $type ) ),
 			'is_activated' => false,
 		);
 		if ( empty( $plugin_basename ) || empty( $type ) ) {
@@ -386,9 +386,9 @@ class Extension_Manager {
 		if ( ! is_wp_error( $activated ) ) {
 
 			if ( $already_installed ) {
-				$message = 'plugin' === $type ? esc_html__( 'Plugin activated.', 'easy-digital-downloads' ) : esc_html__( 'Extension activated.', 'easy-digital-downloads' );
+				$message = 'plugin' === $type ? esc_html__( 'Plugin activated.', 'commercestore' ) : esc_html__( 'Extension activated.', 'commercestore' );
 			} else {
-				$message = 'plugin' === $type ? esc_html__( 'Plugin installed & activated.', 'easy-digital-downloads' ) : esc_html__( 'Extension installed & activated.', 'easy-digital-downloads' );
+				$message = 'plugin' === $type ? esc_html__( 'Plugin installed & activated.', 'commercestore' ) : esc_html__( 'Extension installed & activated.', 'commercestore' );
 			}
 			$result['is_activated'] = true;
 			$result['message']      = $message;
@@ -416,7 +416,7 @@ class Extension_Manager {
 		}
 
 		// Determine whether file modifications are allowed.
-		if ( ! wp_is_file_mod_allowed( 'edd_can_install' ) ) {
+		if ( ! wp_is_file_mod_allowed( 'cs_can_install' ) ) {
 			return false;
 		}
 

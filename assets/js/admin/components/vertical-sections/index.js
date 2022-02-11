@@ -1,6 +1,6 @@
 jQuery( document ).ready( function( $ ) {
 
-	const sectionSelector = '.edd-vertical-sections.use-js';
+	const sectionSelector = '.cs-vertical-sections.use-js';
 	// If the current screen doesn't have JS sections, return.
 	if ( 0 === $( sectionSelector ).length ) {
 		return;
@@ -10,7 +10,7 @@ jQuery( document ).ready( function( $ ) {
 	$( `${ sectionSelector } .section-content` ).hide();
 
 	const hash = window.location.hash;
-	if ( hash && hash.includes( 'edd_' ) ) {
+	if ( hash && hash.includes( 'cs_' ) ) {
 		// Show the section content related to the URL.
 		$( sectionSelector ).find( hash ).show();
 
@@ -37,7 +37,7 @@ jQuery( document ).ready( function( $ ) {
 			// Get the `href` attribute of the item.
 			const them = $( this ),
 				href = them.attr( 'href' ),
-				rents = them.parents( '.edd-vertical-sections' );
+				rents = them.parents( '.cs-vertical-sections' );
 
 			// Hide all section content.
 			rents.find( '.section-content' ).hide();

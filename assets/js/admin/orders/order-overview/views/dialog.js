@@ -29,7 +29,7 @@ export const Dialog = Base.extend( {
 				at: 'center center-25%',
 			},
 			classes: {
-				'ui-dialog': 'edd-dialog',
+				'ui-dialog': 'cs-dialog',
 			},
 			closeText: eddAdminOrderOverview.i18n.closeText,
 			width: '350px',

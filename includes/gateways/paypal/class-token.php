@@ -2,13 +2,13 @@
 /**
  * PayPal REST API Token
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
 class Token {
 
@@ -32,7 +32,7 @@ class Token {
 		}
 
 		if ( ! $this->is_valid( $token_object ) ) {
-			throw new \RuntimeException( __( 'Invalid token.', 'easy-digital-downloads' ) );
+			throw new \RuntimeException( __( 'Invalid token.', 'commercestore' ) );
 		}
 
 		$this->token_object = $token_object;

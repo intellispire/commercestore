@@ -22,12 +22,12 @@ export const FormAddOrderItem = Dialog.extend( {
 	/**
 	 * @since 3.0
 	 */
-	el: '#edd-admin-order-add-item-dialog',
+	el: '#cs-admin-order-add-item-dialog',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-form-add-order-item' ),
+	template: wp.template( 'cs-admin-order-form-add-order-item' ),
 
 	/**
 	 * "Add Item" view.
@@ -281,7 +281,7 @@ export const FormAddOrderItem = Dialog.extend( {
 
 		this.closeDialog();
 
-		const button = $( '[href="#edd_general_address"]' );
+		const button = $( '[href="#cs_general_address"]' );
 
 		if ( ! button ) {
 			return;
@@ -289,7 +289,7 @@ export const FormAddOrderItem = Dialog.extend( {
 
 		button.trigger( 'click' );
 
-		$( '#edd_order_address_country' ).trigger( 'focus' );
+		$( '#cs_order_address_country' ).trigger( 'focus' );
 	},
 
 	/**

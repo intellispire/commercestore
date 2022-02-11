@@ -2,9 +2,9 @@
 /**
  * Thickbox
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -18,21 +18,21 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0
  * @return string "Insert Download" Button
  */
-function edd_media_button() {
+function cs_media_button() {
 
 	// Bail if not a post new/edit screen
-	if ( ! edd_is_insertable_admin_page() ) {
+	if ( ! cs_is_insertable_admin_page() ) {
 		return;
 	}
 
 	// Setup the icon
-	$icon = '<span class="wp-media-buttons-icon dashicons dashicons-download" id="edd-media-button"></span>';
-	$text = sprintf( __( 'Insert %s', 'easy-digital-downloads' ), edd_get_label_singular() );
+	$icon = '<span class="wp-media-buttons-icon dashicons dashicons-download" id="cs-media-button"></span>';
+	$text = sprintf( __( 'Insert %s', 'commercestore' ), cs_get_label_singular() );
 
 	// Output the thickbox button
-	echo '<a href="#TB_inline?&width=600&height=300&inlineId=choose-download" name="' . esc_attr( $text ) . '" class="thickbox button edd-thickbox">' . $icon . esc_html( $text ) . '</a>';
+	echo '<a href="#TB_inline?&width=600&height=300&inlineId=choose-download" name="' . esc_attr( $text ) . '" class="thickbox button cs-thickbox">' . $icon . esc_html( $text ) . '</a>';
 }
-add_action( 'media_buttons', 'edd_media_button', 11 );
+add_action( 'media_buttons', 'cs_media_button', 11 );
 
 /**
  * Admin Footer For Thickbox
@@ -45,21 +45,21 @@ add_action( 'media_buttons', 'edd_media_button', 11 );
  * @global $typenow
  * @return void
  */
-function edd_admin_footer_for_thickbox() {
+function cs_admin_footer_for_thickbox() {
 
 	// Bail if not a post new/edit screen
-	if ( ! edd_is_insertable_admin_page() ) {
+	if ( ! cs_is_insertable_admin_page() ) {
 		return;
 	}
 
 	// Styles
 	$styles = array(
-		'text link' => esc_html__( 'Link',   'easy-digital-downloads' ),
-		'button'    => esc_html__( 'Button', 'easy-digital-downloads' )
+		'text link' => esc_html__( 'Link',   'commercestore' ),
+		'button'    => esc_html__( 'Button', 'commercestore' )
 	);
 
 	// Colors
-	$colors = edd_get_button_colors();
+	$colors = cs_get_button_colors();
 
 	?>
 
@@ -70,14 +70,14 @@ function edd_admin_footer_for_thickbox() {
 		 */
 		function insertDownload() {
 			var id     = jQuery('#products').val(),
-				direct = jQuery('#select-edd-direct').val(),
-				style  = jQuery('#select-edd-style').val(),
-				color  = jQuery('#select-edd-color').is(':visible') ? jQuery( '#select-edd-color').val() : '',
-				text   = jQuery('#edd-text').val() || '<?php _e( 'Purchase', 'easy-digital-downloads' ); ?>';
+				direct = jQuery('#select-cs-direct').val(),
+				style  = jQuery('#select-cs-style').val(),
+				color  = jQuery('#select-cs-color').is(':visible') ? jQuery( '#select-cs-color').val() : '',
+				text   = jQuery('#cs-text').val() || '<?php _e( 'Purchase', 'commercestore' ); ?>';
 
 			// Return early if no download is selected
 			if ( '' === id ) {
-				alert('<?php _e( 'You must choose a download', 'easy-digital-downloads' ); ?>');
+				alert('<?php _e( 'You must choose a download', 'commercestore' ); ?>');
 				return;
 			}
 
@@ -92,10 +92,10 @@ function edd_admin_footer_for_thickbox() {
 		}
 
 		jQuery(document).ready(function ($) {
-			$('#select-edd-style').change(function () {
+			$('#select-cs-style').change(function () {
 				( $(this).val() === 'button' )
-					? $('#edd-color-choice').show()
-					: $('#edd-color-choice').hide();
+					? $('#cs-color-choice').show()
+					: $('#cs-color-choice').hide();
 			});
 		});
 	</script>
@@ -107,70 +107,70 @@ function edd_admin_footer_for_thickbox() {
 					<tbody>
 						<tr>
 							<th scope="row" valign="top">
-								<?php echo edd_get_label_singular(); ?>
+								<?php echo cs_get_label_singular(); ?>
 							</th>
 							<td>
-								<?php echo EDD()->html->product_dropdown( array( 'chosen' => true ) ); ?>
-								<p class="description"><?php esc_html_e( 'Choose an existing product', 'easy-digital-downloads' ); ?></p>
+								<?php echo CS()->html->product_dropdown( array( 'chosen' => true ) ); ?>
+								<p class="description"><?php esc_html_e( 'Choose an existing product', 'commercestore' ); ?></p>
 							</td>
 						</tr>
 
-						<?php if ( edd_shop_supports_buy_now() ) : ?>
+						<?php if ( cs_shop_supports_buy_now() ) : ?>
 							<tr>
 								<th scope="row" valign="top">
-									<?php esc_html_e( 'Behavior', 'easy-digital-downloads' ); ?>
+									<?php esc_html_e( 'Behavior', 'commercestore' ); ?>
 								</th>
 								<td>
-									<select id="select-edd-direct">
-										<option value="1"><?php _e( 'Add to Cart', 'easy-digital-downloads' ); ?></option>
-										<option value="2"><?php _e( 'Direct Link', 'easy-digital-downloads' ); ?></option>
+									<select id="select-cs-direct">
+										<option value="1"><?php _e( 'Add to Cart', 'commercestore' ); ?></option>
+										<option value="2"><?php _e( 'Direct Link', 'commercestore' ); ?></option>
 									</select>
-									<p class="description"><?php esc_html_e( 'How do you want this to work?', 'easy-digital-downloads' ); ?></p>
+									<p class="description"><?php esc_html_e( 'How do you want this to work?', 'commercestore' ); ?></p>
 								</td>
 							</tr>
 						<?php endif; ?>
 
 						<tr>
 							<th scope="row" valign="top">
-								<?php esc_html_e( 'Style', 'easy-digital-downloads' ); ?>
+								<?php esc_html_e( 'Style', 'commercestore' ); ?>
 							</th>
 							<td>
-								<select id="select-edd-style">
+								<select id="select-cs-style">
 									<?php
 										foreach ( $styles as $style => $label ) {
 											echo '<option value="' . esc_attr( $style ) . '">' . esc_html( $label ) . '</option>';
 										}
 									?>
 								</select>
-								<p class="description"><?php esc_html_e( 'Choose between a Button or a Link', 'easy-digital-downloads' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Choose between a Button or a Link', 'commercestore' ); ?></p>
 							</td>
 						</tr>
 
 						<?php if ( ! empty( $colors ) ) : ?>
-							<tr id="edd-color-choice" style="display: none;">
+							<tr id="cs-color-choice" style="display: none;">
 								<th scope="row" valign="top">
-									<?php esc_html_e( 'Color', 'easy-digital-downloads' ); ?>
+									<?php esc_html_e( 'Color', 'commercestore' ); ?>
 								</th>
 								<td>
-									<select id="select-edd-color">
+									<select id="select-cs-color">
 										<?php
 											foreach ( $colors as $key => $color ) {
 												echo '<option value="' . str_replace( ' ', '_', $key ) . '">' . $color['label'] . '</option>';
 											}
 										?>
 									</select>
-									<p class="description"><?php esc_html_e( 'Choose the button color', 'easy-digital-downloads' ); ?></p>
+									<p class="description"><?php esc_html_e( 'Choose the button color', 'commercestore' ); ?></p>
 								</td>
 							</tr>
 						<?php endif; ?>
 
 						<tr>
 							<th scope="row" valign="top">
-								<?php esc_html_e( 'Text', 'easy-digital-downloads' ); ?>
+								<?php esc_html_e( 'Text', 'commercestore' ); ?>
 							</th>
 							<td>
-								<input type="text" class="regular-text" id="edd-text" value="" placeholder="<?php _e( 'View Product', 'easy-digital-downloads' ); ?>"/>
-								<p class="description"><?php esc_html_e( 'This is the text inside the button or link', 'easy-digital-downloads' ); ?></p>
+								<input type="text" class="regular-text" id="cs-text" value="" placeholder="<?php _e( 'View Product', 'commercestore' ); ?>"/>
+								<p class="description"><?php esc_html_e( 'This is the text inside the button or link', 'commercestore' ); ?></p>
 							</td>
 						</tr>
 					</tbody>
@@ -179,8 +179,8 @@ function edd_admin_footer_for_thickbox() {
 
 			<div class="submit-wrapper">
 				<div>
-					<a id="edd-cancel-download-insert" class="button" onclick="tb_remove();"><?php _e( 'Cancel', 'easy-digital-downloads' ); ?></a>
-					<input type="button" id="edd-insert-download" class="button-primary" value="<?php echo sprintf( __( 'Insert %s', 'easy-digital-downloads' ), edd_get_label_singular() ); ?>" onclick="insertDownload();" />
+					<a id="cs-cancel-download-insert" class="button" onclick="tb_remove();"><?php _e( 'Cancel', 'commercestore' ); ?></a>
+					<input type="button" id="cs-insert-download" class="button-primary" value="<?php echo sprintf( __( 'Insert %s', 'commercestore' ), cs_get_label_singular() ); ?>" onclick="insertDownload();" />
 				</div>
 			</div>
 		</div>
@@ -188,4 +188,4 @@ function edd_admin_footer_for_thickbox() {
 
 <?php
 }
-add_action( 'admin_footer', 'edd_admin_footer_for_thickbox' );
+add_action( 'admin_footer', 'cs_admin_footer_for_thickbox' );

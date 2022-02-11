@@ -2,18 +2,18 @@
 /**
  * PayPal Commerce Refunds
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
-use EDD\Gateways\PayPal\Exceptions\API_Exception;
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
-use EDD\Orders\Order;
+use CS\Gateways\PayPal\Exceptions\API_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Orders\Order;
 
 /**
  * Shows a checkbox to automatically refund payments in PayPal.
@@ -22,7 +22,7 @@ use EDD\Orders\Order;
  *
  * @since 3.0
  */
-add_action( 'edd_after_submit_refund_table', function( Order $order ) {
+add_action( 'cs_after_submit_refund_table', function( Order $order ) {
 	if ( 'paypal_commerce' !== $order->gateway ) {
 		return;
 	}
@@ -36,11 +36,11 @@ add_action( 'edd_after_submit_refund_table', function( Order $order ) {
 		return;
 	}
 	?>
-	<div class="edd-form-group edd-paypal-refund-transaction">
-		<div class="edd-form-group__control">
-			<input type="checkbox" id="edd-paypal-commerce-refund" name="edd-paypal-commerce-refund" class="edd-form-group__input" value="1">
-			<label for="edd-paypal-commerce-refund" class="edd-form-group__label">
-				<?php esc_html_e( 'Refund transaction in PayPal', 'easy-digital-downloads' ); ?>
+	<div class="cs-form-group cs-paypal-refund-transaction">
+		<div class="cs-form-group__control">
+			<input type="checkbox" id="cs-paypal-commerce-refund" name="cs-paypal-commerce-refund" class="cs-form-group__input" value="1">
+			<label for="cs-paypal-commerce-refund" class="cs-form-group__label">
+				<?php esc_html_e( 'Refund transaction in PayPal', 'commercestore' ); ?>
 			</label>
 		</div>
 	</div>
@@ -56,7 +56,7 @@ add_action( 'edd_after_submit_refund_table', function( Order $order ) {
  *
  * @since 3.0
  */
-add_action( 'edd_refund_order', function( $order_id, $refund_id, $all_refunded ) {
+add_action( 'cs_refund_order', function( $order_id, $refund_id, $all_refunded ) {
 	if ( ! current_user_can( 'edit_shop_payments', $order_id ) ) {
 		return;
 	}
@@ -65,7 +65,7 @@ add_action( 'edd_refund_order', function( $order_id, $refund_id, $all_refunded )
 		return;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 	if ( empty( $order->gateway ) || 'paypal_commerce' !== $order->gateway ) {
 		return;
 	}
@@ -73,18 +73,18 @@ add_action( 'edd_refund_order', function( $order_id, $refund_id, $all_refunded )
 	// Get our data out of the serialized string.
 	parse_str( $_POST['data'], $form_data );
 
-	if ( empty( $form_data['edd-paypal-commerce-refund'] ) ) {
-		edd_add_note( array(
+	if ( empty( $form_data['cs-paypal-commerce-refund'] ) ) {
+		cs_add_note( array(
 			'object_id'   => $order_id,
 			'object_type' => 'order',
 			'user_id'     => is_admin() ? get_current_user_id() : 0,
-			'content'     => __( 'Transaction not refunded in PayPal, as checkbox was not selected.', 'easy-digital-downloads' )
+			'content'     => __( 'Transaction not refunded in PayPal, as checkbox was not selected.', 'commercestore' )
 		) );
 
 		return;
 	}
 
-	$refund = edd_get_order( $refund_id );
+	$refund = cs_get_order( $refund_id );
 	if ( empty( $refund->total ) ) {
 		return;
 	}
@@ -92,19 +92,19 @@ add_action( 'edd_refund_order', function( $order_id, $refund_id, $all_refunded )
 	try {
 		refund_transaction( $order, $refund );
 	} catch ( \Exception $e ) {
-		edd_debug_log( sprintf(
+		cs_debug_log( sprintf(
 			'Failure when processing refund #%d. Message: %s',
 			$refund->id,
 			$e->getMessage()
 		), true );
 
-		edd_add_note( array(
+		cs_add_note( array(
 			'object_id'   => $order->id,
 			'object_type' => 'order',
 			'user_id'     => is_admin() ? get_current_user_id() : 0,
 			'content'     => sprintf(
 				/* Translators: %d - ID of the refund; %s - error message from PayPal */
-				__( 'Failure when processing PayPal refund #%d: %s', 'easy-digital-downloads' ),
+				__( 'Failure when processing PayPal refund #%d: %s', 'commercestore' ),
 				$refund->id,
 				$e->getMessage()
 			)
@@ -117,7 +117,7 @@ add_action( 'edd_refund_order', function( $order_id, $refund_id, $all_refunded )
  *
  * @link  https://developer.paypal.com/docs/api/payments/v2/#captures_refund
  *
- * @param \EDD_Payment|Order $payment_or_order
+ * @param \CS_Payment|Order $payment_or_order
  * @param Order|null         $refund_object
  *
  * @since 2.11
@@ -128,15 +128,15 @@ add_action( 'edd_refund_order', function( $order_id, $refund_id, $all_refunded )
 function refund_transaction( $payment_or_order, Order $refund_object = null ) {
 	/*
 	 * Internally we want to work with an Order object, but we also need
-	 * an EDD_Payment object for backwards compatibility in the hooks.
+	 * an CS_Payment object for backwards compatibility in the hooks.
 	 */
 	$order = $payment = false;
 	if ( $payment_or_order instanceof Order ) {
 		$order = $payment_or_order;
-		$payment = edd_get_payment( $order->id );
-	} elseif ( $payment_or_order instanceof \EDD_Payment ) {
+		$payment = cs_get_payment( $order->id );
+	} elseif ( $payment_or_order instanceof \CS_Payment ) {
 		$payment = $payment_or_order;
-		$order   = edd_get_order( $payment->ID );
+		$order   = cs_get_order( $payment->ID );
 	}
 
 	if ( empty( $order ) || ! $order instanceof Order ) {
@@ -146,7 +146,7 @@ function refund_transaction( $payment_or_order, Order $refund_object = null ) {
 	$transaction_id = $order->get_transaction_id();
 
 	if ( empty( $transaction_id ) ) {
-		throw new \Exception( __( 'Missing transaction ID.', 'easy-digital-downloads' ) );
+		throw new \Exception( __( 'Missing transaction ID.', 'commercestore' ) );
 	}
 
 	$mode = ( 'live' === $order->mode ) ? API::MODE_LIVE : API::MODE_SANDBOX;
@@ -172,7 +172,7 @@ function refund_transaction( $payment_or_order, Order $refund_object = null ) {
 	if ( 201 !== $api->last_response_code ) {
 		throw new API_Exception( sprintf(
 		/* Translators: %d - The HTTP response code; %s - Full API response from PayPal */
-			__( 'Unexpected response code: %d. Response: %s', 'easy-digital-downloads' ),
+			__( 'Unexpected response code: %d. Response: %s', 'commercestore' ),
 			$api->last_response_code,
 			json_encode( $response )
 		), $api->last_response_code );
@@ -181,27 +181,27 @@ function refund_transaction( $payment_or_order, Order $refund_object = null ) {
 	if ( empty( $response->status ) || 'COMPLETED' !== strtoupper( $response->status ) ) {
 		throw new API_Exception( sprintf(
 		/* Translators: %s - API response from PayPal */
-			__( 'Missing or unexpected refund status. Response: %s', 'easy-digital-downloads' ),
+			__( 'Missing or unexpected refund status. Response: %s', 'commercestore' ),
 			json_encode( $response )
 		) );
 	}
 
 	// At this point we can assume it was successful.
-	edd_update_order_meta( $order->id, '_edd_paypal_refunded', true );
+	cs_update_order_meta( $order->id, '_cs_paypal_refunded', true );
 
 	if ( ! empty( $response->id ) ) {
 		// Add a note to the original order, and, if provided, the new refund object.
 		if ( isset( $response->amount->value ) ) {
 			$note_message = sprintf(
 				/* Translators: %1$s - amount refunded; %$2$s - transaction ID. */
-				__( '%1$s refunded in PayPal. Refund transaction ID: %2$s', 'easy-digital-downloads' ),
-				edd_currency_filter( edd_format_amount( $response->amount->value ), $order->currency ),
+				__( '%1$s refunded in PayPal. Refund transaction ID: %2$s', 'commercestore' ),
+				cs_currency_filter( cs_format_amount( $response->amount->value ), $order->currency ),
 				esc_html( $response->id )
 			);
 		} else {
 			$note_message = sprintf(
 				/* Translators: %s - ID of the refund in PayPal */
-				__( 'Successfully refunded in PayPal. Refund transaction ID: %s', 'easy-digital-downloads' ),
+				__( 'Successfully refunded in PayPal. Refund transaction ID: %s', 'commercestore' ),
 				esc_html( $response->id )
 			);
 		}
@@ -212,7 +212,7 @@ function refund_transaction( $payment_or_order, Order $refund_object = null ) {
 		}
 
 		foreach ( $note_object_ids as $note_object_id ) {
-			edd_add_note( array(
+			cs_add_note( array(
 				'object_id'   => $note_object_id,
 				'object_type' => 'order',
 				'user_id'     => is_admin() ? get_current_user_id() : 0,
@@ -222,13 +222,13 @@ function refund_transaction( $payment_or_order, Order $refund_object = null ) {
 
 		// Add a negative transaction.
 		if ( $refund_object instanceof Order && isset( $response->amount->value ) ) {
-			edd_add_order_transaction( array(
+			cs_add_order_transaction( array(
 				'object_id'      => $refund_object->id,
 				'object_type'    => 'order',
 				'transaction_id' => sanitize_text_field( $response->id ),
 				'gateway'        => 'paypal_commerce',
 				'status'         => 'complete',
-				'total'          => edd_negate_amount( $response->amount->value ),
+				'total'          => cs_negate_amount( $response->amount->value ),
 			) );
 		}
 	}
@@ -236,7 +236,7 @@ function refund_transaction( $payment_or_order, Order $refund_object = null ) {
 	/**
 	 * Triggers after a successful refund.
 	 *
-	 * @param \EDD_Payment $payment
+	 * @param \CS_Payment $payment
 	 */
-	do_action( 'edd_paypal_refund_purchase', $payment );
+	do_action( 'cs_paypal_refund_purchase', $payment );
 }

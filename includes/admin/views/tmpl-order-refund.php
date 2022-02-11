@@ -2,15 +2,15 @@
 /**
  * Order Overview: Refunds
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-$view_url = edd_get_admin_url( array(
-	'page' => 'edd-payment-history',
+$view_url = cs_get_admin_url( array(
+	'page' => 'cs-payment-history',
 	'view' => 'view-refund-details',
 ) );
 ?>
@@ -22,7 +22,7 @@ $view_url = edd_get_admin_url( array(
 	echo wp_kses(
 		sprintf(
 			/* translators: %s Refund number, linked to Refund record. */
-			__( 'Refund: %s', 'easy-digital-downloads' ),
+			__( 'Refund: %s', 'commercestore' ),
 			'<a href="' . esc_url( $view_url ) . '&id={{ data.id }}">{{ data.number }}</a>'
 		),
 		array(
@@ -36,6 +36,6 @@ $view_url = edd_get_admin_url( array(
 	<small>{{ data.dateCreated }}</small>
 </td>
 
-<td class="column-right" data-colname="<?php esc_html_e( 'Total', 'easy-digital-downloads' ); ?>">
+<td class="column-right" data-colname="<?php esc_html_e( 'Total', 'commercestore' ); ?>">
 	{{ data.totalCurrency }}
 </td>

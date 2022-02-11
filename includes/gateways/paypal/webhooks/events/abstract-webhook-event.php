@@ -2,19 +2,19 @@
 /**
  * Webhook Event Handler
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal\Webhooks\Events
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal\Webhooks\Events;
+namespace CS\Gateways\PayPal\Webhooks\Events;
 
-use EDD\Gateways\PayPal\API;
-use EDD\Gateways\PayPal\Exceptions\API_Exception;
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
-use EDD\Orders\Order;
+use CS\Gateways\PayPal\API;
+use CS\Gateways\PayPal\Exceptions\API_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Orders\Order;
 
 abstract class Webhook_Event {
 
@@ -99,12 +99,12 @@ abstract class Webhook_Event {
 		$order = false;
 
 		if ( ! empty( $resource->custom_id ) && is_numeric( $resource->custom_id ) ) {
-			$order = edd_get_order( $resource->custom_id );
+			$order = cs_get_order( $resource->custom_id );
 		}
 
 		if ( empty( $order ) && ! empty( $resource->id ) ) {
-			$order_id = edd_get_order_id_from_transaction_id( $resource->id );
-			$order    = $order_id ? edd_get_order( $order_id ) : false;
+			$order_id = cs_get_order_id_from_transaction_id( $resource->id );
+			$order    = $order_id ? cs_get_order( $order_id ) : false;
 		}
 
 		if ( ! $order instanceof Order ) {
@@ -113,7 +113,7 @@ abstract class Webhook_Event {
 
 		/*
 		 * Verify the transaction ID. This covers us in case we fetched the order via `custom_id`, but
-		 * it wasn't actually an EDD-initiated payment.
+		 * it wasn't actually an CS-initiated payment.
 		 */
 		$order_transaction_id = $order->get_transaction_id();
 		if ( $order_transaction_id !== $resource->id ) {
@@ -138,7 +138,7 @@ abstract class Webhook_Event {
 	 * @throws \Exception
 	 */
 	protected function get_order_from_refund() {
-		edd_debug_log( sprintf(
+		cs_debug_log( sprintf(
 			'PayPal Commerce Webhook - get_payment_from_capture_object() - Resource type: %s; Resource ID: %s',
 			$this->request->get_param( 'resource_type' ),
 			$this->event->resource->id
@@ -179,13 +179,13 @@ abstract class Webhook_Event {
 	}
 
 	/**
-	 * Retrieves an EDD_Payment record from a capture event.
+	 * Retrieves an CS_Payment record from a capture event.
 	 *
 	 * @since      2.11
 	 * @deprecated 3.0 In favour of `get_order_from_capture()`
 	 * @see        Webhook_Event::get_order_from_capture()
 	 *
-	 * @return \EDD_Payment
+	 * @return \CS_Payment
 	 * @throws \Exception
 	 */
 	protected function get_payment_from_capture() {
@@ -201,7 +201,7 @@ abstract class Webhook_Event {
 	}
 
 	/**
-	 * Retrieves an EDD_Payment record from a capture object.
+	 * Retrieves an CS_Payment record from a capture object.
 	 *
 	 * @param object $resource
 	 *
@@ -209,28 +209,28 @@ abstract class Webhook_Event {
 	 * @deprecated 3.0 In favour of `get_order_from_capture_object()`
 	 * @see        Webhook_Event::get_order_from_capture_object
 	 *
-	 * @return \EDD_Payment
+	 * @return \CS_Payment
 	 * @throws \Exception
 	 */
 	protected function get_payment_from_capture_object( $resource ) {
 		$payment = false;
 
 		if ( ! empty( $resource->custom_id ) && is_numeric( $resource->custom_id ) ) {
-			$payment = edd_get_payment( $resource->custom_id );
+			$payment = cs_get_payment( $resource->custom_id );
 		}
 
 		if ( empty( $payment ) && ! empty( $resource->id ) ) {
-			$payment_id = edd_get_purchase_id_by_transaction_id( $resource->id );
-			$payment    = $payment_id ? edd_get_payment( $payment_id ) : false;
+			$payment_id = cs_get_purchase_id_by_transaction_id( $resource->id );
+			$payment    = $payment_id ? cs_get_payment( $payment_id ) : false;
 		}
 
-		if ( ! $payment instanceof \EDD_Payment ) {
+		if ( ! $payment instanceof \CS_Payment ) {
 			throw new \Exception( 'get_payment_from_capture_object() - Failed to locate payment.', 200 );
 		}
 
 		/*
 		 * Verify the transaction ID. This covers us in case we fetched the payment via `custom_id`, but
-		 * it wasn't actually an EDD-initiated payment.
+		 * it wasn't actually an CS-initiated payment.
 		 */
 		if ( $payment->transaction_id !== $resource->id ) {
 			throw new \Exception( sprintf( 'get_payment_from_capture_object() - Transaction ID mismatch. Expected: %s; Actual: %s', $payment->transaction_id, $resource->id ), 200 );
@@ -240,19 +240,19 @@ abstract class Webhook_Event {
 	}
 
 	/**
-	 * Retrieves an EDD_Payment record from a refund event.
+	 * Retrieves an CS_Payment record from a refund event.
 	 *
 	 * @since      2.11
 	 * @deprecated 3.0 In favour of `get_order_from_refund`
 	 * @see        Webhook_Event::get_order_from_refund
 	 *
-	 * @return \EDD_Payment
+	 * @return \CS_Payment
 	 * @throws API_Exception
 	 * @throws Authentication_Exception
 	 * @throws \Exception
 	 */
 	protected function get_payment_from_refund() {
-		edd_debug_log( sprintf( 'PayPal Commerce Webhook - get_payment_from_refund() - Resource type: %s; Resource ID: %s', $this->request->get_param( 'resource_type' ), $this->event->resource->id ) );
+		cs_debug_log( sprintf( 'PayPal Commerce Webhook - get_payment_from_refund() - Resource type: %s; Resource ID: %s', $this->request->get_param( 'resource_type' ), $this->event->resource->id ) );
 
 		if ( empty( $this->event->resource->links ) || ! is_array( $this->event->resource->links ) ) {
 			throw new \Exception( 'Missing resources.', 200 );

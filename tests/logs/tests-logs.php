@@ -1,16 +1,16 @@
 <?php
-namespace EDD\Logs;
+namespace CS\Logs;
 
 /**
  * Logs DB Tests
  *
- * @group edd_logs_db
+ * @group cs_logs_db
  * @group database
- * @group edd_logs
+ * @group cs_logs
  *
- * @coversDefaultClass \EDD_Log_Query
+ * @coversDefaultClass \CS_Log_Query
  */
-class Logs_Tests extends \EDD_UnitTestCase {
+class Logs_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Logs fixture.
@@ -24,14 +24,14 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * Set up fixtures once.
 	 */
 	public static function wpSetUpBeforeClass() {
-		self::$logs = parent::edd()->log->create_many( 5 );
+		self::$logs = parent::cs()->log->create_many( 5 );
 	}
 
 	/**
 	 * @covers ::update_item()
 	 */
 	public function test_update_should_return_true() {
-		$success = edd_update_log( self::$logs[0], array(
+		$success = cs_update_log( self::$logs[0], array(
 			'title' => 'Log title 45',
 		) );
 
@@ -42,11 +42,11 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::update_item()
 	 */
 	public function test_log_object_after_update_should_return_true() {
-		$success = edd_update_log( self::$logs[0], array(
+		$success = cs_update_log( self::$logs[0], array(
 			'title' => 'Log title 45',
 		) );
 
-		$log = edd_get_log( self::$logs[0] );
+		$log = cs_get_log( self::$logs[0] );
 
 		$this->assertEquals( 'Log title 45', $log->title );
 	}
@@ -55,7 +55,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::update_item()
 	 */
 	public function test_update_without_id_should_fail() {
-		$success = edd_update_log( null, array(
+		$success = cs_update_log( null, array(
 			'message' => 'Payment status changed',
 		) );
 
@@ -66,7 +66,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::delete_item()
 	 */
 	public function test_delete_should_return_true() {
-		$success = edd_delete_log( self::$logs[0] );
+		$success = cs_delete_log( self::$logs[0] );
 
 		$this->assertSame( 1, $success );
 	}
@@ -75,7 +75,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::delete_item()
 	 */
 	public function test_delete_without_id_should_fail() {
-		$success = edd_delete_log( '' );
+		$success = cs_delete_log( '' );
 
 		$this->assertFalse( $success );
 	}
@@ -84,7 +84,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_number_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'number' => 10,
 		) );
 
@@ -95,7 +95,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_offset_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'number' => 10,
 			'offset' => 4,
 		) );
@@ -107,7 +107,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_search_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'search' => 'Log title',
 		) );
 
@@ -118,7 +118,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_orderby_title_and_order_asc_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'orderby' => 'title',
 			'order'   => 'asc'
 		) );
@@ -130,7 +130,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_orderby_title_and_order_desc_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'orderby' => 'title',
 			'order'   => 'desc'
 		) );
@@ -142,7 +142,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_orderby_content_and_order_asc_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'orderby' => 'content',
 			'order'   => 'asc'
 		) );
@@ -154,7 +154,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_orderby_content_and_order_desc_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'orderby' => 'content',
 			'order'   => 'desc'
 		) );
@@ -166,7 +166,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_order_asc_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'order' => 'asc',
 		) );
 
@@ -177,7 +177,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_order_desc_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'order' => 'desc',
 		) );
 
@@ -188,7 +188,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_log_id_should_return_1() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'id' => 1,
 		) );
 
@@ -199,7 +199,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_id__in_should_return_2() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'id__in' => array( 1, 2 ),
 		) );
 
@@ -210,7 +210,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_id__not_in_should_return_3() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'id__not_in' => array( 1, 2 ),
 			'number'     => 5,
 		) );
@@ -222,7 +222,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_object_id_should_return_1() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'object_id' => \WP_UnitTest_Generator_Sequence::$incr
 		) );
 
@@ -233,7 +233,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_object_id__in_should_return_2() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'object_id__in' => array( \WP_UnitTest_Generator_Sequence::$incr, \WP_UnitTest_Generator_Sequence::$incr - 1 )
 		) );
 
@@ -244,7 +244,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_object_id__not_in_should_return_3() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'object_id__not_in' => array( \WP_UnitTest_Generator_Sequence::$incr, \WP_UnitTest_Generator_Sequence::$incr - 1 ),
 			'number'            => 5,
 		) );
@@ -256,7 +256,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_invalid_object_id_should_return_0() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'object_id' => 99999,
 		) );
 
@@ -267,7 +267,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_object_type_should_return_5() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'object_type' => 'download',
 		) );
 
@@ -278,7 +278,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_object_type__in_should_return_2() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'object_type__in' => array( 'download' )
 		) );
 
@@ -289,7 +289,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_object_type__not_in_should_return_3() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'object_type__not_in' => array( 'download' ),
 			'number'            => 5,
 		) );
@@ -310,7 +310,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 			$title_search = 'Log title ' . zeroise( \WP_UnitTest_Generator_Sequence::$incr, 7 );
 		}
 
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'title' => $title_search,
 		) );
 
@@ -321,7 +321,7 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_with_invalid_title_should_return_0() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'title' => 'Log title 99999',
 		) );
 
@@ -332,12 +332,12 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::query()
 	 */
 	public function test_get_logs_returned_objects_should_return_true() {
-		$logs = edd_get_logs( array(
+		$logs = cs_get_logs( array(
 			'number' => 5
 		) );
 
 		foreach ( $logs as $log ) {
-			$this->assertInstanceOf( 'EDD\\Logs\\Log', $log );
+			$this->assertInstanceOf( 'CS\\Logs\\Log', $log );
 		}
 	}
 
@@ -345,6 +345,6 @@ class Logs_Tests extends \EDD_UnitTestCase {
 	 * @covers ::count()
 	 */
 	public function test_count() {
-		$this->assertEquals( 5, edd_count_logs() );
+		$this->assertEquals( 5, cs_count_logs() );
 	}
 }

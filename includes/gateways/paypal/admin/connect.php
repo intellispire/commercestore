@@ -2,20 +2,20 @@
 /**
  * PayPal Commerce Connect
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Gateways\PayPal\Admin;
+namespace CS\Gateways\PayPal\Admin;
 
-use EDD\Gateways\PayPal;
-use EDD\Gateways\PayPal\AccountStatusValidator;
-use EDD\Gateways\PayPal\API;
+use CS\Gateways\PayPal;
+use CS\Gateways\PayPal\AccountStatusValidator;
+use CS\Gateways\PayPal\API;
 
-if ( ! defined( 'EDD_PAYPAL_PARTNER_CONNECT_URL' ) ) {
-	define( 'EDD_PAYPAL_PARTNER_CONNECT_URL', 'https://easydigitaldownloads.com/wp-json/paypal-connect/v1/' );
+if ( ! defined( 'CS_PAYPAL_PARTNER_CONNECT_URL' ) ) {
+	define( 'CS_PAYPAL_PARTNER_CONNECT_URL', 'https://commercestore.com/wp-json/paypal-connect/v1/' );
 }
 
 /**
@@ -29,7 +29,7 @@ if ( ! defined( 'EDD_PAYPAL_PARTNER_CONNECT_URL' ) ) {
  */
 function connect_settings_field() {
 	$is_connected = PayPal\has_rest_api_connection();
-	$mode         = edd_is_test_mode() ? __( 'sandbox', 'easy-digital-downloads' ) : __( 'live', 'easy-digital-downloads' );
+	$mode         = cs_is_test_mode() ? __( 'sandbox', 'commercestore' ) : __( 'live', 'commercestore' );
 
 	ob_start();
 
@@ -49,7 +49,7 @@ function connect_settings_field() {
 					<?php
 					echo wp_kses( sprintf(
 						/* Translators: %1$s opening <strong> tag; %2$s closing </strong> tag */
-						__( '%1$sConnection failure:%2$s Please ensure browser popups are enabled then click the button below to connect again. If you continue to experience this error, please contact support.', 'easy-digital-downloads' ),
+						__( '%1$sConnection failure:%2$s Please ensure browser popups are enabled then click the button below to connect again. If you continue to experience this error, please contact support.', 'commercestore' ),
 						'<strong>',
 						'</strong>'
 					), array( 'strong' => array() ) );
@@ -59,30 +59,30 @@ function connect_settings_field() {
 			<?php
 		}
 		?>
-		<button type="button" id="edd-paypal-commerce-connect" class="button" data-nonce="<?php echo esc_attr( wp_create_nonce( 'edd_process_paypal_connect' ) ); ?>">
+		<button type="button" id="cs-paypal-commerce-connect" class="button" data-nonce="<?php echo esc_attr( wp_create_nonce( 'cs_process_paypal_connect' ) ); ?>">
 			<?php
 			/* Translators: %s - the store mode, either `sandbox` or `live` */
-			printf( esc_html__( 'Connect with PayPal in %s mode', 'easy-digital-downloads' ), esc_html( $mode ) );
+			printf( esc_html__( 'Connect with PayPal in %s mode', 'commercestore' ), esc_html( $mode ) );
 			?>
 		</button>
-		<a href="#" target="_blank" id="edd-paypal-commerce-link" class="edd-hidden" data-paypal-onboard-complete="eddPayPalOnboardingCallback" data-paypal-button="true">
-			<?php esc_html_e( 'Sign up for PayPal', 'easy-digital-downloads' ); ?>
+		<a href="#" target="_blank" id="cs-paypal-commerce-link" class="cs-hidden" data-paypal-onboard-complete="csPayPalOnboardingCallback" data-paypal-button="true">
+			<?php esc_html_e( 'Sign up for PayPal', 'commercestore' ); ?>
 		</a>
-		<div id="edd-paypal-commerce-errors"></div>
+		<div id="cs-paypal-commerce-errors"></div>
 		<?php
 	} else {
 		/**
 		 * Show Account Info & Disconnect
 		 */
 		?>
-		<div id="edd-paypal-commerce-connect-wrap" class="edd-paypal-connect-account-info notice inline" data-nonce="<?php echo esc_attr( wp_create_nonce( 'edd_paypal_account_information' ) ); ?>">
+		<div id="cs-paypal-commerce-connect-wrap" class="cs-paypal-connect-account-info notice inline" data-nonce="<?php echo esc_attr( wp_create_nonce( 'cs_paypal_account_information' ) ); ?>">
 			<p>
-				<em><?php esc_html_e( 'Retrieving account information...', 'easy-digital-downloads' ); ?></em>
+				<em><?php esc_html_e( 'Retrieving account information...', 'commercestore' ); ?></em>
 				<span class="spinner is-active"></span>
 			</p>
 		</div>
-		<div id="edd-paypal-disconnect">
-			<a href="<?php echo esc_url( get_disconnect_url() ); ?>"><?php esc_html_e( 'Disconnect from PayPal', 'easy-digital-downloads' ); ?></a>
+		<div id="cs-paypal-disconnect">
+			<a href="<?php echo esc_url( get_disconnect_url() ); ?>"><?php esc_html_e( 'Disconnect from PayPal', 'commercestore' ); ?></a>
 		</div>
 		<?php
 	}
@@ -100,22 +100,22 @@ function connect_settings_field() {
  */
 function process_connect() {
 	// This validates the nonce.
-	check_ajax_referer( 'edd_process_paypal_connect' );
+	check_ajax_referer( 'cs_process_paypal_connect' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( __( 'You do not have permission to perform this action.', 'easy-digital-downloads' ) );
+		wp_send_json_error( __( 'You do not have permission to perform this action.', 'commercestore' ) );
 	}
 
-	$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+	$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 
-	$response = wp_remote_post( EDD_PAYPAL_PARTNER_CONNECT_URL . 'signup-link', array(
+	$response = wp_remote_post( CS_PAYPAL_PARTNER_CONNECT_URL . 'signup-link', array(
 		'headers' => array(
 			'Content-Type' => 'application/json',
 		),
 		'body'    => json_encode( array(
 			'mode'          => $mode,
-			'country_code'  => edd_get_shop_country(),
-			'currency_code' => edd_get_currency(),
+			'country_code'  => cs_get_shop_country(),
+			'currency_code' => cs_get_currency(),
 			'return_url'    => get_settings_url()
 		) )
 	) );
@@ -130,14 +130,14 @@ function process_connect() {
 	if ( 200 !== intval( $code ) ) {
 		wp_send_json_error( sprintf(
 		/* Translators: %d - HTTP response code; %s - Response from the API */
-			__( 'Unexpected response code: %d. Error: %s', 'easy-digital-downloads' ),
+			__( 'Unexpected response code: %d. Error: %s', 'commercestore' ),
 			$code,
 			json_encode( $body )
 		) );
 	}
 
 	if ( empty( $body->signupLink ) || empty( $body->nonce ) ) {
-		wp_send_json_error( __( 'An unexpected error occurred.', 'easy-digital-downloads' ) );
+		wp_send_json_error( __( 'An unexpected error occurred.', 'commercestore' ) );
 	}
 
 	/**
@@ -145,12 +145,12 @@ function process_connect() {
 	 *
 	 * @see get_access_token()
 	 */
-	update_option( 'edd_paypal_commerce_connect_details_' . $mode, json_encode( $body ) );
+	update_option( 'cs_paypal_commerce_connect_details_' . $mode, json_encode( $body ) );
 
 	wp_send_json_success( $body );
 }
 
-add_action( 'wp_ajax_edd_paypal_commerce_connect', __NAMESPACE__ . '\process_connect' );
+add_action( 'wp_ajax_cs_paypal_commerce_connect', __NAMESPACE__ . '\process_connect' );
 
 /**
  * Retrieves partner Connect details for the given mode.
@@ -161,10 +161,10 @@ add_action( 'wp_ajax_edd_paypal_commerce_connect', __NAMESPACE__ . '\process_con
  */
 function get_partner_details( $mode = '' ) {
 	if ( ! $mode ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
-	return json_decode( get_option( 'edd_paypal_commerce_connect_details_' . $mode ) );
+	return json_decode( get_option( 'cs_paypal_commerce_connect_details_' . $mode ) );
 }
 
 /**
@@ -176,24 +176,24 @@ function get_partner_details( $mode = '' ) {
  */
 function get_and_save_credentials() {
 	// This validates the nonce.
-	check_ajax_referer( 'edd_process_paypal_connect' );
+	check_ajax_referer( 'cs_process_paypal_connect' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( __( 'You do not have permission to perform this action.', 'easy-digital-downloads' ) );
+		wp_send_json_error( __( 'You do not have permission to perform this action.', 'commercestore' ) );
 	}
 
 	if ( empty( $_POST['auth_code'] ) || empty( $_POST['share_id'] ) ) {
-		wp_send_json_error( __( 'Missing PayPal authentication information. Please try again.', 'easy-digital-downloads' ) );
+		wp_send_json_error( __( 'Missing PayPal authentication information. Please try again.', 'commercestore' ) );
 	}
 
-	$mode = edd_is_test_mode() ? PayPal\API::MODE_SANDBOX : PayPal\API::MODE_LIVE;
+	$mode = cs_is_test_mode() ? PayPal\API::MODE_SANDBOX : PayPal\API::MODE_LIVE;
 
 	$partner_details = get_partner_details( $mode );
 	if ( empty( $partner_details->nonce ) ) {
-		wp_send_json_error( __( 'Missing nonce. Please refresh the page and try again.', 'easy-digital-downloads' ) );
+		wp_send_json_error( __( 'Missing nonce. Please refresh the page and try again.', 'commercestore' ) );
 	}
 
-	$paypal_subdomain = edd_is_test_mode() ? '.sandbox' : '';
+	$paypal_subdomain = cs_is_test_mode() ? '.sandbox' : '';
 	$api_url          = 'https://api-m' . $paypal_subdomain . '.paypal.com/';
 
 	/*
@@ -222,7 +222,7 @@ function get_and_save_credentials() {
 	if ( empty( $body->access_token ) ) {
 		wp_send_json_error( sprintf(
 		/* Translators: %d - HTTP response code */
-			__( 'Unexpected response from PayPal while generating token. Response code: %d. Please try again.', 'easy-digital-downloads' ),
+			__( 'Unexpected response from PayPal while generating token. Response code: %d. Please try again.', 'commercestore' ),
 			$code
 		) );
 	}
@@ -231,7 +231,7 @@ function get_and_save_credentials() {
 	 * Now we can use this access token to fetch the seller's credentials for all future
 	 * API requests.
 	 */
-	$response = wp_remote_get( $api_url . 'v1/customer/partners/' . urlencode( \EDD\Gateways\PayPal\get_partner_merchant_id( $mode ) ) . '/merchant-integrations/credentials/', array(
+	$response = wp_remote_get( $api_url . 'v1/customer/partners/' . urlencode( \CS\Gateways\PayPal\get_partner_merchant_id( $mode ) ) . '/merchant-integrations/credentials/', array(
 		'headers' => array(
 			'Authorization' => sprintf( 'Bearer %s', $body->access_token ),
 			'Content-Type'  => 'application/json',
@@ -249,20 +249,20 @@ function get_and_save_credentials() {
 	if ( empty( $body->client_id ) || empty( $body->client_secret ) ) {
 		wp_send_json_error( sprintf(
 		/* Translators: %d - HTTP response code */
-			__( 'Unexpected response from PayPal. Response code: %d. Please try again.', 'easy-digital-downloads' ),
+			__( 'Unexpected response from PayPal. Response code: %d. Please try again.', 'commercestore' ),
 			$code
 		) );
 	}
 
-	edd_update_option( 'paypal_' . $mode . '_client_id', sanitize_text_field( $body->client_id ) );
-	edd_update_option( 'paypal_' . $mode . '_client_secret', sanitize_text_field( $body->client_secret ) );
+	cs_update_option( 'paypal_' . $mode . '_client_id', sanitize_text_field( $body->client_id ) );
+	cs_update_option( 'paypal_' . $mode . '_client_secret', sanitize_text_field( $body->client_secret ) );
 
-	$message = esc_html__( 'Successfully connected.', 'easy-digital-downloads' );
+	$message = esc_html__( 'Successfully connected.', 'commercestore' );
 
 	try {
 		PayPal\Webhooks\create_webhook( $mode );
 	} catch ( \Exception $e ) {
-		$message = esc_html__( 'Your account has been successfully connected, but an error occurred while creating a webhook.', 'easy-digital-downloads' );
+		$message = esc_html__( 'Your account has been successfully connected, but an error occurred while creating a webhook.', 'commercestore' );
 	}
 
 	/**
@@ -272,12 +272,12 @@ function get_and_save_credentials() {
 	 *
 	 * @since 2.11
 	 */
-	do_action( 'edd_paypal_commerce_connected', $mode );
+	do_action( 'cs_paypal_commerce_connected', $mode );
 
 	wp_send_json_success( $message );
 }
 
-add_action( 'wp_ajax_edd_paypal_commerce_get_access_token', __NAMESPACE__ . '\get_and_save_credentials' );
+add_action( 'wp_ajax_cs_paypal_commerce_get_access_token', __NAMESPACE__ . '\get_and_save_credentials' );
 
 /**
  * Verifies the connected account.
@@ -286,18 +286,18 @@ add_action( 'wp_ajax_edd_paypal_commerce_get_access_token', __NAMESPACE__ . '\ge
  * @return void
  */
 function get_account_info() {
-	check_ajax_referer( 'edd_paypal_account_information' );
+	check_ajax_referer( 'cs_paypal_account_information' );
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_send_json_error( wpautop( __( 'You do not have permission to perform this action.', 'easy-digital-downloads' ) ) );
+		wp_send_json_error( wpautop( __( 'You do not have permission to perform this action.', 'commercestore' ) ) );
 	}
 
 	try {
 		$status         = 'success';
 		$account_status = '';
 		$actions = array(
-			'refresh_merchant' => '<button type="button" class="button edd-paypal-connect-action" data-nonce="' . esc_attr( wp_create_nonce( 'edd_check_merchant_status' ) ) . '" data-action="edd_paypal_commerce_check_merchant_status">' . esc_html__( 'Re-Check Payment Status', 'easy-digital-downloads' ) . '</button>',
-			'webhook'          => '<button type="button" class="button edd-paypal-connect-action" data-nonce="' . esc_attr( wp_create_nonce( 'edd_update_paypal_webhook' ) ) . '" data-action="edd_paypal_commerce_update_webhook">' . esc_html__( 'Sync Webhook', 'easy-digital-downloads' ) . '</button>'
+			'refresh_merchant' => '<button type="button" class="button cs-paypal-connect-action" data-nonce="' . esc_attr( wp_create_nonce( 'cs_check_merchant_status' ) ) . '" data-action="cs_paypal_commerce_check_merchant_status">' . esc_html__( 'Re-Check Payment Status', 'commercestore' ) . '</button>',
+			'webhook'          => '<button type="button" class="button cs-paypal-connect-action" data-nonce="' . esc_attr( wp_create_nonce( 'cs_update_paypal_webhook' ) ) . '" data-action="cs_paypal_commerce_update_webhook">' . esc_html__( 'Sync Webhook', 'commercestore' ) . '</button>'
 		);
 
 		$validator = new AccountStatusValidator();
@@ -306,17 +306,17 @@ function get_account_info() {
 		/*
 		 * 1. Check REST API credentials
 		 */
-		$rest_api_message = '<strong>' . __( 'API:', 'easy-digital-downloads' ) . '</strong>' . ' ';
+		$rest_api_message = '<strong>' . __( 'API:', 'commercestore' ) . '</strong>' . ' ';
 		if ( $validator->errors_for_credentials->errors ) {
 			$rest_api_dashicon = 'no';
 			$status            = 'error';
 			$rest_api_message  .= $validator->errors_for_credentials->get_error_message();
 		} else {
 			$rest_api_dashicon = 'yes';
-			$mode_string       = edd_is_test_mode() ? __( 'sandbox', 'easy-digital-downloads' ) : __( 'live', 'easy-digital-downloads' );
+			$mode_string       = cs_is_test_mode() ? __( 'sandbox', 'commercestore' ) : __( 'live', 'commercestore' );
 
 			/* Translators: %s - the connected mode, either `sandbox` or `live` */
-			$rest_api_message .= sprintf( __( 'Your PayPal account is successfully connected in %s mode.', 'easy-digital-downloads' ), $mode_string );
+			$rest_api_message .= sprintf( __( 'Your PayPal account is successfully connected in %s mode.', 'commercestore' ), $mode_string );
 		}
 
 		ob_start();
@@ -331,11 +331,11 @@ function get_account_info() {
 		/*
 		 * 2. Check merchant account
 		 */
-		$merchant_account_message = '<strong>' . __( 'Payment Status:', 'easy-digital-downloads' ) . '</strong>' . ' ';
+		$merchant_account_message = '<strong>' . __( 'Payment Status:', 'commercestore' ) . '</strong>' . ' ';
 		if ( $validator->errors_for_merchant_account->errors ) {
 			$merchant_dashicon        = 'no';
 			$status                   = 'error';
-			$merchant_account_message .= __( 'You need to address the following issues before you can start receiving payments:', 'easy-digital-downloads' );
+			$merchant_account_message .= __( 'You need to address the following issues before you can start receiving payments:', 'commercestore' );
 
 			// We can only refresh the status if we have a merchant ID.
 			if ( in_array( 'missing_merchant_details', $validator->errors_for_merchant_account->get_error_codes() ) ) {
@@ -343,7 +343,7 @@ function get_account_info() {
 			}
 		} else {
 			$merchant_dashicon        = 'yes';
-			$merchant_account_message .= __( 'Ready to accept payments.', 'easy-digital-downloads' );
+			$merchant_account_message .= __( 'Ready to accept payments.', 'commercestore' );
 		}
 
 		ob_start();
@@ -365,18 +365,18 @@ function get_account_info() {
 		/*
 		 * 3. Webhooks
 		 */
-		$webhook_message = '<strong>' . __( 'Webhook:', 'easy-digital-downloads' ) . '</strong>' . ' ';
+		$webhook_message = '<strong>' . __( 'Webhook:', 'commercestore' ) . '</strong>' . ' ';
 		if ( $validator->errors_for_webhook->errors ) {
 			$webhook_dashicon = 'no';
 			$status           = ( 'success' === $status ) ? 'warning' : $status;
 			$webhook_message  .= $validator->errors_for_webhook->get_error_message();
 
 			if ( in_array( 'webhook_missing', $validator->errors_for_webhook->get_error_codes() ) ) {
-				$actions['webhook'] = '<button type="button" class="button edd-paypal-connect-action" data-nonce="' . esc_attr( wp_create_nonce( 'edd_create_paypal_webhook' ) ) . '" data-action="edd_paypal_commerce_create_webhook">' . esc_html__( 'Create Webhook', 'easy-digital-downloads' ) . '</button>';
+				$actions['webhook'] = '<button type="button" class="button cs-paypal-connect-action" data-nonce="' . esc_attr( wp_create_nonce( 'cs_create_paypal_webhook' ) ) . '" data-action="cs_paypal_commerce_create_webhook">' . esc_html__( 'Create Webhook', 'commercestore' ) . '</button>';
 			}
 		} else {
 			$webhook_dashicon = 'yes';
-			$webhook_message  .= __( 'Webhook successfully configured for the following events:', 'easy-digital-downloads' );
+			$webhook_message  .= __( 'Webhook successfully configured for the following events:', 'commercestore' );
 		}
 
 		ob_start();
@@ -385,11 +385,11 @@ function get_account_info() {
 			<span class="dashicons dashicons-<?php echo esc_attr( $webhook_dashicon ); ?>"></span>
 			<span><?php echo wp_kses( $webhook_message, array( 'strong' => array() ) ); ?></span>
 			<?php if ( $validator->webhook ) : ?>
-				<ul class="edd-paypal-webhook-events">
+				<ul class="cs-paypal-webhook-events">
 					<?php foreach ( array_keys( PayPal\Webhooks\get_webhook_events() ) as $event_name ) : ?>
 						<li>
 							<span class="dashicons dashicons-<?php echo in_array( $event_name, $validator->enabled_webhook_events ) ? 'yes' : 'no'; ?>"></span>
-							<span class="edd-paypal-webhook-event-name"><?php echo esc_html( $event_name ); ?></span>
+							<span class="cs-paypal-webhook-event-name"><?php echo esc_html( $event_name ); ?></span>
 						</li>
 					<?php endforeach; ?>
 				</ul>
@@ -398,11 +398,11 @@ function get_account_info() {
 		<?php
 		$account_status .= ob_get_clean();
 
-		if ( ! edd_is_gateway_active( 'paypal_commerce' ) ) {
+		if ( ! cs_is_gateway_active( 'paypal_commerce' ) ) {
 			$account_status .= sprintf(
 				/* Translators: %1$s opening anchor tag; %2$s closing anchor tag; %3$s: opening line item/status/strong tags; %4$s closing strong tag; %5$s: closing list item tag */
-				__( '%3$sGateway Status: %4$s PayPal is not currently active. %1$sEnable PayPal%2$s in the general gateway settings to start using it.%5$s', 'easy-digital-downloads' ),
-				'<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=edd-settings&tab=gateways&section=main' ) ) . '">',
+				__( '%3$sGateway Status: %4$s PayPal is not currently active. %1$sEnable PayPal%2$s in the general gateway settings to start using it.%5$s', 'commercestore' ),
+				'<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=main' ) ) . '">',
 				'</a>',
 				'<li><span class="dashicons dashicons-no"></span><strong>',
 				'</strong>',
@@ -412,7 +412,7 @@ function get_account_info() {
 
 		wp_send_json_success( array(
 			'status'         => $status,
-			'account_status' => '<ul class="edd-paypal-account-status">' . $account_status . '</ul>',
+			'account_status' => '<ul class="cs-paypal-account-status">' . $account_status . '</ul>',
 			'webhook_object' => isset( $validator ) ? $validator->webhook : null,
 			'actions'        => array_values( $actions )
 		) );
@@ -424,7 +424,7 @@ function get_account_info() {
 	}
 }
 
-add_action( 'wp_ajax_edd_paypal_commerce_get_account_info', __NAMESPACE__ . '\get_account_info' );
+add_action( 'wp_ajax_cs_paypal_commerce_get_account_info', __NAMESPACE__ . '\get_account_info' );
 
 /**
  * Returns the URL for disconnecting from PayPal Commerce.
@@ -436,11 +436,11 @@ function get_disconnect_url() {
 	return wp_nonce_url(
 		add_query_arg(
 			array(
-				'edd_action' => 'disconnect_paypal_commerce'
+				'cs_action' => 'disconnect_paypal_commerce'
 			),
 			admin_url()
 		),
-		'edd_disconnect_paypal_commerce'
+		'cs_disconnect_paypal_commerce'
 	);
 }
 
@@ -452,14 +452,14 @@ function get_disconnect_url() {
  */
 function process_disconnect() {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have permission to perform this action.', 'easy-digital-downloads' ), esc_html__( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'You do not have permission to perform this action.', 'commercestore' ), esc_html__( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
-	if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'edd_disconnect_paypal_commerce' ) ) {
-		wp_die( esc_html__( 'You do not have permission to perform this action.', 'easy-digital-downloads' ), esc_html__( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+	if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'cs_disconnect_paypal_commerce' ) ) {
+		wp_die( esc_html__( 'You do not have permission to perform this action.', 'commercestore' ), esc_html__( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
-	$mode = edd_is_test_mode() ? PayPal\API::MODE_SANDBOX : PayPal\API::MODE_LIVE;
+	$mode = cs_is_test_mode() ? PayPal\API::MODE_SANDBOX : PayPal\API::MODE_LIVE;
 
 	try {
 		$api = new PayPal\API();
@@ -479,25 +479,25 @@ function process_disconnect() {
 	}
 
 	// Delete API credentials.
-	$edd_settings_to_delete = array(
+	$cs_settings_to_delete = array(
 		'paypal_' . $mode . '_client_id',
 		'paypal_' . $mode . '_client_secret',
 	);
-	foreach ( $edd_settings_to_delete as $option_name ) {
-		edd_delete_option( $option_name );
+	foreach ( $cs_settings_to_delete as $option_name ) {
+		cs_delete_option( $option_name );
 	}
 
 	// Delete merchant information.
-	delete_option( 'edd_paypal_' . $mode . '_merchant_details' );
+	delete_option( 'cs_paypal_' . $mode . '_merchant_details' );
 
 	// Delete partner connect information.
-	delete_option( 'edd_paypal_commerce_connect_details_' . $mode );
+	delete_option( 'cs_paypal_commerce_connect_details_' . $mode );
 
 	wp_safe_redirect( esc_url_raw( get_settings_url() ) );
 	exit;
 }
 
-add_action( 'edd_disconnect_paypal_commerce', __NAMESPACE__ . '\process_disconnect' );
+add_action( 'cs_disconnect_paypal_commerce', __NAMESPACE__ . '\process_disconnect' );
 
 /**
  * AJAX callback for refreshing payment status.
@@ -505,17 +505,17 @@ add_action( 'edd_disconnect_paypal_commerce', __NAMESPACE__ . '\process_disconne
  * @since 2.11
  */
 function refresh_merchant_status() {
-	check_ajax_referer( 'edd_check_merchant_status' );
+	check_ajax_referer( 'cs_check_merchant_status' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( esc_html__( 'You do not have permission to perform this action.', 'easy-digital-downloads' ) );
+		wp_send_json_error( esc_html__( 'You do not have permission to perform this action.', 'commercestore' ) );
 	}
 
 	$merchant_details = PayPal\MerchantAccount::retrieve();
 
 	try {
 		if ( empty( $merchant_details->merchant_id ) ) {
-			throw new \Exception( __( 'No merchant ID saved. Please reconnect to PayPal.', 'easy-digital-downloads' ) );
+			throw new \Exception( __( 'No merchant ID saved. Please reconnect to PayPal.', 'commercestore' ) );
 		}
 
 		$partner_details = get_partner_details();
@@ -531,7 +531,7 @@ function refresh_merchant_status() {
 	}
 }
 
-add_action( 'wp_ajax_edd_paypal_commerce_check_merchant_status', __NAMESPACE__ . '\refresh_merchant_status' );
+add_action( 'wp_ajax_cs_paypal_commerce_check_merchant_status', __NAMESPACE__ . '\refresh_merchant_status' );
 
 /**
  * AJAX callback for creating a webhook.
@@ -539,10 +539,10 @@ add_action( 'wp_ajax_edd_paypal_commerce_check_merchant_status', __NAMESPACE__ .
  * @since 2.11
  */
 function create_webhook() {
-	check_ajax_referer( 'edd_create_paypal_webhook' );
+	check_ajax_referer( 'cs_create_paypal_webhook' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( esc_html__( 'You do not have permission to perform this action.', 'easy-digital-downloads' ) );
+		wp_send_json_error( esc_html__( 'You do not have permission to perform this action.', 'commercestore' ) );
 	}
 
 	try {
@@ -554,7 +554,7 @@ function create_webhook() {
 	}
 }
 
-add_action( 'wp_ajax_edd_paypal_commerce_create_webhook', __NAMESPACE__ . '\create_webhook' );
+add_action( 'wp_ajax_cs_paypal_commerce_create_webhook', __NAMESPACE__ . '\create_webhook' );
 
 /**
  * AJAX callback for syncing a webhook. This is used to fix issues with missing events.
@@ -562,10 +562,10 @@ add_action( 'wp_ajax_edd_paypal_commerce_create_webhook', __NAMESPACE__ . '\crea
  * @since 2.11
  */
 function update_webhook() {
-	check_ajax_referer( 'edd_update_paypal_webhook' );
+	check_ajax_referer( 'cs_update_paypal_webhook' );
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( esc_html__( 'You do not have permission to perform this action.', 'easy-digital-downloads' ) );
+		wp_send_json_error( esc_html__( 'You do not have permission to perform this action.', 'commercestore' ) );
 	}
 
 	try {
@@ -577,7 +577,7 @@ function update_webhook() {
 	}
 }
 
-add_action( 'wp_ajax_edd_paypal_commerce_update_webhook', __NAMESPACE__ . '\update_webhook' );
+add_action( 'wp_ajax_cs_paypal_commerce_update_webhook', __NAMESPACE__ . '\update_webhook' );
 
 /**
  * PayPal Redirect Callback
@@ -589,21 +589,21 @@ add_action( 'wp_ajax_edd_paypal_commerce_update_webhook', __NAMESPACE__ . '\upda
  * @since 2.11
  */
 add_action( 'admin_init', function () {
-	if ( ! isset( $_GET['merchantIdInPayPal'] ) || ! edd_is_admin_page( 'settings' ) ) {
+	if ( ! isset( $_GET['merchantIdInPayPal'] ) || ! cs_is_admin_page( 'settings' ) ) {
 		return;
 	}
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( __( 'You do not have permission to perform this action.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to perform this action.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
-	edd_debug_log( 'PayPal Connect - Checking merchant status.' );
+	cs_debug_log( 'PayPal Connect - Checking merchant status.' );
 
 	$merchant_id = urldecode( $_GET['merchantIdInPayPal'] );
 
 	try {
 		$details = get_merchant_status( $merchant_id );
-		edd_debug_log( 'PayPal Connect - Successfully retrieved merchant status.' );
+		cs_debug_log( 'PayPal Connect - Successfully retrieved merchant status.' );
 	} catch ( \Exception $e ) {
 		/*
 		 * This won't be enough to actually validate the merchant status, but we want to ensure
@@ -613,7 +613,7 @@ add_action( 'admin_init', function () {
 			'merchant_id' => $merchant_id
 		);
 
-		edd_debug_log( 'PayPal Connect - Failed to retrieve merchant status from PayPal. Error: %s', $e->getMessage() );
+		cs_debug_log( 'PayPal Connect - Failed to retrieve merchant status from PayPal. Error: %s', $e->getMessage() );
 	}
 
 	$merchant_account = new PayPal\MerchantAccount( $details );
@@ -633,12 +633,12 @@ add_action( 'admin_init', function () {
  * @throws PayPal\Exceptions\API_Exception
  */
 function get_merchant_status( $merchant_id, $nonce = '' ) {
-	$response = wp_remote_post( EDD_PAYPAL_PARTNER_CONNECT_URL . 'merchant-status', array(
+	$response = wp_remote_post( CS_PAYPAL_PARTNER_CONNECT_URL . 'merchant-status', array(
 		'headers' => array(
 			'Content-Type' => 'application/json',
 		),
 		'body'    => json_encode( array(
-			'mode'        => edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE,
+			'mode'        => cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE,
 			'merchant_id' => $merchant_id,
 			'nonce'       => $nonce
 		) )

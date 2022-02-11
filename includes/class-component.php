@@ -2,15 +2,15 @@
 /**
  * Component Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Core
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD;
+namespace CS;
 
-use EDD\Database;
+use CS\Database;
 
 /**
  * Component Class.
@@ -98,7 +98,7 @@ class Component extends Base_Object {
 	);
 
 	/**
-	 * Construct an EDD component
+	 * Construct an CommerceStore component
 	 *
 	 * @since 3.0
 	 * @param array $args
@@ -122,7 +122,7 @@ class Component extends Base_Object {
 	}
 
 	/**
-	 * Setup an EDD component based on parsing in constructor
+	 * Setup an CommerceStore component based on parsing in constructor
 	 *
 	 * @since 3.0
 	 * @param array $args

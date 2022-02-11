@@ -1,6 +1,6 @@
 <?php
 
-namespace EDD\Admin\Extensions;
+namespace CS\Admin\Extensions;
 
 class ProductData {
 

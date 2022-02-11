@@ -8,14 +8,14 @@ defined( 'ABSPATH' ) || exit;
  * Chris Christoff on 12/26/2012
  * Changes: Changes vars to publics
  *
- * Modified to work for EDD by
+ * Modified to work for CommerceStore by
  * Chris Christoff on 12/23/2012
  * Changes: Removed the browser string return and added spacing. Also removed return HTML formatting.
  *
- * Modified to add formatted User Agent string for EDD System Info by
+ * Modified to add formatted User Agent string for CommerceStore System Info by
  * Chris Christoff on 12/23/2012
  * Changes: Split user string and add formatting so we can print a nicely
- * formatted user agent string on the EDD System Info
+ * formatted user agent string on the CommerceStore System Info
  *
  * File: Browser.php
  * Author: Chris Schuld (http://chrisschuld.com/)

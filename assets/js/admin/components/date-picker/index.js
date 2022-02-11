@@ -5,21 +5,21 @@
  * third-party plugins.
  */
 jQuery( document ).ready( function( $ ) {
-	const edd_datepicker = $( 'input.edd_datepicker' );
+	const cs_datepicker = $( 'input.cs_datepicker' );
 
-	if ( edd_datepicker.length > 0 ) {
-		edd_datepicker
+	if ( cs_datepicker.length > 0 ) {
+		cs_datepicker
 
 		// Disable autocomplete to avoid it covering the calendar
 			.attr( 'autocomplete', 'off' )
 
 		// Invoke the datepickers
 			.datepicker( {
-				dateFormat: edd_vars.date_picker_format,
+				dateFormat: cs_vars.date_picker_format,
 				beforeShow: function() {
 					$( '#ui-datepicker-div' )
 						.removeClass( 'ui-datepicker' )
-						.addClass( 'edd-datepicker' );
+						.addClass( 'cs-datepicker' );
 				},
 			} );
 	}

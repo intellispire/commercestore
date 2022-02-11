@@ -4,9 +4,9 @@
  *
  * These are functions used for displaying discounts, credits, fees, and more.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Tools
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
@@ -20,10 +20,10 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.0
  * @author Daniel J Griffiths
  */
-function edd_adjustments_page() {
+function cs_adjustments_page() {
 
 	// Get all tabs
-	$all_tabs = edd_get_adjustments_tabs();
+	$all_tabs = cs_get_adjustments_tabs();
 
 	// Current tab
 	$active_tab = isset( $_GET['tab'] )
@@ -31,36 +31,36 @@ function edd_adjustments_page() {
 		: 'discount';
 
 	// Add new URL
-	$add_new_url = edd_get_admin_url( array(
-		'page'       => 'edd-discounts',
-		'edd-action' => 'add_' . $active_tab
+	$add_new_url = cs_get_admin_url( array(
+		'page'       => 'cs-discounts',
+		'cs-action' => 'add_' . $active_tab
 	) );
 
 	// Start the output buffer
 	ob_start(); ?>
 
 	<div class="wrap">
-		<h1 class="wp-heading-inline"><?php esc_html_e( 'Discounts', 'easy-digital-downloads' ); ?></h1>
-		<a href="<?php echo esc_url( $add_new_url ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'easy-digital-downloads' ); ?></a>
+		<h1 class="wp-heading-inline"><?php esc_html_e( 'Discounts', 'commercestore' ); ?></h1>
+		<a href="<?php echo esc_url( $add_new_url ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'commercestore' ); ?></a>
 
 		<hr class="wp-header-end">
 		<?php if ( 1 < count( $all_tabs ) ) : ?>
 
-		<nav class="nav-tab-wrapper edd-nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Secondary menu', 'easy-digital-downloads' ); ?>">
+		<nav class="nav-tab-wrapper cs-nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Secondary menu', 'commercestore' ); ?>">
 			<?php
 
 			// Loop through all tabs
 			foreach ( $all_tabs as $tab_id => $tab_name ) :
 
 				// Add the tab ID
-				$tab_url = edd_get_admin_url( array(
-					'page' => 'edd-discounts',
+				$tab_url = cs_get_admin_url( array(
+					'page' => 'cs-discounts',
 					'tab'  => $tab_id
 				) );
 
 				// Remove messages
 				$tab_url = remove_query_arg( array(
-					'edd-message',
+					'cs-message',
 				), $tab_url );
 
 				// Setup the selected class
@@ -76,7 +76,7 @@ function edd_adjustments_page() {
 		<br>
 		<?php endif; ?>
 
-		<?php do_action( 'edd_adjustments_page_' . $active_tab ); ?>
+		<?php do_action( 'cs_adjustments_page_' . $active_tab ); ?>
 	</div><!-- .wrap -->
 
 	<?php
@@ -92,15 +92,15 @@ function edd_adjustments_page() {
  *
  * @return array Tabs for the 'Adjustments' page.
  */
-function edd_get_adjustments_tabs() {
+function cs_get_adjustments_tabs() {
 
 	// Tabs
 	$tabs = array(
-		'discount' => __( 'Discounts', 'easy-digital-downloads' ),
-//		'credit'   => __( 'Credits',   'easy-digital-downloads' ),
-//		'fee'      => __( 'Fees',      'easy-digital-downloads' )
+		'discount' => __( 'Discounts', 'commercestore' ),
+//		'credit'   => __( 'Credits',   'commercestore' ),
+//		'fee'      => __( 'Fees',      'commercestore' )
 	);
 
 	// Filter & return
-	return apply_filters( 'edd_adjustments_tabs', $tabs );
+	return apply_filters( 'cs_adjustments_tabs', $tabs );
 }

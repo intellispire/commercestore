@@ -2,14 +2,14 @@
 /**
  * Order Refund Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-use EDD\Orders\Refund_Validator;
+use CS\Orders\Refund_Validator;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.0
  * @return array
  */
-function edd_get_refundable_order_statuses() {
+function cs_get_refundable_order_statuses() {
 	$refundable_order_statuses = array( 'complete', 'publish', 'partially_refunded' );
 
 	/**
@@ -30,7 +30,7 @@ function edd_get_refundable_order_statuses() {
 	 *
 	 * @since 3.0
 	 */
-	return (array) apply_filters( 'edd_refundable_order_statuses', $refundable_order_statuses );
+	return (array) apply_filters( 'cs_refundable_order_statuses', $refundable_order_statuses );
 }
 
 /**
@@ -41,7 +41,7 @@ function edd_get_refundable_order_statuses() {
  * @param int $order_id Order ID.
  * @return bool True if refundable, false otherwise.
  */
-function edd_is_order_refundable( $order_id = 0 ) {
+function cs_is_order_refundable( $order_id = 0 ) {
 	global $wpdb;
 
 	// Bail if no order ID was passed.
@@ -49,7 +49,7 @@ function edd_is_order_refundable( $order_id = 0 ) {
 		return false;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	// Bail if order was not found.
 	if ( ! $order ) {
@@ -57,12 +57,12 @@ function edd_is_order_refundable( $order_id = 0 ) {
 	}
 
 	// Only orders with a supported status can be refunded.
-	if ( ! in_array( $order->status, edd_get_refundable_order_statuses(), true ) ) {
+	if ( ! in_array( $order->status, cs_get_refundable_order_statuses(), true ) ) {
 		return false;
 	}
 
 	// Check order hasn't already been refunded.
-	$query          = "SELECT COUNT(id) FROM {$wpdb->edd_orders} WHERE parent = %d AND status = '%s'";
+	$query          = "SELECT COUNT(id) FROM {$wpdb->cs_orders} WHERE parent = %d AND status = '%s'";
 	$prepare        = sprintf( $query, $order_id, esc_sql( 'refunded' ) );
 	$refunded_order = $wpdb->get_var( $prepare ); // WPCS: unprepared SQL ok.
 
@@ -71,12 +71,12 @@ function edd_is_order_refundable( $order_id = 0 ) {
 	}
 
 	// Allow overrides.
-	if ( true === edd_is_order_refundable_by_override( $order->id ) ) {
+	if ( true === cs_is_order_refundable_by_override( $order->id ) ) {
 		return true;
 	}
 
 	// Outside of Refund window.
-	if ( true === edd_is_order_refund_window_passed( $order->id ) ) {
+	if ( true === cs_is_order_refund_window_passed( $order->id ) ) {
 		return false;
 	}
 
@@ -92,13 +92,13 @@ function edd_is_order_refundable( $order_id = 0 ) {
  * @param int $order_id Order ID.
  * @return bool True if in window, false otherwise.
  */
-function edd_is_order_refund_window_passed( $order_id = 0 ) {
+function cs_is_order_refund_window_passed( $order_id = 0 ) {
 	// Bail if no order ID was passed.
 	if ( empty( $order_id ) ) {
 		return false;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	// Bail if order was not found.
 	if ( ! $order ) {
@@ -107,18 +107,18 @@ function edd_is_order_refund_window_passed( $order_id = 0 ) {
 
 	// Refund dates may not have been set retroactively so we need to calculate it manually.
 	if ( empty( $order->date_refundable ) ) {
-		$refund_window = absint( edd_get_option( 'refund_window', 30 ) );
+		$refund_window = absint( cs_get_option( 'refund_window', 30 ) );
 
 		// Refund window is infinite.
 		if ( 0 === $refund_window ) {
 			return true;
 		} else {
-			$date_refundable = \Carbon\Carbon::parse( $order->date_completed, 'UTC' )->setTimezone( edd_get_timezone_id() )->addDays( $refund_window );
+			$date_refundable = \Carbon\Carbon::parse( $order->date_completed, 'UTC' )->setTimezone( cs_get_timezone_id() )->addDays( $refund_window );
 		}
 
 	// Parse date using Carbon.
 	} else {
-		$date_refundable = \Carbon\Carbon::parse( $order->date_refundable, 'UTC' )->setTimezone( edd_get_timezone_id() );
+		$date_refundable = \Carbon\Carbon::parse( $order->date_refundable, 'UTC' )->setTimezone( cs_get_timezone_id() );
 	}
 
 	return true === $date_refundable->isPast();
@@ -132,13 +132,13 @@ function edd_is_order_refund_window_passed( $order_id = 0 ) {
  * @param int $order_id Order ID.
  * @return bool True if refundable via capability override, false otherwise.
  */
-function edd_is_order_refundable_by_override( $order_id = 0 ) {
+function cs_is_order_refundable_by_override( $order_id = 0 ) {
 	// Bail if no order ID was passed.
 	if ( empty( $order_id ) ) {
 		return false;
 	}
 
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	// Bail if order was not found.
 	if ( ! $order ) {
@@ -158,7 +158,7 @@ function edd_is_order_refundable_by_override( $order_id = 0 ) {
 	 *                        refundability. Default `edit_shop_payments`.
 	 * @param int   $order_id ID of current Order being refunded.
 	 */
-	$caps = apply_filters( 'edd_is_order_refundable_by_override_caps', $caps, $order_id );
+	$caps = apply_filters( 'cs_is_order_refundable_by_override_caps', $caps, $order_id );
 
 	$can_override = false;
 
@@ -178,7 +178,7 @@ function edd_is_order_refundable_by_override( $order_id = 0 ) {
 	 *                           the current user.
 	 * @param int  $order_id     ID of current Order being refunded.
 	 */
-	$can_override = apply_filters( 'edd_is_order_refundable_by_override', $can_override, $order_id );
+	$can_override = apply_filters( 'cs_is_order_refundable_by_override', $can_override, $order_id );
 
 	return $can_override;
 }
@@ -210,21 +210,21 @@ function edd_is_order_refundable_by_override( $order_id = 0 ) {
  *
  * @return int|WP_Error New order ID if successful, WP_Error on failure.
  */
-function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all' ) {
+function cs_refund_order( $order_id, $order_items = 'all', $adjustments = 'all' ) {
 	global $wpdb;
 
 	// Ensure the order ID is an integer.
 	$order_id = absint( $order_id );
 
 	// Fetch order.
-	$order = edd_get_order( $order_id );
+	$order = cs_get_order( $order_id );
 
 	if ( ! $order ) {
-		return new WP_Error( 'invalid_order', __( 'Invalid order.', 'easy-digital-downloads' ) );
+		return new WP_Error( 'invalid_order', __( 'Invalid order.', 'commercestore' ) );
 	}
 
-	if ( false === edd_is_order_refundable( $order_id ) ) {
-		return new WP_Error( 'not_refundable', __( 'Order not refundable.', 'easy-digital-downloads' ) );
+	if ( false === cs_is_order_refundable( $order_id ) ) {
+		return new WP_Error( 'not_refundable', __( 'Order not refundable.', 'commercestore' ) );
 	}
 
 	/**
@@ -234,17 +234,17 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 	 *
 	 * @param int $order_id Order ID.
 	 */
-	$should_refund = apply_filters( 'edd_should_process_order_refund', true, $order_id );
+	$should_refund = apply_filters( 'cs_should_process_order_refund', true, $order_id );
 
 	// Bail if refund is blocked.
 	if ( true !== $should_refund ) {
-		return new WP_Error( 'refund_not_allowed', __( 'Refund not allowed on this order.', 'easy-digital-downloads' ) );
+		return new WP_Error( 'refund_not_allowed', __( 'Refund not allowed on this order.', 'commercestore' ) );
 	}
 
 	/** Generate new order number *********************************************/
 
 	$last_order = $wpdb->get_row( $wpdb->prepare( "SELECT id, order_number
-		FROM {$wpdb->edd_orders}
+		FROM {$wpdb->cs_orders}
 		WHERE parent = %d
 		ORDER BY id DESC
 		LIMIT 1", $order_id ) );
@@ -256,7 +256,7 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 	 *
 	 * @param string Suffix.
 	 */
-	$refund_suffix = apply_filters( 'edd_order_refund_suffix', '-R-' );
+	$refund_suffix = apply_filters( 'cs_order_refund_suffix', '-R-' );
 
 	if ( $last_order ) {
 
@@ -286,8 +286,8 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 	try {
 		$validator = new Refund_Validator( $order, $order_items, $adjustments );
 		$validator->validate_and_calculate_totals();
-	} catch( \EDD\Utils\Exceptions\Invalid_Argument $e ) {
-		return new WP_Error( 'refund_validation_error', __( 'Invalid argument. Please check your amounts and try again.', 'easy-digital-downloads' ) );
+	} catch( \CS\Utils\Exceptions\Invalid_Argument $e ) {
+		return new WP_Error( 'refund_validation_error', __( 'Invalid argument. Please check your amounts and try again.', 'commercestore' ) );
 	} catch ( \Exception $e ) {
 		return new WP_Error( 'refund_validation_error', $e->getMessage() );
 	}
@@ -308,20 +308,20 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 		'currency'     => $order->currency,
 		'payment_key'  => strtolower( md5( uniqid() ) ),
 		'tax_rate_id'  => $order->tax_rate_id,
-		'subtotal'     => edd_negate_amount( $validator->subtotal ),
-		'tax'          => edd_negate_amount( $validator->tax ),
-		'total'        => edd_negate_amount( $validator->total ),
+		'subtotal'     => cs_negate_amount( $validator->subtotal ),
+		'tax'          => cs_negate_amount( $validator->tax ),
+		'total'        => cs_negate_amount( $validator->total ),
 	);
 
 	// Full refund is inserted first to allow for conditional checks to run later
 	// and update the order, but we need an INSERT to be executed to generate a
 	// new order ID.
-	$refund_id = edd_add_order( $order_data );
+	$refund_id = cs_add_order( $order_data );
 
 	// If we have tax, but no tax rate, manually save the percentage.
-	$tax_rate_meta = edd_get_order_meta( $order_id, 'tax_rate', true );
+	$tax_rate_meta = cs_get_order_meta( $order_id, 'tax_rate', true );
 	if ( $tax_rate_meta ) {
-		edd_update_order_meta( $refund_id, 'tax_rate', $tax_rate_meta );
+		cs_update_order_meta( $refund_id, 'tax_rate', $tax_rate_meta );
 	}
 
 	/** Insert order items ****************************************************/
@@ -332,7 +332,7 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 	foreach ( $validator->get_refunded_order_items() as $order_item ) {
 		$order_item['order_id'] = $refund_id;
 
-		$new_item_id = edd_add_order_item( $order_item );
+		$new_item_id = cs_add_order_item( $order_item );
 
 		if ( ! empty( $order_item['parent'] ) ) {
 			$order_item_id_map[ $order_item['parent'] ] = $new_item_id;
@@ -340,7 +340,7 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 
 		// Update the status on the original order item.
 		if ( ! empty( $order_item['parent'] ) && ! empty( $order_item['original_item_status'] ) ) {
-			edd_update_order_item( $order_item['parent'], array( 'status' => $order_item['original_item_status'] ) );
+			cs_update_order_item( $order_item['parent'], array( 'status' => $order_item['original_item_status'] ) );
 		}
 	}
 
@@ -379,12 +379,12 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 		 * So we link back to the *original* order item in all cases to be consistent.
 		 */
 
-		edd_add_order_adjustment( $adjustment );
+		cs_add_order_adjustment( $adjustment );
 	}
 
 	// Update order status to `refunded` once refund is complete and if all items are marked as refunded.
 	$all_refunded = true;
-	if ( edd_get_order_total( $order_id ) > 0 ) {
+	if ( cs_get_order_total( $order_id ) > 0 ) {
 		$all_refunded = false;
 	}
 
@@ -392,11 +392,11 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 		? 'refunded'
 		: 'partially_refunded';
 
-	edd_update_order( $order_id, array( 'status' => $order_status ) );
+	cs_update_order( $order_id, array( 'status' => $order_status ) );
 
 	/**
 	 * Fires when an order has been refunded.
-	 * This hook will trigger the legacy `edd_pre_refund_payment` and `edd_post_refund_payment`
+	 * This hook will trigger the legacy `cs_pre_refund_payment` and `cs_post_refund_payment`
 	 * hooks for the time being, but any code using either of those should be updated.
 	 *
 	 * @since 3.0
@@ -405,7 +405,7 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 	 * @param int  $refund_id    ID of the new refund object.
 	 * @param bool $all_refunded Whether or not the entire order was refunded.
 	 */
-	do_action( 'edd_refund_order', $order_id, $refund_id, $all_refunded );
+	do_action( 'cs_refund_order', $order_id, $refund_id, $all_refunded );
 
 	return $refund_id;
 }
@@ -413,15 +413,15 @@ function edd_refund_order( $order_id, $order_items = 'all', $adjustments = 'all'
 /**
  * Queries for order refunds.
  *
- * @see \EDD\Database\Queries\Order::__construct()
+ * @see \CS\Database\Queries\Order::__construct()
  *
  * @since 3.0
  *
  * @param int $order_id Parent Order.
- * @return \EDD\Orders\Order[] Array of `Order` objects.
+ * @return \CS\Orders\Order[] Array of `Order` objects.
  */
-function edd_get_order_refunds( $order_id = 0 ) {
-	$order_refunds = new \EDD\Database\Queries\Order();
+function cs_get_order_refunds( $order_id = 0 ) {
+	$order_refunds = new \CS\Database\Queries\Order();
 
 	return $order_refunds->query( array(
 		'type'   => 'refund',
@@ -438,10 +438,10 @@ function edd_get_order_refunds( $order_id = 0 ) {
  * @param int $order_id Order ID.
  * @return float $total Order total.
  */
-function edd_get_order_total( $order_id ) {
+function cs_get_order_total( $order_id ) {
 	global $wpdb;
 
-	$query   = "SELECT SUM(total) FROM {$wpdb->edd_orders} WHERE id = %d OR parent = %d";
+	$query   = "SELECT SUM(total) FROM {$wpdb->cs_orders} WHERE id = %d OR parent = %d";
 	$prepare = $wpdb->prepare( $query, $order_id, $order_id );
 	$total   = $wpdb->get_var( $prepare ); // WPCS: unprepared SQL ok.
 	$retval  = ( null === $total )
@@ -462,7 +462,7 @@ function edd_get_order_total( $order_id ) {
  *
  * @return float $total Order total.
  */
-function edd_get_order_item_total( $order_ids = array(), $product_id = 0 ) {
+function cs_get_order_item_total( $order_ids = array(), $product_id = 0 ) {
 	global $wpdb;
 
 	// Bail if no order IDs were passed.
@@ -470,7 +470,7 @@ function edd_get_order_item_total( $order_ids = array(), $product_id = 0 ) {
 		return 0;
 	}
 
-	$query   = "SELECT SUM(total) FROM {$wpdb->edd_order_items} WHERE order_id IN (%s) AND product_id = %d";
+	$query   = "SELECT SUM(total) FROM {$wpdb->cs_order_items} WHERE order_id IN (%s) AND product_id = %d";
 	$ids     = join( ',', array_map( 'absint', $order_ids ) );
 	$prepare = sprintf( $query, $ids, $product_id );
 	$total   = $wpdb->get_var( $prepare ); // WPCS: unprepared SQL ok.

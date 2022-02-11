@@ -2,22 +2,22 @@
 /**
  * License Upgrade Notice
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.10.6
  */
 
-namespace EDD\Admin\Promos\Notices;
+namespace CS\Admin\Promos\Notices;
 
-use EDD\Admin\Pass_Manager;
+use CS\Admin\Pass_Manager;
 
 class License_Upgrade_Notice extends Notice {
 
 	const DISPLAY_HOOK = 'admin_notices';
 
 	/**
-	 * Number of EDD license keys that have been entered.
+	 * Number of CommerceStore license keys that have been entered.
 	 * Not validated to make sure they're actually active; this is
 	 * just an indicator if any licenses exist at all.
 	 *
@@ -34,9 +34,9 @@ class License_Upgrade_Notice extends Notice {
 	 * License_Upgrade_Notice constructor.
 	 */
 	public function __construct() {
-		global $edd_licensed_products;
+		global $cs_licensed_products;
 
-		$this->number_license_keys = is_array( $edd_licensed_products ) ? count( $edd_licensed_products ) : 0;
+		$this->number_license_keys = is_array( $cs_licensed_products ) ? count( $cs_licensed_products ) : 0;
 		$this->pass_manager        = new Pass_Manager();
 	}
 
@@ -50,18 +50,18 @@ class License_Upgrade_Notice extends Notice {
 	}
 
 	/**
-	 * Determines if the current page is an EDD admin page.
+	 * Determines if the current page is an CommerceStore admin page.
 	 *
 	 * @return bool
 	 */
-	private function is_edd_admin_page() {
-		if ( defined( 'EDD_DOING_TESTS' ) && EDD_DOING_TESTS ) {
+	private function is_cs_admin_page() {
+		if ( defined( 'CS_DOING_TESTS' ) && CS_DOING_TESTS ) {
 			return true;
 		}
 
 		$screen = get_current_screen();
 
-		if ( ! $screen instanceof \WP_Screen || 'dashboard' === $screen->id || ! edd_is_admin_page( '', '', false ) ) {
+		if ( ! $screen instanceof \WP_Screen || 'dashboard' === $screen->id || ! cs_is_admin_page( '', '', false ) ) {
 			return false;
 		}
 
@@ -75,7 +75,7 @@ class License_Upgrade_Notice extends Notice {
 	 */
 	protected function _should_display() {
 
-		if ( ! $this->is_edd_admin_page() ) {
+		if ( ! $this->is_cs_admin_page() ) {
 			return false;
 		}
 
@@ -138,7 +138,7 @@ class License_Upgrade_Notice extends Notice {
 					);
 					break;
 				default :
-					$source = str_replace( 'download_page_edd-', '', $screen->base );
+					$source = str_replace( 'download_page_cs-', '', $screen->base );
 			}
 		}
 
@@ -148,8 +148,8 @@ class License_Upgrade_Notice extends Notice {
 				// No license keys active at all.
 				printf(
 				/* Translators: %1$s opening anchor tag; %2$s closing anchor tag */
-					__( 'You are using the free version of Easy Digital Downloads. %1$sPurchase a pass%2$s to get email marketing tools and recurring payments.', 'easy-digital-downloads' ),
-					'<a href="' . esc_url( add_query_arg( $this->query_args( 'core', $source ), 'https://easydigitaldownloads.com/pricing/' ) ) . '" target="_blank">',
+					__( 'You are using the free version of CommerceStore. %1$sPurchase a pass%2$s to get email marketing tools and recurring payments.', 'commercestore' ),
+					'<a href="' . esc_url( add_query_arg( $this->query_args( 'core', $source ), 'https://commercestore.com/pricing/' ) ) . '" target="_blank">',
 					'</a>'
 				);
 
@@ -158,8 +158,8 @@ class License_Upgrade_Notice extends Notice {
 				// Individual product license active, but no pass.
 				printf(
 				/* Translators: %1$s opening anchor tag; %2$s closing anchor tag */
-					__( 'For access to additional Easy Digital Downloads extensions to grow your store, consider %1$spurchasing a pass%2$s.', 'easy-digital-downloads' ),
-					'<a href="' . esc_url( add_query_arg( $this->query_args( 'extension-license', $source ), 'https://easydigitaldownloads.com/pricing/' ) ) . '" target="_blank">',
+					__( 'For access to additional CommerceStore extensions to grow your store, consider %1$spurchasing a pass%2$s.', 'commercestore' ),
+					'<a href="' . esc_url( add_query_arg( $this->query_args( 'extension-license', $source ), 'https://commercestore.com/pricing/' ) ) . '" target="_blank">',
 					'</a>'
 				);
 
@@ -168,8 +168,8 @@ class License_Upgrade_Notice extends Notice {
 				// Personal pass active.
 				printf(
 				/* Translators: %1$s opening anchor tag; %2$s closing anchor tag */
-					__( 'You are using Easy Digital Downloads with a Personal Pass. Consider %1$supgrading%2$s to get recurring payments and more.', 'easy-digital-downloads' ),
-					'<a href="' . esc_url( add_query_arg( $this->query_args( 'personal-pass', $source ), 'https://easydigitaldownloads.com/your-account/license-keys/' ) ) . '" target="_blank">',
+					__( 'You are using CommerceStore with a Personal Pass. Consider %1$supgrading%2$s to get recurring payments and more.', 'commercestore' ),
+					'<a href="' . esc_url( add_query_arg( $this->query_args( 'personal-pass', $source ), 'https://commercestore.com/your-account/license-keys/' ) ) . '" target="_blank">',
 					'</a>'
 				);
 
@@ -178,7 +178,7 @@ class License_Upgrade_Notice extends Notice {
 				// Extended pass or higher.
 				printf(
 				/* Translators: %1$s opening anchor tag; %2$s closing anchor tag */
-					__( 'Grow your business and make more money with affiliate marketing. %1$sGet AffiliateWP%2$s', 'easy-digital-downloads' ),
+					__( 'Grow your business and make more money with affiliate marketing. %1$sGet AffiliateWP%2$s', 'commercestore' ),
 					'<a href="' . esc_url( add_query_arg( $this->query_args( 'extended-pass', $source ), 'https://affiliatewp.com/?ref=743' ) ) . '" target="_blank">',
 					'</a>'
 				);

@@ -1,21 +1,21 @@
 <?php
-namespace EDD\Reports\Data\Charts\v2;
+namespace CS\Reports\Data\Charts\v2;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Bar_Dataset class
  *
- * @group edd_reports
- * @group edd_reports_charts
+ * @group cs_reports
+ * @group cs_reports_charts
  *
- * @coversDefaultClass \EDD\Reports\Data\Charts\v2\Bar_Dataset
+ * @coversDefaultClass \CS\Reports\Data\Charts\v2\Bar_Dataset
  */
-class Bar_Dataset_Tests extends \EDD_UnitTestCase {
+class Bar_Dataset_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * @covers ::$fields
@@ -26,7 +26,7 @@ class Bar_Dataset_Tests extends \EDD_UnitTestCase {
 			'hoverBorderColor', 'hoverBorderWidth'
 		);
 
-		$bar_dataset = $this->getMockBuilder( 'EDD\\Reports\\Data\\Charts\\v2\\Bar_Dataset' )
+		$bar_dataset = $this->getMockBuilder( 'CS\\Reports\\Data\\Charts\\v2\\Bar_Dataset' )
 			->setMethods( null )
 			->disableOriginalConstructor()
 			->getMock();

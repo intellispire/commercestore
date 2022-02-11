@@ -1,59 +1,59 @@
 <?php
 /**
- * This template is used to display the registration form with [edd_register]
+ * This template is used to display the registration form with [cs_register]
  */
-global $edd_register_redirect;
+global $cs_register_redirect;
 
-do_action( 'edd_print_errors' ); ?>
+do_action( 'cs_print_errors' ); ?>
 
 <?php if ( ! is_user_logged_in() ) : ?>
 
-<form id="edd_register_form" class="edd_form" action="" method="post">
-	<?php do_action( 'edd_register_form_fields_top' ); ?>
+<form id="cs_register_form" class="cs_form" action="" method="post">
+	<?php do_action( 'cs_register_form_fields_top' ); ?>
 
 	<fieldset>
-		<legend><?php _e( 'Register New Account', 'easy-digital-downloads' ); ?></legend>
+		<legend><?php _e( 'Register New Account', 'commercestore' ); ?></legend>
 
-		<?php do_action( 'edd_register_form_fields_before' ); ?>
+		<?php do_action( 'cs_register_form_fields_before' ); ?>
 
 		<p>
-			<label for="edd-user-login"><?php _e( 'Username', 'easy-digital-downloads' ); ?></label>
-			<input id="edd-user-login" class="required edd-input" type="text" name="edd_user_login" />
+			<label for="cs-user-login"><?php _e( 'Username', 'commercestore' ); ?></label>
+			<input id="cs-user-login" class="required cs-input" type="text" name="cs_user_login" />
 		</p>
 
 		<p>
-			<label for="edd-user-email"><?php _e( 'Email', 'easy-digital-downloads' ); ?></label>
-			<input id="edd-user-email" class="required edd-input" type="email" name="edd_user_email" />
+			<label for="cs-user-email"><?php _e( 'Email', 'commercestore' ); ?></label>
+			<input id="cs-user-email" class="required cs-input" type="email" name="cs_user_email" />
 		</p>
 
 		<p>
-			<label for="edd-user-pass"><?php _e( 'Password', 'easy-digital-downloads' ); ?></label>
-			<input id="edd-user-pass" class="password required edd-input" type="password" name="edd_user_pass" />
+			<label for="cs-user-pass"><?php _e( 'Password', 'commercestore' ); ?></label>
+			<input id="cs-user-pass" class="password required cs-input" type="password" name="cs_user_pass" />
 		</p>
 
 		<p>
-			<label for="edd-user-pass2"><?php _e( 'Confirm Password', 'easy-digital-downloads' ); ?></label>
-			<input id="edd-user-pass2" class="password required edd-input" type="password" name="edd_user_pass2" />
+			<label for="cs-user-pass2"><?php _e( 'Confirm Password', 'commercestore' ); ?></label>
+			<input id="cs-user-pass2" class="password required cs-input" type="password" name="cs_user_pass2" />
 		</p>
 
 
-		<?php do_action( 'edd_register_form_fields_before_submit' ); ?>
+		<?php do_action( 'cs_register_form_fields_before_submit' ); ?>
 
 		<p>
-			<input type="hidden" name="edd_honeypot" value="" />
-			<input type="hidden" name="edd_action" value="user_register" />
-			<input type="hidden" name="edd_redirect" value="<?php echo esc_url( $edd_register_redirect ); ?>"/>
-			<input class="edd-submit" name="edd_register_submit" type="submit" value="<?php esc_attr_e( 'Register', 'easy-digital-downloads' ); ?>" />
+			<input type="hidden" name="cs_honeypot" value="" />
+			<input type="hidden" name="cs_action" value="user_register" />
+			<input type="hidden" name="cs_redirect" value="<?php echo esc_url( $cs_register_redirect ); ?>"/>
+			<input class="cs-submit" name="cs_register_submit" type="submit" value="<?php esc_attr_e( 'Register', 'commercestore' ); ?>" />
 		</p>
 
-		<?php do_action( 'edd_register_form_fields_after' ); ?>
+		<?php do_action( 'cs_register_form_fields_after' ); ?>
 	</fieldset>
 
-	<?php do_action( 'edd_register_form_fields_bottom' ); ?>
+	<?php do_action( 'cs_register_form_fields_bottom' ); ?>
 </form>
 
 <?php else : ?>
 
-	<?php do_action( 'edd_register_form_logged_in' ); ?>
+	<?php do_action( 'cs_register_form_logged_in' ); ?>
 
 <?php endif; ?>

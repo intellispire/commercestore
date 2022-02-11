@@ -1,11 +1,11 @@
 <?php
 
-namespace EDD\Admin\Extensions;
+namespace CS\Admin\Extensions;
 
 class ExtensionsAPI {
 
 	/**
-	 * Gets the product data from the EDD Products API.
+	 * Gets the product data from the CommerceStore Products API.
 	 *
 	 * @since 2.11.4
 	 * @param array $body    The body for the API request.
@@ -21,7 +21,7 @@ class ExtensionsAPI {
 		}
 		$key = $this->array_key_first( $body );
 		// The option name is created from the first key/value pair of the API "body".
-		$option_name = sanitize_key( "edd_extension_{$key}_{$body[ $key ]}_data" );
+		$option_name = sanitize_key( "cs_extension_{$key}_{$body[ $key ]}_data" );
 		$option      = get_option( $option_name );
 		$is_stale    = $this->option_has_expired( $option );
 
@@ -97,7 +97,7 @@ class ExtensionsAPI {
 	 */
 	private function get_all_product_data() {
 		// Possibly all product data is in an option. If it is, return it.
-		$all_product_data = get_option( 'edd_all_extension_data' );
+		$all_product_data = get_option( 'cs_all_extension_data' );
 		if ( $all_product_data && ! $this->option_has_expired( $all_product_data ) ) {
 			return ! empty( $all_product_data['products'] ) ? $all_product_data['products'] : false;
 		}
@@ -105,7 +105,7 @@ class ExtensionsAPI {
 		// Otherwise, query the API.
 		$url     = add_query_arg(
 			array(
-				'edd_action' => 'extension_data',
+				'cs_action' => 'extension_data',
 			),
 			$this->get_products_url()
 		);
@@ -120,7 +120,7 @@ class ExtensionsAPI {
 		// If there was an API error, set option and return false.
 		if ( is_wp_error( $request ) || ( 200 !== wp_remote_retrieve_response_code( $request ) ) ) {
 			update_option(
-				'edd_all_extension_data',
+				'cs_all_extension_data',
 				array(
 					'timeout' => strtotime( '+1 hour', time() ),
 				),
@@ -137,7 +137,7 @@ class ExtensionsAPI {
 			'products' => $all_product_data,
 		);
 
-		update_option( 'edd_all_extension_data', $data, false );
+		update_option( 'cs_all_extension_data', $data, false );
 
 		return $all_product_data;
 	}
@@ -168,11 +168,11 @@ class ExtensionsAPI {
 	 * @return string
 	 */
 	private function get_products_url() {
-		if ( defined( 'EDD_PRODUCTS_URL' ) ) {
-			return EDD_PRODUCTS_URL;
+		if ( defined( 'CS_PRODUCTS_URL' ) ) {
+			return CS_PRODUCTS_URL;
 		}
 
-		return 'https://easydigitaldownloads.com/';
+		return 'https://commercestore.com/';
 	}
 
 	/**

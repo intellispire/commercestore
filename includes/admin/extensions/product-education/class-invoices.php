@@ -4,27 +4,27 @@
  *
  * Manages automatic installation/activation for Invoices.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Invoices
- * @copyright   Copyright (c) 2021, Easy Digital Downloads
+ * @copyright   Copyright (c) 2021, CommerceStore
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.11.4
  */
-namespace EDD\Admin\Settings;
+namespace CS\Admin\Settings;
 
-use \EDD\Admin\Extensions\Extension;
+use \CS\Admin\Extensions\Extension;
 
 class Invoices extends Extension {
 
 	/**
-	 * The product ID on EDD.
+	 * The product ID on CS.
 	 *
 	 * @var integer
 	 */
 	protected $item_id = 375153;
 
 	/**
-	 * The EDD settings tab where this extension should show.
+	 * The CommerceStore settings tab where this extension should show.
 	 *
 	 * @since 2.11.4
 	 * @var string
@@ -42,12 +42,12 @@ class Invoices extends Extension {
 	/**
 	 * The pass level required to access this extension.
 	 */
-	const PASS_LEVEL = \EDD\Admin\Pass_Manager::EXTENDED_PASS_ID;
+	const PASS_LEVEL = \CS\Admin\Pass_Manager::EXTENDED_PASS_ID;
 
 	public function __construct() {
-		add_filter( 'edd_settings_sections_gateways', array( $this, 'add_section' ) );
-		add_action( 'edd_settings_tab_top_gateways_invoices', array( $this, 'settings_field' ) );
-		add_action( 'edd_settings_tab_top_gateways_invoices', array( $this, 'hide_submit_button' ) );
+		add_filter( 'cs_settings_sections_gateways', array( $this, 'add_section' ) );
+		add_action( 'cs_settings_tab_top_gateways_invoices', array( $this, 'settings_field' ) );
+		add_action( 'cs_settings_tab_top_gateways_invoices', array( $this, 'hide_submit_button' ) );
 
 		parent::__construct();
 	}
@@ -56,10 +56,10 @@ class Invoices extends Extension {
 	 * Gets the custom configuration for Invoices.
 	 *
 	 * @since 2.11.4
-	 * @param \EDD\Admin\Extensions\ProductData $product_data The product data object.
+	 * @param \CS\Admin\Extensions\ProductData $product_data The product data object.
 	 * @return array
 	 */
-	protected function get_configuration( \EDD\Admin\Extensions\ProductData $product_data ) {
+	protected function get_configuration( \CS\Admin\Extensions\ProductData $product_data ) {
 		return array(
 			'style'       => 'detailed-2col',
 			'title'       => 'Attractive Invoices For Your Customers',
@@ -100,13 +100,13 @@ class Invoices extends Extension {
 			return $sections;
 		}
 
-		$sections[ $this->settings_section ] = __( 'Invoices', 'easy-digital-downloads' );
+		$sections[ $this->settings_section ] = __( 'Invoices', 'commercestore' );
 
 		return $sections;
 	}
 
 	/**
-	 * Whether EDD Invoices active or not.
+	 * Whether CommerceStore Invoices active or not.
 	 *
 	 * @since 2.11.4
 	 *
@@ -117,7 +117,7 @@ class Invoices extends Extension {
 			return true;
 		}
 
-		return class_exists( 'EDDInvoices' );
+		return class_exists( 'CSInvoices' );
 	}
 }
 

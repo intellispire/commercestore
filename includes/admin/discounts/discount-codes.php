@@ -2,9 +2,9 @@
 /**
  * Discount Codes
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Discounts
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -20,22 +20,22 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.4
  * @since 3.0 Nomenclature updated for consistency.
 */
-function edd_discounts_page() {
+function cs_discounts_page() {
 	// Enqueue scripts.
-	wp_enqueue_script( 'edd-admin-discounts' );
+	wp_enqueue_script( 'cs-admin-discounts' );
 
 	// Edit
-	if ( ! empty( $_GET['edd-action'] ) && ( 'edit_discount' === $_GET['edd-action'] ) ) {
-		wp_enqueue_script( 'edd-admin-notes' );
-		require_once EDD_PLUGIN_DIR . 'includes/admin/discounts/edit-discount.php';
+	if ( ! empty( $_GET['cs-action'] ) && ( 'edit_discount' === $_GET['cs-action'] ) ) {
+		wp_enqueue_script( 'cs-admin-notes' );
+		require_once CS_PLUGIN_DIR . 'includes/admin/discounts/edit-discount.php';
 
 	// Add
-	} elseif ( ! empty( $_GET['edd-action'] ) && ( 'add_discount' === $_GET['edd-action'] ) ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/discounts/add-discount.php';
+	} elseif ( ! empty( $_GET['cs-action'] ) && ( 'add_discount' === $_GET['cs-action'] ) ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/discounts/add-discount.php';
 
 	// List tables
 	} else {
-		edd_adjustments_page();
+		cs_adjustments_page();
 	}
 }
 
@@ -44,19 +44,19 @@ function edd_discounts_page() {
  *
  * @since 3.0
  */
-function edd_discounts_page_content() {
-	require_once EDD_PLUGIN_DIR . 'includes/admin/discounts/class-discount-codes-table.php';
+function cs_discounts_page_content() {
+	require_once CS_PLUGIN_DIR . 'includes/admin/discounts/class-discount-codes-table.php';
 
-	$discount_codes_table = new EDD_Discount_Codes_Table();
+	$discount_codes_table = new CS_Discount_Codes_Table();
 	$discount_codes_table->prepare_items();
 
-	do_action( 'edd_discounts_page_top' ); ?>
+	do_action( 'cs_discounts_page_top' ); ?>
 
-	<form id="edd-discounts-filter" method="get" action="<?php echo admin_url( 'edit.php?post_type=download&page=edd-discounts' ); ?>">
-		<?php $discount_codes_table->search_box( __( 'Search Discounts', 'easy-digital-downloads' ), 'edd-discounts' ); ?>
+	<form id="cs-discounts-filter" method="get" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-discounts' ); ?>">
+		<?php $discount_codes_table->search_box( __( 'Search Discounts', 'commercestore' ), 'cs-discounts' ); ?>
 
 		<input type="hidden" name="post_type" value="download" />
-		<input type="hidden" name="page" value="edd-discounts" />
+		<input type="hidden" name="page" value="cs-discounts" />
 
 		<?php
 		$discount_codes_table->views();
@@ -64,6 +64,6 @@ function edd_discounts_page_content() {
 		?>
 	</form>
 
-	<?php do_action( 'edd_discounts_page_bottom' );
+	<?php do_action( 'cs_discounts_page_bottom' );
 }
-add_action( 'edd_adjustments_page_discount', 'edd_discounts_page_content' );
+add_action( 'cs_adjustments_page_discount', 'cs_discounts_page_content' );

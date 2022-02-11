@@ -2,8 +2,8 @@
 /**
  * Email Footer
  *
- * @author 		Easy Digital Downloads
- * @package 	Easy Digital Downloads/Templates/Emails
+ * @author 		CommerceStore
+ * @package 	CommerceStore/Templates/Emails
  * @version     2.1
  */
 
@@ -45,7 +45,7 @@ $credit = "
                                                 <table border="0" cellpadding="10" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td colspan="2" valign="middle" id="credit" style="<?php echo $credit; ?>">
-                                                           <?php echo wpautop( wp_kses_post( wptexturize( apply_filters( 'edd_email_footer_text', '<a href="' . esc_url( home_url() ) . '">' . get_bloginfo( 'name' ) . '</a>' ) ) ) ); ?>
+                                                           <?php echo wpautop( wp_kses_post( wptexturize( apply_filters( 'cs_email_footer_text', '<a href="' . esc_url( home_url() ) . '">' . get_bloginfo( 'name' ) . '</a>' ) ) ) ); ?>
                                                         </td>
                                                     </tr>
                                                 </table>

@@ -8,18 +8,18 @@ import { getChosenVars } from 'utils/chosen.js';
 jQuery( document ).ready( function( $ ) {
 
 	// Globally apply to elements on the page.
-	$( '.edd-select-chosen' ).each( function() {
+	$( '.cs-select-chosen' ).each( function() {
 		const el = $( this );
 		el.chosen( getChosenVars( el ) );
 	} );
 
-	$( '.edd-select-chosen .chosen-search input' ).each( function() {
+	$( '.cs-select-chosen .chosen-search input' ).each( function() {
 		// Bail if placeholder already set
 		if ( $( this ).attr( 'placeholder' ) ) {
 			return;
 		}
 
-		const selectElem = $( this ).parent().parent().parent().prev( 'select.edd-select-chosen' ),
+		const selectElem = $( this ).parent().parent().parent().prev( 'select.cs-select-chosen' ),
 			placeholder = selectElem.data( 'search-placeholder' );
 
 		if ( placeholder ) {
@@ -31,27 +31,27 @@ jQuery( document ).ready( function( $ ) {
 	$( '.chosen-choices' ).on( 'click', function() {
 		let placeholder = $( this ).parent().prev().data( 'search-placeholder' );
 		if ( typeof placeholder === 'undefined' ) {
-			placeholder = edd_vars.type_to_search;
+			placeholder = cs_vars.type_to_search;
 		}
 		$( this ).children( 'li' ).children( 'input' ).attr( 'placeholder', placeholder );
 	} );
 
 	// This fixes the Chosen box being 0px wide when the thickbox is opened
-	$( '#post' ).on( 'click', '.edd-thickbox', function() {
-		$( '.edd-select-chosen', '#choose-download' ).css( 'width', '100%' );
+	$( '#post' ).on( 'click', '.cs-thickbox', function() {
+		$( '.cs-select-chosen', '#choose-download' ).css( 'width', '100%' );
 	} );
 
 	// Variables for setting up the typing timer
 	// Time in ms, Slow - 521ms, Moderate - 342ms, Fast - 300ms
 	let userInteractionInterval = 342,
-		typingTimerElements = '.edd-select-chosen .chosen-search input, .edd-select-chosen .search-field input',
+		typingTimerElements = '.cs-select-chosen .chosen-search input, .cs-select-chosen .search-field input',
 		typingTimer;
 
 	// Replace options with search results
 	$( document.body ).on( 'keyup', typingTimerElements, _.debounce( function( e ) {
 		let	element = $( this ),
 			val = element.val(),
-			container = element.closest( '.edd-select-chosen' ),
+			container = element.closest( '.cs-select-chosen' ),
 
 			select = container.prev(),
 			select_type = select.data( 'search-type' ),
@@ -60,7 +60,7 @@ jQuery( document ).ready( function( $ ) {
 			variations_only = container.hasClass( 'variations-only' ),
 
 			lastKey = e.which,
-			search_type = 'edd_download_search';
+			search_type = 'cs_download_search';
 
 		// String replace the chosen container IDs
 		container.attr( 'id' ).replace( '_chosen', '' );
@@ -72,14 +72,14 @@ jQuery( document ).ready( function( $ ) {
 				return;
 			}
 
-			search_type = 'edd_' + select_type + '_search';
+			search_type = 'cs_' + select_type + '_search';
 		} else {
 			return;
 		}
 
 		// Don't fire if short or is a modifier key (shift, ctrl, apple command key, or arrow keys)
 		if (
-			( val.length <= 3 && 'edd_download_search' === search_type ) ||
+			( val.length <= 3 && 'cs_download_search' === search_type ) ||
 			(
 				lastKey === 16 ||
 				lastKey === 13 ||

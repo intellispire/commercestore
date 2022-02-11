@@ -2,18 +2,18 @@
 /**
  * Customer Database Object Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Rows
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Rows;
+namespace CS\Database\Rows;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Row;
+use CS\Database\Row;
 
 /**
  * Customer database row class.

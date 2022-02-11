@@ -2,13 +2,13 @@
 /**
  * Backwards Compatibility Handler for Taxes.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Tax Class.
  *
- * EDD 3.0 moves away from storing tax rates in wp_options. This class handles all the backwards compatibility for the
+ * CommerceStore 3.0 moves away from storing tax rates in wp_options. This class handles all the backwards compatibility for the
  * transition to custom tables.
  *
  * @since 3.0
@@ -50,7 +50,7 @@ class Tax extends Base {
 	/**
 	 * Backwards compatibility layer for update_option().
 	 *
-	 * This is here for backwards compatibility purposes with the migration to custom tables in EDD 3.0.
+	 * This is here for backwards compatibility purposes with the migration to custom tables in CommerceStore 3.0.
 	 *
 	 * @since 3.0
 	 *
@@ -63,7 +63,7 @@ class Tax extends Base {
 	public function update_option( $value, $option, $old_value ) {
 
 		// Bail if tax rates are not being updated.
-		if ( 'edd_tax_rates' !== $option ) {
+		if ( 'cs_tax_rates' !== $option ) {
 			return $value;
 		}
 
@@ -92,12 +92,12 @@ class Tax extends Base {
 			);
 
 			// Update database if adjustment ID was supplied.
-			if ( isset( $tax_rate['edd_adjustment_id'] ) ) {
-				edd_update_adjustment( $tax_rate['edd_adjustment_id'], $adjustment_data );
+			if ( isset( $tax_rate['cs_adjustment_id'] ) ) {
+				cs_update_adjustment( $tax_rate['cs_adjustment_id'], $adjustment_data );
 
 			// Check if the tax rate exists.
 			} else {
-				$rate = edd_get_adjustments( array(
+				$rate = cs_get_adjustments( array(
 					'type'        => 'tax_rate',
 					'fields'      => 'ids',
 					'name'        => $tax_rate['country'],
@@ -109,11 +109,11 @@ class Tax extends Base {
 				if ( 1 === count( $rate ) ) {
 					$adjustment_id = absint( $rate[0] );
 
-					edd_update_adjustment( $adjustment_id, $adjustment_data );
+					cs_update_adjustment( $adjustment_id, $adjustment_data );
 
 				// Add the tax rate to the database.
 				} else {
-					edd_add_adjustment( $adjustment_data );
+					cs_add_adjustment( $adjustment_data );
 				}
 			}
 		}

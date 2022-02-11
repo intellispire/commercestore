@@ -4,9 +4,9 @@
  *
  * This class handles importing payments with the batch processing API
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Import
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.6
  */
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Import Class
+ * CS_Batch_Import Class
  *
  * @since 2.6
  */
-class EDD_Batch_Payments_Import extends EDD_Batch_Import {
+class CS_Batch_Payments_Import extends CS_Batch_Import {
 
 	/**
 	 * Set up our import config.
@@ -45,7 +45,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 			'name'              => '',
 			'first_name'        => '',
 			'last_name'         => '',
-			'edd_customer_id'   => '',
+			'cs_customer_id'   => '',
 			'user_id'           => '',
 			'discounts'         => '',
 			'key'               => '',
@@ -74,12 +74,12 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 		$more = false;
 
 		if ( ! $this->can_import() ) {
-			wp_die( __( 'You do not have permission to import data.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+			wp_die( __( 'You do not have permission to import data.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		// Remove certain actions to ensure they don't fire when creating the payments
-		remove_action( 'edd_complete_purchase', 'edd_trigger_purchase_receipt', 999 );
-		remove_action( 'edd_admin_sale_notice', 'edd_admin_email_notice', 10 );
+		remove_action( 'cs_complete_purchase', 'cs_trigger_purchase_receipt', 999 );
+		remove_action( 'cs_admin_sale_notice', 'cs_admin_email_notice', 10 );
 
 		$i      = 1;
 		$offset = $this->step > 1 ? ( $this->per_step * ( $this->step - 1 ) ) : 0;
@@ -89,7 +89,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 
 			// Clean up the temporary records in the payment import process
 			global $wpdb;
-			$sql = "DELETE FROM {$wpdb->prefix}edd_customermeta WHERE meta_key = '_canonical_import_id'";
+			$sql = "DELETE FROM {$wpdb->prefix}cs_customermeta WHERE meta_key = '_canonical_import_id'";
 			$wpdb->query( $sql );
 
 			// Delete the uploaded CSV file.
@@ -131,7 +131,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 	 */
 	public function create_payment( $row = array() ) {
 
-		$payment = new EDD_Payment;
+		$payment = new CS_Payment;
 		$payment->status = 'pending';
 
 		if( ! empty( $this->field_mapping['number'] ) && ! empty( $row[ $this->field_mapping['number'] ] ) ) {
@@ -145,7 +145,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 			$mode = strtolower( sanitize_text_field( $row[ $this->field_mapping['mode'] ] ) );
 			$mode = 'test' != $mode && 'live' != $mode ? false : $mode;
 			if( ! $mode ) {
-				$mode = edd_is_test_mode() ? 'test' : 'live';
+				$mode = cs_is_test_mode() ? 'test' : 'live';
 			}
 
 			$payment->mode = $mode;
@@ -220,7 +220,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 
 				$payment->user_id = $user->ID;
 
-				$customer = new EDD_Customer( $payment->customer_id );
+				$customer = new CS_Customer( $payment->customer_id );
 
 				if( empty( $customer->user_id ) ) {
 					$customer->update( array( 'user_id' => $user->ID ) );
@@ -250,7 +250,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 
 		if( ! empty( $this->field_mapping['gateway'] ) && ! empty( $row[ $this->field_mapping['gateway'] ] ) ) {
 
-			$gateways = edd_get_payment_gateways();
+			$gateways = cs_get_payment_gateways();
 			$gateway  = strtolower( sanitize_text_field( $row[ $this->field_mapping['gateway'] ] ) );
 
 			if( ! array_key_exists( $gateway, $gateways ) ) {
@@ -292,10 +292,10 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 
 		if( ! empty( $this->field_mapping['downloads'] ) && ! empty( $row[ $this->field_mapping['downloads'] ] ) ) {
 
-			if( __( 'Products (Raw)', 'easy-digital-downloads' ) == $this->field_mapping['downloads'] ) {
+			if( __( 'Products (Raw)', 'commercestore' ) == $this->field_mapping['downloads'] ) {
 
-				// This is an EDD export so we can extract prices
-				$downloads = $this->get_downloads_from_edd( $row[ $this->field_mapping['downloads'] ] );
+				// This is an CommerceStore export so we can extract prices
+				$downloads = $this->get_downloads_from_cs( $row[ $this->field_mapping['downloads'] ] );
 
 			} else {
 
@@ -324,7 +324,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 						continue;
 					}
 
-					$item_price = ! isset( $price ) ? edd_get_download_price( $download_id ) : $price;
+					$item_price = ! isset( $price ) ? cs_get_download_price( $download_id ) : $price;
 					$item_tax   = ! isset( $tax ) ? ( $download_count > 1 ? 0.00 : $payment->tax ) : $tax;
 					$price_id   = ! isset( $price_id ) ? false : $price_id;
 
@@ -344,19 +344,19 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 
 		if( ! empty( $this->field_mapping['total'] ) && ! empty( $row[ $this->field_mapping['total'] ] ) ) {
 
-			$payment->total = edd_sanitize_amount( $row[ $this->field_mapping['total'] ] );
+			$payment->total = cs_sanitize_amount( $row[ $this->field_mapping['total'] ] );
 
 		}
 
 		if( ! empty( $this->field_mapping['tax'] ) && ! empty( $row[ $this->field_mapping['tax'] ] ) ) {
 
-			$payment->tax = edd_sanitize_amount( $row[ $this->field_mapping['tax'] ] );
+			$payment->tax = cs_sanitize_amount( $row[ $this->field_mapping['tax'] ] );
 
 		}
 
 		if( ! empty( $this->field_mapping['subtotal'] ) && ! empty( $row[ $this->field_mapping['subtotal'] ] ) ) {
 
-			$payment->subtotal = edd_sanitize_amount( $row[ $this->field_mapping['subtotal'] ] );
+			$payment->subtotal = cs_sanitize_amount( $row[ $this->field_mapping['subtotal'] ] );
 
 		} else {
 
@@ -412,27 +412,27 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 		}
 
 		// Look for a customer from the canonical source, if any
-		if( ! empty( $this->field_mapping['edd_customer_id'] ) && ! empty( $row[ $this->field_mapping['edd_customer_id'] ] ) ) {
+		if( ! empty( $this->field_mapping['cs_customer_id'] ) && ! empty( $row[ $this->field_mapping['cs_customer_id'] ] ) ) {
 
-			$canonical_id = absint( $row[ $this->field_mapping['edd_customer_id'] ] );
-			$mapped_id    = $wpdb->get_var( $wpdb->prepare( "SELECT edd_customer_id FROM $wpdb->edd_customermeta WHERE meta_key = '_canonical_import_id' AND meta_value = %d LIMIT 1", $canonical_id ) );
+			$canonical_id = absint( $row[ $this->field_mapping['cs_customer_id'] ] );
+			$mapped_id    = $wpdb->get_var( $wpdb->prepare( "SELECT cs_customer_id FROM $wpdb->cs_customermeta WHERE meta_key = '_canonical_import_id' AND meta_value = %d LIMIT 1", $canonical_id ) );
 
 		}
 
 		if( ! empty( $mapped_id ) ) {
 
-			$customer = new EDD_Customer( $mapped_id );
+			$customer = new CS_Customer( $mapped_id );
 
 		}
 
 		if( empty( $mapped_id ) || ! $customer->id > 0 ) {
 
 			// Look for a customer based on provided ID, if any
-			if ( ! empty( $this->field_mapping['edd_customer_id'] ) && ! empty( $row[ $this->field_mapping['edd_customer_id'] ] ) ) {
+			if ( ! empty( $this->field_mapping['cs_customer_id'] ) && ! empty( $row[ $this->field_mapping['cs_customer_id'] ] ) ) {
 
-				$customer_id = absint( $row[ $this->field_mapping['edd_customer_id'] ] );
+				$customer_id = absint( $row[ $this->field_mapping['cs_customer_id'] ] );
 
-				$customer_by_id = new EDD_Customer( $customer_id );
+				$customer_by_id = new CS_Customer( $customer_id );
 
 			}
 
@@ -440,7 +440,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 
 			if( ! empty( $email ) ) {
 
-				$customer_by_email = new EDD_Customer( $email );
+				$customer_by_email = new CS_Customer( $email );
 
 			}
 
@@ -463,8 +463,8 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 			// Make sure we found a customer. Create one if not.
 			if ( empty( $customer->id ) ) {
 
-				if ( ! $customer instanceof EDD_Customer ) {
-					$customer = new EDD_Customer();
+				if ( ! $customer instanceof CS_Customer ) {
+					$customer = new CS_Customer();
 				}
 			}
 
@@ -548,7 +548,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 	 * @since 2.6
 	 * @return int
 	 */
-	public function get_downloads_from_edd( $data_str ) {
+	public function get_downloads_from_cs( $data_str ) {
 
 		// Break string into separate products
 
@@ -621,7 +621,7 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 	 * @return string
 	 */
 	public function get_list_table_url() {
-		return admin_url( 'edit.php?post_type=download&page=edd-payment-history' );
+		return admin_url( 'edit.php?post_type=download&page=cs-payment-history' );
 	}
 
 	/**
@@ -631,6 +631,6 @@ class EDD_Batch_Payments_Import extends EDD_Batch_Import {
 	 * @return string
 	 */
 	public function get_import_type_label() {
-		return __( 'payments', 'easy-digital-downloads' );
+		return __( 'payments', 'commercestore' );
 	}
 }

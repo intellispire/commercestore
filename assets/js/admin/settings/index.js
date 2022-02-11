@@ -4,7 +4,7 @@ import './gateways/paypal';
 /**
  * Settings screen JS
  */
-const EDD_Settings = {
+const CS_Settings = {
 	init: function() {
 		this.general();
 		this.misc();
@@ -13,29 +13,29 @@ const EDD_Settings = {
 	},
 
 	general: function() {
-		const edd_color_picker = $( '.edd-color-picker' );
+		const cs_color_picker = $( '.cs-color-picker' );
 
-		if ( edd_color_picker.length ) {
-			edd_color_picker.wpColorPicker();
+		if ( cs_color_picker.length ) {
+			cs_color_picker.wpColorPicker();
 		}
 
 		// Settings Upload field JS
-		if ( typeof wp === 'undefined' || '1' !== edd_vars.new_media_ui ) {
+		if ( typeof wp === 'undefined' || '1' !== cs_vars.new_media_ui ) {
 			// Old Thickbox uploader
-			const edd_settings_upload_button = $( '.edd_settings_upload_button' );
-			if ( edd_settings_upload_button.length > 0 ) {
+			const cs_settings_upload_button = $( '.cs_settings_upload_button' );
+			if ( cs_settings_upload_button.length > 0 ) {
 				window.formfield = '';
 
-				$( document.body ).on( 'click', edd_settings_upload_button, function( e ) {
+				$( document.body ).on( 'click', cs_settings_upload_button, function( e ) {
 					e.preventDefault();
 					window.formfield = $( this ).parent().prev();
 					window.tbframe_interval = setInterval( function() {
-						jQuery( '#TB_iframeContent' ).contents().find( '.savesend .button' ).val( edd_vars.use_this_file ).end().find( '#insert-gallery, .wp-post-thumbnail' ).hide();
+						jQuery( '#TB_iframeContent' ).contents().find( '.savesend .button' ).val( cs_vars.use_this_file ).end().find( '#insert-gallery, .wp-post-thumbnail' ).hide();
 					}, 2000 );
-					tb_show( edd_vars.add_new_download, 'media-upload.php?TB_iframe=true' );
+					tb_show( cs_vars.add_new_download, 'media-upload.php?TB_iframe=true' );
 				} );
 
-				window.edd_send_to_editor = window.send_to_editor;
+				window.cs_send_to_editor = window.send_to_editor;
 				window.send_to_editor = function( html ) {
 					if ( window.formfield ) {
 						imgurl = $( 'a', '<div>' + html + '</div>' ).attr( 'href' );
@@ -43,9 +43,9 @@ const EDD_Settings = {
 						window.clearInterval( window.tbframe_interval );
 						tb_remove();
 					} else {
-						window.edd_send_to_editor( html );
+						window.cs_send_to_editor( html );
 					}
-					window.send_to_editor = window.edd_send_to_editor;
+					window.send_to_editor = window.cs_send_to_editor;
 					window.formfield = '';
 					window.imagefield = false;
 				};
@@ -55,7 +55,7 @@ const EDD_Settings = {
 			var file_frame;
 			window.formfield = '';
 
-			$( document.body ).on( 'click', '.edd_settings_upload_button', function( e ) {
+			$( document.body ).on( 'click', '.cs_settings_upload_button', function( e ) {
 				e.preventDefault();
 
 				const button = $( this );
@@ -111,7 +111,7 @@ const EDD_Settings = {
 	},
 
 	misc: function() {
-		const downloadMethod = $( 'select[name="edd_settings[download_method]"]' ),
+		const downloadMethod = $( 'select[name="cs_settings[download_method]"]' ),
 			symlink = downloadMethod.parent().parent().next();
 
 		// Hide Symlink option if Download Method is set to Direct
@@ -133,10 +133,10 @@ const EDD_Settings = {
 	},
 
 	gateways: function() {
-		$( '#edd-payment-gateways input[type="checkbox"]' ).on( 'change', function() {
+		$( '#cs-payment-gateways input[type="checkbox"]' ).on( 'change', function() {
 			const gateway = $( this ),
 				gateway_key = gateway.data( 'gateway-key' ),
-				default_gateway = $( '#edd_settings\\[default_gateway\\]' ),
+				default_gateway = $( '#cs_settings\\[default_gateway\\]' ),
 				option = default_gateway.find( 'option[value="' + gateway_key + '"]' );
 
 			// Toggle enable/disable based
@@ -154,9 +154,9 @@ const EDD_Settings = {
 	},
 
 	emails: function() {
-		$('#edd-recapture-connect').on('click', function(e) {
+		$('#cs-recapture-connect').on('click', function(e) {
 			e.preventDefault();
-			$(this).html( edd_vars.wait + ' <span class="edd-loading"></span>' );
+			$(this).html( cs_vars.wait + ' <span class="cs-loading"></span>' );
 			document.body.style.cursor = 'wait';
 			recaptureRemoteInstall();
 		});
@@ -164,5 +164,5 @@ const EDD_Settings = {
 };
 
 jQuery( document ).ready( function( $ ) {
-	EDD_Settings.init();
+	CS_Settings.init();
 } );

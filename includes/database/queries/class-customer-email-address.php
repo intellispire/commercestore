@@ -2,25 +2,25 @@
 /**
  * Customer Email Address Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying customer email addresses.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Customer_Email_Address::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Customer_Email_Address::__construct() for accepted arguments.
  */
 class Customer_Email_Address extends Query {
 
@@ -51,7 +51,7 @@ class Customer_Email_Address extends Query {
 	 * @access public
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Customer_Email_Addresses';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Customer_Email_Addresses';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Customer_Email_Address extends Query {
 	 * @access public
 	 * @var mixed
 	 */
-	protected $item_shape = '\\EDD\\Customers\\Email_Address';
+	protected $item_shape = '\\CS\\Customers\\Email_Address';
 
 	/** Cache *****************************************************************/
 

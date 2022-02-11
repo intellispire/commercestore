@@ -2,16 +2,16 @@
 /**
  * Reports API - Dataset class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports\Data\Charts
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\Charts\v2;
+namespace CS\Reports\Data\Charts\v2;
 
-use EDD\Reports\Data\Chart_Endpoint;
-use EDD\Utils\Error_Logger_Interface as Error_Logger;
+use CS\Reports\Data\Chart_Endpoint;
+use CS\Utils\Error_Logger_Interface as Error_Logger;
 
 /**
  * Represents the manifestation of a ChartJS v2 dataset in PHP form.
@@ -121,7 +121,7 @@ abstract class Dataset implements Error_Logger {
 	 *
 	 * @since 3.0
 	 *
-	 * @param EDD\Reports\Data\Chart_Endpoint $endpoint Chart_Endpoint object.
+	 * @param CS\Reports\Data\Chart_Endpoint $endpoint Chart_Endpoint object.
 	 */
 	private function set_endpoint( $endpoint ) {
 		$this->endpoint = $endpoint;
@@ -191,7 +191,7 @@ abstract class Dataset implements Error_Logger {
 		 * @param array   $fields ChartJS fields (global and local).
 		 * @param Dataset $this   Dataset instance.
 		 */
-		return apply_filters( 'edd_reports_chart_fields', $fields, $this );
+		return apply_filters( 'cs_reports_chart_fields', $fields, $this );
 	}
 
 	/**

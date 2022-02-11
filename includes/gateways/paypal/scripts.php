@@ -9,9 +9,9 @@
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
 
 /**
  * Enqueues polyfills for Promise and Fetch.
@@ -26,7 +26,7 @@ function maybe_enqueue_polyfills() {
 	 *
 	 * @since 2.11
 	 */
-	if ( ! apply_filters( 'edd_load_ie11_polyfills', true ) ) {
+	if ( ! apply_filters( 'cs_load_ie11_polyfills', true ) ) {
 		return;
 	}
 
@@ -36,7 +36,7 @@ function maybe_enqueue_polyfills() {
 	} else {
 		wp_enqueue_script(
 			'wp-polyfill',
-			EDD_PLUGIN_URL . 'assets/js/wp-polyfill.min.js',
+			CS_PLUGIN_URL . 'assets/js/wp-polyfill.min.js',
 			array(),
 			false,
 			false
@@ -53,7 +53,7 @@ function maybe_enqueue_polyfills() {
  * @return void
  */
 function register_js( $force_load = false ) {
-	if ( ! edd_is_gateway_active( 'paypal_commerce' ) ) {
+	if ( ! cs_is_gateway_active( 'paypal_commerce' ) ) {
 		return;
 	}
 
@@ -74,9 +74,9 @@ function register_js( $force_load = false ) {
 	 *
 	 * @since 2.11
 	 */
-	$sdk_query_args = apply_filters( 'edd_paypal_js_sdk_query_args', array(
+	$sdk_query_args = apply_filters( 'cs_paypal_js_sdk_query_args', array(
 		'client-id'       => urlencode( $api->client_id ),
-		'currency'        => urlencode( strtoupper( edd_get_currency() ) ),
+		'currency'        => urlencode( strtoupper( cs_get_currency() ) ),
 		'intent'          => 'capture',
 		'disable-funding' => 'card,credit,bancontact,blik,eps,giropay,ideal,mercadopago,mybank,p24,sepa,sofort,venmo'
 	) );
@@ -87,22 +87,22 @@ function register_js( $force_load = false ) {
 	);
 
 	wp_register_script(
-		'edd-paypal',
-		EDD_PLUGIN_URL . 'assets/js/paypal-checkout.js',
+		'cs-paypal',
+		CS_PLUGIN_URL . 'assets/js/paypal-checkout.js',
 		array(
 			'sandhills-paypal-js-sdk',
 			'jquery',
-			'edd-ajax'
+			'cs-ajax'
 		),
-		EDD_VERSION,
+		CS_VERSION,
 		true
 	);
 
-	if ( edd_is_checkout() || $force_load ) {
+	if ( cs_is_checkout() || $force_load ) {
 		maybe_enqueue_polyfills();
 
 		wp_enqueue_script( 'sandhills-paypal-js-sdk' );
-		wp_enqueue_script( 'edd-paypal' );
+		wp_enqueue_script( 'cs-paypal' );
 
 		$paypal_script_vars = array(
 			/**
@@ -110,15 +110,15 @@ function register_js( $force_load = false ) {
 			 *
 			 * @since 2.11
 			 */
-			'approvalAction' => apply_filters( 'edd_paypal_on_approve_action', 'edd_capture_paypal_order' ),
-			'defaultError'   => edd_build_errors_html( array(
-				'paypal-error' => esc_html__( 'An unexpected error occurred. Please try again.', 'easy-digital-downloads' )
+			'approvalAction' => apply_filters( 'cs_paypal_on_approve_action', 'cs_capture_paypal_order' ),
+			'defaultError'   => cs_build_errors_html( array(
+				'paypal-error' => esc_html__( 'An unexpected error occurred. Please try again.', 'commercestore' )
 			) ),
 			'intent'         => ! empty( $sdk_query_args['intent'] ) ? $sdk_query_args['intent'] : 'capture',
 			'style'          => get_button_styles()
 		);
 
-		wp_localize_script( 'edd-paypal', 'eddPayPalVars', $paypal_script_vars );
+		wp_localize_script( 'cs-paypal', 'csPayPalVars', $paypal_script_vars );
 	}
 }
 
@@ -172,8 +172,8 @@ function add_data_attributes( $script_tag, $handle, $src ) {
 	 *
 	 * @param array $data_attributes
 	 */
-	$data_attributes = apply_filters( 'edd_paypal_js_sdk_data_attributes', array(
-		'partner-attribution-id' => EDD_PAYPAL_PARTNER_ATTRIBUTION_ID
+	$data_attributes = apply_filters( 'cs_paypal_js_sdk_data_attributes', array(
+		'partner-attribution-id' => CS_PAYPAL_PARTNER_ATTRIBUTION_ID
 	) );
 
 	if ( empty( $data_attributes ) || ! is_array( $data_attributes ) ) {

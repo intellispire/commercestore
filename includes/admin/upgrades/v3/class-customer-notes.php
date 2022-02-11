@@ -3,11 +3,11 @@
  * 3.0 Data Migration - Customer Notes.
  *
  * @subpackage  Admin/Upgrades/v3
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 use Carbon\Carbon;
 
@@ -29,7 +29,7 @@ class Customer_Notes extends Base {
 	public function __construct( $step = 1 ) {
 		parent::__construct( $step );
 
-		$this->completed_message = __( 'Customer notes migration completed successfully.', 'easy-digital-downloads' );
+		$this->completed_message = __( 'Customer notes migration completed successfully.', 'commercestore' );
 		$this->upgrade           = 'migrate_customer_notes';
 	}
 
@@ -45,7 +45,7 @@ class Customer_Notes extends Base {
 
 		$results = $this->get_db()->get_results( $this->get_db()->prepare(
 			"SELECT *
-			 FROM {$this->get_db()->edd_customers}
+			 FROM {$this->get_db()->cs_customers}
 			 LIMIT %d, %d",
 			$offset, $this->per_step
 		) );
@@ -69,7 +69,7 @@ class Customer_Notes extends Base {
 	 * @return float Percentage.
 	 */
 	public function get_percentage_complete() {
-		$total = $this->get_db()->get_var( "SELECT COUNT(id) AS count FROM {$this->get_db()->edd_customers}" );
+		$total = $this->get_db()->get_var( "SELECT COUNT(id) AS count FROM {$this->get_db()->cs_customers}" );
 
 		if ( empty( $total ) ) {
 			$total = 0;

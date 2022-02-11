@@ -15,12 +15,12 @@ export const OrderTotal = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	className: 'edd-order-overview-summary__total',
+	className: 'cs-order-overview-summary__total',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-total' ),
+	template: wp.template( 'cs-admin-order-total' ),
 
 	/**
 	 * Order tax view.

@@ -1,15 +1,15 @@
 <?php
-namespace EDD\Orders;
+namespace CS\Orders;
 
 /**
  * Customer Email Address Tests.
  *
- * @group edd_customers
+ * @group cs_customers
  * @group database
  *
- * @coversDefaultClass \EDD\Customers\Customer_Email_Address
+ * @coversDefaultClass \CS\Customers\Customer_Email_Address
  */
-class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
+class Customer_Email_Address_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Customer email addresses fixture.
@@ -23,67 +23,67 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	 * Set up fixtures once.
 	 */
 	public static function wpSetUpBeforeClass() {
-		self::$customer_email_addresses = parent::edd()->customer_email_address->create_many( 5 );
+		self::$customer_email_addresses = parent::cs()->customer_email_address->create_many( 5 );
 	}
 
 	/**
-	 * @covers ::edd_update_customer_email_address
+	 * @covers ::cs_update_customer_email_address
 	 */
 	public function test_update_should_return_true() {
-		$success = edd_update_customer_email_address( self::$customer_email_addresses[0], array(
-			'email' => 'eddtest@edd.test',
+		$success = cs_update_customer_email_address( self::$customer_email_addresses[0], array(
+			'email' => 'cstest@cs.test',
 		) );
 
 		$this->assertSame( 1, $success );
 	}
 
 	/**
-	 * @covers ::edd_update_customer_email_address
+	 * @covers ::cs_update_customer_email_address
 	 */
 	public function test_email_address_object_after_update_should_return_true() {
-		edd_update_customer_email_address( self::$customer_email_addresses[0], array(
-			'email' => 'eddtest@edd.test',
+		cs_update_customer_email_address( self::$customer_email_addresses[0], array(
+			'email' => 'cstest@cs.test',
 		) );
 
-		$customer_email_address = edd_get_customer_email_address( self::$customer_email_addresses[0] );
+		$customer_email_address = cs_get_customer_email_address( self::$customer_email_addresses[0] );
 
-		$this->assertSame( 'eddtest@edd.test', $customer_email_address->email );
+		$this->assertSame( 'cstest@cs.test', $customer_email_address->email );
 	}
 
 	/**
-	 * @covers ::edd_update_customer_email_address
+	 * @covers ::cs_update_customer_email_address
 	 */
 	public function test_update_without_id_should_fail() {
-		$success = edd_update_customer_email_address( null, array(
-			'email' => 'eddtest@edd.test',
+		$success = cs_update_customer_email_address( null, array(
+			'email' => 'cstest@cs.test',
 		) );
 
 		$this->assertFalse( $success );
 	}
 
 	/**
-	 * @covers ::edd_delete_order_transaction
+	 * @covers ::cs_delete_order_transaction
 	 */
 	public function test_delete_should_return_true() {
-		$success = edd_delete_customer_email_address( self::$customer_email_addresses[0] );
+		$success = cs_delete_customer_email_address( self::$customer_email_addresses[0] );
 
 		$this->assertSame( 1, $success );
 	}
 
 	/**
-	 * @covers ::edd_delete_order_transaction
+	 * @covers ::cs_delete_order_transaction
 	 */
 	public function test_delete_without_id_should_fail() {
-		$success = edd_delete_customer_email_address( '' );
+		$success = cs_delete_customer_email_address( '' );
 
 		$this->assertFalse( $success );
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_number_should_return_true() {
-		$orders = edd_get_customer_email_addresses( array(
+		$orders = cs_get_customer_email_addresses( array(
 			'number' => 10,
 		) );
 
@@ -91,10 +91,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_offset_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'number' => 10,
 			'offset' => 4,
 		) );
@@ -103,10 +103,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_id_and_order_asc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'id',
 			'order'   => 'asc',
 		) );
@@ -115,10 +115,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_id_and_order_desc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'id',
 			'order'   => 'desc',
 		) );
@@ -127,10 +127,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_id__not_in_should_return_5() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'id__not_in' => array(
 				999,
 			),
@@ -140,10 +140,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_customer_id_and_order_asc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'customer_id',
 			'order'   => 'asc',
 		) );
@@ -152,10 +152,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_customer_id_and_order_desc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'customer_id',
 			'order'   => 'desc',
 		) );
@@ -164,10 +164,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_customer_id__in_should_return_1() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'customer_id__in' => array(
 				\WP_UnitTest_Generator_Sequence::$incr,
 			),
@@ -177,10 +177,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_customer_id__not_in_should_return_5() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'customer_id__not_in' => array(
 				999,
 			),
@@ -190,10 +190,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_type_and_order_asc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'type',
 			'order'   => 'asc',
 		) );
@@ -202,10 +202,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_type_and_order_desc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'type',
 			'order'   => 'desc',
 		) );
@@ -214,10 +214,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_type__in_should_return_1() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'type__in' => array(
 				'type' . \WP_UnitTest_Generator_Sequence::$incr,
 			),
@@ -227,10 +227,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_type__not_in_should_return_5() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'type__not_in' => array(
 				999,
 			),
@@ -240,10 +240,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_status_and_order_asc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'status',
 			'order'   => 'asc',
 		) );
@@ -252,10 +252,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_status_and_order_desc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'status',
 			'order'   => 'desc',
 		) );
@@ -264,10 +264,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_status__in_should_return_1() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'status__in' => array(
 				'status' . \WP_UnitTest_Generator_Sequence::$incr,
 			),
@@ -277,10 +277,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_status__not_in_should_return_5() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'status__not_in' => array(
 				999,
 			),
@@ -290,10 +290,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_email_and_order_asc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'email',
 			'order'   => 'asc',
 		) );
@@ -302,10 +302,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_orderby_email_and_order_desc_should_return_true() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'orderby' => 'email',
 			'order'   => 'desc',
 		) );
@@ -314,12 +314,12 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_email__in_should_return_1() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'email__in' => array(
-				'user' . \WP_UnitTest_Generator_Sequence::$incr . '@edd.test',
+				'user' . \WP_UnitTest_Generator_Sequence::$incr . '@cs.test',
 			),
 		) );
 
@@ -327,10 +327,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_email__not_in_should_return_5() {
-		$customer_email_addresses = edd_get_customer_email_addresses( array(
+		$customer_email_addresses = cs_get_customer_email_addresses( array(
 			'email__not_in' => array(
 				999,
 			),
@@ -340,10 +340,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_invalid_id_should_return_0() {
-		$transactions = edd_get_customer_email_addresses( array(
+		$transactions = cs_get_customer_email_addresses( array(
 			'id' => -999,
 		) );
 
@@ -351,10 +351,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_invalid_customer_id_should_return_0() {
-		$transactions = edd_get_customer_email_addresses( array(
+		$transactions = cs_get_customer_email_addresses( array(
 			'customer_id' => -999,
 		) );
 
@@ -362,10 +362,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_invalid_type_should_return_0() {
-		$transactions = edd_get_customer_email_addresses( array(
+		$transactions = cs_get_customer_email_addresses( array(
 			'type' => -999,
 		) );
 
@@ -373,10 +373,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_invalid_status_should_return_0() {
-		$transactions = edd_get_customer_email_addresses( array(
+		$transactions = cs_get_customer_email_addresses( array(
 			'status' => -999,
 		) );
 
@@ -384,10 +384,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_invalid_email_should_return_0() {
-		$transactions = edd_get_customer_email_addresses( array(
+		$transactions = cs_get_customer_email_addresses( array(
 			'email' => -999,
 		) );
 
@@ -395,10 +395,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_invalid_date_created_should_return_0() {
-		$transactions = edd_get_customer_email_addresses( array(
+		$transactions = cs_get_customer_email_addresses( array(
 			'date_created' => '2250-01-01 23:59:59',
 		) );
 
@@ -406,10 +406,10 @@ class Customer_Email_Address_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::edd_get_customer_email_addresses
+	 * @covers ::cs_get_customer_email_addresses
 	 */
 	public function test_get_customer_email_addresses_with_invalid_date_modified_should_return_0() {
-		$transactions = edd_get_customer_email_addresses( array(
+		$transactions = cs_get_customer_email_addresses( array(
 			'date_modified' => '2250-01-01 23:59:59',
 		) );
 

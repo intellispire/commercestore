@@ -2,20 +2,20 @@
 /**
  * NotificationApiTests.php
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  */
 
-namespace EDD\Tests\Notifications;
+namespace CS\Tests\Notifications;
 
-use EDD\API\v3\Endpoint;
-use EDD\Models\Notification;
+use CS\API\v3\Endpoint;
+use CS\Models\Notification;
 
 /**
- * @coversDefaultClass \EDD\API\v3\Notifications
+ * @coversDefaultClass \CS\API\v3\Notifications
  */
-class NotificationApiTests extends \EDD_UnitTestCase {
+class NotificationApiTests extends \CS_UnitTestCase {
 
 	/**
 	 * @var int[] IDs of notifications we've created.
@@ -50,13 +50,13 @@ class NotificationApiTests extends \EDD_UnitTestCase {
 
 		// Truncate notifications table.
 		global $wpdb;
-		$tableName = EDD()->notifications->table_name;
+		$tableName = CS()->notifications->table_name;
 
 		$wpdb->query( "TRUNCATE TABLE {$tableName}" );
 
 		// Insert 5 notifications.
 		for ( $i = 1; $i <= 5; $i ++ ) {
-			self::$notificationIds[] = (int) EDD()->notifications->insert( array(
+			self::$notificationIds[] = (int) CS()->notifications->insert( array(
 				'title'     => 'Notification ' . $i,
 				'content'   => 'Notification ' . $i,
 				'type'      => 'success',
@@ -65,12 +65,12 @@ class NotificationApiTests extends \EDD_UnitTestCase {
 		}
 
 		/**
-		 * Also need to make sure we have the EDD roles so that we pass the
+		 * Also need to make sure we have the CommerceStore roles so that we pass the
 		 * capability check.
 		 *
-		 * @see \EDD\API\v3\Notifications::canViewNotification
+		 * @see \CS\API\v3\Notifications::canViewNotification
 		 */
-		$roles = new \EDD_Roles;
+		$roles = new \CS_Roles;
 		$roles->add_roles();
 		$roles->add_caps();
 
@@ -107,7 +107,7 @@ class NotificationApiTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\API\v3\Notifications::listNotifications
+	 * @covers \CS\API\v3\Notifications::listNotifications
 	 * @return void
 	 */
 	public function test_get_notifications_returns_5_notifications() {
@@ -124,13 +124,13 @@ class NotificationApiTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\API\v3\Notifications::dismissNotification
+	 * @covers \CS\API\v3\Notifications::dismissNotification
 	 * @return void
 	 */
 	public function test_dismissing_notification_updates_notification() {
 		$notificationId = self::$notificationIds[0];
 
-		$notification = new Notification( EDD()->notifications->get( $notificationId ) );
+		$notification = new Notification( CS()->notifications->get( $notificationId ) );
 		$this->assertFalse( $notification->dismissed );
 
 		$response = $this->makeRestRequest(
@@ -141,7 +141,7 @@ class NotificationApiTests extends \EDD_UnitTestCase {
 
 		$this->assertEquals( 204, $response->get_status() );
 
-		$notification = new Notification( EDD()->notifications->get( $notificationId ) );
+		$notification = new Notification( CS()->notifications->get( $notificationId ) );
 		$this->assertTrue( $notification->dismissed );
 	}
 
@@ -166,7 +166,7 @@ class NotificationApiTests extends \EDD_UnitTestCase {
 		global $current_user;
 		$current_user = new \WP_User( wp_insert_user( array(
 			'user_login' => 'test_subscriber',
-			'user_email' => 'test_subscriber@easydigitaldownloads.com',
+			'user_email' => 'test_subscriber@commercestore.com',
 			'user_pass'  => 'test_subscriber',
 		) ) );
 		$current_user->set_role( 'subscriber' );
@@ -180,7 +180,7 @@ class NotificationApiTests extends \EDD_UnitTestCase {
 		global $current_user;
 		$current_user = new \WP_User( wp_insert_user( array(
 			'user_login' => 'test_subscriber',
-			'user_email' => 'test_subscriber@easydigitaldownloads.com',
+			'user_email' => 'test_subscriber@commercestore.com',
 			'user_pass'  => 'test_subscriber',
 		) ) );
 		$current_user->set_role( 'subscriber' );

@@ -5,8 +5,8 @@
  * Removes some PII from the log meta, and adds the customer ID of the payment to allow more accurate
  * file download counts for a customer.
  *
- * @subpackage  Admin/Classes/EDD_SL_License_Log_Migration
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @subpackage  Admin/Classes/CS_SL_License_Log_Migration
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.9.2
  */
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_File_Download_Log_Migration Class
+ * CS_File_Download_Log_Migration Class
  *
  * @since 2.9.2
  */
-class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
+class CS_File_Download_Log_Migration extends CS_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions
@@ -65,25 +65,25 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 			$sanitized_log_id = absint( $log_id );
 
 			if ( $sanitized_log_id !== $log_id ) {
-				edd_debug_log( "Log ID mismatch, skipping log ID {$log_id}" );
+				cs_debug_log( "Log ID mismatch, skipping log ID {$log_id}" );
 				continue;
 			}
 
-			$has_customer_id = (int) get_post_meta( $log_id, '_edd_log_customer_id', true );
+			$has_customer_id = (int) get_post_meta( $log_id, '_cs_log_customer_id', true );
 			if ( ! empty( $has_customer_id ) ) {
 				continue;
 			}
 
-			$payment_id = (int) get_post_meta( $log_id, '_edd_log_payment_id', true );
+			$payment_id = (int) get_post_meta( $log_id, '_cs_log_payment_id', true );
 			if ( ! empty( $payment_id ) ) {
-				$customer_id = edd_get_payment_customer_id( $payment_id );
+				$customer_id = cs_get_payment_customer_id( $payment_id );
 
 				if ( $customer_id < 0 ) {
 					$customer_id = 0;
 				}
 
-				update_post_meta( $log_id, '_edd_log_customer_id', $customer_id );
-				delete_post_meta( $log_id, '_edd_log_user_info' );
+				update_post_meta( $log_id, '_cs_log_customer_id', $customer_id );
+				delete_post_meta( $log_id, '_cs_log_user_info' );
 			}
 		}
 
@@ -97,7 +97,7 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 	 * @return int
 	 */
 	public function get_percentage_complete() {
-		$total = (int) get_option( 'edd_fdlm_total_logs', 0 );
+		$total = (int) get_option( 'cs_fdlm_total_logs', 0 );
 
 		$percentage = 100;
 
@@ -130,8 +130,8 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 
 		if ( ! $this->can_export() ) {
 			wp_die(
-				__( 'You do not have permission to run this upgrade.', 'easy-digital-downloads' ),
-				__( 'Error', 'easy-digital-downloads' ),
+				__( 'You do not have permission to run this upgrade.', 'commercestore' ),
+				__( 'Error', 'commercestore' ),
 				array( 'response' => 403 ) );
 		}
 
@@ -142,16 +142,16 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 			return true;
 		} else {
 			$this->done = true;
-			delete_option( 'edd_fdlm_total_logs' );
-			delete_option( 'edd_fdlm_term_tax_id' );
-			$this->message = __( 'File download logs updated successfully.', 'easy-digital-downloads' );
-			edd_set_upgrade_complete( 'update_file_download_log_data' );
+			delete_option( 'cs_fdlm_total_logs' );
+			delete_option( 'cs_fdlm_term_tax_id' );
+			$this->message = __( 'File download logs updated successfully.', 'commercestore' );
+			cs_set_upgrade_complete( 'update_file_download_log_data' );
 			return false;
 		}
 	}
 
 	public function headers() {
-		edd_set_time_limit();
+		cs_set_time_limit();
 	}
 
 	/**
@@ -166,7 +166,7 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 		// Set headers
 		$this->headers();
 
-		edd_die();
+		cs_die();
 	}
 
 	/**
@@ -189,13 +189,13 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 		if ( ! empty( $term_id ) ) {
 
 			// Query for possible entries...
-			$term_tax_id  = $wpdb->get_var( $wpdb->prepare( "SELECT term_taxonomy_id FROM {$wpdb->term_taxonomy} WHERE term_id = %d AND taxonomy = 'edd_log_type' LIMIT 1", $term_id ) );
+			$term_tax_id  = $wpdb->get_var( $wpdb->prepare( "SELECT term_taxonomy_id FROM {$wpdb->term_taxonomy} WHERE term_id = %d AND taxonomy = 'cs_log_type' LIMIT 1", $term_id ) );
 
 			// Entries exist...
 			if ( ! empty( $term_tax_id ) ) {
 
 				// Cache the term taxonomy ID
-				update_option( 'edd_fdlm_term_tax_id', $term_tax_id );
+				update_option( 'cs_fdlm_term_tax_id', $term_tax_id );
 
 				// Count the number of entries!
 				$log_id_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->term_relationships} WHERE term_taxonomy_id = %d", $term_tax_id ) );
@@ -203,7 +203,7 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 		}
 
 		// Temporarily save the number of rows
-		update_option( 'edd_fdlm_total_logs', (int) $log_id_count );
+		update_option( 'cs_fdlm_total_logs', (int) $log_id_count );
 	}
 
 	/**
@@ -222,7 +222,7 @@ class EDD_File_Download_Log_Migration extends EDD_Batch_Export {
 		$offset  = ( $this->step * $this->per_step ) - $this->per_step;
 
 		// Count the number of entries!
-		$term_tax_id = (int) get_option( 'edd_fdlm_term_tax_id', 0 );
+		$term_tax_id = (int) get_option( 'cs_fdlm_term_tax_id', 0 );
 
 		// Only query if term taxonomy ID was prefetched
 		if ( ! empty( $term_tax_id ) ) {

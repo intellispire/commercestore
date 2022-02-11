@@ -1,4 +1,4 @@
-.edd-form-row {
+.cs-form-row {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 12px;
@@ -8,7 +8,7 @@
 		flex-direction: column;
 		justify-content: flex-end;
 
-		&.edd-form-group {
+		&.cs-form-group {
 			margin-bottom: 0;
 		}
 	}

@@ -28,7 +28,7 @@ class Array2XML {
      */
     public static function &createXML($node_name, $arr=array()) {
         if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            _edd_deprecated_function( 'array2xml::createXML', '2.8.11', 'ArrayToXML::buildXML' );
+            _cs_deprecated_function( 'array2xml::createXML', '2.8.11', 'ArrayToXML::buildXML' );
         }
 
         $xml = self::getXMLRoot();

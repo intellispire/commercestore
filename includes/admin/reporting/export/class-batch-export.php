@@ -4,9 +4,9 @@
  *
  * This is the base class for all batch export methods. Each data export type (customers, payments, etc) extend this class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Export
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.4
  */
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Export Class
+ * CS_Export Class
  *
  * @since 2.4
  */
-class EDD_Batch_Export extends EDD_Export {
+class CS_Batch_Export extends CS_Export {
 
 	/**
 	 * Whether or not we're done processing.
@@ -123,7 +123,7 @@ class EDD_Batch_Export extends EDD_Export {
 
 		$upload_dir       = wp_upload_dir();
 		$this->filetype   = '.csv';
-		$this->filename   = 'edd-' . $this->export_type . $this->filetype;
+		$this->filename   = 'cs-' . $this->export_type . $this->filetype;
 		$this->file       = trailingslashit( $upload_dir['basedir'] ) . $this->filename;
 
 		if ( ! is_writeable( $upload_dir['basedir'] ) ) {
@@ -143,7 +143,7 @@ class EDD_Batch_Export extends EDD_Export {
 	public function process_step() {
 
 		if ( ! $this->can_export() ) {
-			wp_die( __( 'You do not have permission to export data.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+			wp_die( __( 'You do not have permission to export data.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		if( $this->step < 2 ) {
@@ -168,7 +168,7 @@ class EDD_Batch_Export extends EDD_Export {
 	 * Output the CSV columns
 	 *
 	 * @since 2.4
-	 * @uses EDD_Export::get_csv_cols()
+	 * @uses CS_Export::get_csv_cols()
 	 * @return string
 	 */
 	public function print_csv_cols() {

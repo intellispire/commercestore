@@ -2,9 +2,9 @@
 /**
  * Misc Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return string
  */
-function edd_get_admin_base_url() {
+function cs_get_admin_base_url() {
 
 	// Default args
 	$args = array(
@@ -35,7 +35,7 @@ function edd_get_admin_base_url() {
 	$url = add_query_arg( $args, $admin_url );
 
 	// Filter & return
-	return apply_filters( 'edd_get_admin_base_url', $url, $args, $admin_url );
+	return apply_filters( 'cs_get_admin_base_url', $url, $args, $admin_url );
 }
 
 /**
@@ -46,8 +46,8 @@ function edd_get_admin_base_url() {
  * @param array $args
  * @return string
  */
-function edd_get_admin_url( $args = array() ) {
-	return add_query_arg( $args, edd_get_admin_base_url() );
+function cs_get_admin_url( $args = array() ) {
+	return add_query_arg( $args, cs_get_admin_base_url() );
 }
 
 /**
@@ -56,9 +56,9 @@ function edd_get_admin_url( $args = array() ) {
  * @since 1.0
  * @return bool $ret True if test mode is enabled, false otherwise
  */
-function edd_is_test_mode() {
-	$ret = edd_get_option( 'test_mode', false );
-	return (bool) apply_filters( 'edd_is_test_mode', $ret );
+function cs_is_test_mode() {
+	$ret = cs_get_option( 'test_mode', false );
+	return (bool) apply_filters( 'cs_is_test_mode', $ret );
 }
 
 /**
@@ -67,12 +67,12 @@ function edd_is_test_mode() {
  * @since 2.8.7
  * @return bool $ret True if debug mode is enabled, false otherwise
  */
-function edd_is_debug_mode() {
-	$ret = edd_get_option( 'debug_mode', false );
-	if( defined( 'EDD_DEBUG_MODE' ) && EDD_DEBUG_MODE ) {
+function cs_is_debug_mode() {
+	$ret = cs_get_option( 'debug_mode', false );
+	if( defined( 'CS_DEBUG_MODE' ) && CS_DEBUG_MODE ) {
 		$ret = true;
 	}
-	return (bool) apply_filters( 'edd_is_debug_mode', $ret );
+	return (bool) apply_filters( 'cs_is_debug_mode', $ret );
 }
 
 /**
@@ -82,13 +82,13 @@ function edd_is_debug_mode() {
  *
  * @return bool $is_dev_environment True if development environment; otherwise false.
  */
-function edd_is_dev_environment() {
+function cs_is_dev_environment() {
 
 	// wp_get_environment_type was added in WordPress 5.5.
 	if ( function_exists( 'wp_get_environment_type' ) ) {
 		$environment = wp_get_environment_type();
 
-		return apply_filters( 'edd_is_dev_environment', in_array( $environment, array( 'local', 'development' ), true ) );
+		return apply_filters( 'cs_is_dev_environment', in_array( $environment, array( 'local', 'development' ), true ) );
 	}
 
 	// Assume not a development environment
@@ -128,7 +128,7 @@ function edd_is_dev_environment() {
 	}
 
 	// Filter & return
-	return apply_filters( 'edd_is_dev_environment', $is_dev_environment );
+	return apply_filters( 'cs_is_dev_environment', $is_dev_environment );
 }
 
 /**
@@ -137,9 +137,9 @@ function edd_is_dev_environment() {
  * @since 1.0
  * @return bool $ret True if guest checkout is enabled, false otherwise
  */
-function edd_no_guest_checkout() {
-	$ret = edd_get_option( 'logged_in_only', false );
-	return (bool) apply_filters( 'edd_no_guest_checkout', $ret );
+function cs_no_guest_checkout() {
+	$ret = cs_get_option( 'logged_in_only', false );
+	return (bool) apply_filters( 'cs_no_guest_checkout', $ret );
 }
 
 /**
@@ -148,9 +148,9 @@ function edd_no_guest_checkout() {
  * @since 1.0
  * @return bool $ret Whether or not the logged_in_only setting is set
  */
-function edd_logged_in_only() {
-	$ret = edd_get_option( 'logged_in_only', false );
-	return (bool) apply_filters( 'edd_logged_in_only', $ret );
+function cs_logged_in_only() {
+	$ret = cs_get_option( 'logged_in_only', false );
+	return (bool) apply_filters( 'cs_logged_in_only', $ret );
 }
 
 /**
@@ -159,9 +159,9 @@ function edd_logged_in_only() {
  * @since 1.4.2
  * @return bool $ret True is redirect is enabled, false otherwise
  */
-function edd_straight_to_checkout() {
-	$ret = edd_get_option( 'redirect_on_add', false );
-	return (bool) apply_filters( 'edd_straight_to_checkout', $ret );
+function cs_straight_to_checkout() {
+	$ret = cs_get_option( 'redirect_on_add', false );
+	return (bool) apply_filters( 'cs_straight_to_checkout', $ret );
 }
 
 /**
@@ -170,9 +170,9 @@ function edd_straight_to_checkout() {
  * @since 1.0.8.2
  * @return bool True if redownloading of files is disabled, false otherwise
  */
-function edd_no_redownload() {
-	$ret = edd_get_option( 'disable_redownload', false );
-	return (bool) apply_filters( 'edd_no_redownload', $ret );
+function cs_no_redownload() {
+	$ret = cs_get_option( 'disable_redownload', false );
+	return (bool) apply_filters( 'cs_no_redownload', $ret );
 }
 
 /**
@@ -181,7 +181,7 @@ function edd_no_redownload() {
  * @since 1.4
  * @return bool $ret True is verify credit cards is live
  */
-function edd_is_cc_verify_enabled() {
+function cs_is_cc_verify_enabled() {
 	$ret = true;
 
 	/*
@@ -189,7 +189,7 @@ function edd_is_cc_verify_enabled() {
 	 * Enable if using more than one gateway if they aren't both PayPal and manual, again assuming credit card usage
 	 */
 
-	$gateways = edd_get_enabled_payment_gateways();
+	$gateways = cs_get_enabled_payment_gateways();
 
 	if ( count( $gateways ) == 1 && ! isset( $gateways['paypal'] ) && ! isset( $gateways['manual'] ) ) {
 		$ret = true;
@@ -199,7 +199,7 @@ function edd_is_cc_verify_enabled() {
 		$ret = false;
 	}
 
-	return (bool) apply_filters( 'edd_verify_credit_cards', $ret );
+	return (bool) apply_filters( 'cs_verify_credit_cards', $ret );
 }
 
 /**
@@ -211,7 +211,7 @@ function edd_is_cc_verify_enabled() {
  * @param int     $int The integer to check
  * @return bool Is the integer odd?
  */
-function edd_is_odd( $int ) {
+function cs_is_odd( $int ) {
 	return (bool) ( $int & 1 );
 }
 
@@ -226,7 +226,7 @@ function edd_is_odd( $int ) {
  *
  * @return mixed File extension
  */
-function edd_get_file_extension( $str ) {
+function cs_get_file_extension( $str ) {
 	$parts = explode( '.', $str );
 	$file_extension = end( $parts );
 
@@ -244,11 +244,11 @@ function edd_get_file_extension( $str ) {
  * @param string  $filename Filename
  * @return bool Whether or not the filename is an image
  */
-function edd_string_is_image_url( $filename ) {
-	$ext    = edd_get_file_extension( $filename );
+function cs_string_is_image_url( $filename ) {
+	$ext    = cs_get_file_extension( $filename );
 	$images = array( 'jpg', 'jpeg', 'png', 'gif', 'webp' );
 
-	return (bool) apply_filters( 'edd_string_is_image', in_array( $ext, $images, true ), $filename );
+	return (bool) apply_filters( 'cs_string_is_image', in_array( $ext, $images, true ), $filename );
 }
 
 /**
@@ -259,7 +259,7 @@ function edd_string_is_image_url( $filename ) {
  * @since 1.0.8.2
  * @return string $ip User's IP address
  */
-function edd_get_ip() {
+function cs_get_ip() {
 
 	$ip = false;
 
@@ -287,7 +287,7 @@ function edd_get_ip() {
 	$ip_array = explode( ',', $ip );
 	$ip_array = array_map( 'trim', $ip_array );
 
-	return apply_filters( 'edd_get_ip', $ip_array[0] );
+	return apply_filters( 'cs_get_ip', $ip_array[0] );
 }
 
 
@@ -299,7 +299,7 @@ function edd_get_ip() {
  * @since 2.0
  * @return mixed string $host if detected, false otherwise
  */
-function edd_get_host() {
+function cs_get_host() {
 	$host = false;
 
 	if( defined( 'WPE_APIKEY' ) ) {
@@ -345,7 +345,7 @@ function edd_get_host() {
  * @param $host The host to check
  * @return bool true if host matches, false if not
  */
-function edd_is_host( $host = false ) {
+function cs_is_host( $host = false ) {
 
 	$return = false;
 
@@ -417,7 +417,7 @@ function edd_is_host( $host = false ) {
  * @param bool    $return_long_name Optional. Return full name of month if true. Default false.
  * @return string Short month name
  */
-function edd_month_num_to_name( $n, $return_long_name = false ) {
+function cs_month_num_to_name( $n, $return_long_name = false ) {
 	$timestamp   = mktime( 0, 0, 0, $n, 1, 2005 );
 	$date_format = $return_long_name ? 'F' : 'M';
 
@@ -430,7 +430,7 @@ function edd_month_num_to_name( $n, $return_long_name = false ) {
  * @since 1.0.8.3
  * @return string Arg separator output
  */
-function edd_get_php_arg_separator_output() {
+function cs_get_php_arg_separator_output() {
 	return ini_get( 'arg_separator.output' );
 }
 
@@ -441,7 +441,7 @@ function edd_get_php_arg_separator_output() {
  * @param  bool   $nocache  If we should bust cache on the returned URL
  * @return string $page_url Current page URL
  */
-function edd_get_current_page_url( $nocache = false ) {
+function cs_get_current_page_url( $nocache = false ) {
 
 	global $wp;
 
@@ -461,14 +461,14 @@ function edd_get_current_page_url( $nocache = false ) {
 
 	if ( is_front_page() ) {
 		$uri = home_url( '/' );
-	} elseif ( edd_is_checkout() ) {
-		$uri = edd_get_checkout_uri();
+	} elseif ( cs_is_checkout() ) {
+		$uri = cs_get_checkout_uri();
 	}
 
-	$uri = apply_filters( 'edd_get_current_page_url', $uri );
+	$uri = apply_filters( 'cs_get_current_page_url', $uri );
 
 	if ( $nocache ) {
-		$uri = edd_add_cache_busting( $uri );
+		$uri = cs_add_cache_busting( $uri );
 	}
 
 	return $uri;
@@ -481,11 +481,11 @@ function edd_get_current_page_url( $nocache = false ) {
  * @param  string $url The URL being requested
  * @return string      The URL with cache busting added or not
  */
-function edd_add_cache_busting( $url = '' ) {
+function cs_add_cache_busting( $url = '' ) {
 
-	$no_cache_checkout = edd_get_option( 'no_cache_checkout', false );
+	$no_cache_checkout = cs_get_option( 'no_cache_checkout', false );
 
-	if ( edd_is_caching_plugin_active() || ( edd_is_checkout() && $no_cache_checkout ) ) {
+	if ( cs_is_caching_plugin_active() || ( cs_is_checkout() && $no_cache_checkout ) ) {
 		$url = add_query_arg( 'nocache', 'true', $url );
 	}
 
@@ -495,7 +495,7 @@ function edd_add_cache_busting( $url = '' ) {
 /**
  * Marks a function as deprecated and informs when it has been used.
  *
- * There is a hook edd_deprecated_function_run that will be called that can be used
+ * There is a hook cs_deprecated_function_run that will be called that can be used
  * to get the backtrace up to what file and function called the deprecated
  * function.
  *
@@ -503,25 +503,25 @@ function edd_add_cache_busting( $url = '' ) {
  *
  * This function is to be used in every function that is deprecated.
  *
- * @uses do_action() Calls 'edd_deprecated_function_run' and passes the function name, what to use instead,
+ * @uses do_action() Calls 'cs_deprecated_function_run' and passes the function name, what to use instead,
  *   and the version the function was deprecated in.
- * @uses apply_filters() Calls 'edd_deprecated_function_trigger_error' and expects boolean value of true to do
+ * @uses apply_filters() Calls 'cs_deprecated_function_trigger_error' and expects boolean value of true to do
  *   trigger or false to not trigger error.
  *
  * @param string  $function    The function that was called
- * @param string  $version     The version of Easy Digital Downloads that deprecated the function
+ * @param string  $version     The version of CommerceStore that deprecated the function
  * @param string  $replacement Optional. The function that should have been called
  * @param array   $backtrace   Optional. Contains stack backtrace of deprecated function
  */
-function _edd_deprecated_function( $function, $version, $replacement = null, $backtrace = null ) {
-	do_action( 'edd_deprecated_function_run', $function, $replacement, $version );
+function _cs_deprecated_function( $function, $version, $replacement = null, $backtrace = null ) {
+	do_action( 'cs_deprecated_function_run', $function, $replacement, $version );
 
 	$show_errors = current_user_can( 'manage_options' );
 
 	// Allow plugin to filter the output error trigger
-	if ( WP_DEBUG && apply_filters( 'edd_deprecated_function_trigger_error', $show_errors ) ) {
+	if ( WP_DEBUG && apply_filters( 'cs_deprecated_function_trigger_error', $show_errors ) ) {
 		if ( ! is_null( $replacement ) ) {
-			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since Easy Digital Downloads version %2$s! Use %3$s instead.', 'easy-digital-downloads' ), $function, $version, $replacement ) );
+			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since CommerceStore version %2$s! Use %3$s instead.', 'commercestore' ), $function, $version, $replacement ) );
 
 			if ( ! empty( $backtrace ) ) {
 				trigger_error(  print_r( $backtrace, 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
@@ -529,7 +529,7 @@ function _edd_deprecated_function( $function, $version, $replacement = null, $ba
 
 			// Alternatively we could dump this to a file.
 		} else {
-			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since Easy Digital Downloads version %2$s with no alternative available.', 'easy-digital-downloads' ), $function, $version ) );
+			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since CommerceStore version %2$s with no alternative available.', 'commercestore' ), $function, $version ) );
 
 			if ( ! empty( $backtrace ) ) {
 				trigger_error( print_r( $backtrace, 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
@@ -543,7 +543,7 @@ function _edd_deprecated_function( $function, $version, $replacement = null, $ba
 /**
  * Marks an argument in a function deprecated and informs when it's been used
  *
- * There is a hook edd_deprecated_argument_run that will be called that can be used
+ * There is a hook cs_deprecated_argument_run that will be called that can be used
  * to get the backtrace up to what file and function called the deprecated
  * function.
  *
@@ -551,9 +551,9 @@ function _edd_deprecated_function( $function, $version, $replacement = null, $ba
  *
  * This function is to be used in every function that has an argument being deprecated.
  *
- * @uses do_action() Calls 'edd_deprecated_argument_run' and passes the argument, function name, what to use instead,
+ * @uses do_action() Calls 'cs_deprecated_argument_run' and passes the argument, function name, what to use instead,
  *   and the version the function was deprecated in.
- * @uses apply_filters() Calls 'edd_deprecated_argument_trigger_error' and expects boolean value of true to do
+ * @uses apply_filters() Calls 'cs_deprecated_argument_trigger_error' and expects boolean value of true to do
  *   trigger or false to not trigger error.
  *
  * @param string  $argument    The arguemnt that is being deprecated
@@ -562,15 +562,15 @@ function _edd_deprecated_function( $function, $version, $replacement = null, $ba
  * @param string  $replacement Optional. The function that should have been called
  * @param array   $backtrace   Optional. Contains stack backtrace of deprecated function
  */
-function _edd_deprected_argument( $argument, $function, $version, $replacement = null, $backtrace = null ) {
-	do_action( 'edd_deprecated_argument_run', $argument, $function, $replacement, $version );
+function _cs_deprected_argument( $argument, $function, $version, $replacement = null, $backtrace = null ) {
+	do_action( 'cs_deprecated_argument_run', $argument, $function, $replacement, $version );
 
 	$show_errors = current_user_can( 'manage_options' );
 
 	// Allow plugin to filter the output error trigger
-	if ( WP_DEBUG && apply_filters( 'edd_deprecated_argument_trigger_error', $show_errors ) ) {
+	if ( WP_DEBUG && apply_filters( 'cs_deprecated_argument_trigger_error', $show_errors ) ) {
 		if ( ! is_null( $replacement ) ) {
-			trigger_error( sprintf( __( 'The %1$s argument of %2$s is <strong>deprecated</strong> since Easy Digital Downloads version %3$s! Please use %4$s instead.', 'easy-digital-downloads' ), $argument, $function, $version, $replacement ) );
+			trigger_error( sprintf( __( 'The %1$s argument of %2$s is <strong>deprecated</strong> since CommerceStore version %3$s! Please use %4$s instead.', 'commercestore' ), $argument, $function, $version, $replacement ) );
 
 			if ( ! empty( $backtrace ) ) {
 				trigger_error(  print_r( $backtrace, 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
@@ -578,7 +578,7 @@ function _edd_deprected_argument( $argument, $function, $version, $replacement =
 
 			// Alternatively we could dump this to a file.
 		} else {
-			trigger_error( sprintf( __( 'The %1$s argument of %2$s is <strong>deprecated</strong> since Easy Digital Downloads version %3$s with no alternative available.', 'easy-digital-downloads' ), $argument, $function, $version ) );
+			trigger_error( sprintf( __( 'The %1$s argument of %2$s is <strong>deprecated</strong> since CommerceStore version %3$s with no alternative available.', 'commercestore' ), $argument, $function, $version ) );
 
 			if ( ! empty( $backtrace ) ) {
 				trigger_error( print_r( $backtrace, 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
@@ -591,7 +591,7 @@ function _edd_deprected_argument( $argument, $function, $version, $replacement =
 /**
  * Marks an argument in a function deprecated and informs when it's been used
  *
- * There is a hook edd_deprecated_argument_run that will be called that can be used
+ * There is a hook cs_deprecated_argument_run that will be called that can be used
  * to get the backtrace up to what file and function called the deprecated
  * function.
  *
@@ -599,62 +599,62 @@ function _edd_deprected_argument( $argument, $function, $version, $replacement =
  *
  * This function is to be used in every function that has an argument being deprecated.
  *
- * @uses do_action() Calls 'edd_deprecated_argument_run' and passes the argument, function name, what to use instead,
+ * @uses do_action() Calls 'cs_deprecated_argument_run' and passes the argument, function name, what to use instead,
  *   and the version the function was deprecated in.
- * @uses apply_filters() Calls 'edd_deprecated_argument_trigger_error' and expects boolean value of true to do
+ * @uses apply_filters() Calls 'cs_deprecated_argument_trigger_error' and expects boolean value of true to do
  *   trigger or false to not trigger error.
  *
  * @param string $file        The file that was included.
- * @param string $version     The version of EDD that deprecated the file.
- * @param string $replacement Optional. The file that should have been included based on EDD_PLUGIN_DIR.
+ * @param string $version     The version of CommerceStore that deprecated the file.
+ * @param string $replacement Optional. The file that should have been included based on CS_PLUGIN_DIR.
  *                            Default null.
  * @param string $message     Optional. A message regarding the change. Default empty.
  */
-function _edd_deprecated_file( $file, $version, $replacement = null, $message = '' ) {
+function _cs_deprecated_file( $file, $version, $replacement = null, $message = '' ) {
 	/**
 	 * Fires immediately before a deprecated file notice is output.
 	 *
 	 * @since 3.0
 	 *
 	 * @param string $file        The file that was included.
-	 * @param string $replacement The file that should have been included based on EDD_PLUGIN_DIR.
-	 * @param string $version     The version of EDD that deprecated the file.
+	 * @param string $replacement The file that should have been included based on CS_PLUGIN_DIR.
+	 * @param string $version     The version of CommerceStore that deprecated the file.
 	 */
-	do_action( 'edd_deprecated_file_run', $file, $replacement, $version );
+	do_action( 'cs_deprecated_file_run', $file, $replacement, $version );
 
 	$show_errors = current_user_can( 'manage_options' );
 
 	/**
-	 * Filters whether to trigger the error output for deprecated EDD files.
+	 * Filters whether to trigger the error output for deprecated CommerceStore files.
 	 *
 	 * @since 3.0
 	 *
 	 * @param bool $show_errors Whether to trigger errors for deprecated files.
 	 */
-	if ( WP_DEBUG && apply_filters( 'edd_deprecated_file_trigger_error', $show_errors ) ) {
+	if ( WP_DEBUG && apply_filters( 'cs_deprecated_file_trigger_error', $show_errors ) ) {
 		$message = empty( $message ) ? '' : ' ' . $message;
 
 		if ( ! is_null( $replacement ) ) {
-			/* translators: 1: PHP file name, 2: EDD version number, 3: alternative file name */
-			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since Easy Digital Downloads version %2$s! Use %3$s instead.', 'easy-digital-downloads' ), $file, $version, $replacement ) . $message );
+			/* translators: 1: PHP file name, 2: CommerceStore version number, 3: alternative file name */
+			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since CommerceStore version %2$s! Use %3$s instead.', 'commercestore' ), $file, $version, $replacement ) . $message );
 		} else {
-			/* translators: 1: PHP file name, 2: EDD version number */
-			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since Easy Digital Downloads version %2$s with no alternative available.', 'easy-digital-downloads' ), $file, $version ) . $message );
+			/* translators: 1: PHP file name, 2: CommerceStore version number */
+			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since CommerceStore version %2$s with no alternative available.', 'commercestore' ), $file, $version ) . $message );
 		}
 	}
 }
 
-function _edd_generic_deprecated( $function, $version, $message ) {
+function _cs_generic_deprecated( $function, $version, $message ) {
 	/**
 	 * Fires immediately before a generic deprecated notice is output.
 	 *
 	 * @since 3.0
 	 *
 	 * @param string function  The function that the deprecation is happening in.
-	 * @param string $version  The version of EDD that deprecated the code..
+	 * @param string $version  The version of CommerceStore that deprecated the code..
 	 * @param string $message  The message to supply for the deprecation.
 	 */
-	do_action( 'edd_generic_deprecated', $function, $version, $message );
+	do_action( 'cs_generic_deprecated', $function, $version, $message );
 
 	$show_errors = current_user_can( 'manage_options' );
 
@@ -665,19 +665,19 @@ function _edd_generic_deprecated( $function, $version, $message ) {
 	 *
 	 * @param bool $show_errors Whether to trigger errors for deprecated calls..
 	 */
-	if ( WP_DEBUG && apply_filters( 'edd_generic_deprecated_trigger_error', $show_errors ) ) {
+	if ( WP_DEBUG && apply_filters( 'cs_generic_deprecated_trigger_error', $show_errors ) ) {
 		$message = empty( $message ) ? '' : ' ' . $message;
 
-		/* translators: 1: PHP file name, 2: EDD version number */
-		trigger_error( sprintf( __( 'Code within %1$s is <strong>deprecated</strong> since Easy Digital Downloads version %2$s. See message for further details.', 'easy-digital-downloads' ), $function, $version ) . $message );
+		/* translators: 1: PHP file name, 2: CommerceStore version number */
+		trigger_error( sprintf( __( 'Code within %1$s is <strong>deprecated</strong> since CommerceStore version %2$s. See message for further details.', 'commercestore' ), $function, $version ) . $message );
 	}
 }
 
 /**
- * Fires functions attached to a deprecated EDD filter hook.
+ * Fires functions attached to a deprecated CommerceStore filter hook.
  *
  * When a filter hook is deprecated, the apply_filters() call is replaced with
- * edd_apply_filters_deprecated(), which triggers a deprecation notice and then fires
+ * cs_apply_filters_deprecated(), which triggers a deprecation notice and then fires
  * the original filter hook.
  *
  * @param string $tag         The name of the filter hook.
@@ -687,21 +687,21 @@ function _edd_generic_deprecated( $function, $version, $message ) {
  * @param string $message     Optional. A message regarding the change. Default null.
  * @return
  */
-function edd_apply_filters_deprecated( $tag, $args, $version, $replacement = false, $message = null ) {
+function cs_apply_filters_deprecated( $tag, $args, $version, $replacement = false, $message = null ) {
 	if ( ! has_filter( $tag ) ) {
 		return $args[0];
 	}
 
-	_edd_deprecated_hook( $tag, $version, $replacement, $message );
+	_cs_deprecated_hook( $tag, $version, $replacement, $message );
 
 	return apply_filters_ref_array( $tag, $args );
 }
 
 /**
- * Fires functions attached to a deprecated EDD action hook.
+ * Fires functions attached to a deprecated CommerceStore action hook.
  *
  * When an action hook is deprecated, the do_action() call is replaced with
- * edd_do_action_deprecated(), which triggers a deprecation notice and then fires
+ * cs_do_action_deprecated(), which triggers a deprecation notice and then fires
  * the original hook.
  *
  * @param string $tag         The name of the action hook.
@@ -710,25 +710,25 @@ function edd_apply_filters_deprecated( $tag, $args, $version, $replacement = fal
  * @param string $replacement Optional. The hook that should have been used.
  * @param string $message     Optional. A message regarding the change.
  */
-function edd_do_action_deprecated( $tag, $args, $version, $replacement = false, $message = null ) {
+function cs_do_action_deprecated( $tag, $args, $version, $replacement = false, $message = null ) {
 	if ( ! has_action( $tag ) ) {
 		return;
 	}
 
-	_edd_deprecated_hook( $tag, $version, $replacement, $message );
+	_cs_deprecated_hook( $tag, $version, $replacement, $message );
 
 	do_action_ref_array( $tag, $args );
 }
 
 /**
- * Marks a deprecated EDD action or filter hook as deprecated and throws a notice.
+ * Marks a deprecated CommerceStore action or filter hook as deprecated and throws a notice.
  *
- * Use the {@see 'edd_deprecated_hook_run'} action to get the backtrace describing where
+ * Use the {@see 'cs_deprecated_hook_run'} action to get the backtrace describing where
  * the deprecated hook was called.
  *
  * Default behavior is to trigger a user error if `WP_DEBUG` is true.
  *
- * This function is called by the edd_do_action_deprecated() and edd_apply_filters_deprecated()
+ * This function is called by the cs_do_action_deprecated() and cs_apply_filters_deprecated()
  * functions, and so generally does not need to be called directly.
  *
  * @since 3.0
@@ -738,9 +738,9 @@ function edd_do_action_deprecated( $tag, $args, $version, $replacement = false, 
  * @param string $replacement Optional. The hook that should have been used.
  * @param string $message     Optional. A message regarding the change.
  */
-function _edd_deprecated_hook( $hook, $version, $replacement = null, $message = null ) {
+function _cs_deprecated_hook( $hook, $version, $replacement = null, $message = null ) {
 	/**
-	 * Fires when a deprecated EDD hook is called.
+	 * Fires when a deprecated CommerceStore hook is called.
 	 *
 	 * @since 3.0
 	 *
@@ -749,44 +749,44 @@ function _edd_deprecated_hook( $hook, $version, $replacement = null, $message = 
 	 * @param string $version     The version of WordPress that deprecated the argument used.
 	 * @param string $message     A message regarding the change.
 	 */
-	do_action( 'edd_deprecated_hook_run', $hook, $replacement, $version, $message );
+	do_action( 'cs_deprecated_hook_run', $hook, $replacement, $version, $message );
 
 	$show_errors = current_user_can( 'manage_options' );
 
 	/**
-	 * Filters whether to trigger deprecated EDD hook errors.
+	 * Filters whether to trigger deprecated CommerceStore hook errors.
 	 *
 	 * @since 3.0
 	 *
 	 * @param bool $trigger Whether to trigger deprecated hook errors. Requires
 	 *                      `WP_DEBUG` to be defined true.
 	 */
-	if ( WP_DEBUG && apply_filters( 'edd_deprecated_hook_trigger_error', $show_errors ) ) {
+	if ( WP_DEBUG && apply_filters( 'cs_deprecated_hook_trigger_error', $show_errors ) ) {
 		$message = empty( $message ) ? '' : ' ' . $message;
 
 		if ( ! is_null( $replacement ) ) {
-			/* translators: 1: PHP file name, 2: EDD version number, 3: alternative hook name */
-			trigger_error( sprintf( __( 'The %1$s hook is <strong>deprecated</strong> since Easy Digital Downloads version %2$s! Use the %3$s hook instead.', 'easy-digital-downloads' ), $hook, $version, $replacement ) . $message );
+			/* translators: 1: PHP file name, 2: CommerceStore version number, 3: alternative hook name */
+			trigger_error( sprintf( __( 'The %1$s hook is <strong>deprecated</strong> since CommerceStore version %2$s! Use the %3$s hook instead.', 'commercestore' ), $hook, $version, $replacement ) . $message );
 		} else {
-			/* translators: 1: PHP file name, 2: EDD version number */
-			trigger_error( sprintf( __( 'The %1$s hook is <strong>deprecated</strong> since Easy Digital Downloads version %2$s with no alternative available.', 'easy-digital-downloads' ), $hook, $version ) . $message );
+			/* translators: 1: PHP file name, 2: CommerceStore version number */
+			trigger_error( sprintf( __( 'The %1$s hook is <strong>deprecated</strong> since CommerceStore version %2$s with no alternative available.', 'commercestore' ), $hook, $version ) . $message );
 		}
 	}
 }
 
 /**
- * EDD Let To Num
+ * CommerceStore Let To Num
  *
  * Does Size Conversions
  *
  * @since 1.4
- * @usedby edd_settings()
+ * @usedby cs_settings()
  * @author Chris Christoff
  *
  * @param unknown $v
  * @return int
  */
-function edd_let_to_num( $v ) {
+function cs_let_to_num( $v ) {
 	$l   = substr( $v, -1 );
 	$ret = substr( $v, 0, -1 );
 
@@ -812,8 +812,8 @@ function edd_let_to_num( $v ) {
  *
  * @return string
  */
-function edd_get_uploads_base_dir() {
-	return 'edd'; // No filter, for now
+function cs_get_uploads_base_dir() {
+	return 'cs'; // No filter, for now
 }
 
 /**
@@ -822,19 +822,19 @@ function edd_get_uploads_base_dir() {
  * @since 1.5
  * @return string $url URL of the symlink directory
  */
-function edd_get_symlink_url() {
+function cs_get_symlink_url() {
 
 	// Make sure the symlink directory exists
-	edd_get_symlink_dir();
+	cs_get_symlink_dir();
 
 	// Get the URL
 	$wp_upload_dir = wp_upload_dir();
-	$edd_dir       = edd_get_uploads_base_dir();
-	$path          = '/' . $edd_dir . '/symlinks';
+	$cs_dir       = cs_get_uploads_base_dir();
+	$path          = '/' . $cs_dir . '/symlinks';
 	$url           = $wp_upload_dir['baseurl'] . $path;
 
 	// Filter & return
-	return apply_filters( 'edd_get_symlink_url', $url );
+	return apply_filters( 'cs_get_symlink_url', $url );
 }
 
 /**
@@ -843,11 +843,11 @@ function edd_get_symlink_url() {
  * @since  1.5
  * @return string $path Absolute path to the symlink directory
  */
-function edd_get_symlink_dir() {
+function cs_get_symlink_dir() {
 	$wp_upload_dir = wp_upload_dir();
-	$edd_dir       = edd_get_uploads_base_dir();
-	$path          = $wp_upload_dir['basedir'] . '/' . $edd_dir . '/symlinks';
-	$retval        = apply_filters( 'edd_get_symlink_dir', $path );
+	$cs_dir       = cs_get_uploads_base_dir();
+	$path          = $wp_upload_dir['basedir'] . '/' . $cs_dir . '/symlinks';
+	$retval        = apply_filters( 'cs_get_symlink_dir', $path );
 
 	// Make sure the directory exists
 	wp_mkdir_p( $retval );
@@ -860,13 +860,13 @@ function edd_get_symlink_dir() {
  * Retrieve the absolute path to the file upload directory without the trailing slash
  *
  * @since  1.8
- * @return string $path Absolute path to the EDD upload directory
+ * @return string $path Absolute path to the CommerceStore upload directory
  */
-function edd_get_upload_dir() {
+function cs_get_upload_dir() {
 	$wp_upload_dir = wp_upload_dir();
-	$edd_dir       = edd_get_uploads_base_dir();
-	$path          = $wp_upload_dir['basedir'] . '/' . $edd_dir;
-	$retval        =  apply_filters( 'edd_get_upload_dir', $path );
+	$cs_dir       = cs_get_uploads_base_dir();
+	$path          = $wp_upload_dir['basedir'] . '/' . $cs_dir;
+	$retval        =  apply_filters( 'cs_get_upload_dir', $path );
 
 	// Make sure the directory exists
 	wp_mkdir_p( $retval );
@@ -879,19 +879,19 @@ function edd_get_upload_dir() {
  * Retrieve the URL to the file upload directory without the trailing slash
  *
  * @since  3.0
- * @return string $purl URL to the EDD upload directory
+ * @return string $purl URL to the CommerceStore upload directory
  */
-function edd_get_upload_url() {
+function cs_get_upload_url() {
 
 	// Make sure the symlink directory exists
-	edd_get_upload_dir();
+	cs_get_upload_dir();
 
 	// Get the URL
 	$wp_upload_dir = wp_upload_dir();
-	$edd_dir       = edd_get_uploads_base_dir();
-	$url           = $wp_upload_dir['baseurl'] . '/' . $edd_dir;
+	$cs_dir       = cs_get_uploads_base_dir();
+	$url           = $wp_upload_dir['baseurl'] . '/' . $cs_dir;
 
-	return apply_filters( 'edd_get_upload_url', $url );
+	return apply_filters( 'cs_get_upload_url', $url );
 }
 
 /**
@@ -901,21 +901,21 @@ function edd_get_upload_url() {
  *
  * @return bool True if URL returns 200, False if anything else
  */
-function edd_is_uploads_url_protected() {
-	$transient_key = 'edd_is_uploads_url_protected';
+function cs_is_uploads_url_protected() {
+	$transient_key = 'cs_is_uploads_url_protected';
 	$protected     = get_transient( $transient_key );
 
 	// No transient
 	if ( false === $protected ) {
 
 		// Get the upload path
-		$upload_path = edd_get_upload_dir();
+		$upload_path = cs_get_upload_dir();
 
 		// The upload path is writeable
 		if ( wp_is_writable( $upload_path ) ) {
 
 			// Get the file path
-			$file_name = wp_unique_filename( $upload_path, 'edd-temp.zip' );
+			$file_name = wp_unique_filename( $upload_path, 'cs-temp.zip' );
 			$file_path = trailingslashit( $upload_path ) . $file_name;
 
 			// Save a temporary file - we will try to access it
@@ -924,7 +924,7 @@ function edd_is_uploads_url_protected() {
 			}
 
 			// Setup vars for request
-			$upload_url = edd_get_upload_url() . '/' . $file_name;
+			$upload_url = cs_get_upload_url() . '/' . $file_name;
 			$url        = esc_url_raw( $upload_url );
 			$args       = array(
 				'sslverify'   => false,
@@ -954,7 +954,7 @@ function edd_is_uploads_url_protected() {
 	 *
 	 * @param string $protected Response code from remote get request
 	 */
-	return (bool) apply_filters( 'edd_is_uploads_url_protected', $protected );
+	return (bool) apply_filters( 'cs_is_uploads_url_protected', $protected );
 }
 
 /**
@@ -965,14 +965,14 @@ function edd_is_uploads_url_protected() {
  * @since  1.5
  * @return void
  */
-function edd_cleanup_file_symlinks() {
+function cs_cleanup_file_symlinks() {
 
 	// Bail if not in WordPress cron
-	if ( ! edd_doing_cron() ) {
+	if ( ! cs_doing_cron() ) {
 		return;
 	}
 
-	$path = edd_get_symlink_dir();
+	$path = cs_get_symlink_dir();
 	$dir = opendir( $path );
 
 	while ( ( $file = readdir( $dir ) ) !== false ) {
@@ -986,7 +986,7 @@ function edd_cleanup_file_symlinks() {
 		}
 	}
 }
-add_action( 'edd_cleanup_file_symlinks', 'edd_cleanup_file_symlinks' );
+add_action( 'cs_cleanup_file_symlinks', 'cs_cleanup_file_symlinks' );
 
 /**
  * Checks if SKUs are enabled
@@ -995,9 +995,9 @@ add_action( 'edd_cleanup_file_symlinks', 'edd_cleanup_file_symlinks' );
  * @author Daniel J Griffiths
  * @return bool $ret True if SKUs are enabled, false otherwise
  */
-function edd_use_skus() {
-	$ret = edd_get_option( 'enable_skus', false );
-	return (bool) apply_filters( 'edd_use_skus', $ret );
+function cs_use_skus() {
+	$ret = cs_get_option( 'enable_skus', false );
+	return (bool) apply_filters( 'cs_use_skus', $ret );
 }
 
 /**
@@ -1008,7 +1008,7 @@ function edd_use_skus() {
  * @param    object|array $object An object or an array of objects
  * @return   array                An array or array of arrays, converted from the provided object(s)
  */
-function edd_object_to_array( $object = array() ) {
+function cs_object_to_array( $object = array() ) {
 
 	if ( empty( $object ) || ( ! is_object( $object ) && ! is_array( $object ) ) ) {
 		return $object;
@@ -1017,22 +1017,22 @@ function edd_object_to_array( $object = array() ) {
 	if ( is_array( $object ) ) {
 		$return = array();
 		foreach ( $object as $item ) {
-			if ( $object instanceof EDD_Payment ) {
+			if ( $object instanceof CS_Payment ) {
 				$return[] = $object->array_convert();
 			} else {
-				$return[] = edd_object_to_array( $item );
+				$return[] = cs_object_to_array( $item );
 			}
 
 		}
 	} else {
-		if ( $object instanceof EDD_Payment ) {
+		if ( $object instanceof CS_Payment ) {
 			$return = $object->array_convert();
 		} else {
 			$return = get_object_vars( $object );
 
 			// Now look at the items that came back and convert any nested objects to arrays
 			foreach ( $return as $key => $value ) {
-				$value = ( is_array( $value ) || is_object( $value ) ) ? edd_object_to_array( $value ) : $value;
+				$value = ( is_array( $value ) || is_object( $value ) ) ? cs_object_to_array( $value ) : $value;
 				$return[ $key ] = $value;
 			}
 		}
@@ -1045,13 +1045,13 @@ function edd_object_to_array( $object = array() ) {
 /**
  * Set Upload Directory
  *
- * Sets the upload dir to edd. This function is called from
- * edd_change_downloads_upload_dir()
+ * Sets the upload dir to cs. This function is called from
+ * cs_change_downloads_upload_dir()
  *
  * @since 1.0
  * @return array Upload directory information
  */
-function edd_set_upload_dir( $upload ) {
+function cs_set_upload_dir( $upload ) {
 
 	// Override the year / month being based on the post publication date, if year/month organization is enabled
 	if ( get_option( 'uploads_use_yearmonth_folders' ) ) {
@@ -1062,8 +1062,8 @@ function edd_set_upload_dir( $upload ) {
 		$upload['subdir'] = "/$y/$m";
 	}
 
-	$edd_dir          = edd_get_uploads_base_dir();
-	$upload['subdir'] = '/' . $edd_dir . $upload['subdir'];
+	$cs_dir          = cs_get_uploads_base_dir();
+	$upload['subdir'] = '/' . $cs_dir . $upload['subdir'];
 	$upload['path']   = $upload['basedir'] . $upload['subdir'];
 	$upload['url']    = $upload['baseurl'] . $upload['subdir'];
 	return $upload;
@@ -1075,7 +1075,7 @@ function edd_set_upload_dir( $upload ) {
  * @param  string $payment_key The payment key.
  * @return bool                Whether the receipt is visible or not.
  */
-function edd_can_view_receipt( $payment_key = '' ) {
+function cs_can_view_receipt( $payment_key = '' ) {
 
 	$return = false;
 
@@ -1083,13 +1083,13 @@ function edd_can_view_receipt( $payment_key = '' ) {
 		return $return;
 	}
 
-	global $edd_receipt_args;
+	global $cs_receipt_args;
 
-	$order = edd_get_order_by( 'payment_key', $payment_key );
+	$order = cs_get_order_by( 'payment_key', $payment_key );
 	if ( empty( $order->id ) ) {
 		return $return;
 	}
-	$edd_receipt_args['id'] = $order->id;
+	$cs_receipt_args['id'] = $order->id;
 
 	if ( is_user_logged_in() ) {
 		if ( (int) get_current_user_id() === (int) $order->user_id ) {
@@ -1100,7 +1100,7 @@ function edd_can_view_receipt( $payment_key = '' ) {
 			$return = true;
 		}
 	} else {
-		$session = edd_get_purchase_session();
+		$session = cs_get_purchase_session();
 		if ( ! empty( $session ) ) {
 			if ( $session['purchase_key'] === $order->payment_key ) {
 				$return = true;
@@ -1108,38 +1108,38 @@ function edd_can_view_receipt( $payment_key = '' ) {
 		}
 	}
 
-	return (bool) apply_filters( 'edd_can_view_receipt', $return, $payment_key );
+	return (bool) apply_filters( 'cs_can_view_receipt', $return, $payment_key );
 }
 
 /**
  * Given an order ID, generate a link to IP address provider (ipinfo.io)
  *
  * @since 2.8.15
- * @since 3.0 Updated to use EDD\Orders\Order.
+ * @since 3.0 Updated to use CS\Orders\Order.
  *
  * @param int $order_id Order ID.
  * @return string A link to the IP details provider
  */
-function edd_payment_get_ip_address_url( $order_id ) {
-	$order = edd_get_order( $order_id );
+function cs_payment_get_ip_address_url( $order_id ) {
+	$order = cs_get_order( $order_id );
 
 	$base_url = 'https://ipinfo.io/';
 	$provider_url = '<a href="' . esc_url( $base_url ) . esc_attr( $order->ip ) . '" target="_blank">' . esc_attr( $order->ip ) . '</a>';
 
-	return apply_filters( 'edd_payment_get_ip_address_url', $provider_url, $order->ip, $order->id );
+	return apply_filters( 'cs_payment_get_ip_address_url', $provider_url, $order->ip, $order->id );
 }
 
 /**
  * Abstraction for WordPress cron checking, to avoid code duplication.
  *
- * In future versions of EDD, this function will be changed to only refer to
- * EDD specific cron related jobs. You probably won't want to use it until then.
+ * In future versions of CS, this function will be changed to only refer to
+ * CommerceStore specific cron related jobs. You probably won't want to use it until then.
  *
  * @since 2.8.16
  *
  * @return boolean
  */
-function edd_doing_cron() {
+function cs_doing_cron() {
 
 	// Bail if doing WordPress cron.
 	if ( wp_doing_cron() ) {
@@ -1153,14 +1153,14 @@ function edd_doing_cron() {
 /**
  * Abstraction for WordPress AJAX checking, to avoid code duplication.
  *
- * In future versions of EDD, this function will be changed to only refer to
- * EDD specific AJAX related requests. You probably won't want to use it until then.
+ * In future versions of CS, this function will be changed to only refer to
+ * CommerceStore specific AJAX related requests. You probably won't want to use it until then.
  *
  * @since 3.0
  *
  * @return boolean
  */
-function edd_doing_ajax() {
+function cs_doing_ajax() {
 
 	// Bail if doing WordPress AJAX.
 	if ( wp_doing_ajax() ) {
@@ -1174,14 +1174,14 @@ function edd_doing_ajax() {
 /**
  * Abstraction for WordPress autosave checking, to avoid code duplication.
  *
- * In future versions of EDD, this function will be changed to only refer to
- * EDD specific autosave related requests. You probably won't want to use it until then.
+ * In future versions of CS, this function will be changed to only refer to
+ * CommerceStore specific autosave related requests. You probably won't want to use it until then.
  *
  * @since 3.0
  *
  * @return boolean
  */
-function edd_doing_autosave() {
+function cs_doing_autosave() {
 
 	// Bail if doing WordPress autosave.
 	if ( defined( 'DOING_AUTOSAVE' ) && ( true === DOING_AUTOSAVE ) ) {
@@ -1199,7 +1199,7 @@ function edd_doing_autosave() {
  *
  * @return boolean
  */
-function edd_doing_script_debug() {
+function cs_doing_script_debug() {
 	return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 }
 
@@ -1210,10 +1210,10 @@ function edd_doing_script_debug() {
  *
  * @return string
  */
-function edd_get_bot_name() {
-	$retval = esc_html__( 'Store Bot', 'easy-digital-downloads' );
+function cs_get_bot_name() {
+	$retval = esc_html__( 'Store Bot', 'commercestore' );
 
-	return (string) apply_filters( 'edd_get_bot_name', $retval );
+	return (string) apply_filters( 'cs_get_bot_name', $retval );
 }
 
 /**
@@ -1230,7 +1230,7 @@ function edd_get_bot_name() {
  * @param int    $status   Optional. The numeric code to give in the redirect
  *                         headers. Default: 302.
  */
-function edd_redirect( $location = '', $status = 302 ) {
+function cs_redirect( $location = '', $status = 302 ) {
 
 	// Prevent redirects in unit tests.
 	if ( (bool) ( defined( 'WP_TESTS_DIR' ) && WP_TESTS_DIR ) || function_exists( '_manually_load_plugin' ) ) {
@@ -1248,7 +1248,7 @@ function edd_redirect( $location = '', $status = 302 ) {
 	wp_safe_redirect( $location, $status );
 
 	// Exit so the redirect takes place immediately.
-	edd_die();
+	cs_die();
 }
 
 /**
@@ -1260,7 +1260,7 @@ function edd_redirect( $location = '', $status = 302 ) {
  * @param string  $function Name of the function.
  * @return bool Whether or not function is disabled.
  */
-function edd_is_func_disabled( $function ) {
+function cs_is_func_disabled( $function ) {
 	$disabled = explode( ',',  @ini_get( 'disable_functions' ) );
 
 	return in_array( $function, $disabled, true );
@@ -1280,13 +1280,13 @@ function edd_is_func_disabled( $function ) {
  * @param boolean $ignore_user_abort Whether to call ignore_user_about( true )
  * @param int     $time_limit        How long to set the time limit to. Cannot be 0. Default 6 hours.
  */
-function edd_set_time_limit( $ignore_user_abort = true, $time_limit = 21600 ) {
+function cs_set_time_limit( $ignore_user_abort = true, $time_limit = 21600 ) {
 
 	// Default time limit is 6 hours
 	$default = HOUR_IN_SECONDS * 6;
 
 	// Only abort if true and if function is enabled
-	if ( ( true === $ignore_user_abort ) && ! edd_is_func_disabled( 'ignore_user_abort' ) ) {
+	if ( ( true === $ignore_user_abort ) && ! cs_is_func_disabled( 'ignore_user_abort' ) ) {
 		@ignore_user_abort( true );
 	}
 
@@ -1302,7 +1302,7 @@ function edd_set_time_limit( $ignore_user_abort = true, $time_limit = 21600 ) {
 	 *
 	 * @returns int $time_limit The filtered time limit value. Default 6 hours.
 	 */
-	$time_limit = (int) apply_filters( 'edd_set_time_limit', $time_limit );
+	$time_limit = (int) apply_filters( 'cs_set_time_limit', $time_limit );
 
 	// Disallow infinite values
 	if ( empty( $time_limit ) ) {
@@ -1310,12 +1310,12 @@ function edd_set_time_limit( $ignore_user_abort = true, $time_limit = 21600 ) {
 	}
 
 	// Set time limit to non-infinite value if function is enabled
-	if ( ! edd_is_func_disabled( 'set_time_limit' ) ) {
+	if ( ! cs_is_func_disabled( 'set_time_limit' ) ) {
 		@set_time_limit( $time_limit );
 	}
 
-	// Attempt to raise the memory limit. See: edd_set_batch_memory_limit()
-	wp_raise_memory_limit( 'edd_batch' );
+	// Attempt to raise the memory limit. See: cs_set_batch_memory_limit()
+	wp_raise_memory_limit( 'cs_batch' );
 }
 
 /**
@@ -1327,12 +1327,12 @@ function edd_set_time_limit( $ignore_user_abort = true, $time_limit = 21600 ) {
  *
  * @return string 256M
  */
-function edd_set_batch_memory_limit( $memory_limit = '128M' ) {
+function cs_set_batch_memory_limit( $memory_limit = '128M' ) {
 	$memory_limit = '256M';
 
 	return $memory_limit;
 }
-add_filter( 'edd_batch_memory_limit', 'edd_set_batch_memory_limit' );
+add_filter( 'cs_batch_memory_limit', 'cs_set_batch_memory_limit' );
 
 /**
  * Output the admin area filter bar
@@ -1341,9 +1341,9 @@ add_filter( 'edd_batch_memory_limit', 'edd_set_batch_memory_limit' );
  *
  * @param string $context
  */
-function edd_admin_filter_bar( $context = '', $item = null ) {
+function cs_admin_filter_bar( $context = '', $item = null ) {
 
-	?><div class="wp-filter" id="edd-filters"><?php
+	?><div class="wp-filter" id="cs-filters"><?php
 
 		/**
 		 * Fires before filtered items, usually unused
@@ -1352,7 +1352,7 @@ function edd_admin_filter_bar( $context = '', $item = null ) {
 		 *
 		 * @param string $context
 		 */
-		do_action( "edd_before_admin_filter_bar_{$context}", $item );
+		do_action( "cs_before_admin_filter_bar_{$context}", $item );
 
 		?><div class="filter-items"><?php
 
@@ -1363,7 +1363,7 @@ function edd_admin_filter_bar( $context = '', $item = null ) {
 			 *
 			 * @param string $context
 			 */
-			do_action( "edd_admin_filter_bar_{$context}", $item );
+			do_action( "cs_admin_filter_bar_{$context}", $item );
 
 		?></div><?php
 
@@ -1374,7 +1374,7 @@ function edd_admin_filter_bar( $context = '', $item = null ) {
 		 *
 		 * @param string $context
 		 */
-		do_action( "edd_after_admin_filter_bar_{$context}", $item );
+		do_action( "cs_after_admin_filter_bar_{$context}", $item );
 
 	?></div><?php
 }
@@ -1387,7 +1387,7 @@ function edd_admin_filter_bar( $context = '', $item = null ) {
  * @param float $value Amount to negate.
  * @return float Negated amount.
  */
-function edd_negate_amount( $value = 0.00 ) {
+function cs_negate_amount( $value = 0.00 ) {
 	return abs( floatval( $value ) ) * -1;
 }
 
@@ -1399,7 +1399,7 @@ function edd_negate_amount( $value = 0.00 ) {
  * @param int $value
  * @return int
  */
-function edd_negate_int( $value = 0 ) {
+function cs_negate_int( $value = 0 ) {
 	return intval( $value ) * -1;
 }
 
@@ -1412,29 +1412,29 @@ function edd_negate_int( $value = 0 ) {
  *
  * @return string Label for the status
  */
-function edd_get_status_label( $status = '' ) {
+function cs_get_status_label( $status = '' ) {
 
 	// Set a default.
 	$status_label = str_replace( '_', ' ', $status );
 	$status_label = ucwords( $status_label );
 
-	// If this is a payment label, fetch from `edd_get_payment_status_label()`.
-	if ( array_key_exists( $status, edd_get_payment_statuses() ) ) {
-		$status_label = edd_get_payment_status_label( $status );
+	// If this is a payment label, fetch from `cs_get_payment_status_label()`.
+	if ( array_key_exists( $status, cs_get_payment_statuses() ) ) {
+		$status_label = cs_get_payment_status_label( $status );
 	} else {
 		// Otherwise, fetch from generic array. This covers all other non-payment statuses.
 		$labels = array(
 			// Discounts
-			'active'             => __( 'Active', 'easy-digital-downloads' ),
-			'inactive'           => __( 'Inactive', 'easy-digital-downloads' ),
-			'expired'            => __( 'Expired', 'easy-digital-downloads' ),
+			'active'             => __( 'Active', 'commercestore' ),
+			'inactive'           => __( 'Inactive', 'commercestore' ),
+			'expired'            => __( 'Expired', 'commercestore' ),
 
 			// Common
-			'pending'            => __( 'Pending', 'easy-digital-downloads' ),
-			'verified'           => __( 'Verified', 'easy-digital-downloads' ),
-			'spam'               => __( 'Spam', 'easy-digital-downloads' ),
-			'deleted'            => __( 'Deleted', 'easy-digital-downloads' ),
-			'cancelled'          => __( 'Cancelled', 'easy-digital-downloads' ),
+			'pending'            => __( 'Pending', 'commercestore' ),
+			'verified'           => __( 'Verified', 'commercestore' ),
+			'spam'               => __( 'Spam', 'commercestore' ),
+			'deleted'            => __( 'Deleted', 'commercestore' ),
+			'cancelled'          => __( 'Cancelled', 'commercestore' ),
 		);
 
 		// Return the label if set, or uppercase the first letter if not
@@ -1451,7 +1451,7 @@ function edd_get_status_label( $status = '' ) {
 	 * @param string $status_label Status label.
 	 * @param string $status       Provided status key.
 	 */
-	return apply_filters( 'edd_get_status_label', $status_label, $status );
+	return apply_filters( 'cs_get_status_label', $status_label, $status );
 }
 
 /**
@@ -1459,11 +1459,11 @@ function edd_get_status_label( $status = '' ) {
  *
  * @since 3.0
  *
- * @param EDD\Database\Query $counts
+ * @param CS\Database\Query $counts
  * @param string             $groupby
  * @return array
  */
-function edd_format_counts( $counts = array(), $groupby = '' ) {
+function cs_format_counts( $counts = array(), $groupby = '' ) {
 
 	// Default array
 	$c = array(
@@ -1492,14 +1492,14 @@ function edd_format_counts( $counts = array(), $groupby = '' ) {
 /**
  * Get all payment icon dimensions.
  *
- * This is used because as of EDD 3.0, payment icons are SVGs with specific
+ * This is used because as of CommerceStore 3.0, payment icons are SVGs with specific
  * (and sometimes different) widths and heights.
  *
  * @since 3.0
  *
  * @return array $sizes Sizes array (width and height) of the icon requested.
  */
-function edd_get_payment_icon_dimensions( $icon = '' ) {
+function cs_get_payment_icon_dimensions( $icon = '' ) {
 
 	// Bail if icon is empty
 	if ( empty( $icon ) ) {
@@ -1507,7 +1507,7 @@ function edd_get_payment_icon_dimensions( $icon = '' ) {
 	}
 
 	// Filter the SVG dimensions
-	$sizes = apply_filters( 'edd_get_payment_icon_dimensions', array(
+	$sizes = apply_filters( 'cs_get_payment_icon_dimensions', array(
 		'mastercard' => array(
 			'width'  => 50,
 			'height' => 32
@@ -1546,16 +1546,16 @@ function edd_get_payment_icon_dimensions( $icon = '' ) {
  *
  * @return string SVG markup.
  */
-function edd_get_payment_icon( $args = array() ) {
+function cs_get_payment_icon( $args = array() ) {
 
 	// Bail if no arguments
 	if ( empty( $args ) ) {
-		return __( 'Please define default parameters in the form of an array.', 'easy-digital-downloads' );
+		return __( 'Please define default parameters in the form of an array.', 'commercestore' );
 	}
 
 	// Bail if no icon
 	if ( false === array_key_exists( 'icon', $args ) ) {
-		return __( 'Please define an SVG icon filename.', 'easy-digital-downloads' );
+		return __( 'Please define an SVG icon filename.', 'commercestore' );
 	}
 
 	// Parse args.
@@ -1632,7 +1632,7 @@ function edd_get_payment_icon( $args = array() ) {
  *
  * @since 3.0
  */
-function edd_print_payment_icons( $icons = array() ) {
+function cs_print_payment_icons( $icons = array() ) {
 
 	// Bail if no icons being requested
 	if ( empty( $icons ) ) {
@@ -1743,7 +1743,7 @@ function edd_print_payment_icons( $icons = array() ) {
  *
  * @return bool
  */
-function edd_is_promo_active() {
+function cs_is_promo_active() {
 
 	// Set the date/time range based on UTC.
 	$start = strtotime( '2019-11-29 06:00:00' );
@@ -1759,18 +1759,18 @@ function edd_is_promo_active() {
 }
 
 /**
- * Gets the date that this EDD install was activated (for new installs).
+ * Gets the date that this CommerceStore install was activated (for new installs).
  * For existing installs, this option is added whenever the function is first used.
  *
  * @since 2.11.4
- * @return int The timestamp when EDD was marked as activated.
+ * @return int The timestamp when CommerceStore was marked as activated.
  */
-function edd_get_activation_date() {
-	$activation_date = get_option( 'edd_activation_date', '' );
+function cs_get_activation_date() {
+	$activation_date = get_option( 'cs_activation_date', '' );
 	if ( ! $activation_date ) {
 		$activation_date = time();
 		// Gets the first order placed in the store (any status).
-		$payments = edd_get_payments(
+		$payments = cs_get_payments(
 			array(
 				'output'        => 'posts',
 				'number'        => 1,
@@ -1786,7 +1786,7 @@ function edd_get_activation_date() {
 				$activation_date = strtotime( $first_payment->post_date_gmt );
 			}
 		}
-		update_option( 'edd_activation_date', $activation_date );
+		update_option( 'cs_activation_date', $activation_date );
 	}
 
 	return $activation_date;

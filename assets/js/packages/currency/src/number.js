@@ -1,4 +1,4 @@
-/* global edd_vars */
+/* global cs_vars */
 
 /**
  * External dependencies
@@ -17,16 +17,16 @@ export const NumberFormat = class NumberFormat {
 	 * @todo Validate configuration.
 	 * @since 3.0
 	 * @param {Object} config Configuration for the number formatter.
-	 * @param {number} [config.decimalPlaces=edd_vars.currency_decimals] The number of decimals places to format to.
-	 * @param {string} [config.decimalSeparator=edd_vars.decimal_separator] The separator between the number and decimal.
-	 * @param {string} [config.thousandsSeparator=edd_vars.thousands_separator] Thousands separator.
+	 * @param {number} [config.decimalPlaces=cs_vars.currency_decimals] The number of decimals places to format to.
+	 * @param {string} [config.decimalSeparator=cs_vars.decimal_separator] The separator between the number and decimal.
+	 * @param {string} [config.thousandsSeparator=cs_vars.thousands_separator] Thousands separator.
 	 */
 	constructor( config = {} ) {
 		const {
 			currency_decimals: precision,
 			decimal_separator: decimalSeparator,
 			thousands_separator: thousandSeparator,
-		} = edd_vars;
+		} = cs_vars;
 
 		this.config = {
 			precision,

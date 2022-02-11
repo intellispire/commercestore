@@ -2,16 +2,16 @@
 /**
  * PayPal Commerce Functions
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
 
 /**
  * Determines whether or not there's a valid REST API connection.
@@ -49,7 +49,7 @@ function has_rest_api_connection( $mode = '' ) {
  */
 function ready_to_accept_payments( $mode = '' ) {
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
 	if ( ! has_rest_api_connection( $mode ) ) {
@@ -76,11 +76,11 @@ function ready_to_accept_payments( $mode = '' ) {
  */
 function paypal_standard_enabled( $mode = '' ) {
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
 	$rest_connection = has_rest_api_connection( $mode );
-	$enabled         = ! $rest_connection && edd_get_option( 'paypal_email' );
+	$enabled         = ! $rest_connection && cs_get_option( 'paypal_email' );
 
 	/**
 	 * Filters whether or not PayPal Standard is enabled.
@@ -89,7 +89,7 @@ function paypal_standard_enabled( $mode = '' ) {
 	 *
 	 * @param bool $enabled
 	 */
-	return apply_filters( 'edd_paypal_standard_enabled', $enabled );
+	return apply_filters( 'cs_paypal_standard_enabled', $enabled );
 }
 
 /**
@@ -102,13 +102,13 @@ function paypal_standard_enabled( $mode = '' ) {
  */
 function get_partner_merchant_id( $mode = '' ) {
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
 	if ( API::MODE_LIVE === $mode ) {
-		return EDD_PAYPAL_MERCHANT_ID;
+		return CS_PAYPAL_MERCHANT_ID;
 	} else {
-		return EDD_PAYPAL_SANDBOX_MERCHANT_ID;
+		return CS_PAYPAL_SANDBOX_MERCHANT_ID;
 	}
 }
 
@@ -126,7 +126,7 @@ function get_button_styles() {
 		'label'  => 'paypal'
 	);
 
-	if ( ! edd_is_checkout() ) {
+	if ( ! cs_is_checkout() ) {
 		$styles['layout'] = 'horizontal';
 		$styles['label']  = 'buynow';
 	}
@@ -136,7 +136,7 @@ function get_button_styles() {
 	 *
 	 * @since 2.11
 	 */
-	return apply_filters( 'edd_paypal_smart_button_style', $styles );
+	return apply_filters( 'cs_paypal_smart_button_style', $styles );
 }
 
 /**
@@ -152,18 +152,18 @@ function get_button_styles() {
  */
 function get_order_purchase_units_without_breakdown( $payment_id, $purchase_data, $payment_args ) {
 	$order_amount = array(
-		'currency_code' => edd_get_currency(),
-		'value'         => (string) edd_sanitize_amount( $purchase_data['price'] ),
+		'currency_code' => cs_get_currency(),
+		'value'         => (string) cs_sanitize_amount( $purchase_data['price'] ),
 	);
 	if ( (float) $purchase_data['tax'] > 0 ) {
 		$order_amount['breakdown'] = array(
 			'item_total' => array(
-				'currency_code' => edd_get_currency(),
-				'value'         => (string) edd_sanitize_amount( $purchase_data['price'] - $purchase_data['tax'] )
+				'currency_code' => cs_get_currency(),
+				'value'         => (string) cs_sanitize_amount( $purchase_data['price'] - $purchase_data['tax'] )
 			),
 			'tax_total'  => array(
-				'currency_code' => edd_get_currency(),
-				'value'         => (string) edd_sanitize_amount( $purchase_data['tax'] ),
+				'currency_code' => cs_get_currency(),
+				'value'         => (string) cs_sanitize_amount( $purchase_data['tax'] ),
 			)
 		);
 	}
@@ -186,7 +186,7 @@ function get_order_purchase_units_without_breakdown( $payment_id, $purchase_data
  */
 function get_order_purchase_units( $payment_id, $purchase_data, $payment_args ) {
 
-	$currency       = edd_get_currency();
+	$currency       = cs_get_currency();
 	$order_subtotal = $purchase_data['subtotal'];
 	$items          = get_order_items( $purchase_data );
 	// Adjust the order subtotal if any items are discounted.
@@ -213,7 +213,7 @@ function get_order_purchase_units( $payment_id, $purchase_data, $payment_args ) 
 					'name'        => stripslashes_deep( html_entity_decode( wp_strip_all_tags( $fee['label'] ), ENT_COMPAT, 'UTF-8' ) ),
 					'unit_amount' => array(
 						'currency_code' => $currency,
-						'value'         => (string) edd_sanitize_amount( $fee['amount'] ),
+						'value'         => (string) cs_sanitize_amount( $fee['amount'] ),
 					),
 					'quantity'    => 1,
 				);
@@ -227,11 +227,11 @@ function get_order_purchase_units( $payment_id, $purchase_data, $payment_args ) 
 
 	$order_amount = array(
 		'currency_code' => $currency,
-		'value'         => (string) edd_sanitize_amount( $purchase_data['price'] ),
+		'value'         => (string) cs_sanitize_amount( $purchase_data['price'] ),
 		'breakdown'     => array(
 			'item_total' => array(
 				'currency_code' => $currency,
-				'value'         => (string) edd_sanitize_amount( $order_subtotal ),
+				'value'         => (string) cs_sanitize_amount( $order_subtotal ),
 			),
 		),
 	);
@@ -240,7 +240,7 @@ function get_order_purchase_units( $payment_id, $purchase_data, $payment_args ) 
 	if ( $tax > 0 ) {
 		$order_amount['breakdown']['tax_total'] = array(
 			'currency_code' => $currency,
-			'value'         => (string) edd_sanitize_amount( $tax ),
+			'value'         => (string) cs_sanitize_amount( $tax ),
 		);
 	}
 
@@ -248,7 +248,7 @@ function get_order_purchase_units( $payment_id, $purchase_data, $payment_args ) 
 	if ( $discount > 0 ) {
 		$order_amount['breakdown']['discount'] = array(
 			'currency_code' => $currency,
-			'value'         => (string) edd_sanitize_amount( $discount ),
+			'value'         => (string) cs_sanitize_amount( $discount ),
 		);
 	}
 
@@ -281,16 +281,16 @@ function get_order_items( $purchase_data ) {
 			$item_amount = 0;
 		}
 		$items[ $i ] = array(
-			'name'        => stripslashes_deep( html_entity_decode( substr( edd_get_cart_item_name( $item ), 0, 127 ), ENT_COMPAT, 'UTF-8' ) ),
+			'name'        => stripslashes_deep( html_entity_decode( substr( cs_get_cart_item_name( $item ), 0, 127 ), ENT_COMPAT, 'UTF-8' ) ),
 			'quantity'    => $item['quantity'],
 			'unit_amount' => array(
-				'currency_code' => edd_get_currency(),
-				'value'         => (string) edd_sanitize_amount( $item_amount ),
+				'currency_code' => cs_get_currency(),
+				'value'         => (string) cs_sanitize_amount( $item_amount ),
 			),
 			'discount'    => $item['discount'], // This is unset later and never sent to PayPal.
 		);
-		if ( edd_use_skus() ) {
-			$sku = edd_get_download_sku( $item['id'] );
+		if ( cs_use_skus() ) {
+			$sku = cs_get_download_sku( $item['id'] );
 			if ( ! empty( $sku ) && '-' !== $sku ) {
 				$items[ $i ]['sku'] = $sku;
 			}
@@ -305,7 +305,7 @@ function get_order_items( $purchase_data ) {
  * Attempts to detect if there's an item total mismatch. This means the individual item breakdowns don't
  * add up to our proposed totals.
  *
- * @link https://github.com/easydigitaldownloads/easy-digital-downloads/pull/8835#issuecomment-921759101
+ * @link https://github.com/commercestore/commercestore/pull/8835#issuecomment-921759101
  * @internal Not intended for public use.
  *
  * @since 2.11.2

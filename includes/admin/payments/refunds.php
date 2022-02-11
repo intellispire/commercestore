@@ -2,14 +2,14 @@
 /**
  * Refund Details Sections
  *
- * @package    EDD
+ * @package    CS
  * @subpackage Admin/Orders
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since      3.0
  */
 
-use EDD\Orders\Order;
+use CS\Orders\Order;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -23,11 +23,11 @@ defined( 'ABSPATH' ) || exit;
  *
  * @param Order $refund Current Refund.
  */
-function edd_refund_details_notice( $refund ) {
-	$order_url = edd_get_admin_url(
+function cs_refund_details_notice( $refund ) {
+	$order_url = cs_get_admin_url(
 		array(
 			'id'        => $refund->parent,
-			'page'      => 'edd-payment-history',
+			'page'      => 'cs-payment-history',
 			'view'      => 'view-order-details',
 		)
 	);
@@ -38,13 +38,13 @@ function edd_refund_details_notice( $refund ) {
 
 		<div class="edit-post-header__settings">
 			<a href="<?php echo esc_url( $order_url ); ?>" class="button button-secondary" autofocus>
-				<?php esc_html_e( 'View Original Order', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'View Original Order', 'commercestore' ); ?>
 			</a>
 		</div>
 
 		<div class="edit-post-header__toolbar">
-			<span alt="f223" class="edd-help-tip dashicons dashicons-editor-help" title="<?php _e( 'A refund is a read-only record to help balance your store&#39;s books.', 'easy-digital-downloads' ); ?>"></span>&nbsp;
-			<?php esc_html_e( 'You are viewing a refund record.', 'easy-digital-downloads' ); ?>
+			<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'A refund is a read-only record to help balance your store&#39;s books.', 'commercestore' ); ?>"></span>&nbsp;
+			<?php esc_html_e( 'You are viewing a refund record.', 'commercestore' ); ?>
 		</div>
 
 	</div>
@@ -62,11 +62,11 @@ function edd_refund_details_notice( $refund ) {
  *
  * @param Order $refund Current Refund.
  */
-function edd_refund_details_items( $refund ) {
+function cs_refund_details_items( $refund ) {
 	$_items       = array();
 	$_adjustments = array();
 
-	$items  = edd_get_order_items( array(
+	$items  = cs_get_order_items( array(
 		'order_id' => $refund->id,
 		'number'   => 999,
 	) );
@@ -74,7 +74,7 @@ function edd_refund_details_items( $refund ) {
 	foreach ( $items as $item ) {
 		$item_adjustments = array();
 
-		$adjustments = edd_get_order_adjustments( array(
+		$adjustments = cs_get_order_adjustments( array(
 			'object_id'   => $item->id,
 			'number'      => 999,
 			'object_type' => 'order_item',
@@ -86,7 +86,7 @@ function edd_refund_details_items( $refund ) {
 		) );
 
 		foreach ( $adjustments as $adjustment ) {
-			// @todo edd_get_order_adjustment_to_json()?
+			// @todo cs_get_order_adjustment_to_json()?
 			$adjustment_args = array(
 				'id'           => esc_html( $adjustment->id ),
 				'objectId'     => esc_html( $adjustment->object_id ),
@@ -106,7 +106,7 @@ function edd_refund_details_items( $refund ) {
 			$_adjustments[]     = $adjustment_args;
 		}
 
-		// @todo edd_get_order_item_to_json()?
+		// @todo cs_get_order_item_to_json()?
 		$_items[] = array(
 			'id'           => esc_html( $item->id ),
 			'orderId'      => esc_html( $item->order_id ),
@@ -128,7 +128,7 @@ function edd_refund_details_items( $refund ) {
 		);
 	}
 
-	$adjustments  = edd_get_order_adjustments( array(
+	$adjustments  = cs_get_order_adjustments( array(
 		'object_id'   => $refund->id,
 		'number'      => 999,
 		'object_type' => 'order',
@@ -140,7 +140,7 @@ function edd_refund_details_items( $refund ) {
 	) );
 
 	foreach ( $adjustments as $adjustment ) {
-		// @todo edd_get_order_adjustment_to_json()?
+		// @todo cs_get_order_adjustment_to_json()?
 		$_adjustments[] = array(
 			'id'           => esc_html( $adjustment->id ),
 			'objectId'     => esc_html( $adjustment->object_id ),
@@ -177,19 +177,19 @@ function edd_refund_details_items( $refund ) {
 	}
 
 	wp_localize_script(
-		'edd-admin-orders',
-		'eddAdminOrderOverview',
+		'cs-admin-orders',
+		'csAdminOrderOverview',
 		array(
 			'items'        => $_items,
 			'adjustments'  => $_adjustments,
 			'refunds'      => array(),
 			'isAdding'     => false,
 			'isRefund'     => true,
-			'hasQuantity'  => true === edd_item_quantities_enabled(),
+			'hasQuantity'  => true === cs_item_quantities_enabled(),
 			'hasTax'       => $has_tax,
 			'order'        => array(
 				'currency'       => $refund->currency,
-				'currencySymbol' => html_entity_decode( edd_currency_symbol( $refund->currency ) ),
+				'currencySymbol' => html_entity_decode( cs_currency_symbol( $refund->currency ) ),
 				'subtotal'       => $refund->subtotal,
 				'discount'       => $refund->discount,
 				'tax'            => $refund->tax,
@@ -209,22 +209,22 @@ function edd_refund_details_items( $refund ) {
 	);
 
 	foreach ( $templates as $tmpl ) {
-		echo '<script type="text/html" id="tmpl-edd-admin-order-' . esc_attr( $tmpl ) . '">';
-		require_once EDD_PLUGIN_DIR . 'includes/admin/views/tmpl-order-' . $tmpl . '.php';
+		echo '<script type="text/html" id="tmpl-cs-admin-order-' . esc_attr( $tmpl ) . '">';
+		require_once CS_PLUGIN_DIR . 'includes/admin/views/tmpl-order-' . $tmpl . '.php';
 		echo '</script>';
 	}
 ?>
 
-<div id="edd-order-overview" class="postbox edd-edit-purchase-element edd-order-overview">
-	<table id="edd-order-overview-summary" class="widefat wp-list-table edd-order-overview-summary edd-order-overview-summary--refund">
+<div id="cs-order-overview" class="postbox cs-edit-purchase-element cs-order-overview">
+	<table id="cs-order-overview-summary" class="widefat wp-list-table cs-order-overview-summary cs-order-overview-summary--refund">
 		<thead>
 			<tr>
-				<th class="column-name column-primary"><?php echo esc_html( edd_get_label_singular() ); ?></th>
-				<th class="column-amount"><?php esc_html_e( 'Unit Price', 'easy-digital-downloads' ); ?></th>
-				<?php if ( true === edd_item_quantities_enabled() ) : ?>
-				<th class="column-quantity"><?php esc_html_e( 'Quantity', 'easy-digital-downloads' ); ?></th>
+				<th class="column-name column-primary"><?php echo esc_html( cs_get_label_singular() ); ?></th>
+				<th class="column-amount"><?php esc_html_e( 'Unit Price', 'commercestore' ); ?></th>
+				<?php if ( true === cs_item_quantities_enabled() ) : ?>
+				<th class="column-quantity"><?php esc_html_e( 'Quantity', 'commercestore' ); ?></th>
 				<?php endif; ?>
-				<th class="column-subtotal column-right"><?php esc_html_e( 'Amount', 'easy-digital-downloads' ); ?></th>
+				<th class="column-subtotal column-right"><?php esc_html_e( 'Amount', 'commercestore' ); ?></th>
 			</tr>
 		</thead>
 	</table>
@@ -240,16 +240,16 @@ function edd_refund_details_items( $refund ) {
  *
  * @param Order $refund Current Refund.
  */
-function edd_refund_details_notes( $refund ) {
+function cs_refund_details_notes( $refund ) {
 ?>
 
-<div id="edd-order-items" class="postbox edd-edit-purchase-element">
+<div id="cs-order-items" class="postbox cs-edit-purchase-element">
 	<h2 class="hndle">
-		<?php esc_html_e( 'Refund Notes', 'easy-digital-downloads' ); ?>
+		<?php esc_html_e( 'Refund Notes', 'commercestore' ); ?>
 	</h2>
 
 	<div class="inside">
-		<?php edd_order_details_notes( $refund ); ?>
+		<?php cs_order_details_notes( $refund ); ?>
 	</div>
 </div>
 
@@ -263,53 +263,53 @@ function edd_refund_details_notes( $refund ) {
  *
  * @param Order $refund Current Refund.
  */
-function edd_refund_details_attributes( $refund ) {
-	$refund_date = edd_get_edd_timezone_equivalent_date_from_utc( EDD()->utils->date( $refund->date_created, 'utc', true ) );
+function cs_refund_details_attributes( $refund ) {
+	$refund_date = cs_get_cs_timezone_equivalent_date_from_utc( CS()->utils->date( $refund->date_created, 'utc', true ) );
 
 	$trash_url = wp_nonce_url(
-		edd_get_admin_url( array(
-			'edd-action'  => 'trash_order',
+		cs_get_admin_url( array(
+			'cs-action'  => 'trash_order',
 			'purchase_id' => $refund->id,
 			'order_type'  => 'refund',
-			'page'        => 'edd-payment-history',
+			'page'        => 'cs-payment-history',
 		) ),
-		'edd_payment_nonce'
+		'cs_payment_nonce'
 	);
 
-	$order_url = edd_get_admin_url(
+	$order_url = cs_get_admin_url(
 		array(
 			'id'        => $refund->parent,
-			'page'      => 'edd-payment-history',
+			'page'      => 'cs-payment-history',
 			'view'      => 'view-order-details',
 		)
 	);
 
-	$order = edd_get_order( $refund->parent );
+	$order = cs_get_order( $refund->parent );
 ?>
 
 <div class="postbox">
 	<h2 class="hndle">
-		<?php esc_html_e( 'Refund Attributes', 'easy-digital-downloads' ); ?>
+		<?php esc_html_e( 'Refund Attributes', 'commercestore' ); ?>
 	</h2>
 
-	<div class="edd-admin-box-inside">
-		<time datetime="<?php echo esc_attr( EDD()->utils->date( $refund->date_created, null, true )->toDateTimeString() ); ?>" style="line-height: normal">
-			<?php echo edd_date_i18n( $refund->date_created, 'M. d, Y' ) . '<br />' . edd_date_i18n( strtotime( $refund->date_created ), 'H:i' ); ?> <?php echo esc_html( edd_get_timezone_abbr() ); ?>
+	<div class="cs-admin-box-inside">
+		<time datetime="<?php echo esc_attr( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString() ); ?>" style="line-height: normal">
+			<?php echo cs_date_i18n( $refund->date_created, 'M. d, Y' ) . '<br />' . cs_date_i18n( strtotime( $refund->date_created ), 'H:i' ); ?> <?php echo esc_html( cs_get_timezone_abbr() ); ?>
 		</time>
 
 		<br /><br />
 
-		<a href="<?php echo esc_url( $trash_url ); ?>" class="edd-delete-payment edd-delete">
-			<?php esc_html_e( 'Move to Trash', 'easy-digital-downloads' ); ?>
+		<a href="<?php echo esc_url( $trash_url ); ?>" class="cs-delete-payment cs-delete">
+			<?php esc_html_e( 'Move to Trash', 'commercestore' ); ?>
 		</a>
 	</div>
 
-	<div class="edd-admin-box-inside edd-admin-box-inside--row">
-		<div class="edd-form-group">
-			<span class="edd-form-group__label">
-				<?php esc_html_e( 'Original Order', 'easy-digital-downloads' ); ?>
+	<div class="cs-admin-box-inside cs-admin-box-inside--row">
+		<div class="cs-form-group">
+			<span class="cs-form-group__label">
+				<?php esc_html_e( 'Original Order', 'commercestore' ); ?>
 			</span>
-			<div class="edd-form-group__control">
+			<div class="cs-form-group__control">
 				<a href="<?php echo esc_url( $order_url ); ?>"><?php echo esc_html( $order->number ); ?></a>
 			</div>
 		</div>
@@ -326,9 +326,9 @@ function edd_refund_details_attributes( $refund ) {
  *
  * @param Order $refund
  */
-function edd_refund_details_related_refunds( $refund ) {
+function cs_refund_details_related_refunds( $refund ) {
 	$refunds = array_filter(
-		edd_get_order_refunds( $refund->parent ),
+		cs_get_order_refunds( $refund->parent ),
 		function( $related_refund ) use ( $refund ) {
 			return $related_refund->id !== $refund->id;
 		}
@@ -339,27 +339,27 @@ function edd_refund_details_related_refunds( $refund ) {
 	}
 ?>
 
-<div class="postbox edd-order-data">
+<div class="postbox cs-order-data">
 	<h2 class="hndle">
-		<?php esc_html_e( 'Related Refunds', 'easy-digital-downloads' ); ?>
+		<?php esc_html_e( 'Related Refunds', 'commercestore' ); ?>
 	</h2>
 
 	<?php
 	foreach( $refunds as $refund ) :
-		$refund_url = edd_get_admin_url( array(
-			'page' => 'edd-payment-history',
+		$refund_url = cs_get_admin_url( array(
+			'page' => 'cs-payment-history',
 			'view' => 'view-refund-details',
 			'id'   => $refund->id
 		) );
 	?>
-		<div class="edd-admin-box-inside">
-			<div class="edd-form-group">
-				<a href="<?php echo esc_url( $refund_url ); ?>" class="edd-form-group__label">
+		<div class="cs-admin-box-inside">
+			<div class="cs-form-group">
+				<a href="<?php echo esc_url( $refund_url ); ?>" class="cs-form-group__label">
 					<?php echo esc_html( $refund->number ); ?>
 				</a>
-				<div class="edd-form-group__control">
-					<time datetime="<?php echo esc_attr( EDD()->utils->date( $refund->date_created, null, true )->toDateTimeString() ); ?>" style="line-height: normal">
-						<?php echo edd_date_i18n( $refund->date_created, 'M. d, Y' ) . '<br />' . edd_date_i18n( strtotime( $refund->date_created ), 'H:i' ); ?> <?php echo esc_html( edd_get_timezone_abbr() ); ?>
+				<div class="cs-form-group__control">
+					<time datetime="<?php echo esc_attr( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString() ); ?>" style="line-height: normal">
+						<?php echo cs_date_i18n( $refund->date_created, 'M. d, Y' ) . '<br />' . cs_date_i18n( strtotime( $refund->date_created ), 'H:i' ); ?> <?php echo esc_html( cs_get_timezone_abbr() ); ?>
 					</time>
 				</div>
 		</div>

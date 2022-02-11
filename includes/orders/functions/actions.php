@@ -2,15 +2,15 @@
 /**
  * Order Action Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
 // Exit if accessed directly
-use EDD\Adjustments\Adjustment;
+use CS\Adjustments\Adjustment;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,24 +22,24 @@ defined( 'ABSPATH' ) || exit;
  * @param array $args Order form data.
  * @return void
  */
-function edd_add_manual_order( $args = array() ) {
+function cs_add_manual_order( $args = array() ) {
 	// Bail if user cannot manage shop settings or no data was passed.
 	if ( empty( $args ) || ! current_user_can( 'manage_shop_settings' ) ) {
 		return;
 	}
 
 	// Set up parameters.
-	$nonce = isset( $_POST['edd_add_order_nonce'] )
-		? sanitize_text_field( $_POST['edd_add_order_nonce'] )
+	$nonce = isset( $_POST['cs_add_order_nonce'] )
+		? sanitize_text_field( $_POST['cs_add_order_nonce'] )
 		: '';
 
 	// Bail if nonce fails.
-	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'edd_add_order_nonce' ) ) {
+	if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'cs_add_order_nonce' ) ) {
 		return;
 	}
 
 	// Get now one time to avoid microsecond issues
-	$now = EDD()->utils->date( 'now', null, true )->timestamp;
+	$now = CS()->utils->date( 'now', null, true )->timestamp;
 
 	// Parse args.
 	$data = wp_parse_args( $args, array(
@@ -49,15 +49,15 @@ function edd_add_manual_order( $args = array() ) {
 		'tax'                     => 0.00,
 		'total'                   => 0.00,
 		'discount'                => 0.00,
-		'edd-payment-status'      => 'complete',
+		'cs-payment-status'      => 'complete',
 		'payment_key'             => '',
 		'gateway'                 => '',
 		'transaction_id'          => '',
 		'receipt'                 => '',
-		'edd-payment-date'        => date( 'Y-m-d', $now ),
-		'edd-payment-time-hour'   => date( 'G',     $now ),
-		'edd-payment-time-min'    => date( 'i',     $now ),
-		'edd-unlimited-downloads' => 0,
+		'cs-payment-date'        => date( 'Y-m-d', $now ),
+		'cs-payment-time-hour'   => date( 'G',     $now ),
+		'cs-payment-time-min'    => date( 'i',     $now ),
+		'cs-unlimited-downloads' => 0,
 	) );
 
 	/** Customer data *********************************************************/
@@ -69,39 +69,39 @@ function edd_add_manual_order( $args = array() ) {
 	$name        = '';
 
 	// Create a new customer record.
-	if ( isset( $data['edd-new-customer'] ) && 1 === absint( $data['edd-new-customer'] ) ) {
+	if ( isset( $data['cs-new-customer'] ) && 1 === absint( $data['cs-new-customer'] ) ) {
 
 		// Sanitize first name
-		$first_name = isset( $data['edd-new-customer-first-name'] )
-			? sanitize_text_field( $data['edd-new-customer-first-name'] )
+		$first_name = isset( $data['cs-new-customer-first-name'] )
+			? sanitize_text_field( $data['cs-new-customer-first-name'] )
 			: '';
 
 		// Sanitize last name
-		$last_name = isset( $data['edd-new-customer-last-name'] )
-			? sanitize_text_field( $data['edd-new-customer-last-name'] )
+		$last_name = isset( $data['cs-new-customer-last-name'] )
+			? sanitize_text_field( $data['cs-new-customer-last-name'] )
 			: '';
 
 		// Combine
 		$name = trim( $first_name . ' ' . $last_name );
 
 		// Sanitize the email address
-		$email = isset( $data['edd-new-customer-email'] )
-			? sanitize_email( $data['edd-new-customer-email'] )
+		$email = isset( $data['cs-new-customer-email'] )
+			? sanitize_email( $data['cs-new-customer-email'] )
 			: '';
 
 		// Save to database.
-		$customer_id = edd_add_customer( array(
+		$customer_id = cs_add_customer( array(
 			'name'  => $name,
 			'email' => $email,
 		) );
 
-		$customer = edd_get_customer( $customer_id );
+		$customer = cs_get_customer( $customer_id );
 
 	// Existing customer.
-	} elseif ( isset( $data['edd-new-customer'] ) && 0 === absint( $data['edd-new-customer'] ) && isset( $data['customer-id'] ) ) {
+	} elseif ( isset( $data['cs-new-customer'] ) && 0 === absint( $data['cs-new-customer'] ) && isset( $data['customer-id'] ) ) {
 		$customer_id = absint( $data['customer-id'] );
 
-		$customer = edd_get_customer( $customer_id );
+		$customer = cs_get_customer( $customer_id );
 
 		if ( $customer ) {
 			$email   = $customer->email;
@@ -113,15 +113,15 @@ function edd_add_manual_order( $args = array() ) {
 	/** Insert order **********************************************************/
 
 	// Parse order status.
-	$status = sanitize_text_field( $data['edd-payment-status'] );
+	$status = sanitize_text_field( $data['cs-payment-status'] );
 
-	if ( empty( $status ) || ! in_array( $status, array_keys( edd_get_payment_statuses() ), true ) ) {
+	if ( empty( $status ) || ! in_array( $status, array_keys( cs_get_payment_statuses() ), true ) ) {
 		$status = 'complete';
 	}
 
 	// Parse date.
-	$date = sanitize_text_field( $data['edd-payment-date'] );
-	$hour = sanitize_text_field( $data['edd-payment-time-hour'] );
+	$date = sanitize_text_field( $data['cs-payment-date'] );
+	$hour = sanitize_text_field( $data['cs-payment-time-hour'] );
 
 	// Restrict to our high and low.
 	if ( $hour > 23 ) {
@@ -130,7 +130,7 @@ function edd_add_manual_order( $args = array() ) {
 		$hour = 00;
 	}
 
-	$minute = sanitize_text_field( $data['edd-payment-time-min'] );
+	$minute = sanitize_text_field( $data['cs-payment-time-min'] );
 
 	// Restrict to our high and low.
 	if ( $minute > 59 ) {
@@ -140,11 +140,11 @@ function edd_add_manual_order( $args = array() ) {
 	}
 
 	// The date is entered in the WP timezone. We need to convert it to UTC prior to saving now.
-	$date = edd_get_utc_equivalent_date( EDD()->utils->date( $date . ' ' . $hour . ':' . $minute . ':00', edd_get_timezone_id(), false ) );
+	$date = cs_get_utc_equivalent_date( CS()->utils->date( $date . ' ' . $hour . ':' . $minute . ':00', cs_get_timezone_id(), false ) );
 	$date = $date->format( 'Y-m-d H:i:s' );
 
 	// Get mode
-	$mode = edd_is_test_mode()
+	$mode = cs_is_test_mode()
 		? 'test'
 		: 'live';
 
@@ -156,16 +156,16 @@ function edd_add_manual_order( $args = array() ) {
 
 	$tax_rate  = false;
 	// If taxes are enabled, get the tax rate for the order location.
-	if ( edd_use_taxes() ) {
-		$country = ! empty( $data['edd_order_address']['country'] )
-			? $data['edd_order_address']['country']
+	if ( cs_use_taxes() ) {
+		$country = ! empty( $data['cs_order_address']['country'] )
+			? $data['cs_order_address']['country']
 			: false;
 
-		$region = ! empty( $data['edd_order_address']['region'] )
-			? $data['edd_order_address']['region']
+		$region = ! empty( $data['cs_order_address']['region'] )
+			? $data['cs_order_address']['region']
 			: false;
 
-		$tax_rate = edd_get_tax_rate_by_location(
+		$tax_rate = cs_get_tax_rate_by_location(
 			array(
 				'country' => $country,
 				'region'  => $region,
@@ -174,7 +174,7 @@ function edd_add_manual_order( $args = array() ) {
 	}
 
 	// Add the order ID
-	$order_id = edd_add_order(
+	$order_id = cs_add_order(
 		array(
 			'status'       => 'pending', // Always insert as pending initially.
 			'user_id'      => $user_id,
@@ -183,8 +183,8 @@ function edd_add_manual_order( $args = array() ) {
 			'ip'           => sanitize_text_field( $data['ip'] ),
 			'gateway'      => sanitize_text_field( $data['gateway'] ),
 			'mode'         => $mode,
-			'currency'     => edd_get_currency(),
-			'payment_key'  => $data['payment_key'] ? sanitize_text_field( $data['payment_key'] ) : edd_generate_order_payment_key( $email ),
+			'currency'     => cs_get_currency(),
+			'payment_key'  => $data['payment_key'] ? sanitize_text_field( $data['payment_key'] ) : cs_generate_order_payment_key( $email ),
 			'tax_rate_id'  => ! empty( $tax_rate->id ) ? $tax_rate->id : null,
 			'subtotal'     => $order_subtotal,
 			'tax'          => $order_tax,
@@ -207,16 +207,16 @@ function edd_add_manual_order( $args = array() ) {
 				$tax_rate_percentage = $tax_rate_percentage * 100;
 			}
 
-			edd_update_order_meta( $order_id, 'tax_rate', $tax_rate_percentage );
+			cs_update_order_meta( $order_id, 'tax_rate', $tax_rate_percentage );
 		}
 	}
 
 	/** Insert order address **************************************************/
 
-	if ( isset( $data['edd_order_address'] ) ) {
+	if ( isset( $data['cs_order_address'] ) ) {
 
 		// Parse args
-		$address = wp_parse_args( $data['edd_order_address'], array(
+		$address = wp_parse_args( $data['cs_order_address'], array(
 			'name'        => $name,
 			'address'     => '',
 			'address2'    => '',
@@ -232,16 +232,16 @@ function edd_add_manual_order( $args = array() ) {
 		// Remove empty data.
 		$order_address_data = array_filter( $order_address_data );
 
-		// Add to edd_order_addresses table.
-		edd_add_order_address( $order_address_data );
+		// Add to cs_order_addresses table.
+		cs_add_order_address( $order_address_data );
 
-		// Maybe add the address to the edd_customer_addresses.
+		// Maybe add the address to the cs_customer_addresses.
 		$customer_address_data = $order_address_data;
 
-		// We don't need to pass this data to edd_maybe_add_customer_address().
+		// We don't need to pass this data to cs_cs_maybe_add_customer_address().
 		unset( $customer_address_data['order_id'] );
 
-		edd_maybe_add_customer_address( $customer->id, $customer_address_data );
+		cs_cs_maybe_add_customer_address( $customer->id, $customer_address_data );
 	}
 
 	/** Insert order items ****************************************************/
@@ -263,7 +263,7 @@ function edd_add_manual_order( $args = array() ) {
 		$downloads = array_reverse( $data['downloads'] );
 
 		foreach ( $downloads as $cart_key => $download ) {
-			$d = edd_get_download( absint( $download['id'] ) );
+			$d = cs_get_download( absint( $download['id'] ) );
 
 			// Skip if download no longer exists
 			if ( empty( $d ) ) {
@@ -301,11 +301,11 @@ function edd_add_manual_order( $args = array() ) {
 				? floatval( $download[ 'total' ] )
 				: 0.00;
 
-			// Add to edd_order_items table.
-			$order_item_id = edd_add_order_item( array(
+			// Add to cs_order_items table.
+			$order_item_id = cs_add_order_item( array(
 				'order_id'     => $order_id,
 				'product_id'   => absint( $download['id'] ),
-				'product_name' => edd_get_download_name( $download['id'], absint( $price_id ) ),
+				'product_name' => cs_get_download_name( $download['id'], absint( $price_id ) ),
 				'price_id'     => $price_id,
 				'cart_index'   => $cart_key,
 				'type'         => 'download',
@@ -337,7 +337,7 @@ function edd_add_manual_order( $args = array() ) {
 							$order_item_adjustment_tax      = floatval( $order_item_adjustment['tax'] );
 							$order_item_adjustment_total    = floatval( $order_item_adjustment['total'] );
 
-						edd_add_order_adjustment( array(
+						cs_add_order_adjustment( array(
 							'object_id'   => $order_item_id,
 							'object_type' => 'order_item',
 							'type'        => sanitize_text_field( $order_item_adjustment['type'] ),
@@ -351,8 +351,8 @@ function edd_add_manual_order( $args = array() ) {
 				}
 
 				// Increase the earnings for this download.
-				edd_increase_earnings( absint( $download['id'] ), $total );
-				edd_increase_purchase_count( absint( $download['id'] ), $quantity );
+				cs_increase_earnings( absint( $download['id'] ), $total );
+				cs_increase_purchase_count( absint( $download['id'] ), $quantity );
 			}
 		}
 	}
@@ -376,7 +376,7 @@ function edd_add_manual_order( $args = array() ) {
 			$adjustment_tax      = floatval( $adjustment['tax'] );
 			$adjustment_total    = floatval( $adjustment['total'] );
 
-			edd_add_order_adjustment( array(
+			cs_add_order_adjustment( array(
 				'object_id'   => $order_id,
 				'object_type' => 'order',
 				'type'        => sanitize_text_field( $adjustment['type'] ),
@@ -394,7 +394,7 @@ function edd_add_manual_order( $args = array() ) {
 		$discounts = array_reverse( $data['discounts'] );
 
 		foreach ( $discounts as $discount ) {
-			$d = edd_get_discount( absint( $discount['type_id'] ) );
+			$d = cs_get_discount( absint( $discount['type_id'] ) );
 
 			if ( empty( $d ) ) {
 				continue;
@@ -404,7 +404,7 @@ function edd_add_manual_order( $args = array() ) {
 			$discount_total    = floatval( $discount['total'] );
 
 			// Store discount.
-			edd_add_order_adjustment( array(
+			cs_add_order_adjustment( array(
 				'object_id'   => $order_id,
 				'object_type' => 'order',
 				'type_id'     => intval( $discount['type_id'] ),
@@ -421,7 +421,7 @@ function edd_add_manual_order( $args = array() ) {
 
 	// Insert transaction ID.
 	if ( ! empty( $data['transaction_id'] ) ) {
-		edd_add_order_transaction( array(
+		cs_add_order_transaction( array(
 			'object_id'      => $order_id,
 			'object_type'    => 'order',
 			'transaction_id' => sanitize_text_field( $data['transaction_id'] ),
@@ -432,48 +432,48 @@ function edd_add_manual_order( $args = array() ) {
 	}
 
 	// Unlimited downloads.
-	if ( isset( $data['edd-unlimited-downloads'] ) && 1 === (int) $data['edd-unlimited-downloads'] ) {
-		edd_update_order_meta( $order_id, 'unlimited_downloads', 1 );
+	if ( isset( $data['cs-unlimited-downloads'] ) && 1 === (int) $data['cs-unlimited-downloads'] ) {
+		cs_update_order_meta( $order_id, 'unlimited_downloads', 1 );
 	}
 
 	if ( ! empty( $customer ) ) {
 		$customer->recalculate_stats();
 	}
 
-	edd_increase_total_earnings( $order_total );
+	cs_increase_total_earnings( $order_total );
 
 	// Setup order number.
 	$order_number = '';
 
-	if ( edd_get_option( 'enable_sequential' ) ) {
-		$number = edd_get_next_payment_number();
+	if ( cs_get_option( 'enable_sequential' ) ) {
+		$number = cs_get_next_payment_number();
 
-		$order_number = edd_format_payment_number( $number );
+		$order_number = cs_format_payment_number( $number );
 
-		update_option( 'edd_last_payment_number', $number );
+		update_option( 'cs_last_payment_number', $number );
 
 		// Update totals & maybe add order number.
-		edd_update_order( $order_id, array(
+		cs_update_order( $order_id, array(
 			'order_number' => $order_number,
 		) );
 	}
 
 	// Stop purchase receipt from being sent.
-	if ( ! isset( $data['edd_order_send_receipt'] ) ) {
-		remove_action( 'edd_complete_purchase', 'edd_trigger_purchase_receipt', 999 );
+	if ( ! isset( $data['cs_order_send_receipt'] ) ) {
+		remove_action( 'cs_complete_purchase', 'cs_trigger_purchase_receipt', 999 );
 	}
 
-	// Trigger edd_complete_purchase.
+	// Trigger cs_complete_purchase.
 	if ( 'complete' === $status ) {
-		edd_update_order_status( $order_id, $status );
+		cs_update_order_status( $order_id, $status );
 	}
 
 	// Redirect to `Edit Order` page.
-	edd_redirect( edd_get_admin_url( array(
-		'page'        => 'edd-payment-history',
+	cs_redirect( cs_get_admin_url( array(
+		'page'        => 'cs-payment-history',
 		'view'        => 'view-order-details',
 		'id'          => urlencode( $order_id ),
-		'edd-message' => 'order_added',
+		'cs-message' => 'order_added',
 	) ) );
 }
-add_action( 'edd_add_order', 'edd_add_manual_order' );
+add_action( 'cs_add_order', 'cs_add_manual_order' );

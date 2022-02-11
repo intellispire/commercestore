@@ -17,7 +17,7 @@ window.edd = window.edd || {};
  *
  * @param {Object} config Chart config.
  */
-window.edd.renderChart = ( config ) => {
+window.cs.renderChart = ( config ) => {
 	const isPie = isPieChart( config );
 
 	Chart.defaults.global.pointHitDetectionRadius = 5;

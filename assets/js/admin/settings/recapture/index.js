@@ -1,6 +1,6 @@
 export const recaptureRemoteInstall = () => {
 	var data = {
-		'action': 'edd_recapture_remote_install',
+		'action': 'cs_recapture_remote_install',
 	};
 
 	jQuery.post( ajaxurl, data, function( response ) {

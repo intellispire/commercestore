@@ -2,13 +2,13 @@
 
 
 /**
- * @group edd_tools
+ * @group cs_tools
  */
-class Tests_Tools extends EDD_UnitTestCase {
+class Tests_Tools extends CS_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
-		require_once EDD_PLUGIN_DIR . 'includes/admin/tools.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/tools.php';
 	}
 
 	public function tearDown() {
@@ -16,7 +16,7 @@ class Tests_Tools extends EDD_UnitTestCase {
 	}
 
 	public function test_system_info() {
-		$system_info = edd_tools_sysinfo_get();
+		$system_info = cs_tools_sysinfo_get();
 		$this->assertContains( 'Site URL:                 ' . site_url()                       , $system_info );
 		$this->assertContains( 'Home URL:                 ' . home_url()                       , $system_info );
 		$this->assertContains( 'Multisite:                ' . ( is_multisite() ? 'Yes' : 'No' ), $system_info );
@@ -68,7 +68,7 @@ class Tests_Tools extends EDD_UnitTestCase {
 		$this->assertContains( 'fsockopen', $system_info );
 		$this->assertContains( 'SOAP Client', $system_info );
 		$this->assertContains( 'Suhosin', $system_info );
-		$this->assertContains( 'EDD Use Sessions', $system_info );
+		$this->assertContains( 'CS Use Sessions', $system_info );
 		$this->assertContains( 'Session', $system_info );
 	}
 }

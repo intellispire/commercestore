@@ -10,6 +10,6 @@
 	"browser": true,
 	"globals": {
 		"jQuery": false,
-		"edd_scripts": false
+		"cs_scripts": false
 	}
 }

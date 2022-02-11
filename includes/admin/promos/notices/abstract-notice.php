@@ -2,15 +2,15 @@
 /**
  * Notice
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.10.6
  */
 
-namespace EDD\Admin\Promos\Notices;
+namespace CS\Admin\Promos\Notices;
 
-use EDD\Admin\Promos\PromoHandler;
+use CS\Admin\Promos\PromoHandler;
 
 abstract class Notice {
 
@@ -99,18 +99,18 @@ abstract class Notice {
 	public function display() {
 		?>
 		<div
-			id="edd-admin-notice-<?php echo esc_attr( $this->get_id() ); ?>"
-			class="edd-admin-notice-<?php echo esc_attr( sanitize_html_class( static::TYPE ) ); ?> edd-promo-notice"
-			data-nonce="<?php echo esc_attr( wp_create_nonce( 'edd-dismiss-notice-' . $this->get_id() ) ); ?>"
+			id="cs-admin-notice-<?php echo esc_attr( $this->get_id() ); ?>"
+			class="cs-admin-notice-<?php echo esc_attr( sanitize_html_class( static::TYPE ) ); ?> cs-promo-notice"
+			data-nonce="<?php echo esc_attr( wp_create_nonce( 'cs-dismiss-notice-' . $this->get_id() ) ); ?>"
 			data-id="<?php echo esc_attr( $this->get_id() ); ?>"
 			data-lifespan="<?php echo esc_attr( static::dismiss_duration() ); ?>"
 		>
 			<?php $this->_display(); ?>
 
 			<?php if ( static::DISMISSIBLE ) : ?>
-				<button class="button-link edd-promo-notice-dismiss">
+				<button class="button-link cs-promo-notice-dismiss">
 					&times;
-					<span class="screen-reader-text"><?php esc_html_e( 'Dismiss notice', 'easy-digital-downloads' ); ?></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Dismiss notice', 'commercestore' ); ?></span>
 				</button>
 			<?php endif; ?>
 		</div>

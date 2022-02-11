@@ -2,7 +2,7 @@
 /**
  * Order Overview: Copy Download Links
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -10,18 +10,18 @@
  */
 ?>
 
-<div class="edd-order-overview-modal">
-	<form class="edd-order-copy-download-link">
+<div class="cs-order-overview-modal">
+	<form class="cs-order-copy-download-link">
 
 		<p>
 			<label for="link">
-				<?php echo esc_html( sprintf( __( '%s Links', 'easy-digital-downloads' ), edd_get_label_singular() ) ); ?>
+				<?php echo esc_html( sprintf( __( '%s Links', 'commercestore' ), cs_get_label_singular() ) ); ?>
 			</label>
 
 			<# if ( false === data.link ) { #>
 				<span class="spinner is-active" style="float: none; margin: 0;"></span>
 			<# } else if ( '' === data.link ) { #>
-				<?php esc_html_e( 'No file links available', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'No file links available', 'commercestore' ); ?>
 			<# } else { #>
 				<textarea rows="10" id="link">{{ data.link }}</textarea>
 			<# } #>
@@ -31,8 +31,8 @@
 			<input
 				id="close"
 				type="submit"
-				class="button button-primary edd-ml-auto"
-				value="<?php esc_html_e( 'Close', 'easy-digital-downloads' ); ?>"
+				class="button button-primary cs-ml-auto"
+				value="<?php esc_html_e( 'Close', 'commercestore' ); ?>"
 			/>
 		</p>
 	</form>

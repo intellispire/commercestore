@@ -2,25 +2,25 @@
 /**
  * Adjustment Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying adjustments.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Adjustment::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Adjustment::__construct() for accepted arguments.
  */
 class Adjustment extends Query {
 
@@ -51,7 +51,7 @@ class Adjustment extends Query {
 	 * @access protected
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Adjustments';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Adjustments';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Adjustment extends Query {
 	 * @access protected
 	 * @var mixed
 	 */
-	protected $item_shape = '\\EDD\\Database\\Rows\\Adjustment';
+	protected $item_shape = '\\CS\\Database\\Rows\\Adjustment';
 
 	/** Cache *****************************************************************/
 

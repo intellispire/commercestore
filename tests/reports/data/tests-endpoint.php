@@ -1,29 +1,29 @@
 <?php
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Endpoint object.
  *
- * @group edd_registry
- * @group edd_reports
- * @group edd_reports_endpoints
- * @group edd_objects
+ * @group cs_registry
+ * @group cs_reports
+ * @group cs_reports_endpoints
+ * @group cs_objects
  *
- * @coversDefaultClass \EDD\Reports\Data\Endpoint
+ * @coversDefaultClass \CS\Reports\Data\Endpoint
  */
-class Endpoint_Tests extends \EDD_UnitTestCase {
+class Endpoint_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Endpoint registry fixture.
 	 *
 	 * @access protected
-	 * @var    \EDD\Reports\Data\Endpoint_Registry
+	 * @var    \CS\Reports\Data\Endpoint_Registry
 	 */
 	protected $registry;
 
@@ -33,7 +33,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->registry = new \EDD\Reports\Data\Endpoint_Registry();
+		$this->registry = new \CS\Reports\Data\Endpoint_Registry();
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::check_view()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_check_view_with_invalid_view_should_flag_WP_Error() {
 		// Execute the invisible method via the constructor.
@@ -69,7 +69,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::check_view()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_check_view_with_invalid_view_should_flag_WP_Error_including_code_invalid_view() {
 		// Execute the invisible method via the constructor.
@@ -167,7 +167,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_display_args()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_display_args_with_non_array_display_args_should_flag_WP_Error_including_code_invalid_view_arg_type() {
 		// Execute the invisible method via the constructor.
@@ -190,7 +190,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_display_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_display_props_with_empty_view_display_callback_should_flag_WP_Error() {
 		// Execute the invisible method via the constructor.
@@ -210,7 +210,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_display_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_display_props_with_empty_view_display_callback_should_flag_WP_Error_including_code_missing_display_callback() {
 		// Execute the invisible method via the constructor.
@@ -232,7 +232,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_display_callback()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_display_callback_with_non_callable_display_callback_should_flag_WP_Error_including_code_invalid_view_arg_type() {
 		// Execute the invisible method via the constructor.
@@ -255,7 +255,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_display_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_display_props_with_empty_view_data_callback_should_flag_WP_Error() {
 		// Execute the invisible method via the constructor.
@@ -275,7 +275,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_display_props()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_display_props_with_empty_view_data_callback_should_flag_WP_Error_including_code_missing_data_callback() {
 		// Execute the invisible method via the constructor.
@@ -297,7 +297,7 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::set_data_callback()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_set_data_callback_with_non_callable_data_callback_should_flag_WP_Error_including_code_invalid_view_arg_type() {
 		// Execute the invisible method via the constructor.
@@ -322,10 +322,10 @@ class Endpoint_Tests extends \EDD_UnitTestCase {
 	 * Mocks a copy of the Endpoint abstract class.
 	 *
 	 * @param array $args
-	 * @return \EDD\Reports\Data\Endpoint Mocked Endpoint instance.
+	 * @return \CS\Reports\Data\Endpoint Mocked Endpoint instance.
 	 */
 	protected function mock_Endpoint( $args ) {
-		return $this->getMockForAbstractClass( '\EDD\Reports\Data\Endpoint', array( $args ) );
+		return $this->getMockForAbstractClass( '\CS\Reports\Data\Endpoint', array( $args ) );
 	}
 
 }

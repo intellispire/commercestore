@@ -1,6 +1,6 @@
 /* Notifications
 -------------------------------------------------------------- */
-.edd-overlay {
+.cs-overlay {
 	position: fixed;
 	z-index: 1052;
 	top: 0;
@@ -12,12 +12,12 @@
 	transition: .5s;
 }
 
-.edd-slide-in {
+.cs-slide-in {
 	transform: translateX(100%) !important;
 	-webkit-transform: translateX(100%) !important;
 }
 
-#edd-notifications-panel {
+#cs-notifications-panel {
 	background-color: white;
 	height: 100%;
 	width: 100%;
@@ -33,83 +33,83 @@
 	transform: translateX(0%);
 	-webkit-transform: translateX(0%);
 }
-body.admin-bar #edd-notifications-panel {
+body.admin-bar #cs-notifications-panel {
 	top: 32px;
 }
 @media screen and (max-width: 600px) {
-	body.admin-bar #edd-notifications-panel {
+	body.admin-bar #cs-notifications-panel {
 		top: 46px;
 	}
 }
 
-#edd-notifications-header {
+#cs-notifications-header {
 	display: flex;
 	align-items: center;
 	padding: 0 30px;
 	color: #fff;
 	background-color: #0c5d95;
 }
-#edd-notifications-header h3 {
+#cs-notifications-header h3 {
 	color: #fff;
 	flex: 1;
 }
-#edd-notifications-header .edd-close {
+#cs-notifications-header .cs-close {
 	background: none;
 	border: none;
 	color: #fff;
 	cursor: pointer;
 }
 
-#edd-notifications-body {
+#cs-notifications-body {
 	padding: 30px;
 }
 
-.edd-notification {
+.cs-notification {
 	display: flex;
 	gap: 20px;
 	margin-bottom: 20px;
 }
-.edd-notification--icon {
+.cs-notification--icon {
 	color: #00aa63;
 }
-.edd-notification--icon.edd-notification--icon-info {
+.cs-notification--icon.cs-notification--icon-info {
 	color: #005ae0;
 }
-.edd-notification--icon.edd-notification--icon-warning {
+.cs-notification--icon.cs-notification--icon-warning {
 	color: #f18200;
 }
-.edd-notification--icon.edd-notification--icon-error {
+.cs-notification--icon.cs-notification--icon-error {
 	color: #df2a4a;
 }
-.edd-notification--body {
+.cs-notification--body {
 	flex: 1;
 }
-.edd-notification--header {
+.cs-notification--header {
 	align-items: center;
 	display: flex;
 	justify-content: space-between;
 	gap: 5px;
 	margin-bottom: 7px;
 }
-.edd-notification--title {
+.cs-notification--title {
 	color: #141b38;
 	flex: 1;
 	font-size: 16px;
 	font-weight: 600;
 	margin: 0;
 }
-.edd-notification--date {
+.cs-notification--date {
 	color: #71747e;
 	font-size: 12px;
 }
-.edd-notification--actions {
+.cs-notification--actions {
 	flex-wrap: wrap;
 	display: flex;
 	align-items: center;
 	gap: 5px;
 	margin-top: 10px;
 }
-.edd-notification--dismiss {
+.cs-notification--dismiss {
 	background: none !important;
 	border: none !important;
 	box-shadow: none !important;
@@ -118,6 +118,6 @@ body.admin-bar #edd-notifications-panel {
 	padding: 0 10px;
 	text-decoration: underline;
 }
-.edd-notification--dismiss:hover {
+.cs-notification--dismiss:hover {
 	text-decoration: none;
 }

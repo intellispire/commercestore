@@ -2,22 +2,22 @@
 /**
  * Most Valuable Customers list table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports/Data/Customers
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\Customers;
+namespace CS\Reports\Data\Customers;
 
-use EDD\Reports as Reports;
+use CS\Reports as Reports;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-// Load \EDD_Customer_Reports_Table if not loaded
-if ( ! class_exists( '\EDD_Customer_Reports_Table' ) ) {
-	require_once EDD_PLUGIN_DIR . 'includes/admin/customers/class-customer-table.php';
+// Load \CS_Customer_Reports_Table if not loaded
+if ( ! class_exists( '\CS_Customer_Reports_Table' ) ) {
+	require_once CS_PLUGIN_DIR . 'includes/admin/customers/class-customer-table.php';
 }
 
 /**
@@ -25,7 +25,7 @@ if ( ! class_exists( '\EDD_Customer_Reports_Table' ) ) {
  *
  * @since 3.0
  */
-class Most_Valuable_Customers_List_Table extends \EDD_Customer_Reports_Table {
+class Most_Valuable_Customers_List_Table extends \CS_Customer_Reports_Table {
 
 	/**
 	 * Query the database and fetch the top five customers of all time.
@@ -55,7 +55,7 @@ class Most_Valuable_Customers_List_Table extends \EDD_Customer_Reports_Table {
 		$end_date   = sanitize_text_field( date( 'Y-m-d 23:59:59', strtotime( $date_range['end'] ) ) );
 
 		$sql = "SELECT customer_id, COUNT(id) AS order_count, SUM({$column}) AS total_spent
-				FROM {$wpdb->edd_orders}
+				FROM {$wpdb->cs_orders}
 				WHERE status IN (%s, %s) AND date_created >= %s AND date_created <= %s AND type = 'sale'
 				{$currency_clause}
 				GROUP BY customer_id
@@ -65,7 +65,7 @@ class Most_Valuable_Customers_List_Table extends \EDD_Customer_Reports_Table {
 		$results = $wpdb->get_results( $wpdb->prepare( $sql, sanitize_text_field( 'complete' ), sanitize_text_field( 'revoked' ), $start_date, $end_date ) );
 
 		foreach ( $results as $result ) {
-			$customer = edd_get_customer( (int) $result->customer_id );
+			$customer = cs_get_customer( (int) $result->customer_id );
 
 			// Skip if customer record not found.
 			if ( ! $customer ) {

@@ -4,9 +4,9 @@
  *
  * This file contains functions related to refunds.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
@@ -21,10 +21,10 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return array
  */
-function edd_get_refundability_types() {
+function cs_get_refundability_types() {
 	return array(
-		'refundable'    => __( 'Refundable',     'easy-digital-downloads' ),
-		'nonrefundable' => __( 'Non-Refundable', 'easy-digital-downloads' )
+		'refundable'    => __( 'Refundable',     'commercestore' ),
+		'nonrefundable' => __( 'Non-Refundable', 'commercestore' )
 	);
 }
 
@@ -38,14 +38,14 @@ function edd_get_refundability_types() {
  *
  * @return string|false Date refundable (in UTC), false otherwise.
  */
-function edd_get_refund_date( $date = '', $download_id = 0 ) {
+function cs_get_refund_date( $date = '', $download_id = 0 ) {
 
 	// Bail if no date was passed.
 	if ( empty( $date ) ) {
 		return false;
 	}
 
-	$refund_window = absint( edd_get_option( 'refund_window', 30 ) );
+	$refund_window = absint( cs_get_option( 'refund_window', 30 ) );
 
 	// Refund window is infinite.
 	if ( 0 === $refund_window ) {
@@ -53,7 +53,7 @@ function edd_get_refund_date( $date = '', $download_id = 0 ) {
 	}
 
 	if ( ! empty( $download_id ) ) {
-		$refund_window = edd_get_download_refund_window( $download_id );
+		$refund_window = cs_get_download_refund_window( $download_id );
 
 		$date_refundable = \Carbon\Carbon::parse( $date, 'UTC' )->addDays( $refund_window );
 	} else {

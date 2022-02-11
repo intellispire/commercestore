@@ -2,9 +2,9 @@
 /**
  * Order Type Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
@@ -19,10 +19,10 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return array
  */
-function edd_get_order_types() {
+function cs_get_order_types() {
 
 	// Get the
-	$component = edd_get_component( 'order' );
+	$component = cs_get_component( 'order' );
 
 	// Setup an empty types array
 	if ( ! isset( $component->types ) ) {
@@ -40,7 +40,7 @@ function edd_get_order_types() {
  *
  * @param array $args
  */
-function edd_register_order_type( $type = '', $args = array() ) {
+function cs_register_order_type( $type = '', $args = array() ) {
 
 	// Sanitize the type
 	$type = sanitize_key( $type );
@@ -55,7 +55,7 @@ function edd_register_order_type( $type = '', $args = array() ) {
 	) );
 
 	// Get the
-	$component = edd_get_component( 'order' );
+	$component = cs_get_component( 'order' );
 
 	// Setup an empty types array
 	if ( ! isset( $component->types ) ) {
@@ -71,7 +71,7 @@ function edd_register_order_type( $type = '', $args = array() ) {
  *
  * @since 3.0
  */
-function edd_register_default_order_types( $name = '' ) {
+function cs_register_default_order_types( $name = '' ) {
 
 	// Bail if not the `order` name
 	if ( 'order' !== $name ) {
@@ -79,28 +79,28 @@ function edd_register_default_order_types( $name = '' ) {
 	}
 
 	// Sales
-	edd_register_order_type( 'sale', array(
+	cs_register_order_type( 'sale', array(
 		'labels' => array(
-			'singular' => __( 'Order',  'easy-digital-downloads' ),
-			'plural'   => __( 'Orders', 'easy-digital-downloads' )
+			'singular' => __( 'Order',  'commercestore' ),
+			'plural'   => __( 'Orders', 'commercestore' )
 		)
 	) );
 
 	// Refunds
-	edd_register_order_type( 'refund', array(
+	cs_register_order_type( 'refund', array(
 		'labels' => array(
-			'singular' => __( 'Refund',  'easy-digital-downloads' ),
-			'plural'   => __( 'Refunds', 'easy-digital-downloads' )
+			'singular' => __( 'Refund',  'commercestore' ),
+			'plural'   => __( 'Refunds', 'commercestore' )
 		)
 	) );
 
 	// Invoices
-	edd_register_order_type( 'invoice', array(
+	cs_register_order_type( 'invoice', array(
 		'show_ui' => false,
 		'labels'  => array(
-			'singular' => __( 'Invoice',  'easy-digital-downloads' ),
-			'plural'   => __( 'Invoices', 'easy-digital-downloads' )
+			'singular' => __( 'Invoice',  'commercestore' ),
+			'plural'   => __( 'Invoices', 'commercestore' )
 		)
 	) );
 }
-add_action( 'edd_registered_component', 'edd_register_default_order_types' );
+add_action( 'cs_registered_component', 'cs_register_default_order_types' );

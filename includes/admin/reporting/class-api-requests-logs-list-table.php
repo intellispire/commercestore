@@ -2,9 +2,9 @@
 /**
  * API Requests Log View Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5
  */
@@ -13,12 +13,12 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_API_Request_Log_Table List Table Class
+ * CS_API_Request_Log_Table List Table Class
  *
  * @since 1.5
  * @since 3.0 Updated to use the custom tables and new query classes.
  */
-class EDD_API_Request_Log_Table extends EDD_Base_Log_List_Table {
+class CS_API_Request_Log_Table extends CS_Base_Log_List_Table {
 
 	/**
 	 * Log type
@@ -45,12 +45,12 @@ class EDD_API_Request_Log_Table extends EDD_Base_Log_List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'ID'      => __( 'Log ID',          'easy-digital-downloads' ),
-			'details' => __( 'Request Details', 'easy-digital-downloads' ),
-			'version' => __( 'API Version',     'easy-digital-downloads' ),
-			'ip'      => __( 'Request IP',      'easy-digital-downloads' ),
-			'speed'   => __( 'Request Speed',   'easy-digital-downloads' ),
-			'date'    => __( 'Date',            'easy-digital-downloads' )
+			'ID'      => __( 'Log ID',          'commercestore' ),
+			'details' => __( 'Request Details', 'commercestore' ),
+			'version' => __( 'API Version',     'commercestore' ),
+			'ip'      => __( 'Request IP',      'commercestore' ),
+			'speed'   => __( 'Request Speed',   'commercestore' ),
+			'date'    => __( 'Date',            'commercestore' )
 		);
 	}
 
@@ -94,23 +94,23 @@ class EDD_API_Request_Log_Table extends EDD_Base_Log_List_Table {
 	 */
 	public function column_details( $item ) {
 	?>
-		<a href="#TB_inline?width=640&amp;inlineId=log-details-<?php echo $item['ID']; ?>" class="thickbox"><?php _e( 'View Request', 'easy-digital-downloads' ); ?></a>
+		<a href="#TB_inline?width=640&amp;inlineId=log-details-<?php echo $item['ID']; ?>" class="thickbox"><?php _e( 'View Request', 'commercestore' ); ?></a>
 		<div id="log-details-<?php echo $item['ID']; ?>" style="display:none;">
 			<?php
 
 			$request = $item['request'];
 			$error   = $item['error'];
-			echo '<p><strong>' . __( 'API Request:', 'easy-digital-downloads' ) . '</strong></p>';
+			echo '<p><strong>' . __( 'API Request:', 'commercestore' ) . '</strong></p>';
 			echo '<div>' . $request . '</div>';
 			if ( ! empty( $error ) ) {
-				echo '<p><strong>' . __( 'Error', 'easy-digital-downloads' ) . '</strong></p>';
+				echo '<p><strong>' . __( 'Error', 'commercestore' ) . '</strong></p>';
 				echo '<div>' . esc_html( $error ) . '</div>';
 			}
-			echo '<p><strong>' . __( 'API User:', 'easy-digital-downloads' ) . '</strong></p>';
+			echo '<p><strong>' . __( 'API User:', 'commercestore' ) . '</strong></p>';
 			echo '<div>' . $item['user_id'] . '</div>';
-			echo '<p><strong>' . __( 'API Key:', 'easy-digital-downloads' ) . '</strong></p>';
+			echo '<p><strong>' . __( 'API Key:', 'commercestore' ) . '</strong></p>';
 			echo '<div>' . $item['api_key'] . '</div>';
-			echo '<p><strong>' . __( 'Request Date:', 'easy-digital-downloads' ) . '</strong></p>';
+			echo '<p><strong>' . __( 'Request Date:', 'commercestore' ) . '</strong></p>';
 			echo '<div>' . $item['date'] . '</div>';
 			?>
 		</div>
@@ -126,11 +126,11 @@ class EDD_API_Request_Log_Table extends EDD_Base_Log_List_Table {
 	 */
 	public function get_logs( $log_query = array() ) {
 		$logs_data = array();
-		$logs      = edd_get_api_request_logs( $log_query );
+		$logs      = cs_get_api_request_logs( $log_query );
 
 		if ( $logs ) {
 			foreach ( $logs as $log ) {
-				/** @var $log EDD\Logs\Api_Request_Log */
+				/** @var $log CS\Logs\Api_Request_Log */
 
 				$logs_data[] = array(
 					'ID'      => $log->id,
@@ -159,6 +159,6 @@ class EDD_API_Request_Log_Table extends EDD_Base_Log_List_Table {
 	 * @return int
 	 */
 	public function get_total( $log_query = array() ) {
-		return edd_count_api_request_logs( $log_query );
+		return cs_count_api_request_logs( $log_query );
 	}
 }

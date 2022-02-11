@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @group edd_scripts
+ * @group cs_scripts
  */
-class Tests_Scripts extends EDD_UnitTestCase {
+class Tests_Scripts extends CS_UnitTestCase {
 
 	/**
 	 * Test if all the file hooks are working.
@@ -11,15 +11,15 @@ class Tests_Scripts extends EDD_UnitTestCase {
 	 * @since 2.3.6
 	 */
 	public function test_file_hooks() {
-		$this->assertNotFalse( has_action( 'init',                  'edd_register_scripts'       ) );
-		$this->assertNotFalse( has_action( 'init',                  'edd_register_styles'        ) );
-		$this->assertNotFalse( has_action( 'wp_enqueue_scripts',    'edd_load_scripts'           ) );
-		$this->assertNotFalse( has_action( 'wp_enqueue_scripts',    'edd_enqueue_styles'         ) );
-		$this->assertNotFalse( has_action( 'admin_init',            'edd_register_admin_scripts' ) );
-		$this->assertNotFalse( has_action( 'admin_init',            'edd_register_admin_styles'  ) );
-		$this->assertNotFalse( has_action( 'admin_enqueue_scripts', 'edd_enqueue_admin_scripts'  ) );
-		$this->assertNotFalse( has_action( 'admin_enqueue_scripts', 'edd_enqueue_admin_styles'   ) );
-		$this->assertNotFalse( has_action( 'admin_head',            'edd_admin_downloads_icon'   ) );
+		$this->assertNotFalse( has_action( 'init',                  'cs_register_scripts'       ) );
+		$this->assertNotFalse( has_action( 'init',                  'cs_register_styles'        ) );
+		$this->assertNotFalse( has_action( 'wp_enqueue_scripts',    'cs_load_scripts'           ) );
+		$this->assertNotFalse( has_action( 'wp_enqueue_scripts',    'cs_enqueue_styles'         ) );
+		$this->assertNotFalse( has_action( 'admin_init',            'cs_register_admin_scripts' ) );
+		$this->assertNotFalse( has_action( 'admin_init',            'cs_register_admin_styles'  ) );
+		$this->assertNotFalse( has_action( 'admin_enqueue_scripts', 'cs_enqueue_admin_scripts'  ) );
+		$this->assertNotFalse( has_action( 'admin_enqueue_scripts', 'cs_enqueue_admin_styles'   ) );
+		$this->assertNotFalse( has_action( 'admin_head',            'cs_admin_downloads_icon'   ) );
 	}
 
 	/**
@@ -28,21 +28,21 @@ class Tests_Scripts extends EDD_UnitTestCase {
 	 * @since 2.3.6
 	 */
 	public function test_load_scripts_checkout() {
-		global $edd_options;
+		global $cs_options;
 
 		// Prepare test
-		$this->go_to( get_permalink( $edd_options['purchase_page'] ) );
-		edd_load_scripts();
+		$this->go_to( get_permalink( $cs_options['purchase_page'] ) );
+		cs_load_scripts();
 
 		$this->assertTrue( wp_script_is( 'creditCardValidator', 'enqueued' ) );
-		$this->assertTrue( wp_script_is( 'edd-checkout-global', 'enqueued' ) );
-		$this->assertTrue( wp_script_is( 'edd-ajax', 'enqueued' ) );
+		$this->assertTrue( wp_script_is( 'cs-checkout-global', 'enqueued' ) );
+		$this->assertTrue( wp_script_is( 'cs-ajax', 'enqueued' ) );
 
 		$this->go_to( '/' );
 	}
 
 	/**
-	 * Test that the edd_register_styles() function will bail when the 'disable_styles'
+	 * Test that the cs_register_styles() function will bail when the 'disable_styles'
 	 * option is set to true.
 	 *
 	 * @since 2.3.6
@@ -50,27 +50,27 @@ class Tests_Scripts extends EDD_UnitTestCase {
 	public function test_register_styles_bail_option() {
 
 		// Prepare test
-		$origin_disable_styles = edd_get_option( 'disable_styles', false );
-		edd_update_option( 'disable_styles', true );
+		$origin_disable_styles = cs_get_option( 'disable_styles', false );
+		cs_update_option( 'disable_styles', true );
 
 		// Assert
-		$this->assertNull( edd_register_styles() );
+		$this->assertNull( cs_register_styles() );
 
 		// Reset to origin
-		edd_update_option( 'disable_styles', $origin_disable_styles );
+		cs_update_option( 'disable_styles', $origin_disable_styles );
 	}
 
 	/**
-	 * Test that the edd_register_styles() function will enqueue the styles.
+	 * Test that the cs_register_styles() function will enqueue the styles.
 	 *
 	 * @since 2.3.6
 	 */
 	public function test_register_styles() {
 
-		edd_update_option( 'disable_styles', false );
-		edd_register_styles();
+		cs_update_option( 'disable_styles', false );
+		cs_register_styles();
 
-		$this->assertTrue( wp_style_is( 'edd-styles', 'registered' ) );
+		$this->assertTrue( wp_style_is( 'cs-styles', 'registered' ) );
 	}
 
 	/**
@@ -80,14 +80,14 @@ class Tests_Scripts extends EDD_UnitTestCase {
 	 */
 	public function test_enqueue_styles() {
 
-		edd_update_option( 'disable_styles', false );
-		edd_enqueue_styles();
+		cs_update_option( 'disable_styles', false );
+		cs_enqueue_styles();
 
-		$this->assertTrue( wp_style_is( 'edd-styles', 'enqueued' ) );
+		$this->assertTrue( wp_style_is( 'cs-styles', 'enqueued' ) );
 	}
 
 	/**
-	 * Test that the edd_register_styles() function will enqueue the proper styles
+	 * Test that the cs_register_styles() function will enqueue the proper styles
 	 * when page is checkout + ssl.
 	 *
 	 * @since 2.3.6
@@ -96,19 +96,19 @@ class Tests_Scripts extends EDD_UnitTestCase {
 
 		// Prepare test
 		$_SERVER['HTTPS'] = 'ON'; // Fake SSL
-		$this->go_to( get_permalink( edd_get_option( 'purchase_page' ) ) );
-		edd_update_option( 'disable_styles', false );
-		edd_register_styles();
+		$this->go_to( get_permalink( cs_get_option( 'purchase_page' ) ) );
+		cs_update_option( 'disable_styles', false );
+		cs_register_styles();
 
 		$this->go_to( '/' );
 
-		$this->assertTrue( wp_style_is( 'edd-styles', 'registered' ) );
+		$this->assertTrue( wp_style_is( 'cs-styles', 'registered' ) );
 
 		unset( $_SERVER['HTTPS'] );
 	}
 
 	/**
-	 * Test that the edd_load_admin_scripts() function will bail when not a EDD admin page.
+	 * Test that the cs_load_admin_scripts() function will bail when not a CommerceStore admin page.
 	 *
 	 * @since 2.3.6
 	 */
@@ -119,12 +119,12 @@ class Tests_Scripts extends EDD_UnitTestCase {
 		$origin_pagenow = $pagenow;
 		$pagenow = 'dashboard';
 
-		if ( ! function_exists( 'edd_is_admin_page' ) ) {
-			include EDD_PLUGIN_DIR . 'includes/admin/admin-pages.php';
+		if ( ! function_exists( 'cs_is_admin_page' ) ) {
+			include CS_PLUGIN_DIR . 'includes/admin/admin-pages.php';
 		}
 
 		// Assert
-		$this->assertNull( edd_load_admin_scripts( 'dashboard' ) );
+		$this->assertNull( cs_load_admin_scripts( 'dashboard' ) );
 
 		// Reset to origin
 		$pagenow = $origin_pagenow;
@@ -132,7 +132,7 @@ class Tests_Scripts extends EDD_UnitTestCase {
 
 	/**
 	 * @dataProvider _admin_scripts_dp
-	 * @covers ::edd_load_admin_scripts()
+	 * @covers ::cs_load_admin_scripts()
 	 *
 	 * @param string $script    Registered script handle.
 	 * @param string $script_is Status of the script to check.
@@ -149,7 +149,7 @@ class Tests_Scripts extends EDD_UnitTestCase {
 	public function _admin_scripts_dp() {
 		return array(
 			array( 'jquery-chosen',        'enqueued' ),
-			array( 'edd-admin-scripts',    'enqueued' ),
+			array( 'cs-admin-scripts',    'enqueued' ),
 			array( 'jquery-ui-datepicker', 'enqueued' ),
 			array( 'jquery-ui-dialog',     'enqueued' ),
 			array( 'media-upload',         'enqueued' ),
@@ -159,7 +159,7 @@ class Tests_Scripts extends EDD_UnitTestCase {
 
 	/**
 	 * @dataProvider _admin_styles_dp
-	 * @covers ::edd_load_admin_scripts()
+	 * @covers ::cs_load_admin_scripts()
 	 *
 	 * @param string $style    Registered stylesheet handle.
 	 * @param string $style_is Status of the stylesheet to check.
@@ -178,7 +178,7 @@ class Tests_Scripts extends EDD_UnitTestCase {
 			array( 'jquery-chosen',   'enqueued' ),
 			array( 'wp-color-picker', 'enqueued' ),
 			array( 'thickbox',        'enqueued' ),
-			array( 'edd-admin',       'enqueued' ),
+			array( 'cs-admin',       'enqueued' ),
 		);
 	}
 
@@ -186,11 +186,11 @@ class Tests_Scripts extends EDD_UnitTestCase {
 	 * Helper to load admin scripts.
 	 */
 	protected function load_admin_scripts() {
-		if ( ! function_exists( 'edd_is_admin_page' ) ) {
-			include EDD_PLUGIN_DIR . 'includes/admin/admin-pages.php';
+		if ( ! function_exists( 'cs_is_admin_page' ) ) {
+			include CS_PLUGIN_DIR . 'includes/admin/admin-pages.php';
 		}
 
-		edd_load_admin_scripts( 'settings.php' );
+		cs_load_admin_scripts( 'settings.php' );
 	}
 
 }

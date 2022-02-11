@@ -2,9 +2,9 @@
 /**
  * Date Functions
  *
- * @package    EDD
+ * @package    CS
  * @subpackage Functions
- * @copyright  Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright  Copyright (c) 2018, CommerceStore, LLC
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since      3.0
  */
@@ -20,8 +20,8 @@
  *                          Default 'date' represents the value of the 'date_format' option.
  * @return string The formatted date, translated if locale specifies it.
  */
-function edd_date_i18n( $timestamp, $format = 'date' ) {
-	$format = edd_get_date_format( $format );
+function cs_date_i18n( $timestamp, $format = 'date' ) {
+	$format = cs_get_date_format( $format );
 
 	// If timestamp is a string, attempt to turn it into a timestamp.
 	if ( ! is_numeric( $timestamp ) ) {
@@ -29,7 +29,7 @@ function edd_date_i18n( $timestamp, $format = 'date' ) {
 	}
 
 	// We need to get the timezone offset so we can pass that to date_i18n.
-	$date = EDD()->utils->date( 'now', edd_get_timezone_id(), false );
+	$date = CS()->utils->date( 'now', cs_get_timezone_id(), false );
 
 	return date_i18n( $format, (int) $timestamp + $date->getOffset() );
 }
@@ -40,59 +40,59 @@ function edd_date_i18n( $timestamp, $format = 'date' ) {
  * @since 1.6
  * @return string $timezone The timezone ID
  */
-function edd_get_timezone_id() {
-	return EDD()->utils->get_time_zone( true );
+function cs_get_timezone_id() {
+	return CS()->utils->get_time_zone( true );
 }
 
 /**
- * Accept an EDD date object and get the UTC equivalent version of it.
- * The EDD date object passed-in can be in any timezone. The one you'll get back will be the UTC equivalent of that time.
+ * Accept an CommerceStore date object and get the UTC equivalent version of it.
+ * The CommerceStore date object passed-in can be in any timezone. The one you'll get back will be the UTC equivalent of that time.
  * This is useful when querying data from the tables by a user-defined date range, like "today".
  *
  * @since 3.0
- * @param EDD\Utils\Date $edd_date_object The EDD Date object for which you wish to get the UTC equiavalent.
- * @return EDD\Utils\Date The EDD date object set at the UTC equivalent time.
+ * @param CS\Utils\Date $cs_date_object The CommerceStore Date object for which you wish to get the UTC equiavalent.
+ * @return CS\Utils\Date The CommerceStore date object set at the UTC equivalent time.
  */
-function edd_get_utc_equivalent_date( $edd_date_object ) {
+function cs_get_utc_equivalent_date( $cs_date_object ) {
 
-	$instance_check = 'EDD\Utils\Date';
-	if ( ! $edd_date_object instanceof $instance_check ) {
+	$instance_check = 'CS\Utils\Date';
+	if ( ! $cs_date_object instanceof $instance_check ) {
 		return false;
 	}
 
-	// Convert the timezone (and thus, also the time) from the WP/EDD Timezone to the UTC equivalent.
+	// Convert the timezone (and thus, also the time) from the WP/CS Timezone to the UTC equivalent.
 	$utc_timezone = new DateTimeZone( 'utc' );
-	$edd_date_object->setTimezone( $utc_timezone );
+	$cs_date_object->setTimezone( $utc_timezone );
 
-	return $edd_date_object;
+	return $cs_date_object;
 }
 
 /**
- * Accept an EDD date object set in UTC, and get the WP/EDD Timezone equivalent version of it.
- * The EDD date object must be in UTC. The one you'll get back will be the WP timezone equivalent of that time.
+ * Accept an CommerceStore date object set in UTC, and get the WP/CS Timezone equivalent version of it.
+ * The CommerceStore date object must be in UTC. The one you'll get back will be the WP timezone equivalent of that time.
  * This is useful when showing date information to the user, so that they see it in the proper timezone, instead of UTC.
  *
  * @since 3.0
- * @param EDD\Utils\Date $edd_date_object The EDD Date object for which you wish to get the UTC equiavalent.
- * @return EDD\Utils\Date The EDD date object set at the UTC equivalent time.
+ * @param CS\Utils\Date $cs_date_object The CommerceStore Date object for which you wish to get the UTC equiavalent.
+ * @return CS\Utils\Date The CommerceStore date object set at the UTC equivalent time.
  */
-function edd_get_edd_timezone_equivalent_date_from_utc( $edd_date_object ) {
+function cs_get_cs_timezone_equivalent_date_from_utc( $cs_date_object ) {
 
-	$instance_check = 'EDD\Utils\Date';
-	if ( ! $edd_date_object instanceof $instance_check ) {
+	$instance_check = 'CS\Utils\Date';
+	if ( ! $cs_date_object instanceof $instance_check ) {
 		return false;
 	}
 
 	// If you passed a date object to this function that isn't set to UTC, that is incorrect usage.
-	if ( 'UTC' !== $edd_date_object->format( 'T' ) ) {
+	if ( 'UTC' !== $cs_date_object->format( 'T' ) ) {
 		return false;
 	}
 
-	// Convert the timezone (and thus, also the time) from UTC to the WP/EDD Timezone.
-	$edd_timezone = new DateTimeZone( edd_get_timezone_id() );
-	$edd_date_object->setTimezone( $edd_timezone );
+	// Convert the timezone (and thus, also the time) from UTC to the WP/CS Timezone.
+	$cs_timezone = new DateTimeZone( cs_get_timezone_id() );
+	$cs_date_object->setTimezone( $cs_timezone );
 
-	return $edd_date_object;
+	return $cs_date_object;
 }
 
 /**
@@ -102,10 +102,10 @@ function edd_get_edd_timezone_equivalent_date_from_utc( $edd_date_object ) {
  *
  * @return string The abreviation for the current WordPress timezone setting.
  */
-function edd_get_timezone_abbr() {
-	$edd_timezone    = edd_get_timezone_id();
-	$edd_date_object = EDD()->utils->date( 'now', $edd_timezone, true );
-	return $edd_date_object->format( 'T' );
+function cs_get_timezone_abbr() {
+	$cs_timezone    = cs_get_timezone_id();
+	$cs_date_object = CS()->utils->date( 'now', $cs_timezone, true );
+	return $cs_date_object->format( 'T' );
 }
 
 /**
@@ -113,7 +113,7 @@ function edd_get_timezone_abbr() {
  *
  * @since 3.0
  *
- * @see \EDD_Utilities::get_date_format_string()
+ * @see \CS_Utilities::get_date_format_string()
  *
  * @param string $format Shorthand date format string. Accepts 'date', 'time', 'mysql', or
  *                       'datetime'. If none of the accepted values, the original value will
@@ -122,8 +122,8 @@ function edd_get_timezone_abbr() {
  *
  * @return string date_format()-compatible date format string.
  */
-function edd_get_date_format( $format = 'date' ) {
-	return EDD()->utils->get_date_format_string( $format );
+function cs_get_date_format( $format = 'date' ) {
+	return CS()->utils->get_date_format_string( $format );
 }
 
 /**
@@ -131,14 +131,14 @@ function edd_get_date_format( $format = 'date' ) {
  *
  * Use this if you need to use placeholder or format attributes in input fields.
  *
- * This is a bit different than `edd_get_date_format()` because these formats
+ * This is a bit different than `cs_get_date_format()` because these formats
  * are exposed to users as hints and also used by jQuery UI so the Datepicker
  * knows what format it returns into it's connected input value.
  *
  * Previous to this function existing, all values were hard-coded, causing some
  * inconsistencies across admin-area screens.
  *
- * @see https://github.com/easydigitaldownloads/easy-digital-downloads/commit/e9855762892b6eec578b0a402f7950f22bd19632
+ * @see https://github.com/commercestore/commercestore/commit/e9855762892b6eec578b0a402f7950f22bd19632
  *
  * @since 3.0
  *
@@ -146,7 +146,7 @@ function edd_get_date_format( $format = 'date' ) {
  *                        Use 'js' for use with jQuery UI Datepicker. Use 'display' for HTML attributes.
  * @return string
  */
-function edd_get_date_picker_format( $context = 'display' ) {
+function cs_get_date_picker_format( $context = 'display' ) {
 
 	// What is the context that we are getting the picker format for?
 	switch ( $context ) {
@@ -154,13 +154,13 @@ function edd_get_date_picker_format( $context = 'display' ) {
 		// jQuery UI Datepicker does its own thing
 		case 'js' :
 		case 'javascript' :
-			$retval = EDD()->utils->get_date_format_string( 'date-js' );
+			$retval = CS()->utils->get_date_format_string( 'date-js' );
 			break;
 
 		// Used to display in an attribute, placeholder, etc...
 		case 'display' :
 		default :
-			$retval = EDD()->utils->get_date_format_string( 'date-attribute' );
+			$retval = CS()->utils->get_date_format_string( 'date-attribute' );
 			break;
 	}
 
@@ -172,7 +172,7 @@ function edd_get_date_picker_format( $context = 'display' ) {
 	 * @param string $retval  Date format for date picker
 	 * @param string $context The context this format is for
 	 */
-	return apply_filters( 'edd_get_date_picker_format', $retval, $context );
+	return apply_filters( 'cs_get_date_picker_format', $retval, $context );
 }
 
 /**
@@ -182,8 +182,8 @@ function edd_get_date_picker_format( $context = 'display' ) {
  *
  * @return array
  */
-function edd_get_hour_values() {
-	return (array) apply_filters( 'edd_get_hour_values', array(
+function cs_get_hour_values() {
+	return (array) apply_filters( 'cs_get_hour_values', array(
 		'00' => '00',
 		'01' => '01',
 		'02' => '02',
@@ -219,8 +219,8 @@ function edd_get_hour_values() {
  *
  * @return array
  */
-function edd_get_minute_values() {
-	return (array) apply_filters( 'edd_get_minute_values', array(
+function cs_get_minute_values() {
+	return (array) apply_filters( 'cs_get_minute_values', array(
 		'00' => '00',
 		'01' => '01',
 		'02' => '02',

@@ -1,22 +1,22 @@
 <?php
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Tile_Endpoint object.
  *
- * @group edd_reports
- * @group edd_reports_endpoints
- * @group edd_objects
+ * @group cs_reports
+ * @group cs_reports_endpoints
+ * @group cs_objects
  *
- * @coversDefaultClass \EDD\Reports\Data\Table_Endpoint
+ * @coversDefaultClass \CS\Reports\Data\Table_Endpoint
  */
-class Table_Endpoint_Tests extends \EDD_UnitTestCase {
+class Table_Endpoint_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * @covers ::check_view()

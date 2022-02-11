@@ -2,11 +2,11 @@
 /**
  * Import Functions
  *
- * These are functions are used for import data into Easy Digital Downloads.
+ * These are functions are used for import data into CommerceStore.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Import
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
@@ -19,24 +19,24 @@ defined( 'ABSPATH' ) || exit;
  * @since 2.6
  * @return void
  */
-function edd_do_ajax_import_file_upload() {
+function cs_do_ajax_import_file_upload() {
 
 	if ( ! function_exists( 'wp_handle_upload' ) ) {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 	}
 
-	require_once EDD_PLUGIN_DIR . 'includes/admin/import/class-batch-import.php';
+	require_once CS_PLUGIN_DIR . 'includes/admin/import/class-batch-import.php';
 
-	if( ! wp_verify_nonce( $_REQUEST['edd_ajax_import'], 'edd_ajax_import' ) ) {
-		wp_send_json_error( array( 'error' => __( 'Nonce verification failed', 'easy-digital-downloads' ) ) );
+	if( ! wp_verify_nonce( $_REQUEST['cs_ajax_import'], 'cs_ajax_import' ) ) {
+		wp_send_json_error( array( 'error' => __( 'Nonce verification failed', 'commercestore' ) ) );
 	}
 
-	if( empty( $_POST['edd-import-class'] ) ) {
-		wp_send_json_error( array( 'error' => __( 'Missing import parameters. Import class must be specified.', 'easy-digital-downloads' ), 'request' => $_REQUEST ) );
+	if( empty( $_POST['cs-import-class'] ) ) {
+		wp_send_json_error( array( 'error' => __( 'Missing import parameters. Import class must be specified.', 'commercestore' ), 'request' => $_REQUEST ) );
 	}
 
-	if( empty( $_FILES['edd-import-file'] ) ) {
-		wp_send_json_error( array( 'error' => __( 'Missing import file. Please provide an import file.', 'easy-digital-downloads' ), 'request' => $_REQUEST ) );
+	if( empty( $_FILES['cs-import-file'] ) ) {
+		wp_send_json_error( array( 'error' => __( 'Missing import file. Please provide an import file.', 'commercestore' ), 'request' => $_REQUEST ) );
 	}
 
 	$accepted_mime_types = array(
@@ -54,34 +54,34 @@ function edd_do_ajax_import_file_upload() {
 		'application/vnd.msexcel',
 	);
 
-	if( empty( $_FILES['edd-import-file']['type'] ) || ! in_array( strtolower( $_FILES['edd-import-file']['type'] ), $accepted_mime_types ) ) {
-		wp_send_json_error( array( 'error' => __( 'The file you uploaded does not appear to be a CSV file.', 'easy-digital-downloads' ), 'request' => $_REQUEST ) );
+	if( empty( $_FILES['cs-import-file']['type'] ) || ! in_array( strtolower( $_FILES['cs-import-file']['type'] ), $accepted_mime_types ) ) {
+		wp_send_json_error( array( 'error' => __( 'The file you uploaded does not appear to be a CSV file.', 'commercestore' ), 'request' => $_REQUEST ) );
 	}
 
-	if( ! file_exists( $_FILES['edd-import-file']['tmp_name'] ) ) {
-		wp_send_json_error( array( 'error' => __( 'Something went wrong during the upload process, please try again.', 'easy-digital-downloads' ), 'request' => $_REQUEST ) );
+	if( ! file_exists( $_FILES['cs-import-file']['tmp_name'] ) ) {
+		wp_send_json_error( array( 'error' => __( 'Something went wrong during the upload process, please try again.', 'commercestore' ), 'request' => $_REQUEST ) );
 	}
 
 	// Let WordPress import the file. We will remove it after import is complete
-	$import_file = wp_handle_upload( $_FILES['edd-import-file'], array( 'test_form' => false ) );
+	$import_file = wp_handle_upload( $_FILES['cs-import-file'], array( 'test_form' => false ) );
 
 	if ( $import_file && empty( $import_file['error'] ) ) {
 
-		do_action( 'edd_batch_import_class_include', $_POST['edd-import-class'] );
+		do_action( 'cs_batch_import_class_include', $_POST['cs-import-class'] );
 
-		$import = new $_POST['edd-import-class']( $import_file['file'] );
+		$import = new $_POST['cs-import-class']( $import_file['file'] );
 
 		if( ! $import->can_import() ) {
-			wp_send_json_error( array( 'error' => __( 'You do not have permission to import data', 'easy-digital-downloads' ) ) );
+			wp_send_json_error( array( 'error' => __( 'You do not have permission to import data', 'commercestore' ) ) );
 		}
 
 		wp_send_json_success( array(
 			'form'      => $_POST,
-			'class'     => $_POST['edd-import-class'],
+			'class'     => $_POST['cs-import-class'],
 			'upload'    => $import_file,
 			'first_row' => $import->get_first_row(),
 			'columns'   => $import->get_columns(),
-			'nonce'     => wp_create_nonce( 'edd_ajax_import', 'edd_ajax_import' )
+			'nonce'     => wp_create_nonce( 'cs_ajax_import', 'cs_ajax_import' )
 		) );
 
 	} else {
@@ -97,7 +97,7 @@ function edd_do_ajax_import_file_upload() {
 	exit;
 
 }
-add_action( 'edd_upload_import_file', 'edd_do_ajax_import_file_upload' );
+add_action( 'cs_upload_import_file', 'cs_do_ajax_import_file_upload' );
 
 /**
  * Process batch imports via ajax
@@ -105,23 +105,23 @@ add_action( 'edd_upload_import_file', 'edd_do_ajax_import_file_upload' );
  * @since 2.6
  * @return void
  */
-function edd_do_ajax_import() {
+function cs_do_ajax_import() {
 
-	require_once EDD_PLUGIN_DIR . 'includes/admin/import/class-batch-import.php';
+	require_once CS_PLUGIN_DIR . 'includes/admin/import/class-batch-import.php';
 
-	if( ! wp_verify_nonce( $_REQUEST['nonce'], 'edd_ajax_import' ) ) {
-		wp_send_json_error( array( 'error' => __( 'Nonce verification failed', 'easy-digital-downloads' ), 'request' => $_REQUEST ) );
+	if( ! wp_verify_nonce( $_REQUEST['nonce'], 'cs_ajax_import' ) ) {
+		wp_send_json_error( array( 'error' => __( 'Nonce verification failed', 'commercestore' ), 'request' => $_REQUEST ) );
 	}
 
 	if( empty( $_REQUEST['class'] ) ) {
-		wp_send_json_error( array( 'error' => __( 'Missing import parameters. Import class must be specified.', 'easy-digital-downloads' ), 'request' => $_REQUEST ) );
+		wp_send_json_error( array( 'error' => __( 'Missing import parameters. Import class must be specified.', 'commercestore' ), 'request' => $_REQUEST ) );
 	}
 
 	if( ! file_exists( $_REQUEST['upload']['file'] ) ) {
-		wp_send_json_error( array( 'error' => __( 'Something went wrong during the upload process, please try again.', 'easy-digital-downloads' ), 'request' => $_REQUEST ) );
+		wp_send_json_error( array( 'error' => __( 'Something went wrong during the upload process, please try again.', 'commercestore' ), 'request' => $_REQUEST ) );
 	}
 
-	do_action( 'edd_batch_import_class_include', $_REQUEST['class'] );
+	do_action( 'cs_batch_import_class_include', $_REQUEST['class'] );
 
 	$step     = absint( $_REQUEST['step'] );
 	$class    = $_REQUEST['class'];
@@ -129,13 +129,13 @@ function edd_do_ajax_import() {
 
 	if( ! $import->can_import() ) {
 
-		wp_send_json_error( array( 'error' => __( 'You do not have permission to import data', 'easy-digital-downloads' ) ) );
+		wp_send_json_error( array( 'error' => __( 'You do not have permission to import data', 'commercestore' ) ) );
 
 	}
 
 	parse_str( $_REQUEST['mapping'], $map );
 
-	$import->map_fields( $map['edd-import-field'] );
+	$import->map_fields( $map['cs-import-field'] );
 
 	$ret = $import->process_step( $step );
 
@@ -155,7 +155,7 @@ function edd_do_ajax_import() {
 	} elseif ( true === $import->is_empty ) {
 
 		wp_send_json_error( array(
-			'error' => __( 'No data found for import parameters', 'easy-digital-downloads' )
+			'error' => __( 'No data found for import parameters', 'commercestore' )
 		) );
 
 	} else {
@@ -163,7 +163,7 @@ function edd_do_ajax_import() {
 		wp_send_json_success( array(
 			'step'    => 'done',
 			'message' => sprintf(
-				__( 'Import complete! <a href="%s">View imported %s</a>.', 'easy-digital-downloads' ),
+				__( 'Import complete! <a href="%s">View imported %s</a>.', 'commercestore' ),
 				$import->get_list_table_url(),
 				$import->get_import_type_label()
 			)
@@ -171,4 +171,4 @@ function edd_do_ajax_import() {
 
 	}
 }
-add_action( 'wp_ajax_edd_do_ajax_import', 'edd_do_ajax_import' );
+add_action( 'wp_ajax_cs_do_ajax_import', 'cs_do_ajax_import' );

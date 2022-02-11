@@ -2,9 +2,9 @@
 /**
  * Earnings / Sales Stats
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Classes/Stats
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.8
 */
@@ -13,18 +13,18 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Payment_Stats Class.
+ * CS_Payment_Stats Class.
  *
  * This class is for retrieving stats for earnings and sales.
  *
  * Stats can be retrieved for date ranges and pre-defined periods.
  *
- * This class remains here for backwards compatibility purposes. The EDD\Stats class should be used instead.
+ * This class remains here for backwards compatibility purposes. The CS\Stats class should be used instead.
  *
  * @since 1.8
  * @since 3.0 Refactored to work with custom tables.
  */
-class EDD_Payment_Stats extends EDD_Stats {
+class CS_Payment_Stats extends CS_Stats {
 
 	/**
 	 * Retrieve sale stats.
@@ -56,10 +56,10 @@ class EDD_Payment_Stats extends EDD_Stats {
 
 		if ( empty( $download_id ) ) {
 			// Global sale stats
-			add_filter( 'edd_count_payments_where', array( $this, 'count_where' ) );
+			add_filter( 'cs_count_payments_where', array( $this, 'count_where' ) );
 
 			$count        = 0;
-			$total_counts = edd_count_payments();
+			$total_counts = cs_count_payments();
 
 			foreach ( (array) $status as $payment_status ) {
 				if ( isset( $total_counts->$payment_status ) ) {
@@ -67,7 +67,7 @@ class EDD_Payment_Stats extends EDD_Stats {
 				}
 			}
 
-			remove_filter( 'edd_count_payments_where', array( $this, 'count_where' ) );
+			remove_filter( 'cs_count_payments_where', array( $this, 'count_where' ) );
 		} else {
 			$this->timestamp = false;
 
@@ -89,8 +89,8 @@ class EDD_Payment_Stats extends EDD_Stats {
 
 			add_filter( 'date_query_valid_columns', array( $this, '__filter_valid_date_columns' ), 2 );
 
-			$date_query         = new \WP_Date_Query( $date_created_query, 'edd_o.date_created' );
-			$date_query->column = 'edd_o.date_created';
+			$date_query         = new \WP_Date_Query( $date_created_query, 'cs_o.date_created' );
+			$date_query->column = 'cs_o.date_created';
 			$date_query_sql     = $date_query->get_sql();
 
 			remove_filter( 'date_query_valid_columns', array( $this, '__filter_valid_date_columns' ), 2 );
@@ -104,14 +104,14 @@ class EDD_Payment_Stats extends EDD_Stats {
 			 *
 			 * @param array $statuses Order statuses to include when generating stats.
 			 */
-			$statuses = apply_filters( 'edd_payment_stats_post_statuses', $statuses );
+			$statuses = apply_filters( 'cs_payment_stats_post_statuses', $statuses );
 			$statuses = "'" . implode( "', '", $statuses ) . "'";
 
 			$result = $wpdb->get_row( $wpdb->prepare(
-				"SELECT COUNT(edd_oi.id) AS sales
-				 FROM {$wpdb->edd_order_items} edd_oi
-				 INNER JOIN {$wpdb->edd_orders} edd_o ON edd_oi.order_id = edd_o.id
-				 WHERE edd_o.status IN ($statuses) AND edd_oi.product_id = %d {$date_query_sql}",
+				"SELECT COUNT(cs_oi.id) AS sales
+				 FROM {$wpdb->cs_order_items} cs_oi
+				 INNER JOIN {$wpdb->cs_orders} cs_o ON cs_oi.order_id = cs_o.id
+				 WHERE cs_o.status IN ($statuses) AND cs_oi.product_id = %d {$date_query_sql}",
 			$download_id ) );
 
 			$count = null === $result
@@ -158,11 +158,11 @@ class EDD_Payment_Stats extends EDD_Stats {
 			 *
 			 * @param array $statuses Order statuses to include when generating stats.
 			 */
-			$statuses = apply_filters( 'edd_payment_stats_post_statuses', edd_get_gross_order_statuses() );
+			$statuses = apply_filters( 'cs_payment_stats_post_statuses', cs_get_gross_order_statuses() );
 
 			// Global earning stats
 			$args = array(
-				'post_type'              => 'edd_payment',
+				'post_type'              => 'cs_payment',
 				'nopaging'               => true,
 				'post_status'            => $statuses,
 				'fields'                 => 'ids',
@@ -170,16 +170,16 @@ class EDD_Payment_Stats extends EDD_Stats {
 				'suppress_filters'       => false,
 				'start_date'             => $this->start_date, // These dates are not valid query args, but they are used for cache keys
 				'end_date'               => $this->end_date,
-				'edd_transient_type'     => 'edd_earnings', // This is not a valid query arg, but is used for cache keying
+				'cs_transient_type'     => 'cs_earnings', // This is not a valid query arg, but is used for cache keying
 				'include_taxes'          => $include_taxes,
 			);
 
-			$args   = apply_filters( 'edd_stats_earnings_args', $args );
-			$cached = get_transient( 'edd_stats_earnings' );
+			$args   = apply_filters( 'cs_stats_earnings_args', $args );
+			$cached = get_transient( 'cs_stats_earnings' );
 			$key    = md5( wp_json_encode( $args ) );
 
 			if ( ! isset( $cached[ $key ] ) ) {
-				$orders = edd_get_orders( array(
+				$orders = cs_get_orders( array(
 					'type'          => 'sale',
 					'status__in'    => $args['post_status'],
 					'date_query'    => array(
@@ -212,7 +212,7 @@ class EDD_Payment_Stats extends EDD_Stats {
 						$total_tax      += $order->tax;
 					}
 
-					$earnings = apply_filters( 'edd_payment_stats_earnings_total', $total_earnings, $orders, $args );
+					$earnings = apply_filters( 'cs_payment_stats_earnings_total', $total_earnings, $orders, $args );
 
 					if ( false === $include_taxes ) {
 						$earnings -= $total_tax;
@@ -221,7 +221,7 @@ class EDD_Payment_Stats extends EDD_Stats {
 
 				// Cache the results for one hour
 				$cached[ $key ] = $earnings;
-				set_transient( 'edd_stats_earnings', $cached, HOUR_IN_SECONDS );
+				set_transient( 'cs_stats_earnings', $cached, HOUR_IN_SECONDS );
 			}
 
 		// Download specific earning stats
@@ -249,8 +249,8 @@ class EDD_Payment_Stats extends EDD_Stats {
 				'include_taxes'      => $include_taxes,
 			);
 
-			$args   = apply_filters( 'edd_stats_earnings_args', $args );
-			$cached = get_transient( 'edd_stats_earnings' );
+			$args   = apply_filters( 'cs_stats_earnings_args', $args );
+			$cached = get_transient( 'cs_stats_earnings' );
 			$key    = md5( wp_json_encode( $args ) );
 
 			if ( ! isset( $cached[ $key ] ) ) {
@@ -258,8 +258,8 @@ class EDD_Payment_Stats extends EDD_Stats {
 
 				add_filter( 'date_query_valid_columns', array( $this, '__filter_valid_date_columns' ), 2 );
 
-				$date_query         = new \WP_Date_Query( $args['date_created_query'], 'edd_o.date_created' );
-				$date_query->column = 'edd_o.date_created';
+				$date_query         = new \WP_Date_Query( $args['date_created_query'], 'cs_o.date_created' );
+				$date_query->column = 'cs_o.date_created';
 				$date_query_sql     = $date_query->get_sql();
 
 				remove_filter( 'date_query_valid_columns', array( $this, '__filter_valid_date_columns' ), 2 );
@@ -273,14 +273,14 @@ class EDD_Payment_Stats extends EDD_Stats {
 				 *
 				 * @param array $statuses Order statuses to include when generating stats.
 				 */
-				$statuses = apply_filters( 'edd_payment_stats_post_statuses', $statuses );
+				$statuses = apply_filters( 'cs_payment_stats_post_statuses', $statuses );
 				$statuses = "'" . implode( "', '", $statuses ) . "'";
 
 				$result = $wpdb->get_row( $wpdb->prepare(
-					"SELECT edd_oi.tax, edd_oi.total
-					 FROM {$wpdb->edd_order_items} edd_oi
-					 INNER JOIN {$wpdb->edd_orders} edd_o ON edd_oi.order_id = edd_o.id
-					 WHERE edd_o.status IN ($statuses) AND edd_oi.product_id = %d {$date_query_sql}",
+					"SELECT cs_oi.tax, cs_oi.total
+					 FROM {$wpdb->cs_order_items} cs_oi
+					 INNER JOIN {$wpdb->cs_orders} cs_o ON cs_oi.order_id = cs_o.id
+					 WHERE cs_o.status IN ($statuses) AND cs_oi.product_id = %d {$date_query_sql}",
 				$download_id ) );
 
 				$earnings = 0;
@@ -292,18 +292,18 @@ class EDD_Payment_Stats extends EDD_Stats {
 						$earnings -= floatval( $result->tax );
 					}
 
-					$earnings = apply_filters_deprecated( 'edd_payment_stats_item_earnings', array( $earnings ), 'EDD 3.0' );
+					$earnings = apply_filters_deprecated( 'cs_payment_stats_item_earnings', array( $earnings ), 'CS 3.0' );
 				}
 
 				// Cache the results for one hour
 				$cached[ $key ] = $earnings;
-				set_transient( 'edd_stats_earnings', $cached, HOUR_IN_SECONDS );
+				set_transient( 'cs_stats_earnings', $cached, HOUR_IN_SECONDS );
 			}
 		}
 
 		$result = $cached[ $key ];
 
-		return round( $result, edd_currency_decimal_filter() );
+		return round( $result, cs_currency_decimal_filter() );
 	}
 
 	/**
@@ -321,7 +321,7 @@ class EDD_Payment_Stats extends EDD_Stats {
 		$downloads = $wpdb->get_results( $wpdb->prepare(
 			"SELECT post_id as download_id, max(meta_value) as sales
 			 FROM $wpdb->postmeta
-			 WHERE meta_key='_edd_download_sales' AND meta_value > 0
+			 WHERE meta_key='_cs_download_sales' AND meta_value > 0
 			 GROUP BY meta_value+0
 			 DESC LIMIT %d;", $number
 		) );
@@ -361,26 +361,26 @@ class EDD_Payment_Stats extends EDD_Stats {
 			return $this->end_date;
 		}
 
-		$cached = get_transient( 'edd_stats_sales' );
+		$cached = get_transient( 'cs_stats_sales' );
 		$key    = md5( $range . '_' . date( 'Y-m-d', $this->start_date ) . '_' . date( 'Y-m-d', strtotime( '+1 DAY', $this->end_date ) ) );
 		$sales  = isset( $cached[ $key ] ) ? $cached[ $key ] : false;
 
 		if ( false === $sales || ! $this->is_cacheable( $range ) ) {
 			if ( ! $day_by_day ) {
-				$select   = "DATE_FORMAT(edd_o.date_created, '%%m') AS m, YEAR(edd_o.date_created) AS y, COUNT(DISTINCT edd_o.id) as count";
-				$grouping = "YEAR(edd_o.date_created), MONTH(edd_o.date_created)";
+				$select   = "DATE_FORMAT(cs_o.date_created, '%%m') AS m, YEAR(cs_o.date_created) AS y, COUNT(DISTINCT cs_o.id) as count";
+				$grouping = "YEAR(cs_o.date_created), MONTH(cs_o.date_created)";
 			} else {
 				if ( 'today' === $range || 'yesterday' === $range ) {
-					$select   = "DATE_FORMAT(edd_o.date_created, '%%d') AS d, DATE_FORMAT(edd_o.date_created, '%%m') AS m, YEAR(edd_o.date_created) AS y, HOUR(edd_o.date_created) AS h, COUNT(DISTINCT edd_o.id) as count";
-					$grouping = "YEAR(edd_o.date_created), MONTH(edd_o.date_created), DAY(edd_o.date_created), HOUR(edd_o.date_created)";
+					$select   = "DATE_FORMAT(cs_o.date_created, '%%d') AS d, DATE_FORMAT(cs_o.date_created, '%%m') AS m, YEAR(cs_o.date_created) AS y, HOUR(cs_o.date_created) AS h, COUNT(DISTINCT cs_o.id) as count";
+					$grouping = "YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created), HOUR(cs_o.date_created)";
 				} else {
-					$select   = "DATE_FORMAT(edd_o.date_created, '%%d') AS d, DATE_FORMAT(edd_o.date_created, '%%m') AS m, YEAR(edd_o.date_created) AS y, COUNT(DISTINCT edd_o.id) as count";
-					$grouping = "YEAR(edd_o.date_created), MONTH(edd_o.date_created), DAY(edd_o.date_created)";
+					$select   = "DATE_FORMAT(cs_o.date_created, '%%d') AS d, DATE_FORMAT(cs_o.date_created, '%%m') AS m, YEAR(cs_o.date_created) AS y, COUNT(DISTINCT cs_o.id) as count";
+					$grouping = "YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created)";
 				}
 			}
 
 			if ( 'today' === $range || 'yesterday' === $range ) {
-				$grouping = 'YEAR(edd_o.date_created), MONTH(edd_o.date_created), DAY(edd_o.date_created), HOUR(edd_o.date_created)';
+				$grouping = 'YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created), HOUR(cs_o.date_created)';
 			}
 
 			$statuses = array( 'complete', 'publish', 'revoked', 'refunded', 'partially_refunded' );
@@ -392,20 +392,20 @@ class EDD_Payment_Stats extends EDD_Stats {
 			 *
 			 * @param array $statuses Order statuses to include when generating stats.
 			 */
-			$statuses = apply_filters( 'edd_payment_stats_post_statuses', $statuses );
+			$statuses = apply_filters( 'cs_payment_stats_post_statuses', $statuses );
 			$statuses = "'" . implode( "', '", $statuses ) . "'";
 
 			$sales = $wpdb->get_results( $wpdb->prepare(
 				"SELECT {$select}
-				 FROM {$wpdb->edd_orders} edd_o
-				 WHERE edd_o.status IN ({$statuses}) AND edd_o.date_created >= %s AND edd_o.date_created < %s
+				 FROM {$wpdb->cs_orders} cs_o
+				 WHERE cs_o.status IN ({$statuses}) AND cs_o.date_created >= %s AND cs_o.date_created < %s
 				 GROUP BY {$grouping}
-				 ORDER by edd_o.date_created ASC",
+				 ORDER by cs_o.date_created ASC",
 			date( 'Y-m-d', $this->start_date ), date( 'Y-m-d', strtotime( '+1 day', $this->end_date ) ) ), ARRAY_A );
 
 			if ( $this->is_cacheable( $range ) ) {
 				$cached[ $key ] = $sales;
-				set_transient( 'edd_stats_sales', $cached, HOUR_IN_SECONDS );
+				set_transient( 'cs_stats_sales', $cached, HOUR_IN_SECONDS );
 			}
 		}
 
@@ -442,26 +442,26 @@ class EDD_Payment_Stats extends EDD_Stats {
 
 		$earnings = array();
 
-		$cached = get_transient( 'edd_stats_earnings' );
+		$cached = get_transient( 'cs_stats_earnings' );
 		$key    = md5( $range . '_' . date( 'Y-m-d', $this->start_date ) . '_' . date( 'Y-m-d', strtotime( '+1 DAY', $this->end_date ) ) );
 		$sales  = isset( $cached[ $key ] ) ? $cached[ $key ] : false;
 
 		if ( false === $sales || ! $this->is_cacheable( $range ) ) {
 			if ( ! $day_by_day ) {
-				$select   = "DATE_FORMAT(edd_o.date_created, '%%m') AS m, YEAR(edd_o.date_created) AS y, COUNT(DISTINCT edd_o.id) as count";
-				$grouping = "YEAR(edd_o.date_created), MONTH(edd_o.date_created)";
+				$select   = "DATE_FORMAT(cs_o.date_created, '%%m') AS m, YEAR(cs_o.date_created) AS y, COUNT(DISTINCT cs_o.id) as count";
+				$grouping = "YEAR(cs_o.date_created), MONTH(cs_o.date_created)";
 			} else {
 				if ( 'today' === $range || 'yesterday' === $range ) {
-					$select   = "DATE_FORMAT(edd_o.date_created, '%%d') AS d, DATE_FORMAT(edd_o.date_created, '%%m') AS m, YEAR(edd_o.date_created) AS y, HOUR(edd_o.date_created) AS h, COUNT(DISTINCT edd_o.id) as count";
-					$grouping = "YEAR(edd_o.date_created), MONTH(edd_o.date_created), DAY(edd_o.date_created), HOUR(edd_o.date_created)";
+					$select   = "DATE_FORMAT(cs_o.date_created, '%%d') AS d, DATE_FORMAT(cs_o.date_created, '%%m') AS m, YEAR(cs_o.date_created) AS y, HOUR(cs_o.date_created) AS h, COUNT(DISTINCT cs_o.id) as count";
+					$grouping = "YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created), HOUR(cs_o.date_created)";
 				} else {
-					$select   = "DATE_FORMAT(edd_o.date_created, '%%d') AS d, DATE_FORMAT(edd_o.date_created, '%%m') AS m, YEAR(edd_o.date_created) AS y, COUNT(DISTINCT edd_o.id) as count";
-					$grouping = "YEAR(edd_o.date_created), MONTH(edd_o.date_created), DAY(edd_o.date_created)";
+					$select   = "DATE_FORMAT(cs_o.date_created, '%%d') AS d, DATE_FORMAT(cs_o.date_created, '%%m') AS m, YEAR(cs_o.date_created) AS y, COUNT(DISTINCT cs_o.id) as count";
+					$grouping = "YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created)";
 				}
 			}
 
 			if ( 'today' === $range || 'yesterday' === $range ) {
-				$grouping = 'YEAR(edd_o.date_created), MONTH(edd_o.date_created), DAY(edd_o.date_created), HOUR(edd_o.date_created)';
+				$grouping = 'YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created), HOUR(cs_o.date_created)';
 			}
 
 			$statuses = array( 'complete', 'publish', 'revoked', 'refunded', 'partially_refunded' );
@@ -473,15 +473,15 @@ class EDD_Payment_Stats extends EDD_Stats {
 			 *
 			 * @param array $statuses Order statuses to include when generating stats.
 			 */
-			$statuses = apply_filters( 'edd_payment_stats_post_statuses', $statuses );
+			$statuses = apply_filters( 'cs_payment_stats_post_statuses', $statuses );
 			$statuses = "'" . implode( "', '", $statuses ) . "'";
 
 			$earnings = $wpdb->get_results( $wpdb->prepare(
 				"SELECT SUM(total) AS total, SUM(tax) AS tax, $select
-				 FROM {$wpdb->edd_orders} edd_o
-				 WHERE edd_o.status IN ({$statuses}) AND edd_o.date_created >= %s AND edd_o.date_created < %s
+				 FROM {$wpdb->cs_orders} cs_o
+				 WHERE cs_o.status IN ({$statuses}) AND cs_o.date_created >= %s AND cs_o.date_created < %s
 				 GROUP BY {$grouping}
-				 ORDER by edd_o.date_created ASC",
+				 ORDER by cs_o.date_created ASC",
 			date( 'Y-m-d', $this->start_date ), date( 'Y-m-d', strtotime( '+1 day', $this->end_date ) ) ), ARRAY_A );
 
 			if ( ! $include_taxes ) {

@@ -2,15 +2,15 @@
 /**
  * Invalid_View exception class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Classes/Utilities
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Exceptions;
+namespace CS\Reports\Exceptions;
 
-use EDD\Utils\Exceptions;
+use CS\Utils\Exceptions;
 
 /**
  * Implements an Invalid_View exception thrown when a given
@@ -19,9 +19,9 @@ use EDD\Utils\Exceptions;
  * @since 3.0
  *
  * @see \InvalidArgumentException
- * @see \EDD_Exception
+ * @see \CS_Exception
  */
-class Invalid_View extends Invalid_Parameter implements \EDD_Exception {
+class Invalid_View extends Invalid_Parameter implements \CS_Exception {
 
 	/**
 	 * Type of value.

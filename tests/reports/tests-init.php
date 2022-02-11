@@ -1,27 +1,27 @@
 <?php
-namespace EDD\Reports;
+namespace CS\Reports;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once EDD_PLUGIN_DIR . 'includes/reports/class-init.php';
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once CS_PLUGIN_DIR . 'includes/reports/class-init.php';
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Reports Init class.
  *
- * @group edd_reports
- * @group edd_bootstrap
+ * @group cs_reports
+ * @group cs_bootstrap
  *
- * @coversDefaultClass \EDD\Reports\Init
+ * @coversDefaultClass \CS\Reports\Init
  */
-class Init_Tests extends \EDD_UnitTestCase {
+class Init_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * @dataProvider _test_bootstrap_dp
 	 * @covers ::bootstrap()
 	 *
-	 * @group edd_includes
+	 * @group cs_includes
 	 */
 	public function test_bootstrap( $path_to_file ) {
 		$this->assertFileExists( $path_to_file );
@@ -31,7 +31,7 @@ class Init_Tests extends \EDD_UnitTestCase {
 	 * Data provider for test_bootstrap method.
 	 */
 	public function _test_bootstrap_dp() {
-		$reports_dir = EDD_PLUGIN_DIR . 'includes/reports/';
+		$reports_dir = CS_PLUGIN_DIR . 'includes/reports/';
 
 		return array(
 			// Functions.

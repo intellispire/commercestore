@@ -2,16 +2,16 @@
 /**
  * Reports API - Chart Manifest class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports\Data\Charts
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
- */namespace EDD\Reports\Data\Charts\v2;
+ */namespace CS\Reports\Data\Charts\v2;
 
-use EDD\Reports;
-use EDD\Reports\Data\Chart_Endpoint;
-use EDD\Utils\Error_Logger_Interface as Error_Logger;
+use CS\Reports;
+use CS\Reports\Data\Chart_Endpoint;
+use CS\Utils\Error_Logger_Interface as Error_Logger;
 
 /**
  * Represents a manifestation of a ChartJS v2 object's attributes in PHP form.
@@ -131,7 +131,7 @@ class Manifest implements Error_Logger {
 	 *
 	 * @since 3.0
 	 *
-	 * @param EDD\Reports\Data\Chart_Endpoint $endpoint Chart_Endpoint object.
+	 * @param CS\Reports\Data\Chart_Endpoint $endpoint Chart_Endpoint object.
 	 */
 	private function set_endpoint( $endpoint ) {
 		$this->endpoint = $endpoint;
@@ -280,15 +280,15 @@ class Manifest implements Error_Logger {
 
 			case 'doughnut':
 			case 'pie':
-				$handler = 'EDD\Reports\Data\Charts\v2\Pie_Dataset';
+				$handler = 'CS\Reports\Data\Charts\v2\Pie_Dataset';
 				break;
 
 			case 'bar':
-				$handler = 'EDD\Reports\Data\Charts\v2\Bar_Dataset';
+				$handler = 'CS\Reports\Data\Charts\v2\Bar_Dataset';
 				break;
 
 			case 'line':
-				$handler = 'EDD\Reports\Data\Charts\v2\Line_Dataset';
+				$handler = 'CS\Reports\Data\Charts\v2\Line_Dataset';
 				break;
 
 
@@ -306,7 +306,7 @@ class Manifest implements Error_Logger {
 	 */
 	public function get_target_el() {
 		$endpoint = $this->get_endpoint();
-		$default  = "edd_reports_graph_{$endpoint->get_id()}";
+		$default  = "cs_reports_graph_{$endpoint->get_id()}";
 
 		return $endpoint->get_display_arg( 'target', $default );
 	}
@@ -321,10 +321,10 @@ class Manifest implements Error_Logger {
 		printf( '<canvas id="%s"></canvas>', esc_attr( $this->get_target_el() ) );
 
 		// Enqueue script and configuration to render the chart.
-		wp_enqueue_script( 'edd-admin-reports' );
+		wp_enqueue_script( 'cs-admin-reports' );
 		wp_add_inline_script(
-			'edd-admin-reports',
-			sprintf( 'window.edd.renderChart(%s)', wp_json_encode( $this->build_config() ) )
+			'cs-admin-reports',
+			sprintf( 'window.cs.renderChart(%s)', wp_json_encode( $this->build_config() ) )
 		);
 	}
 
@@ -347,8 +347,8 @@ class Manifest implements Error_Logger {
 		$dates['end']->addSeconds( 1 );
 
 		// Apply UTC offset.
-		$dates['start']->setTimezone( edd_get_timezone_id() );
-		$dates['end']->setTimezone( edd_get_timezone_id() );
+		$dates['start']->setTimezone( cs_get_timezone_id() );
+		$dates['end']->setTimezone( cs_get_timezone_id() );
 
 		$config->type         = $this->get_type();
 		$config->data         = $this->get_chart_data();
@@ -359,7 +359,7 @@ class Manifest implements Error_Logger {
 			array(
 				'hour_by_hour' => $hour_by_hour,
 				'day_by_day'   => $day_by_day,
-				'utc_offset'   => esc_js( EDD()->utils->get_gmt_offset() / HOUR_IN_SECONDS ),
+				'utc_offset'   => esc_js( CS()->utils->get_gmt_offset() / HOUR_IN_SECONDS ),
 			)
 		);
 

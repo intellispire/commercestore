@@ -2,9 +2,9 @@
 /**
  * Sales Log Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
@@ -12,13 +12,13 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Sales_Log_Table Class.
+ * CS_Sales_Log_Table Class.
  *
  * @since 1.4
  * @since 3.0 Updated to use the custom tables and new query classes.
  *            Updated table to display order items as sales logs have been deprecated.
  */
-class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
+class CS_Sales_Log_Table extends CS_Base_Log_List_Table {
 
 	/**
 	 * Gets the name of the primary column.
@@ -49,7 +49,7 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 		switch ( $column_name ) {
 			case 'download':
 				$download_id = $item[ $column_name ];
-				$download    = edd_get_download( $download_id );
+				$download    = cs_get_download( $download_id );
 				$price_id    = ! empty( $item['price_id'] )
 					? absint( $item['price_id'] )
 					: 0;
@@ -61,21 +61,21 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 			case 'customer':
 				$name = ! empty( $item['customer']->name )
 					? $item['customer']->name
-					: '<em>' . __( 'Unnamed Customer', 'easy-digital-downloads' ) . '</em>';
+					: '<em>' . __( 'Unnamed Customer', 'commercestore' ) . '</em>';
 
-				$return = '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=edd-customers&view=overview&id=' . $item['customer']->id ) ) . '">#' . $item['customer']->id . ' ' . $name . '</a>';
+				$return = '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $item['customer']->id ) ) . '">#' . $item['customer']->id . ' ' . $name . '</a>';
 				break;
 
 			case 'item_price':
-				$return = edd_currency_filter( edd_format_amount( $item['item_price'] ), $currency );
+				$return = cs_currency_filter( cs_format_amount( $item['item_price'] ), $currency );
 				break;
 
 			case 'amount':
-				$return = edd_currency_filter( edd_format_amount( $item['amount'] / $item['quantity'] ), $currency );
+				$return = cs_currency_filter( cs_format_amount( $item['amount'] / $item['quantity'] ), $currency );
 				break;
 
 			case 'ID':
-				$return = '<a href="' . admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id=' . $item['order_id'] ) . '">' . $item['ID'] . '</a>';
+				$return = '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $item['order_id'] ) . '">' . $item['ID'] . '</a>';
 				break;
 
 			default:
@@ -94,11 +94,11 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'ID'         => __( 'Order Number', 'easy-digital-downloads' ),
-			'customer'   => __( 'Customer', 'easy-digital-downloads' ),
-			'download'   => edd_get_label_singular(),
-			'amount'     => __( 'Item Amount', 'easy-digital-downloads' ),
-			'date'       => __( 'Date', 'easy-digital-downloads' ),
+			'ID'         => __( 'Order Number', 'commercestore' ),
+			'customer'   => __( 'Customer', 'commercestore' ),
+			'download'   => cs_get_label_singular(),
+			'amount'     => __( 'Item Amount', 'commercestore' ),
+			'date'       => __( 'Date', 'commercestore' ),
 		);
 	}
 
@@ -191,12 +191,12 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 
 		// Maybe query for orders first
 		if ( ! empty( $order_args ) ) {
-			$orders = edd_get_orders( $order_args );
+			$orders = cs_get_orders( $order_args );
 			$log_query['order_id__in'] = wp_list_pluck( $orders, 'id' );
 		}
 
 		// Query order items
-		$order_items = edd_get_order_items( $log_query );
+		$order_items = cs_get_order_items( $log_query );
 
 		// Bail if no order items
 		if ( empty( $order_items ) ) {
@@ -208,7 +208,7 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 			$order_ids = array_values( array_unique( wp_list_pluck( $order_items, 'order_id' ) ) );
 
 			if ( count( $order_ids ) > 2 ) {
-				$orders = edd_get_orders( array(
+				$orders = cs_get_orders( array(
 					'id__in'        => $order_ids,
 					'no_found_rows' => true
 				) );
@@ -220,7 +220,7 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 			$customer_ids = array_values( array_unique( wp_list_pluck( $orders, 'customer_id' ) ) );
 
 			if ( count( $customer_ids ) > 2 ) {
-				edd_get_customers( array(
+				cs_get_customers( array(
 					'id__in'        => $customer_ids,
 					'no_found_rows' => true
 				) );
@@ -229,17 +229,17 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 
 		// Loop through order items
 		foreach ( $order_items as $order_item ) {
-			$order = edd_get_order( $order_item->order_id );
+			$order = cs_get_order( $order_item->order_id );
 
 			$data[] = array(
 				'ID'         => $order->get_number(),
 				'order_id'   => $order->id,
-				'customer'   => edd_get_customer( $order->customer_id ),
+				'customer'   => cs_get_customer( $order->customer_id ),
 				'download'   => $order_item->product_id,
 				'price_id'   => $order_item->price_id,
 				'item_price' => $order_item->amount,
 				'amount'     => $order_item->total,
-				'date'       => EDD()->utils->date( $order_item->date_created, null, true )->toDateTimeString(),
+				'date'       => CS()->utils->date( $order_item->date_created, null, true )->toDateTimeString(),
 				'quantity'   => $order_item->quantity,
 				'currency'   => $order->currency,
 			);
@@ -258,6 +258,6 @@ class EDD_Sales_Log_Table extends EDD_Base_Log_List_Table {
 	 * @return int
 	 */
 	public function get_total( $log_query = array() ) {
-		return edd_count_order_items( $log_query );
+		return cs_count_order_items( $log_query );
 	}
 }

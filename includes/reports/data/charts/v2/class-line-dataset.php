@@ -2,13 +2,13 @@
 /**
  * Reports API - LINE Dataset Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports\Data\Charts
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\Charts\v2;
+namespace CS\Reports\Data\Charts\v2;
 
 /**
  * Represents a manifestation of a ChartJS v2 line chart dataset in PHP form.

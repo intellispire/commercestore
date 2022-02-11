@@ -2,15 +2,15 @@
 /**
  * Order Adjustment Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Orders;
+namespace CS\Orders;
 
-use EDD\Refundable_Item;
+use CS\Refundable_Item;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
  * @property string   $date_completed
  * @property string   $date_modified
  */
-class Order_Adjustment extends \EDD\Database\Rows\Order_Adjustment {
+class Order_Adjustment extends \CS\Database\Rows\Order_Adjustment {
 
 	use Refundable_Item;
 
@@ -160,7 +160,7 @@ class Order_Adjustment extends \EDD\Database\Rows\Order_Adjustment {
 			return false;
 		}
 
-		return edd_get_order_adjustments( array(
+		return cs_get_order_adjustments( array(
 			'parent' => $this->id
 		) );
 	}

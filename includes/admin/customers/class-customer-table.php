@@ -2,9 +2,9 @@
 /**
  * Customer Reports Table Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5
  */
@@ -12,16 +12,16 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Admin\List_Table;
+use CS\Admin\List_Table;
 
 /**
- * EDD_Customer_Reports_Table Class
+ * CS_Customer_Reports_Table Class
  *
  * Renders the Customer Reports table
  *
  * @since 1.5
  */
-class EDD_Customer_Reports_Table extends List_Table {
+class CS_Customer_Reports_Table extends List_Table {
 
 	/**
 	 * Get things started
@@ -31,8 +31,8 @@ class EDD_Customer_Reports_Table extends List_Table {
 	 */
 	public function __construct() {
 		parent::__construct( array(
-			'singular' => __( 'Customer',  'easy-digital-downloads' ),
-			'plural'   => __( 'Customers', 'easy-digital-downloads' ),
+			'singular' => __( 'Customer',  'commercestore' ),
+			'plural'   => __( 'Customers', 'commercestore' ),
 			'ajax'     => false
 		) );
 
@@ -64,7 +64,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 	 */
 	public function column_default( $item, $column_name ) {
 
-		$timezone_abbreviation = edd_get_timezone_abbr();
+		$timezone_abbreviation = cs_get_timezone_abbr();
 
 		switch ( $column_name ) {
 
@@ -77,19 +77,19 @@ class EDD_Customer_Reports_Table extends List_Table {
 				break;
 
 			case 'order_count' :
-				$url = edd_get_admin_url( array(
-					'page'     => 'edd-payment-history',
+				$url = cs_get_admin_url( array(
+					'page'     => 'cs-payment-history',
 					'customer' => $item['id']
 				) );
 				$value = '<a href="' . esc_url( $url ) . '">' . esc_html( number_format_i18n( $item['order_count'] ) ) . '</a>';
 				break;
 
 			case 'spent' :
-				$value = edd_currency_filter( edd_format_amount( $item[ $column_name ] ) );
+				$value = cs_currency_filter( cs_format_amount( $item[ $column_name ] ) );
 				break;
 
 			case 'date_created' :
-				$value = '<time datetime="' . esc_attr( $item['date_created'] ) . '">' . edd_date_i18n( $item['date_created'], 'M. d, Y' ) . '<br>' . edd_date_i18n( $item['date_created'], 'H:i' ) . ' ' . $timezone_abbreviation . '</time>';
+				$value = '<time datetime="' . esc_attr( $item['date_created'] ) . '">' . cs_date_i18n( $item['date_created'], 'M. d, Y' ) . '<br>' . cs_date_i18n( $item['date_created'], 'H:i' ) . ' ' . $timezone_abbreviation . '</time>';
 				break;
 
 			default:
@@ -100,7 +100,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 		}
 
 		// Filter & return
-		return apply_filters( 'edd_customers_column_' . $column_name, $value, $item['id'] );
+		return apply_filters( 'cs_customers_column_' . $column_name, $value, $item['id'] );
 	}
 
 	/**
@@ -115,11 +115,11 @@ class EDD_Customer_Reports_Table extends List_Table {
 		$state    = '';
 		$status   = $this->get_status();
 		$name     = ! empty( $item['name'] ) ? $item['name'] : '&mdash;';
-		$view_url = admin_url( 'edit.php?post_type=download&page=edd-customers&view=overview&id=' . $item['id'] );
+		$view_url = admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $item['id'] );
 		$actions  = array(
-			'view'   => '<a href="' . $view_url . '">' . __( 'Edit', 'easy-digital-downloads' ) . '</a>',
-			'logs'   => '<a href="' . admin_url( 'edit.php?post_type=download&page=edd-tools&tab=logs&customer=' . $item['id'] ) . '">' . __( 'Logs', 'easy-digital-downloads' ) . '</a>',
-			'delete' => '<a href="' . admin_url( 'edit.php?post_type=download&page=edd-customers&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'easy-digital-downloads' ) . '</a>',
+			'view'   => '<a href="' . $view_url . '">' . __( 'Edit', 'commercestore' ) . '</a>',
+			'logs'   => '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-tools&tab=logs&customer=' . $item['id'] ) . '">' . __( 'Logs', 'commercestore' ) . '</a>',
+			'delete' => '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-customers&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'commercestore' ) . '</a>',
 		);
 
 		$item_status = ! empty( $item['status'] )
@@ -130,12 +130,12 @@ class EDD_Customer_Reports_Table extends List_Table {
 		if ( ( ! empty( $status ) && ( $status !== $item_status ) ) || ( $item_status !== 'active' ) ) {
 			switch ( $status ) {
 				case 'pending' :
-					$value = __( 'Pending', 'easy-digital-downloads' );
+					$value = __( 'Pending', 'commercestore' );
 					break;
 				case 'active' :
 				case '' :
 				default :
-					$value = __( 'Active', 'easy-digital-downloads' );
+					$value = __( 'Active', 'commercestore' );
 					break;
 			}
 
@@ -166,7 +166,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 			/*$1%s*/ 'customer',
 			/*$2%s*/ esc_attr( $item['id'] ),
 			/* translators: customer name or email */
-			esc_html( sprintf( __( 'Select %s', 'easy-digital-downloads' ), $name ) )
+			esc_html( sprintf( __( 'Select %s', 'commercestore' ), $name ) )
 		);
 	}
 
@@ -177,7 +177,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 	 * @return void
 	 */
 	public function get_counts() {
-		$this->counts = edd_get_customer_counts();
+		$this->counts = cs_get_customer_counts();
 	}
 
 	/**
@@ -187,13 +187,13 @@ class EDD_Customer_Reports_Table extends List_Table {
 	 * @return array $columns Array of all the list table columns
 	 */
 	public function get_columns() {
-		return apply_filters( 'edd_report_customer_columns', array(
+		return apply_filters( 'cs_report_customer_columns', array(
 			'cb'            => '<input type="checkbox" />',
-			'name'          => __( 'Name',   'easy-digital-downloads' ),
-			'email'         => __( 'Email',  'easy-digital-downloads' ),
-			'order_count'   => __( 'Orders', 'easy-digital-downloads' ),
-			'spent'         => __( 'Spent',  'easy-digital-downloads' ),
-			'date_created'  => __( 'Date',   'easy-digital-downloads' )
+			'name'          => __( 'Name',   'commercestore' ),
+			'email'         => __( 'Email',  'commercestore' ),
+			'order_count'   => __( 'Orders', 'commercestore' ),
+			'spent'         => __( 'Spent',  'commercestore' ),
+			'date_created'  => __( 'Date',   'commercestore' )
 		) );
 	}
 
@@ -221,7 +221,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 	 */
 	public function get_bulk_actions() {
 		return array(
-			'delete' => __( 'Delete', 'easy-digital-downloads' )
+			'delete' => __( 'Delete', 'commercestore' )
 		);
 	}
 
@@ -250,7 +250,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 		foreach ( $ids as $id ) {
 			switch ( $this->current_action() ) {
 				case 'delete' :
-					edd_delete_customer( $id );
+					cs_delete_customer( $id );
 					break;
 			}
 		}
@@ -265,7 +265,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 	 * @return array All the data for customer reports.
 	 */
 	public function reports_data() {
-		_edd_deprecated_function( __METHOD__, '3.0', 'EDD_Customer_Reports_Table::get_data()' );
+		_cs_deprecated_function( __METHOD__, '3.0', 'CS_Customer_Reports_Table::get_data()' );
 
 		return $this->get_data();
 	}
@@ -308,7 +308,7 @@ class EDD_Customer_Reports_Table extends List_Table {
 		$this->args = $this->parse_pagination_args( $args );
 
 		// Get the data
-		$customers  = edd_get_customers( $this->args );
+		$customers  = cs_get_customers( $this->args );
 
 		if ( ! empty( $customers ) ) {
 			foreach ( $customers as $customer ) {

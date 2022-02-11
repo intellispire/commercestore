@@ -3,7 +3,7 @@
 /**
  * These tests currently do not run
  *
- * @group edd_ajax
+ * @group cs_ajax
  */
 class Tests_AJAX extends WP_UnitTestCase {
 	protected $_post = null;
@@ -14,9 +14,9 @@ class Tests_AJAX extends WP_UnitTestCase {
 		parent::setUp();
 
 		$_actions = array(
-			'edd_remove_from_cart', 'edd_add_to_cart', 'edd_apply_discount', 'checkout_login',
-			'checkout_register', 'get_download_title', 'edd_local_tax_opt_in', 'edd_local_tax_opt_out',
-			'edd_check_for_download_price_variations'
+			'cs_remove_from_cart', 'cs_add_to_cart', 'cs_apply_discount', 'checkout_login',
+			'checkout_register', 'get_download_title', 'cs_local_tax_opt_in', 'cs_local_tax_opt_out',
+			'cs_check_for_download_price_variations'
 		);
 
 		foreach ( $_actions as $action ) {
@@ -43,7 +43,7 @@ class Tests_AJAX extends WP_UnitTestCase {
 		remove_filter( 'wp_die_ajax_handler', array( $this, 'getDieHandler' ), 1, 1 );
 		remove_action( 'clear_auth_cookie', array( $this, 'logout' ) );
 		set_current_screen( 'front' );
-		EDD()->session->set( 'edd_cart', null );
+		CS()->session->set( 'cs_cart', null );
 	}
 
 	public function logout() {
@@ -111,18 +111,18 @@ class Tests_AJAX extends WP_UnitTestCase {
 		);
 
 		$meta = array(
-			'edd_price' => '0.00',
+			'cs_price' => '0.00',
 			'_variable_pricing' => 1,
-			'_edd_price_options_mode' => 'on',
-			'edd_variable_prices' => array_values( $_variable_pricing ),
-			'edd_download_files' => array_values( $_download_files ),
-			'_edd_download_limit' => 20,
-			'_edd_hide_purchase_link' => 1,
-			'edd_product_notes' => 'Purchase Notes',
-			'_edd_product_type' => 'default',
-			'_edd_download_earnings' => 129.43,
-			'_edd_download_sales' => 59,
-			'_edd_download_limit_override_1' => 1
+			'_cs_price_options_mode' => 'on',
+			'cs_variable_prices' => array_values( $_variable_pricing ),
+			'cs_download_files' => array_values( $_download_files ),
+			'_cs_download_limit' => 20,
+			'_cs_hide_purchase_link' => 1,
+			'cs_product_notes' => 'Purchase Notes',
+			'_cs_product_type' => 'default',
+			'_cs_download_earnings' => 129.43,
+			'_cs_download_sales' => 59,
+			'_cs_download_limit_override_1' => 1
 		);
 		foreach( $meta as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );
@@ -139,7 +139,7 @@ class Tests_AJAX extends WP_UnitTestCase {
 			)
 		);
 
-		$this->_handleAjax( 'edd_add_to_cart' );
+		$this->_handleAjax( 'cs_add_to_cart' );
 		$this->markTestIncomplete( 'This test needs to be rewritten per #600.');
 	}
 
@@ -150,7 +150,7 @@ class Tests_AJAX extends WP_UnitTestCase {
 			'cart_item' => 0
 		);
 
-		$this->assertEquals( '{"removed":1,"subtotal":"$0.00","total":"$0.00"}', $this->_handleAjax( 'edd_remove_from_cart' ) );
+		$this->assertEquals( '{"removed":1,"subtotal":"$0.00","total":"$0.00"}', $this->_handleAjax( 'cs_remove_from_cart' ) );
 	}
 
 	public function test_checkout_register_fields() {
@@ -163,7 +163,7 @@ class Tests_AJAX extends WP_UnitTestCase {
 		$_POST = array(
 			'download_id' => $post_id
 		);
-		$this->_handleAjax( 'edd_get_download_title' );
+		$this->_handleAjax( 'cs_get_download_title' );
 		$this->assertEquals( 'Test Download', $this->_last_response );
 	}
 
@@ -195,18 +195,18 @@ class Tests_AJAX extends WP_UnitTestCase {
 		);
 
 		$meta = array(
-			'edd_price' => '0.00',
+			'cs_price' => '0.00',
 			'_variable_pricing' => 1,
-			'_edd_price_options_mode' => 'on',
-			'edd_variable_prices' => array_values( $_variable_pricing ),
-			'edd_download_files' => array_values( $_download_files ),
-			'_edd_download_limit' => 20,
-			'_edd_hide_purchase_link' => 1,
-			'edd_product_notes' => 'Purchase Notes',
-			'_edd_product_type' => 'default',
-			'_edd_download_earnings' => 129.43,
-			'_edd_download_sales' => 59,
-			'_edd_download_limit_override_1' => 1
+			'_cs_price_options_mode' => 'on',
+			'cs_variable_prices' => array_values( $_variable_pricing ),
+			'cs_download_files' => array_values( $_download_files ),
+			'_cs_download_limit' => 20,
+			'_cs_hide_purchase_link' => 1,
+			'cs_product_notes' => 'Purchase Notes',
+			'_cs_product_type' => 'default',
+			'_cs_download_earnings' => 129.43,
+			'_cs_download_sales' => 59,
+			'_cs_download_limit_override_1' => 1
 		);
 		foreach( $meta as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );
@@ -215,21 +215,21 @@ class Tests_AJAX extends WP_UnitTestCase {
 		$_POST = array(
 			'download_id' => $post_id
 		);
-		//$this->_handleAjax( 'edd_check_for_download_price_variations' );
+		//$this->_handleAjax( 'cs_check_for_download_price_variations' );
 
-		$expected = '<select class="edd_price_options_select edd-select edd-select"><option value="0">Simple</option><option value="1">Advanced</option></select>';
+		$expected = '<select class="cs_price_options_select cs-select cs-select"><option value="0">Simple</option><option value="1">Advanced</option></select>';
 		//$this->assertEquals( $expected, $this->_last_response );
 	}
 
-	public function test_edd_test_ajax_works() {
+	public function test_cs_test_ajax_works() {
 		$this->markTestIncomplete( 'Needs to be reworked per #3475' );
-		$this->assertTrue( edd_test_ajax_works() );
+		$this->assertTrue( cs_test_ajax_works() );
 
-		$this->assertNotEmpty( get_transient( '_edd_ajax_works' ) );
+		$this->assertNotEmpty( get_transient( '_cs_ajax_works' ) );
 
 		// Now test for Airplane Mode plugin
 
-		delete_transient( '_edd_ajax_works' );
+		delete_transient( '_cs_ajax_works' );
 
 		class Airplane_Mode_Core {
 			function __construct() {}
@@ -240,7 +240,7 @@ class Tests_AJAX extends WP_UnitTestCase {
 		$Airplane_Mode_Core = new Airplane_Mode_Core;
 
 		// Should return true but should not set a transient
-		$this->assertTrue( edd_test_ajax_works() );
-		$this->assertEmpty( get_transient( '_edd_ajax_works' ) );
+		$this->assertTrue( cs_test_ajax_works() );
+		$this->assertEmpty( get_transient( '_cs_ajax_works' ) );
 	}
 }

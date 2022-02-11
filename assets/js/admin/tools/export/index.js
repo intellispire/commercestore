@@ -1,7 +1,7 @@
 /**
  * Export screen JS
  */
-const EDD_Export = {
+const CS_Export = {
 
 	init: function() {
 		this.submit();
@@ -10,7 +10,7 @@ const EDD_Export = {
 	submit: function() {
 		const self = this;
 
-		$( document.body ).on( 'submit', '.edd-export-form', function( e ) {
+		$( document.body ).on( 'submit', '.cs-export-form', function( e ) {
 			e.preventDefault();
 
 			const form = $( this ),
@@ -27,7 +27,7 @@ const EDD_Export = {
 			}
 			submitButton.attr( 'disabled', true ).addClass( 'updating-message' );
 			form.find( '.notice-wrap' ).remove();
-			form.append( '<div class="notice-wrap"><div class="edd-progress"><div></div></div></div>' );
+			form.append( '<div class="notice-wrap"><div class="cs-progress"><div></div></div></div>' );
 
 			// start the process
 			self.process_step( 1, data, self );
@@ -40,14 +40,14 @@ const EDD_Export = {
 			url: ajaxurl,
 			data: {
 				form: data,
-				action: 'edd_do_ajax_export',
+				action: 'cs_do_ajax_export',
 				step: step,
 			},
 			dataType: 'json',
 			success: function( response ) {
 				if ( 'done' === response.step || response.error || response.success ) {
 					// We need to get the actual in progress form, not all forms on the page
-					const export_form = $( '.edd-export-form' ).find( '.edd-progress' ).parent().parent();
+					const export_form = $( '.cs-export-form' ).find( '.cs-progress' ).parent().parent();
 					const notice_wrap = export_form.find( '.notice-wrap' );
 
 					export_form.find( 'button' ).attr( 'disabled', false ).removeClass( 'updating-message' ).addClass( 'updated-message' );
@@ -58,10 +58,10 @@ const EDD_Export = {
 						notice_wrap.html( '<div class="updated error"><p>' + error_message + '</p></div>' );
 					} else if ( response.success ) {
 						const success_message = response.message;
-						notice_wrap.html( '<div id="edd-batch-success" class="updated notice"><p>' + success_message + '</p></div>' );
+						notice_wrap.html( '<div id="cs-batch-success" class="updated notice"><p>' + success_message + '</p></div>' );
 						if ( response.data ) {
 							$.each( response.data, function ( key, value ) {
-								$( '.edd_' + key ).html( value );
+								$( '.cs_' + key ).html( value );
 							} );
 						}
 					} else {
@@ -69,7 +69,7 @@ const EDD_Export = {
 						window.location = response.url;
 					}
 				} else {
-					$( '.edd-progress div' ).animate( {
+					$( '.cs-progress div' ).animate( {
 						width: response.percentage + '%',
 					}, 50, function() {
 						// Animation complete.
@@ -86,5 +86,5 @@ const EDD_Export = {
 };
 
 jQuery( document ).ready( function( $ ) {
-	EDD_Export.init();
+	CS_Export.init();
 } );

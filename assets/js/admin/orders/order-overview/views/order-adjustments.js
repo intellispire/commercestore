@@ -22,7 +22,7 @@ export const OrderAdjustments = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	className: 'edd-order-overview-summary__adjustments',
+	className: 'cs-order-overview-summary__adjustments',
 
 	/**
 	 * @since 3.0

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @group edd_emails
+ * @group cs_emails
  */
-class Tests_Emails extends EDD_UnitTestCase {
+class Tests_Emails extends CS_UnitTestCase {
 
 	/**
 	 * Payment fixture.
@@ -50,18 +50,18 @@ class Tests_Emails extends EDD_UnitTestCase {
 		);
 
 		$meta = array(
-			'edd_price'                      => '0.00',
+			'cs_price'                      => '0.00',
 			'_variable_pricing'              => 1,
-			'_edd_price_options_mode'        => 'on',
-			'edd_variable_prices'            => array_values( $_variable_pricing ),
-			'edd_download_files'             => array_values( $_download_files ),
-			'_edd_download_limit'            => 20,
-			'_edd_hide_purchase_link'        => 1,
-			'edd_product_notes'              => 'Purchase Notes',
-			'_edd_product_type'              => 'default',
-			'_edd_download_earnings'         => 129.43,
-			'_edd_download_sales'            => 59,
-			'_edd_download_limit_override_1' => 1
+			'_cs_price_options_mode'        => 'on',
+			'cs_variable_prices'            => array_values( $_variable_pricing ),
+			'cs_download_files'             => array_values( $_download_files ),
+			'_cs_download_limit'            => 20,
+			'_cs_hide_purchase_link'        => 1,
+			'cs_product_notes'              => 'Purchase Notes',
+			'_cs_product_type'              => 'default',
+			'_cs_download_earnings'         => 129.43,
+			'_cs_download_sales'            => 59,
+			'_cs_download_limit_override_1' => 1
 		);
 		foreach( $meta as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );
@@ -93,7 +93,7 @@ class Tests_Emails extends EDD_UnitTestCase {
 
 		$total = 0;
 
-		$prices = get_post_meta( $download_details[0]['id'], 'edd_variable_prices', true );
+		$prices = get_post_meta( $download_details[0]['id'], 'cs_variable_prices', true );
 		$item_price = $prices[1]['amount'];
 
 		$total += $item_price;
@@ -134,9 +134,9 @@ class Tests_Emails extends EDD_UnitTestCase {
 		);
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['SERVER_NAME'] = 'edd-virtual.local';
+		$_SERVER['SERVER_NAME'] = 'cs-virtual.local';
 
-		self::$payment_id = edd_insert_payment( $purchase_data );
+		self::$payment_id = cs_insert_payment( $purchase_data );
 	}
 
 	/**
@@ -145,20 +145,20 @@ class Tests_Emails extends EDD_UnitTestCase {
 	public function test_email_actions() {
 		global $wp_filter;
 
-		$this->assertarrayHasKey( 'edd_admin_email_notice',       $wp_filter['edd_admin_sale_notice'][10]  );
-		$this->assertarrayHasKey( 'edd_trigger_purchase_receipt', $wp_filter['edd_complete_purchase'][999] );
-		$this->assertarrayHasKey( 'edd_resend_purchase_receipt',  $wp_filter['edd_email_links'][10]        );
-		$this->assertarrayHasKey( 'edd_send_test_email',          $wp_filter['edd_send_test_email'][10]    );
+		$this->assertarrayHasKey( 'cs_admin_email_notice',       $wp_filter['cs_admin_sale_notice'][10]  );
+		$this->assertarrayHasKey( 'cs_trigger_purchase_receipt', $wp_filter['cs_complete_purchase'][999] );
+		$this->assertarrayHasKey( 'cs_resend_purchase_receipt',  $wp_filter['cs_email_links'][10]        );
+		$this->assertarrayHasKey( 'cs_send_test_email',          $wp_filter['cs_send_test_email'][10]    );
 	}
 
 	public function test_admin_notice_emails() {
 		$expected = array( 'admin@example.org' );
 
-		$this->assertEquals( $expected, edd_get_admin_notice_emails() );
+		$this->assertEquals( $expected, cs_get_admin_notice_emails() );
 	}
 
 	public function test_admin_notice_disabled() {
-		$this->assertFalse( edd_admin_notices_disabled() );
+		$this->assertFalse( cs_admin_notices_disabled() );
 	}
 
 	public function test_email_templates() {
@@ -167,15 +167,15 @@ class Tests_Emails extends EDD_UnitTestCase {
 			'none' => 'No template, plain text only'
 		);
 
-		$this->assertEquals( $expected, edd_get_email_templates() );
+		$this->assertEquals( $expected, cs_get_email_templates() );
 	}
 
 	public function test_get_template() {
-		$this->assertEquals( 'default', EDD()->emails->get_template() );
+		$this->assertEquals( 'default', CS()->emails->get_template() );
 	}
 
-	public function test_edd_get_default_sale_notification_email() {
-		$email = edd_get_default_sale_notification_email();
+	public function test_cs_get_default_sale_notification_email() {
+		$email = cs_get_default_sale_notification_email();
 
 		$this->assertContains( 'Hello', $email );
 		$this->assertContains( 'A Downloads purchase has been made', $email );
@@ -185,7 +185,7 @@ class Tests_Emails extends EDD_UnitTestCase {
 	}
 
 	public function test_email_tags_get_tags() {
-		$tags = edd_get_email_tags();
+		$tags = cs_get_email_tags();
 
 		$this->assertInternalType( 'array', $tags );
 		$this->assertarrayHasKey( 'download_list', $tags );
@@ -205,123 +205,123 @@ class Tests_Emails extends EDD_UnitTestCase {
 	}
 
 	public function test_email_tags_add() {
-		edd_add_email_tag( 'sample_tag', 'A sample tag for the unit test', '__return_empty_array' );
+		cs_add_email_tag( 'sample_tag', 'A sample tag for the unit test', '__return_empty_array' );
 
-		$this->assertTrue( edd_email_tag_exists( 'sample_tag' ) );
+		$this->assertTrue( cs_email_tag_exists( 'sample_tag' ) );
 	}
 
 	public function test_email_tags_remove() {
-		edd_remove_email_tag( 'sample_tag' );
+		cs_remove_email_tag( 'sample_tag' );
 
-		$this->assertFalse( edd_email_tag_exists( 'sample_tag' ) );
+		$this->assertFalse( cs_email_tag_exists( 'sample_tag' ) );
 	}
 
 	public function test_email_tags_download_list() {
-		$order_items = edd_get_order_items( array( 'order_id' => self::$payment_id ) );
-		$this->assertContains( '<strong>' . $order_items[0]->get_order_item_name() . '</strong>', edd_email_tag_download_list( self::$payment_id ) );
-		$this->assertContains( '<div><a href="', edd_email_tag_download_list( self::$payment_id ) );
+		$order_items = cs_get_order_items( array( 'order_id' => self::$payment_id ) );
+		$this->assertContains( '<strong>' . $order_items[0]->get_order_item_name() . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertContains( '<div><a href="', cs_email_tag_download_list( self::$payment_id ) );
 	}
 
 	public function test_email_tag_download_list_with_names_disabled_via_filter() {
-		add_filter( 'edd_email_show_names', '__return_false' );
-		$this->assertNotContains( '<strong>' . get_the_title( self::$post->ID ) . '</strong>', edd_email_tag_download_list( self::$payment_id ) );
-		remove_filter( 'edd_email_show_names', '__return_false' );
+		add_filter( 'cs_email_show_names', '__return_false' );
+		$this->assertNotContains( '<strong>' . get_the_title( self::$post->ID ) . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
+		remove_filter( 'cs_email_show_names', '__return_false' );
 	}
 
 	public function test_email_tag_download_list_with_links_disabled_via_filer() {
-		add_filter( 'edd_email_show_links', '__return_false' );
-		$this->assertContains( '<div>File 2</div>', edd_email_tag_download_list( self::$payment_id ) );
-		remove_filter( 'edd_email_show_links', '__return_false' );
+		add_filter( 'cs_email_show_links', '__return_false' );
+		$this->assertContains( '<div>File 2</div>', cs_email_tag_download_list( self::$payment_id ) );
+		remove_filter( 'cs_email_show_links', '__return_false' );
 	}
 
 	public function test_email_tags_first_name() {
-		$this->assertEquals( 'Network', edd_email_tag_first_name( self::$payment_id ) );
+		$this->assertEquals( 'Network', cs_email_tag_first_name( self::$payment_id ) );
 	}
 
 	public function test_email_tags_fullname() {
-		$this->assertEquals( 'Network Administrator', edd_email_tag_fullname( self::$payment_id ) );
+		$this->assertEquals( 'Network Administrator', cs_email_tag_fullname( self::$payment_id ) );
 	}
 
 	public function test_email_tags_username() {
-		$this->assertEquals( 'admin', edd_email_tag_username( self::$payment_id ) );
+		$this->assertEquals( 'admin', cs_email_tag_username( self::$payment_id ) );
 	}
 
 	public function test_email_tags_email() {
-		$this->assertEquals( 'admin@example.org', edd_email_tag_user_email( self::$payment_id ) );
+		$this->assertEquals( 'admin@example.org', cs_email_tag_user_email( self::$payment_id ) );
 	}
 
 	public function test_email_tags_date() {
-		$payment = edd_get_payment( self::$payment_id );
+		$payment = cs_get_payment( self::$payment_id );
 
-		$this->assertEquals( date( 'F j, Y', strtotime( $payment->date ) ), edd_email_tag_date( self::$payment_id ) );
+		$this->assertEquals( date( 'F j, Y', strtotime( $payment->date ) ), cs_email_tag_date( self::$payment_id ) );
 	}
 
 	public function test_email_tags_subtotal() {
-		$this->assertEquals( '$100.00', edd_email_tag_subtotal( self::$payment_id ) );
+		$this->assertEquals( '$100.00', cs_email_tag_subtotal( self::$payment_id ) );
 	}
 
 	public function test_email_tags_tax() {
-		$this->assertEquals( '$0.00', edd_email_tag_tax( self::$payment_id ) );
+		$this->assertEquals( '$0.00', cs_email_tag_tax( self::$payment_id ) );
 	}
 
 	public function test_email_tags_price() {
-		$this->assertEquals( '$100.00', edd_email_tag_price( self::$payment_id ) );
+		$this->assertEquals( '$100.00', cs_email_tag_price( self::$payment_id ) );
 	}
 
 	public function test_email_tags_payment_id() {
-		$this->assertEquals( self::$payment_id, edd_email_tag_payment_id( self::$payment_id ) );
+		$this->assertEquals( self::$payment_id, cs_email_tag_payment_id( self::$payment_id ) );
 	}
 
 	public function test_email_tags_receipt_id() {
-		$this->assertEquals( edd_get_payment_key( self::$payment_id ), edd_email_tag_receipt_id( self::$payment_id ) );
+		$this->assertEquals( cs_get_payment_key( self::$payment_id ), cs_email_tag_receipt_id( self::$payment_id ) );
 	}
 
 	public function test_email_tags_payment_method() {
-		$this->assertEquals( 'Store Gateway', edd_email_tag_payment_method( self::$payment_id ) );
+		$this->assertEquals( 'Store Gateway', cs_email_tag_payment_method( self::$payment_id ) );
 	}
 
 	public function test_email_tags_site_name() {
-		$this->assertEquals( get_bloginfo( 'name' ), edd_email_tag_sitename( self::$payment_id ) );
+		$this->assertEquals( get_bloginfo( 'name' ), cs_email_tag_sitename( self::$payment_id ) );
 	}
 
 	public function test_email_tags_receipt_link() {
-		$this->assertContains( 'View it in your browser &raquo;', edd_email_tag_receipt_link( self::$payment_id ) );
+		$this->assertContains( 'View it in your browser &raquo;', cs_email_tag_receipt_link( self::$payment_id ) );
 	}
 
 	public function test_get_from_name() {
-		$this->assertEquals( get_bloginfo( 'name' ), EDD()->emails->get_from_name() );
+		$this->assertEquals( get_bloginfo( 'name' ), CS()->emails->get_from_name() );
 	}
 
 	public function test_get_from_address() {
-		$this->assertEquals( get_bloginfo( 'admin_email' ), EDD()->emails->get_from_address() );
+		$this->assertEquals( get_bloginfo( 'admin_email' ), CS()->emails->get_from_address() );
 	}
 
 	public function test_fallback_for_invalid_from_address() {
-		edd_update_option( 'from_email', 'not-an-email' );
+		cs_update_option( 'from_email', 'not-an-email' );
 
-		$this->assertEquals( get_bloginfo( 'admin_email' ), EDD()->emails->get_from_address() );
+		$this->assertEquals( get_bloginfo( 'admin_email' ), CS()->emails->get_from_address() );
 	}
 
 	public function test_get_content_type() {
-		$this->assertEquals( 'text/html', EDD()->emails->get_content_type() );
+		$this->assertEquals( 'text/html', CS()->emails->get_content_type() );
 
-		EDD()->emails->content_type = 'text/plain';
+		CS()->emails->content_type = 'text/plain';
 
-		$this->assertEquals( 'text/plain', EDD()->emails->get_content_type() );
+		$this->assertEquals( 'text/plain', CS()->emails->get_content_type() );
 
 	}
 
 	public function test_get_headers() {
-		$from_name = EDD()->emails->get_from_name();
-		$from_address = EDD()->emails->get_from_address();
+		$from_name = CS()->emails->get_from_name();
+		$from_address = CS()->emails->get_from_address();
 
-		$this->assertContains( "From: {$from_name} <{$from_address}>", EDD()->emails->get_headers() );
+		$this->assertContains( "From: {$from_name} <{$from_address}>", CS()->emails->get_headers() );
 	}
 
 	public function test_get_heading() {
-		EDD()->emails->__set( 'heading', 'Purchase Receipt' );
+		CS()->emails->__set( 'heading', 'Purchase Receipt' );
 
-		$this->assertEquals( 'Purchase Receipt', EDD()->emails->get_heading() );
+		$this->assertEquals( 'Purchase Receipt', CS()->emails->get_heading() );
 	}
 
 	public function test_text_to_html() {
@@ -330,8 +330,8 @@ class Tests_Emails extends EDD_UnitTestCase {
 
 		$expected  = wpautop( $message );
 
-		EDD()->emails->content_type = 'text/html';
-		$message = EDD()->emails->text_to_html( $message, EDD()->emails );
+		CS()->emails->content_type = 'text/html';
+		$message = CS()->emails->text_to_html( $message, CS()->emails );
 
 		$this->assertEquals( $expected, $message );
 	}

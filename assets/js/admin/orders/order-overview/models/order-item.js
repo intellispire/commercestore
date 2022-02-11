@@ -177,14 +177,14 @@ export const OrderItem = Backbone.Model.extend( {
 		discountIds = [],
 	} ) {
 		const {
-			nonces: { edd_admin_order_get_item_amounts: nonce },
+			nonces: { cs_admin_order_get_item_amounts: nonce },
 		} = window.eddAdminOrderOverview;
 
 		const { productId, priceId, quantity, amount, tax, subtotal } = _.clone(
 			this.attributes
 		);
 
-		return wp.ajax.send( 'edd-admin-order-get-item-amounts', {
+		return wp.ajax.send( 'cs-admin-order-get-item-amounts', {
 			data: {
 				nonce,
 				productId,

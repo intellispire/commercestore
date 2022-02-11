@@ -4,20 +4,20 @@
  *
  * Manages automatic installation/activation for email marketing extensions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  EmailMarketing
- * @copyright   Copyright (c) 2021, Easy Digital Downloads
+ * @copyright   Copyright (c) 2021, CommerceStore
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.11.4
  */
-namespace EDD\Admin\Settings;
+namespace CS\Admin\Settings;
 
-use \EDD\Admin\Extensions\Extension;
+use \CS\Admin\Extensions\Extension;
 
 class EmailMarketing extends Extension {
 
 	/**
-	 * The EDD settings tab where this extension should show.
+	 * The CommerceStore settings tab where this extension should show.
 	 *
 	 * @since 2.11.4
 	 * @var string
@@ -33,8 +33,8 @@ class EmailMarketing extends Extension {
 	protected $settings_section = 'email_marketing';
 
 	public function __construct() {
-		add_filter( 'edd_settings_sections_marketing', array( $this, 'add_section' ) );
-		add_action( 'edd_settings_tab_top_marketing_email_marketing', array( $this, 'field' ) );
+		add_filter( 'cs_settings_sections_marketing', array( $this, 'add_section' ) );
+		add_action( 'cs_settings_tab_top_marketing_email_marketing', array( $this, 'field' ) );
 
 		parent::__construct();
 	}
@@ -47,14 +47,14 @@ class EmailMarketing extends Extension {
 	 * @return array
 	 */
 	public function add_section( $sections ) {
-		if ( ! $this->is_edd_settings_screen() ) {
+		if ( ! $this->is_cs_settings_screen() ) {
 			return $sections;
 		}
 		$product_data = $this->get_product_data();
 		if ( ! $product_data || ! is_array( $product_data ) ) {
 			return $sections;
 		}
-		$sections[ $this->settings_section ] = __( 'Email Marketing', 'easy-digital-downloads' );
+		$sections[ $this->settings_section ] = __( 'Email Marketing', 'commercestore' );
 
 		return $sections;
 	}
@@ -63,16 +63,16 @@ class EmailMarketing extends Extension {
 	 * Gets the customized configuration for the extension card.
 	 *
 	 * @since 2.11.4
-	 * @param \EDD\Admin\Extensions\ProductData $product_data The product data object.
+	 * @param \CS\Admin\Extensions\ProductData $product_data The product data object.
 	 * @return array
 	 */
-	protected function get_configuration( \EDD\Admin\Extensions\ProductData $product_data ) {
+	protected function get_configuration( \CS\Admin\Extensions\ProductData $product_data ) {
 		$configuration = array();
 		if ( ! empty( $product_data->title ) ) {
 			/* translators: the product name */
-			$configuration['title'] = sprintf( __( 'Get %s Today!', 'easy-digital-downloads' ), $product_data->title );
+			$configuration['title'] = sprintf( __( 'Get %s Today!', 'commercestore' ), $product_data->title );
 		}
-		if ( 'mailchimp' === $product_data->slug && ! ( defined( 'EDD_MAILCHIMP_VERSION' ) && version_compare( EDD_MAILCHIMP_VERSION, '3.0.16', '>=' ) ) ) {
+		if ( 'mailchimp' === $product_data->slug && ! ( defined( 'CS_MAILCHIMP_VERSION' ) && version_compare( CS_MAILCHIMP_VERSION, '3.0.16', '>=' ) ) ) {
 			$configuration['tab'] = 'extensions';
 		}
 
@@ -88,10 +88,10 @@ class EmailMarketing extends Extension {
 	public function field() {
 		$this->hide_submit_button();
 		if ( $this->is_activated() ) {
-			printf( '<p>%s</p>', esc_html__( 'Looks like you have an email marketing extension installed, but we support more providers!', 'easy-digital-downloads' ) );
+			printf( '<p>%s</p>', esc_html__( 'Looks like you have an email marketing extension installed, but we support more providers!', 'commercestore' ) );
 		}
 		?>
-		<div class="edd-extension-manager__card-group">
+		<div class="cs-extension-manager__card-group">
 			<?php
 			foreach ( $this->get_product_data() as $item_id => $extension ) {
 				$this->do_single_extension_card( $item_id );

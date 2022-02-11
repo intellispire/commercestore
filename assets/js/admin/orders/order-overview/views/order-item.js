@@ -21,7 +21,7 @@ export const OrderItem = Base.extend( {
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-item' ),
+	template: wp.template( 'cs-admin-order-item' ),
 
 	/**
 	 * @since 3.0

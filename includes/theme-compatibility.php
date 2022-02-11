@@ -4,9 +4,9 @@
  *
  * Functions for compatibility with specific themes.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions/Compatibility
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.4.3
  */
@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
  * @param int $post_id Post ID
  * @return array
  */
-function edd_responsive_download_post_class( $classes = array(), $class = '', $post_id = 0 ) {
+function cs_responsive_download_post_class( $classes = array(), $class = '', $post_id = 0 ) {
 	if (
 		! is_singular( 'download' ) &&
 		! is_post_type_archive( 'download' ) &&
@@ -39,4 +39,4 @@ function edd_responsive_download_post_class( $classes = array(), $class = '', $p
 
 	return $classes;
 }
-add_filter( 'post_class', 'edd_responsive_download_post_class', 999, 3 );
+add_filter( 'post_class', 'cs_responsive_download_post_class', 999, 3 );

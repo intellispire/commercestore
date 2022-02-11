@@ -4,7 +4,7 @@
  *
  * Hooks that are triggered when customer-based actions occur.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Actions
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -16,15 +16,15 @@
  *
  * @param string $old_value The previous value of `is_primary`.
  * @param string $new_value The new value of `is_primary`.
- * @param int $item_id      The address ID in the edd_customer_addresses table.
+ * @param int $item_id      The address ID in the cs_customer_addresses table.
  * @return void
  */
-function edd_demote_customer_primary_addresses( $old_value, $new_value, $item_id ) {
+function cs_demote_customer_primary_addresses( $old_value, $new_value, $item_id ) {
 	if ( ! $new_value ) {
 		return;
 	}
-	$address                    = edd_fetch_customer_address( $item_id );
-	$previous_primary_addresses = edd_get_customer_addresses(
+	$address                    = cs_fetch_customer_address( $item_id );
+	$previous_primary_addresses = cs_get_customer_addresses(
 		array(
 			'id__not_in'  => array( $item_id ),
 			'fields'      => 'ids',
@@ -36,10 +36,10 @@ function edd_demote_customer_primary_addresses( $old_value, $new_value, $item_id
 		return;
 	}
 	foreach ( $previous_primary_addresses as $previous ) {
-		edd_update_customer_address( $previous, array( 'is_primary' => false ) );
+		cs_update_customer_address( $previous, array( 'is_primary' => false ) );
 	}
 }
-add_action( 'edd_transition_customer_address_is_primary', 'edd_demote_customer_primary_addresses', 10, 3 );
+add_action( 'cs_transition_customer_address_is_primary', 'cs_demote_customer_primary_addresses', 10, 3 );
 
 /**
  * Updates the email address of a customer record when the email on a user is updated.
@@ -51,7 +51,7 @@ add_action( 'edd_transition_customer_address_is_primary', 'edd_demote_customer_p
  *
  * @return void
  */
-function edd_update_customer_email_on_user_update( $user_id, $old_user_data ) {
+function cs_update_customer_email_on_user_update( $user_id, $old_user_data ) {
 	$user = get_userdata( $user_id );
 
 	// Bail if the email address didn't actually change just now.
@@ -59,18 +59,18 @@ function edd_update_customer_email_on_user_update( $user_id, $old_user_data ) {
 		return;
 	}
 
-	$customer = edd_get_customer_by( 'user_id', $user_id );
+	$customer = cs_get_customer_by( 'user_id', $user_id );
 
 	if ( empty( $customer ) || $user->user_email === $customer->email ) {
 		return;
 	}
 
 	// Bail if we have another customer with this email address already.
-	if ( edd_get_customer_by( 'email', $user->user_email ) ) {
+	if ( cs_get_customer_by( 'email', $user->user_email ) ) {
 		return;
 	}
 
-	$success = edd_update_customer( $customer->id, array( 'email' => $user->user_email ) );
+	$success = cs_update_customer( $customer->id, array( 'email' => $user->user_email ) );
 
 	if ( ! $success ) {
 		return;
@@ -80,8 +80,8 @@ function edd_update_customer_email_on_user_update( $user_id, $old_user_data ) {
 	 * Triggers after the customer has been successfully updated.
 	 *
 	 * @param WP_User      $user
-	 * @param EDD_Customer $customer
+	 * @param CS_Customer $customer
 	 */
-	do_action( 'edd_update_customer_email_on_user_update', $user, $customer );
+	do_action( 'cs_update_customer_email_on_user_update', $user, $customer );
 }
-add_action( 'profile_update', 'edd_update_customer_email_on_user_update', 10, 2 );
+add_action( 'profile_update', 'cs_update_customer_email_on_user_update', 10, 2 );

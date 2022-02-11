@@ -2,20 +2,20 @@
 /**
  * Top Five Discounts list table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports/Data/Customers
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\Discounts;
+namespace CS\Reports\Data\Discounts;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Reports as Reports;
-use EDD\Stats as Stats;
-use EDD\Admin\List_Table;
+use CS\Reports as Reports;
+use CS\Stats as Stats;
+use CS\Admin\List_Table;
 
 /**
  * Top_Five_Discounts_List_Table class.
@@ -72,10 +72,10 @@ class Top_Five_Discounts_List_Table extends List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'name'      => __( 'Name',   'easy-digital-downloads' ),
-			'code'      => __( 'Code',   'easy-digital-downloads' ),
-			'use_count' => __( 'Uses',   'easy-digital-downloads' ),
-			'amount'    => __( 'Amount', 'easy-digital-downloads' )
+			'name'      => __( 'Name',   'commercestore' ),
+			'code'      => __( 'Code',   'commercestore' ),
+			'use_count' => __( 'Uses',   'commercestore' ),
+			'amount'    => __( 'Amount', 'commercestore' )
 		);
 	}
 
@@ -103,7 +103,7 @@ class Top_Five_Discounts_List_Table extends List_Table {
 	 * @return string Formatted amount.
 	 */
 	public function column_amount( $discount ) {
-		return edd_format_discount_rate( $discount->type, $discount->amount );
+		return cs_format_discount_rate( $discount->type, $discount->amount );
 	}
 
 	/**
@@ -125,12 +125,12 @@ class Top_Five_Discounts_List_Table extends List_Table {
 
 		// State
 		if ( ( ! empty( $status ) && ( $status !== $discount->status ) ) || ( $discount->status !== 'active' ) ) {
-			$state = ' &mdash; ' . edd_get_discount_status_label( $discount->id );
+			$state = ' &mdash; ' . cs_get_discount_status_label( $discount->id );
 		}
 
 		// Wrap discount title in strong anchor
 		$discount_title = '<strong><a class="row-title" href="' . add_query_arg( array(
-				'edd-action' => 'edit_discount',
+				'cs-action' => 'edit_discount',
 				'discount'   => $discount->id,
 			), $base ) . '">' . stripslashes( $discount->name ) . '</a>' . esc_html( $state ) . '</strong>';
 
@@ -162,11 +162,11 @@ class Top_Five_Discounts_List_Table extends List_Table {
 	public function get_base_url() {
 
 		// Remove some query arguments
-		$base = remove_query_arg( edd_admin_removable_query_args(), edd_get_admin_base_url() );
+		$base = remove_query_arg( cs_admin_removable_query_args(), cs_get_admin_base_url() );
 
 		// Add base query args
 		return add_query_arg( array(
-			'page' => 'edd-discounts',
+			'page' => 'cs-discounts',
 		), $base );
 	}
 
@@ -176,7 +176,7 @@ class Top_Five_Discounts_List_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function no_items() {
-		esc_html_e( 'No discounts found.', 'easy-digital-downloads' );
+		esc_html_e( 'No discounts found.', 'commercestore' );
 	}
 
 	/**

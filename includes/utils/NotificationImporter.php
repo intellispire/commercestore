@@ -2,13 +2,13 @@
 /**
  * NotificationImporter.php
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\Utils;
+namespace CS\Utils;
 
 class NotificationImporter {
 
@@ -30,12 +30,12 @@ class NotificationImporter {
 	 * @since 2.11.4
 	 */
 	public function run() {
-		edd_debug_log( 'Fetching notifications via ' . $this->getApiEndpoint() );
+		cs_debug_log( 'Fetching notifications via ' . $this->getApiEndpoint() );
 
 		try {
 			$notifications = $this->fetchNotifications();
 		} catch ( \Exception $e ) {
-			edd_debug_log( sprintf( 'Notification fetch exception: %s', $e->getMessage() ) );
+			cs_debug_log( sprintf( 'Notification fetch exception: %s', $e->getMessage() ) );
 
 			return;
 		}
@@ -43,23 +43,23 @@ class NotificationImporter {
 		foreach ( $notifications as $notification ) {
 			$notificationId = isset( $notification->id ) ? $notification->id : 'unknown';
 
-			edd_debug_log( sprintf( 'Processing notification ID %s', $notificationId ) );
+			cs_debug_log( sprintf( 'Processing notification ID %s', $notificationId ) );
 
 			try {
 				$this->validateNotification( $notification );
 
-				$existingId = EDD()->notifications->get_column_by( 'id', 'remote_id', $notification->id );
+				$existingId = CS()->notifications->get_column_by( 'id', 'remote_id', $notification->id );
 				if ( $existingId ) {
-					edd_debug_log( '-- Updating existing notification.' );
+					cs_debug_log( '-- Updating existing notification.' );
 
 					$this->updateExistingNotification( $existingId, $notification );
 				} else {
-					edd_debug_log( '-- Inserting new notification.' );
+					cs_debug_log( '-- Inserting new notification.' );
 
 					$this->insertNewNotification( $notification );
 				}
 			} catch ( \Exception $e ) {
-				edd_debug_log( sprintf( '-- Notification processing failure for ID %s: %s', $notificationId, $e->getMessage() ) );
+				cs_debug_log( sprintf( '-- Notification processing failure for ID %s: %s', $notificationId, $e->getMessage() ) );
 			}
 		}
 	}
@@ -72,11 +72,11 @@ class NotificationImporter {
 	 * @return string
 	 */
 	protected function getApiEndpoint() {
-		if ( defined( 'EDD_NOTIFICATIONS_API_URL' ) ) {
-			return EDD_NOTIFICATIONS_API_URL;
+		if ( defined( 'CS_NOTIFICATIONS_API_URL' ) ) {
+			return CS_NOTIFICATIONS_API_URL;
 		}
 
-		return 'https://plugin.easydigitaldownloads.com/wp-content/notifications.json';
+		return 'https://plugin.commercestore.com/wp-content/notifications.json';
 	}
 
 	/**
@@ -127,9 +127,9 @@ class NotificationImporter {
 			throw new \Exception( 'Notification has expired.' );
 		}
 
-		// Ignore if notification was created before EDD was installed.
-		if ( ! empty( $notification->start ) && edd_get_activation_date() > strtotime( $notification->start ) ) {
-			throw new \Exception( 'Notification created prior to EDD activation.' );
+		// Ignore if notification was created before CommerceStore was installed.
+		if ( ! empty( $notification->start ) && cs_get_activation_date() > strtotime( $notification->start ) ) {
+			throw new \Exception( 'Notification created prior to CommerceStore activation.' );
 		}
 
 		if (
@@ -204,7 +204,7 @@ class NotificationImporter {
 	 * @throws \Exception
 	 */
 	protected function insertNewNotification( $notification ) {
-		$result = EDD()->notifications->insert( $this->getNotificationData( $notification ) );
+		$result = CS()->notifications->insert( $this->getNotificationData( $notification ) );
 
 		if ( ! $result ) {
 			throw new \Exception( 'Failed to insert into database.' );
@@ -220,7 +220,7 @@ class NotificationImporter {
 	 * @param object $notification
 	 */
 	protected function updateExistingNotification( $existingId, $notification ) {
-		EDD()->notifications->update( $existingId, wp_parse_args( $this->getNotificationData( $notification ), array(
+		CS()->notifications->update( $existingId, wp_parse_args( $this->getNotificationData( $notification ), array(
 			'date_updated' => gmdate( 'Y-m-d H:i:s' ),
 		) ) );
 	}

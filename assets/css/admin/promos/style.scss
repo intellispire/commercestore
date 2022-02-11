@@ -1,4 +1,4 @@
-.edd-admin-notice-top-of-page {
+.cs-admin-notice-top-of-page {
 	font-size: 15px;
 	line-height: 1.4;
 	color: #fff;
@@ -51,21 +51,21 @@
 
 /* Five Star Review Request
 ------------------------------------------------------------- */
-#edd-admin-notice-five-star-review {
+#cs-admin-notice-five-star-review {
 	display: grid;
 }
 
-#edd_dashboard_sales .edd-promo-notice {
+#cs_dashboard_sales .cs-promo-notice {
 	border-bottom: 1px solid #c3c4c7;
 }
 
-.edd-review-actions {
+.cs-review-actions {
 	display: flex;
 	gap: 6px;
 	margin: 0 0 16px 0;
 }
 
-.edd-promo-notice .edd-peeking {
+.cs-promo-notice .cs-peeking {
 	align-self: flex-end;
 	justify-self: flex-end;
 	margin-right: 16px;
@@ -73,20 +73,20 @@
 }
 
 @media screen and (max-width: 782px) {
-	#edd-admin-notice-five-star-review.notice .edd-peeking {
+	#cs-admin-notice-five-star-review.notice .cs-peeking {
 		margin-bottom: -6px;
 	}
 }
 
 @media screen and (min-width: 400px) {
-	.edd-promo-notice .edd-peeking {
+	.cs-promo-notice .cs-peeking {
 		justify-self: flex-start;
 		margin-right: 0;
 		margin-left: 200px;
 	}
 }
 
-.edd-review-step,
-.edd-promo-notice .edd-peeking {
+.cs-review-step,
+.cs-promo-notice .cs-peeking {
 	grid-area: 1/-1;
 }

@@ -2,13 +2,13 @@
 
 
 /**
- * @group edd_upgrades
+ * @group cs_upgrades
  */
-class Tests_Upgrades extends EDD_UnitTestCase {
+class Tests_Upgrades extends CS_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
-		require_once EDD_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 	}
 
 	public function tearDown() {
@@ -17,14 +17,14 @@ class Tests_Upgrades extends EDD_UnitTestCase {
 
 	public function test_upgrade_completion() {
 
-		$current_upgrades = edd_get_completed_upgrades();
+		$current_upgrades = cs_get_completed_upgrades();
 		// Since we mark previous upgrades as complete upon install
 		$this->assertTrue( ! empty( $current_upgrades ) );
 		$this->assertInternalType( 'array', $current_upgrades );
 
-		$this->assertTrue( edd_set_upgrade_complete( 'test-upgrade-action' ) );
-		$this->assertTrue( edd_has_upgrade_completed( 'test-upgrade-action' ) );
-		$this->assertFalse( edd_has_upgrade_completed( 'test-upgrade-action-false' ) );
+		$this->assertTrue( cs_set_upgrade_complete( 'test-upgrade-action' ) );
+		$this->assertTrue( cs_has_upgrade_completed( 'test-upgrade-action' ) );
+		$this->assertFalse( cs_has_upgrade_completed( 'test-upgrade-action-false' ) );
 
 	}
 

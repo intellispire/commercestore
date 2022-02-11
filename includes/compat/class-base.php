@@ -2,13 +2,13 @@
 /**
  * A Base Backwards Compatibility Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -53,8 +53,8 @@ abstract class Base {
 	public function __construct() {
 		$this->hooks();
 
-		$this->show_notices   = apply_filters( 'edd_show_deprecated_notices', ( defined( 'WP_DEBUG' ) && WP_DEBUG ) );
-		$this->show_backtrace = apply_filters( 'edd_show_backtrace', ( defined( 'WP_DEBUG' ) && WP_DEBUG ) && ! defined( 'EDD_DOING_TESTS' ) );
+		$this->show_notices   = apply_filters( 'cs_show_deprecated_notices', ( defined( 'WP_DEBUG' ) && WP_DEBUG ) );
+		$this->show_backtrace = apply_filters( 'cs_show_backtrace', ( defined( 'WP_DEBUG' ) && WP_DEBUG ) && ! defined( 'CS_DOING_TESTS' ) );
 	}
 
 	/**

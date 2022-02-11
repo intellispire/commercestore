@@ -2,9 +2,9 @@
 /**
  * Admin Options Page
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Settings
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -13,53 +13,53 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Adds the EDD branded header to the EDD settings pages.
+ * Adds the CommerceStore branded header to the CommerceStore settings pages.
  *
  * @since 2.11.3
  */
-function edd_admin_header() {
-	if ( ! edd_is_admin_page( '', '', false ) ) {
+function cs_admin_header() {
+	if ( ! cs_is_admin_page( '', '', false ) ) {
 		return;
 	}
 
-	$numberNotifications = EDD()->notifications->countActiveNotifications();
+	$numberNotifications = CS()->notifications->countActiveNotifications();
 	?>
-	<div id="edd-header" class="edd-header">
-		<div id="edd-header-wrapper">
-			<img class="edd-header-logo" alt="" src="<?php echo esc_url( EDD_PLUGIN_URL . '/assets/images/logo-edd-dark.svg' ); ?>" />
+	<div id="cs-header" class="cs-header">
+		<div id="cs-header-wrapper">
+			<img class="cs-header-logo" alt="" src="<?php echo esc_url( CS_PLUGIN_URL . '/assets/images/logo-cs-dark.svg' ); ?>" />
 
-			<div id="edd-header-actions">
+			<div id="cs-header-actions">
 				<button
-					id="edd-notification-button"
-					class="edd-round"
+					id="cs-notification-button"
+					class="cs-round"
 					x-data
-					x-init="$store.eddNotifications.numberActiveNotifications = <?php echo esc_js( $numberNotifications ); ?>"
-					@click="$store.eddNotifications.openPanel()"
+					x-init="$store.csNotifications.numberActiveNotifications = <?php echo esc_js( $numberNotifications ); ?>"
+					@click="$store.csNotifications.openPanel()"
 				>
 					<span
-						class="edd-round edd-number<?php echo 0 === $numberNotifications ? ' edd-hidden' : ''; ?>"
-						x-show="$store.eddNotifications.numberActiveNotifications > 0"
+						class="cs-round cs-number<?php echo 0 === $numberNotifications ? ' cs-hidden' : ''; ?>"
+						x-show="$store.csNotifications.numberActiveNotifications > 0"
 					>
 						<?php echo wp_kses( sprintf(
 							/* Translators: %1$s number of notifications; %2$s opening span tag; %3$s closing span tag */
-							__( '%1$s %2$sunread notifications%3$s', 'easy-digital-downloads' ),
-							'<span x-text="$store.eddNotifications.numberActiveNotifications"></span>',
+							__( '%1$s %2$sunread notifications%3$s', 'commercestore' ),
+							'<span x-text="$store.csNotifications.numberActiveNotifications"></span>',
 							'<span class="screen-reader-text">',
 							'</span>'
 						), array( 'span' => array( 'class' => true, 'x-text' => true ) ) ); ?>
 					</span>
 
-					<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="edd-notifications-icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8333 2.5H4.16667C3.25 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V4.16667C17.5 3.25 16.75 2.5 15.8333 2.5ZM15.8333 15.8333H4.16667V13.3333H7.13333C7.70833 14.325 8.775 15 10.0083 15C11.2417 15 12.3 14.325 12.8833 13.3333H15.8333V15.8333ZM11.675 11.6667H15.8333V4.16667H4.16667V11.6667H8.34167C8.34167 12.5833 9.09167 13.3333 10.0083 13.3333C10.925 13.3333 11.675 12.5833 11.675 11.6667Z" fill="currentColor"></path></svg>
+					<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="cs-notifications-icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8333 2.5H4.16667C3.25 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V4.16667C17.5 3.25 16.75 2.5 15.8333 2.5ZM15.8333 15.8333H4.16667V13.3333H7.13333C7.70833 14.325 8.775 15 10.0083 15C11.2417 15 12.3 14.325 12.8833 13.3333H15.8333V15.8333ZM11.675 11.6667H15.8333V4.16667H4.16667V11.6667H8.34167C8.34167 12.5833 9.09167 13.3333 10.0083 13.3333C10.925 13.3333 11.675 12.5833 11.675 11.6667Z" fill="currentColor"></path></svg>
 				</button>
 			</div>
 		</div>
 	</div>
 	<?php
 	add_action( 'admin_footer', function() {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/views/notifications.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/views/notifications.php';
 	} );
 }
-add_action( 'admin_notices', 'edd_admin_header', 1 );
+add_action( 'admin_notices', 'cs_admin_header', 1 );
 
 /**
  * Output the primary options page navigation
@@ -69,9 +69,9 @@ add_action( 'admin_notices', 'edd_admin_header', 1 );
  * @param array  $tabs       All available tabs.
  * @param string $active_tab Current active tab.
  */
-function edd_options_page_primary_nav( $tabs, $active_tab = '' ) {
+function cs_options_page_primary_nav( $tabs, $active_tab = '' ) {
 	?>
-	<nav class="nav-tab-wrapper edd-nav-tab-wrapper edd-settings-nav" aria-label="<?php esc_attr_e( 'Secondary menu', 'easy-digital-downloads' ); ?>">
+	<nav class="nav-tab-wrapper cs-nav-tab-wrapper cs-settings-nav" aria-label="<?php esc_attr_e( 'Secondary menu', 'commercestore' ); ?>">
 		<?php
 
 		foreach ( $tabs as $tab_id => $tab_name ) {
@@ -79,10 +79,10 @@ function edd_options_page_primary_nav( $tabs, $active_tab = '' ) {
 				array(
 					'settings-updated' => false,
 					'post_type'        => 'download',
-					'page'             => 'edd-settings',
+					'page'             => 'cs-settings',
 					'tab'              => $tab_id,
 				),
-				edd_get_admin_base_url()
+				cs_get_admin_base_url()
 			);
 
 			// Remove the section from the tabs so we always end up at the main section
@@ -110,13 +110,13 @@ function edd_options_page_primary_nav( $tabs, $active_tab = '' ) {
  * @param string $section
  * @param array  $sections
  */
-function edd_options_page_secondary_nav( $active_tab = '', $section = '', $sections = array() ) {
+function cs_options_page_secondary_nav( $active_tab = '', $section = '', $sections = array() ) {
 
 	// Back compat for section'less tabs (Licenses, etc...)
 	if ( empty( $sections ) ) {
 		$section  = 'main';
 		$sections = array(
-			'main' => __( 'General', 'easy-digital-downloads' )
+			'main' => __( 'General', 'commercestore' )
 		);
 	}
 
@@ -130,11 +130,11 @@ function edd_options_page_secondary_nav( $active_tab = '', $section = '', $secti
 		$tab_url = add_query_arg(
 			array(
 				'post_type' => 'download',
-				'page'      => 'edd-settings',
+				'page'      => 'cs-settings',
 				'tab'       => $active_tab,
 				'section'   => $section_id,
 			),
-			edd_get_admin_base_url()
+			cs_get_admin_base_url()
 		);
 
 		// Settings not updated
@@ -150,7 +150,7 @@ function edd_options_page_secondary_nav( $active_tab = '', $section = '', $secti
 	} ?>
 
 	<div class="wp-clearfix">
-		<ul class="subsubsub edd-settings-sub-nav">
+		<ul class="subsubsub cs-settings-sub-nav">
 			<?php echo implode( '', $links ); ?>
 		</ul>
 	</div>
@@ -167,7 +167,7 @@ function edd_options_page_secondary_nav( $active_tab = '', $section = '', $secti
  * @param string  $section
  * @param boolean $override
  */
-function edd_options_page_form( $active_tab = '', $section = '', $override = false ) {
+function cs_options_page_form( $active_tab = '', $section = '', $override = false ) {
 
 	// Setup the action & section suffix
 	$suffix = ! empty( $section )
@@ -175,38 +175,38 @@ function edd_options_page_form( $active_tab = '', $section = '', $override = fal
 		: $active_tab . '_main';
 
 	// Find out if we're displaying a sidebar.
-	$is_promo_active = edd_is_promo_active();
+	$is_promo_active = cs_is_promo_active();
 	$wrapper_class   = ( true === $is_promo_active )
-		? array( ' edd-has-sidebar' )
+		? array( ' cs-has-sidebar' )
 		: array();
 	?>
 
-	<div class="edd-settings-wrap<?php echo esc_attr( implode( ' ', $wrapper_class ) ); ?> wp-clearfix">
-		<div class="edd-settings-content">
-			<form method="post" action="options.php" class="edd-settings-form">
+	<div class="cs-settings-wrap<?php echo esc_attr( implode( ' ', $wrapper_class ) ); ?> wp-clearfix">
+		<div class="cs-settings-content">
+			<form method="post" action="options.php" class="cs-settings-form">
 				<?php
 
-				settings_fields( 'edd_settings' );
+				settings_fields( 'cs_settings' );
 
 				if ( 'main' === $section ) {
-					do_action( 'edd_settings_tab_top', $active_tab );
+					do_action( 'cs_settings_tab_top', $active_tab );
 				}
 
-				do_action( 'edd_settings_tab_top_' . $suffix );
+				do_action( 'cs_settings_tab_top_' . $suffix );
 
-				do_settings_sections( 'edd_settings_' . $suffix );
+				do_settings_sections( 'cs_settings_' . $suffix );
 
-				do_action( 'edd_settings_tab_bottom_' . $suffix  );
+				do_action( 'cs_settings_tab_bottom_' . $suffix  );
 
 				// For backwards compatibility
 				if ( 'main' === $section ) {
-					do_action( 'edd_settings_tab_bottom', $active_tab );
+					do_action( 'cs_settings_tab_bottom', $active_tab );
 				}
 
 				// If the main section was empty and we overrode the view with the
 				// next subsection, prepare the section for saving
 				if ( true === $override ) {
-					?><input type="hidden" name="edd_section_override" value="<?php echo esc_attr( $section ); ?>" /><?php
+					?><input type="hidden" name="cs_section_override" value="<?php echo esc_attr( $section ); ?>" /><?php
 				}
 
 				submit_button(); ?>
@@ -214,7 +214,7 @@ function edd_options_page_form( $active_tab = '', $section = '', $override = fal
 		</div>
 		<?php
 		if ( true === $is_promo_active ) {
-			edd_options_sidebar();
+			cs_options_sidebar();
 		}
 		?>
 	</div>
@@ -229,12 +229,12 @@ function edd_options_page_form( $active_tab = '', $section = '', $override = fal
  *
  * @return string
  */
-function edd_options_sidebar() {
+function cs_options_sidebar() {
 	// Get settings tab and section info
 	$active_tab     = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
-	$active_tab     = array_key_exists( $active_tab, edd_get_settings_tabs() ) ? $active_tab : 'general';
+	$active_tab     = array_key_exists( $active_tab, cs_get_settings_tabs() ) ? $active_tab : 'general';
 	$active_section = isset( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : 'main';
-	$active_section = array_key_exists( $active_section, edd_get_settings_tab_sections( $active_tab ) ) ? $active_section : 'main';
+	$active_section = array_key_exists( $active_section, cs_get_settings_tab_sections( $active_tab ) ) ? $active_section : 'main';
 
 	// The coupon code we're promoting
 	$coupon_code = 'BFCM2019';
@@ -246,23 +246,23 @@ function edd_options_sidebar() {
 		'utm_campaign' => 'bfcm2019',
 		'utm_content'  => 'sidebar-promo-' . $active_tab . '-' . $active_section,
 	);
-	$url  = add_query_arg( $args, 'https://easydigitaldownloads.com/pricing/' );
+	$url  = add_query_arg( $args, 'https://commercestore.com/pricing/' );
 	?>
-	<div class="edd-settings-sidebar">
-		<div class="edd-settings-sidebar-content">
-			<div class="edd-sidebar-header-section">
-				<img class="edd-bfcm-header" src="<?php echo esc_url( EDD_PLUGIN_URL . 'assets/images/promo/bfcm-header.svg' ); ?>">
+	<div class="cs-settings-sidebar">
+		<div class="cs-settings-sidebar-content">
+			<div class="cs-sidebar-header-section">
+				<img class="cs-bfcm-header" src="<?php echo esc_url( CS_PLUGIN_URL . 'assets/images/promo/bfcm-header.svg' ); ?>">
 			</div>
-			<div class="edd-sidebar-description-section">
-				<p class="edd-sidebar-description"><?php _e( 'Save 25% on all Easy Digital Downloads purchases <strong>this week</strong>, including renewals and upgrades!', 'easy-digital-downloads' ); ?></p>
+			<div class="cs-sidebar-description-section">
+				<p class="cs-sidebar-description"><?php _e( 'Save 25% on all CommerceStore purchases <strong>this week</strong>, including renewals and upgrades!', 'commercestore' ); ?></p>
 			</div>
-			<div class="edd-sidebar-coupon-section">
-				<label for="edd-coupon-code"><?php _e( 'Use code at checkout:', 'easy-digital-downloads' ); ?></label>
-				<input id="edd-coupon-code" type="text" value="<?php echo $coupon_code; ?>" readonly>
-				<p class="edd-coupon-note"><?php _e( 'Sale ends 23:59 PM December 6th CST. Save 25% on <a href="https://sandhillsdev.com/projects/" target="_blank">our other plugins</a>.', 'easy-digital-downloads' ); ?></p>
+			<div class="cs-sidebar-coupon-section">
+				<label for="cs-coupon-code"><?php _e( 'Use code at checkout:', 'commercestore' ); ?></label>
+				<input id="cs-coupon-code" type="text" value="<?php echo $coupon_code; ?>" readonly>
+				<p class="cs-coupon-note"><?php _e( 'Sale ends 23:59 PM December 6th CST. Save 25% on <a href="https://sandhillsdev.com/projects/" target="_blank">our other plugins</a>.', 'commercestore' ); ?></p>
 			</div>
-			<div class="edd-sidebar-footer-section">
-				<a class="edd-cta-button" href="<?php echo esc_url( $url ); ?>" target="_blank"><?php _e( 'Shop Now!', 'easy-digital-downloads' ); ?></a>
+			<div class="cs-sidebar-footer-section">
+				<a class="cs-cta-button" href="<?php echo esc_url( $url ); ?>" target="_blank"><?php _e( 'Shop Now!', 'commercestore' ); ?></a>
 			</div>
 		</div>
 	</div>
@@ -275,17 +275,17 @@ function edd_options_sidebar() {
  * @since 1.0
  * @return void
  */
-function edd_options_page() {
+function cs_options_page() {
 	// Enqueue scripts.
-	wp_enqueue_script( 'edd-admin-settings' );
+	wp_enqueue_script( 'cs-admin-settings' );
 
 	// Try to figure out where we are
-	$all_settings   = edd_get_registered_settings();
-	$settings_tabs  = edd_get_settings_tabs();
+	$all_settings   = cs_get_registered_settings();
+	$settings_tabs  = cs_get_settings_tabs();
 	$settings_tabs  = empty( $settings_tabs ) ? array() : $settings_tabs;
 	$active_tab     = isset( $_GET['tab']   ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
 	$active_tab     = array_key_exists( $active_tab, $settings_tabs ) && array_key_exists( $active_tab, $all_settings ) ? $active_tab : 'general';
-	$sections       = edd_get_settings_tab_sections( $active_tab );
+	$sections       = cs_get_settings_tab_sections( $active_tab );
 	$section        = ! empty( $_GET['section'] ) && ! empty( $sections[ $_GET['section'] ] ) ? sanitize_text_field( $_GET['section'] ) : 'main';
 
 	// Default values
@@ -335,17 +335,17 @@ function edd_options_page() {
 	ob_start(); ?>
 
 	<div class="wrap <?php echo 'wrap-' . esc_attr( $active_tab ); ?>">
-		<h1><?php esc_html_e( 'Settings', 'easy-digital-downloads' ); ?></h1>
+		<h1><?php esc_html_e( 'Settings', 'commercestore' ); ?></h1>
 
 		<?php
 		// Primary nav
-		edd_options_page_primary_nav( $settings_tabs, $active_tab );
+		cs_options_page_primary_nav( $settings_tabs, $active_tab );
 
 		// Secondary nav
-		edd_options_page_secondary_nav( $active_tab, $section, $sections );
+		cs_options_page_secondary_nav( $active_tab, $section, $sections );
 
 		// Form
-		edd_options_page_form( $active_tab, $section, $override );
+		cs_options_page_form( $active_tab, $section, $override );
 
 		?></div><!-- .wrap --><?php
 
@@ -359,20 +359,20 @@ function edd_options_page() {
  *
  * @since 3.0
  */
-function edd_tax_settings_display_tax_disabled_notice() {
-	if ( edd_use_taxes() ) {
+function cs_tax_settings_display_tax_disabled_notice() {
+	if ( cs_use_taxes() ) {
 		return;
 	}
 
 	?>
 	<div class="notice-wrap" style="clear: both;">
-		<div id="edd-tax-disabled-notice">
+		<div id="cs-tax-disabled-notice">
 			<p>
-				<?php _e( 'Taxes are currently disabled. Rates listed below will not be applied to purchases until taxes are enabled.', 'easy-digital-downloads' ); ?>
+				<?php _e( 'Taxes are currently disabled. Rates listed below will not be applied to purchases until taxes are enabled.', 'commercestore' ); ?>
 			</p>
 		</div>
 	</div>
 	<?php
 
 }
-add_action( 'edd_settings_tab_top_taxes_rates', 'edd_tax_settings_display_tax_disabled_notice', 10 );
+add_action( 'cs_settings_tab_top_taxes_rates', 'cs_tax_settings_display_tax_disabled_notice', 10 );

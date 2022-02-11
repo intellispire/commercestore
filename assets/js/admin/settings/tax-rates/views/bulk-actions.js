@@ -5,12 +5,12 @@
  */
 const BulkActions = wp.Backbone.View.extend( {
 	// See https://codex.wordpress.org/Javascript_Reference/wp.template
-	template: wp.template( 'edd-admin-tax-rates-table-bulk-actions' ),
+	template: wp.template( 'cs-admin-tax-rates-table-bulk-actions' ),
 
 	// Watch events.
 	events: {
-		'click .edd-admin-tax-rates-table-filter': 'filter',
-		'change .edd-admin-tax-rates-table-hide input': 'showHide',
+		'click .cs-admin-tax-rates-table-filter': 'filter',
+		'change .cs-admin-tax-rates-table-hide input': 'showHide',
 	},
 
 	/**
@@ -24,7 +24,7 @@ const BulkActions = wp.Backbone.View.extend( {
 		event.preventDefault();
 
 		// @hack - need to access the DOM directly here because the dropdown is not tied to the button event.
-		const status = document.getElementById( 'edd-admin-tax-rates-table-bulk-actions' );
+		const status = document.getElementById( 'cs-admin-tax-rates-table-bulk-actions' );
 
 		_.each( this.collection.selected, ( cid ) => {
 			const model = this.collection.get( {
@@ -46,7 +46,7 @@ const BulkActions = wp.Backbone.View.extend( {
 		this.collection.showAll = event.target.checked;
 
 		// @hack -- shouldn't access this table directly.
-		document.getElementById( 'edd_tax_rates' ).classList.toggle( 'has-inactive', this.collection.showAll );
+		document.getElementById( 'cs_tax_rates' ).classList.toggle( 'has-inactive', this.collection.showAll );
 
 		this.collection.trigger( 'filtered' );
 	},

@@ -15,12 +15,12 @@ export const OrderSubtotal = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	className: 'edd-order-overview-summary__subtotal',
+	className: 'cs-order-overview-summary__subtotal',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-subtotal' ),
+	template: wp.template( 'cs-admin-order-subtotal' ),
 
 	/**
 	 * Order subtotal view.

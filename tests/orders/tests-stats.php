@@ -1,15 +1,15 @@
 <?php
-namespace EDD;
+namespace CS;
 
 /**
  * Stats Tests.
  *
- * @group edd_orders
- * @group edd_stats
+ * @group cs_orders
+ * @group cs_stats
  *
- * @coversDefaultClass \EDD\Stats
+ * @coversDefaultClass \CS\Stats
  */
-class Stats_Tests extends \EDD_UnitTestCase {
+class Stats_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Stats class fixture.
@@ -37,11 +37,11 @@ class Stats_Tests extends \EDD_UnitTestCase {
 	 */
 	public static function wpSetUpBeforeClass() {
 		self::$stats  = new Stats();
-		self::$orders = parent::edd()->order->create_many( 5 );
+		self::$orders = parent::cs()->order->create_many( 5 );
 
 		// Refund two of those orders.
 		for ( $i = 0; $i < 2; $i++ ) {
-			self::$refunds[] = edd_refund_order( self::$orders[ $i ] );
+			self::$refunds[] = cs_refund_order( self::$orders[ $i ] );
 		}
 	}
 

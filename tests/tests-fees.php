@@ -2,9 +2,9 @@
 
 
 /**
- * @group edd_fees
+ * @group cs_fees
  */
-class Tests_Fee extends EDD_UnitTestCase {
+class Tests_Fee extends CS_UnitTestCase {
 	protected $_post = null;
 
 	public function setUp() {
@@ -13,16 +13,16 @@ class Tests_Fee extends EDD_UnitTestCase {
 		$post_id = $this->factory->post->create( array( 'post_title' => 'Test Download', 'post_type' => 'download', 'post_status' => 'publish' ) );
 		$this->_post = get_post( $post_id );
 
-		edd_add_to_cart( $this->_post->ID );
+		cs_add_to_cart( $this->_post->ID );
 
 	}
 
 	public function test_adding_fee_legacy() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
 		//This is not using the $args array because it's for backwards compatibility.
-		EDD()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
+		CS()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
 
 		$expected = array(
 			'shipping_fee' => array(
@@ -35,15 +35,15 @@ class Tests_Fee extends EDD_UnitTestCase {
 			),
 		);
 
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'all' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'all' ) );
 	}
 
 	public function test_adding_fee() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
 		//Arbitrary fee test.
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20.00',
 			'label' => 'Arbitrary Item',
 			'download_id' => $this->_post->ID,
@@ -60,17 +60,17 @@ class Tests_Fee extends EDD_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'all' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'all' ) );
 	}
 
 	public function test_adding_fee_no_cart_item() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
-		edd_empty_cart();
+		cs_empty_cart();
 
 		//Arbitrary fee test.
-		$this->assertFalse( EDD()->fees->add_fee( array(
+		$this->assertFalse( CS()->fees->add_fee( array(
 			'amount' => '20.00',
 			'label' => 'Arbitrary Item',
 			'download_id' => $this->_post->ID,
@@ -81,10 +81,10 @@ class Tests_Fee extends EDD_UnitTestCase {
 
 	public function test_adding_fee_for_variable_price() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
 		//Test with variable price id attached to a fee.
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -104,17 +104,17 @@ class Tests_Fee extends EDD_UnitTestCase {
 			),
 		);
 
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'all' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'all' ) );
 	}
 
 	public function test_adding_fee_for_variable_price_not_in_cart() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
-		edd_empty_cart();
+		cs_empty_cart();
 
 		//Test with variable price id attached to a fee.
-		$this->assertFalse( EDD()->fees->add_fee( array(
+		$this->assertFalse( CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -123,8 +123,8 @@ class Tests_Fee extends EDD_UnitTestCase {
 			'type' => 'fee'
 		) ) );
 
-		edd_add_to_cart( $this->_post->ID, array( 'price_id' => 1 ) );
-		$this->assertNotEmpty( EDD()->fees->add_fee( array(
+		cs_add_to_cart( $this->_post->ID, array( 'price_id' => 1 ) );
+		$this->assertNotEmpty( CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -136,13 +136,13 @@ class Tests_Fee extends EDD_UnitTestCase {
 
 	public function test_adding_fees() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
 		//Add Legacy Fee
-		EDD()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
+		CS()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
 
 		//Add Normal Fee with variable price id for to a fee.
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -152,7 +152,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		) );
 
 		//Add Normal fee
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20.00',
 			'label' => 'Arbitrary Item',
 			'download_id' => $this->_post->ID,
@@ -188,14 +188,14 @@ class Tests_Fee extends EDD_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'all' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'all' ) );
 	}
 
 	public function test_has_fees() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -204,14 +204,14 @@ class Tests_Fee extends EDD_UnitTestCase {
 			'type' => 'fee'
 		) );
 
-		$this->assertTrue( EDD()->fees->has_fees() );
+		$this->assertTrue( CS()->fees->has_fees() );
 	}
 
 	public function test_get_fee() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -229,9 +229,9 @@ class Tests_Fee extends EDD_UnitTestCase {
 			'price_id'    => 1
 		);
 
-		$this->assertEquals( $expected, EDD()->fees->get_fee( 'shipping_fee_with_variable_price_id' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fee( 'shipping_fee_with_variable_price_id' ) );
 
-		$fee = EDD()->fees->get_fee( 'shipping_fee_with_variable_price_id' );
+		$fee = CS()->fees->get_fee( 'shipping_fee_with_variable_price_id' );
 
 		$this->assertEquals( '10.00', $fee['amount'] );
 		$this->assertEquals( 'Shipping Fee (Small)', $fee['label'] );
@@ -241,13 +241,13 @@ class Tests_Fee extends EDD_UnitTestCase {
 
 	public function test_get_all_fees() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
 		//Add Legacy Fee
-		EDD()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
+		CS()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
 
 		//Add Normal Fee with variable price id for to a fee.
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -257,7 +257,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		) );
 
 		//Add Normal fee
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20.00',
 			'label' => 'Arbitrary Item',
 			'download_id' => $this->_post->ID,
@@ -294,7 +294,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		);
 
 		//Test getting all Fees
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'all' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'all' ) );
 
 		$expected = array(
 			//Legacy Fee
@@ -318,7 +318,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		);
 
 		//Test getting all fees with the type set to 'fee'
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'fee' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'fee' ) );
 
 		$expected = array(
 			//Normal Fee
@@ -331,7 +331,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		);
 
 		// Test getting only fees with the type set to 'item'
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'item' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'item' ) );
 
 		$expected = array(
 			//Normal Fee with Variable Price
@@ -346,16 +346,16 @@ class Tests_Fee extends EDD_UnitTestCase {
 		);
 
 		// Test getting download-specific fees
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'fee', $this->_post->ID ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'fee', $this->_post->ID ) );
 
 	}
 
 	public function test_total_fees() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
 		//Add Normal Fee
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20.00',
 			'label' => 'Tax Fee',
 			'download_id' => NULL,
@@ -364,7 +364,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		) );
 
 		//Add a variable price fee
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -374,7 +374,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		) );
 
 		//Add another variable price fee
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Medium)',
 			'download_id' => $this->_post->ID,
@@ -384,7 +384,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		) );
 
 		//Add another normal Fee
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20.00',
 			'label' => 'Arbitrary Fee',
 			'download_id' => NULL,
@@ -393,24 +393,24 @@ class Tests_Fee extends EDD_UnitTestCase {
 		) );
 
 		//Test adding up all the fees
-		$this->assertEquals( 60, EDD()->fees->total() );
+		$this->assertEquals( 60, CS()->fees->total() );
 
 		//Test getting the total of fees that match the post ID passed
-		$this->assertEquals( 20, EDD()->fees->total( $this->_post->ID ) );
+		$this->assertEquals( 20, CS()->fees->total( $this->_post->ID ) );
 
 		//Test the string value of the fees total
-		$this->assertEquals( '60.00', EDD()->fees->total() );
+		$this->assertEquals( '60.00', CS()->fees->total() );
 	}
 
 	public function test_record_fee() {
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
 		//Add Legacy Fee
-		EDD()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
+		CS()->fees->add_fee( 10, 'Shipping Fee', 'shipping_fee' );
 
 		//Add Normal Fee with variable price id for to a fee.
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '10.00',
 			'label' => 'Shipping Fee (Small)',
 			'download_id' => $this->_post->ID,
@@ -420,7 +420,7 @@ class Tests_Fee extends EDD_UnitTestCase {
 		) );
 
 		//Add Normal fee
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20.00',
 			'label' => 'Arbitrary Item',
 			'download_id' => $this->_post->ID,
@@ -458,15 +458,15 @@ class Tests_Fee extends EDD_UnitTestCase {
 			)
 		);
 
-		$actual = EDD()->fees->record_fees( $payment_meta = array(), $payment_data = array() );
+		$actual = CS()->fees->record_fees( $payment_meta = array(), $payment_data = array() );
 
 		$this->assertEquals( $expected, $actual );
 	}
 
 	public function test_fee_number_format_default() {
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20',
 			'label' => 'Arbitrary Item',
 			'download_id' => $this->_post->ID,
@@ -483,15 +483,15 @@ class Tests_Fee extends EDD_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'all' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'all' ) );
 	}
 
 	public function test_fee_number_format_decimal_filter() {
-		add_filter( 'edd_currency_decimal_count', array( $this, 'alter_decimal_filter' ), 10, 2 );
+		add_filter( 'cs_currency_decimal_count', array( $this, 'alter_decimal_filter' ), 10, 2 );
 
-		EDD()->session->set( 'edd_cart_fees', null );
+		CS()->session->set( 'cs_cart_fees', null );
 
-		EDD()->fees->add_fee( array(
+		CS()->fees->add_fee( array(
 			'amount' => '20',
 			'label' => 'Arbitrary Item',
 			'download_id' => $this->_post->ID,
@@ -508,9 +508,9 @@ class Tests_Fee extends EDD_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( $expected, EDD()->fees->get_fees( 'all' ) );
+		$this->assertEquals( $expected, CS()->fees->get_fees( 'all' ) );
 
-		remove_filter( 'edd_currency_decimal_count', array( $this, 'alter_decimal_filter' ), 10, 2 );
+		remove_filter( 'cs_currency_decimal_count', array( $this, 'alter_decimal_filter' ), 10, 2 );
 	}
 
 	public function alter_decimal_filter() {

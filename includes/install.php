@@ -2,9 +2,9 @@
 /**
  * Install Function
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions/Install
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -19,35 +19,35 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return string
  */
-function edd_get_db_version() {
-	$db_version = get_option( 'edd_version' );
+function cs_get_db_version() {
+	$db_version = get_option( 'cs_version' );
 	$retval     = ! empty( $db_version )
-		? edd_format_db_version( $db_version )
+		? cs_format_db_version( $db_version )
 		: false;
 
 	return $retval;
 }
 
 /**
- * Update the EDD version in the options table
+ * Update the CommerceStore version in the options table
  *
  * @since 3.0
  */
-function edd_update_db_version() {
-	if ( defined( 'EDD_VERSION' ) ) {
-		update_option( 'edd_version', edd_format_db_version( EDD_VERSION ) );
+function cs_update_db_version() {
+	if ( defined( 'CS_VERSION' ) ) {
+		update_option( 'cs_version', cs_format_db_version( CS_VERSION ) );
 	}
 }
 
 /**
- * Format the EDD version (going into or coming from the database.)
+ * Format the CommerceStore version (going into or coming from the database.)
  *
  * @since 3.0
  *
  * @param string $version
  * @return string
  */
-function edd_format_db_version( $version = '' ) {
+function cs_format_db_version( $version = '' ) {
 	return preg_replace( '/[^0-9.].*/', '', $version );
 }
 
@@ -58,7 +58,7 @@ function edd_format_db_version( $version = '' ) {
  * @param  string $upgrade_action The upgrade action to check completion for
  * @return bool                   If the action has been added to the copmleted actions array
  */
-function edd_has_upgrade_completed( $upgrade_action = '' ) {
+function cs_has_upgrade_completed( $upgrade_action = '' ) {
 
 	// Bail if no upgrade action to check
 	if ( empty( $upgrade_action ) ) {
@@ -66,7 +66,7 @@ function edd_has_upgrade_completed( $upgrade_action = '' ) {
 	}
 
 	// Get completed upgrades
-	$completed_upgrades = edd_get_completed_upgrades();
+	$completed_upgrades = cs_get_completed_upgrades();
 
 	// Return true if in array, false if not
 	return in_array( $upgrade_action, $completed_upgrades, true );
@@ -78,10 +78,10 @@ function edd_has_upgrade_completed( $upgrade_action = '' ) {
  * @since  2.3
  * @return array The array of completed upgrades
  */
-function edd_get_completed_upgrades() {
+function cs_get_completed_upgrades() {
 
 	// Get the completed upgrades for this site
-	$completed_upgrades = get_option( 'edd_completed_upgrades', array() );
+	$completed_upgrades = get_option( 'cs_completed_upgrades', array() );
 
 	// Return array of completed upgrades
 	return (array) $completed_upgrades;
@@ -99,24 +99,24 @@ function edd_get_completed_upgrades() {
  * @param  bool $network_wide If the plugin is being network-activated
  * @return void
  */
-function edd_install( $network_wide = false ) {
+function cs_install( $network_wide = false ) {
 
 	// Multi-site install
 	if ( is_multisite() && ! empty( $network_wide ) ) {
-		edd_run_multisite_install();
+		cs_run_multisite_install();
 
 	// Single site install
 	} else {
-		edd_run_install();
+		cs_run_install();
 	}
 }
 
 /**
- * Run the EDD installation on every site in the current network.
+ * Run the CommerceStore installation on every site in the current network.
  *
  * @since 3.0
  */
-function edd_run_multisite_install() {
+function cs_run_multisite_install() {
 	global $wpdb;
 
 	// Get site count
@@ -145,7 +145,7 @@ function edd_run_multisite_install() {
 		// Proceed if site IDs exist
 		if ( ! empty( $site_ids ) ) {
 			foreach ( $site_ids as $site_id ) {
-				edd_run_install( $site_id );
+				cs_run_install( $site_id );
 			}
 		}
 
@@ -160,12 +160,12 @@ function edd_run_multisite_install() {
 }
 
 /**
- * Run the EDD Install process
+ * Run the CommerceStore Install process
  *
  * @since 2.5
  * @since 3.0 Added $site_id parameter
  */
-function edd_run_install( $site_id = false ) {
+function cs_run_install( $site_id = false ) {
 
 	// Not switched
 	$switched = false;
@@ -177,67 +177,67 @@ function edd_run_install( $site_id = false ) {
 	}
 
 	// Get the current database version
-	$current_version = edd_get_db_version();
+	$current_version = cs_get_db_version();
 
 	// Setup the components (customers, discounts, logs, etc...)
-	edd_setup_components();
+	cs_setup_components();
 
 	// Setup the Downloads Custom Post Type
-	edd_setup_edd_post_types();
+	cs_setup_cs_post_types();
 
 	// Setup the Download Taxonomies
-	edd_setup_download_taxonomies();
+	cs_setup_download_taxonomies();
 
 	// Clear the permalinks
 	flush_rewrite_rules( false );
 
 	// Install the default pages
-	edd_install_pages();
+	cs_install_pages();
 
 	// Maybe save the previous version, only if different than current
-	if ( ! empty( $current_version ) && ( edd_format_db_version( EDD_VERSION ) !== $current_version ) ) {
-		if ( version_compare( $current_version, edd_format_db_version( EDD_VERSION ), '>' ) ) {
+	if ( ! empty( $current_version ) && ( cs_format_db_version( CS_VERSION ) !== $current_version ) ) {
+		if ( version_compare( $current_version, cs_format_db_version( CS_VERSION ), '>' ) ) {
 			$downgraded = true;
-			update_option( 'edd_version_downgraded_from', $current_version );
+			update_option( 'cs_version_downgraded_from', $current_version );
 		}
 
-		update_option( 'edd_version_upgraded_from', $current_version );
+		update_option( 'cs_version_upgraded_from', $current_version );
 	}
 
 	// Install the default settings
-	edd_install_settings();
+	cs_install_settings();
 
 	// Set the activation date.
-	edd_get_activation_date();
+	cs_get_activation_date();
 
-	// Create wp-content/uploads/edd/ folder and the .htaccess file
-	if ( ! function_exists( 'edd_create_protection_files' ) ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/upload-functions.php';
+	// Create wp-content/uploads/commercestore/ folder and the .htaccess file
+	if ( ! function_exists( 'cs_create_protection_files' ) ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/upload-functions.php';
 	}
-	if ( function_exists( 'edd_create_protection_files' ) ) {
-		edd_create_protection_files( true );
+	if ( function_exists( 'cs_create_protection_files' ) ) {
+		cs_create_protection_files( true );
 	}
 
 	// Create custom tables. (@todo move to BerlinDB)
-	EDD()->notifications->create_table();
+	CS()->notifications->create_table();
 
-	// Create EDD shop roles
-	$roles = new EDD_Roles;
+	// Create CommerceStore shop roles
+	$roles = new CS_Roles;
 	$roles->add_roles();
 	$roles->add_caps();
 
 	// API version
-	$api = new EDD_API;
-	update_option( 'edd_default_api_version', 'v' . $api->get_version() );
+	$api = new CS_API;
+	update_option( 'cs_default_api_version', 'v' . $api->get_version() );
 
 	// Check for PHP Session support, and enable if available
-	EDD()->session->use_php_sessions();
+	CS()->session->use_php_sessions();
 
 	// Maybe set all upgrades as complete (only on fresh installation)
-	edd_set_all_upgrades_complete();
+	cs_set_all_upgrades_complete();
 
 	// Update the database version (must be at end, but before site restore)
-	edd_update_db_version();
+	cs_update_db_version();
 
 	// Maybe switch back
 	if ( true === $switched ) {
@@ -249,16 +249,16 @@ function edd_run_install( $site_id = false ) {
  * Maybe set upgrades as complete during a fresh
  * @since 3.0
  */
-function edd_set_all_upgrades_complete() {
+function cs_set_all_upgrades_complete() {
 
 	// Bail if not a fresh installation
-	if ( ! edd_get_db_version() ) {
+	if ( ! cs_get_db_version() ) {
 		return;
 	}
 
 	// Maybe include an admin-area only file/function
-	if ( ! function_exists( 'edd_set_upgrade_complete' ) ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
+	if ( ! function_exists( 'cs_set_upgrade_complete' ) ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 	}
 
 	// When new upgrade routines are added, mark them as complete on fresh install
@@ -272,7 +272,7 @@ function edd_set_all_upgrades_complete() {
 
 	// Loop through upgrade routines and mark them as complete
 	foreach ( $upgrade_routines as $upgrade ) {
-		edd_set_upgrade_complete( $upgrade );
+		cs_set_upgrade_complete( $upgrade );
 	}
 }
 
@@ -281,10 +281,10 @@ function edd_set_all_upgrades_complete() {
  *
  * @since 3.0
  */
-function edd_install_pages() {
+function cs_install_pages() {
 
-	// Get all of the EDD settings
-	$current_options = get_option( 'edd_settings', array() );
+	// Get all of the CommerceStore settings
+	$current_options = get_option( 'cs_settings', array() );
 
 	// Required store pages
 	$pages = array_flip( array(
@@ -341,7 +341,7 @@ function edd_install_pages() {
 			// Checkout
 			case 'purchase_page':
 				$page_attributes = array(
-					'post_title'     => __( 'Checkout', 'easy-digital-downloads' ),
+					'post_title'     => __( 'Checkout', 'commercestore' ),
 					'post_content'   => "<!-- wp:shortcode -->[download_checkout]<!-- /wp:shortcode -->",
 					'post_status'    => 'publish',
 					'post_author'    => 1,
@@ -353,10 +353,10 @@ function edd_install_pages() {
 
 			// Success
 			case 'success_page':
-				$text            = __( 'Thank you for your purchase!', 'easy-digital-downloads' );
+				$text            = __( 'Thank you for your purchase!', 'commercestore' );
 				$page_attributes = array(
-					'post_title'     => __( 'Purchase Confirmation', 'easy-digital-downloads' ),
-					'post_content'   => "<!-- wp:paragraph --><p>{$text}</p><!-- /wp:paragraph --><!-- wp:shortcode -->[edd_receipt]<!-- /wp:shortcode -->",
+					'post_title'     => __( 'Purchase Confirmation', 'commercestore' ),
+					'post_content'   => "<!-- wp:paragraph --><p>{$text}</p><!-- /wp:paragraph --><!-- wp:shortcode -->[cs_receipt]<!-- /wp:shortcode -->",
 					'post_status'    => 'publish',
 					'post_author'    => 1,
 					'post_parent'    => $checkout,
@@ -367,9 +367,9 @@ function edd_install_pages() {
 
 			// Failure
 			case 'failure_page':
-				$text            = __( 'Your transaction failed, please try again or contact site support.', 'easy-digital-downloads' );
+				$text            = __( 'Your transaction failed, please try again or contact site support.', 'commercestore' );
 				$page_attributes = array(
-					'post_title'     => __( 'Transaction Failed', 'easy-digital-downloads' ),
+					'post_title'     => __( 'Transaction Failed', 'commercestore' ),
 					'post_content'   => "<!-- wp:paragraph --><p>{$text}</p><!-- /wp:paragraph -->",
 					'post_status'    => 'publish',
 					'post_author'    => 1,
@@ -382,7 +382,7 @@ function edd_install_pages() {
 			// Purchase History
 			case 'purchase_history_page':
 				$page_attributes = array(
-					'post_title'     => __( 'Purchase History', 'easy-digital-downloads' ),
+					'post_title'     => __( 'Purchase History', 'commercestore' ),
 					'post_content'   => "<!-- wp:shortcode -->[purchase_history]<!-- /wp:shortcode -->",
 					'post_status'    => 'publish',
 					'post_author'    => 1,
@@ -410,7 +410,7 @@ function edd_install_pages() {
 
 	// Update the option
 	if ( true === $changed ) {
-		update_option( 'edd_settings', $current_options );
+		update_option( 'cs_settings', $current_options );
 	}
 }
 
@@ -419,23 +419,23 @@ function edd_install_pages() {
  *
  * @since 3.0
  *
- * @global array $edd_options
+ * @global array $cs_options
  */
-function edd_install_settings() {
-	global $edd_options;
+function cs_install_settings() {
+	global $cs_options;
 
 	// Setup some default options
 	$options = array();
 
 	// Populate some default values
-	$all_settings = edd_get_registered_settings();
+	$all_settings = cs_get_registered_settings();
 
 	if ( ! empty( $all_settings ) ) {
 		foreach ( $all_settings as $tab => $sections ) {
 			foreach ( $sections as $section => $settings) {
 
 				// Check for backwards compatibility
-				$tab_sections = edd_get_settings_tab_sections( $tab );
+				$tab_sections = cs_get_settings_tab_sections( $tab );
 				if ( ! is_array( $tab_sections ) || ! array_key_exists( $section, $tab_sections ) ) {
 					$section  = 'main';
 					$settings = $sections;
@@ -451,25 +451,25 @@ function edd_install_settings() {
 	}
 
 	// Get the settings
-	$settings       = get_option( 'edd_settings', array() );
+	$settings       = get_option( 'cs_settings', array() );
 	$merged_options = array_merge( $settings, $options );
-	$edd_options    = $merged_options;
+	$cs_options    = $merged_options;
 
 	// Update the settings
-	update_option( 'edd_settings', $merged_options );
+	update_option( 'cs_settings', $merged_options );
 }
 
 /**
- * When a new Blog is created in multisite, see if EDD is network activated, and run the installer
+ * When a new Blog is created in multisite, see if CommerceStore is network activated, and run the installer
  *
  * @since  2.5
  * @param  int|WP_Site $blog WordPress 5.1 passes a WP_Site object.
  * @return void
  */
-function edd_new_blog_created( $blog ) {
+function cs_new_blog_created( $blog ) {
 
 	// Bail if plugin is not activated for the network
-	if ( ! is_plugin_active_for_network( plugin_basename( EDD_PLUGIN_FILE ) ) ) {
+	if ( ! is_plugin_active_for_network( plugin_basename( CS_PLUGIN_FILE ) ) ) {
 		return;
 	}
 
@@ -478,13 +478,13 @@ function edd_new_blog_created( $blog ) {
 	}
 
 	switch_to_blog( $blog );
-	edd_install();
+	cs_install();
 	restore_current_blog();
 }
 if ( version_compare( get_bloginfo( 'version' ), '5.1', '>=' ) ) {
-	add_action( 'wp_initialize_site', 'edd_new_blog_created' );
+	add_action( 'wp_initialize_site', 'cs_new_blog_created' );
 } else {
-	add_action( 'wpmu_new_blog', 'edd_new_blog_created' );
+	add_action( 'wpmu_new_blog', 'cs_new_blog_created' );
 }
 
 /**
@@ -496,11 +496,11 @@ if ( version_compare( get_bloginfo( 'version' ), '5.1', '>=' ) ) {
  * @param      int   $blog_id The Blog ID being deleted
  * @return     array          The tables to drop
  */
-function edd_wpmu_drop_tables( $tables, $blog_id ) {
+function cs_wpmu_drop_tables( $tables, $blog_id ) {
 
 	switch_to_blog( $blog_id );
-	$customers_db     = new EDD_DB_Customers();
-	$customer_meta_db = new EDD_DB_Customer_Meta();
+	$customers_db     = new CS_DB_Customers();
+	$customer_meta_db = new CS_DB_Customer_Meta();
 	if ( $customers_db->installed() ) {
 		$tables[] = $customers_db->table_name;
 		$tables[] = $customer_meta_db->table_name;
@@ -515,37 +515,37 @@ function edd_wpmu_drop_tables( $tables, $blog_id ) {
  * Post-installation
  *
  * Runs just after plugin installation and exposes the
- * edd_after_install hook.
+ * cs_after_install hook.
  *
  * @since 1.7
  * @return void
  */
-function edd_after_install() {
+function cs_after_install() {
 
 	if ( ! is_admin() ) {
 		return;
 	}
 
-	$edd_options = get_transient( '_edd_installed' );
+	$cs_options = get_transient( '_cs_installed' );
 
-	do_action( 'edd_after_install', $edd_options );
+	do_action( 'cs_after_install', $cs_options );
 
-	if ( false !== $edd_options ) {
+	if ( false !== $cs_options ) {
 		// Delete the transient
-		delete_transient( '_edd_installed' );
+		delete_transient( '_cs_installed' );
 	}
 }
-add_action( 'admin_init', 'edd_after_install' );
+add_action( 'admin_init', 'cs_after_install' );
 
 /**
  * Install user roles on sub-sites of a network
  *
- * Roles do not get created when EDD is network activation so we need to create them during admin_init
+ * Roles do not get created when CommerceStore is network activation so we need to create them during admin_init
  *
  * @since 1.9
  * @return void
  */
-function edd_install_roles_on_network() {
+function cs_install_roles_on_network() {
 
 	global $wp_roles;
 
@@ -556,12 +556,12 @@ function edd_install_roles_on_network() {
 
 	if( empty( $wp_roles->roles ) || ! array_key_exists( 'shop_manager', $wp_roles->roles ) ) {
 
-		// Create EDD shop roles
-		$roles = new EDD_Roles;
+		// Create CommerceStore shop roles
+		$roles = new CS_Roles;
 		$roles->add_roles();
 		$roles->add_caps();
 
 	}
 
 }
-add_action( 'admin_init', 'edd_install_roles_on_network' );
+add_action( 'admin_init', 'cs_install_roles_on_network' );

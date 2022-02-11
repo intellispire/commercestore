@@ -1,7 +1,7 @@
-/* global edd_vars */
+/* global cs_vars */
 
 document.addEventListener( 'alpine:init', () => {
-	Alpine.store( 'eddNotifications', {
+	Alpine.store( 'csNotifications', {
 		isPanelOpen: false,
 		notificationsLoaded: false,
 		numberActiveNotifications: 0,
@@ -9,27 +9,27 @@ document.addEventListener( 'alpine:init', () => {
 		inactiveNotifications: [],
 
 		init: function() {
-			const eddNotifications = this;
+			const csNotifications = this;
 
 			/*
 			 * The bubble starts out hidden until AlpineJS is initialized. Once it is, we remove
 			 * the hidden class. This prevents a flash of the bubble's visibility in the event that there
 			 * are no notifications.
 			 */
-			const notificationCountBubble = document.querySelector( '#edd-notification-button .edd-number' );
+			const notificationCountBubble = document.querySelector( '#cs-notification-button .cs-number' );
 			if ( notificationCountBubble ) {
-				notificationCountBubble.classList.remove( 'edd-hidden' );
+				notificationCountBubble.classList.remove( 'cs-hidden' );
 			}
 
 			document.addEventListener( 'keydown', function( e ) {
 				if ( e.key === 'Escape' ) {
-					eddNotifications.closePanel();
+					csNotifications.closePanel();
 				}
 			} );
 		},
 
 		openPanel: function() {
-			const panelHeader = document.getElementById( 'edd-notifications-header' );
+			const panelHeader = document.getElementById( 'cs-notifications-header' );
 
 			if ( this.notificationsLoaded ) {
 				this.isPanelOpen = true;
@@ -66,19 +66,19 @@ document.addEventListener( 'alpine:init', () => {
 
 			this.isPanelOpen = false;
 
-			const notificationButton = document.getElementById( 'edd-notification-button' );
+			const notificationButton = document.getElementById( 'cs-notification-button' );
 			if ( notificationButton ) {
 				notificationButton.focus();
 			}
 		},
 
 		apiRequest: function( endpoint, method ) {
-			return fetch( edd_vars.restBase + endpoint, {
+			return fetch( cs_vars.restBase + endpoint, {
 				method: method,
 				credentials: 'same-origin',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-WP-Nonce': edd_vars.restNonce
+					'X-WP-Nonce': cs_vars.restNonce
 				}
 			} ).then( response => {
 				if ( ! response.ok ) {

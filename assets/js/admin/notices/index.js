@@ -4,15 +4,15 @@
 ; ( function ( document, $ ) {
 	'use strict';
 
-	$( '#edd-disable-debug-log' ).on( 'click', function ( e ) {
+	$( '#cs-disable-debug-log' ).on( 'click', function ( e ) {
 		e.preventDefault();
 		$( this ).attr( 'disabled', true );
-		var notice = $( '#edd-debug-log-notice' );
+		var notice = $( '#cs-debug-log-notice' );
 		$.ajax( {
 			type: "GET",
 			data: {
-				action: 'edd_disable_debugging',
-				nonce: $( '#edd_debug_log_delete' ).val(),
+				action: 'cs_disable_debugging',
+				nonce: $( '#cs_debug_log_delete' ).val(),
 			},
 			url: ajaxurl,
 			success: function ( response ) {

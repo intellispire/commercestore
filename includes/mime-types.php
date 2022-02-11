@@ -2,9 +2,9 @@
 /**
  * MIME Types
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @param array $existing_mimes A list of all the existing MIME types.
  * @return array A list of all the new MIME types appended.
  */
-function edd_allowed_mime_types( $existing_mimes = array() ) {
+function cs_allowed_mime_types( $existing_mimes = array() ) {
 	$existing_mimes['zip']  = 'application/zip';
 	$existing_mimes['epub'] = 'application/epub+zip';
 	$existing_mimes['mobi'] = 'application/x-mobipocket-ebook';
@@ -35,4 +35,4 @@ function edd_allowed_mime_types( $existing_mimes = array() ) {
 
 	return $existing_mimes;
 }
-add_filter( 'upload_mimes', 'edd_allowed_mime_types' );
+add_filter( 'upload_mimes', 'cs_allowed_mime_types' );

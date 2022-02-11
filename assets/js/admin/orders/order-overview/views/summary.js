@@ -23,7 +23,7 @@ export const Summary = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	el: '#edd-order-overview-summary',
+	el: '#cs-order-overview-summary',
 
 	/**
 	 * Renders the view.

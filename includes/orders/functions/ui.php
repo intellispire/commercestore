@@ -2,9 +2,9 @@
 /**
  * Order User Interface Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @param WP_Admin_Bar $wp_admin_bar Admin bar object.
  */
-function edd_add_new_order_to_wp_admin_bar( $wp_admin_bar ) {
+function cs_add_new_order_to_wp_admin_bar( $wp_admin_bar ) {
 	// Bail if no admin bar
 	if ( empty( $wp_admin_bar ) ) {
 		return;
@@ -33,12 +33,12 @@ function edd_add_new_order_to_wp_admin_bar( $wp_admin_bar ) {
 	// Add the menu item
 	$wp_admin_bar->add_menu( array(
 		'id'     => 'new-order',
-		'title'  => __( 'Order', 'easy-digital-downloads' ),
+		'title'  => __( 'Order', 'commercestore' ),
 		'parent' => 'new-content',
-		'href'   => edd_get_admin_url( array(
-			'page' => 'edd-payment-history',
+		'href'   => cs_get_admin_url( array(
+			'page' => 'cs-payment-history',
 			'view' => 'add-order',
 		) ),
 	) );
 }
-add_action( 'admin_bar_menu', 'edd_add_new_order_to_wp_admin_bar', 99 );
+add_action( 'admin_bar_menu', 'cs_add_new_order_to_wp_admin_bar', 99 );

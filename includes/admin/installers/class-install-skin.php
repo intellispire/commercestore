@@ -1,8 +1,8 @@
 <?php
 
-namespace EDD\Admin\Installers;
+namespace CS\Admin\Installers;
 
-use EDD\Admin\Installers\PluginSilentUpgraderSkin;
+use CS\Admin\Installers\PluginSilentUpgraderSkin;
 
 /**
  * Skin for on-the-fly addon installations.

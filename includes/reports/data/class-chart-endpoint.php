@@ -2,15 +2,15 @@
 /**
  * Reports API - Chart Endpoint Handler
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Reports\Data\Charts\v2 as Chart;
+use CS\Reports\Data\Charts\v2 as Chart;
 
 /**
  * Handler for building a chart endpoint in the Reports API.

@@ -2,9 +2,9 @@
 /**
  * Formatting functions for taking care of proper number formats and such
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions/Formatting
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.2
 */
@@ -26,11 +26,11 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return string $amount Newly sanitized amount.
  */
-function edd_sanitize_amount( $amount = 0 ) {
+function cs_sanitize_amount( $amount = 0 ) {
 
 	// Get separators
-	$decimal_sep   = edd_get_option( 'decimal_separator',   '.' );
-	$thousands_sep = edd_get_option( 'thousands_separator', ',' );
+	$decimal_sep   = cs_get_option( 'decimal_separator',   '.' );
+	$thousands_sep = cs_get_option( 'thousands_separator', ',' );
 
 	// Look for separators in amount
 	$found_decimal   = strpos( $amount, $decimal_sep   );
@@ -71,7 +71,7 @@ function edd_sanitize_amount( $amount = 0 ) {
 	 * @param int        $number Default 2. Number of decimals.
 	 * @param int|string $amount Amount being sanitized.
 	 */
-	$decimals = apply_filters( 'edd_sanitize_amount_decimals', 2, $amount );
+	$decimals = apply_filters( 'cs_sanitize_amount_decimals', 2, $amount );
 
 	// Check for empty strings before we multiply.
 	if ( '' === $amount ) {
@@ -96,7 +96,7 @@ function edd_sanitize_amount( $amount = 0 ) {
 	 * @param string $decimal_sep   Default '.'. Decimal separator.
 	 * @param string $thousands_sep Default ','. Thousands separator.
 	 */
-	return apply_filters( 'edd_sanitize_amount', $sanitized, $amount, $decimals, $decimal_sep, $thousands_sep );
+	return apply_filters( 'cs_sanitize_amount', $sanitized, $amount, $decimals, $decimal_sep, $thousands_sep );
 }
 
 /**
@@ -118,12 +118,12 @@ function edd_sanitize_amount( $amount = 0 ) {
  *
  * @return string $amount Newly formatted amount or Price Not Available
  */
-function edd_format_amount( $amount = 0, $decimals = true, $currency = '' ) {
+function cs_format_amount( $amount = 0, $decimals = true, $currency = '' ) {
 	if ( empty( $currency ) ) {
-		$currency = edd_get_currency();
+		$currency = cs_get_currency();
 	}
 
-	$formatter = new \EDD\Currency\Money_Formatter( $amount, new \EDD\Currency\Currency( $currency ) );
+	$formatter = new \CS\Currency\Money_Formatter( $amount, new \CS\Currency\Currency( $currency ) );
 
 	return $formatter->format_for_display( $decimals )->amount;
 }
@@ -141,19 +141,19 @@ function edd_format_amount( $amount = 0, $decimals = true, $currency = '' ) {
  *
  * @return string $currency Currencies displayed correctly
  */
-function edd_currency_filter( $price = '', $currency = '' ) {
+function cs_currency_filter( $price = '', $currency = '' ) {
 
 	// Fallback to default currency
 	if ( empty( $currency ) ) {
-		$currency = edd_get_currency();
+		$currency = cs_get_currency();
 	}
 
-	$currency = new \EDD\Currency\Currency( $currency );
+	$currency = new \CS\Currency\Currency( $currency );
 	if ( '' === $price ) {
 		return $currency->symbol;
 	}
 
-	$formatter = new \EDD\Currency\Money_Formatter( $price, $currency );
+	$formatter = new \CS\Currency\Money_Formatter( $price, $currency );
 
 	return $formatter->apply_symbol();
 }
@@ -169,9 +169,9 @@ function edd_currency_filter( $price = '', $currency = '' ) {
  *
  * @return int $decimals Number of decimal places for currency.
 */
-function edd_currency_decimal_filter( $decimals = 2, $currency = '' ) {
+function cs_currency_decimal_filter( $decimals = 2, $currency = '' ) {
 	$currency = empty( $currency )
-		? edd_get_currency()
+		? cs_get_currency()
 		: $currency;
 
 	switch ( $currency ) {
@@ -183,13 +183,13 @@ function edd_currency_decimal_filter( $decimals = 2, $currency = '' ) {
 			break;
 	}
 
-	return apply_filters( 'edd_currency_decimal_count', $decimals, $currency );
+	return apply_filters( 'cs_currency_decimal_count', $decimals, $currency );
 }
-add_filter( 'edd_sanitize_amount_decimals', 'edd_currency_decimal_filter' );
-add_filter( 'edd_format_amount_decimals',   'edd_currency_decimal_filter', 10, 2 );
+add_filter( 'cs_sanitize_amount_decimals', 'cs_currency_decimal_filter' );
+add_filter( 'cs_format_amount_decimals',   'cs_currency_decimal_filter', 10, 2 );
 
 /**
- * Sanitizes a string key for EDD Settings
+ * Sanitizes a string key for CommerceStore Settings
  *
  * Keys are used as internal identifiers. Alphanumeric characters, dashes,
  * underscores, stops, colons and slashes are allowed.
@@ -201,7 +201,7 @@ add_filter( 'edd_format_amount_decimals',   'edd_currency_decimal_filter', 10, 2
  * @param  string $key String key
  * @return string Sanitized key
  */
-function edd_sanitize_key( $key = '' ) {
+function cs_sanitize_key( $key = '' ) {
 	$raw_key = $key;
 	$key     = preg_replace( '/[^a-zA-Z0-9_\-\.\:\/]/', '', $key );
 
@@ -212,7 +212,7 @@ function edd_sanitize_key( $key = '' ) {
 	 * @param string $key     Sanitized key.
 	 * @param string $raw_key The key prior to sanitization.
 	 */
-	return apply_filters( 'edd_sanitize_key', $key, $raw_key );
+	return apply_filters( 'cs_sanitize_key', $key, $raw_key );
 }
 
 /**
@@ -225,7 +225,7 @@ function edd_sanitize_key( $key = '' ) {
  * @param int $number Default 0.
  * @return int.
  */
-function edd_number_not_negative( $number = 0 ) {
+function cs_number_not_negative( $number = 0 ) {
 
 	// Protect against formatted strings
 	if ( is_string( $number ) ) {
@@ -249,7 +249,7 @@ function edd_number_not_negative( $number = 0 ) {
 	$not_less_than_zero = max( $max_value, $casted_number );
 
 	// Filter & return
-	return (int) apply_filters( 'edd_number_not_negative', $not_less_than_zero, $casted_number, $number );
+	return (int) apply_filters( 'cs_number_not_negative', $not_less_than_zero, $casted_number, $number );
 }
 
 /**
@@ -261,8 +261,8 @@ function edd_number_not_negative( $number = 0 ) {
  *
  * @return array
  */
-function edd_get_allowed_tags() {
-	return (array) apply_filters( 'edd_allowed_html_tags', array(
+function cs_get_allowed_tags() {
+	return (array) apply_filters( 'cs_allowed_html_tags', array(
 		'p'      => array(
 			'class' => array(),
 			'id'    => array(),
@@ -311,11 +311,11 @@ function edd_get_allowed_tags() {
  *
  * @return string              The translatable string for the display type, in lowercase.
  */
-function edd_get_address_type_label( $address_type = 'billing' ) {
+function cs_get_address_type_label( $address_type = 'billing' ) {
 
 	// Core default address types and their labels.
 	$address_type_labels = array(
-		'billing' => __( 'Billing', 'easy-digital-downloads' ),
+		'billing' => __( 'Billing', 'commercestore' ),
 	);
 
 	/**
@@ -327,10 +327,10 @@ function edd_get_address_type_label( $address_type = 'billing' ) {
 	 * @since 3.0
 	 * @param array $address_type_labels
 	 *     Array of the address type labels, in key/value form. The key should match the database entry for the
-	 *         wp_edd_customer_addresses table in the 'type' column. The value of each array entry should be a translatable
+	 *         wp_cs_customer_addresses table in the 'type' column. The value of each array entry should be a translatable
 	 *         string for output in the UI.
 	 */
-	$address_type_labels = apply_filters( 'edd_address_type_labels', $address_type_labels );
+	$address_type_labels = apply_filters( 'cs_address_type_labels', $address_type_labels );
 
 	// Fallback to just applying an upper case to any words not in the filter.
 	return array_key_exists( $address_type, $address_type_labels ) ?

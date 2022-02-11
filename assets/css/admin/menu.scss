@@ -1,7 +1,7 @@
 /**
- * EDD Admin Menu CSS
+ * CommerceStore Admin Menu CSS
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin CSS
  * @copyright   Copyright (c) 2015, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -20,8 +20,8 @@
 
 /* Secondary Separators */
 #adminmenu ul > li:not(:last-child) a[href^="post-new.php?post_type=download"]:after,
-#adminmenu ul > li:not(:last-child) a[href^="edit.php?post_type=download&page=edd-discount"]:after,
-#adminmenu ul > li:not(:last-child) a[href^="edit.php?post_type=download&page=edd-reports"]:after,
+#adminmenu ul > li:not(:last-child) a[href^="edit.php?post_type=download&page=cs-discount"]:after,
+#adminmenu ul > li:not(:last-child) a[href^="edit.php?post_type=download&page=cs-reports"]:after,
 #adminmenu #menu-posts-download ul > li:nth-last-child(2):after {
 	border-bottom: 1px solid rgba(255,255,255,0.2);
 	display: block;

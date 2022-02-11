@@ -3,7 +3,7 @@
 /**
  * Internal dependencies.
  */
-import { NumberFormat } from '@easy-digital-downloads/currency';
+import { NumberFormat } from '@commercestore/currency';
 import { getLabelWithTypeCondition, toolTipBaseConfig } from './utils';
 
 /**

@@ -2,19 +2,19 @@
 /**
  * Customer Email Addresses Schema Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Schemas
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-namespace EDD\Database\Schemas;
+namespace CS\Database\Schemas;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Schema;
+use CS\Database\Schema;
 
 /**
  * Customer Email Addresses Schema Class.

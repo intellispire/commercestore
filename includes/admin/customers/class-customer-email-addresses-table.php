@@ -2,9 +2,9 @@
 /**
  * Customer Email Addresses Table Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
@@ -12,16 +12,16 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Admin\List_Table;
+use CS\Admin\List_Table;
 
 /**
- * EDD_Customer_Email_Addresses_Table Class
+ * CS_Customer_Email_Addresses_Table Class
  *
  * Renders the Customer Reports table
  *
  * @since 3.0
  */
-class EDD_Customer_Email_Addresses_Table extends List_Table {
+class CS_Customer_Email_Addresses_Table extends List_Table {
 
 	/**
 	 * Get things started
@@ -75,12 +75,12 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 
 			case 'type' :
 				$value = ( 'primary' === $item['type'] )
-					? esc_html__( 'Primary',   'easy-digital-downloads' )
-					: esc_html__( 'Secondary', 'easy-digital-downloads' );
+					? esc_html__( 'Primary',   'commercestore' )
+					: esc_html__( 'Secondary', 'commercestore' );
 				break;
 
 			case 'date_created' :
-				$value = '<time datetime="' . esc_attr( $item['date_created'] ) . '">' . edd_date_i18n( $item['date_created'], 'M. d, Y' ) . '<br>' . edd_date_i18n( $item['date_created'], 'H:i' ) . ' ' . edd_get_timezone_abbr() . '</time>';
+				$value = '<time datetime="' . esc_attr( $item['date_created'] ) . '">' . cs_date_i18n( $item['date_created'], 'M. d, Y' ) . '<br>' . cs_date_i18n( $item['date_created'], 'H:i' ) . ' ' . cs_get_timezone_abbr() . '</time>';
 				break;
 
 			default:
@@ -91,7 +91,7 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 		}
 
 		// Filter & return
-		return apply_filters( 'edd_customers_column_' . $column_name, $value, $item['id'] );
+		return apply_filters( 'cs_customers_column_' . $column_name, $value, $item['id'] );
 	}
 
 	/**
@@ -118,39 +118,39 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 			: 0;
 
 		// Link to customer
-		$customer_url = edd_get_admin_url( array(
-			'page' => 'edd-customers',
+		$customer_url = cs_get_admin_url( array(
+			'page' => 'cs-customers',
 			'view' => 'overview',
 			'id'   => $customer_id
 		) );
 
 		// Actions
 		$actions  = array(
-			'view' => '<a href="' . esc_url( $customer_url ) . '">' . __( 'View', 'easy-digital-downloads' ) . '</a>'
+			'view' => '<a href="' . esc_url( $customer_url ) . '">' . __( 'View', 'commercestore' ) . '</a>'
 		);
 
 		// Non-primary email actions
 		if ( empty( $item['type'] ) || 'primary' !== $item['type'] ) {
-			$delete_url = wp_nonce_url( edd_get_admin_url( array(
-				'page'       => 'edd-customers',
+			$delete_url = wp_nonce_url( cs_get_admin_url( array(
+				'page'       => 'cs-customers',
 				'view'       => 'overview',
 				'id'         => urlencode( $customer_id ),
 				'email'      => rawurlencode( $email ),
-				'edd_action' => 'customer-remove-email'
-			) ), 'edd-remove-customer-email' );
-			$actions['delete'] = '<a href="' . esc_url( $delete_url ) . '">' . esc_html__( 'Delete', 'easy-digital-downloads' ) . '</a>';
+				'cs_action' => 'customer-remove-email'
+			) ), 'cs-remove-customer-email' );
+			$actions['delete'] = '<a href="' . esc_url( $delete_url ) . '">' . esc_html__( 'Delete', 'commercestore' ) . '</a>';
 		}
 
 		// State
 		if ( ( ! empty( $status ) && ( $status !== $item_status ) ) || ( $item_status !== 'active' ) ) {
 			switch ( $status ) {
 				case 'pending' :
-					$value = __( 'Pending', 'easy-digital-downloads' );
+					$value = __( 'Pending', 'commercestore' );
 					break;
 				case 'verified' :
 				case '' :
 				default :
-					$value = __( 'Active', 'easy-digital-downloads' );
+					$value = __( 'Active', 'commercestore' );
 					break;
 			}
 
@@ -182,7 +182,7 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 		}
 
 		// Try to get the customer
-		$customer = edd_get_customer( $customer_id );
+		$customer = cs_get_customer( $customer_id );
 
 		// Bail if customer no longer exists
 		if ( empty( $customer ) ) {
@@ -190,8 +190,8 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 		}
 
 		// Link to customer
-		$customer_url = edd_get_admin_url( array(
-			'page'      => 'edd-customers',
+		$customer_url = cs_get_admin_url( array(
+			'page'      => 'cs-customers',
 			'page_type' => 'emails',
 			's'         => 'c:' . absint( $customer_id )
 		) );
@@ -213,14 +213,14 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 	public function column_cb( $item ) {
 		$is_primary         = ! empty( $item['type'] ) && 'primary' === $item['type'];
 		$primary_attributes = $is_primary ? ' disabled' : '';
-		$title              = $is_primary ? __( 'Primary email addresses cannot be deleted.', 'easy-digital-downloads' ) : '';
+		$title              = $is_primary ? __( 'Primary email addresses cannot be deleted.', 'commercestore' ) : '';
 
 		return sprintf(
 			'<input type="checkbox" name="%1$s[]" id="%1$s-%2$s" value="%2$s" title="%4$s"%5$s /><label for="%1$s-%2$s" class="screen-reader-text">%3$s</label>',
 			/*$1%s*/ esc_attr( 'customer' ),
 			/*$2%s*/ esc_attr( $item['id'] ),
 			/* translators: customer email */
-			esc_html( sprintf( __( 'Select %s', 'easy-digital-downloads' ), $item['email'] ) ),
+			esc_html( sprintf( __( 'Select %s', 'commercestore' ), $item['email'] ) ),
 			/*$4%s*/ esc_attr( $title ),
 			/*$5%s*/ $primary_attributes
 		);
@@ -234,7 +234,7 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 	 * @return void
 	 */
 	public function get_counts() {
-		$this->counts = edd_get_customer_email_address_counts();
+		$this->counts = cs_get_customer_email_address_counts();
 	}
 
 	/**
@@ -244,12 +244,12 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 	 * @return array $columns Array of all the list table columns
 	 */
 	public function get_columns() {
-		return apply_filters( 'edd_report_customer_columns', array(
+		return apply_filters( 'cs_report_customer_columns', array(
 			'cb'            => '<input type="checkbox" />',
-			'email'         => __( 'Email',    'easy-digital-downloads' ),
-			'customer'      => __( 'Customer', 'easy-digital-downloads' ),
-			'type'          => __( 'Type',     'easy-digital-downloads' ),
-			'date_created'  => __( 'Date',     'easy-digital-downloads' )
+			'email'         => __( 'Email',    'commercestore' ),
+			'customer'      => __( 'Customer', 'commercestore' ),
+			'type'          => __( 'Type',     'commercestore' ),
+			'date_created'  => __( 'Date',     'commercestore' )
 		) );
 	}
 
@@ -277,7 +277,7 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 	 */
 	public function get_bulk_actions() {
 		return array(
-			'delete' => __( 'Delete', 'easy-digital-downloads' )
+			'delete' => __( 'Delete', 'commercestore' )
 		);
 	}
 
@@ -308,7 +308,7 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 		 * Only non-primary email addresses can be deleted, so we're building up a safelist using the provided
 		 * IDs. Each ID will be matched against this prior to deletion.
 		 */
-		$non_primary_address_ids = edd_get_customer_email_addresses( array(
+		$non_primary_address_ids = cs_get_customer_email_addresses( array(
 			'id__in'       => $ids,
 			'type__not_in' => array( 'primary' ),
 			'fields'       => 'id'
@@ -318,7 +318,7 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 			switch ( $this->current_action() ) {
 				case 'delete' :
 					if ( in_array( $id, $non_primary_address_ids ) ) {
-						edd_delete_customer_email_address( $id );
+						cs_delete_customer_email_address( $id );
 					}
 					break;
 			}
@@ -359,7 +359,7 @@ class EDD_Customer_Email_Addresses_Table extends List_Table {
 		$this->args = $this->parse_pagination_args( $args );
 
 		// Get the data
-		$emails = edd_get_customer_email_addresses( $this->args );
+		$emails = cs_get_customer_email_addresses( $this->args );
 
 		if ( ! empty( $emails ) ) {
 			foreach ( $emails as $customer ) {

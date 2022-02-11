@@ -4,9 +4,9 @@
  *
  * This class handles sales and earnings export on a day-by-day basis.
  *
- * @package    EDD
+ * @package    CS
  * @subpackage Admin/Reporting/Export
- * @copyright  Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright  Copyright (c) 2018, CommerceStore, LLC
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since      3.0
  */
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Payments_Export Class
+ * CS_Batch_Payments_Export Class
  *
  * @since 2.4
  */
-class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
+class CS_Batch_Sales_And_Earnings_Export extends CS_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions.
@@ -56,9 +56,9 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'date'     => __( 'Date', 'easy-digital-downloads' ),
-			'sales'    => __( 'Sales', 'easy-digital-downloads' ),
-			'earnings' => __( 'Earnings', 'easy-digital-downloads' ),
+			'date'     => __( 'Date', 'commercestore' ),
+			'sales'    => __( 'Sales', 'commercestore' ),
+			'earnings' => __( 'Earnings', 'commercestore' ),
 		);
 
 		return $cols;
@@ -81,24 +81,24 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 			'offset' => ( $this->step * 30 ) - 30,
 		);
 
-		$status         = "AND {$wpdb->edd_orders}.status IN ( '" . implode( "', '", $wpdb->_escape( array( 'complete', 'revoked' ) ) ) . "' )";
+		$status         = "AND {$wpdb->cs_orders}.status IN ( '" . implode( "', '", $wpdb->_escape( array( 'complete', 'revoked' ) ) ) . "' )";
 		$date_query_sql = '';
 
 		// Customer ID.
 		$customer_id = ! empty( $this->customer_id )
-			? $wpdb->prepare( "AND {$wpdb->edd_orders}.customer_id = %d", $this->customer_id )
+			? $wpdb->prepare( "AND {$wpdb->cs_orders}.customer_id = %d", $this->customer_id )
 			: '';
 
 		// Download ID.
 		$download_id = ! empty( $this->download_id )
-			? $wpdb->prepare( "AND {$wpdb->edd_order_items}.product_id = %d", $this->download_id )
+			? $wpdb->prepare( "AND {$wpdb->cs_order_items}.product_id = %d", $this->download_id )
 			: '';
 
 		// Generate date query SQL if dates have been set.
 		if ( ! empty( $this->start ) || ! empty( $this->end ) ) {
 
 			// Fetch GMT offset.
-			$offset = EDD()->utils->get_gmt_offset();
+			$offset = CS()->utils->get_gmt_offset();
 
 			$date_query_sql = 'AND ';
 
@@ -106,10 +106,10 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 				$this->start = date( 'Y-m-d 00:00:00', strtotime( $this->start ) );
 
 				$this->start = 0 < $offset
-					? EDD()->utils->date( $this->start )->subSeconds( $offset )->format( 'mysql' )
-					: EDD()->utils->date( $this->start )->addSeconds( $offset )->format( 'mysql' );
+					? CS()->utils->date( $this->start )->subSeconds( $offset )->format( 'mysql' )
+					: CS()->utils->date( $this->start )->addSeconds( $offset )->format( 'mysql' );
 
-				$date_query_sql .= $wpdb->prepare( "{$wpdb->edd_orders}.date_created >= %s", $this->start );
+				$date_query_sql .= $wpdb->prepare( "{$wpdb->cs_orders}.date_created >= %s", $this->start );
 			}
 
 			// Join dates with `AND` if start and end date set.
@@ -117,14 +117,14 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 				$this->end = date( 'Y-m-d 23:59:59', strtotime( $this->end ) );
 
 				$this->end = 0 < $offset
-					? EDD()->utils->date( $this->end )->addSeconds( $offset )->format( 'mysql' )
-					: EDD()->utils->date( $this->end )->subSeconds( $offset )->format( 'mysql' );
+					? CS()->utils->date( $this->end )->addSeconds( $offset )->format( 'mysql' )
+					: CS()->utils->date( $this->end )->subSeconds( $offset )->format( 'mysql' );
 
 				$date_query_sql .= ' AND ';
 			}
 
 			if ( ! empty( $this->end ) ) {
-				$date_query_sql .= $wpdb->prepare( "{$wpdb->edd_orders}.date_created <= %s", $this->end );
+				$date_query_sql .= $wpdb->prepare( "{$wpdb->cs_orders}.date_created <= %s", $this->end );
 			}
 		}
 
@@ -132,7 +132,7 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 		if ( 0 === $this->download_id ) {
 			$sql = "
 				SELECT COUNT(id) AS sales, SUM(total) AS earnings, date_created
-				FROM {$wpdb->edd_orders}
+				FROM {$wpdb->cs_orders}
 				WHERE 1=1 {$status} {$customer_id} {$date_query_sql}
 				GROUP BY YEAR(date_created), MONTH(date_created), DAY(date_created)
 	            ORDER BY YEAR(date_created), MONTH(date_created), DAY(date_created) ASC
@@ -142,12 +142,12 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 		// Join orders and order items table.
 		} else {
 			$sql = "
-				SELECT SUM({$wpdb->edd_order_items}.quantity) AS sales, SUM({$wpdb->edd_order_items}.total) AS earnings, {$wpdb->edd_orders}.date_created
-				FROM {$wpdb->edd_orders}
-				INNER JOIN {$wpdb->edd_order_items} ON {$wpdb->edd_orders}.id = {$wpdb->edd_order_items}.order_id
+				SELECT SUM({$wpdb->cs_order_items}.quantity) AS sales, SUM({$wpdb->cs_order_items}.total) AS earnings, {$wpdb->cs_orders}.date_created
+				FROM {$wpdb->cs_orders}
+				INNER JOIN {$wpdb->cs_order_items} ON {$wpdb->cs_orders}.id = {$wpdb->cs_order_items}.order_id
 				WHERE 1=1 {$status} {$download_id} {$date_query_sql}
-				GROUP BY YEAR({$wpdb->edd_orders}.date_created), MONTH({$wpdb->edd_orders}.date_created), DAY({$wpdb->edd_orders}.date_created)
-	            ORDER BY YEAR({$wpdb->edd_orders}.date_created), MONTH({$wpdb->edd_orders}.date_created), DAY({$wpdb->edd_orders}.date_created) ASC
+				GROUP BY YEAR({$wpdb->cs_orders}.date_created), MONTH({$wpdb->cs_orders}.date_created), DAY({$wpdb->cs_orders}.date_created)
+	            ORDER BY YEAR({$wpdb->cs_orders}.date_created), MONTH({$wpdb->cs_orders}.date_created), DAY({$wpdb->cs_orders}.date_created) ASC
 	            LIMIT {$args['offset']}, {$args['number']}
 			";
 		}
@@ -157,14 +157,14 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 		foreach ( $results as $result ) {
 
 			// Localize the returned time.
-			$d = EDD()->utils->date( $result->date_created, null, true )->format( 'date' );
+			$d = CS()->utils->date( $result->date_created, null, true )->format( 'date' );
 
 			$sales = isset( $result->sales )
 				? absint( $result->sales )
 				: 0;
 
 			$earnings = isset( $result->earnings )
-				? edd_format_amount( $result->earnings )
+				? cs_format_amount( $result->earnings )
 				: floatval( 0 );
 
 			$data[] = array(
@@ -174,8 +174,8 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 			);
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return $data;
 	}
@@ -197,7 +197,7 @@ class EDD_Batch_Sales_And_Earnings_Export extends EDD_Batch_Export {
 			$args['date_query'] = $this->get_date_query();
 		}
 
-		$total = edd_count_orders( $args );
+		$total = cs_count_orders( $args );
 		$percentage = 100;
 
 		if ( $total > 0 ) {

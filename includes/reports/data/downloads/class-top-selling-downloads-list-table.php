@@ -2,20 +2,20 @@
 /**
  * Top Selling Downloads list table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports/Data/File_Downloads
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\Downloads;
+namespace CS\Reports\Data\Downloads;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Stats as Stats;
-use EDD\Reports as Reports;
-use EDD\Admin\List_Table;
+use CS\Stats as Stats;
+use CS\Reports as Reports;
+use CS\Admin\List_Table;
 
 /**
  * Top_Selling_Downloads_List_Table class.
@@ -52,10 +52,10 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'name'           => __( 'Name', 'easy-digital-downloads' ),
-			'price'          => __( 'Price', 'easy-digital-downloads' ),
-			'sales'          => __( 'Sales', 'easy-digital-downloads' ),
-			'earnings'       => __( 'Earnings', 'easy-digital-downloads' ),
+			'name'           => __( 'Name', 'commercestore' ),
+			'price'          => __( 'Price', 'commercestore' ),
+			'sales'          => __( 'Sales', 'commercestore' ),
+			'earnings'       => __( 'Earnings', 'commercestore' ),
 		);
 	}
 
@@ -68,14 +68,14 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 	 * @return string Data shown in the Name column.
 	 */
 	public function column_name( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
 		// Check for variable pricing
 		$retval = ! empty( $download->price_id )
-			? edd_get_download_name( $download->object->ID, $download->price_id )
-			: edd_get_download_name( $download->object->ID );
+			? cs_get_download_name( $download->object->ID, $download->price_id )
+			: cs_get_download_name( $download->object->ID );
 
 		return $retval;
 	}
@@ -89,20 +89,20 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 	 * @return string Data shown in the Price column.
 	 */
 	public function column_price( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
 		// Check for variable pricing
 		$retval = ! empty( $download->price_id )
-			? edd_price( $download->object->ID, false, $download->price_id )
-			: edd_price( $download->object->ID, false );
+			? cs_price( $download->object->ID, false, $download->price_id )
+			: cs_price( $download->object->ID, false );
 
 		return $retval;
 	}
 
 	public function column_sales( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
@@ -112,12 +112,12 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 	}
 
 	public function column_earnings( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
 		return current_user_can( 'view_product_stats', $download->object->ID )
-			? edd_currency_filter( edd_format_amount( $download->total ) )
+			? cs_currency_filter( cs_format_amount( $download->total ) )
 			: '&mdash;';
 	}
 
@@ -143,7 +143,7 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 	 * @return string
 	 */
 	public function get_base_url() {
-		return remove_query_arg( edd_admin_removable_query_args(), edd_get_admin_base_url() );
+		return remove_query_arg( cs_admin_removable_query_args(), cs_get_admin_base_url() );
 	}
 
 	/**
@@ -152,7 +152,7 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function no_items() {
-		esc_html_e( 'No downloads found.', 'easy-digital-downloads' );
+		esc_html_e( 'No downloads found.', 'commercestore' );
 	}
 
 	/**

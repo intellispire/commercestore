@@ -1,18 +1,18 @@
-/* global eddPayPalVars, edd_global_vars */
+/* global csPayPalVars, cs_global_vars */
 
-var EDD_PayPal = {
+var CS_PayPal = {
 	isMounted: false,
 
 	/**
 	 * Initializes PayPal buttons and sets up some events.
 	 */
 	init: function() {
-		if ( document.getElementById( 'edd-paypal-container' ) ) {
-			this.initButtons( '#edd-paypal-container', 'checkout' );
+		if ( document.getElementById( 'cs-paypal-container' ) ) {
+			this.initButtons( '#cs-paypal-container', 'checkout' );
 		}
 
-		jQuery( document.body ).on( 'edd_discount_applied', this.maybeRefreshPage );
-		jQuery( document.body ).on( 'edd_discount_removed', this.maybeRefreshPage );
+		jQuery( document.body ).on( 'cs_discount_applied', this.maybeRefreshPage );
+		jQuery( document.body ).on( 'cs_discount_removed', this.maybeRefreshPage );
 	},
 
 	/**
@@ -21,12 +21,12 @@ var EDD_PayPal = {
 	 */
 	isPayPal: function() {
 		var chosenGateway = false;
-		if ( jQuery('select#edd-gateway, input.edd-gateway').length ) {
-			chosenGateway = jQuery("meta[name='edd-chosen-gateway']").attr('content');
+		if ( jQuery('select#cs-gateway, input.cs-gateway').length ) {
+			chosenGateway = jQuery("meta[name='cs-chosen-gateway']").attr('content');
 		}
 
-		if ( ! chosenGateway && edd_scripts.default_gateway ) {
-			chosenGateway = edd_scripts.default_gateway;
+		if ( ! chosenGateway && cs_scripts.default_gateway ) {
+			chosenGateway = cs_scripts.default_gateway;
 		}
 
 		return 'paypal_commerce' === chosenGateway;
@@ -39,9 +39,9 @@ var EDD_PayPal = {
 	 * @param {object} data
 	 */
 	maybeRefreshPage: function( e, data ) {
-		if ( 0 === data.total_plain && EDD_PayPal.isPayPal() ) {
+		if ( 0 === data.total_plain && CS_PayPal.isPayPal() ) {
 			window.location.reload();
-		} else if ( ! EDD_PayPal.isMounted && EDD_PayPal.isPayPal() && data.total_plain > 0 ) {
+		} else if ( ! CS_PayPal.isMounted && CS_PayPal.isPayPal() && data.total_plain > 0 ) {
 			window.location.reload();
 		}
 	},
@@ -56,23 +56,23 @@ var EDD_PayPal = {
 	setErrorHtml: function( container, context, errorHtml ) {
 		// Format errors.
 
-		if ( 'checkout' === context && 'undefined' !== typeof edd_global_vars && edd_global_vars.checkout_error_anchor ) {
+		if ( 'checkout' === context && 'undefined' !== typeof cs_global_vars && cs_global_vars.checkout_error_anchor ) {
 			// Checkout errors.
-			var errorWrapper = document.getElementById( 'edd-paypal-errors-wrap' );
+			var errorWrapper = document.getElementById( 'cs-paypal-errors-wrap' );
 			if ( errorWrapper ) {
 				errorWrapper.innerHTML = errorHtml;
 			}
 		} else if ( 'buy_now' === context ) {
 			// Buy Now errors
-			var form = container.closest( '.edd_download_purchase_form' );
-			var errorWrapper = form ? form.querySelector( '.edd-paypal-checkout-buy-now-error-wrapper' ) : false;
+			var form = container.closest( '.cs_download_purchase_form' );
+			var errorWrapper = form ? form.querySelector( '.cs-paypal-checkout-buy-now-error-wrapper' ) : false;
 
 			if ( errorWrapper ) {
 				errorWrapper.innerHTML = errorHtml;
 			}
 		}
 
-		jQuery( document.body ).trigger( 'edd_checkout_error', [ errorHtml ] );
+		jQuery( document.body ).trigger( 'cs_checkout_error', [ errorHtml ] );
 	},
 
 	/**
@@ -82,11 +82,11 @@ var EDD_PayPal = {
 	 * @param {string} context   Context for the button. Either `checkout` or `buy_now`.
 	 */
 	initButtons: function( container, context ) {
-		EDD_PayPal.isMounted = true;
+		CS_PayPal.isMounted = true;
 
-		paypal.Buttons( EDD_PayPal.getButtonArgs( container, context ) ).render( container );
+		paypal.Buttons( CS_PayPal.getButtonArgs( container, context ) ).render( container );
 
-		document.dispatchEvent( new CustomEvent( 'edd_paypal_buttons_mounted' ) );
+		document.dispatchEvent( new CustomEvent( 'cs_paypal_buttons_mounted' ) );
 	},
 
 	/**
@@ -96,18 +96,18 @@ var EDD_PayPal = {
 	 * @param {string} context   Context for the button. Either `checkout` or `buy_now`.
 	 */
 	getButtonArgs: function ( container, context ) {
-		var form = ( 'checkout' === context ) ? document.getElementById( 'edd_purchase_form' ) : container.closest( '.edd_download_purchase_form' );
-		var errorWrapper = ( 'checkout' === context ) ? form.querySelector( '#edd-paypal-errors-wrap' ) : form.querySelector( '.edd-paypal-checkout-buy-now-error-wrapper' );
-		var spinner = ( 'checkout' === context ) ? document.getElementById( 'edd-paypal-spinner' ) : form.querySelector( '.edd-paypal-spinner' );
-		var nonceEl = form.querySelector( 'input[name="edd_process_paypal_nonce"]' );
-		var tokenEl = form.querySelector( 'input[name="edd-process-paypal-token"]' );
-		var createFunc = ( 'subscription' === eddPayPalVars.intent ) ? 'createSubscription' : 'createOrder';
+		var form = ( 'checkout' === context ) ? document.getElementById( 'cs_purchase_form' ) : container.closest( '.cs_download_purchase_form' );
+		var errorWrapper = ( 'checkout' === context ) ? form.querySelector( '#cs-paypal-errors-wrap' ) : form.querySelector( '.cs-paypal-checkout-buy-now-error-wrapper' );
+		var spinner = ( 'checkout' === context ) ? document.getElementById( 'cs-paypal-spinner' ) : form.querySelector( '.cs-paypal-spinner' );
+		var nonceEl = form.querySelector( 'input[name="cs_process_paypal_nonce"]' );
+		var tokenEl = form.querySelector( 'input[name="cs-process-paypal-token"]' );
+		var createFunc = ( 'subscription' === csPayPalVars.intent ) ? 'createSubscription' : 'createOrder';
 
 		var buttonArgs = {
 			onApprove: function( data, actions ) {
 				var formData = new FormData();
-				formData.append( 'action', eddPayPalVars.approvalAction );
-				formData.append( 'edd_process_paypal_nonce', nonceEl.value );
+				formData.append( 'action', csPayPalVars.approvalAction );
+				formData.append( 'cs_process_paypal_nonce', nonceEl.value );
 				formData.append( 'token', tokenEl.getAttribute('data-token') );
 				formData.append( 'timestamp', tokenEl.getAttribute('data-timestamp' ) );
 
@@ -118,7 +118,7 @@ var EDD_PayPal = {
 					formData.append( 'paypal_subscription_id', data.subscriptionID );
 				}
 
-				return fetch( edd_scripts.ajaxurl, {
+				return fetch( cs_scripts.ajaxurl, {
 					method: 'POST',
 					body: formData
 				} ).then( function( response ) {
@@ -130,9 +130,9 @@ var EDD_PayPal = {
 						// Hide spinner.
 						spinner.style.display = 'none';
 
-						var errorHtml = responseData.data.message ? responseData.data.message : eddPayPalVars.defaultError;
+						var errorHtml = responseData.data.message ? responseData.data.message : csPayPalVars.defaultError;
 
-						EDD_PayPal.setErrorHtml( container, context, errorHtml );
+						CS_PayPal.setErrorHtml( container, context, errorHtml );
 
 						// @link https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
 						if ( responseData.data.retry ) {
@@ -146,15 +146,15 @@ var EDD_PayPal = {
 				spinner.style.display = 'none';
 
 				error.name = '';
-				EDD_PayPal.setErrorHtml( container, context, error );
+				CS_PayPal.setErrorHtml( container, context, error );
 			},
 			onCancel: function( data ) {
 				// Hide spinner.
 				spinner.style.display = 'none';
 
 				const formData = new FormData();
-				formData.append( 'action', 'edd_cancel_paypal_order' );
-				return fetch( edd_scripts.ajaxurl, {
+				formData.append( 'action', 'cs_cancel_paypal_order' );
+				return fetch( cs_scripts.ajaxurl, {
 					method: 'POST',
 					body: formData
 				} ).then( function ( response ) {
@@ -163,7 +163,7 @@ var EDD_PayPal = {
 					if ( responseData.success ) {
 						const nonces = responseData.data.nonces;
 						Object.keys( nonces ).forEach( function ( key ) {
-							document.getElementById( 'edd-gateway-' + key ).setAttribute( 'data-' + key + '-nonce', nonces[ key ] );
+							document.getElementById( 'cs-gateway-' + key ).setAttribute( 'data-' + key + '-nonce', nonces[ key ] );
 						} );
 					}
 				} );
@@ -175,8 +175,8 @@ var EDD_PayPal = {
 		 *
 		 * @link https://developer.paypal.com/docs/checkout/integration-features/customize-button/
 		 */
-		if ( eddPayPalVars.style ) {
-			buttonArgs.style = eddPayPalVars.style;
+		if ( csPayPalVars.style ) {
+			buttonArgs.style = csPayPalVars.style;
 		}
 
 		/*
@@ -193,7 +193,7 @@ var EDD_PayPal = {
 			}
 
 			// Submit the form via AJAX.
-			return fetch( edd_scripts.ajaxurl, {
+			return fetch( cs_scripts.ajaxurl, {
 				method: 'POST',
 				body: new FormData( form )
 			} ).then( function( response ) {
@@ -215,7 +215,7 @@ var EDD_PayPal = {
 					return orderData.data.paypal_order_id;
 				} else {
 					// Error message.
-					var errorHtml = eddPayPalVars.defaultError;
+					var errorHtml = csPayPalVars.defaultError;
 					if ( orderData.data && 'string' === typeof orderData.data ) {
 						errorHtml = orderData.data;
 					} else if ( 'string' === typeof orderData ) {
@@ -236,27 +236,27 @@ var EDD_PayPal = {
 /**
  * Initialize on checkout.
  */
-jQuery( document.body ).on( 'edd_gateway_loaded', function( e, gateway ) {
+jQuery( document.body ).on( 'cs_gateway_loaded', function( e, gateway ) {
 	if ( 'paypal_commerce' !== gateway ) {
 		return;
 	}
 
-	EDD_PayPal.init();
+	CS_PayPal.init();
 } );
 
 /**
  * Initialize Buy Now buttons.
  */
 jQuery( document ).ready( function( $ ) {
-	var buyButtons = document.querySelectorAll( '.edd-paypal-checkout-buy-now' );
+	var buyButtons = document.querySelectorAll( '.cs-paypal-checkout-buy-now' );
 	for ( var i = 0; i < buyButtons.length; i++ ) {
 		var element = buyButtons[ i ];
 		// Skip if "Free Downloads" is enabled for this download.
-		if ( element.classList.contains( 'edd-free-download' ) ) {
+		if ( element.classList.contains( 'cs-free-download' ) ) {
 			continue;
 		}
 
-		var wrapper = element.closest( '.edd_purchase_submit_wrapper' );
+		var wrapper = element.closest( '.cs_purchase_submit_wrapper' );
 		if ( ! wrapper ) {
 			continue;
 		}
@@ -266,16 +266,16 @@ jQuery( document ).ready( function( $ ) {
 
 		// Add error container after the wrapper.
 		var errorNode = document.createElement( 'div' );
-		errorNode.classList.add( 'edd-paypal-checkout-buy-now-error-wrapper' );
+		errorNode.classList.add( 'cs-paypal-checkout-buy-now-error-wrapper' );
 		wrapper.before( errorNode );
 
 		// Add spinner container.
 		var spinnerWrap = document.createElement( 'span' );
-		spinnerWrap.classList.add( 'edd-paypal-spinner', 'edd-loading-ajax', 'edd-loading' );
+		spinnerWrap.classList.add( 'cs-paypal-spinner', 'cs-loading-ajax', 'cs-loading' );
 		spinnerWrap.style.display = 'none';
 		wrapper.after( spinnerWrap );
 
 		// Initialize button.
-		EDD_PayPal.initButtons( wrapper, 'buy_now' );
+		CS_PayPal.initButtons( wrapper, 'buy_now' );
 	}
 } );

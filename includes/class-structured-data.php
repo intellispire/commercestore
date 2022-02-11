@@ -2,19 +2,19 @@
 /**
  * Structured Data Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  StructuredData
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD;
+namespace CS;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Structured_Data Class.
+ * CS_Structured_Data Class.
  *
  * @since 3.0
  */
@@ -103,10 +103,10 @@ class Structured_Data {
 		 *
 		 * @since 3.0
 		 *
-		 * @param EDD_Structured_Data Instance of the object.
+		 * @param CS_Structured_Data Instance of the object.
 		 * @param mixed string|bool $context Context.
 		 */
-		do_action( 'edd_generate_structured_data', $this, $context );
+		do_action( 'cs_generate_structured_data', $this, $context );
 	}
 
 	/**
@@ -115,16 +115,16 @@ class Structured_Data {
 	 * @access public
 	 * @since 3.0
 	 *
-	 * @param mixed int|EDD_Download Download ID or EDD_Download object to generate data for.
+	 * @param mixed int|CS_Download Download ID or CS_Download object to generate data for.
 	 *
 	 * @return bool True if data generated successfully, false otherwise.
 	 */
 	public function generate_download_data( $download = false ) {
 		if ( false === $download || is_null( $download ) ) {
 			global $post;
-			$download = edd_get_download( $post->ID );
+			$download = cs_get_download( $post->ID );
 		} elseif ( is_int( $download ) ) {
-			$download = edd_get_download( $download );
+			$download = cs_get_download( $download );
 		} else {
 			return false;
 		}
@@ -163,7 +163,7 @@ class Structured_Data {
 				$offers[] = array(
 					'@type'           => 'Offer',
 					'price'           => $price['amount'],
-					'priceCurrency'   => edd_get_currency(),
+					'priceCurrency'   => cs_get_currency(),
 					'priceValidUntil' => date( 'c', time() + YEAR_IN_SECONDS ),
 					'itemOffered'     => $data['name'] . ' - ' . $price['name'],
 					'url'             => $data['url'],
@@ -180,7 +180,7 @@ class Structured_Data {
 			$data['offers'] = array(
 				'@type'           => 'Offer',
 				'price'           => $download->get_price(),
-				'priceCurrency'   => edd_get_currency(),
+				'priceCurrency'   => cs_get_currency(),
 				'priceValidUntil' => null,
 				'url'             => $data['url'],
 				'availability'    => 'http://schema.org/InStock',
@@ -204,7 +204,7 @@ class Structured_Data {
 		 *
 		 * @param array $data Structured data for a download.
 		 */
-		$data = apply_filters( 'edd_generate_download_structured_data', $data );
+		$data = apply_filters( 'cs_generate_download_structured_data', $data );
 
 		$this->set_data( $data );
 

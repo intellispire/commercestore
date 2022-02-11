@@ -1,7 +1,7 @@
 /**
  * Customer management screen JS
  */
-var EDD_Customer = {
+var CS_Customer = {
 
 	vars: {
 		customer_card_wrap_editable: $( '#edit-customer-info .editable' ),
@@ -21,8 +21,8 @@ var EDD_Customer = {
 		$( document.body ).on( 'click', '#edit-customer', function( e ) {
 			e.preventDefault();
 
-			EDD_Customer.vars.customer_card_wrap_editable.hide();
-			EDD_Customer.vars.customer_card_wrap_edit_item.show().css( 'display', 'block' );
+			CS_Customer.vars.customer_card_wrap_editable.hide();
+			CS_Customer.vars.customer_card_wrap_edit_item.show().css( 'display', 'block' );
 		} );
 	},
 	add_email: function() {
@@ -35,7 +35,7 @@ var EDD_Customer = {
 				primary = wrapper.find( 'input[name="make-additional-primary"]' ).is( ':checked' ),
 				nonce = wrapper.find( 'input[name="add_email_nonce"]' ).val(),
 				postData = {
-					edd_action: 'customer-add-email',
+					cs_action: 'customer-add-email',
 					customer_id: customer_id,
 					email: email,
 					primary: primary,
@@ -61,20 +61,20 @@ var EDD_Customer = {
 	},
 	user_search: function() {
 		// Upon selecting a user from the dropdown, we need to update the User ID
-		$( document.body ).on( 'click.eddSelectUser', '.edd_user_search_results a', function( e ) {
+		$( document.body ).on( 'click.eddSelectUser', '.cs_user_search_results a', function( e ) {
 			e.preventDefault();
 			const user_id = $( this ).data( 'userid' );
-			EDD_Customer.vars.user_id.val( user_id );
+			CS_Customer.vars.user_id.val( user_id );
 		} );
 	},
 	remove_user: function() {
 		$( document.body ).on( 'click', '#disconnect-customer', function( e ) {
 			e.preventDefault();
 
-			if ( confirm( edd_vars.disconnect_customer ) ) {
+			if ( confirm( cs_vars.disconnect_customer ) ) {
 				const customer_id = $( 'input[name="customerinfo[id]"]' ).val(),
 					postData = {
-						edd_action: 'disconnect-userid',
+						cs_action: 'disconnect-userid',
 						customer_id: customer_id,
 						_wpnonce: $( '#edit-customer-info #_wpnonce' ).val(),
 					};
@@ -87,12 +87,12 @@ var EDD_Customer = {
 		} );
 	},
 	cancel_edit: function() {
-		$( document.body ).on( 'click', '#edd-edit-customer-cancel', function( e ) {
+		$( document.body ).on( 'click', '#cs-edit-customer-cancel', function( e ) {
 			e.preventDefault();
-			EDD_Customer.vars.customer_card_wrap_edit_item.hide();
-			EDD_Customer.vars.customer_card_wrap_editable.show();
+			CS_Customer.vars.customer_card_wrap_edit_item.hide();
+			CS_Customer.vars.customer_card_wrap_editable.show();
 
-			$( '.edd_user_search_results' ).html( '' );
+			$( '.cs_user_search_results' ).html( '' );
 		} );
 	},
 	change_country: function() {
@@ -100,7 +100,7 @@ var EDD_Customer = {
 			const select = $( this ),
 				state_input = $( ':input[name="customerinfo[region]"]' ),
 				data = {
-					action: 'edd_get_shop_states',
+					action: 'cs_get_shop_states',
 					country: select.val(),
 					nonce: select.data( 'nonce' ),
 					field_name: 'customerinfo[region]',
@@ -109,7 +109,7 @@ var EDD_Customer = {
 			$.post( ajaxurl, data, function( response ) {
 				console.log( response );
 				if ( 'nostates' === response ) {
-					state_input.replaceWith( '<input type="text" name="' + data.field_name + '" value="" class="edd-edit-toggles medium-text"/>' );
+					state_input.replaceWith( '<input type="text" name="' + data.field_name + '" value="" class="cs-edit-toggles medium-text"/>' );
 				} else {
 					state_input.replaceWith( response );
 				}
@@ -119,9 +119,9 @@ var EDD_Customer = {
 		} );
 	},
 	delete_checked: function() {
-		$( '#edd-customer-delete-confirm' ).change( function() {
-			const records_input = $( '#edd-customer-delete-records' );
-			const submit_button = $( '#edd-delete-customer' );
+		$( '#cs-customer-delete-confirm' ).change( function() {
+			const records_input = $( '#cs-customer-delete-records' );
+			const submit_button = $( '#cs-delete-customer' );
 
 			if ( $( this ).prop( 'checked' ) ) {
 				records_input.attr( 'disabled', false );
@@ -136,5 +136,5 @@ var EDD_Customer = {
 };
 
 jQuery( document ).ready( function( $ ) {
-	EDD_Customer.init();
+	CS_Customer.init();
 } );

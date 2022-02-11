@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class EDD_Helper_Discount.
+ * Class CS_Helper_Discount.
  *
  * Helper class to create and delete a discount easily.
  */
-class EDD_Helper_Discount extends WP_UnitTestCase {
+class CS_Helper_Discount extends WP_UnitTestCase {
 
 	/**
 	 * Delete a discount.
@@ -15,7 +15,7 @@ class EDD_Helper_Discount extends WP_UnitTestCase {
 	 * @param int $discount_id ID of the discount to delete.
 	 */
 	public static function delete_discount( $discount_id ) {
-		edd_delete_discount( $discount_id );
+		cs_delete_discount( $discount_id );
 	}
 
 	/**
@@ -24,7 +24,7 @@ class EDD_Helper_Discount extends WP_UnitTestCase {
 	 * @since 2.3
 	 */
 	public static function create_simple_percent_discount() {
-		return edd_add_discount( array(
+		return cs_add_discount( array(
 			'name'              => '20 Percent Off',
 			'code'              => '20OFF',
 			'status'            => 'active',
@@ -45,7 +45,7 @@ class EDD_Helper_Discount extends WP_UnitTestCase {
 	 * @since 2.3
 	 */
 	public static function create_simple_negative_percent_discount() {
-		return edd_add_discount( array(
+		return cs_add_discount( array(
 			'name'              => 'Double Double',
 			'code'              => 'DOUBLE',
 			'status'            => 'active',
@@ -66,7 +66,7 @@ class EDD_Helper_Discount extends WP_UnitTestCase {
 	 * @since 2.3
 	 */
 	public static function create_simple_flat_discount() {
-		return edd_add_discount( array(
+		return cs_add_discount( array(
 			'name'              => '$10 Off',
 			'code'              => '10FLAT',
 			'type'              => 'flat',
@@ -87,7 +87,7 @@ class EDD_Helper_Discount extends WP_UnitTestCase {
 	 * @since 3.0
 	 */
 	public static function created_expired_flat_discount() {
-		return edd_add_discount( array(
+		return cs_add_discount( array(
 			'name'              => '$20 Off',
 			'code'              => '20FLAT',
 			'type'              => 'flat',
@@ -110,7 +110,7 @@ class EDD_Helper_Discount extends WP_UnitTestCase {
 	public static function create_legacy_discount() {
 
 		$discount_id = wp_insert_post( array(
-			'post_type'   => 'edd_discount',
+			'post_type'   => 'cs_discount',
 			'post_title'  => 'Legacy Discount',
 			'post_status' => 'active'
 		) );
@@ -132,13 +132,13 @@ class EDD_Helper_Discount extends WP_UnitTestCase {
 			'is_single_use'     => true
 		);
 
-		remove_filter( 'add_post_metadata', array( 'EDD\Compat\Discount', 'update_post_metadata' ), 99 );
+		remove_filter( 'add_post_metadata', array( 'CS\Compat\Discount', 'update_post_metadata' ), 99 );
 
 		foreach( $meta as $key => $value ) {
-			add_post_meta( $discount_id, '_edd_discount_' . $key, $value );
+			add_post_meta( $discount_id, '_cs_discount_' . $key, $value );
 		}
 
-		$compat = new EDD\Compat\Discount();
+		$compat = new CS\Compat\Discount();
 
 		add_filter( 'add_post_metadata', array( $compat, 'update_post_metadata' ), 99, 5 );
 

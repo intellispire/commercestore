@@ -3,12 +3,12 @@
  * 3.0 Data Migration - Base.
  *
  * @subpackage  Admin/Upgrades/v3
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 3.0
  */
-class Base extends \EDD_Batch_Export {
+class Base extends \CS_Batch_Export {
 
 	/**
 	 * Orders.
@@ -113,8 +113,8 @@ class Base extends \EDD_Batch_Export {
 	public function process_step() {
 		if ( ! $this->can_export() ) {
 			wp_die(
-				esc_html__( 'You do not have permission to run this upgrade.', 'easy-digital-downloads' ),
-				esc_html__( 'Error', 'easy-digital-downloads' ),
+				esc_html__( 'You do not have permission to run this upgrade.', 'commercestore' ),
+				esc_html__( 'Error', 'commercestore' ),
 				array(
 					'response' => 403,
 				)
@@ -126,13 +126,13 @@ class Base extends \EDD_Batch_Export {
 		if ( $had_data ) {
 			$this->done = false;
 			// Save the *next* step to do.
-			update_option( sprintf( 'edd_v3_migration_%s_step', sanitize_key( $this->upgrade ) ), $this->step + 1 );
+			update_option( sprintf( 'cs_v3_migration_%s_step', sanitize_key( $this->upgrade ) ), $this->step + 1 );
 			return true;
 		} else {
 			$this->done    = true;
 			$this->message = $this->completed_message;
-			edd_set_upgrade_complete( $this->upgrade );
-			delete_option( sprintf( 'edd_v3_migration_%s_step', sanitize_key( $this->upgrade ) ) );
+			cs_set_upgrade_complete( $this->upgrade );
+			delete_option( sprintf( 'cs_v3_migration_%s_step', sanitize_key( $this->upgrade ) ) );
 			return false;
 		}
 	}
@@ -143,7 +143,7 @@ class Base extends \EDD_Batch_Export {
 	 * @since 3.0
 	 */
 	public function headers() {
-		edd_set_time_limit();
+		cs_set_time_limit();
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Base extends \EDD_Batch_Export {
 		// Set headers.
 		$this->headers();
 
-		edd_die();
+		cs_die();
 	}
 
 	/**

@@ -4,9 +4,9 @@
  *
  * This class handles the taxed orders export in batches.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
+ * @copyright   Copyright (c) 2018, CommerceStore, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Taxed_Orders_Export Class
+ * CS_Batch_Taxed_Orders_Export Class
  *
  * @since 3.0
  */
-class EDD_Batch_Taxed_Customers_Export extends EDD_Batch_Export {
+class CS_Batch_Taxed_Customers_Export extends CS_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions.
@@ -38,11 +38,11 @@ class EDD_Batch_Taxed_Customers_Export extends EDD_Batch_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'id'        => __( 'ID', 'easy-digital-downloads' ),
-			'name'      => __( 'Name', 'easy-digital-downloads' ),
-			'email'     => __( 'Email', 'easy-digital-downloads' ),
-			'purchases' => __( 'Number of Purchases', 'easy-digital-downloads' ),
-			'amount'    => __( 'Customer Value', 'easy-digital-downloads' ),
+			'id'        => __( 'ID', 'commercestore' ),
+			'name'      => __( 'Name', 'commercestore' ),
+			'email'     => __( 'Email', 'commercestore' ),
+			'purchases' => __( 'Number of Purchases', 'commercestore' ),
+			'amount'    => __( 'Customer Value', 'commercestore' ),
 		);
 
 		return $cols;
@@ -71,11 +71,11 @@ class EDD_Batch_Taxed_Customers_Export extends EDD_Batch_Export {
 			$args['date_query'] = $this->get_date_query();
 		}
 
-		add_filter( 'edd_orders_query_clauses', array( $this, 'query_clauses' ), 10, 2 );
+		add_filter( 'cs_orders_query_clauses', array( $this, 'query_clauses' ), 10, 2 );
 
-		$customer_ids = edd_get_orders( $args );
+		$customer_ids = cs_get_orders( $args );
 
-		remove_filter( 'edd_orders_query_clauses', array( $this, 'query_clauses' ), 10 );
+		remove_filter( 'cs_orders_query_clauses', array( $this, 'query_clauses' ), 10 );
 
 		$customer_ids = array_unique( $customer_ids );
 
@@ -88,7 +88,7 @@ class EDD_Batch_Taxed_Customers_Export extends EDD_Batch_Export {
 				continue;
 			}
 
-			$customer = edd_get_customer( $customer_id );
+			$customer = cs_get_customer( $customer_id );
 
 			// Bail if a customer record does not exist.
 			if ( ! $customer ) {
@@ -100,12 +100,12 @@ class EDD_Batch_Taxed_Customers_Export extends EDD_Batch_Export {
 				'name'      => $customer->name,
 				'email'     => $customer->email,
 				'purchases' => $customer->purchase_count,
-				'amount'    => edd_format_amount( $customer->purchase_value ),
+				'amount'    => cs_format_amount( $customer->purchase_value ),
 			);
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return $data;
 	}
@@ -127,11 +127,11 @@ class EDD_Batch_Taxed_Customers_Export extends EDD_Batch_Export {
 			$args['date_query'] = $this->get_date_query();
 		}
 
-		add_filter( 'edd_orders_query_clauses', array( $this, 'query_clauses' ), 10, 2 );
+		add_filter( 'cs_orders_query_clauses', array( $this, 'query_clauses' ), 10, 2 );
 
-		$total = edd_count_orders( $args );
+		$total = cs_count_orders( $args );
 
-		remove_filter( 'edd_orders_query_clauses', array( $this, 'query_clauses' ), 10 );
+		remove_filter( 'cs_orders_query_clauses', array( $this, 'query_clauses' ), 10 );
 
 		$percentage = 100;
 
@@ -164,7 +164,7 @@ class EDD_Batch_Taxed_Customers_Export extends EDD_Batch_Export {
 	 * @since 3.0
 	 *
 	 * @param array               $clauses A compacted array of item query clauses.
-	 * @param \EDD\Database\Query $base    Instance passed by reference.
+	 * @param \CS\Database\Query $base    Instance passed by reference.
 	 *
 	 * @return array
 	 */

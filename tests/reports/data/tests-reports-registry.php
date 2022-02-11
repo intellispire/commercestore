@@ -1,27 +1,27 @@
 <?php
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Report registry API.
  *
- * @group edd_registry
- * @group edd_reports
+ * @group cs_registry
+ * @group cs_reports
  *
- * @coversDefaultClass \EDD\Reports\Data\Report_Registry
+ * @coversDefaultClass \CS\Reports\Data\Report_Registry
  */
-class Report_Registry_Tests extends \EDD_UnitTestCase {
+class Report_Registry_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Report registry fixture.
 	 *
 	 * @access protected
-	 * @var    \EDD\Reports\Data\Report_Registry
+	 * @var    \CS\Reports\Data\Report_Registry
 	 */
 	protected $registry;
 
@@ -31,7 +31,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->registry = new \EDD\Reports\Data\Report_Registry();
+		$this->registry = new \CS\Reports\Data\Report_Registry();
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 	 * @covers ::__call()
 	 */
 	public function test_get_report_with_invalid_report_id_should_return_an_empty_array() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' report does not exist." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' report does not exist." );
 
 		$result = $this->registry->get_report( 'foo' );
 
@@ -67,7 +67,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 	 * @covers ::__call()
 	 */
 	public function test_get_report_with_invalid_report_id_should_throw_an_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' report does not exist." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' report does not exist." );
 
 		$this->registry->get_report( 'foo' );
 	}
@@ -114,7 +114,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @expectedException \EDD_Exception
+	 * @expectedException \CS_Exception
 	 */
 	public function test_add_report_with_empty_attributes_should_return_false() {
 		$this->assertFalse( $this->registry->add_report( 'foo', array() ) );
@@ -122,10 +122,10 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_with_empty_label_should_throw_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'label' parameter for the 'foo' item is missing or invalid in 'EDD\Reports\Registry::validate_attributes'." );
+		$this->setExpectedException( '\CS_Exception', "The 'label' parameter for the 'foo' item is missing or invalid in 'CS\Reports\Registry::validate_attributes'." );
 
 		$this->registry->add_report( 'foo', array(
 			'label'     => '',
@@ -138,10 +138,10 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_with_empty_endpoints_should_throw_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'endpoints' parameter for the 'foo' item is missing or invalid in 'EDD\Reports\Registry::validate_attributes'." );
+		$this->setExpectedException( '\CS_Exception', "The 'endpoints' parameter for the 'foo' item is missing or invalid in 'CS\Reports\Registry::validate_attributes'." );
 
 		$added = $this->registry->add_report( 'foo', array(
 			'label'     => 'Foo',
@@ -152,10 +152,10 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_with_invalid_filter_should_throw_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' report contains one or more invalid filters." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' report contains one or more invalid filters." );
 
 		$this->registry->add_report( 'foo', array(
 			'label'     => 'Foo',
@@ -168,10 +168,10 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_with_non_string_filter_should_throw_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' report contains one or more invalid filters." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' report contains one or more invalid filters." );
 
 		$this->registry->add_report( 'foo', array(
 			'label'     => 'Foo',
@@ -184,7 +184,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_with_valid_filter_should_return_true() {
 		$added = $this->registry->add_report( 'foo', array(
@@ -199,7 +199,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_without_filters_should_default_to_date_filter() {
 		$this->registry->add_report( 'foo', array(
@@ -216,7 +216,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_with_no_priority_should_set_priority_10() {
 		$this->registry->add_report( 'foo', array(
@@ -233,7 +233,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_report()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_report_with_priority_should_set_that_priority() {
 		$this->registry->add_report( 'foo', array(
@@ -252,7 +252,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::__call()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_reports_with_no_sort_should_return_reports_in_order_of_registration() {
 
@@ -265,7 +265,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::__call()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_reports_with_invalid_sort_should_return_reports_in_order_of_registration() {
 
@@ -278,7 +278,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::__call()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_reports_with_ID_sort_should_return_reports_in_alphabetical_order_by_ID() {
 
@@ -291,7 +291,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::__call()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_reports_with_priority_sort_should_return_reports_in_order_of_priority() {
 
@@ -314,7 +314,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 				),
 				'filters'   => array( 'dates' ),
 			) );
-		} catch ( \EDD_Exception $exception ) {}
+		} catch ( \CS_Exception $exception ) {}
 	}
 
 	/**
@@ -371,7 +371,7 @@ class Report_Registry_Tests extends \EDD_UnitTestCase {
 	/**
 	 * Adds two test reports for use when comparing sorting results.
 	 *
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	protected function add_test_reports_for_sort() {
 		$this->registry->add_report( 'foo', array(
