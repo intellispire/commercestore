@@ -6,7 +6,7 @@
  * file download counts for a customer.
  *
  * @subpackage  Admin/Classes/CS_SL_License_Log_Migration
- * @copyright   Copyright (c) 2018, CommerceStore, LLC
+ * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.9.2
  */

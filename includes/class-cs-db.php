@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @package     CS
  * @subpackage  Classes/CS DB
- * @copyright   Copyright (c) 2018, CommerceStore, LLC
+ * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.1
 */

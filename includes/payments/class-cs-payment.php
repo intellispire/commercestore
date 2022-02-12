@@ -6,7 +6,7 @@
  *
  * @package     CS
  * @subpackage  Payments
- * @copyright   Copyright (c) 2018, CommerceStore, LLC
+ * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.5
  */
