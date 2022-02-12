@@ -1196,6 +1196,9 @@ function cs_get_registered_settings() {
 	}
 
 	// Filter & return
+	if (CS_FEATURE_MARKETING == false) {
+		unset ( $cs_settings['marketing'] );
+	}
 	return apply_filters( 'cs_registered_settings', $cs_settings );
 }
 

@@ -165,8 +165,8 @@ add_action( 'init', 'cs_setup_post_type_support' );
  */
 function cs_get_default_labels() {
 	$defaults = array(
-		'singular' => __( 'Download', 'commercestore' ),
-		'plural'   => __( 'Downloads', 'commercestore' ),
+		'singular' => __( 'Product', 'commercestore' ),
+		'plural'   => __( 'Products', 'commercestore' ),
 	);
 
 	return apply_filters( 'cs_default_downloads_name', $defaults );

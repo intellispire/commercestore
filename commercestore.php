@@ -33,6 +33,13 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Feature flags
+ */
+
+define('CS_FEATURE_VARIABLE_PRICE', false);
+define('CS_FEATURE_MARKETING', false);
+
+/**
  * The main plugin requirements checker
  *
  * @since 3.0
@@ -76,7 +83,7 @@ final class CS_Requirements_Check {
 
 		// WordPress
 		'wp' => array(
-			'minimum' => '5.9.0',
+			'minimum' => '5.8',
 			'name'    => 'WordPress',
 			'exists'  => true,
 			'current' => false,

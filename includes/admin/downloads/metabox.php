@@ -290,7 +290,7 @@ function cs_render_price_field( $post_id ) {
 	<p>
 		<strong><?php echo apply_filters( 'cs_price_options_heading', __( 'Pricing Options:', 'commercestore' ) ); ?></strong>
 	</p>
-
+<?php if ( CS_FEATURE_VARIABLE_PRICE ) { ?>
 	<div class="cs-form-group">
 		<div class="cs-form-group__control">
 			<input type="checkbox" class="cs-form-group__input" name="_variable_pricing" id="cs_variable_pricing" value="1" <?php checked( 1, $variable_pricing ); ?> />
@@ -299,6 +299,7 @@ function cs_render_price_field( $post_id ) {
 			</label>
 		</div>
 	</div>
+<?php } ?>
 
 	<div id="cs_regular_price_field" class="cs-form-group cs_pricing_fields" <?php echo $price_display; ?>>
 		<label for="cs_price" class="cs-form-group__label screen-reader-text"><?php esc_html_e( 'Price', 'commercestore' ); ?></label>
