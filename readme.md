@@ -1,6 +1,6 @@
 # [CommerceStore](https://commercestore.com) #
 
-![Plugin Version](https://img.shields.io/wordpress/plugin/v/commercestore.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/commercestore.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/commercestore.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/commercestore.svg?maxAge=2592000) [![Build status](https://badge.buildkite.com/e318e1649f3a28f4029272231b926126d5664837d575cd507a.svg?branch=release/3.0)](https://buildkite.com/intellispire/commercestore?branch=release/3.0) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/intellispire/commercestore/blob/master/license.txt)
+![Plugin Version](https://img.shields.io/wordpress/plugin/v/commercestore.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/commercestore.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/commercestore.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/commercestore.svg?maxAge=2592000) [![Build status](https://badge.buildkite.com/.svg?branch=master)](https://buildkite.com/intellispire/commercestore?branch=master) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/intellispire/commercestore/blob/master/license.txt)
 
 ### Welcome to our GitHub Repository
 
