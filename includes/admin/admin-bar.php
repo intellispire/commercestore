@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 3.0
  */
-function cs_cs_maybe_add_store_mode_admin_bar_menu( $wp_admin_bar ) {
+function cs_maybe_add_store_mode_admin_bar_menu( $wp_admin_bar ) {
 
 	// Bail if no admin bar
 	if ( empty( $wp_admin_bar ) ) {
@@ -64,7 +64,7 @@ function cs_cs_maybe_add_store_mode_admin_bar_menu( $wp_admin_bar ) {
 		) );
 	}
 }
-add_action( 'admin_bar_menu', 'cs_cs_maybe_add_store_mode_admin_bar_menu', 9999 );
+add_action( 'admin_bar_menu', 'cs_maybe_add_store_mode_admin_bar_menu', 9999 );
 
 /**
  * Styling for text-mode button

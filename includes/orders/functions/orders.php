@@ -815,12 +815,12 @@ function cs_build_order( $order_data = array() ) {
 	// Maybe add the address to the cs_customer_addresses.
 	$customer_address_data = $order_address_data;
 
-	// We don't need to pass this data to cs_cs_maybe_add_customer_address().
+	// We don't need to pass this data to cs_maybe_add_customer_address().
 	unset( $customer_address_data['order_id'] );
 	unset( $customer_address_data['first_name'] );
 	unset( $customer_address_data['last_name'] );
 
-	cs_cs_maybe_add_customer_address( $customer->id, $customer_address_data );
+	cs_maybe_add_customer_address( $customer->id, $customer_address_data );
 
 	/** Insert order items ****************************************************/
 

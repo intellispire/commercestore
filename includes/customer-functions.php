@@ -672,7 +672,7 @@ function cs_count_customer_addresses( $args = array() ) {
  *
  * @return int|false ID of the insert customer address. False otherwise.
  */
-function cs_cs_maybe_add_customer_address( $customer_id = 0, $data = array() ) {
+function cs_maybe_add_customer_address( $customer_id = 0, $data = array() ) {
 
 	// Bail if nothing passed.
 	if ( empty( $customer_id ) || empty( $data ) ) {
