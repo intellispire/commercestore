@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: Bug, Needs Replication
+labels: ''
 assignees: ''
 
 ---
@@ -23,7 +23,7 @@ etc, etc
 ### Information (if a specific version is affected):
 PHP Version:
 
-EDD Version (or branch):
+CommerceStore Version (or branch):
 
 WordPress Version:
 
