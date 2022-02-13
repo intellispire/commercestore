@@ -18,7 +18,8 @@
     "require": {
         "php": ">=7.0",
         "composer/installers": "~1.0",
-        "timber/timber": "dev-master"
+        "timber/timber": "dev-master",
+        "stripe/stripe-php": "^7.113"
     },
     "require-dev": {
         "phpunit/phpunit": "4.8.* || 5.7.* || ^6.5.14",
