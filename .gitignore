@@ -36,5 +36,6 @@ node_modules
 # Temporary files
 *~
 
-# Stripe
+# Gateways
 includes/gateways/stripe
+includes/gateways/square

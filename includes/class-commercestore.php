@@ -643,11 +643,18 @@ final class CommerceStore {
 		require_once CS_PLUGIN_DIR . 'includes/gateways/paypal/paypal.php';
 		require_once CS_PLUGIN_DIR . 'includes/gateways/manual.php';
 
+        # FIXME - load dynamicly
+
 		$stripe = CS_PLUGIN_DIR . 'includes/gateways/stripe/cs-stripe.php';
 
 		if ( file_exists( $stripe ) ) {
 			require_once( $stripe );
 		}
+
+        $square = CS_PLUGIN_DIR . 'includes/gateways/square/cs-square.php';
+        if ( file_exists( $square ) ) {
+                require_once( $square);
+        }
 
 		// Logs
 		require_once CS_PLUGIN_DIR . 'includes/logs/api-request-log/class-api-request-log.php';
