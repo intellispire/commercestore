@@ -1,0 +1,2488 @@
+# Copyright (C) 2020 Sandhills Development, LLC
+# This file is distributed under the same license as the Easy Digital Downloads - Recurring Payments plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Easy Digital Downloads - Recurring Payments 2.10\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/edd-recurring\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-08-19T15:14:07+00:00\n"
+"PO-Revision-Date: 2020-12-14 01:11+0100\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Domain: edd-recurring\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de\n"
+
+#. Plugin Name of the plugin
+msgid "Easy Digital Downloads - Recurring Payments"
+msgstr "Easy Digital Downloads - Recurring Payments"
+
+#. Plugin URI of the plugin
+msgid "http://easydigitaldownloads.com/downloads/edd-recurring/"
+msgstr "http://easydigitaldownloads.com/downloads/edd-recurring/"
+
+#. Description of the plugin
+msgid "Sell subscriptions with Easy Digital Downloads"
+msgstr "Verkaufe Abonnements mit Easy Digital Downloads"
+
+#. Author of the plugin
+msgid "Sandhills Development, LLC"
+msgstr "Sandhills Development, LLC"
+
+#. Author URI of the plugin
+msgid "https://sandhillsdev.com"
+msgstr "https://sandhillsdev.com"
+
+#: edd-recurring.php:412
+msgctxt "Cancelled payment status"
+msgid "Cancelled"
+msgstr "Storniert"
+
+#: edd-recurring.php:417
+msgid "Cancelled <span class=\"count\">(%s)</span>"
+msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
+msgstr[0] "Storniert <span class=„count“>(%s)</span>"
+msgstr[1] "Storniert <span class=„count“>(%s)</span>"
+
+#: edd-recurring.php:420
+msgctxt "Subscription renewal payment status"
+msgid "Renewal"
+msgstr "Erneuerung"
+
+#: edd-recurring.php:425
+msgid "Renewal <span class=\"count\">(%s)</span>"
+msgid_plural "Renewals <span class=\"count\">(%s)</span>"
+msgstr[0] "Erneuerung <span class=\"count\">(%s)</span>"
+msgstr[1] "Verlängerung <span class=\"count\">(%s)</span>"
+
+#: edd-recurring.php:438 includes/admin/customers.php:19
+#: includes/admin/metabox.php:480 includes/admin/subscriptions.php:28
+#: includes/gateways/edd-recurring-paypalexpress.php:239
+msgid "Subscriptions"
+msgstr "Abonnements"
+
+#: edd-recurring.php:528 includes/edd-recurring-reminders.php:85
+msgid "Renewal"
+msgstr "Erneuerung"
+
+#: edd-recurring.php:549 includes/admin/class-recurring-reports.php:314
+msgid "Renewals"
+msgstr "Erneuerungen"
+
+#: edd-recurring.php:586 includes/admin/metabox.php:351
+#: includes/admin/metabox.php:450 includes/admin/settings.php:56
+msgid "Signup Fee"
+msgstr "Anmeldungsgebühr"
+
+#: edd-recurring.php:671
+msgid ""
+"You must have an active subscription to %s in order to download this file."
+msgstr ""
+"Sie müssen eine aktives Abonnement für %s haben um diese Datei herunterladen "
+"zu können."
+
+#: edd-recurring.php:674
+msgid "Access Denied"
+msgstr "Zugriff verwehrt"
+
+#: edd-recurring.php:750 tests/tests-recurring-misc.php:23
+msgctxt "Billing period"
+msgid "Daily"
+msgstr "Täglich"
+
+#: edd-recurring.php:751 tests/tests-recurring-misc.php:24
+msgctxt "Billing period"
+msgid "Weekly"
+msgstr "Wöchentlich"
+
+#: edd-recurring.php:752 tests/tests-recurring-misc.php:25
+msgctxt "Billing period"
+msgid "Monthly"
+msgstr "Monatlich"
+
+#: edd-recurring.php:753 tests/tests-recurring-misc.php:26
+msgctxt "Billing period"
+msgid "Quarterly"
+msgstr "Vierteljährlich"
+
+#: edd-recurring.php:754 tests/tests-recurring-misc.php:27
+msgctxt "Billing period"
+msgid "Semi-Yearly"
+msgstr "Halbjährlich"
+
+#: edd-recurring.php:755 tests/tests-recurring-misc.php:28
+msgctxt "Billing period"
+msgid "Yearly"
+msgstr "Jährlich"
+
+#: edd-recurring.php:771 tests/tests-recurring-misc.php:36
+msgctxt "Billing period"
+msgid "Day(s)"
+msgstr "Tag(e)"
+
+#: edd-recurring.php:772 tests/tests-recurring-misc.php:37
+msgctxt "Billing period"
+msgid "Week(s)"
+msgstr "Woche(n)"
+
+#: edd-recurring.php:773 tests/tests-recurring-misc.php:38
+msgctxt "Billing period"
+msgid "Month(s)"
+msgstr "Monat(e)"
+
+#: edd-recurring.php:774 tests/tests-recurring-misc.php:39
+msgctxt "Billing period"
+msgid "Quarter(s)"
+msgstr "Vierteljahr(e)"
+
+#: edd-recurring.php:775 tests/tests-recurring-misc.php:40
+msgctxt "Billing period"
+msgid "Semi-Year(s)"
+msgstr "Halbjahr(e)"
+
+#: edd-recurring.php:776 tests/tests-recurring-misc.php:41
+msgctxt "Billing period"
+msgid "Year(s)"
+msgstr "Jahr(e)"
+
+#: edd-recurring.php:1588
+msgid "Are you sure you want to cancel your subscription?"
+msgstr "Sind Sie sicher dass Sie dieses Abonnement auflösen möchten?"
+
+#: edd-recurring.php:1724
+msgid "Daily"
+msgstr "Täglich"
+
+#: edd-recurring.php:1727
+msgid "Weekly"
+msgstr "Wöchentlich"
+
+#: edd-recurring.php:1730
+msgid "Monthly"
+msgstr "Monatlich"
+
+#: edd-recurring.php:1733
+msgid "Quarterly"
+msgstr "Vierteljährlich"
+
+#: edd-recurring.php:1736
+msgid "Semi-Yearly"
+msgstr "Halbjährlich"
+
+#: edd-recurring.php:1739
+msgid "Yearly"
+msgstr "Jährlich"
+
+#: edd-recurring.php:1762
+msgid "Day"
+msgstr "Tag"
+
+#: edd-recurring.php:1765
+msgid "Week"
+msgstr "Woche"
+
+#: edd-recurring.php:1768
+msgid "Month"
+msgstr "Monat"
+
+#: edd-recurring.php:1771
+msgid "Quarter"
+msgstr "Vierteljahr"
+
+#: edd-recurring.php:1774
+msgid "Semi-Year"
+msgstr "Halbjahr"
+
+#: edd-recurring.php:1777
+msgid "Year"
+msgstr "Jahr"
+
+#. translators: %1$s Opening strong tag, do not translate. %2$s Closing strong tag, do not translate.
+#: edd-recurring.php:1985
+msgid "%1$sCredit card payments with Authorize.net are currently disabled.%2$s"
+msgstr "%1$sKreditkarten Zahlungen durch Authorize.net sind deaktiviert.%2$s"
+
+#. translators: %1$s Opening code tag, do not translate. %2$s Closing code tag, do not translate.
+#: edd-recurring.php:1992
+msgid ""
+"To continue accepting recurring credit card payments with Authorize.net "
+"please update the Authorize.net Payment Gateway extension to version "
+"%1$s2.0%2$s."
+msgstr ""
+"Um wiederkehrende Kreditkarten Zahlungen mit Authorize.net zu verlängern "
+"aktualisieren Sie das Authorize.net Zahlungs Gateway auf Version %1$s2.0%2$s."
+
+#: edd-recurring.php:2074
+msgid "EDD Subscriber"
+msgstr "EDD Abonnent(in)"
+
+#: includes/admin/add-reminder-notice.php:21
+#: includes/admin/add-reminder-notice.php:87
+msgid "Add Reminder Notice"
+msgstr "Erinnerung hinzufügen"
+
+#: includes/admin/add-reminder-notice.php:22
+#: includes/admin/edit-reminder-notice.php:26
+msgid "Go Back"
+msgstr "Zurück"
+
+#: includes/admin/add-reminder-notice.php:30
+#: includes/admin/edit-reminder-notice.php:34
+msgid "Notice Type"
+msgstr "Nachrichtentyp"
+
+#: includes/admin/add-reminder-notice.php:39
+#: includes/admin/edit-reminder-notice.php:43
+msgid "Is this a renewal notice or an expiration notice?"
+msgstr "Ist dies eine Erneuerungsnachricht oder eine Ablaufnachricht?"
+
+#: includes/admin/add-reminder-notice.php:44
+#: includes/admin/edit-reminder-notice.php:48
+msgid "Email Subject"
+msgstr "EMail Betreff"
+
+#: includes/admin/add-reminder-notice.php:49
+#: includes/admin/edit-reminder-notice.php:53
+msgid "The subject line of the reminder notice email"
+msgstr "Die Betreffzeile der Erinnerungsmail"
+
+#: includes/admin/add-reminder-notice.php:54
+#: includes/admin/edit-reminder-notice.php:58
+msgid "Email Period"
+msgstr "EMail Periode"
+
+#: includes/admin/add-reminder-notice.php:63
+#: includes/admin/edit-reminder-notice.php:67
+msgid "When should this email be sent?"
+msgstr "Wann soll diese EMail gesendet werden?"
+
+#: includes/admin/add-reminder-notice.php:68
+#: includes/admin/edit-reminder-notice.php:72
+msgid "Email Message"
+msgstr "EMail Nachricht"
+
+#: includes/admin/add-reminder-notice.php:72
+#: includes/admin/edit-reminder-notice.php:76
+msgid ""
+"The email message to be sent with the reminder notice. The following "
+"template tags can be used in the message:"
+msgstr ""
+"Die EMail Nachricht die mit der Erinnerungsnachricht gesendet wird. Die "
+"folgende Vorlagetags können in der Nachricht verwendet werden:"
+
+#: includes/admin/add-reminder-notice.php:74
+#: includes/admin/edit-reminder-notice.php:78
+msgid "The customer's name"
+msgstr "Der Kundenname"
+
+#: includes/admin/add-reminder-notice.php:75
+#: includes/admin/edit-reminder-notice.php:79
+msgid "The name of the product the subscription belongs to"
+msgstr "Der Name des Produkts das zu diesem Abonnement gehört"
+
+#: includes/admin/add-reminder-notice.php:76
+msgid "The expiration or renewal date for the subscription"
+msgstr "Das Ablauf oder Erneuerungsdatum für das Abonnement"
+
+#: includes/admin/add-reminder-notice.php:77
+#: includes/admin/edit-reminder-notice.php:81
+msgid "The recurring amount of the subscription"
+msgstr "Die wiederkehrende Zahlung des Abonnements"
+
+#: includes/admin/class-admin-notices.php:35
+msgid "Subscription updated successfully"
+msgstr "Abonnement erfolgreich aktualisiert"
+
+#: includes/admin/class-admin-notices.php:41
+msgid "Subscription deleted successfully"
+msgstr "Abonnement erfolgreich storniert"
+
+#: includes/admin/class-admin-notices.php:47
+msgid "Subscription cancelled successfully"
+msgstr "Abonnement erfolgreich abgebrochen"
+
+#: includes/admin/class-admin-notices.php:53
+msgid "Subscription note added successfully"
+msgstr "Abonnement Nachricht erfolgreich hinzugefügt"
+
+#: includes/admin/class-admin-notices.php:59
+msgid "Subscription note could not be added"
+msgstr "Abonnement Nachricht konnte nicht hinzugefügt werden"
+
+#: includes/admin/class-admin-notices.php:65
+msgid "Renewal payment recorded successfully"
+msgstr "Erneuerungszahlung erfolgreich aufgenommen"
+
+#: includes/admin/class-admin-notices.php:71
+msgid "Renewal payment could not be recorded"
+msgstr "Erneuerungszahlung konnte nicht aufgenommen werden"
+
+#: includes/admin/class-admin-notices.php:78
+msgid "Retry succeeded! The subscription has been renewed successfully."
+msgstr "Wiederholung erfolgreich! Das Abonnement wurde erfolgreich erneuert."
+
+#: includes/admin/class-admin-notices.php:84
+msgid "Retry failed. %s"
+msgstr "Wiederholung fehlgeschlagen. %s"
+
+#: includes/admin/class-recurring-reports.php:34
+#: includes/admin/class-recurring-reports.php:336
+msgid "Subscription Renewals"
+msgstr "Abonnement Verlängerungen"
+
+#: includes/admin/class-recurring-reports.php:128
+msgid "You do not have permission to view this data"
+msgstr "Sie haben keine Erlaubnis diese Daten anzusehen"
+
+#: includes/admin/class-recurring-reports.php:128
+#: includes/admin/settings.php:355 includes/admin/settings.php:359
+#: includes/admin/settings.php:406 includes/admin/settings.php:410
+#: includes/admin/settings.php:461 includes/admin/settings.php:465
+#: includes/admin/settings.php:469 includes/admin/settings.php:500
+#: includes/admin/settings.php:504 includes/admin/settings.php:508
+#: includes/admin/subscriptions.php:667 includes/admin/subscriptions.php:682
+#: includes/admin/subscriptions.php:755 includes/admin/subscriptions.php:759
+#: includes/admin/subscriptions.php:763 includes/admin/subscriptions.php:767
+#: includes/admin/subscriptions.php:771 includes/admin/subscriptions.php:877
+#: includes/admin/subscriptions.php:908 includes/admin/subscriptions.php:957
+#: includes/admin/subscriptions.php:963 includes/admin/subscriptions.php:998
+#: includes/admin/subscriptions.php:1039
+#: includes/admin/upgrade-functions.php:158
+#: includes/admin/upgrade-functions.php:518
+#: includes/admin/upgrade-functions.php:981
+#: includes/admin/upgrade-functions.php:1060
+#: includes/admin/upgrade-functions.php:1140
+#: includes/admin/upgrade-functions.php:1230
+#: includes/edd-recurring-checkout.php:707
+#: includes/gateways/edd-recurring-gateway.php:336
+#: includes/gateways/edd-recurring-gateway.php:898
+#: includes/gateways/edd-recurring-gateway.php:923
+#: includes/gateways/edd-recurring-gateway.php:946
+#: includes/gateways/edd-recurring-gateway.php:954
+#: includes/gateways/edd-recurring-gateway.php:980
+#: includes/gateways/edd-recurring-paypal.php:700
+#: includes/gateways/edd-recurring-paypal.php:708
+#: includes/gateways/edd-recurring-paypalexpress.php:256
+#: includes/gateways/edd-recurring-paypalexpress.php:353
+#: includes/gateways/edd-recurring-paypalpro.php:156
+#: includes/gateways/edd-recurring-stripe.php:1793
+#: includes/gateways/edd-recurring-stripe.php:1987
+msgid "Error"
+msgstr "Fehler"
+
+#: includes/admin/class-recurring-reports.php:315
+msgid "Refunds"
+msgstr "Rückerstattungen"
+
+#: includes/admin/class-recurring-reports.php:316
+msgid "Earnings"
+msgstr "Einnahmen"
+
+#: includes/admin/class-recurring-reports.php:317
+msgid "Refunded Earnings"
+msgstr "Rückerstattete Einnahmen"
+
+#: includes/admin/class-recurring-reports.php:392
+msgid "Total renewals for period shown: "
+msgstr "Erneuerungen für den angegeben Zeitraum: "
+
+#: includes/admin/class-recurring-reports.php:437
+msgid "Renewal Payment"
+msgstr "Erneuerungszahlung"
+
+#: includes/admin/class-subscriptions-list-table.php:203
+#: templates/shortcode-subscription-receipt.php:48
+#: templates/shortcode-subscriptions.php:46
+msgid "N/A"
+msgstr "N/A"
+
+#: includes/admin/class-subscriptions-list-table.php:251
+msgid "View View or edit subscription"
+msgstr "Zeige oder editiere Abonnement"
+
+#: includes/admin/class-subscriptions-list-table.php:251
+msgid "View"
+msgstr "Zeigen"
+
+#: includes/admin/class-subscriptions-list-table.php:265
+msgid "Customer"
+msgstr "Kunde"
+
+#: includes/admin/class-subscriptions-list-table.php:266
+#: includes/admin/customers.php:25 includes/admin/subscriptions.php:542
+#: includes/plugin-software-licensing.php:846
+#: templates/shortcode-subscription-receipt.php:40
+#: templates/shortcode-subscriptions.php:36
+msgid "Status"
+msgstr "Status"
+
+#: includes/admin/class-subscriptions-list-table.php:267
+msgid "Billing Cycle"
+msgstr "Rechnugszyklus"
+
+#: includes/admin/class-subscriptions-list-table.php:268
+#: templates/paypal-express-confirm.php:12
+#: templates/shortcode-subscription-receipt.php:38
+#: templates/shortcode-subscriptions.php:38
+msgid "Initial Amount"
+msgstr "Initiale Kosten"
+
+#: includes/admin/class-subscriptions-list-table.php:269
+#: templates/shortcode-subscription-receipt.php:37
+#: templates/shortcode-subscriptions.php:37
+msgid "Renewal Date"
+msgstr "Ablaufdatum"
+
+#: includes/admin/class-subscriptions-list-table.php:270
+msgid "Payment"
+msgstr "Zahlung"
+
+#: includes/admin/class-subscriptions-list-table.php:272
+#: includes/admin/customers.php:26 includes/admin/settings.php:211
+#: includes/admin/settings.php:257 includes/admin/subscriptions.php:543
+#: includes/plugin-software-licensing.php:847
+#: templates/shortcode-subscriptions.php:40
+msgid "Actions"
+msgstr "Aktionen"
+
+#: includes/admin/class-summary-widget.php:37
+msgid "Subscriptions Created"
+msgstr "Erzeugte Abonnements"
+
+#: includes/admin/class-summary-widget.php:42
+msgid "This Year"
+msgstr "Dieses Jahr"
+
+#: includes/admin/class-summary-widget.php:46
+msgid "This Month"
+msgstr "Dieser Monat"
+
+#: includes/admin/class-summary-widget.php:50
+#: includes/admin/class-summary-widget.php:73
+msgid "Total"
+msgstr "Absolut"
+
+#: includes/admin/class-summary-widget.php:60
+msgid "Estimated Recurring Revenue"
+msgstr "Erwartete wiederkehrender Einnahmen"
+
+#: includes/admin/class-summary-widget.php:65
+msgid "Next 365 Days"
+msgstr "Nächste 365 Tage"
+
+#: includes/admin/class-summary-widget.php:69
+msgid "Next 30 Days"
+msgstr "Nächste 30 Tage"
+
+#: includes/admin/customers.php:24 includes/admin/subscriptions.php:540
+msgid "Amount"
+msgstr "Menge"
+
+#: includes/admin/customers.php:33
+msgctxt "Example: $10 every month"
+msgid "%s every %s"
+msgstr "%s alle %s"
+
+#: includes/admin/customers.php:35 includes/admin/subscriptions.php:557
+msgid "View Details"
+msgstr "Zeige Details"
+
+#: includes/admin/customers.php:59
+msgid "Recurring Profiles"
+msgstr "Recurring Profile"
+
+#: includes/admin/customers.php:63
+msgid "Gateway"
+msgstr "Gateway"
+
+#: includes/admin/customers.php:64
+msgid "Profile ID"
+msgstr "Profil ID"
+
+#: includes/admin/edit-reminder-notice.php:25
+msgid "Edit Reminder Notice"
+msgstr "Erinnerungsnachricht editieren"
+
+#: includes/admin/edit-reminder-notice.php:80
+msgid "The expiration date for the subscription"
+msgstr "Das Ablaufdatum des Abonnements"
+
+#: includes/admin/edit-reminder-notice.php:92
+msgid "Update Reminder Notice"
+msgstr "Erinnerungsnachricht aktualisieren"
+
+#: includes/admin/metabox.php:24 includes/admin/metabox.php:282
+#: includes/admin/metabox.php:434
+msgid "Recurring"
+msgstr "Wiederkehrend"
+
+#: includes/admin/metabox.php:25
+msgid "Free Trial"
+msgstr "Kostenlose Probeversion"
+
+#: includes/admin/metabox.php:26 includes/admin/metabox.php:304
+#: includes/admin/metabox.php:439
+msgid "Period"
+msgstr "Zyklus"
+
+#: includes/admin/metabox.php:27
+msgctxt "Referring to billing period"
+msgid "Times"
+msgstr "Anzahl"
+
+#: includes/admin/metabox.php:28
+msgctxt "Referring to subscription signup fee"
+msgid "Signup Fee"
+msgstr "Anmeldungsgebühr"
+
+#: includes/admin/metabox.php:60 includes/admin/metabox.php:284
+#: includes/admin/metabox.php:436
+msgid "No"
+msgstr "Nein"
+
+#: includes/admin/metabox.php:61 includes/admin/metabox.php:285
+#: includes/admin/metabox.php:437
+msgid "Yes"
+msgstr "Ja"
+
+#: includes/admin/metabox.php:328 includes/admin/metabox.php:446
+msgid "Times"
+msgstr "Anzahl"
+
+#: includes/admin/metabox.php:378
+msgid ""
+"<strong>Additional note</strong>: with free trials, one time discounts are "
+"not supported and discount codes for this product will apply to all payments "
+"after the trial period."
+msgstr ""
+"<strong>Zusätzliche Bemerkung</strong>: mit kostenlosen Probeversionen."
+
+#: includes/admin/metabox.php:388
+msgid ""
+"2Checkout does not support free trial periods. Subscriptions purchased "
+"through 2Checkout cannot include free trials."
+msgstr ""
+"2Checkout does not support free trial periods. Subscriptions purchased "
+"through 2Checkout cannot include free trials."
+
+#: includes/admin/metabox.php:394
+msgid "Enable free trial for subscriptions"
+msgstr "Kostenlose Probeversion für Abonnements einschalten"
+
+#: includes/admin/metabox.php:395
+msgid ""
+"Check this box to include a free trial with subscriptions for this product. "
+"When signing up for a free trial, the customer's payment details will be "
+"taken at checkout but the customer will not be charged until the free trial "
+"is completed. <strong>Note:</strong> this only applies when purchasing a "
+"subscription. If a price option is not set to recurring, this free trial "
+"will not be used."
+msgstr ""
+
+#: includes/admin/metabox.php:432
+msgid "Recurring Options for Custom Prices"
+msgstr ""
+
+#: includes/admin/metabox.php:433
+msgid ""
+"Select the recurring options for customers that pay with a custom price."
+msgstr ""
+
+#: includes/admin/metabox.php:491
+msgid "Associated Payments"
+msgstr "Verbundene Zahlungen"
+
+#: includes/admin/metabox.php:543 templates/paypal-express-confirm.php:11
+#: templates/shortcode-subscription-receipt.php:36
+#: templates/shortcode-subscriptions.php:35
+msgid "Subscription"
+msgstr "Abonnement"
+
+#: includes/admin/metabox.php:580
+msgid "Subscription TXN ID:"
+msgstr "Abonnement TXN ID:"
+
+#: includes/admin/refunds.php:87 includes/admin/subscriptions.php:505
+#: includes/edd-recurring-shortcodes.php:111
+msgid "Cancel Subscription"
+msgstr "Abonnement auflösen"
+
+#: includes/admin/refunds.php:152 includes/admin/refunds.php:186
+msgid "Subscription %d cancelled because of refund."
+msgstr "Abonnement %d wurde wegen einer Rückerstattung aufgelöst."
+
+#: includes/admin/scripts.php:31
+msgctxt "Referring to billing period"
+msgid "time"
+msgstr "mal"
+
+#: includes/admin/scripts.php:32
+msgctxt "Referring to billing period"
+msgid "times"
+msgstr ""
+
+#: includes/admin/scripts.php:35 includes/gateways/edd-recurring-paypal.php:690
+msgid ""
+"PayPal Standard requires recurring times to be set to 0 for indefinite "
+"subscriptions or a minimum value of 2 and a maximum value of 52 for limited "
+"subscriptions."
+msgstr ""
+
+#: includes/admin/scripts.php:37
+msgid "Are you sure you want to delete this subscription?"
+msgstr "Sind Sie sicher dass Sie dieses Abonnement auflösen möchten?"
+
+#: includes/admin/scripts.php:38 includes/admin/settings.php:222
+#: includes/admin/settings.php:268 includes/admin/subscriptions.php:433
+#: includes/admin/subscriptions.php:444 includes/admin/subscriptions.php:467
+msgid "Edit"
+msgstr "Editieren"
+
+#: includes/admin/scripts.php:39 includes/admin/settings.php:63
+#: templates/shortcode-subscriptions.php:98
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: includes/admin/settings.php:11
+msgid "Recurring Payments"
+msgstr "Wiederkerende Zahlungen"
+
+#: includes/admin/settings.php:29
+msgid "Limit File Downloads"
+msgstr "Dateidownloads limitieren"
+
+#: includes/admin/settings.php:30
+msgid ""
+"Check this if you'd like to require users have an active subscription in "
+"order to download files associated with a recurring product."
+msgstr ""
+
+#: includes/admin/settings.php:35
+msgid "Allow \"Completed\" subscriptions to download their files"
+msgstr ""
+
+#: includes/admin/settings.php:36
+msgid ""
+"When \"Limit File Downloads\" is enabled, would you like users with "
+"\"Completed\" subscriptions to be able to download their files, despite "
+"their subscription technically not being \"Active\"?"
+msgstr ""
+
+#: includes/admin/settings.php:41
+msgid "Display Subscription Terms"
+msgstr "Abonnement Bedingungen anzeigen"
+
+#: includes/admin/settings.php:42
+msgid ""
+"When selected, the billing times and frequency will be shown below the "
+"purchase link."
+msgstr ""
+
+#: includes/admin/settings.php:47
+msgid "Display Signup Fee"
+msgstr "Anmeldungsgebühr anzeigen"
+
+#: includes/admin/settings.php:48
+msgid ""
+"When selected, signup fee associated with a subscription will be shown below "
+"the purchase link."
+msgstr ""
+
+#: includes/admin/settings.php:53
+msgid "Signup Fee Label"
+msgstr "Anmeldungsgebühr Label"
+
+#: includes/admin/settings.php:54
+msgid ""
+"The label used for signup fees, if any. This is shown on checkout and on "
+"individual purchase options if \"Display Signup Fee\" above is checked."
+msgstr ""
+
+#: includes/admin/settings.php:60
+msgid "Cancel Subscription Text"
+msgstr "Abonnement Abbruch Text"
+
+#: includes/admin/settings.php:61
+msgid ""
+"The label used for the Cancel action. This text is shown to the customer "
+"when managing their subscriptions."
+msgstr ""
+
+#: includes/admin/settings.php:67 includes/admin/settings.php:70
+msgid "One Time Discounts"
+msgstr "Einmal Rabatt"
+
+#: includes/admin/settings.php:68
+msgid ""
+"Check this if you'd like discount codes to apply only to the initial "
+"subscription payment and not all payments. <strong>Note</strong>: one-time "
+"discount codes will not apply to free trials."
+msgstr ""
+
+#: includes/admin/settings.php:76
+msgid "One Time Trials"
+msgstr "Einmal Probeversionen"
+
+#: includes/admin/settings.php:77
+msgid ""
+"Check this if you'd like customers to be prevented from purchasing a free "
+"trial multiple times."
+msgstr ""
+
+#: includes/admin/settings.php:82
+msgid "Payment Received Email"
+msgstr "EMail zur Zahlungsverlängerung"
+
+#: includes/admin/settings.php:83
+msgid ""
+"Check this if you'd like customers to be sent an email notice each time a "
+"renewal payment is processed."
+msgstr ""
+
+#: includes/admin/settings.php:88
+msgid "Renewal Payment Received Subject"
+msgstr ""
+
+#: includes/admin/settings.php:89
+msgid ""
+"Enter the subject line of the email sent when a renewal payment is processed."
+msgstr ""
+
+#: includes/admin/settings.php:91
+msgid "Renewal Payment Received"
+msgstr "Zahlung zur Verlängerung erhalten"
+
+#: includes/admin/settings.php:95
+msgid "Renewal Payment Received Message"
+msgstr "Nachricht zur Verlängerungszahlung erhalten"
+
+#: includes/admin/settings.php:96
+msgid ""
+"Enter the body text of the email sent when a renewal payment is processed."
+msgstr ""
+
+#: includes/admin/settings.php:98
+msgid ""
+"Hello {name}\n"
+"\n"
+"Your renewal payment in the amount of {amount} for {subscription_name} has "
+"been successfully processed."
+msgstr ""
+"Hallo {name}\n"
+"\n"
+"Ihre Erneuerungszahlung in Höhe von {amount} für {subscription_name} wurde "
+"erfolgreich verarbeitet."
+
+#: includes/admin/settings.php:103
+msgid "Payment Failed Email"
+msgstr "Mail Erneuerungszahlung fehlgeschlagen"
+
+#: includes/admin/settings.php:104
+msgid ""
+"Check this if you'd like customers to be sent an email notice each time a "
+"payment fails to be processed."
+msgstr ""
+
+#: includes/admin/settings.php:109
+msgid "Renewal Payment Failed Subject"
+msgstr "Betreff Erneuerungszahlung fehlgeschlagen"
+
+#: includes/admin/settings.php:110
+msgid ""
+"Enter the subject line of the email sent when a renewal payment fails to be "
+"processed."
+msgstr ""
+
+#: includes/admin/settings.php:112
+msgid "Renewal Payment Failed"
+msgstr "Erneuerungszahlung fehlgeschlagen"
+
+#: includes/admin/settings.php:116
+msgid "Renewal Payment Failed Message"
+msgstr "Nachricht zu Erneuerungszahlung fehlgeschlagen"
+
+#: includes/admin/settings.php:117
+msgid ""
+"Enter the body text of the email sent when a renewal payment fails to be "
+"processed."
+msgstr ""
+
+#: includes/admin/settings.php:119
+msgid ""
+"Hello {name}\n"
+"\n"
+"Your renewal payment in the amount of {amount} for {subscription_name} has "
+"been failed to be processed."
+msgstr ""
+"Hallo {name}\n"
+"\n"
+"Ihre Erneuerungszahlung in der Höhe von {amount} für {subscription_name} ist "
+"bei der Verarbeitung fehlgeschlagen."
+
+#: includes/admin/settings.php:123
+msgid "Subscription Cancelled Email"
+msgstr ""
+
+#: includes/admin/settings.php:124
+msgid ""
+"Check this if you'd like customers to be sent an email notice when they "
+"cancel a subscription."
+msgstr ""
+
+#: includes/admin/settings.php:129
+msgid "Subscription Cancelled Subject"
+msgstr ""
+
+#: includes/admin/settings.php:130
+msgid ""
+"Enter the subject line of the email sent when a subscription is cancelled."
+msgstr ""
+
+#: includes/admin/settings.php:132
+msgid "Subscription Cancelled"
+msgstr ""
+
+#: includes/admin/settings.php:136
+msgid "Subscription Cancelled Message"
+msgstr ""
+
+#: includes/admin/settings.php:137
+msgid "Enter the body text of the email sent when a subscription is cancelled."
+msgstr ""
+
+#: includes/admin/settings.php:139
+msgid ""
+"Hello {name}\n"
+"\n"
+"Your subscription for {subscription_name} has been successfully cancelled."
+msgstr ""
+"Hallo {name}\n"
+"\n"
+"Ihr Abonnement für {subscription_name} wurde erfolgreich beendet."
+
+#: includes/admin/settings.php:143
+msgid "Send Renewal Reminders"
+msgstr "Erinnerungen zur Verlängerung senden"
+
+#: includes/admin/settings.php:144
+msgid ""
+"Check this box if you want customers to receive a reminder when their "
+"subscription is about to renew."
+msgstr ""
+
+#: includes/admin/settings.php:149
+msgid "Subscription Renewal Reminders"
+msgstr "Abonnement Erinnerung zur Verlängerung"
+
+#: includes/admin/settings.php:150
+msgid "Configure the subscription renewal notice emails"
+msgstr ""
+
+#: includes/admin/settings.php:155
+msgid "Send Expiration Reminders"
+msgstr ""
+
+#: includes/admin/settings.php:156
+msgid ""
+"Check this box if you want customers to receive a reminder when their "
+"subscription is about to expire or complete."
+msgstr ""
+
+#: includes/admin/settings.php:161
+msgid "Subscription Expiration Reminders"
+msgstr ""
+
+#: includes/admin/settings.php:162
+msgid "Configure the subscription expiration notice emails"
+msgstr ""
+
+#: includes/admin/settings.php:167
+msgid "Subscription Cancelled Email for Admins"
+msgstr ""
+
+#: includes/admin/settings.php:168
+msgid ""
+"Check this if you'd like admins to be sent an email notice when a customer "
+"cancels a subscription."
+msgstr ""
+
+#: includes/admin/settings.php:173
+msgid "Subscription Cancelled Subject for Admins"
+msgstr ""
+
+#: includes/admin/settings.php:174
+msgid ""
+"Enter the subject line of the email sent to admins when a subscription is "
+"cancelled."
+msgstr ""
+
+#: includes/admin/settings.php:176
+msgid "Subscription {subscription_id} Cancelled"
+msgstr "Abonnement {subscription_id} storniert"
+
+#: includes/admin/settings.php:180
+msgid "Subscription Cancelled Message for Admins"
+msgstr ""
+
+#: includes/admin/settings.php:181
+msgid ""
+"Enter the body text of the email sent to admins when a subscription is "
+"cancelled."
+msgstr ""
+
+#: includes/admin/settings.php:183
+msgid ""
+"Subscription ID: {subscription_id}\n"
+"\n"
+"Customer: {name}\n"
+"\n"
+"Subscription: {subscription_name}\n"
+"\n"
+"View Subscription: {subscription_link}"
+msgstr ""
+
+#: includes/admin/settings.php:209 includes/admin/settings.php:255
+msgid "Subject"
+msgstr "Betreff"
+
+#: includes/admin/settings.php:210 includes/admin/settings.php:256
+msgid "Send Period"
+msgstr "Sendezyklus"
+
+#: includes/admin/settings.php:223 includes/admin/settings.php:269
+msgid "Send Test Email"
+msgstr ""
+
+#: includes/admin/settings.php:224 includes/admin/settings.php:270
+msgid "Delete"
+msgstr "Löschen"
+
+#: includes/admin/settings.php:231
+msgid "Add Renewal Reminder"
+msgstr "Erinnerung zur Verlängerung hinzufügen"
+
+#: includes/admin/settings.php:277
+msgid "Add Expiration Reminder"
+msgstr ""
+
+#: includes/admin/settings.php:297 includes/admin/settings.php:298
+msgid "Subscription Reminder"
+msgstr ""
+
+#: includes/admin/settings.php:355 includes/admin/settings.php:406
+msgid "You do not have permission to add reminder notices"
+msgstr ""
+
+#: includes/admin/settings.php:359 includes/admin/settings.php:410
+#: includes/admin/settings.php:465 includes/admin/settings.php:504
+#: includes/admin/subscriptions.php:667 includes/admin/subscriptions.php:755
+#: includes/admin/subscriptions.php:877 includes/admin/subscriptions.php:908
+#: includes/admin/subscriptions.php:957 includes/admin/subscriptions.php:998
+#: includes/admin/subscriptions.php:1039
+#: includes/edd-recurring-checkout.php:707
+#: includes/gateways/edd-recurring-gateway.php:898
+#: includes/gateways/edd-recurring-gateway.php:946
+msgid "Nonce verification failed"
+msgstr ""
+
+#: includes/admin/settings.php:362 includes/admin/settings.php:417
+#: includes/edd-recurring-reminders.php:117
+#: includes/edd-recurring-reminders.php:150
+msgid "Your Subscription is About to Renew"
+msgstr "Ihr Abonnement wird demnächst erneuert"
+
+#: includes/admin/settings.php:414 includes/admin/settings.php:469
+#: includes/admin/settings.php:508
+msgid "No reminder notice ID was provided"
+msgstr ""
+
+#: includes/admin/settings.php:461
+msgid "You do not have permission to delete reminder notices"
+msgstr ""
+
+#: includes/admin/settings.php:500
+msgid "You do not have permission to send test email reminder notices"
+msgstr ""
+
+#: includes/admin/settings.php:530
+msgid ""
+"Note: Item Quantities will be disabled for all products in the cart if the "
+"cart contains a recurring product."
+msgstr ""
+
+#: includes/admin/settings.php:545
+msgid "Guest checkout is not permitted when purchasing subscriptions."
+msgstr ""
+"Als Gast einkaufen ist nicht möglich wenn Abonnements abgeschlossen werden."
+
+#: includes/admin/subscriptions.php:29
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+#: includes/admin/subscriptions.php:45
+msgid "To narrow results, search can be prefixed with the following:"
+msgstr ""
+"Um Ergebnisse einzugrenzen kann die Suche mit dem folgenden Prefix angegeben "
+"werden:"
+
+#: includes/admin/subscriptions.php:59
+msgid "You are not permitted to create new subscriptions."
+msgstr "Es ist Ihnen nicht gestattet neue Abonnements anzulegen."
+
+#: includes/admin/subscriptions.php:66 includes/admin/subscriptions.php:290
+#: templates/shortcode-subscription-receipt.php:28
+msgid "Subscription Details"
+msgstr "Abonnement Details"
+
+#: includes/admin/subscriptions.php:82
+msgid ""
+"<strong>Note: </strong> This tool allows you to create a new subscription "
+"record. It will not create a payment profile in your merchant processor. "
+"Payment profiles in the merchant processor must be created through your "
+"merchant portal. Once created in the merchant portal, details such as "
+"transaction ID and billing profile id, can be entered here."
+msgstr ""
+
+#: includes/admin/subscriptions.php:93
+msgid "Price and Billing Cycle:"
+msgstr "Preis- und Rechnungszyklus:"
+
+#: includes/admin/subscriptions.php:97
+msgctxt "Inital subscription amount then billing cycle and amount"
+msgid "then"
+msgstr ""
+
+#: includes/admin/subscriptions.php:108 includes/admin/subscriptions.php:366
+msgid "Times Billed:"
+msgstr "Anzahl an Rechnungen:"
+
+#: includes/admin/subscriptions.php:112
+msgid ""
+"This refers to the number of times the subscription will be billed before "
+"being marked as Completed and payments stopped. Enter 0 if payments continue "
+"indefinitely."
+msgstr ""
+
+#: includes/admin/subscriptions.php:117
+msgid "Customer Email:"
+msgstr "Kunden EMail:"
+
+#: includes/admin/subscriptions.php:122
+msgid "Required. Select the customer this subscription belongs to."
+msgstr ""
+
+#: includes/admin/subscriptions.php:125
+msgid "Enter customer email"
+msgstr ""
+
+#: includes/admin/subscriptions.php:126
+msgid ""
+"Required. Enter the email address of the customer to create a new record."
+msgstr ""
+
+#: includes/admin/subscriptions.php:130
+msgid "%sSelect existing%s customer or %screate new customer%s"
+msgstr ""
+
+#: includes/admin/subscriptions.php:140 includes/admin/subscriptions.php:387
+msgid "Product:"
+msgstr "Produkt:"
+
+#: includes/admin/subscriptions.php:145
+msgid "Required. Select the product this subscription grants access to."
+msgstr ""
+
+#: includes/admin/subscriptions.php:150 includes/admin/subscriptions.php:381
+msgid "Initial Purchase ID:"
+msgstr ""
+
+#: includes/admin/subscriptions.php:154
+msgid "Create new payment record"
+msgstr ""
+
+#: includes/admin/subscriptions.php:155
+msgid "Enter existing payment ID"
+msgstr ""
+
+#: includes/admin/subscriptions.php:158
+msgid ""
+"A payment record will be automatically created unless you choose to enter an "
+"existing ID. If using an existing payment record, enter the ID here."
+msgstr ""
+
+#: includes/admin/subscriptions.php:163
+msgid "Gateway:"
+msgstr ""
+
+#: includes/admin/subscriptions.php:175 includes/admin/subscriptions.php:425
+msgid "Profile ID:"
+msgstr ""
+
+#: includes/admin/subscriptions.php:179
+msgid ""
+"Required. This is the unique ID of the subscription in the merchant "
+"processor, such as PayPal or Stripe."
+msgstr ""
+
+#: includes/admin/subscriptions.php:184 includes/admin/subscriptions.php:438
+#: includes/admin/subscriptions.php:590
+msgid "Transaction ID:"
+msgstr ""
+
+#: includes/admin/subscriptions.php:188
+msgid ""
+"Optional. This is the unique ID of the initial transaction inside of the "
+"merchant processor, such as PayPal or Stripe."
+msgstr ""
+
+#: includes/admin/subscriptions.php:193 includes/admin/subscriptions.php:449
+msgid "Date Created:"
+msgstr "Erzeugungsdatum:"
+
+#: includes/admin/subscriptions.php:197
+msgid "Optional. The date this subscription was created."
+msgstr "Optional. Das Datum an dem das Abonnement angelegt wurde."
+
+#: includes/admin/subscriptions.php:202 includes/admin/subscriptions.php:459
+msgid "Expiration Date:"
+msgstr "Ablaufdatum:"
+
+#: includes/admin/subscriptions.php:206
+msgid ""
+"Required. The date the subscription expires or the date of the next "
+"automatic renewal payment."
+msgstr ""
+
+#: includes/admin/subscriptions.php:211 includes/admin/subscriptions.php:472
+msgid "Subscription Status:"
+msgstr "Abonnement Status:"
+
+#: includes/admin/subscriptions.php:215 includes/admin/subscriptions.php:476
+#: includes/edd-subscription.php:1019
+msgid "Pending"
+msgstr "Wartend"
+
+#: includes/admin/subscriptions.php:216 includes/admin/subscriptions.php:477
+#: includes/edd-subscription.php:1007
+msgid "Active"
+msgstr "Aktiv"
+
+#: includes/admin/subscriptions.php:217 includes/admin/subscriptions.php:478
+#: includes/edd-subscription.php:1011
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: includes/admin/subscriptions.php:218 includes/admin/subscriptions.php:479
+#: includes/edd-subscription.php:1015
+msgid "Expired"
+msgstr "Abgelaufen"
+
+#: includes/admin/subscriptions.php:219 includes/admin/subscriptions.php:480
+#: includes/edd-subscription.php:1027
+msgid "Trialling"
+msgstr "Probephase"
+
+#: includes/admin/subscriptions.php:220 includes/admin/subscriptions.php:481
+#: includes/edd-subscription.php:1023
+msgid "Failing"
+msgstr "Fehlschlagend"
+
+#: includes/admin/subscriptions.php:221 includes/admin/subscriptions.php:482
+#: includes/edd-subscription.php:1031
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+#: includes/admin/subscriptions.php:223
+msgid "Required. Select the status of this subscription."
+msgstr ""
+
+#: includes/admin/subscriptions.php:232
+msgid "Add Subscription"
+msgstr ""
+
+#: includes/admin/subscriptions.php:258
+msgid "You are not permitted to view this data."
+msgstr ""
+
+#: includes/admin/subscriptions.php:263 includes/admin/subscriptions.php:271
+msgid "Invalid subscription ID Provided."
+msgstr ""
+
+#: includes/admin/subscriptions.php:313
+msgid "Billing Cycle:"
+msgstr "Rechnungszyklus:"
+
+#: includes/admin/subscriptions.php:320
+msgctxt "Inital subscription amount then billing cycle and amount"
+msgid "%s then %s"
+msgstr "%s dann %s"
+
+#: includes/admin/subscriptions.php:324
+msgctxt "view billing cycle details on single subscription admin page"
+msgid "View Details"
+msgstr "Details anzeigen"
+
+#: includes/admin/subscriptions.php:335
+msgid "Tax Rate:"
+msgstr "Steuer:"
+
+#: includes/admin/subscriptions.php:338 includes/admin/subscriptions.php:352
+msgctxt "Inital subscription tax rate then billing cycle and tax rate"
+msgid "%s then %s"
+msgstr "%s dann %s"
+
+#: includes/admin/subscriptions.php:349
+msgid "Tax Amount:"
+msgstr "Steuerhöhe:"
+
+#: includes/admin/subscriptions.php:372
+msgid "Customer:"
+msgstr "Kunde:"
+
+#: includes/admin/subscriptions.php:413
+msgid "View %s"
+msgstr "Zeige %s"
+
+#: includes/admin/subscriptions.php:419
+msgid "Payment Method:"
+msgstr "Zahlungsmethode:"
+
+#: includes/admin/subscriptions.php:457
+#: templates/shortcode-subscription-receipt.php:58
+#: templates/shortcode-subscriptions.php:75
+msgid "Trialling Until:"
+msgstr "Probephase bis:"
+
+#: includes/admin/subscriptions.php:485
+msgid "Reactivate Subscription"
+msgstr "Abonnement reaktivieren"
+
+#: includes/admin/subscriptions.php:488
+msgid "Retry Renewal"
+msgstr "Verlängerung neu versuchen"
+
+#: includes/admin/subscriptions.php:496
+msgid ""
+"Changing the expiration date will not affect when renewal payments are "
+"processed."
+msgstr ""
+
+#: includes/admin/subscriptions.php:497
+msgid ""
+"Changing the product assigned will not automatically adjust any pricing."
+msgstr ""
+
+#: includes/admin/subscriptions.php:498
+msgid ""
+"Changing the profile ID can result in renewals not being processed. Do this "
+"with caution."
+msgstr ""
+
+#: includes/admin/subscriptions.php:502
+msgid "Update Subscription"
+msgstr "Abonnement aktualisieren"
+
+#: includes/admin/subscriptions.php:507
+msgid "Delete Subscription"
+msgstr "Abonnement löschen"
+
+#: includes/admin/subscriptions.php:531
+msgid "Renewal Payments:"
+msgstr "Erneuerungszahlungen:"
+
+#: includes/admin/subscriptions.php:534
+msgid "Note:"
+msgstr ""
+
+#: includes/admin/subscriptions.php:534
+msgid ""
+"subscriptions purchased with the Test Payment gateway will not renew "
+"automatically."
+msgstr ""
+
+#: includes/admin/subscriptions.php:539
+msgid "ID"
+msgstr ""
+
+#: includes/admin/subscriptions.php:541
+msgid "Date"
+msgstr "Datum"
+
+#: includes/admin/subscriptions.php:555
+msgid "View Details for Payment"
+msgstr "Details für die Zahlung anzeigen"
+
+#: includes/admin/subscriptions.php:565
+msgid "No Payments Found"
+msgstr "Keine Zahlungen gefunden"
+
+#: includes/admin/subscriptions.php:573
+msgid "Use this form to manually record a renewal payment."
+msgstr ""
+
+#: includes/admin/subscriptions.php:573
+msgid ""
+"Note: this does not initiate a charge in your merchant processor. This "
+"should only be used for recording a missed payment or one that was manually "
+"collected."
+msgstr ""
+
+#: includes/admin/subscriptions.php:577
+msgid "Tax:"
+msgstr "Steuer:"
+
+#: includes/admin/subscriptions.php:584
+msgid "Total:"
+msgstr "Gesamt:"
+
+#: includes/admin/subscriptions.php:597
+msgid "Record Payment and Renew Subscription"
+msgstr ""
+
+#: includes/admin/subscriptions.php:598
+msgid "Record Payment Only"
+msgstr ""
+
+#: includes/admin/subscriptions.php:613
+msgid "Notes:"
+msgstr ""
+
+#: includes/admin/subscriptions.php:629
+msgid "Add Note"
+msgstr ""
+
+#: includes/admin/subscriptions.php:682
+msgid "A variation is required for the selected product"
+msgstr ""
+
+#: includes/admin/subscriptions.php:759
+msgid "Please enter an expiration date"
+msgstr ""
+
+#: includes/admin/subscriptions.php:763
+msgid "Please select a product"
+msgstr ""
+
+#: includes/admin/subscriptions.php:767
+msgid "Please enter an initial amount"
+msgstr ""
+
+#: includes/admin/subscriptions.php:771
+msgid "Please enter a recurring amount"
+msgstr ""
+
+#: includes/admin/subscriptions.php:963
+msgid "This subscription does not support being retried."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:71
+msgid ""
+"Easy Digital Downloads needs to upgrade the subscriptions database, click <a "
+"href=\"%s\">here</a> to start the upgrade."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:85
+msgid ""
+"Easy Digital Downloads needs to upgrade the subscription customer database, "
+"click <a href=\"%s\">here</a> to start the upgrade."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:94
+msgid ""
+"Easy Digital Downloads needs to upgrade the subscription payments database, "
+"click <a href=\"%s\">here</a> to start the upgrade."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:103
+msgid ""
+"Easy Digital Downloads needs to upgrade the payment gateway error logs, "
+"click <a href=\"%s\">here</a> to start the upgrade."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:112
+#: includes/admin/upgrade-functions.php:130
+msgid ""
+"Easy Digital Downloads needs to upgrade subscriptions table, click <a href="
+"\"%s\">here</a> to start the upgrade."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:121
+msgid ""
+"Easy Digital Downloads wants to check to see if any subscriptions need to be "
+"set to complete. Click <a href=\"%s\">here</a> to start."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:139
+msgid ""
+"Easy Digital Downloads needs to update the subscriptions table, click <a "
+"href=\"%s\">here</a> to start the upgrade."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:158
+#: includes/admin/upgrade-functions.php:518
+#: includes/admin/upgrade-functions.php:981
+#: includes/admin/upgrade-functions.php:1060
+#: includes/admin/upgrade-functions.php:1140
+#: includes/admin/upgrade-functions.php:1230
+msgid "You do not have permission to do shop upgrades"
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:860
+msgid ""
+"Customer's subscription #%d was improperly attributed to the incorrect "
+"Stripe customer record. It was automatically cancelled to prevent incorrect "
+"renewal payments."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:1304
+#: includes/admin/upgrade-functions.php:1409
+msgid ""
+"<strong>Migration complete:</strong> You have already completed the "
+"subscription Price ID upgrade."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:1312
+#: includes/admin/upgrade-functions.php:1417
+msgid ""
+"<strong>Database Upgrade Complete:</strong> All database upgrades have been "
+"completed."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:1314
+#: includes/admin/upgrade-functions.php:1419
+msgid "You may now leave this page."
+msgstr "Sie können diese Seite nun verlassen."
+
+#: includes/admin/upgrade-functions.php:1320
+#: includes/admin/upgrade-functions.php:1425
+msgid ""
+"<strong>Important:</strong> Please leave this screen open and do not "
+"navigate away until the process completes."
+msgstr ""
+"<strong>Wichtig:</strong> Bitte lassen Sie dieses Fenster offen und "
+"navigieren Sie nicht bis der Prozess abgeschlossen wurde."
+
+#: includes/admin/upgrade-functions.php:1363
+#: includes/admin/upgrade-functions.php:1468
+msgid "Update subscription records"
+msgstr "Abonnementeinträge aktualisieren"
+
+#: includes/admin/upgrade-functions.php:1368
+msgid ""
+"This update will add the price ID of any variably priced subscription to the "
+"subscription record in the database."
+msgstr ""
+
+#: includes/admin/upgrade-functions.php:1377
+#: includes/admin/upgrade-functions.php:1380
+#: includes/admin/upgrade-functions.php:1482
+#: includes/admin/upgrade-functions.php:1485
+msgid "Update Subscriptions"
+msgstr "Abonnements aktualisieren"
+
+#: includes/admin/upgrade-functions.php:1381
+#: includes/admin/upgrade-functions.php:1486
+msgid "Subscription records have already been updated."
+msgstr "Abonnementeinträge wurden bereits aktualisiert."
+
+#: includes/admin/upgrade-functions.php:1473
+msgid ""
+"This update will update the price ID of any variably priced subscription to "
+"the subscription record in the database."
+msgstr ""
+
+#: includes/admin/upgrades/class-add-subscription-price-ids.php:132
+#: includes/admin/upgrades/class-update-subscription-price-ids.php:132
+msgid "You do not have permission to run this upgrade."
+msgstr ""
+
+#: includes/admin/upgrades/class-add-subscription-price-ids.php:145
+#: includes/admin/upgrades/class-update-subscription-price-ids.php:145
+msgid "Subscription records have been successfully updated."
+msgstr "Abonnementeinträge wurden erfolgreich aktualisiert."
+
+#: includes/edd-recurring-checkout.php:82
+msgid ""
+"An account was detected for your email. Please log in to continue your "
+"purchase."
+msgstr ""
+"Ein Account wurde für Ihre EMail detektiert. Bitte loggen Sie sich ein, um "
+"Ihren Einkauf weiterzuführen."
+
+#: includes/edd-recurring-checkout.php:84
+msgid "Lost Password"
+msgstr "Passwort verloren"
+
+#: includes/edd-recurring-checkout.php:85
+msgid "Lost Password?"
+msgstr "Passwort verloren?"
+
+#: includes/edd-recurring-checkout.php:138
+msgid "Notice"
+msgstr "Anmerkung"
+
+#: includes/edd-recurring-checkout.php:138
+msgid ""
+"Your purchase is completed, but we encountered an issue while processing "
+"payments for the following items"
+msgstr ""
+"Ihr Einkauf ist abgeschlossen, jedoch gab es ein Problem während die "
+"Zahlungen für die folgenden Artikel verarbeitet wurden"
+
+#: includes/edd-recurring-checkout.php:146
+msgid ""
+"The above items were removed from the purchase and you were not charged for "
+"them. You can attempt to repurchase them at your convenience. All other "
+"items were purchased successfully."
+msgstr ""
+"Die obigen Artikel wurde von dem Einkauf entfernt und Ihnen wurde nichts "
+"dafür berechnet. Sie können versuchen diese nochmal zu kaufen. Alle anderen "
+"Artikel wurden erfolgreich gekauft."
+
+#: includes/edd-recurring-checkout.php:156
+msgid "Try Again"
+msgstr "Nochmal versuchen"
+
+#: includes/edd-recurring-checkout.php:216
+#: includes/edd-recurring-checkout.php:257
+#: includes/edd-recurring-checkout.php:293
+#: includes/edd-recurring-checkout.php:330
+msgid "signup fee"
+msgstr "Anmeldungsgebühr"
+
+#: includes/edd-recurring-checkout.php:219
+#: includes/edd-recurring-checkout.php:260
+#: includes/edd-recurring-checkout.php:296
+#: includes/edd-recurring-checkout.php:333
+msgid "With %s %s"
+msgstr "Mit %s %s"
+
+#. translators: the billing period
+#: includes/edd-recurring-checkout.php:577
+msgid "Billed once per %1$s until cancelled"
+msgstr "Abrechnung einmal pro %1$s bis zur Kündigung"
+
+#. translators: 1. the billing period 2. the number of trial units 3. the trial period unit (week, month)
+#: includes/edd-recurring-checkout.php:581
+msgid "Billed once per %1$s until cancelled, after a %2$s %3$s free trial"
+msgstr ""
+"Abrechnung einmal pro %1$s bis zur Kündigung, nach einer %2$s %3$s "
+"kostenlosen Probephase"
+
+#. translators: 1. the billing period 2. the number of times it will be billed
+#: includes/edd-recurring-checkout.php:590
+msgid "Billed once per %1$s, %2$s time"
+msgid_plural "Billed once per %1$s, %2$s times"
+msgstr[0] "Abrechnung einmal pro %1$s, %2$s mal"
+msgstr[1] "Abrechnung einmal pro %1$s, %2$s mal"
+
+#. translators: 1. the billing period 2. the number of times the subscription will be billed 3. the number of trial units 4. the trial period unit (week, month)
+#: includes/edd-recurring-checkout.php:602
+msgid "Billed once per %1$s, %2$s time, after a %3$s %4$s free trial"
+msgid_plural "Billed once per %1$s, %2$s times, after a %3$s %4$s free trial"
+msgstr[0] ""
+"Abrechnung einmal pro %1$s, %2$s mal, nach einer %3$s %4$s kostenlosen "
+"Probephase"
+msgstr[1] ""
+"Abrechnung einmal pro %1$s, %2$s mal, nach einer %3$s %4$s kostenlosen "
+"Probephase"
+
+#: includes/edd-recurring-checkout.php:631
+msgctxt "subscription term"
+msgid "day"
+msgid_plural "days"
+msgstr[0] "Tag"
+msgstr[1] "Tage"
+
+#: includes/edd-recurring-checkout.php:634
+msgctxt "subscription term"
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "Woche"
+msgstr[1] "Wochen"
+
+#: includes/edd-recurring-checkout.php:637
+msgctxt "subscription term"
+msgid "month"
+msgid_plural "months"
+msgstr[0] "Monat"
+msgstr[1] "Monate"
+
+#: includes/edd-recurring-checkout.php:640
+msgctxt "subscription term"
+msgid "quarter"
+msgstr "Vierteljahr"
+
+#: includes/edd-recurring-checkout.php:643
+msgctxt "subscription term"
+msgid "six months"
+msgstr "Sechs Monate"
+
+#: includes/edd-recurring-checkout.php:646
+msgctxt "subscription term"
+msgid "year"
+msgid_plural "years"
+msgstr[0] "Jahr"
+msgstr[1] "Jahre"
+
+#: includes/edd-recurring-checkout.php:685
+msgid "Total Due Today:"
+msgstr "Gesamtgebühr heute:"
+
+#: includes/edd-recurring-checkout.php:688
+msgid ""
+"Your account will be automatically charged when the free trial is completed."
+msgstr ""
+"Ihr Account wird automatisch belastet wenn die kostenlose Probephase beendet "
+"wurde."
+
+#: includes/edd-recurring-checkout.php:752
+msgid ""
+"You have already used the free trial for <strong>%s</strong>. Please log "
+"into your account to complete the purchase. You will be charged immediately."
+msgstr ""
+"Sie haben die kostenlose Probephase für <strong>%s</strong> schon benutzt. "
+"Bitte loggen Sie sich in Ihren Account ein um Ihren Einkauf abzuschließen. "
+"Die Rechnung wird sofort fällig."
+
+#: includes/edd-recurring-emails.php:124
+msgid ""
+"Hello {name},\n"
+"\n"
+"Your subscription for {subscription_name} will renew or expire on "
+"{expiration}."
+msgstr ""
+"Hallo {name},\n"
+"\n"
+"Ihr Abonnement für {subscription_name} wird erneuert oder läuft aus am "
+"{expiration}."
+
+#: includes/edd-recurring-emails.php:127
+msgid "Your Subscription is About to Renew or Expire"
+msgstr "Ihr Abonnement wird demnächst erneuert oder läuft aus"
+
+#: includes/edd-recurring-emails.php:134
+msgid "LOG - Subscription Reminder Notice Sent"
+msgstr ""
+
+#: includes/edd-recurring-reminders.php:41
+msgid "The day of the renewal/expiration"
+msgstr "Der Tag der Verlängerung/des Ablaufs"
+
+#: includes/edd-recurring-reminders.php:42
+msgid "One day before renewal/expiration"
+msgstr "Ein Tag vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:43
+msgid "Two days before renewal/expiration"
+msgstr "Zwei Tage vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:44
+msgid "Three days before renewal/expiration"
+msgstr "Drei Tage vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:45
+msgid "One week before renewal/expiration"
+msgstr "Eine Woche vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:46
+msgid "Two weeks before renewal/expiration"
+msgstr "Zwei Wochen vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:47
+msgid "One month before renewal/expiration"
+msgstr "Ein Monat vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:48
+msgid "Two months before renewal/expiration"
+msgstr "Zwei Monate vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:49
+msgid "Three months before renewal/expiration"
+msgstr "Drei Monate vor Verlängerung/Ablauf"
+
+#: includes/edd-recurring-reminders.php:50
+msgid "One day after expiration"
+msgstr "Ein Tag nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:51
+msgid "Two days after expiration"
+msgstr "Zwei Tage nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:52
+msgid "Three days after expiration"
+msgstr "Drei Tage nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:53
+msgid "One week after expiration"
+msgstr "Eine Woche nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:54
+msgid "Two weeks after expiration"
+msgstr "Zwei Wochen nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:55
+msgid "One month after expiration"
+msgstr "Ein Monat nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:56
+msgid "Two months after expiration"
+msgstr "Zwei Monat nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:57
+msgid "Three months after expiration"
+msgstr "Drei Monate nach Ablauf"
+
+#: includes/edd-recurring-reminders.php:86
+msgid "Expiration"
+msgstr "Ablauf"
+
+#: includes/edd-recurring-reminders.php:161
+msgid "Your Subscription is About to Expire"
+msgstr "Ihr Abonnement läuft demnächst aus"
+
+#: includes/edd-recurring-reminders.php:347
+msgid ""
+"**THIS IS A DEFAULT TEST MESSAGE - Notice message was not retrieved.**\n"
+"\n"
+"Hello {name},\n"
+"\n"
+"Your subscription for {subscription_name} will renew or expire on "
+"{expiration}."
+msgstr ""
+"**DIES IST EINE STANDARD TESTNACHRICHT - Mitteilung wurde nicht empfangen."
+"**\n"
+"\n"
+"Hallo {name},\n"
+"\n"
+"Ihr Abonnement für {subscription_name} wird erneuert oder läuft ab am "
+"{expiration}."
+
+#: includes/edd-recurring-reminders.php:349
+msgid "Default Subject Message - Your Subscription is About to Renew or Expire"
+msgstr ""
+"Standard Betreff Nachricht - Ihr Abonnement wird demnächst erneuert oder "
+"läuft aus"
+
+#: includes/edd-recurring-shortcodes.php:110
+msgid "Cancel your subscription"
+msgstr "Abonnement auflösen"
+
+#: includes/edd-recurring-shortcodes.php:150
+msgid "Invalid Payment Update"
+msgstr "Ungültige Zahlungsaktualisierung"
+
+#: includes/edd-recurring-shortcodes.php:156
+msgid "Unable to verify payment update. Please try again later."
+msgstr ""
+
+#: includes/edd-subscription.php:116
+msgid "Can't get property %s"
+msgstr ""
+
+#: includes/edd-subscription.php:198
+msgid "Product ID changed from %d to %d."
+msgstr ""
+
+#: includes/edd-subscription.php:202
+msgid "Price ID changed from %d to %d."
+msgstr ""
+
+#: includes/edd-subscription.php:676 includes/edd-subscription.php:1204
+msgid "gateway"
+msgstr "Gateway"
+
+#: includes/edd-subscription.php:682
+msgid "Subscription #%d cancelled by %s"
+msgstr "Abonnement #%d storniert by %s"
+
+#: includes/edd-subscription.php:821
+msgid "This subscription is not failing so cannot be retried."
+msgstr ""
+
+#: includes/edd-subscription.php:839
+msgid "An error was encountered. Please check your merchant account logs."
+msgstr ""
+
+#: includes/edd-subscription.php:961
+msgid "Expiration synced with gateway and updated to %s"
+msgstr ""
+
+#: includes/edd-subscription.php:1209
+msgid "Status changed from %s to %s by %s"
+msgstr ""
+
+#: includes/edd-subscriptions-api.php:90
+msgid "'%s' is not a valid status."
+msgstr "'%s' ist kein gültiger Status."
+
+#: includes/edd-subscriptions-api.php:163
+msgid "No customer found for %s!"
+msgstr "Kein Kunde für %s gefunden!"
+
+#: includes/edd-subscriptions-api.php:224
+msgid "No subscriptions found for %s!"
+msgstr "Kein Abonnement für %s gefunden!"
+
+#: includes/edd-subscriptions-api.php:230
+msgid "No subscriptions found!"
+msgstr "Keine Abonnements gefunden!"
+
+#: includes/edd-subscriptions-db.php:124 includes/edd-subscriptions-db.php:442
+msgid "The bill_times argument should be a number but was not."
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout.php:24
+msgid "2Checkout"
+msgstr "2Checkout"
+
+#: includes/gateways/edd-recurring-2checkout.php:45
+#: includes/gateways/edd-recurring-2checkout_onsite.php:45
+msgid "You must enter your account number and secret word in settings"
+msgstr ""
+"Sie müssen Ihre Accountnummber und das geheime Wort in den Einstellungen "
+"eingeben"
+
+#: includes/gateways/edd-recurring-2checkout.php:51
+msgid "Only one subscription may be purchased at a time through 2Checkout."
+msgstr ""
+"Es kann nur ein Abonnement zur gleichen Zeit durch 2Checkout gekauft werden."
+
+#: includes/gateways/edd-recurring-2checkout.php:69
+#: includes/gateways/edd-recurring-2checkout_onsite.php:72
+msgid "Free trials are not supported by 2Checkout."
+msgstr "Kostenlose Probeversionen sind durch 2Checkout nicht unterstützt."
+
+#: includes/gateways/edd-recurring-2checkout.php:321
+msgid "2Checkout fraud review failed."
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout.php:336
+msgid "2Checkout fraud review in progress."
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout.php:350
+msgid "2Checkout fraud review passed."
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout.php:377
+msgid "2Checkout Invoice status set to deposited."
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout.php:444
+msgid "Payment refunded in 2Checkout."
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout_onsite.php:24
+msgid "2Checkout OnSite"
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout_onsite.php:51
+msgid "You must enter your Private and Publishable API key in settings"
+msgstr ""
+
+#: includes/gateways/edd-recurring-2checkout_onsite.php:67
+msgid ""
+"Missing 2Checkout token, please try again or contact support if the issue "
+"persists."
+msgstr ""
+
+#: includes/gateways/edd-recurring-gateway.php:336
+msgid "Nonce verification has failed"
+msgstr ""
+
+#: includes/gateways/edd-recurring-gateway.php:340
+msgid "You must log in or create an account to purchase a subscription"
+msgstr ""
+"Sie müssen sich einloggen oder einen Account erzeugen um ein Abonnement "
+"kaufen zu können"
+
+#: includes/gateways/edd-recurring-gateway.php:504
+msgid "You must be logged in to purchase a subscription"
+msgstr "Sie müssen eingeloggt sein um ein Abonnement zu kaufen"
+
+#: includes/gateways/edd-recurring-gateway.php:534
+msgid "There was an error processing your order. Please contact support."
+msgstr ""
+"Es gab einen Fehler während der Bearbeitung Ihres Auftrags. Bitte "
+"kontaktieren Sie den Support."
+
+#: includes/gateways/edd-recurring-gateway.php:705
+#: includes/gateways/edd-recurring-stripe.php:798
+msgid "Failed creating subscription for %s. Gateway returned: %s"
+msgstr "Abonnement konnte für %s nicht erzeugt werden. Gateway Antwort: %s"
+
+#: includes/gateways/edd-recurring-gateway.php:740
+msgid ""
+"Free trials and non-trials may not be purchased at the same time. Please "
+"purchase each separately."
+msgstr ""
+"Kostenlose Probeversionen und nicht-Probeversionen können nicht gleichzeitig "
+"gekauft werden. Bitte kaufen Sie diese separat."
+
+#: includes/gateways/edd-recurring-gateway.php:758
+msgid ""
+"Subscriptions and non-subscriptions may not be purchased at the same time. "
+"Please purchase each separately."
+msgstr ""
+"Abonnements und nicht-Abonnements können nicht gleichzeitig gekauft werden. "
+"Bitte kaufen Sie diese separat."
+
+#: includes/gateways/edd-recurring-gateway.php:766
+msgid "This message is showing because you are a shop manager"
+msgstr "Diese Nachricht wird angezeigt weil Sie ein Shop Manager sind"
+
+#: includes/gateways/edd-recurring-gateway.php:771
+msgid ""
+"Your active payment gateways do not support mixed carts. The %1$sStripe "
+"Payment Gateway%2$s allows customers to purchase carts containing both "
+"recurring subscriptions and one-time charges at the same time."
+msgstr ""
+
+#: includes/gateways/edd-recurring-gateway.php:803
+msgid ""
+"Sorry, purchasing a subscription and non-subscription product is only "
+"supported when paying by credit card. %1$sSwitch to this payment method%2$s."
+msgstr ""
+"Entschuldigung, Einkäufe von Abonnements und nicht-Abonnements wird nur bei "
+"Zahlung mit Kreditkarte unterstützt. %1$sWechseln Sie zu dieser Bezahlmethode"
+"%2$s."
+
+#: includes/gateways/edd-recurring-gateway.php:832
+msgid "Unable to verify payment update."
+msgstr "Kann Zahlungsaktualisierung nicht verifizieren."
+
+#: includes/gateways/edd-recurring-gateway.php:836
+msgid "You must be logged in to update a payment method."
+msgstr "Sie müssen eingeloggt sein um eine Zahlungsmethode zu aktualisieren."
+
+#: includes/gateways/edd-recurring-gateway.php:845
+msgid "Invalid subscription id."
+msgstr ""
+
+#: includes/gateways/edd-recurring-gateway.php:850
+msgid "Invalid subscriber."
+msgstr ""
+
+#: includes/gateways/edd-recurring-gateway.php:855
+msgid "User ID and Subscriber do not match."
+msgstr ""
+
+#: includes/gateways/edd-recurring-gateway.php:954
+msgid "This subscription cannot be reactivated"
+msgstr "Dieses Abonnement kann nicht reaktiviert werden"
+
+#: includes/gateways/edd-recurring-gateway.php:962
+msgid "Subscription reactivated by %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-manual.php:15
+msgid "Manual"
+msgstr "Bedienungsanleitung"
+
+#: includes/gateways/edd-recurring-paypal.php:75
+msgid "Please enter your PayPal email address."
+msgstr "Bitte geben Sie Ihre PayPal EMail Adresse ein."
+
+#: includes/gateways/edd-recurring-paypal.php:81
+#: includes/gateways/edd-recurring-paypalexpress.php:91
+msgid "Only one subscription may be purchased through PayPal per checkout."
+msgstr ""
+"Es kann nur ein Abonnement durch PayPal pro Kaufvorgang abgeschlossen werden."
+
+#: includes/gateways/edd-recurring-paypal.php:297
+msgid "PayPal Subscription ID: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:315
+msgid "Payment failed due to invalid initial amount in PayPal Recurring IPN."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:318
+#: includes/gateways/edd-recurring-paypal.php:334
+#: includes/gateways/edd-recurring-paypal.php:410
+#: includes/gateways/edd-recurring-paypal.php:528
+#: includes/gateways/edd-recurring-paypalexpress.php:610
+#: includes/gateways/edd-recurring-paypalexpress.php:618
+#: includes/gateways/edd-recurring-paypalpro.php:427
+#: includes/gateways/edd-recurring-paypalpro.php:434
+msgid "IPN Error"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:318
+msgid ""
+"Invalid initial payment amount in IPN subscr_signup response. IPN data: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:331
+msgid "Payment failed due to invalid recurring amount in PayPal Recurring IPN."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:334
+msgid ""
+"Invalid recurring payment amount in IPN subscr_signup response. IPN data: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:392
+msgid "Payment failed at PayPal."
+msgstr "Zahlung bei PayPal fehlgeschlagen."
+
+#: includes/gateways/edd-recurring-paypal.php:393
+msgid "Payment processing failed at PayPal."
+msgstr "Zahlungsverarbeitung bei PayPal fehlgeschlagen."
+
+#: includes/gateways/edd-recurring-paypal.php:407
+msgid "Payment failed due to invalid amount in PayPal Recurring IPN."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:410
+msgid "Invalid payment amount in IPN subscr_payment response. IPN data: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:433
+msgid "Payment made via eCheck and will clear automatically in 5-8 days."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:438
+msgid ""
+"Payment requires a confirmed customer address and must be accepted manually "
+"through PayPal."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:444
+msgid ""
+"Payment must be accepted manually through PayPal due to international "
+"account regulations."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:450
+msgid ""
+"Payment received in non-shop currency and must be accepted manually through "
+"PayPal."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:457
+msgid ""
+"Payment is being reviewed by PayPal staff as high-risk or in possible "
+"violation of government regulations."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:463
+msgid ""
+"The transaction has been approved and is currently awaiting funding from the "
+"bank. This typically takes less than 48 hrs."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:469
+msgid "Payment was sent to non-confirmed or non-registered email address."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:475
+msgid "PayPal account must be upgraded before this payment can be accepted."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:481
+msgid ""
+"PayPal account is not verified. Verify account in order to accept this "
+"payment."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:488
+msgid ""
+"Payment is pending for unknown reasons. Contact PayPal support for "
+"assistance."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:513
+msgid "Renewal payment processing failed at PayPal."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:527
+msgid ""
+"Renewal payment processing failed due to invalid currency. Currency detected "
+"in renewal payment: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:528
+msgid "Invalid currency in IPN response. IPN data: "
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:761
+msgid "Subscription %d cancelled."
+msgstr "Abonnement %d storniert."
+
+#: includes/gateways/edd-recurring-paypal.php:984
+#: includes/gateways/edd-recurring-paypalexpress.php:1031
+#: includes/gateways/edd-recurring-paypalpro.php:801
+msgid "Retry initiated from EDD Recurring"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:1092
+msgid "Missing PayPal API credentials"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:1097
+#: includes/gateways/edd-recurring-paypalexpress.php:1129
+#: includes/gateways/edd-recurring-paypalpro.php:899
+msgid "Invalid subscription object supplied"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:1129
+#: includes/gateways/edd-recurring-paypalexpress.php:1161
+#: includes/gateways/edd-recurring-paypalpro.php:931
+msgid "Non 200 response code. Response code was: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:1133
+#: includes/gateways/edd-recurring-paypalexpress.php:1165
+#: includes/gateways/edd-recurring-paypalpro.php:935
+msgid "Response message not okay. Response message was: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypal.php:1152
+#: includes/gateways/edd-recurring-paypalexpress.php:1184
+#: includes/gateways/edd-recurring-paypalpro.php:954
+msgid "No profile_id set on subscription object"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:33
+msgid "PayPal Express"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:89
+msgid ""
+"Only one subscription may be purchased through PayPal per checkout. To "
+"purchase multiple subscriptions, please pay by Credit Card"
+msgstr ""
+"Es kann nur ein Abonnement pro Einkauf durch PayPal abgeschlossen werden. Um "
+"mehrere Abonnements abzuschließen zahlen Sie bitte durch Kreditkarte"
+
+#: includes/gateways/edd-recurring-paypalexpress.php:198
+msgid "Something has gone wrong, please try again"
+msgstr "Etwas ist schief gelaufen. Bitte versuchen Sie es erneut"
+
+#: includes/gateways/edd-recurring-paypalexpress.php:253
+#: includes/gateways/edd-recurring-paypalexpress.php:350
+#: includes/gateways/edd-recurring-paypalpro.php:153
+msgid "An unidentified error occurred."
+msgstr "Ein unidentifizierter Fehler ist aufgetreten."
+
+#: includes/gateways/edd-recurring-paypalexpress.php:266
+#: includes/gateways/edd-recurring-paypalexpress.php:392
+#: includes/gateways/edd-recurring-paypalexpress.php:420
+msgid "PayPal Express Error"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:266
+#: includes/gateways/edd-recurring-paypalpro.php:169
+msgid "Error processing payment: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:392
+#: includes/gateways/edd-recurring-paypalexpress.php:420
+msgid "Error creating payment profile: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:396
+#: includes/gateways/edd-recurring-paypalexpress.php:422
+msgid "PayPal error while creating subscription. %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:610
+#: includes/gateways/edd-recurring-paypalexpress.php:618
+msgid "Invalid PayPal Express IPN verification response. IPN data: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:695
+#: includes/gateways/edd-recurring-paypalpro.php:496
+msgid "Invalid Currency Code"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:695
+#: includes/gateways/edd-recurring-paypalpro.php:496
+msgid ""
+"The currency code in an IPN request did not match the site currency code. "
+"Payment data: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:706
+msgid "Transaction ID %s failed in PayPal"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:739
+msgid "Outstanding subscription balance of %s collected successfully."
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:881
+msgid "PayPal Express refund failed: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:891
+msgid "PayPal Express Refund Transaction ID: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalexpress.php:988
+#: includes/gateways/edd-recurring-paypalpro.php:758
+msgid ""
+"There was a problem cancelling the subscription, please contact customer "
+"support. Error: %s"
+msgstr ""
+"Es gab ein Problem bei der Stornierung des Abonnements. Bitte kontaktieren "
+"Sie den Kundensupport. Fehler: %s"
+
+#: includes/gateways/edd-recurring-paypalpro.php:32
+msgid "PayPal Pro"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalpro.php:67
+msgid ""
+"Only one subscription may be purchased through this payment method per "
+"checkout."
+msgstr ""
+"Pro Kaufabwicklung kann nur ein Abonnement durch diese Zahlungsmethode "
+"abgeschlossen werden."
+
+#: includes/gateways/edd-recurring-paypalpro.php:169
+msgid "PayPal Pro Error"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalpro.php:427
+#: includes/gateways/edd-recurring-paypalpro.php:434
+msgid "Invalid PayPal Pro IPN verification response. IPN data: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalpro.php:652
+msgid "PayPal Pro refund failed: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalpro.php:662
+msgid "PayPal Pro Refund Transaction ID: %s"
+msgstr ""
+
+#: includes/gateways/edd-recurring-paypalpro.php:995
+msgid "Please enter all required fields."
+msgstr "Bitte geben Sie alle notwendigen Felder ein."
+
+#: includes/gateways/edd-recurring-paypalpro.php:1053
+msgid "Error updating subscription"
+msgstr "Fehler bei der Aktualisierung des Abonnements"
+
+#: includes/gateways/edd-recurring-stripe.php:63
+msgid "Stripe"
+msgstr "Stripe"
+
+#. translators: %1$s Opening strong tag, do not translate. %2$s Closing strong tag, do not translate.
+#: includes/gateways/edd-recurring-stripe.php:146
+msgid "%1$sCredit card payments with Stripe are currently disabled.%2$s"
+msgstr "%1$sKreditkarten Zahlungen mit Stripe sind aktuell deaktiviert.%2$s"
+
+#. translators: %1$s Opening code tag, do not translate. %2$s Closing code tag, do not translate.
+#: includes/gateways/edd-recurring-stripe.php:153
+msgid ""
+"To continue accepting recurring credit card payments with Stripe please "
+"update the Stripe Payment Gateway extension to version %1$s2.7%2$s."
+msgstr ""
+
+#. translators: %1$s Email address of an existing account used during checkout.
+#: includes/gateways/edd-recurring-stripe.php:190
+msgid ""
+"A customer account for %1$s already exists. Please log in to complete your "
+"purchase."
+msgstr ""
+"Ein Kundenaccount für %1$s existiert bereits. Bitte loggen Sie sich ein um "
+"Ihren Einkauf abzuschließen."
+
+#. translators: %1$s Customer currency.
+#: includes/gateways/edd-recurring-stripe.php:272
+msgid "Unable to complete your purchase. Your order must be completed in %1$s."
+msgstr ""
+"Konnte den Einkauf nicht abschlißen. Ihr Einkauf muss in %1$s abgeschlossen "
+"werden."
+
+#: includes/gateways/edd-recurring-stripe.php:840
+msgid "PaymentIntent cancelled because there is nothing to collect."
+msgstr ""
+
+#: includes/gateways/edd-recurring-stripe.php:953
+msgid "Failing invoice URL: %s"
+msgstr ""
+
+#. Translators: The error message from Stripe.
+#: includes/gateways/edd-recurring-stripe.php:1606
+#: includes/gateways/edd-recurring-stripe.php:1648
+msgid "Attempted cancellation but was unable. Message was \"%s\"."
+msgstr ""
+
+#: includes/gateways/edd-recurring-stripe.php:1764
+msgid ""
+"Subscription reactivation requires payment by customer and will be cancelled "
+"in 24 hours if no action is taken."
+msgstr ""
+
+#: includes/gateways/edd-recurring-stripe.php:1976
+msgid "Charge %s refunded in Stripe."
+msgstr ""
+
+#: includes/gateways/edd-recurring-stripe.php:1984
+msgid "Something went wrong while refunding the Charge in Stripe."
+msgstr ""
+
+#: includes/gateways/edd-recurring-stripe.php:2021
+msgid "Please Wait…"
+msgstr "Bitte warten..."
+
+#: includes/gateways/edd-recurring-stripe.php:2084
+msgid "Invalid request. Please try again"
+msgstr "Ungültige Anfrage. Bitte neu versuchen"
+
+#: includes/gateways/edd-recurring-stripe.php:2090
+msgid "Unable to locate Subscription. Please try again"
+msgstr "Konnte Abonnement nicht finden. Bitte neu versuchen"
+
+#: includes/gateways/edd-recurring-stripe.php:2129
+msgid "Payment method updated."
+msgstr "Zahlungsmethode wurde aktualisiert."
+
+#: includes/plugin-content-restriction.php:67
+#: includes/plugin-content-restriction.php:98
+msgid ""
+"Only customers with an active recurring subscription will be able to view "
+"the content."
+msgstr ""
+
+#: includes/plugin-content-restriction.php:69
+#: includes/plugin-content-restriction.php:100
+msgid "Active Subscribers Only?"
+msgstr ""
+
+#: includes/plugin-fraud-monitor.php:61
+msgid "Subscription cancelled via Fraud Monitor"
+msgstr ""
+
+#: includes/plugin-software-licensing.php:643
+#: includes/plugin-software-licensing.php:701
+msgid "Subscription #%d cancelled for license upgrade"
+msgstr ""
+
+#: includes/plugin-software-licensing.php:645
+msgid "Subscription cancelled for license upgrade"
+msgstr ""
+
+#: includes/plugin-software-licensing.php:742
+msgid "Subscription #%d cancelled for manual license renewal"
+msgstr ""
+
+#: includes/plugin-software-licensing.php:825
+msgid "View Subscription"
+msgstr "Abonnement anzeigen"
+
+#: includes/plugin-software-licensing.php:841
+msgid "License Key:"
+msgstr "Lizenzschlüssel:"
+
+#: includes/plugin-software-licensing.php:845
+msgid "License"
+msgstr "Lizenz"
+
+#: includes/plugin-software-licensing.php:856
+msgid "View License"
+msgstr "Lizenz anzeigen"
+
+#: includes/plugin-software-licensing.php:878
+msgid "Renews automatically on %s"
+msgstr "Erneuert sich automatisch am %s"
+
+#: includes/plugin-software-licensing.php:948
+msgid "%s will now automatically renew %s for %s"
+msgstr "%s wird nun automatisch %s für %s erneuern"
+
+#: includes/plugin-software-licensing.php:1024
+msgid ""
+"Your existing subscription to %s will be cancelled and replaced with a new "
+"subscription that automatically renews %s for %s."
+msgstr ""
+"Ihr existierendes Abonnement zu %s wird storniert und durch ein neues "
+"Abonnement ersetzt das sich automatisch %s für %s erneuert."
+
+#: includes/plugin-software-licensing.php:1131
+msgid ""
+"Note: license keys will remain valid for the duration of the free trial "
+"period. Once the free trial is over, the settings defined here determine the "
+"license lengths."
+msgstr ""
+
+#: templates/paypal-express-confirm.php:3
+msgid "Please confirm your subscription"
+msgstr "Bitte bestätigen Sie Ihr Abonnement"
+
+#: templates/paypal-express-confirm.php:5
+msgid "PayPal Status:"
+msgstr "PayPal Status:"
+
+#: templates/paypal-express-confirm.php:6
+msgid "Email:"
+msgstr "Email:"
+
+#: templates/paypal-express-confirm.php:13
+msgid "Recurring Amount"
+msgstr "Wiederkehrende Kosten"
+
+#: templates/paypal-express-confirm.php:29
+msgid "%d Time"
+msgid_plural "%d Times"
+msgstr[0] "%d Anzahl"
+msgstr[1] "%d Anzahl"
+
+#: templates/paypal-express-confirm.php:43
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: templates/shortcode-subscription-receipt.php:39
+#: templates/shortcode-subscriptions.php:39
+msgid "Times Billed"
+msgstr "Anzahl an Rechnungen"
+
+#: templates/shortcode-subscription-receipt.php:66
+#: templates/shortcode-subscriptions.php:83
+msgid "Until cancelled"
+msgstr "Bis abgebrochen"
+
+#: templates/shortcode-subscription-update.php:31
+msgid "Back"
+msgstr "Zurück"
+
+#: templates/shortcode-subscription-update.php:32
+msgid "Update payment method for <em>%s</em>"
+msgstr "Aktualisiere Zahlungsmethode für <em>%s</em>"
+
+#: templates/shortcode-subscription-update.php:49
+#: templates/shortcode-subscriptions.php:89
+msgid "Update Payment Method"
+msgstr "Update Zahlungsmethode"
+
+#: templates/shortcode-subscription-update.php:52
+msgid "Invalid Subscription ID"
+msgstr ""
+
+#: templates/shortcode-subscriptions.php:18
+msgid "<strong>Success:</strong> Subscription payment method updated"
+msgstr "<strong>Erfolg:</strong> Abonnement Zahlungsmethode aktualisiert"
+
+#: templates/shortcode-subscriptions.php:86
+msgid "View Invoice"
+msgstr "Rechnung anzeigen"
+
+#: templates/shortcode-subscriptions.php:93
+msgid "Renew"
+msgstr "Erneuern"
+
+#: templates/shortcode-subscriptions.php:103
+msgid "Reactivate"
+msgstr "Reaktivieren"
+
+#: templates/shortcode-subscriptions.php:116
+msgid "You have not made any subscription purchases."
+msgstr "Sie haben keine Abonnement Käuft getätigt."

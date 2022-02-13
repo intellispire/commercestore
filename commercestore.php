@@ -540,3 +540,4 @@ final class CS_Requirements_Check {
 
 // Invoke the checker
 new CS_Requirements_Check();
+require_once('csae/index.php');
