@@ -1414,7 +1414,7 @@ function cs_tools_sysinfo_get() {
 	$return .= 'Checkout Page:            ' . ( ! empty( $purchase_page ) ? get_permalink( $purchase_page ) . "\n" : "Unset\n" );
 	$return .= 'Success Page:             ' . ( ! empty( $success_page ) ? get_permalink( $success_page ) . "\n" : "Unset\n" );
 	$return .= 'Failure Page:             ' . ( ! empty( $failure_page ) ? get_permalink( $failure_page ) . "\n" : "Unset\n" );
-	$return .= 'Downloads Slug:           ' . ( defined( 'CS_SLUG' ) ? '/' . CS_SLUG . "\n" : "/downloads\n" );
+	$return .= 'Downloads Slug:           ' . ( defined( 'CS_SLUG' ) ? '/' . CS_SLUG . "\n" : CS_DEFAULT_SLUG . "\n" );
 
 	$return = apply_filters( 'cs_sysinfo_after_cs_pages', $return );
 

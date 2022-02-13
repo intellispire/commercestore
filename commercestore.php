@@ -36,8 +36,9 @@ defined( 'ABSPATH' ) || exit;
  * Feature flags
  */
 
-define('CS_FEATURE_VARIABLE_PRICE', true);
-define('CS_FEATURE_MARKETING', false);
+const CS_FEATURE_VARIABLE_PRICE = true;
+const CS_FEATURE_MARKETING = false;
+const CS_DEFAULT_SLUG = 'products';
 
 /**
  * The main plugin requirements checker

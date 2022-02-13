@@ -23,9 +23,7 @@ function cs_setup_cs_post_types() {
 		? false
 		: true;
 
-	$slug = defined( 'CS_SLUG' )
-		? CS_SLUG
-		: 'downloads';
+	$slug = defined( 'CS_SLUG' ) ? CS_SLUG : CS_DEFAULT_SLUG;
 
 	$rewrite = defined( 'CS_DISABLE_REWRITE' ) && CS_DISABLE_REWRITE
 		? false
@@ -240,7 +238,7 @@ add_filter( 'enter_title_here', 'cs_change_default_title' );
  * @return void
 */
 function cs_setup_download_taxonomies() {
-	$slug = defined( 'CS_SLUG' ) ? CS_SLUG : 'downloads';
+	$slug = defined( 'CS_SLUG' ) ? CS_SLUG : CS_DEFAULT_SLUG;
 
 	/** Categories */
 	$category_labels = array(

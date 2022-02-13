@@ -135,9 +135,7 @@ function cs_refresh_permalinks_on_bad_404() {
 	}
 
 	if ( false === get_transient( 'cs_refresh_404_permalinks' ) ) {
-		$slug = defined( 'CS_SLUG' )
-			? CS_SLUG
-			: 'downloads';
+		$slug = defined( 'CS_SLUG' ) ? CS_SLUG	: CS_DEFAULT_SLUG;
 
 		$parts = explode( '/', $wp->request );
 

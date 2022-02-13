@@ -65,7 +65,7 @@ class CS_CLI extends WP_CLI_Command {
 		WP_CLI::line( sprintf( __( 'Checkout URL is: %s', 'commercestore' ), ( ! empty( $purchase_page ) ? get_permalink( $purchase_page ) : __( 'Undefined', 'commercestore' ) ) ) );
 		WP_CLI::line( sprintf( __( 'Success URL is: %s', 'commercestore' ), ( ! empty( $success_page ) ? get_permalink( $success_page ) : __( 'Undefined', 'commercestore' ) ) ) );
 		WP_CLI::line( sprintf( __( 'Failure URL is: %s', 'commercestore' ), ( ! empty( $failure_page ) ? get_permalink( $failure_page ) : __( 'Undefined', 'commercestore' ) ) ) );
-		WP_CLI::line( sprintf( __( 'Downloads slug is: %s', 'commercestore' ), ( defined( 'CS_SLUG' ) ? '/' . CS_SLUG : '/downloads' ) ) );
+		WP_CLI::line( sprintf( __( 'Downloads slug is: %s', 'commercestore' ), ( defined( 'CS_SLUG' ) ? '/' . CS_SLUG : '/' . CS_DEFAULT_SLUG ) ) );
 		WP_CLI::line( "\n" . sprintf( __( 'Taxes are: %s', 'commercestore' ), ( cs_use_taxes() ? __( 'Enabled', 'commercestore' ) : __( 'Disabled', 'commercestore' ) ) ) );
 		WP_CLI::line( sprintf( __( 'Tax rate is: %s', 'commercestore' ), cs_get_formatted_tax_rate() ) );
 
