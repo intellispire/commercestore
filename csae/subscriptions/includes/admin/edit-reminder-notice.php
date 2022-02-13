@@ -2,7 +2,7 @@
 /**
  * Edit Reminder Notice
  *
- * @package     CS Recurring
+ * @package     CommerceStore Recurring
  * @copyright   Copyright (c) 2014, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.4
@@ -22,9 +22,8 @@ $notice_id = absint( $_GET['notice'] );
 $notice    = $notices->get_notice( $notice_id );
 ?>
 <div class="wrap">
-	<h1><?php _e( 'Edit Reminder Notice', 'cs-recurring' ); ?> -
-		<a href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ); ?>" class="add-new-h2"><?php _e( 'Go Back', 'cs-recurring' ); ?></a>
-	</h1>
+	<h1><?php esc_html_e( 'Edit Reminder Notice', 'cs-recurring' ); ?></h1>
+	<a href="<?php echo esc_url( cs_recurring_get_email_settings_url() ); ?>"><?php esc_html_e( 'Return to Email Settings', 'cs-recurring' ); ?></a>
 
 	<form id="cs-edit-reminder-notice" action="" method="post">
 		<table class="form-table">
@@ -39,7 +38,7 @@ $notice    = $notices->get_notice( $notice_id );
 							<option value="<?php echo esc_attr( $type ); ?>"<?php selected( $type, $notice['type'] ); ?>><?php echo esc_html( $label ); ?></option>
 						<?php endforeach; ?>
 					</select>
-					
+
 					<p class="description"><?php _e( 'Is this a renewal notice or an expiration notice?', 'cs-recurring' ); ?></p>
 				</td>
 			</tr>

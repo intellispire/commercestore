@@ -11,7 +11,7 @@
 	flex-basis: 100%;
 }
 
-/* These can be removed when CS 3.0 is standard. */
+/* These can be removed when CommerceStore 3.0 is standard. */
 .cs-form-row {
 	display: flex;
 	gap: 0 !important;

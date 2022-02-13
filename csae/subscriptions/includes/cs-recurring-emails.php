@@ -35,6 +35,15 @@ class CS_Recurring_Emails {
 		}
 	}
 
+	/**
+	 * Sends an email when a subscription payment is received.
+	 *
+	 * @param int              $subscription_id The subscription ID.
+	 * @param int              $expiration      The expiration date.
+	 * @param CS_Subscription $subscription    The subscription object.
+	 * @param int              $payment_id      The renewal payment ID.
+	 * @return void
+	 */
 	public function send_payment_received( $subscription_id, $expiration, CS_Subscription $subscription, $payment_id = 0 ) {
 
 		// Since it's possible to renew a subscription without a payment, we should not send an email if none is specified.
@@ -48,11 +57,12 @@ class CS_Recurring_Emails {
 		$email_to = $this->subscription->customer->email;
 		$subject  = apply_filters( 'cs_recurring_payment_received_subject', cs_get_option( 'payment_received_subject' ) );
 		$subject  = $this->payment_received_template_tags( $subject, $payment->total );
+		$subject  = cs_do_email_tags( $subject, $payment_id );
 		$message  = apply_filters( 'cs_recurring_payment_received_message', cs_get_option( 'payment_received_message' ) );
 		$message  = $this->payment_received_template_tags( $message, $payment->total );
+		$message  = cs_do_email_tags( $message, $payment_id );
 
 		CS()->emails->send( $email_to, $subject, $message );
-
 	}
 
 	public function send_payment_failed( CS_Subscription $subscription ) {
@@ -179,6 +189,13 @@ class CS_Recurring_Emails {
 		return apply_filters( 'cs_recurring_filter_reminder_template_tags', $text, $subscription_id );
 	}
 
+	/**
+	 * Replaces template tags in a payment received email.
+	 *
+	 * @param string $text   The text to be parsed (subject or message).
+	 * @param string $amount The payment amount.
+	 * @return string
+	 */
 	public function payment_received_template_tags( $text = '', $amount = '' ) {
 
 		$download      = cs_get_download( $this->subscription->product_id );

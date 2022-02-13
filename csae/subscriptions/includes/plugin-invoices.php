@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Integrates CS Recurring with the CS Invoices extension
+ * Integrates CommerceStore Recurring with the CommerceStore Invoices extension
  *
  * @since v2.5.3
  */
@@ -24,7 +24,7 @@ class CS_Recurring_Invoices {
 	}
 
 	/**
-	 * Add the payment statuses created and used by Recurring to the list of acceptable statuses when CS Invoices is deciding if it should show the "Generate Invoice" option.
+	 * Add the payment statuses created and used by Recurring to the list of acceptable statuses when CommerceStore Invoices is deciding if it should show the "Generate Invoice" option.
 	 *
 	 * @since  2.5.3
 	 * @param  array $acceptable_statuses  The array containing all of the acceptable payment statuses.

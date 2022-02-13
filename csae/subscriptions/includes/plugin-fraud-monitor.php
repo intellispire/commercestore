@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Integrates CS Recurring with the Fraud Monitor extension
+ * Integrates CommerceStore Recurring with the Fraud Monitor extension
  *
  * @since v2.7.1
  */

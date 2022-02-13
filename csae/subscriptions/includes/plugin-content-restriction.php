@@ -2,7 +2,7 @@
 
 
 /**
- * Integrates CS Recurring with the Content Restriction extension
+ * Integrates CommerceStore Recurring with the Content Restriction extension
  *
  * This allows content to be restricted to active subscribers only
  *
@@ -295,44 +295,62 @@ class CS_Recurring_Content_Restriction {
 	 * Allows subscriptions to modify the cs_restrict shortcode
 	 *
 	 * @since  2.4
-	 * @param  string $content       The content between the shortcode tags
-	 * @param  array  $restricted_to The list of items to restrict to
-	 * @param  array  $atts          The array of attributes
+	 * @param  string $content       The content between the shortcode tags.
+	 * @param  array  $restricted_to The list of items to restrict to.
+	 * @param  array  $atts          The array of attributes.
 	 * @return string                The new content
 	 */
 	public function restrict_shortcode_content( $content, $restricted_to, $atts ) {
-		global $user_ID;
-		$has_access = false;
-
-		if ( ! empty( $user_ID ) && true === filter_var( $atts['subscription'], FILTER_VALIDATE_BOOLEAN ) ) {
-
-			$subscriber = new CS_Recurring_Subscriber( $user_ID, true );
-
-			if ( 'any' === $atts['id'] && $subscriber->has_active_subscription() ) {
-
-				$has_access = true;
-
-			} else {
-
-				foreach ( $restricted_to as $item ) {
-
-					if ( $subscriber->has_active_product_subscription( $item['download'] ) ) {
-						$has_access = true;
-						break;
-					}
-
-				}
-
-			}
-
-			if ( false === $has_access ) {
-				$content = __( 'This content is restricted to buyers.', 'cs-cr' );
-			}
-
+		$user_id = get_current_user_id();
+		if ( empty( $user_id ) || true !== filter_var( $atts['subscription'], FILTER_VALIDATE_BOOLEAN ) ) {
+			return $content;
 		}
 
-		return $content;
+		// Check if the content is available for any active subscription.
+		$subscriber = new CS_Recurring_Subscriber( $user_id, true );
+		if ( 'any' === $atts['id'] && $subscriber->has_active_subscription() ) {
+			return $content;
+		}
 
+		$has_access     = false;
+		$message        = cs_cr_get_any_restriction_message();
+		$custom_message = isset( $atts['message'] ) ? $atts['message'] : false;
+		$products       = array();
+		foreach ( $restricted_to as $item ) {
+			if ( cs_recurring()->is_recurring( $item['download'] ) ) {
+				$has_access = $subscriber->has_active_product_subscription( $item['download'] );
+			} else {
+				if ( ! empty( $item['download']['price_id'] ) && is_numeric( $item['download']['price_id'] ) && cs_has_variable_prices( $item['download'] ) ) {
+					$has_access = cs_has_user_purchased( $user_id, $item['download'], $item['download']['price_id'] );
+				} else {
+					$has_access = cs_has_user_purchased( $user_id, $item['download'] );
+				}
+			}
+			if ( $has_access ) {
+				return $content;
+			}
+			$products[] = get_the_title( $item['download'] );
+		}
+
+		// At this point, $has_access is false and we just need to get the correct message.
+		if ( ! $custom_message && ! empty( $products ) ) {
+			$count = count( $products );
+			if ( $count > 1 ) {
+				$message      = cs_cr_get_multi_restriction_message();
+				$product_list = '<ul>';
+				foreach ( $products as $product ) {
+					$product_list .= '<li>' . $product . '</li>';
+				}
+				$product_list .= '</ul>';
+				$message       = str_replace( '{product_names}', $product_list, $message );
+			} else {
+				$message = cs_cr_get_single_restriction_message();
+				$message = str_replace( '{product_name}', reset( $products ), $message );
+			}
+		}
+
+		// phpcs:ignore WordPress.PHP.DisallowShortTernary
+		return $custom_message ?: $message;
 	}
 
 }

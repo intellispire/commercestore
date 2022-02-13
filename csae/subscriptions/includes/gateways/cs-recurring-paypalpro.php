@@ -60,7 +60,7 @@ class CS_Recurring_PayPal_Website_Payments_Pro extends CS_Recurring_Gateway {
 	public function validate_fields( $data, $posted ) {
 
 		if ( empty( $this->username ) || empty( $this->password ) || empty( $this->signature ) ) {
-			cs_set_error( 'cs_recurring_no_paypal_api', __( 'It appears that you have not configured PayPal API access. Please configure it in CS &rarr; Settings', 'cs_recurring' ) );
+			cs_set_error( 'cs_recurring_no_paypal_api', __( 'It appears that you have not configured PayPal API access. Please configure it in CommerceStore &rarr; Settings', 'cs_recurring' ) );
 		}
 
 		if ( count( cs_get_cart_contents() ) > 1 && ! $this->can_purchase_multiple_subs() ) {
@@ -797,7 +797,7 @@ class CS_Recurring_PayPal_Website_Payments_Pro extends CS_Recurring_Gateway {
 			'VERSION'   => '124',
 			'METHOD'    => 'BillOutstandingAmount',
 			'PROFILEID' => $subscription->profile_id,
-			'NOTE'      => __( 'Retry initiated from CS Recurring', 'cs-recurring' )
+			'NOTE'      => __( 'Retry initiated from CommerceStore Recurring', 'cs-recurring' )
 		);
 
 		$error_msg = '';

@@ -1,7 +1,9 @@
 <?php
 
+use CS\Gateways\PayPal\Exceptions\API_Exception;
+
 /**
- * Integrates CS Recurring with the Software Licensing extension
+ * Integrates CommerceStore Recurring with the Software Licensing extension
  *
  * @since v2.4
  */
@@ -33,7 +35,7 @@ class CS_Recurring_Software_Licensing {
 		add_filter( 'cs_subscription_can_renew', array( $this, 'can_renew_subscription' ), 10, 2 );
 		add_filter( 'cs_subscription_renew_url', array( $this, 'get_renew_url' ), 10, 2 );
 		add_filter( 'cs_recurring_show_stripe_update_payment_method_notice', array( $this, 'maybe_suppress_update_payment_method_notice' ), 10, 2 );
-		add_filter( 'cs_recurring_create_subscription_args', array( $this, 'handle_subscription_upgrade_billing' ), 10, 5 );
+		add_filter( 'cs_recurring_create_subscription_args', array( $this, 'handle_subscription_upgrade_billing' ), 10, 7 );
 		add_filter( 'cs_recurring_pre_record_signup_args', array( $this, 'handle_subscription_upgrade_expiration' ), 10, 2 );
 		add_filter( 'cs_cart_contents', array( $this, 'remove_trial_flags_on_renewals_and_upgrades' ) );
 		add_filter( 'cs_sl_get_time_based_pro_rated_upgrade_cost', array( $this, 'reset_upgrade_cost_when_trialling' ), 10, 4 );
@@ -161,23 +163,58 @@ class CS_Recurring_Software_Licensing {
 		$license  = cs_software_licensing()->get_license( $license_id );
 		$payments = $license->payment_ids;
 
-		if( count( $payments ) <= 1 && cs_recurring()->has_free_trial( $download_id, $license->price_id ) ) {
+		if ( count( $payments ) > 1 || ! cs_recurring()->has_free_trial( $download_id, $license->price_id ) ) {
+			return $expiration;
+		}
 
-			// If our customer record exists, use that email, otherwise set it to false so it defaults to the currently logged in customer's email
-			$email = ! empty( $license->customer ) && ! empty( $license->customer->email ) ? $license->customer->email : '';
+		// Only modify the expiration during initial payments, not renewals.
+		if ( did_action( 'cs_subscription_pre_renew' ) ) {
+			return $expiration;
+		}
 
-			// Only modify the expiration during initial papyments, not renewals
-			if( ! did_action( 'cs_subscription_pre_renew' ) ) {
+		$adjust_license_expiration = ! cs_get_option( 'recurring_one_time_trials' );
+		if ( ! $adjust_license_expiration ) {
+			/*
+			 * We're in here because "one time trials" is being enforced. Now we have to check
+			 * if this license is the customer's first trial, and only change the expiration
+			 * date it if is.
+			 */
+			cs_debug_log( sprintf( 'Recurring - Determining trial eligibility for license #%d.', $license_id ) );
 
-				if( ( cs_get_option( 'recurring_one_time_trials' ) && ! cs_recurring()->has_trialed( $download_id, $email ) ) || ! cs_get_option( 'recurring_one_time_trials' ) ) {
+			$subscription = $this->get_subscription_of_license( $license_id );
 
-					// set expiration to trial length
-					$trial_period = cs_recurring()->get_trial_period( $download_id, $license->price_id );
-					$expiration = '+' . $trial_period['quantity'] . ' ' . $trial_period['unit'];
+			if ( $subscription instanceof CS_Subscription ) {
+				/*
+				 * Our first preference is to use the subscription record as our "record of truth".
+				 * If that exists (it may not always exist yet) and is trialling, then we can
+				 * assume the license is as well.
+				 *
+				 * We can't always rely on `cs_recurring()->has_trialed()` (further below), because if we
+				 * call that _after_ the subscription record has been created, then that will return
+				 * `true`, even though it's talking about this _current_ payment that's being finished up.
+				 *
+				 * @link https://github.com/commercestore/cs-recurring/issues/1479
+				 */
+				$adjust_license_expiration = ( 'trialling' === $subscription->status );
+				cs_debug_log( sprintf( '-- Recurring - Subscription object found for license #%d. Status: %s', $license_id, $subscription->status ) );
+			} else {
+				// If our customer record exists, use that email, otherwise set it to false so it defaults to the currently logged in customer's email
+				$email = ! empty( $license->customer ) && ! empty( $license->customer->email ) ? $license->customer->email : '';
 
-				}
+				$adjust_license_expiration = ! cs_recurring()->has_trialed( $download_id, $email );
 
+				cs_debug_log('-- Recurring - No subscription object found.' );
 			}
+		}
+
+		if ( $adjust_license_expiration ) {
+			// set expiration to trial length
+			$trial_period = cs_recurring()->get_trial_period( $download_id, $license->price_id );
+			$expiration = '+' . $trial_period['quantity'] . ' ' . $trial_period['unit'];
+
+			cs_debug_log( sprintf( '-- Recurring - Adjusting expiration of license #%d to sync with trial period (%s).', $license_id, json_encode( $trial_period ) ) );
+		} else {
+			cs_debug_log( sprintf( '-- Recurring - Not adjusting expiration of license #%d; ineligible for trial.', $license_id ) );
 		}
 
 		return $expiration;
@@ -394,15 +431,19 @@ class CS_Recurring_Software_Licensing {
 	 * and renew the subscription at the next expiration.
 	 *
 	 * @since 2.7.1
-	 * @param $args
-	 * @param $downloads
-	 * @param $gateway
-	 * @param $download_id
-	 * @param $price_id
+	 *
+	 * @param array                      $args          Arguments used to create the subscription.
+	 * @param array                      $downloads     All downloads for this order.
+	 * @param string                     $gateway       Gateway slug.
+	 * @param int                        $download_id   ID of the download for this subscription.
+	 * @param int|false                  $price_id      Price ID for the download.
+	 * @param array                      $subscription  All subscription data used for creating the subscription.
+	 * @param CS_Recurring_Gateway|null $gateway_class Gateway object.
 	 *
 	 * @return array
+	 * @throws Exception
 	 */
-	public function handle_subscription_upgrade_billing( $args, $downloads, $gateway, $download_id, $price_id ) {
+	public function handle_subscription_upgrade_billing( $args, $downloads, $gateway, $download_id, $price_id, $subscription = array(), $gateway_class = null ) {
 		$downloads = ! is_array( $downloads ) ? array() : $downloads;
 
 		foreach ( $downloads as $download ) {
@@ -459,8 +500,10 @@ class CS_Recurring_Software_Licensing {
 			$upgraded_download = new CS_SL_Download( $upgrade_path['download_id'] );
 
 			if ( $upgraded_download->has_variable_prices() ) {
+				$price_id             = $upgrade_path['price_id'];
 				$download_is_lifetime = $upgraded_download->is_price_lifetime( $upgrade_path['price_id'] );
 			} else {
+				$price_id             = false;
 				$download_is_lifetime = $upgraded_download->is_lifetime();
 			}
 
@@ -468,8 +511,8 @@ class CS_Recurring_Software_Licensing {
 				continue;
 			}
 
-			$exp_unit   = $upgraded_download->get_expiration_unit();
-			$exp_length = $upgraded_download->get_expiration_length();
+			$exp_unit   = $upgraded_download->get_expiration_unit( $price_id );
+			$exp_length = $upgraded_download->get_expiration_length( $price_id );
 
 			if( empty( $exp_unit ) ) {
 				$exp_unit = 'years';
@@ -497,6 +540,42 @@ class CS_Recurring_Software_Licensing {
 						$args['trial_end']      = $license_expiration;
 						$args['needs_one_time'] = true;
 						$args['license_id']     = $license_id;
+						break;
+
+					case 'paypal_commerce' :
+						try {
+							if ( empty( $gateway_class->paypal_product_id ) ) {
+								throw new \Exception( 'Missing PayPal product ID.' );
+							}
+
+							$plan_args = \CS_Recurring\Gateways\PayPal\_create_plan_args_for_sl_upgrade(
+								new DateTime( date( 'Y-m-d H:i:s' , $license_expiration ) ),
+								$gateway_class->paypal_product_id,
+								$subscription
+							);
+
+							$api      = new \CS\Gateways\PayPal\API();
+							$response = $api->make_request( 'v1/billing/plans', $plan_args );
+
+							if ( 201 !== $api->last_response_code ) {
+								throw new API_Exception( sprintf(
+									'Unexpected HTTP response code: %d; Response: %s',
+									$api->last_response_code,
+									json_encode( $response )
+								) );
+							}
+
+							if ( empty( $response->id ) ) {
+								throw new API_Exception( sprintf( 'Missing plan ID from PayPal response. Response: %s', json_encode( $response ) ) );
+							}
+
+							$args['plan_id'] = $response->id;
+						} catch ( \Exception $e ) {
+							cs_debug_log( sprintf(
+								'PayPal - Exception while syncing subscription to license key. Message: %s',
+								$e->getMessage()
+							), true );
+						}
 						break;
 
 					case 'paypalpro':
@@ -632,16 +711,45 @@ class CS_Recurring_Software_Licensing {
 			}
 
 			$license_id = isset( $download['options']['license_id'] ) ? $download['options']['license_id'] : false;
-			if ( empty( $license_id ) ) {
+			$license    = cs_software_licensing()->get_license( $license_id );
+			if ( ! $license instanceof CS_SL_License ) {
 				continue;
 			}
 
-			$license_expiration = cs_software_licensing()->get_license_expiration( $license_id );
-			if ( 'lifetime' === $license_expiration ) {
+			$download = new CS_SL_Download( $download_id );
+			$price_id = isset( $args['price_id'] ) && is_numeric( $args['price_id'] ) ? $args['price_id'] : false;
+
+			// If price is lifetime, keep going
+			if ( $download->has_variable_prices() && is_numeric( $price_id ) && $download->is_price_lifetime( $price_id ) ) {
+				continue;
+			} else if ( $download->is_lifetime() ) {
 				continue;
 			}
 
-			$args['expiration'] = date( 'Y-m-d H:i:s', $license_expiration );
+			// Determine if the license length is changing.
+			$old_length = $license->license_length();
+			$new_length = cs_sl_get_product_license_length( $download_id, $price_id );
+
+			$lengths = array(
+				'old' => 'lifetime' !== $old_length ? strtotime( $old_length ) : 'lifetime',
+				'new' => 'lifetime' !== $new_length ? strtotime( $new_length ) : 'lifetime',
+			);
+
+			// If these are the same, use the expiration date of the license.
+			if ( $lengths['old'] === $lengths['new'] ) {
+				$args['expiration'] = date( 'Y-m-d H:i:s', $license->expiration );
+			} else {
+				// Calculate a new expiration date using the new length.
+				$exp_unit   = $download->get_expiration_unit( $price_id );
+				$exp_length = $download->get_expiration_length( $price_id );
+
+				// For now, upgrade expiration dates are relative to original payment date.
+				// @link https://github.com/commercestore/CS-Software-Licensing/issues/1862
+				$old_payment     = new CS_Payment( $license->payment_id );
+				$purchase_date   = ! empty( $old_payment->date ) ? strtotime( $old_payment->date ) : time();
+
+				$args['expiration'] = date( 'Y-m-d H:i:s', strtotime( '+' . $exp_length . ' ' . $exp_unit, $purchase_date ) );
+			}
 		}
 
 		return $args;
@@ -798,7 +906,7 @@ class CS_Recurring_Software_Licensing {
 	 */
 	public function renew_license_keys( $sub_id, $expiration, $subscription, $payment_id ) {
 
-		// Update the expiration date of the associated license key, if CS Software Licensing is active
+		// Update the expiration date of the associated license key, if CommerceStore Software Licensing is active
 
 		$license = apply_filters( 'cs_recurring_sl_renewing_license',
 			cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id ),
@@ -1217,7 +1325,7 @@ class CS_Recurring_Software_Licensing {
 	 * See https://github.com/commercestore/cs-recurring/issues/559
 	 *
 	 * @since  2.7
-	 * @param \CS_Payment|int $payment      The original order ID in CS 3.0; an CS_Payment object in 2.x.
+	 * @param \CS_Payment|int $payment      The original order ID in CommerceStore 3.0; an CS_Payment object in 2.x.
 	 * @param int              $refund_id    The refund order ID (CS 3.0).
 	 * @param bool             $all_refunded Whether the entire order was refunded (CS 3.0).
 	 * @return void

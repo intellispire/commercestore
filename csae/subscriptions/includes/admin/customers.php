@@ -102,6 +102,8 @@ add_filter( 'cs_recount_customer_payment_statuses', 'cs_recurring_customer_recou
 /**
  * Allow the customer recount tool to process a subscription payment.
  *
+ * @todo Deprecate after CommerceStore 3.0.
+ *
  * @since  2.4.5
  * @param  bool   $ret      Base status for if the payment should be processed.
  * @param  object $payment  WP_Post object of the payment being checked.
@@ -109,6 +111,7 @@ add_filter( 'cs_recount_customer_payment_statuses', 'cs_recurring_customer_recou
  */
 function cs_recurring_should_process_payment( $ret, $payment ) {
 
+	// This does not need to be updated for CommerceStore 3.0.
 	if ( 'cs_subscription' === $payment->post_status ) {
 		$ret = true;
 	}

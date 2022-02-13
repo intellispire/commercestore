@@ -1,6 +1,6 @@
 <?php
 /**
- *  CS Template File for [cs_subscriptions] shortcode with the 'update' action
+ *  CommerceStore Template File for [cs_subscriptions] shortcode with the 'update' action
  *
  * @description: Place this template file within your theme directory under /my-theme/cs_templates/
  *

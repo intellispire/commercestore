@@ -248,10 +248,11 @@ class CS_Subscription {
 	 * Retrieve renewal payments for a subscription
 	 *
 	 * @since  2.4
-	 * @return array
+	 * @return CS_Payment[]
 	 */
 	public function get_child_payments() {
 
+		// CommerceStore 3.0 maps these to the correct order parameters.
 		$payments = cs_get_payments( array(
 			'post_parent'    => (int) $this->parent_payment_id,
 			'posts_per_page' => '999',
@@ -273,6 +274,23 @@ class CS_Subscription {
 	 * @return int
 	 */
 	public function get_total_payments() {
+
+		// CommerceStore 3.0
+		if ( function_exists( 'cs_count_orders' ) ) {
+			return cs_count_orders(
+				array(
+					'parent'     => $this->parent_payment_id,
+					'number'     => 999,
+					'type'       => 'sale',
+					'meta_query' => array(
+						array(
+							'key'   => 'subscription_id',
+							'value' => $this->id,
+						),
+					),
+				)
+			) + 1;
+		}
 
 		$args = array(
 			'post_parent'    => (int) $this->parent_payment_id,
@@ -332,7 +350,7 @@ class CS_Subscription {
 		$parent_payment   = cs_get_payment( $this->parent_payment_id );
 		$ignored_statuses = array( 'refunded', 'pending', 'abandoned', 'failed' );
 
-		if ( false === in_array( $parent_payment->status, $ignored_statuses ) ) {
+		if ( ! empty( $parent_payment->status ) && ! in_array( $parent_payment->status, $ignored_statuses, true ) && ! empty( $parent_payment->cart_details ) ) {
 			foreach ( $parent_payment->cart_details as $cart_item ) {
 				if ( (int) $this->product_id === (int) $cart_item['id'] ) {
 					$amount += $cart_item['price'];
@@ -370,7 +388,7 @@ class CS_Subscription {
 
 		$args = wp_parse_args( $args, array(
 			'amount'         => '', // This is the full amount that was charged at the gateway, INCLUDING tax.
-			'tax'            => '', // This is going to be blank since 2.8, where taxes were no longer sent to the gateway. The only exception is when doing a manual renewal through the CS subscription single view.
+			'tax'            => '', // This is going to be blank since 2.8, where taxes were no longer sent to the gateway. The only exception is when doing a manual renewal through the CommerceStore subscription single view.
 			'transaction_id' => '',
 			'gateway'        => '',
 		) );
@@ -450,7 +468,7 @@ class CS_Subscription {
 				$price_id    = isset( $download['options']['price_id'] ) ? $download['options']['price_id'] : null;
 				$args['tax'] = is_numeric( $args['tax'] ) ? cs_format_amount( $args['tax'] ) : 0;
 
-				// Set the amount for the CS Payment based on the inclusive/exclusive of tax setting
+				// Set the amount for the CommerceStore Payment based on the inclusive/exclusive of tax setting
 				if ( cs_prices_include_tax() ) {
 					$amount = $args['amount'];
 				} else {
@@ -892,7 +910,7 @@ class CS_Subscription {
 	 * Determines if subscription is active
 	 *
 	 * @since  2.4
-	 * @return void
+	 * @return bool
 	 */
 	public function is_active() {
 
@@ -924,7 +942,7 @@ class CS_Subscription {
 	 * Determines if subscription is expired
 	 *
 	 * @since  2.4
-	 * @return void
+	 * @return bool
 	 */
 	public function is_expired() {
 
@@ -1079,7 +1097,6 @@ class CS_Subscription {
 	 * @return bool
 	 */
 	public function payment_exists( $txn_id = '' ) {
-		global $wpdb;
 
 		if ( empty( $txn_id ) ) {
 			return false;
@@ -1087,13 +1104,14 @@ class CS_Subscription {
 
 		$txn_id = esc_sql( $txn_id );
 
-		$purchase = $wpdb->get_var( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_cs_payment_transaction_id' AND meta_value = '{$txn_id}' LIMIT 1" );
-
-		if ( $purchase != null ) {
-			return true;
+		if ( function_exists( 'cs_get_order_transaction_by' ) ) {
+			$purchase = cs_get_order_transaction_by( 'transaction_id', $txn_id );
+		} else {
+			global $wpdb;
+			$purchase = $wpdb->get_var( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_cs_payment_transaction_id' AND meta_value = '{$txn_id}' LIMIT 1" );
 		}
 
-		return false;
+		return ! empty( $purchase );
 	}
 
 	/**

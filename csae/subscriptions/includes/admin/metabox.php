@@ -218,7 +218,7 @@ function cs_recurring_metabox_signup_fee( $download_id, $price_id, $args ) {
 add_action( 'cs_recurring_download_price_row', 'cs_recurring_metabox_signup_fee', 999, 3 );
 
 /**
- * Meta fields for CS to save
+ * Meta fields for CommerceStore to save
  *
  * @access      public
  * @since       1.0
@@ -592,7 +592,7 @@ function cs_display_subscription_payment_meta( $payment_id ) {
 				<?php foreach( $subs as $sub ) : ?>
 					<?php $sub_url = admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $sub->id ); ?>
 					<p>
-						<span class="label"><span class="dashicons dashicons-update"></span> <?php printf( __( 'Subscription ID: <a href="%s">#%d</a>', 'cs_recurring' ), $sub_url, $sub->id ); ?></span>&nbsp;
+						<span class="label"><span class="dashicons dashicons-update"></span> <?php printf( __( 'Subscription ID: <a href="%s">#%d</a>', 'cs_recurring' ), $sub_url, $sub->id ); ?></span> (<?php echo esc_html( $sub->get_status_label() ); ?>)
 					</p>
 					<?php $payments = $sub->get_child_payments(); ?>
 					<?php if( $payments ) : ?>
@@ -628,38 +628,57 @@ add_action( 'cs_view_order_details_sidebar_before', 'cs_display_subscription_pay
  * The parent payment ID is the very first payment made. All payments made after for the profile are sub.
  *
  * @since  1.0
+ * @param int $payment_id The current payment ID.
  * @return void
  */
 function cs_recurring_display_parent_payment( $payment_id = 0 ) {
 
 	$payment = cs_get_payment( $payment_id );
+	if ( ! $payment->parent_payment ) {
+		return;
+	}
 
-	if( $payment->parent_payment ) :
-
-		$parent_payment = cs_get_payment( $payment->parent_payment );
-		$sub_id = $payment->get_meta( 'subscription_id', true );
-		if( ! $sub_id ) {
-			$subs_db = new CS_Subscriptions_DB;
-			$subs    = $subs_db->get_subscriptions( array( 'parent_payment_id' => $payment->parent_payment, 'order' => 'ASC' ) );
-			$sub     = reset( $subs );
-			$sub_id  = $sub->id;
-		}
-		$parent_url = admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $payment->parent_payment );
-?>
-		<div id="cs-order-subscription-payments" class="postbox">
-			<h3 class="hndle">
-				<span><?php _e( 'Subscription', 'cs-recurring' ); ?></span>
-			</h3>
-			<div class="inside">
-				<?php $sub_url = admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $sub_id ); ?>
-				<p>
-					<span class="label"><span class="dashicons dashicons-update"></span> <?php printf( __( 'Subscription ID: <a href="%s">#%d</a>', 'cs_recurring' ), $sub_url, $sub_id ); ?></span>&nbsp;
-				</p>
-				<p><?php printf( __( 'Parent Payment: <a href="%s">%s</a>' ), $parent_url, $parent_payment->number ); ?></p>
-			</div><!-- /.inside -->
-		</div><!-- /#cs-order-subscription-payments -->
-<?php
-	endif;
+	$sub_id = $payment->get_meta( 'subscription_id', true );
+	if ( $sub_id ) {
+		$sub = new CS_Subscription( $sub_id );
+	} else {
+		$subs_db = new CS_Subscriptions_DB();
+		$subs    = $subs_db->get_subscriptions( array( 'parent_payment_id' => $payment->parent_payment, 'order' => 'ASC' ) );
+		$sub     = reset( $subs );
+	}
+	if ( ! $sub ) {
+		return;
+	}
+	$parent_url = add_query_arg(
+		array(
+			'post_type' => 'download',
+			'page'      => 'cs-payment-history',
+			'view'      => 'view-order-details',
+			'id'        => urlencode( $payment->parent_payment ),
+		),
+		admin_url( 'edit.php' )
+	);
+	$sub_url    = add_query_arg(
+		array(
+			'post_type' => 'download',
+			'page'      => 'cs-subscriptions',
+			'id'        => urlencode( $sub->id ),
+		),
+		admin_url( 'edit.php' )
+	);
+	?>
+	<div id="cs-order-subscription-payments" class="postbox">
+		<h3 class="hndle">
+			<span><?php esc_html_e( 'Subscription', 'cs-recurring' ); ?></span>
+		</h3>
+		<div class="inside">
+			<p>
+				<span class="label"><span class="dashicons dashicons-update"></span> <?php esc_html_e( 'Subscription ID', 'cs_recurring' ); ?>: <?php printf( '<a href="%s">#%d</a>', esc_url( $sub_url ), (int) $sub->id ); ?></span> (<?php echo esc_html( $sub->get_status_label() ); ?>)
+			</p>
+			<p><?php esc_html_e( 'Parent Payment', 'cs-recurring' ); ?>: <?php printf( '<a href="%s">%s</a>', esc_url( $parent_url ), esc_html( cs_get_payment_number( $payment->parent_payment ) ) ); ?></p>
+		</div><!-- /.inside -->
+	</div><!-- /#cs-order-subscription-payments -->
+	<?php
 }
 add_action( 'cs_view_order_details_sidebar_before', 'cs_recurring_display_parent_payment', 10 );
 

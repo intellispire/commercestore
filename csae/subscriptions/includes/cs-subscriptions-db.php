@@ -356,13 +356,13 @@ class CS_Subscriptions_DB extends CS_DB {
 
 			if ( version_compare(CS_VERSION, '3.0.0-beta1', '<') ) {
 
-				// Pre CS 3.0 join
+				// Pre CommerceStore 3.0 join
 				$join  .= " LEFT JOIN {$wpdb->prefix}postmeta m1 ON t1.parent_payment_id = m1.post_id ";
 				$where .= $wpdb->prepare( " AND m1.meta_key = '_cs_payment_gateway' AND m1.meta_value = '%s'", $gateway );
 
 			} else {
 
-				// Post CS 3.0 join
+				// Post CommerceStore 3.0 join
 				$join  .= " LEFT JOIN {$wpdb->prefix}cs_orders o1 on t1.parent_payment_id = o1.id ";
 				$where .= $wpdb->prepare( " AND o1.gateway = '%s' ", $gateway );
 
@@ -674,15 +674,15 @@ class CS_Subscriptions_DB extends CS_DB {
 		if ( ! empty( $args['gateway'] ) ) {
 			$gateway = sanitize_text_field( $args['gateway'] );
 
-			if ( version_compare(CS_VERSION, '3.0.0-beta1', '<') ) {
+			if ( ! function_exists( 'cs_get_orders' ) ) {
 
-				// Pre CS 3.0 join
+				// Pre CommerceStore 3.0 join
 				$join  .= " LEFT JOIN {$wpdb->prefix}postmeta m1 ON t1.parent_payment_id = m1.post_id ";
 				$where .= $wpdb->prepare( " AND m1.meta_key = '_cs_payment_gateway' AND m1.meta_value = '%s'", $gateway );
 
 			} else {
 
-				// Post CS 3.0 join
+				// Post CommerceStore 3.0 join
 				$join  .= " LEFT JOIN {$wpdb->prefix}cs_orders o1 on t1.parent_payment_id = o1.id ";
 				$where .= $wpdb->prepare( " AND o1.gateway = '%s' ", $gateway );
 

@@ -2,7 +2,7 @@
 /**
  * Subscription List Table Class
  *
- * @package     CS Recurring
+ * @package     CommerceStore Recurring
  * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
@@ -18,7 +18,7 @@ if( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * CS Subscriptions List Table Class
+ * CommerceStore Subscriptions List Table Class
  *
  * @access      private
  */

@@ -1,5 +1,5 @@
 /**
- * CS Admin Recurring JS
+ * CommerceStore Admin Recurring JS
  *
  * @description: JS for CS's Recurring Add-on applied in admin download (single download post) screen
  *

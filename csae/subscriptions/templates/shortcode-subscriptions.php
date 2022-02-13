@@ -1,6 +1,6 @@
 <?php
 /**
- *  CS Template File for [cs_subscriptions] shortcode
+ *  CommerceStore Template File for [cs_subscriptions] shortcode
  *
  * @description: Place this template file within your theme directory under /my-theme/cs_templates/
  *
@@ -83,7 +83,12 @@ if ( is_user_logged_in() ):
 						<span class="cs_subscriptiontimes_billed"><?php echo $subscription->get_times_billed() . ' / ' . ( ( $subscription->bill_times == 0 ) ? __( 'Until cancelled', 'cs-recurring' ) : $subscription->bill_times ); ?></span>
 					</td>
 					<td>
-						<a href="<?php echo esc_url( add_query_arg( 'payment_key', cs_get_payment_key( $subscription->parent_payment_id ), cs_get_success_page_uri() ) ); ?>" class="cs_subscription_invoice"><?php _e( 'View Invoice', 'cs-recurring' ); ?></a>
+						<a
+							href="<?php echo esc_url( add_query_arg( array( 'action' => 'view_transactions', 'subscription_id' => urlencode( $subscription->id ) ) ) ); ?>"
+							class="cs_subscription_invoice"
+						>
+							<?php esc_html_e( 'View Transactions', 'cs-recurring' ); ?>
+						</a>
 						<?php if( $subscription->can_update() ) : ?>
 							&nbsp;|&nbsp;
 							<a href="<?php echo esc_url( $subscription->get_update_url() ); ?>"><?php _e( 'Update Payment Method', 'cs-recurring' ); ?></a>

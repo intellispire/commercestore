@@ -80,7 +80,7 @@ class CS_Recurring_PayPal_Express extends CS_Recurring_Gateway {
 	public function validate_fields( $data, $posted ) {
 
 		if ( empty( $this->username ) || empty( $this->password ) || empty( $this->signature ) ) {
-			cs_set_error( 'cs_recurring_no_paypal_api', __( 'It appears that you have not configured PayPal API access. Please configure it in CS &rarr; Settings', 'cs_recurring' ) );
+			cs_set_error( 'cs_recurring_no_paypal_api', __( 'It appears that you have not configured PayPal API access. Please configure it in CommerceStore &rarr; Settings', 'cs_recurring' ) );
 		}
 
 		if ( count( cs_get_cart_contents() ) > 1 && ! $this->can_purchase_multiple_subs() ) {
@@ -646,16 +646,19 @@ class CS_Recurring_PayPal_Express extends CS_Recurring_Gateway {
 
 			$posted = apply_filters( 'cs_recurring_ipn_post', $_POST ); // allow $_POST to be modified
 
+			/**
+			 * Note: Amounts get more properly sanitized on insert.
+			 * @see CS_Subscription::add_payment()
+			 */
 			if( isset( $posted['amount'] ) ) {
-				$amount = number_format( (float) $posted['amount'], 2 );
+				$amount = (float) $posted['amount'];
 			} elseif( isset( $posted['mc_gross'] ) ) {
-				$amount = number_format( (float) $posted['mc_gross'], 2 );
+				$amount = (float) $posted['mc_gross'];
 			} else {
 				$amount = 0;
 			}
 
 			$txn_type        = isset( $posted['txn_type'] ) ? $posted['txn_type'] : '';
-			$payment_status  = isset( $posted['payment_status'] ) ? $posted['payment_status'] : '';
 			$currency_code   = isset( $posted['mc_currency'] ) ? $posted['mc_currency'] : $posted['currency_code'];
 			$transaction_id  = isset( $posted['txn_id'] ) ? $posted['txn_id'] : '';
 
@@ -1040,7 +1043,7 @@ class CS_Recurring_PayPal_Express extends CS_Recurring_Gateway {
 			'VERSION'   => '124',
 			'METHOD'    => 'BillOutstandingAmount',
 			'PROFILEID' => $subscription->profile_id,
-			'NOTE'      => __( 'Retry initiated from CS Recurring', 'cs-recurring' )
+			'NOTE'      => __( 'Retry initiated from CommerceStore Recurring', 'cs-recurring' )
 		);
 
 		$error_msg = '';

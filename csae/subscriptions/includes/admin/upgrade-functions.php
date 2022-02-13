@@ -2,7 +2,7 @@
 /**
  * Upgrade Functions
  *
- * @package     CS
+ * @package CS
  * @subpackage  Admin/Upgrades
  * @copyright   Copyright (c) 2015, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -498,7 +498,7 @@ function cs_recurring_get_legacy_profile_id( CS_Payment $payment ) {
 }
 
 /**
- * Fixes incorrect stripe customer association from the CS Recurriong 2.4 upgrade routine.
+ * Fixes incorrect stripe customer association from the CommerceStore Recurriong 2.4 upgrade routine.
  *
  * It was discovered that the upgrade routine for 2.4 resulted in a few subscribers getting assigned
  * the same customer ID from Stripe. This resulted in occasional new signups through Stripe to have
@@ -817,7 +817,7 @@ function cs_recurring_fix_24_stripe_customers() {
 					}
 
 					/*
-					 * Get the CS subscription associated with this user ID, and see if this subscription belongs to them.
+					 * Get the CommerceStore subscription associated with this user ID, and see if this subscription belongs to them.
 					 *
 					 * If we successfully retrieve the CS_Subscription object, it is correct.
 					 */
@@ -839,7 +839,7 @@ function cs_recurring_fix_24_stripe_customers() {
 						 * The customer will have to manually renew their subscription in the future
 						 * as automatic renewals will not be processed for this subscription.
 						 *
-						 * A note is added to the CS customer to make it easier to track down the
+						 * A note is added to the CommerceStore customer to make it easier to track down the
 						 * history for this customer if necessary for site admins.
 						 *
 						 */
@@ -849,7 +849,7 @@ function cs_recurring_fix_24_stripe_customers() {
 
 						if ( ! empty( $cs_sub->profile_id ) ) {
 							if ( true === $log_only ) {
-								fwrite( $log_file, 'Found CS Subscription ID ' . $cs_sub->id . ' / ' . $cs_sub->profile_id . ' and removing it from Stripe customer ' . $customer->id . "\n");
+								fwrite( $log_file, 'Found CommerceStore Subscription ID ' . $cs_sub->id . ' / ' . $cs_sub->profile_id . ' and removing it from Stripe customer ' . $customer->id . "\n");
 							} else {
 								$cs_sub->update( array( 'profile_id' => '' ) );
 
@@ -1548,3 +1548,21 @@ function cs_include_subscription_price_id_update_batch_processor( $class ) {
 	}
 
 }
+
+/**
+ * PayPal plan IDs need to be wiped in case they were created with invalid intervals.
+ * @link https://github.com/commercestore/cs-recurring/issues/1502
+ *
+ * @since 2.11.2
+ */
+function cs_recurring_wipe_invalid_paypal_plan_ids() {
+	if ( cs_has_upgrade_completed( 'recurring_wipe_invalid_paypal_plan_ids' ) ) {
+		return;
+	}
+
+	delete_option( 'cs_paypal_plans' );
+
+	cs_set_upgrade_complete( 'recurring_wipe_invalid_paypal_plan_ids' );
+}
+
+add_action( 'admin_init', 'cs_recurring_wipe_invalid_paypal_plan_ids' );

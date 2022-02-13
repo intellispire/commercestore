@@ -10,7 +10,7 @@
 
 add_action( 'init', 'cs_recurring_register_log_type' );
 /**
- * Registers the CS subscription log post type, and
+ * Registers the CommerceStore subscription log post type, and
  * cs_log_type taxonomy if it does not exist.
  *
  * @since 2.10.1

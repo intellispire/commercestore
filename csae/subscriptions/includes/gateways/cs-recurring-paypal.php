@@ -371,7 +371,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 		$transaction_id = cs_get_payment_transaction_id( $subscription->parent_payment_id );
 
-		// Get the Paypal IPN date and the sign up date for the CS Subscription
+		// Get the Paypal IPN date and the sign up date for the CommerceStore Subscription
 		$ipn_payment_date = new DateTime( $ipn_data['payment_date'] );
 		$signup_date = new DateTime( $subscription->created );
 
@@ -981,7 +981,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 			'VERSION'   => '124',
 			'METHOD'    => 'BillOutstandingAmount',
 			'PROFILEID' => $subscription->profile_id,
-			'NOTE'      => __( 'Retry initiated from CS Recurring', 'cs-recurring' )
+			'NOTE'      => __( 'Retry initiated from CommerceStore Recurring', 'cs-recurring' )
 		);
 
 		$error_msg = '';
@@ -1049,7 +1049,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 	 *
 	 * @param  CS_Subscription $subscription The subscription object
 	 *
-	 * @return string Expiration date or WP_Error if something went wrong
+	 * @return string|WP_Error Expiration date or WP_Error if something went wrong
 	 */
 	public function get_expiration( $subscription ) {
 

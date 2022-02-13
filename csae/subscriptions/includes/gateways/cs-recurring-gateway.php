@@ -103,6 +103,19 @@ class CS_Recurring_Gateway {
 	}
 
 	/**
+	 * Whether or not payments should automatically be set to `complete` during `record_signup()`.
+	 *
+	 * Defaults to the opposite of `CS_Recurring_Gateway::$offsite`.
+	 *
+	 * @since 2.11
+	 *
+	 * @return bool
+	 */
+	protected function should_auto_complete_payment() {
+		return ! $this->offsite;
+	}
+
+	/**
 	 * Creates subscription payment profiles and sets the IDs so they can be stored
 	 *
 	 * @access      public
@@ -178,7 +191,7 @@ class CS_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.4
-	 * @param       CS_Subscription $subscription The CS_Subscription object for the CS Subscription being cancelled.
+	 * @param       CS_Subscription $subscription The CS_Subscription object for the CommerceStore Subscription being cancelled.
 	 * @param       bool             $valid Currently this defaults to be true at all times.
 	 * @return      bool
 	 */
@@ -189,7 +202,7 @@ class CS_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.4
-	 * @param       CS_Subscription $subscription The CS_Subscription object for the CS Subscription being cancelled.
+	 * @param       CS_Subscription $subscription The CS_Subscription object for the CommerceStore Subscription being cancelled.
 	 * @return      bool
 	 */
 	public function cancel_immediately( $subscription ) {
@@ -452,8 +465,15 @@ class CS_Recurring_Gateway {
 
 			}
 
-			// Determine tax amount for any fees if it's more than $0
+			/**
+			 * Determine tax amount for any fees if it's more than $0
+			 *
+			 * Fees (at this time) must be exclusive of tax
+			 * @see CS_Cart::get_tax_on_fees()
+			 */
+			add_filter( 'cs_prices_include_tax', '__return_false' );
 			$fee_tax = $fees > 0 ? cs_calculate_tax( $fees ) : 0;
+			remove_filter( 'cs_prices_include_tax', '__return_false' );
 
 			// Format the tax rate.
 			$tax_rate = round( floatval( $this->purchase_data['tax_rate'] ), 4 );
@@ -512,9 +532,8 @@ class CS_Recurring_Gateway {
 
 		if ( ! is_user_logged_in() ) {
 			cs_set_error( 'cs_recurring_login', __( 'You must be logged in to purchase a subscription', 'cs-recurring' ) );
-			$redirect_query = '?payment-mode=' . $this->id . '&cs-recurring-login=1';
 
-			cs_send_back_to_checkout( $redirect_query );
+			$this->handle_errors( cs_get_errors() );
 		}
 
 		// Create subscription payment profiles in the gateway
@@ -527,7 +546,7 @@ class CS_Recurring_Gateway {
 			foreach ( $this->failed_subscriptions as $failed_sub ) {
 
 				$item_key = $failed_sub['key'];
-				// Remove it from the subscriptions array so we don't create an CS Subscription entry
+				// Remove it from the subscriptions array so we don't create an CommerceStore Subscription entry
 				unset( $this->subscriptions[ $item_key ] );
 
 				// Remove it from the cart details and downloads so we don't charge the customer and give accees to it
@@ -553,7 +572,7 @@ class CS_Recurring_Gateway {
 		$errors = cs_get_errors();
 
 		if ( $errors ) {
-			cs_send_back_to_checkout( '?payment-mode=' . $this->id );
+			$this->handle_errors( $errors );
 		}
 
 		// Record the subscriptions and finish up
@@ -567,11 +586,20 @@ class CS_Recurring_Gateway {
 
 		// We shouldn't usually get here, but just in case a new error was recorded, we need to check for it
 		if ( $errors ) {
-
-			cs_send_back_to_checkout( '?payment-mode=' . $this->id );
-
+			$this->handle_errors( $errors );
 		}
 
+	}
+
+	/**
+	 * Handles errors that occur during checkout processing.
+	 *
+	 * @param array|false $errors
+	 *
+	 * @since 2.11
+	 */
+	protected function handle_errors( $errors = false ) {
+		cs_send_back_to_checkout( '?payment-mode=' . $this->id );
 	}
 
 	/**
@@ -612,7 +640,7 @@ class CS_Recurring_Gateway {
 		$this->payment_id = cs_insert_payment( $payment_data );
 		$payment          = cs_get_payment( $this->payment_id );
 
-		if ( ! $this->offsite ) {
+		if ( $this->should_auto_complete_payment() ) {
 
 			// Offsite payments get verified via a webhook so are completed in webhooks()
 			$payment->status = 'publish';
@@ -640,7 +668,7 @@ class CS_Recurring_Gateway {
 			if( isset( $subscription['status'] ) ) {
 				$status  = $subscription['status'];
 			} else {
-				$status  = $this->offsite ? 'pending' : 'active';
+				$status = ! $this->should_auto_complete_payment() ? 'pending' : 'active';
 			}
 
 			$trial_period = ! empty( $subscription['has_trial'] ) ? $subscription['trial_quantity'] . ' ' . $subscription['trial_unit'] : '';
@@ -702,7 +730,7 @@ class CS_Recurring_Gateway {
 			$args = apply_filters( 'cs_recurring_pre_record_signup_args', $args, $this );
 			$sub = $subscriber->add_subscription( $args );
 
-			if( ! $this->offsite && $trial_period ) {
+			if ( $this->should_auto_complete_payment() && $trial_period ) {
 				$subscriber->add_meta( 'cs_recurring_trials', $subscription['id'] );
 			}
 

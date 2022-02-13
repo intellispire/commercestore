@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Integrates CS Recurring with the Auto Register extension
+ * Integrates CommerceStore Recurring with the Auto Register extension
  *
  * @since v2.4
  */

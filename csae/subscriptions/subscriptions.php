@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Easy Digital Downloads - Recurring Payments
- * Plugin URI: http://commercestore.com/downloads/cs-recurring/
+ * Plugin URI: https://commercestore.com/downloads/cs-recurring/
  * Description: Sell subscriptions with Easy Digital Downloads
- * Author: Sandhills Development, LLC
- * Author URI: https://sandhillsdev.com
- * Version: 2.10.5
+ * Author: Easy Digital Downloads
+ * Author URI: https://commercestore.com
+ * Version: 2.11.6
  * Text Domain: cs-recurring
  * Domain Path: languages
  */
@@ -31,7 +31,7 @@ if ( ! defined( 'CS_RECURRING_PLUGIN_FILE' ) ) {
 }
 
 if ( ! defined( 'CS_RECURRING_VERSION' ) ) {
-	define( 'CS_RECURRING_VERSION', '2.10.5' );
+	define( 'CS_RECURRING_VERSION', '2.11.6' );
 }
 
 final class CS_Recurring {
@@ -185,6 +185,7 @@ final class CS_Recurring {
 			'paypal'           => 'CS_Recurring_PayPal',
 			'paypalexpress'    => 'CS_Recurring_PayPal_Express',
 			'paypalpro'        => 'CS_Recurring_PayPal_Website_Payments_Pro',
+			'paypal_commerce'  => 'CS_Recurring_PayPal_Commerce',
 			'stripe'           => 'CS_Recurring_Stripe',
 		);
 
@@ -226,15 +227,22 @@ final class CS_Recurring {
 
 		//Load gateway functions
 		foreach ( cs_get_payment_gateways() as $key => $gateway ) {
-			if ( file_exists( CS_RECURRING_PLUGIN_DIR . 'includes/gateways/' . $key . '/functions.php' ) ) {
-				require_once CS_RECURRING_PLUGIN_DIR . 'includes/gateways/' . $key . '/functions.php';
+			$potential_files = array(
+				CS_RECURRING_PLUGIN_DIR . 'includes/gateways/' . $key . '/functions.php',
+				CS_RECURRING_PLUGIN_DIR . 'includes/gateways/' . str_replace( '_', '-', $key ) . '/functions.php'
+			);
+
+			foreach ( $potential_files as $file_path ) {
+				if ( file_exists( $file_path ) ) {
+					require_once $file_path;
+				}
 			}
 		}
 
 		/*
 		 * Make sure PayPal functions are always loaded.
-		 * In CS <2.11 this wasn't necessary because `paypal` was always available as a gateway.
-		 * In CS 2.11, the new gateway is `paypal_commerce`, which means this file wasn't getting loaded.
+		 * In CommerceStore <2.11 this wasn't necessary because `paypal` was always available as a gateway.
+		 * In CommerceStore 2.11, the new gateway is `paypal_commerce`, which means this file wasn't getting loaded.
 		 */
 		if ( ! function_exists( 'cs_recurring_get_paypal_api_credentials' ) ) {
 			require_once CS_RECURRING_PLUGIN_DIR . 'includes/gateways/paypal/functions.php';
@@ -328,7 +336,12 @@ final class CS_Recurring {
 	 */
 	private function actions() {
 
-		if ( class_exists( 'CS_License' ) && is_admin() ) {
+		// @todo The `elseif` can be removed once CommerceStore minimum is 2.11.4.
+		if ( class_exists( '\\CS\\Extensions\\ExtensionRegistry' ) ) {
+			add_action( 'cs_extension_license_init', function( \CS\Extensions\ExtensionRegistry $registry ) {
+				$registry->addExtension( __FILE__, CS_RECURRING_PRODUCT_NAME, 28530, CS_RECURRING_VERSION, 'recurring_license_key' );
+			} );
+		} elseif ( class_exists( 'CS_License' ) ) {
 			$recurring_license = new CS_License( __FILE__, CS_RECURRING_PRODUCT_NAME, CS_RECURRING_VERSION, 'Easy Digital Downloads', 'recurring_license_key', null, 28530 );
 		}
 
@@ -343,7 +356,7 @@ final class CS_Recurring {
 		// Check for subscription status on file download
 		add_action( 'cs_process_verified_download', array( $this, 'process_download' ), 10, 4 );
 
-		// Tells CS to include subscription payments in Payment History
+		// Tells CommerceStore to include subscription payments in Payment History
 		add_action( 'cs_pre_get_payments', array( $this, 'enable_child_payments' ), 100 );
 
 		// Register styles
@@ -389,9 +402,12 @@ final class CS_Recurring {
 
 		// Include subscription payments in the calulation of earnings
 		add_filter( 'cs_get_total_earnings_args', array( $this, 'earnings_query' ) );
+		add_filter( 'cs_stats_earnings_args', array( $this, 'earnings_query' ) );
+
+		// Deprecated in CommerceStore 2.7
 		add_filter( 'cs_get_earnings_by_date_args', array( $this, 'earnings_query' ) );
 		add_filter( 'cs_get_sales_by_date_args', array( $this, 'earnings_query' ) );
-		add_filter( 'cs_stats_earnings_args', array( $this, 'earnings_query' ) );
+
 		add_filter( 'cs_get_users_purchases_args', array( $this, 'has_purchased_query' ) );
 
 		// Allow PDF Invoices to be downloaded for subscription payments
@@ -406,7 +422,7 @@ final class CS_Recurring {
 		// Don't count renewals towards a customer purchase count when using recount
 		add_filter( 'cs_customer_recount_sholud_increase_count', array( $this, 'maybe_increase_customer_sales' ), 10, 2 );
 
-		// Add cs_subscription to payment stats in CS Core
+		// Add cs_subscription to payment stats in CommerceStore Core
 		add_filter( 'cs_payment_stats_post_statuses', array( $this, 'cs_payment_stats_post_status' ) );
 
 		// Ensure Authorize.net 2.0+ is available.
@@ -479,17 +495,16 @@ final class CS_Recurring {
 	 */
 	public function is_payment_complete( $ret, $payment_id, $status ) {
 
-		if ( 'cancelled' == $status ) {
+		if ( 'cancelled' === $status ) {
 
 			$ret = true;
 
-		} elseif ( 'cs_subscription' == $status ) {
+		} elseif ( 'cs_subscription' === $status ) {
 
-			$parent = get_post_field( 'post_parent', $payment_id );
-			if ( cs_is_payment_complete( $parent ) ) {
+			$payment = cs_get_payment( $payment_id );
+			if ( ! empty( $payment->parent_payment ) && cs_is_payment_complete( $payment->parent_payment ) ) {
 				$ret = true;
 			}
-
 		}
 
 		return $ret;
@@ -522,18 +537,21 @@ final class CS_Recurring {
 	 * @return bool               If the file should be delivered or not.
 	 */
 	public function allow_file_access( $has_access, $payment_id, $args ) {
-		$payment = cs_get_payment( $payment_id );
-		if ( 'cs_subscription' === $payment->status ) {
-			$has_access = true;
+		if ( ! $payment_id ) {
+			return $has_access;
 		}
 
+		$payment = cs_get_payment( $payment_id );
+		if ( $payment && 'cs_subscription' === $payment->status ) {
+			$has_access = true;
+		}
 
 		return $has_access;
 	}
 
 
 	/**
-	 * Tells CS about our new payment status
+	 * Tells CommerceStore about our new payment status
 	 *
 	 * @since  1.0
 	 * @return array
@@ -551,6 +569,9 @@ final class CS_Recurring {
 	 * @return array
 	 */
 	public function payments_view( $views ) {
+		if ( function_exists( 'cs_count_orders' ) ) {
+			return $views;
+		}
 		$base          = admin_url( 'edit.php?post_type=download&page=cs-payment-history' );
 		$payment_count = wp_count_posts( 'cs_payment' );
 		$current       = isset( $_GET['status'] ) ? $_GET['status'] : '';
@@ -1228,7 +1249,7 @@ final class CS_Recurring {
 			}
 		}
 
-		// Update the expiration date of license keys, if CS Software Licensing is active
+		// Update the expiration date of license keys, if CommerceStore Software Licensing is active
 		if ( function_exists( 'cs_software_licensing' ) ) {
 			$licenses = cs_software_licensing()->get_licenses_of_purchase( $parent_id );
 
@@ -1493,13 +1514,17 @@ final class CS_Recurring {
 	 */
 	public function earnings_query( $args ) {
 
-		$statuses_to_include = array( 'publish', 'revoked', 'cancelled', 'cs_subscription' );
+		$statuses_to_include = array( 'cancelled', 'cs_subscription' );
 
 		// Include post_status in case we are filtering to direct database queries like in the cs_stats_earnings_args filter
-		$args['post_status'] = $statuses_to_include;
+		if ( isset( $args['post_status'] ) && is_array( $args['post_status'] ) ) {
+			$args['post_status'] = array_unique( array_merge( $args['post_status'], $statuses_to_include ) );
+		}
 
 		// Include status in case we are filtering to queries done through cs_get_payments like in the cs_get_total_earnings_args filter
-		$args['status'] = $statuses_to_include;
+		if ( isset( $args['status'] ) && is_array( $args['status'] ) ) {
+			$args['status'] = array_unique( array_merge( $args['status'], $statuses_to_include ) );
+		}
 
 		return $args;
 	}
@@ -1530,7 +1555,7 @@ final class CS_Recurring {
 	}
 
 	/**
-	 * Add cs_subscription post type to CS Payment Stats
+	 * Add cs_subscription post type to CommerceStore Payment Stats
 	 *
 	 * @since  2.6.10
 	 * @param  array $statuses Post statuses.
@@ -1541,7 +1566,7 @@ final class CS_Recurring {
 	}
 
 	/**
-	 * Tells CS to include child payments in queries
+	 * Tells CommerceStore to include child payments in queries
 	 *
 	 * @since  2.2
 	 * @return void
@@ -1571,6 +1596,7 @@ final class CS_Recurring {
 			}
 		}
 
+		// This does not appear to need to be updated for CommerceStore 3.0.
 		if ( $query_has_recurring ) {
 			$query->__set( 'post_parent', null );
 		}
@@ -1629,19 +1655,19 @@ final class CS_Recurring {
 	}
 
 	/**
-	 * Instruct CS PDF Invoices that subscription paymentsare eligible for Invoices
+	 * Instruct CommerceStore PDF Invoices that subscription paymentsare eligible for Invoices
 	 *
 	 * @since  2.2
 	 * @return bool
 	 */
 	public function is_invoice_allowed( $ret, $payment_id ) {
 
-		$payment_status = get_post_status( $payment_id );
+		$payment_status = cs_get_payment_status( $payment_id );
 
-		if ( 'cs_subscription' == $payment_status ) {
+		if ( 'cs_subscription' === $payment_status ) {
 
-			$parent = get_post_field( 'post_parent', $payment_id );
-			if ( cs_is_payment_complete( $parent ) ) {
+			$payment = cs_get_payment( $payment_id );
+			if ( ! empty( $payment->parent_payment ) && cs_is_payment_complete( $payment->parent_payment ) ) {
 				$ret = true;
 			}
 
@@ -1684,7 +1710,7 @@ final class CS_Recurring {
 	}
 
 	/**
-	 * Checks the payment status during the refund process and tells CS to not decrease sales
+	 * Checks the payment status during the refund process and tells CommerceStore to not decrease sales
 	 * if it's an cs_subscription
 	 *
 	 * @since  2.4
@@ -1712,6 +1738,7 @@ final class CS_Recurring {
 	 */
 	public function maybe_increase_customer_sales( $increase_sales, $payment ) {
 
+		// This does not need to be updated for CommerceStore 3.0.
 		if ( 'cs_subscription' === $payment->post_status ) {
 			$increase_sales = false;
 		}
@@ -1973,6 +2000,11 @@ final class CS_Recurring {
 			case 'update':
 				cs_get_template_part( 'shortcode', 'subscription-update' );
 				break;
+
+			case 'view_transactions':
+				cs_get_template_part( 'shortcode', 'subscription-transactions' );
+				break;
+
 			case 'list':
 			default:
 				cs_get_template_part( 'shortcode', 'subscriptions' );
@@ -2139,6 +2171,7 @@ function cs_recurring_install() {
 			cs_set_upgrade_complete( 'recurring_add_tax_columns_to_subs_table' );
 			cs_set_upgrade_complete( 'recurring_27_subscription_meta' );
 			cs_set_upgrade_complete( 'recurring_increase_transaction_profile_id_cols_and_collate' );
+			cs_set_upgrade_complete( 'recurring_wipe_invalid_paypal_plan_ids' );
 		}
 
 		if ( false === cs_recurring_needs_24_stripe_fix() ) {
@@ -2151,6 +2184,25 @@ function cs_recurring_install() {
 
 		update_option( 'cs_recurring_version', CS_RECURRING_VERSION );
 
+	}
+
+	if ( class_exists( 'CS_Recurring_PayPal_Commerce' ) && function_exists( '\\CS\\Gateways\\PayPal\\Webhooks\\sync_webhook' ) && \CS\Gateways\PayPal\has_rest_api_connection() ) {
+		try {
+			global $wp_rewrite;
+
+			/*
+			 * If `$wp_rewrite` isn't available, we can't get the REST API endpoint URL, which
+			 * would cause a fatal during webhook syncing.
+			 * @link https://github.com/commercestore/cs-recurring/pull/1451#issuecomment-871515068
+			 */
+			if ( empty( $wp_rewrite ) ) {
+				$wp_rewrite = new WP_Rewrite();
+			}
+
+			\CS\Gateways\PayPal\Webhooks\sync_webhook();
+		} catch ( \Exception $e ) {
+
+		}
 	}
 
 }

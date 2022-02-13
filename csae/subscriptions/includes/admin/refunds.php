@@ -1,10 +1,10 @@
 <?php
 /**
- * Handle subscription cancellation options on CS Payments when applying a refund.
+ * Handle subscription cancellation options on CommerceStore Payments when applying a refund.
  *
  * This class is for working with payments in CS.
  *
- * @package     CS Recurring
+ * @package     CommerceStore Recurring
  * @subpackage  Refunds
  * @copyright   Copyright (c) 2019, Sandhills Development
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -142,7 +142,7 @@ function cs_recurring_show_cancel_checkbox( $order ) {
 }
 
 /**
- * Cancels a subscription during the refund process in CS 3.0.
+ * Cancels a subscription during the refund process in CommerceStore 3.0.
  *
  * @since 2.10.4
  * @param int $order_id The original order ID.
@@ -270,7 +270,7 @@ function cs_recurring_cancel_subscription_during_refund( $payment ) {
 			return;
 		}
 
-		// Get the CS Subscription object that we want to cancel.
+		// Get the CommerceStore Subscription object that we want to cancel.
 		$cs_sub = new CS_Subscription( $sub_id );
 
 		// Run the cancel method in the CS_Subscription class. This also cancels the sub at the gateway.

@@ -682,14 +682,22 @@ class CS_Recurring_Checkout {
 			return;
 		}
 
-?>
+		$message = __( 'Your account will be automatically charged when the free trial is completed.', 'cs-recurring' );
+		if ( 1 === count( cs_get_cart_contents() ) ) {
+			$message = sprintf(
+				/* Translators: %s the amount charged */
+				__( 'Your account will be automatically charged %s when the free trial is completed.', 'cs-recurring' ),
+				'<span class="cs_recurring_total_after_trial">' . cs_currency_filter( cs_sanitize_amount( cs_get_cart_total() ) ) . '</span>'
+			);
+		}
+		?>
 		<p id="cs_final_total_wrap">
 			<strong><?php _e( 'Total Due Today:', 'cs-recurring' ); ?></strong>
 			<span class="cs_recurring_trial_total"><?php echo cs_currency_filter( cs_format_amount( 0.00 ) ); ?></span>
 			<span class="cs_recurring_trial_total_sep">&ndash;</span>
-			<span class="cs_recurring_trial_total_note"><?php _e( 'Your account will be automatically charged when the free trial is completed.', 'cs-recurring' ); ?></span>
+			<span class="cs_recurring_trial_total_note"><?php echo wp_kses( $message, array( 'span' => array( 'class' => true ) ) ); ?></span>
 		</p>
-<?php
+		<?php
 	}
 
 	/**

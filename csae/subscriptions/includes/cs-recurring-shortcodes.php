@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Recurring Shortcodes
  *
- * Adds additional recurring specific shortcodes as well as hooking into existing CS core shortcodes to add additional subscription functionality
+ * Adds additional recurring specific shortcodes as well as hooking into existing CommerceStore core shortcodes to add additional subscription functionality
  *
  * @since  2.4
  */
@@ -40,7 +40,7 @@ class CS_Recurring_Shortcodes {
 
 
 	/**
-	 * Adds our templates dir to the CS template stack
+	 * Adds our templates dir to the CommerceStore template stack
 	 *
 	 * @since 2.4
 	 *

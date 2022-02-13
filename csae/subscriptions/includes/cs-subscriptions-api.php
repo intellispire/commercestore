@@ -2,7 +2,7 @@
 /**
  * Subscribers REST API
  *
- * @package     CS Recurring
+ * @package     CommerceStore Recurring
  * @subpackage  Subscriber API Class
  * @copyright   Copyright (c) 2015, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -41,7 +41,7 @@ class CS_Subscriptions_API extends CS_API {
 	public $override = true;
 
 	/**
-	 * Adds to the allowed query vars list from CS Core for API access
+	 * Adds to the allowed query vars list from CommerceStore Core for API access
 	 *
 	 * @access public
 	 * @since  2.4.3

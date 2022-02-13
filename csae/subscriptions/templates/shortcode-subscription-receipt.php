@@ -1,6 +1,6 @@
 <?php
 /**
- *  CS Template File for the Subscriptions section of [cs_receipt]
+ *  CommerceStore Template File for the Subscriptions section of [cs_receipt]
  *
  * @description: Place this template file within your theme directory under /my-theme/cs_templates/
  *
@@ -25,7 +25,7 @@ if ( empty( $subscriptions ) ) {
 }
 ?>
 
-<h3><?php _e( 'Subscription Details', 'cs-recurring' ); ?></h3>
+<h3><?php esc_html_e( 'Subscription Details', 'cs-recurring' ); ?></h3>
 
 <?php do_action( 'cs_subscription_receipt_before_table', $payment ); ?>
 

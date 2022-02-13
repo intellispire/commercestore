@@ -12,7 +12,9 @@ function cs_recurring_settings_section( $sections ) {
 
 	return $sections;
 }
-add_filter( 'cs_settings_sections_extensions', 'cs_recurring_settings_section' );
+$settings_tab = version_compare( CS_VERSION, '2.11.3', '>=' ) ? 'gateways' : 'extensions';
+add_filter( "cs_settings_sections_{$settings_tab}", 'cs_recurring_settings_section' );
+add_filter( 'cs_settings_sections_emails', 'cs_recurring_settings_section' );
 
 /**
 * Register our settings
@@ -77,6 +79,23 @@ function cs_recurring_settings( $settings ) {
 				'desc'  => __( 'Check this if you\'d like customers to be prevented from purchasing a free trial multiple times.', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
+		)
+	);
+
+	return array_merge( $settings, $recurring_settings );
+}
+add_filter( "cs_settings_{$settings_tab}", 'cs_recurring_settings' );
+
+/**
+ * Adds the Recurring email settings to the Recurring section on the Emails tab.
+ *
+ * @since 2.11.4
+ * @param array $settings
+ * @return array
+ */
+function cs_recurring_email_settings( $settings ) {
+	$recurring_settings = array(
+		'recurring' => array(
 			array(
 				'id'    => 'enable_payment_received_email',
 				'name'  => __( 'Payment Received Email', 'cs-recurring' ),
@@ -182,12 +201,12 @@ function cs_recurring_settings( $settings ) {
 				'type'  => 'rich_editor',
 				'std'   => __( "Subscription ID: {subscription_id}\n\nCustomer: {name}\n\nSubscription: {subscription_name}\n\nView Subscription: {subscription_link}", 'cs-recurring' )
 			),
-		)
+		),
 	);
 
 	return array_merge( $settings, $recurring_settings );
 }
-add_filter( 'cs_settings_extensions', 'cs_recurring_settings' );
+add_filter( 'cs_settings_emails', 'cs_recurring_email_settings' );
 
 /**
  * Displays the subscription renewal reminders options
@@ -381,7 +400,7 @@ Your subscription for {subscription_name} will renew on {expiration}.';
 
 	update_option( 'cs_recurring_reminder_notices', $notices );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
+	wp_safe_redirect( cs_recurring_get_email_settings_url() );
 	exit;
 
 }
@@ -436,7 +455,7 @@ Your subscription for {subscription_name} will renew on {expiration}.';
 
 	update_option( 'cs_recurring_reminder_notices', $notices );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
+	wp_safe_redirect( cs_recurring_get_email_settings_url() );
 	exit;
 
 }
@@ -475,7 +494,7 @@ function cs_recurring_process_delete_reminder_notice( $data ) {
 
 	update_option( 'cs_recurring_reminder_notices', $notices );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
+	wp_safe_redirect( cs_recurring_get_email_settings_url() );
 	exit;
 
 }
@@ -512,7 +531,7 @@ function cs_recurring_process_send_test_reminder_notice( $data ) {
 	$notices  = $reminders->get_notices();
 	$reminders->send_test_notice( absint( $data['notice-id'] ) );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
+	wp_safe_redirect( cs_recurring_get_email_settings_url() );
 	exit;
 }
 add_action( 'cs_recurring_send_test_reminder_notice', 'cs_recurring_process_send_test_reminder_notice' );
@@ -542,7 +561,29 @@ add_filter( 'cs_settings_misc', 'cs_recurring_item_quantities_description', 10 )
  * @return array
  */
 function cs_recurring_guest_checkout_description( $settings ) {
-	$settings['checkout']['logged_in_only']['desc'] .= ' <strong>' . __( 'Guest checkout is not permitted when purchasing subscriptions.', 'cs-recurring' ) . '</strong>';
+	if ( ! empty( $settings['checkout']['logged_in_only']['desc'] ) ) {
+		$settings['checkout']['logged_in_only']['desc'] .= '<br /><strong>' . __( 'Guest checkout is not permitted when purchasing subscriptions.', 'cs-recurring' ) . '</strong>';
+	}
+
 	return $settings;
 }
-add_filter( 'cs_settings_misc', 'cs_recurring_guest_checkout_description', 10 );
+$settings_tab = version_compare( CS_VERSION, '2.11.3', '>=' ) ? 'gateways' : 'misc';
+add_filter( "cs_settings_{$settings_tab}", 'cs_recurring_guest_checkout_description', 10 );
+
+/**
+ * Gets the URL for Recurring's email settings.
+ *
+ * @since 2.11.4
+ * @return string
+ */
+function cs_recurring_get_email_settings_url() {
+	return add_query_arg(
+		array(
+			'post_type' => 'download',
+			'page'      => 'cs-settings',
+			'tab'       => 'emails',
+			'section'   => 'recurring',
+		),
+		admin_url( 'edit.php' )
+	);
+}

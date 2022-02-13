@@ -66,32 +66,32 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 		);
 
 		// Make sure the user is logged in if they are using an already existing user email.
-		add_action( 'csx_pre_process_purchase_form', array( $this, 'require_login_for_existing_users' ) );
+		add_action( 'css_pre_process_purchase_form', array( $this, 'require_login_for_existing_users' ) );
 
 		// Watch for subscription payment method updates.
 		add_action( 'wp_ajax_cs_recurring_update_subscription_payment_method', array( $this, 'update_subscription_payment_method' ) );
 
-		// Tell CS Auto Register to log its newly-created user in.
+		// Tell CommerceStore Auto Register to log its newly-created user in.
 		add_filter( 'cs_auto_register_login_user', array( $this, 'auto_register' ) );
 
 		// Bail early if the \Stripe\Customer currency does not match the stores.
-		add_action( 'csx_process_purchase_form_before_intent', array( $this, 'check_customer_currency' ), 10, 2 );
+		add_action( 'css_process_purchase_form_before_intent', array( $this, 'check_customer_currency' ), 10, 2 );
 
 		// Purchase flow:
 
 		// 0. Adjust \Stripe\PaymentIntent behavior for the parent \CS_payment.
-		add_filter( 'csx_create_payment_intent_args', array( $this, 'create_payment_intent_args' ), 10, 2 );
+		add_filter( 'css_create_payment_intent_args', array( $this, 'create_payment_intent_args' ), 10, 2 );
 
 		// 1. Create \CS_Subscription(s) on initial gateway processing.
 		// 2. Create \Stripe\Subscription(s).
 		//    Remove any \CS_Subscription(s) that no longer have a corresponding \Stripe\Subscription.
-		add_action( 'csx_payment_created', array( $this, 'process_purchase_form' ), 20, 2 );
+		add_action( 'css_payment_created', array( $this, 'process_purchase_form' ), 20, 2 );
 
 		// 3. Capture original \Stripe\PaymentIntent using an amount equal to the number of \Stripe\Subscription(s) created.
-		add_action( 'csx_capture_payment_intent', array( $this, 'capture_payment_intent' ) );
+		add_action( 'css_capture_payment_intent', array( $this, 'capture_payment_intent' ) );
 
 		// 4. Transition created \CS_Subscriptions to their next status.
-		add_action( 'csx_payment_complete', array( $this, 'complete_subscriptions' ) );
+		add_action( 'css_payment_complete', array( $this, 'complete_subscriptions' ) );
 
 		add_action( 'cs_pre_refund_payment', array( $this, 'process_refund' ) );
 		add_action( 'cs_recurring_stripe_check_txn', array( $this, 'check_transaction_id' ) );
@@ -215,7 +215,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 * Tell Auto Register to log the user in.
 	 *
 	 * @since  2.9.0
-	 * @param  bool $should_log_in_user This indicates whether the user should be automatically logged in when their user is created by CS Auto Register.
+	 * @param  bool $should_log_in_user This indicates whether the user should be automatically logged in when their user is created by CommerceStore Auto Register.
 	 * @return bool
 	 */
 	public function auto_register( $should_log_in_user ) {
@@ -299,7 +299,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 * @since 2.9.0
 	 *
 	 * @param array                                     $purchase_data Purchase data.
-	 * @param \CS_Payment                              $payment CS Payment.
+	 * @param \CS_Payment                              $payment CommerceStore Payment.
 	 * @param \Stripe\PaymentIntent|\Stripe\SetupIntent $intent Created Stripe Intent.
 	 */
 	public function process_purchase_form( $payment, $intent ) {
@@ -353,7 +353,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 		// Use mapped data to create \Stripe\Subscription records.
 		$this->create_stripe_subscriptions( $intent );
 
-		// There is a bug in CS core that causes adjusting tax amounts on
+		// There is a bug in CommerceStore core that causes adjusting tax amounts on
 		// individual line items to improperly recalculate total taxes.
 		//
 		// Line item amounts are adjusted when a Subscription has a free trial
@@ -481,8 +481,15 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 
 			}
 
-			// Determine tax amount for any fees if it's more than $0
+			/**
+			 * Determine tax amount for any fees if it's more than $0
+			 *
+			 * Fees (at this time) must be exclusive of tax
+			 * @see CS_Cart::get_tax_on_fees()
+			 */
+			add_filter( 'cs_prices_include_tax', '__return_false' );
 			$fee_tax = $fees > 0 ? cs_calculate_tax( $fees ) : 0;
+			remove_filter( 'cs_prices_include_tax', '__return_false' );
 
 			// Format the tax rate.
 			$tax_rate = round( floatval( $this->purchase_data['tax_rate'] ), 4 );
@@ -782,7 +789,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 				if ( ! empty( $subscription['has_trial'] ) ) {
 					$this->payment->modify_cart_item( $key, array(
 						'item_price' => 0,
-						// Tax amount needs to be the same to avoid a bug in CS core.
+						// Tax amount needs to be the same to avoid a bug in CommerceStore core.
 						// If the amount is less it will accidentally increase the value.
 						//
 						// @link https://github.com/commercestore/commercestore/issues/7385
@@ -804,7 +811,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 
 		// Clean up subscriptions.
 		foreach ( $this->failed_subscriptions as $failed_subscription ) {
-			// Remove an CS record to match other gateways that create a
+			// Remove an CommerceStore record to match other gateways that create a
 			// record after talking to the gateway.
 			$failed_subscription['subscription']['cs_subscription']->delete();
 
@@ -1038,6 +1045,23 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 
 				case 'customer.subscription.created' :
 
+					if (
+						! empty( $data->status ) &&
+						'active' === $data->status &&
+						$subscription->id &&
+						! $subscription->is_active()
+					) {
+						cs_debug_log( sprintf(
+							'Activating subscription #%d via webhook. Current status: %s.',
+							$subscription->id,
+							$subscription->status
+						) );
+
+						$subscription->update( array(
+							'status' => empty( $subscription->trial_period ) ? 'active' : 'trialling',
+						) );
+					}
+
 					do_action( 'cs_recurring_stripe_event_' . $event->type, $event );
 
 					die( 'CS Recurring: ' . $event->type );
@@ -1215,7 +1239,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.4
-	 * @param       array $subscription The CS Subscription data in question.
+	 * @param       array $subscription The CommerceStore Subscription data in question.
 	 * @return      int|false
 	 */
 	public function get_plan_id( $subscription = array() ) {
@@ -1230,7 +1254,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.9.6
-	 * @param       array $subscription The CS Subscription data in question.
+	 * @param       array $subscription The CommerceStore Subscription data in question.
 	 * @return      \Stripe\Plan|false Stripe Plan object or false if one cannot be created or retrieved.
 	 */
 	public function get_stripe_plan( $subscription = array() ) {
@@ -1327,7 +1351,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 		/**
 		 * Stripe requires the amount to be in a number of 'cents' in the currency.
 		 * Additionally, Stripe uses a different list of "zero decimal" currencies
-		 * than CS core, so whether the amount should be converted uses that logic.
+		 * than CommerceStore core, so whether the amount should be converted uses that logic.
 		 */
 		if ( ! csx_is_zero_decimal_currency() ) {
 			$amount = round( $amount * 100, 0 );
@@ -1573,7 +1597,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.4
-	 * @param       CS_Subscription $subscription The CS Subscription object being cancelled.
+	 * @param       CS_Subscription $subscription The CommerceStore Subscription object being cancelled.
 	 * @param       bool             $valid Currently this defaults to be true at all times.
 	 * @return      bool
 	 */
@@ -1631,7 +1655,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.9.4
-	 * @param       CS_Subscription $subscription The CS Subscription object being cancelled.
+	 * @param       CS_Subscription $subscription The CommerceStore Subscription object being cancelled.
 	 * @return      bool
 	 */
 	public function cancel_immediately( $subscription ) {
@@ -1914,7 +1938,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	}
 
 	/**
-	 * Converts a Stripe amount (integer) to an CS amount for storage.
+	 * Converts a Stripe amount (integer) to an CommerceStore amount for storage.
 	 * Non-zero-decimal currencies get divided by 100.
 	 *
 	 * @uses csx_is_zero_decimal_currency()
@@ -2022,7 +2046,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 						 *   https://stripe.com/docs/api/refunds/create
 						 * }
 						 */
-						$args = apply_filters( 'csx_create_refund_args', $args );
+						$args = apply_filters( 'css_create_refund_args', $args );
 
 						$opt_args = array();
 
@@ -2035,7 +2059,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 						 *   Per request arguments.
 						 * }
 						 */
-						$opt_args = apply_filters( 'csx_create_refund_secondary_args', $opt_args );
+						$opt_args = apply_filters( 'css_create_refund_secondary_args', $opt_args );
 
 						$refund = csx_api_request( 'Refund', 'create', $args, $opt_args );
 					}
@@ -2451,7 +2475,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 * @since 2.4
 	 * @since 2.9.0 No longer used, always returns value sent.
 	 *
-	 * @param bool  $is_valid  If the data passed so far was valid from CS Core
+	 * @param bool  $is_valid  If the data passed so far was valid from CommerceStore Core
 	 * @param array $post_data The array of $_POST sent by the form
 	 *
 	 * @return bool

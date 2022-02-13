@@ -355,7 +355,7 @@ class CS_Recurring_Customer {
 	 * Calculate a new expiration date
 	 *
 	 * @since  1.0
-	 * @param  $_customer_or_user_id      INT depending on CS Version, this is a customer or User ID
+	 * @param  $_customer_or_user_id      INT depending on CommerceStore Version, this is a customer or User ID
 	 * @param  $payment_id   INT The original payment ID
 	 * @return int
 	 */
