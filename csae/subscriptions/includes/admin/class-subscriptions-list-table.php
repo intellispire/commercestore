@@ -2,7 +2,7 @@
 /**
  * Subscription List Table Class
  *
- * @package     EDD Recurring
+ * @package     CS Recurring
  * @copyright   Copyright (c) 2013, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
@@ -18,11 +18,11 @@ if( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * EDD Subscriptions List Table Class
+ * CS Subscriptions List Table Class
  *
  * @access      private
  */
-class EDD_Subscription_Reports_Table extends WP_List_Table {
+class CS_Subscription_Reports_Table extends WP_List_Table {
 
 	/**
 	 * Number of results to show per page
@@ -81,17 +81,17 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 		$failing_count   = '&nbsp;<span class="count">(' . $this->failing_count   . ')</span>';
 
 		$views = array(
-			'all'       => sprintf( '<a href="%s"%s>%s</a>', remove_query_arg( array( 'status', 'paged' ) ), $current === 'all' || $current == '' ? ' class="current"' : '', __('All','easy-digital-downloads' ) . $total_count ),
-			'active'    => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'active', 'paged' => FALSE ) ), $current === 'active' ? ' class="current"' : '', __('Active','easy-digital-downloads' ) . $active_count ),
-			'pending'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'pending', 'paged' => FALSE ) ), $current === 'pending' ? ' class="current"' : '', __('Pending','easy-digital-downloads' ) . $pending_count ),
-			'expired'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'expired', 'paged' => FALSE ) ), $current === 'expired' ? ' class="current"' : '', __('Expired','easy-digital-downloads' ) . $expired_count ),
-			'completed' => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'completed', 'paged' => FALSE ) ), $current === 'completed' ? ' class="current"' : '', __('Completed','easy-digital-downloads' ) . $completed_count ),
-			'trialling'  => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'trialling', 'paged' => FALSE ) ), $current === 'trialling' ? ' class="current"' : '', __('Trialling','easy-digital-downloads' ) . $trialling_count ),
-			'cancelled' => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'cancelled', 'paged' => FALSE ) ), $current === 'cancelled' ? ' class="current"' : '', __('Cancelled','easy-digital-downloads' ) . $cancelled_count ),
-			'failing'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'failing', 'paged' => FALSE ) ), $current === 'failing' ? ' class="current"' : '', __('Failing','easy-digital-downloads' ) . $failing_count ),
+			'all'       => sprintf( '<a href="%s"%s>%s</a>', remove_query_arg( array( 'status', 'paged' ) ), $current === 'all' || $current == '' ? ' class="current"' : '', __('All','commercestore' ) . $total_count ),
+			'active'    => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'active', 'paged' => FALSE ) ), $current === 'active' ? ' class="current"' : '', __('Active','commercestore' ) . $active_count ),
+			'pending'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'pending', 'paged' => FALSE ) ), $current === 'pending' ? ' class="current"' : '', __('Pending','commercestore' ) . $pending_count ),
+			'expired'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'expired', 'paged' => FALSE ) ), $current === 'expired' ? ' class="current"' : '', __('Expired','commercestore' ) . $expired_count ),
+			'completed' => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'completed', 'paged' => FALSE ) ), $current === 'completed' ? ' class="current"' : '', __('Completed','commercestore' ) . $completed_count ),
+			'trialling'  => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'trialling', 'paged' => FALSE ) ), $current === 'trialling' ? ' class="current"' : '', __('Trialling','commercestore' ) . $trialling_count ),
+			'cancelled' => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'cancelled', 'paged' => FALSE ) ), $current === 'cancelled' ? ' class="current"' : '', __('Cancelled','commercestore' ) . $cancelled_count ),
+			'failing'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'failing', 'paged' => FALSE ) ), $current === 'failing' ? ' class="current"' : '', __('Failing','commercestore' ) . $failing_count ),
 		);
 
-		return apply_filters( 'edd_recurring_subscriptions_table_views', $views );
+		return apply_filters( 'cs_recurring_subscriptions_table_views', $views );
 	}
 
 	/**
@@ -122,7 +122,7 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 		}
 ?>
 		<p class="search-box">
-			<?php do_action( 'edd_recurring_subscription_search_box' ); ?>
+			<?php do_action( 'cs_recurring_subscription_search_box' ); ?>
 			<label class="screen-reader-text" for="<?php echo $input_id ?>"><?php echo $text; ?>:</label>
 			<input type="search" id="<?php echo $input_id ?>" name="s" value="<?php _admin_search_query(); ?>" />
 			<?php submit_button( $text, 'button', false, false, array('ID' => 'search-submit') ); ?><br/>
@@ -149,10 +149,10 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_customer_id( $item ) {
-		$subscriber = new EDD_Recurring_Subscriber( $item->customer_id );
+		$subscriber = new CS_Recurring_Subscriber( $item->customer_id );
 		$customer   = ! empty( $subscriber->name ) ? $subscriber->name : $subscriber->email;
 
-		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=edd-customers&view=overview&id=' . $subscriber->id ) ) . '">' . $customer . '</a>';
+		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $subscriber->id ) ) . '">' . $customer . '</a>';
 	}
 
 
@@ -176,9 +176,9 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 	 */
 	function column_period( $item ) {
 
-		$period = EDD_Recurring()->get_pretty_subscription_frequency( $item->period );
+		$period = CS_Recurring()->get_pretty_subscription_frequency( $item->period );
 
-		return edd_currency_filter( edd_format_amount( $item->recurring_amount ), edd_get_payment_currency_code( $item->parent_payment_id ) ) . ' / ' . $period;
+		return cs_currency_filter( cs_format_amount( $item->recurring_amount ), cs_get_payment_currency_code( $item->parent_payment_id ) ) . ' / ' . $period;
 	}
 
 	/**
@@ -189,7 +189,7 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_initial_amount( $item ) {
-		return edd_currency_filter( edd_format_amount( $item->initial_amount ), edd_get_payment_currency_code( $item->parent_payment_id ) );
+		return cs_currency_filter( cs_format_amount( $item->initial_amount ), cs_get_payment_currency_code( $item->parent_payment_id ) );
 	}
 
 	/**
@@ -200,7 +200,7 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_renewal_date( $item ) {
-		return $renewal_date = ! empty( $item->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $item->expiration ) ) : __( 'N/A', 'edd-recurring' );
+		return $renewal_date = ! empty( $item->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $item->expiration ) ) : __( 'N/A', 'cs-recurring' );
 	}
 
 	/**
@@ -211,7 +211,7 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_parent_payment_id( $item ) {
-		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id=' . $item->parent_payment_id ) ) . '">' . edd_get_payment_number( $item->parent_payment_id ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $item->parent_payment_id ) ) . '">' . cs_get_payment_number( $item->parent_payment_id ) . '</a>';
 	}
 
 	/**
@@ -222,9 +222,9 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_product_id( $item ) {
-		$download = edd_get_download( $item->product_id );
+		$download = cs_get_download( $item->product_id );
 
-		if ( $download instanceof  EDD_Download ) {
+		if ( $download instanceof  CS_Download ) {
 			$product_name = $download->get_name();
 			if ( ! is_null( $item->price_id ) && $download->has_variable_prices() ) {
 				$prices = $download->get_prices();
@@ -248,7 +248,7 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_actions( $item ) {
-		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=edd-subscriptions&id=' . $item->id ) ) . '" title="' . esc_attr( __( 'View View or edit subscription', 'edd-recurring' ) ) . '">' . __( 'View', 'edd-recurring' ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $item->id ) ) . '" title="' . esc_attr( __( 'View View or edit subscription', 'cs-recurring' ) ) . '">' . __( 'View', 'cs-recurring' ) . '</a>';
 	}
 
 
@@ -262,17 +262,17 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 
 	function get_columns(){
 		$columns = array(
-			'customer_id'       => __( 'Customer', 'edd-recurring' ),
-			'status'            => __( 'Status', 'edd-recurring' ),
-			'period'            => __( 'Billing Cycle', 'edd-recurring' ),
-			'initial_amount'    => __( 'Initial Amount', 'edd-recurring' ),
-			'renewal_date'      => __( 'Renewal Date', 'edd-recurring' ),
-			'parent_payment_id' => __( 'Payment', 'edd-recurring' ),
-			'product_id'        => edd_get_label_singular(),
-			'actions'           => __( 'Actions', 'edd-recurring' ),
+			'customer_id'       => __( 'Customer', 'cs-recurring' ),
+			'status'            => __( 'Status', 'cs-recurring' ),
+			'period'            => __( 'Billing Cycle', 'cs-recurring' ),
+			'initial_amount'    => __( 'Initial Amount', 'cs-recurring' ),
+			'renewal_date'      => __( 'Renewal Date', 'cs-recurring' ),
+			'parent_payment_id' => __( 'Payment', 'cs-recurring' ),
+			'product_id'        => cs_get_label_singular(),
+			'actions'           => __( 'Actions', 'cs-recurring' ),
 		);
 
-		return apply_filters( 'edd_report_subscription_columns', $columns );
+		return apply_filters( 'cs_report_subscription_columns', $columns );
 	}
 
 	/**
@@ -297,7 +297,7 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 
 		global $wp_query;
 
-		$db = new EDD_Subscriptions_DB;
+		$db = new CS_Subscriptions_DB;
 
 		$search = ! empty( $_GET['s'] ) ? sanitize_text_field( $_GET['s'] ) : '';
 
@@ -336,7 +336,7 @@ class EDD_Subscription_Reports_Table extends WP_List_Table {
 
 		$current_page = $this->get_pagenum();
 
-		$db     = new EDD_Subscriptions_DB;
+		$db     = new CS_Subscriptions_DB;
 		$search = ! empty( $_GET['s'] ) ? sanitize_text_field( $_GET['s'] ) : '';
 		$args   = array(
 			'number' => $this->per_page,

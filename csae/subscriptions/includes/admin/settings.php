@@ -6,13 +6,13 @@
 * @since  2.4
 * @return array
 */
-function edd_recurring_settings_section( $sections ) {
+function cs_recurring_settings_section( $sections ) {
 
-	$sections['recurring'] = __( 'Recurring Payments', 'edd-recurring' );
+	$sections['recurring'] = __( 'Recurring Payments', 'cs-recurring' );
 
 	return $sections;
 }
-add_filter( 'edd_settings_sections_extensions', 'edd_recurring_settings_section' );
+add_filter( 'cs_settings_sections_extensions', 'cs_recurring_settings_section' );
 
 /**
 * Register our settings
@@ -20,174 +20,174 @@ add_filter( 'edd_settings_sections_extensions', 'edd_recurring_settings_section'
 * @since  1.0
 * @return array
 */
-function edd_recurring_settings( $settings ) {
+function cs_recurring_settings( $settings ) {
 
 	$recurring_settings = array(
 		'recurring' => array(
 			array(
 				'id'    => 'recurring_download_limit',
-				'name'  => __( 'Limit File Downloads', 'edd-recurring' ),
-				'desc'  => __( 'Check this if you\'d like to require users have an active subscription in order to download files associated with a recurring product.', 'edd-recurring' ),
+				'name'  => __( 'Limit File Downloads', 'cs-recurring' ),
+				'desc'  => __( 'Check this if you\'d like to require users have an active subscription in order to download files associated with a recurring product.', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'recurring_treat_completed_subs_as_active',
-				'name'  => __( 'Allow "Completed" subscriptions to download their files', 'edd-recurring' ),
-				'desc'  => __( 'When "Limit File Downloads" is enabled, would you like users with "Completed" subscriptions to be able to download their files, despite their subscription technically not being "Active"?', 'edd-recurring' ),
+				'name'  => __( 'Allow "Completed" subscriptions to download their files', 'cs-recurring' ),
+				'desc'  => __( 'When "Limit File Downloads" is enabled, would you like users with "Completed" subscriptions to be able to download their files, despite their subscription technically not being "Active"?', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_show_terms_notice',
-				'name' => __( 'Display Subscription Terms', 'edd-recurring' ),
-				'desc' => __( 'When selected, the billing times and frequency will be shown below the purchase link.', 'edd-recurring' ),
+				'name' => __( 'Display Subscription Terms', 'cs-recurring' ),
+				'desc' => __( 'When selected, the billing times and frequency will be shown below the purchase link.', 'cs-recurring' ),
 				'type' => 'checkbox',
 			),
 			array(
 				'id'   => 'recurring_show_signup_fee_notice',
-				'name' => __( 'Display Signup Fee', 'edd-recurring' ),
-				'desc' => __( 'When selected, signup fee associated with a subscription will be shown below the purchase link.', 'edd-recurring' ),
+				'name' => __( 'Display Signup Fee', 'cs-recurring' ),
+				'desc' => __( 'When selected, signup fee associated with a subscription will be shown below the purchase link.', 'cs-recurring' ),
 				'type' => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_signup_fee_label',
-				'name' => __( 'Signup Fee Label', 'edd-recurring' ),
-				'desc' => __( 'The label used for signup fees, if any. This is shown on checkout and on individual purchase options if "Display Signup Fee" above is checked.', 'edd-recurring' ),
+				'name' => __( 'Signup Fee Label', 'cs-recurring' ),
+				'desc' => __( 'The label used for signup fees, if any. This is shown on checkout and on individual purchase options if "Display Signup Fee" above is checked.', 'cs-recurring' ),
 				'type' => 'text',
-				'std'  => __( 'Signup Fee', 'edd-recurring' )
+				'std'  => __( 'Signup Fee', 'cs-recurring' )
 			),
 			array(
 				'id'   => 'recurring_cancel_button_text',
-				'name' => __( 'Cancel Subscription Text', 'edd-recurring' ),
-				'desc' => __( 'The label used for the Cancel action. This text is shown to the customer when managing their subscriptions.', 'edd-recurring' ),
+				'name' => __( 'Cancel Subscription Text', 'cs-recurring' ),
+				'desc' => __( 'The label used for the Cancel action. This text is shown to the customer when managing their subscriptions.', 'cs-recurring' ),
 				'type' => 'text',
-				'std'  => __( 'Cancel', 'edd-recurring' )
+				'std'  => __( 'Cancel', 'cs-recurring' )
 			),
 			array(
 				'id'    => 'recurring_one_time_discounts',
-				'name'  => __( 'One Time Discounts', 'edd-recurring' ),
-				'desc'  => __( 'Check this if you\'d like discount codes to apply only to the initial subscription payment and not all payments. <strong>Note</strong>: one-time discount codes will not apply to free trials.', 'edd-recurring' ),
+				'name'  => __( 'One Time Discounts', 'cs-recurring' ),
+				'desc'  => __( 'Check this if you\'d like discount codes to apply only to the initial subscription payment and not all payments. <strong>Note</strong>: one-time discount codes will not apply to free trials.', 'cs-recurring' ),
 				'type'  => 'checkbox',
-				'tooltip_title' => __( 'One Time Discounts', 'edd-recurring' ),
-				'tooltip_desc'  => __( 'When one time discounts are enabled, only the first payment in a subscription will be discounted when a discount code is redeemed on checkout. Free trials and one time discounts, however, cannot be combined. If a customer purchases a free trial, discount codes will always apply to <em>all</em> payments made for the subscription.', 'easy-digital-downloads' ),
+				'tooltip_title' => __( 'One Time Discounts', 'cs-recurring' ),
+				'tooltip_desc'  => __( 'When one time discounts are enabled, only the first payment in a subscription will be discounted when a discount code is redeemed on checkout. Free trials and one time discounts, however, cannot be combined. If a customer purchases a free trial, discount codes will always apply to <em>all</em> payments made for the subscription.', 'commercestore' ),
 
 			),
 			array(
 				'id'    => 'recurring_one_time_trials',
-				'name'  => __( 'One Time Trials', 'edd-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be prevented from purchasing a free trial multiple times.', 'edd-recurring' ),
+				'name'  => __( 'One Time Trials', 'cs-recurring' ),
+				'desc'  => __( 'Check this if you\'d like customers to be prevented from purchasing a free trial multiple times.', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'enable_payment_received_email',
-				'name'  => __( 'Payment Received Email', 'edd-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a renewal payment is processed.', 'edd-recurring' ),
+				'name'  => __( 'Payment Received Email', 'cs-recurring' ),
+				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a renewal payment is processed.', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'payment_received_subject',
-				'name'  => __( 'Renewal Payment Received Subject', 'edd-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment is processed.', 'edd-recurring' ),
+				'name'  => __( 'Renewal Payment Received Subject', 'cs-recurring' ),
+				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment is processed.', 'cs-recurring' ),
 				'type'  => 'text',
-				'std'   => __( 'Renewal Payment Received', 'edd-recurring' )
+				'std'   => __( 'Renewal Payment Received', 'cs-recurring' )
 			),
 			array(
 				'id'    => 'payment_received_message',
-				'name'  => __( 'Renewal Payment Received Message', 'edd-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent when a renewal payment is processed.', 'edd-recurring' ),
+				'name'  => __( 'Renewal Payment Received Message', 'cs-recurring' ),
+				'desc'  => __( 'Enter the body text of the email sent when a renewal payment is processed.', 'cs-recurring' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been successfully processed.", 'edd-recurring' )
+				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been successfully processed.", 'cs-recurring' )
 			),
 
 			array(
 				'id'    => 'enable_payment_failed_email',
-				'name'  => __( 'Payment Failed Email', 'edd-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a payment fails to be processed.', 'edd-recurring' ),
+				'name'  => __( 'Payment Failed Email', 'cs-recurring' ),
+				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a payment fails to be processed.', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'payment_failed_subject',
-				'name'  => __( 'Renewal Payment Failed Subject', 'edd-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment fails to be processed.', 'edd-recurring' ),
+				'name'  => __( 'Renewal Payment Failed Subject', 'cs-recurring' ),
+				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment fails to be processed.', 'cs-recurring' ),
 				'type'  => 'text',
-				'std'   => __( 'Renewal Payment Failed', 'edd-recurring' )
+				'std'   => __( 'Renewal Payment Failed', 'cs-recurring' )
 			),
 			array(
 				'id'    => 'payment_failed_message',
-				'name'  => __( 'Renewal Payment Failed Message', 'edd-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent when a renewal payment fails to be processed.', 'edd-recurring' ),
+				'name'  => __( 'Renewal Payment Failed Message', 'cs-recurring' ),
+				'desc'  => __( 'Enter the body text of the email sent when a renewal payment fails to be processed.', 'cs-recurring' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been failed to be processed.", 'edd-recurring' )
+				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been failed to be processed.", 'cs-recurring' )
 			),
 			array(
 				'id'    => 'enable_subscription_cancelled_email',
-				'name'  => __( 'Subscription Cancelled Email', 'edd-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice when they cancel a subscription.', 'edd-recurring' ),
+				'name'  => __( 'Subscription Cancelled Email', 'cs-recurring' ),
+				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice when they cancel a subscription.', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'subscription_cancelled_subject',
-				'name'  => __( 'Subscription Cancelled Subject', 'edd-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent when a subscription is cancelled.', 'edd-recurring' ),
+				'name'  => __( 'Subscription Cancelled Subject', 'cs-recurring' ),
+				'desc'  => __( 'Enter the subject line of the email sent when a subscription is cancelled.', 'cs-recurring' ),
 				'type'  => 'text',
-				'std'   => __( 'Subscription Cancelled', 'edd-recurring' )
+				'std'   => __( 'Subscription Cancelled', 'cs-recurring' )
 			),
 			array(
 				'id'    => 'subscription_cancelled_message',
-				'name'  => __( 'Subscription Cancelled Message', 'edd-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent when a subscription is cancelled.', 'edd-recurring' ),
+				'name'  => __( 'Subscription Cancelled Message', 'cs-recurring' ),
+				'desc'  => __( 'Enter the body text of the email sent when a subscription is cancelled.', 'cs-recurring' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Hello {name}\n\nYour subscription for {subscription_name} has been successfully cancelled.", 'edd-recurring' )
+				'std'   => __( "Hello {name}\n\nYour subscription for {subscription_name} has been successfully cancelled.", 'cs-recurring' )
 			),
 			array(
 				'id'   => 'recurring_send_renewal_reminders',
-				'name' => __( 'Send Renewal Reminders', 'edd-recurring' ),
-				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to renew.', 'edd-recurring' ),
+				'name' => __( 'Send Renewal Reminders', 'cs-recurring' ),
+				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to renew.', 'cs-recurring' ),
 				'type' => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_renewal_reminders',
-				'name' => __( 'Subscription Renewal Reminders', 'edd-recurring' ),
-				'desc' => __( 'Configure the subscription renewal notice emails', 'edd-recurring' ),
+				'name' => __( 'Subscription Renewal Reminders', 'cs-recurring' ),
+				'desc' => __( 'Configure the subscription renewal notice emails', 'cs-recurring' ),
 				'type' => 'hook'
 			),
 			array(
 				'id'   => 'recurring_send_expiration_reminders',
-				'name' => __( 'Send Expiration Reminders', 'edd-recurring' ),
-				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to expire or complete.', 'edd-recurring' ),
+				'name' => __( 'Send Expiration Reminders', 'cs-recurring' ),
+				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to expire or complete.', 'cs-recurring' ),
 				'type' => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_expiration_reminders',
-				'name' => __( 'Subscription Expiration Reminders', 'edd-recurring' ),
-				'desc' => __( 'Configure the subscription expiration notice emails', 'edd-recurring' ),
+				'name' => __( 'Subscription Expiration Reminders', 'cs-recurring' ),
+				'desc' => __( 'Configure the subscription expiration notice emails', 'cs-recurring' ),
 				'type' => 'hook'
 			),
 			array(
 				'id'    => 'enable_subscription_cancelled_admin_email',
-				'name'  => __( 'Subscription Cancelled Email for Admins', 'edd-recurring' ),
-				'desc'  => __( 'Check this if you\'d like admins to be sent an email notice when a customer cancels a subscription.', 'edd-recurring' ),
+				'name'  => __( 'Subscription Cancelled Email for Admins', 'cs-recurring' ),
+				'desc'  => __( 'Check this if you\'d like admins to be sent an email notice when a customer cancels a subscription.', 'cs-recurring' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'subscription_cancelled_admin_subject',
-				'name'  => __( 'Subscription Cancelled Subject for Admins', 'edd-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent to admins when a subscription is cancelled.', 'edd-recurring' ),
+				'name'  => __( 'Subscription Cancelled Subject for Admins', 'cs-recurring' ),
+				'desc'  => __( 'Enter the subject line of the email sent to admins when a subscription is cancelled.', 'cs-recurring' ),
 				'type'  => 'text',
-				'std'   => __( 'Subscription {subscription_id} Cancelled', 'edd-recurring' )
+				'std'   => __( 'Subscription {subscription_id} Cancelled', 'cs-recurring' )
 			),
 			array(
 				'id'    => 'subscription_cancelled_admin_message',
-				'name'  => __( 'Subscription Cancelled Message for Admins', 'edd-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent to admins when a subscription is cancelled.', 'edd-recurring' ),
+				'name'  => __( 'Subscription Cancelled Message for Admins', 'cs-recurring' ),
+				'desc'  => __( 'Enter the body text of the email sent to admins when a subscription is cancelled.', 'cs-recurring' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Subscription ID: {subscription_id}\n\nCustomer: {name}\n\nSubscription: {subscription_name}\n\nView Subscription: {subscription_link}", 'edd-recurring' )
+				'std'   => __( "Subscription ID: {subscription_id}\n\nCustomer: {name}\n\nSubscription: {subscription_name}\n\nView Subscription: {subscription_link}", 'cs-recurring' )
 			),
 		)
 	);
 
 	return array_merge( $settings, $recurring_settings );
 }
-add_filter( 'edd_settings_extensions', 'edd_recurring_settings' );
+add_filter( 'cs_settings_extensions', 'cs_recurring_settings' );
 
 /**
  * Displays the subscription renewal reminders options
@@ -198,17 +198,17 @@ add_filter( 'edd_settings_extensions', 'edd_recurring_settings' );
  *
  * @return      void
  */
-function edd_recurring_renewal_reminders_settings( $args ) {
+function cs_recurring_renewal_reminders_settings( $args ) {
 
-	$reminders = new EDD_Recurring_Reminders();
+	$reminders = new CS_Recurring_Reminders();
 	$notices  = $reminders->get_notices( 'renewal' );
 	ob_start(); ?>
-	<table id="edd_recurring_renewal_reminders" class="wp-list-table widefat fixed posts">
+	<table id="cs_recurring_renewal_reminders" class="wp-list-table widefat fixed posts">
 		<thead>
 		<tr>
-			<th scope="col" style="padding-left: 10px" class="edd-recurring-reminder-subject-col"><?php _e( 'Subject', 'edd-recurring' ); ?></th>
-			<th scope="col" class="edd-recurring-reminder-period-col"><?php _e( 'Send Period', 'edd-recurring' ); ?></th>
-			<th scope="col" class="edd-recurring-reminder-action-col"><?php _e( 'Actions', 'edd-recurring' ); ?></th>
+			<th scope="col" style="padding-left: 10px" class="cs-recurring-reminder-subject-col"><?php _e( 'Subject', 'cs-recurring' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-period-col"><?php _e( 'Send Period', 'cs-recurring' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-action-col"><?php _e( 'Actions', 'cs-recurring' ); ?></th>
 		</tr>
 		</thead>
 		<?php if ( ! empty( $notices ) ) : $i = 1; ?>
@@ -219,21 +219,21 @@ function edd_recurring_renewal_reminders_settings( $args ) {
 					<td><?php echo esc_html( $notice['subject'] ); ?></td>
 					<td><?php echo esc_html( $reminders->get_notice_period_label( $key ) ); ?></td>
 					<td>
-						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="edd-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'edd-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="edd-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'edd-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="edd-delete"><?php _e( 'Delete', 'edd-recurring' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'cs-recurring' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'cs-recurring' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'cs-recurring' ); ?></a>
 					</td>
 				</tr>
 				<?php $i ++; endforeach; ?>
 		<?php endif; ?>
 	</table>
 	<p>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_recurring_action=add-recurring-reminder-notice&edd_recurring_reminder_type=renewal' ) ); ?>" class="button-secondary" id="edd_recurring_add_renewal_notice"><?php _e( 'Add Renewal Reminder', 'edd-recurring' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=renewal' ) ); ?>" class="button-secondary" id="cs_recurring_add_renewal_notice"><?php _e( 'Add Renewal Reminder', 'cs-recurring' ); ?></a>
 	</p>
 	<?php
 	echo ob_get_clean();
 }
-add_action( 'edd_recurring_renewal_reminders', 'edd_recurring_renewal_reminders_settings' );
+add_action( 'cs_recurring_renewal_reminders', 'cs_recurring_renewal_reminders_settings' );
 
 /**
  * Displays the subscription expiration reminders options
@@ -244,17 +244,17 @@ add_action( 'edd_recurring_renewal_reminders', 'edd_recurring_renewal_reminders_
  *
  * @return      void
  */
-function edd_recurring_expiration_reminders_settings( $args ) {
+function cs_recurring_expiration_reminders_settings( $args ) {
 
-	$reminders = new EDD_Recurring_Reminders();
+	$reminders = new CS_Recurring_Reminders();
 	$notices  = $reminders->get_notices( 'expiration' );
 	ob_start(); ?>
-	<table id="edd_recurring_expiration_reminders" class="wp-list-table widefat fixed posts">
+	<table id="cs_recurring_expiration_reminders" class="wp-list-table widefat fixed posts">
 		<thead>
 		<tr>
-			<th scope="col" style="padding-left: 10px" class="edd-recurring-reminder-subject-col"><?php _e( 'Subject', 'edd-recurring' ); ?></th>
-			<th scope="col" class="edd-recurring-reminder-period-col"><?php _e( 'Send Period', 'edd-recurring' ); ?></th>
-			<th scope="col" class="edd-recurring-reminder-action-col"><?php _e( 'Actions', 'edd-recurring' ); ?></th>
+			<th scope="col" style="padding-left: 10px" class="cs-recurring-reminder-subject-col"><?php _e( 'Subject', 'cs-recurring' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-period-col"><?php _e( 'Send Period', 'cs-recurring' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-action-col"><?php _e( 'Actions', 'cs-recurring' ); ?></th>
 		</tr>
 		</thead>
 		<?php if ( ! empty( $notices ) ) : $i = 1; ?>
@@ -265,21 +265,21 @@ function edd_recurring_expiration_reminders_settings( $args ) {
 					<td><?php echo esc_html( $notice['subject'] ); ?></td>
 					<td><?php echo esc_html( $reminders->get_notice_period_label( $key ) ); ?></td>
 					<td>
-						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="edd-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'edd-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="edd-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'edd-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="edd-delete"><?php _e( 'Delete', 'edd-recurring' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'cs-recurring' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'cs-recurring' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'cs-recurring' ); ?></a>
 					</td>
 				</tr>
 				<?php $i ++; endforeach; ?>
 		<?php endif; ?>
 	</table>
 	<p>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=edd-subscription-reminder-notice&edd_recurring_action=add-recurring-reminder-notice&edd_recurring_reminder_type=expiration' ) ); ?>" class="button-secondary" id="edd_recurring_add_expiration_notice"><?php _e( 'Add Expiration Reminder', 'edd-recurring' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=expiration' ) ); ?>" class="button-secondary" id="cs_recurring_add_expiration_notice"><?php _e( 'Add Expiration Reminder', 'cs-recurring' ); ?></a>
 	</p>
 	<?php
 	echo ob_get_clean();
 }
-add_action( 'edd_recurring_expiration_reminders', 'edd_recurring_expiration_reminders_settings' );
+add_action( 'cs_recurring_expiration_reminders', 'cs_recurring_expiration_reminders_settings' );
 
 /**
  * Add menu page for reminder emails
@@ -288,22 +288,22 @@ add_action( 'edd_recurring_expiration_reminders', 'edd_recurring_expiration_remi
  * @since       2.4
  * @return      void
  */
-function edd_recurring_add_notices_page() {
+function cs_recurring_add_notices_page() {
 
-	global $edd_recurring_reminders_page;
+	global $cs_recurring_reminders_page;
 
-	$edd_recurring_reminders_page = add_submenu_page(
+	$cs_recurring_reminders_page = add_submenu_page(
 		'edit.php?post_type=download',
-		__( 'Subscription Reminder', 'edd-recurring' ),
-		__( 'Subscription Reminder', 'edd-recurring' ),
+		__( 'Subscription Reminder', 'cs-recurring' ),
+		__( 'Subscription Reminder', 'cs-recurring' ),
 		'manage_shop_settings',
-		'edd-subscription-reminder-notice',
-		'edd_recurring_subscription_reminder_notice_edit'
+		'cs-subscription-reminder-notice',
+		'cs_recurring_subscription_reminder_notice_edit'
 	);
 
-	add_action( 'admin_head', 'edd_recurring_hide_reminder_notice_page' );
+	add_action( 'admin_head', 'cs_recurring_hide_reminder_notice_page' );
 }
-add_action( 'admin_menu', 'edd_recurring_add_notices_page', 10 );
+add_action( 'admin_menu', 'cs_recurring_add_notices_page', 10 );
 
 /**
  * Removes the Subscription Reminder Notice menu link
@@ -311,8 +311,8 @@ add_action( 'admin_menu', 'edd_recurring_add_notices_page', 10 );
  * @since       2.4
  * @return      void
  */
-function edd_recurring_hide_reminder_notice_page() {
-	remove_submenu_page( 'edit.php?post_type=download', 'edd-subscription-reminder-notice' );
+function cs_recurring_hide_reminder_notice_page() {
+	remove_submenu_page( 'edit.php?post_type=download', 'cs-subscription-reminder-notice' );
 }
 
 /**
@@ -324,14 +324,14 @@ function edd_recurring_hide_reminder_notice_page() {
  *
  * @return string $input Sanitizied value
  */
-function edd_recurring_subscription_reminder_notice_edit() {
+function cs_recurring_subscription_reminder_notice_edit() {
 
-	$action = isset( $_GET['edd_recurring_action'] ) ? sanitize_text_field( $_GET['edd_recurring_action'] ) : 'add-recurring-reminder-notice';
+	$action = isset( $_GET['cs_recurring_action'] ) ? sanitize_text_field( $_GET['cs_recurring_action'] ) : 'add-recurring-reminder-notice';
 
 	if ( 'edit-recurring-reminder-notice' === $action ) {
-		include EDD_Recurring::$plugin_path . '/includes/admin/edit-reminder-notice.php';
+		include CS_Recurring::$plugin_path . '/includes/admin/edit-reminder-notice.php';
 	} else {
-		include EDD_Recurring::$plugin_path . '/includes/admin/add-reminder-notice.php';
+		include CS_Recurring::$plugin_path . '/includes/admin/add-reminder-notice.php';
 	}
 
 }
@@ -345,21 +345,21 @@ function edd_recurring_subscription_reminder_notice_edit() {
  *
  * @return void
  */
-function edd_recurring_process_add_reminder_notice( $data ) {
+function cs_recurring_process_add_reminder_notice( $data ) {
 
 	if ( ! is_admin() ) {
 		return;
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to add reminder notices', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to add reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
-	if ( ! wp_verify_nonce( $data['edd-recurring-reminder-notice-nonce'], 'edd_recurring_reminder_nonce' ) ) {
-		wp_die( __( 'Nonce verification failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+	if ( ! wp_verify_nonce( $data['cs-recurring-reminder-notice-nonce'], 'cs_recurring_reminder_nonce' ) ) {
+		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
-	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'edd-recurring' );
+	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'cs-recurring' );
 	$period  = isset( $data['period'] ) ? sanitize_text_field( $data['period'] ) : '+1month';
 	$message = isset( $data['message'] ) ? wp_kses( stripslashes( $data['message'] ), wp_kses_allowed_html( 'post' ) ) : false;
 	$type    = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : 'renewal';
@@ -370,7 +370,7 @@ function edd_recurring_process_add_reminder_notice( $data ) {
 Your subscription for {subscription_name} will renew on {expiration}.';
 	}
 
-	$reminders  = new EDD_Recurring_Reminders();
+	$reminders  = new CS_Recurring_Reminders();
 	$notices    = $reminders->get_notices();
 	$notices[]  = array(
 		'subject'     => $subject,
@@ -379,13 +379,13 @@ Your subscription for {subscription_name} will renew on {expiration}.';
 		'type'		  => $type
 	);
 
-	update_option( 'edd_recurring_reminder_notices', $notices );
+	update_option( 'cs_recurring_reminder_notices', $notices );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=edd-settings&tab=extensions&section=recurring' ) );
+	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
 	exit;
 
 }
-add_action( 'edd_recurring_add_reminder_notice', 'edd_recurring_process_add_reminder_notice' );
+add_action( 'cs_recurring_add_reminder_notice', 'cs_recurring_process_add_reminder_notice' );
 
 /**
  * Processes the update of an existing reminder notice
@@ -396,25 +396,25 @@ add_action( 'edd_recurring_add_reminder_notice', 'edd_recurring_process_add_remi
  *
  * @return void
  */
-function edd_recurring_process_update_reminder_notice( $data ) {
+function cs_recurring_process_update_reminder_notice( $data ) {
 
 	if ( ! is_admin() ) {
 		return;
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to add reminder notices', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to add reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
-	if ( ! wp_verify_nonce( $data['edd-recurring-reminder-notice-nonce'], 'edd_recurring_reminder_nonce' ) ) {
-		wp_die( __( 'Nonce verification failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+	if ( ! wp_verify_nonce( $data['cs-recurring-reminder-notice-nonce'], 'cs_recurring_reminder_nonce' ) ) {
+		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! isset( $data['notice-id'] ) ) {
-		wp_die( __( 'No reminder notice ID was provided', 'edd-recurring' ) );
+		wp_die( __( 'No reminder notice ID was provided', 'cs-recurring' ) );
 	}
 
-	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'edd-recurring' );
+	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'cs-recurring' );
 	$period  = isset( $data['period'] ) ? sanitize_text_field( $data['period'] ) : '+1month';
 	$message = isset( $data['message'] ) ? wp_kses( stripslashes( $data['message'] ), wp_kses_allowed_html( 'post' ) ) : false;
 	$type    = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : 'renewal';
@@ -425,7 +425,7 @@ function edd_recurring_process_update_reminder_notice( $data ) {
 Your subscription for {subscription_name} will renew on {expiration}.';
 	}
 
-	$reminders                               = new EDD_Recurring_Reminders();
+	$reminders                               = new CS_Recurring_Reminders();
 	$notices                                 = $reminders->get_notices();
 	$notices[ absint( $data['notice-id'] ) ] = array(
 		'subject'     => $subject,
@@ -434,13 +434,13 @@ Your subscription for {subscription_name} will renew on {expiration}.';
 		'type'		  => $type
 	);
 
-	update_option( 'edd_recurring_reminder_notices', $notices );
+	update_option( 'cs_recurring_reminder_notices', $notices );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=edd-settings&tab=extensions&section=recurring' ) );
+	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
 	exit;
 
 }
-add_action( 'edd_recurring_edit_reminder_notice', 'edd_recurring_process_update_reminder_notice' );
+add_action( 'cs_recurring_edit_reminder_notice', 'cs_recurring_process_update_reminder_notice' );
 
 /**
  * Processes the deletion of an existing reminder notice
@@ -451,35 +451,35 @@ add_action( 'edd_recurring_edit_reminder_notice', 'edd_recurring_process_update_
  *
  * @return void
  */
-function edd_recurring_process_delete_reminder_notice( $data ) {
+function cs_recurring_process_delete_reminder_notice( $data ) {
 
 	if ( ! is_admin() ) {
 		return;
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to delete reminder notices', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to delete reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! wp_verify_nonce( $data['_wpnonce'] ) ) {
-		wp_die( __( 'Nonce verification failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
 	if ( empty( $data['notice-id'] ) && 0 !== (int) $data['notice-id'] ) {
-		wp_die( __( 'No reminder notice ID was provided', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 409 ) );
+		wp_die( __( 'No reminder notice ID was provided', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 409 ) );
 	}
 
-	$reminders = new EDD_Recurring_Reminders();
+	$reminders = new CS_Recurring_Reminders();
 	$notices  = $reminders->get_notices();
 	unset( $notices[ absint( $data['notice-id'] ) ] );
 
-	update_option( 'edd_recurring_reminder_notices', $notices );
+	update_option( 'cs_recurring_reminder_notices', $notices );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=edd-settings&tab=extensions&section=recurring' ) );
+	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
 	exit;
 
 }
-add_action( 'edd_recurring_delete_reminder_notice', 'edd_recurring_process_delete_reminder_notice' );
+add_action( 'cs_recurring_delete_reminder_notice', 'cs_recurring_process_delete_reminder_notice' );
 
 /**
  * Sends a test email for a reminder notice
@@ -490,32 +490,32 @@ add_action( 'edd_recurring_delete_reminder_notice', 'edd_recurring_process_delet
  *
  * @return void
  */
-function edd_recurring_process_send_test_reminder_notice( $data ) {
+function cs_recurring_process_send_test_reminder_notice( $data ) {
 
 	if ( ! is_admin() ) {
 		return;
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to send test email reminder notices', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to send test email reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! wp_verify_nonce( $data['_wpnonce'] ) ) {
-		wp_die( __( 'Nonce verification failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 	}
 
 	if ( empty( $data['notice-id'] ) && 0 !== (int) $data['notice-id'] ) {
-		wp_die( __( 'No reminder notice ID was provided', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 409 ) );
+		wp_die( __( 'No reminder notice ID was provided', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 409 ) );
 	}
 
-	$reminders = new EDD_Recurring_Reminders();
+	$reminders = new CS_Recurring_Reminders();
 	$notices  = $reminders->get_notices();
 	$reminders->send_test_notice( absint( $data['notice-id'] ) );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=edd-settings&tab=extensions&section=recurring' ) );
+	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=extensions&section=recurring' ) );
 	exit;
 }
-add_action( 'edd_recurring_send_test_reminder_notice', 'edd_recurring_process_send_test_reminder_notice' );
+add_action( 'cs_recurring_send_test_reminder_notice', 'cs_recurring_process_send_test_reminder_notice' );
 
 /**
  * Add additional text to Item Quantities setting to explain why it is sometimes disabled
@@ -526,11 +526,11 @@ add_action( 'edd_recurring_send_test_reminder_notice', 'edd_recurring_process_se
  *
  * @return array
  */
-function edd_recurring_item_quantities_description( $settings ) {
-	$settings['main']['item_quantities']['desc'] .= ' <strong>' . __( 'Note: Item Quantities will be disabled for all products in the cart if the cart contains a recurring product.', 'edd-recurring' ) . '</strong>';
+function cs_recurring_item_quantities_description( $settings ) {
+	$settings['main']['item_quantities']['desc'] .= ' <strong>' . __( 'Note: Item Quantities will be disabled for all products in the cart if the cart contains a recurring product.', 'cs-recurring' ) . '</strong>';
 	return $settings;
 }
-add_filter( 'edd_settings_misc', 'edd_recurring_item_quantities_description', 10 );
+add_filter( 'cs_settings_misc', 'cs_recurring_item_quantities_description', 10 );
 
 /**
  * Add additional text to Guest Checkout setting to explain why it is disabled
@@ -541,8 +541,8 @@ add_filter( 'edd_settings_misc', 'edd_recurring_item_quantities_description', 10
  *
  * @return array
  */
-function edd_recurring_guest_checkout_description( $settings ) {
-	$settings['checkout']['logged_in_only']['desc'] .= ' <strong>' . __( 'Guest checkout is not permitted when purchasing subscriptions.', 'edd-recurring' ) . '</strong>';
+function cs_recurring_guest_checkout_description( $settings ) {
+	$settings['checkout']['logged_in_only']['desc'] .= ' <strong>' . __( 'Guest checkout is not permitted when purchasing subscriptions.', 'cs-recurring' ) . '</strong>';
 	return $settings;
 }
-add_filter( 'edd_settings_misc', 'edd_recurring_guest_checkout_description', 10 );
+add_filter( 'cs_settings_misc', 'cs_recurring_guest_checkout_description', 10 );

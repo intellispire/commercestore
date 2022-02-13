@@ -1,7 +1,7 @@
-/* global eddStripe, eddRecurringStripe, edd_stripe_vars, $ */
+/* global csStripe, eddRecurringStripe, cs_stripe_vars, $ */
 
-var eddStripe = window.eddStripe;
-var api = eddStripe._plugin;
+var csStripe = window.csStripe;
+var api = csStripe._plugin;
 
 /**
  * Map jQuery to $
@@ -12,8 +12,8 @@ var api = eddStripe._plugin;
 	 * DOM ready.
 	 */
 	api.domReady( function() {
-		var updatePaymentMethodForm              = document.getElementById( 'edd-recurring-form' );
-		var updatePaymentMethodFormSubmit        = document.getElementById( 'edd-recurring-update-submit' );
+		var updatePaymentMethodForm              = document.getElementById( 'cs-recurring-form' );
+		var updatePaymentMethodFormSubmit        = document.getElementById( 'cs-recurring-update-submit' );
 		var updatePaymentMethodFormSubmitDefault = updatePaymentMethodFormSubmit.value;
 
 		if ( ! updatePaymentMethodForm ) {
@@ -32,7 +32,7 @@ var api = eddStripe._plugin;
 			api.paymentMethods();
 
 			// Attempt to select the method used.
-			var defaultPaymentMethod = document.querySelector( '[name="edd_recurring_stripe_default_payment_method"]' ).value;
+			var defaultPaymentMethod = document.querySelector( '[name="cs_recurring_stripe_default_payment_method"]' ).value;
 			var defaultPaymentMethodOption = document.getElementById( defaultPaymentMethod );
 
 			if ( ! defaultPaymentMethodOption ) {
@@ -50,9 +50,9 @@ var api = eddStripe._plugin;
 		 * Enables form.
 		 */
 		function setupPaymentForm() {
-			eddStripe.cardElement = api.mountCardElement(
-				eddStripe.elements(),
-				'#edd-recurring-form #edd-stripe-card-element'
+			csStripe.cardElement = api.mountCardElement(
+				csStripe.elements(),
+				'#cs-recurring-form #cs-stripe-card-element'
 			);
 		};
 
@@ -76,17 +76,17 @@ var api = eddStripe._plugin;
 		 * Shows exceptions.
 		 */
 		function handleException( error ) {
-			var form = document.getElementById( 'edd-recurring-form' );
+			var form = document.getElementById( 'cs-recurring-form' );
 
 			// Reenable form.
 			enableForm();
 			form.addEventListener( 'submit', onUpdatePaymentMethod );
 
-			var notice = api.generateNotice( ( error && error.message ) ? error.message : edd_stripe_vars.generic_error );
+			var notice = api.generateNotice( ( error && error.message ) ? error.message : cs_stripe_vars.generic_error );
 
 			// Hide previous messages.
 			// @todo don't use jQuery
-			$( '.edd-stripe-alert' ).remove();
+			$( '.cs-stripe-alert' ).remove();
 
 			form.appendChild( notice );
 		}
@@ -99,12 +99,12 @@ var api = eddStripe._plugin;
 		 * @return {Promise} jQuery Promise.
 		 */
 		function updateSubscriptionPaymentMethod( subscriptionId, paymentMethod, billingAddress ) {
-			return api.apiRequest( 'edd_recurring_update_subscription_payment_method', {
+			return api.apiRequest( 'cs_recurring_update_subscription_payment_method', {
 				subscription_id: subscriptionId,
 				payment_method_id: paymentMethod.id,
 				payment_method_exists: paymentMethod.exists,
 				billing_address: billingAddress,
-				nonce: document.getElementById( 'edd_recurring_update_nonce' ).value,
+				nonce: document.getElementById( 'cs_recurring_update_nonce' ).value,
 			} );
 		}
 
@@ -115,7 +115,7 @@ var api = eddStripe._plugin;
 		 */
 		function onUpdatePaymentMethod( e ) {
 			var form = e.target;
-			var subscriptionId = document.querySelector( '[name="edd_recurring_stripe_profile_id"]' );
+			var subscriptionId = document.querySelector( '[name="cs_recurring_stripe_profile_id"]' );
 
 			if ( ! subscriptionId ) {
 				return;
@@ -124,14 +124,14 @@ var api = eddStripe._plugin;
 			e.preventDefault();
 			disableForm();
 
-			var paymentIntentId = document.querySelector( '[name="edd_recurring_stripe_payment_intent"]' );
+			var paymentIntentId = document.querySelector( '[name="cs_recurring_stripe_payment_intent"]' );
 
 			// Callback hell.
 			// @todo Modernize.
 
 			try {
 				// Retrieve or create a PaymentMethod.
-				api.getPaymentMethod( form, eddStripe.cardElement )
+				api.getPaymentMethod( form, csStripe.cardElement )
 					.then( function( paymentMethod ) {
 
 						// Update an existing Subscription default_payment_method

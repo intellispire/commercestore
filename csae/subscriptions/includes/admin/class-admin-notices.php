@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class EDD_Recurring_Admin_Notices {
+class CS_Recurring_Admin_Notices {
 
 	public function __construct() {
 		$this->init();
@@ -17,71 +17,71 @@ class EDD_Recurring_Admin_Notices {
 
 	public function notices() {
 
-		if( ! edd_is_admin_page( 'edd-subscriptions' ) ) {
+		if( ! cs_is_admin_page( 'cs-subscriptions' ) ) {
 			return;
 		}
 
-		if( empty( $_GET['edd-message'] ) ) {
+		if( empty( $_GET['cs-message'] ) ) {
 			return;
 		}
 
 		$type    = 'updated';
 		$message = '';
 
-		switch( strtolower( $_GET['edd-message'] ) ) {
+		switch( strtolower( $_GET['cs-message'] ) ) {
 
 			case 'updated' :
 
-				$message = __( 'Subscription updated successfully', 'edd-recurring' );
+				$message = __( 'Subscription updated successfully', 'cs-recurring' );
 
 				break;
 
 			case 'deleted' :
 
-				$message = __( 'Subscription deleted successfully', 'edd-recurring' );
+				$message = __( 'Subscription deleted successfully', 'cs-recurring' );
 
 				break;
 
 			case 'cancelled' :
 
-				$message = __( 'Subscription cancelled successfully', 'edd-recurring' );
+				$message = __( 'Subscription cancelled successfully', 'cs-recurring' );
 
 				break;
 
 			case 'subscription-note-added' :
 
-				$message = __( 'Subscription note added successfully', 'edd-recurring' );
+				$message = __( 'Subscription note added successfully', 'cs-recurring' );
 
 				break;
 
 			case 'subscription-note-not-added' :
 
-				$message = __( 'Subscription note could not be added', 'edd-recurring' );
+				$message = __( 'Subscription note could not be added', 'cs-recurring' );
 				$type    = 'error';
 				break;
 
 			case 'renewal-added' :
 
-				$message = __( 'Renewal payment recorded successfully', 'edd-recurring' );
+				$message = __( 'Renewal payment recorded successfully', 'cs-recurring' );
 
 				break;
 
 			case 'renewal-not-added' :
 
-				$message = __( 'Renewal payment could not be recorded', 'edd-recurring' );
+				$message = __( 'Renewal payment could not be recorded', 'cs-recurring' );
 				$type    = 'error';
 
 				break;
 
 			case 'retry-success' :
 
-				$message = __( 'Retry succeeded! The subscription has been renewed successfully.', 'edd-recurring' );
+				$message = __( 'Retry succeeded! The subscription has been renewed successfully.', 'cs-recurring' );
 
 				break;
 
 			case 'retry-failed' :
 
-				$message = sprintf( __( 'Retry failed. %s', 'edd-recurring' ), sanitize_text_field( urldecode( $_GET['error-message'] ) ) );
+				$message = sprintf( __( 'Retry failed. %s', 'cs-recurring' ), sanitize_text_field( urldecode( $_GET['error-message'] ) ) );
 				$type    = 'error';
 
 				break;
@@ -96,4 +96,4 @@ class EDD_Recurring_Admin_Notices {
 	}
 
 }
-$edd_recurring_admin_notices = new EDD_Recurring_Admin_Notices;
+$cs_recurring_admin_notices = new CS_Recurring_Admin_Notices;

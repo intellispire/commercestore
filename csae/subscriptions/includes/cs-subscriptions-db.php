@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  2.4
  */
-class EDD_Subscriptions_DB extends EDD_DB {
+class CS_Subscriptions_DB extends CS_DB {
 
 	/**
 	 * Get things started
@@ -22,7 +22,7 @@ class EDD_Subscriptions_DB extends EDD_DB {
 
 		global $wpdb;
 
-		$this->table_name  = $wpdb->prefix . 'edd_subscriptions';
+		$this->table_name  = $wpdb->prefix . 'cs_subscriptions';
 		$this->primary_key = 'id';
 		$this->version     = '1.4.1.3';
 
@@ -121,7 +121,7 @@ class EDD_Subscriptions_DB extends EDD_DB {
 		if( isset( $args['bill_times'] ) ) {
 
 			if ( ! is_numeric( $args['bill_times'] ) ) {
-				trigger_error( __( 'The bill_times argument should be a number but was not.', 'edd-recurring' ) );
+				trigger_error( __( 'The bill_times argument should be a number but was not.', 'cs-recurring' ) );
 			} else {
 				$where .= " AND t1.bill_times {$args['bill_times_operator']} '{$args['bill_times']}'";
 			}
@@ -300,7 +300,7 @@ class EDD_Subscriptions_DB extends EDD_DB {
 
 			if( is_email( $args['search'] ) ) {
 
-				$customer = new EDD_Customer( $args['search'] );
+				$customer = new CS_Customer( $args['search'] );
 				if( $customer && $customer->id > 0 ) {
 					$where .= " AND t1.customer_id = '" . esc_sql( $customer->id ) . "'";
 				}
@@ -354,16 +354,16 @@ class EDD_Subscriptions_DB extends EDD_DB {
 		if ( ! empty( $args['gateway'] ) ) {
 			$gateway = sanitize_text_field( $args['gateway'] );
 
-			if ( version_compare(EDD_VERSION, '3.0.0-beta1', '<') ) {
+			if ( version_compare(CS_VERSION, '3.0.0-beta1', '<') ) {
 
-				// Pre EDD 3.0 join
+				// Pre CS 3.0 join
 				$join  .= " LEFT JOIN {$wpdb->prefix}postmeta m1 ON t1.parent_payment_id = m1.post_id ";
-				$where .= $wpdb->prepare( " AND m1.meta_key = '_edd_payment_gateway' AND m1.meta_value = '%s'", $gateway );
+				$where .= $wpdb->prepare( " AND m1.meta_key = '_cs_payment_gateway' AND m1.meta_value = '%s'", $gateway );
 
 			} else {
 
-				// Post EDD 3.0 join
-				$join  .= " LEFT JOIN {$wpdb->prefix}edd_orders o1 on t1.parent_payment_id = o1.id ";
+				// Post CS 3.0 join
+				$join  .= " LEFT JOIN {$wpdb->prefix}cs_orders o1 on t1.parent_payment_id = o1.id ";
 				$where .= $wpdb->prepare( " AND o1.gateway = '%s' ", $gateway );
 
 			}
@@ -376,9 +376,9 @@ class EDD_Subscriptions_DB extends EDD_DB {
 			$args['orderby'] = 't1.amount+0';
 		}
 
-		$cache_key = md5( 'edd_subscriptions_' . serialize( $args ) );
+		$cache_key = md5( 'cs_subscriptions_' . serialize( $args ) );
 
-		$subscriptions = wp_cache_get( $cache_key, 'edd_subscriptions' );
+		$subscriptions = wp_cache_get( $cache_key, 'cs_subscriptions' );
 
 		$args['orderby'] = esc_sql( $args['orderby'] );
 		$args['order']   = esc_sql( $args['order'] );
@@ -391,23 +391,23 @@ class EDD_Subscriptions_DB extends EDD_DB {
 
 				foreach( $subscriptions as $key => $subscription ) {
 
-					$subscription_object = wp_cache_get( $subscription->id, 'edd_subscription_objects' );
+					$subscription_object = wp_cache_get( $subscription->id, 'cs_subscription_objects' );
 
 					// If we didn't find the subscription in cache, get it.
 					if ( false === $subscription_object ) {
 
-						$subscription_object = new EDD_Subscription( $subscription );
+						$subscription_object = new CS_Subscription( $subscription );
 
 						// If we got a valid subscription object, save it in cache for 1 hour.
 						if ( ! empty( $subscription->id ) ) {
-							wp_cache_set( $subscription->id, $subscription_object, 'edd_subscription_objects', 3600 );
+							wp_cache_set( $subscription->id, $subscription_object, 'cs_subscription_objects', 3600 );
 						}
 					}
 
 					$subscriptions[ $key ] = $subscription_object;
 				}
 
-				wp_cache_set( $cache_key, $subscriptions, 'edd_subscriptions', 3600 );
+				wp_cache_set( $cache_key, $subscriptions, 'cs_subscriptions', 3600 );
 
 			}
 
@@ -439,7 +439,7 @@ class EDD_Subscriptions_DB extends EDD_DB {
 		if( isset( $args['bill_times'] ) ) {
 
 			if ( ! is_numeric( $args['bill_times'] ) ) {
-				trigger_error( __( 'The bill_times argument should be a number but was not.', 'edd-recurring' ) );
+				trigger_error( __( 'The bill_times argument should be a number but was not.', 'cs-recurring' ) );
 			} else {
 				$where .= " AND t1.bill_times {$args['bill_times_operator']} '{$args['bill_times']}'";
 			}
@@ -620,7 +620,7 @@ class EDD_Subscriptions_DB extends EDD_DB {
 
 			if( is_email( $args['search'] ) ) {
 
-				$customer = new EDD_Customer( $args['search'] );
+				$customer = new CS_Customer( $args['search'] );
 				if( $customer && $customer->id > 0 ) {
 					$where .= " AND t1.customer_id = '" . esc_sql( $customer->id ) . "'";
 				}
@@ -674,32 +674,32 @@ class EDD_Subscriptions_DB extends EDD_DB {
 		if ( ! empty( $args['gateway'] ) ) {
 			$gateway = sanitize_text_field( $args['gateway'] );
 
-			if ( version_compare(EDD_VERSION, '3.0.0-beta1', '<') ) {
+			if ( version_compare(CS_VERSION, '3.0.0-beta1', '<') ) {
 
-				// Pre EDD 3.0 join
+				// Pre CS 3.0 join
 				$join  .= " LEFT JOIN {$wpdb->prefix}postmeta m1 ON t1.parent_payment_id = m1.post_id ";
-				$where .= $wpdb->prepare( " AND m1.meta_key = '_edd_payment_gateway' AND m1.meta_value = '%s'", $gateway );
+				$where .= $wpdb->prepare( " AND m1.meta_key = '_cs_payment_gateway' AND m1.meta_value = '%s'", $gateway );
 
 			} else {
 
-				// Post EDD 3.0 join
-				$join  .= " LEFT JOIN {$wpdb->prefix}edd_orders o1 on t1.parent_payment_id = o1.id ";
+				// Post CS 3.0 join
+				$join  .= " LEFT JOIN {$wpdb->prefix}cs_orders o1 on t1.parent_payment_id = o1.id ";
 				$where .= $wpdb->prepare( " AND o1.gateway = '%s' ", $gateway );
 
 			}
 
 		}
 
-		$cache_key = md5( 'edd_subscriptions_count' . serialize( $args ) );
+		$cache_key = md5( 'cs_subscriptions_count' . serialize( $args ) );
 
-		$count = wp_cache_get( $cache_key, 'edd_subscriptions' );
+		$count = wp_cache_get( $cache_key, 'cs_subscriptions' );
 
 		if( $count === false ) {
 
 			$sql   = "SELECT COUNT($this->primary_key) FROM " . $this->table_name . " t1" . "{$join}" . "{$where}";
 			$count = $wpdb->get_var( $sql );
 
-			wp_cache_set( $cache_key, $count, 'edd_subscriptions', 3600 );
+			wp_cache_set( $cache_key, $count, 'cs_subscriptions', 3600 );
 
 		}
 

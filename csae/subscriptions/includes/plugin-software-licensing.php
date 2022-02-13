@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Integrates EDD Recurring with the Software Licensing extension
+ * Integrates CS Recurring with the Software Licensing extension
  *
  * @since v2.4
  */
-class EDD_Recurring_Software_Licensing {
+class CS_Recurring_Software_Licensing {
 
 	protected $db;
 
@@ -17,46 +17,46 @@ class EDD_Recurring_Software_Licensing {
 	 */
 	public function __construct() {
 
-		if ( ! function_exists( 'edd_software_licensing' ) ) {
+		if ( ! function_exists( 'cs_software_licensing' ) ) {
 			return;
 		}
 
-		$this->db = new EDD_Subscriptions_DB;
+		$this->db = new CS_Subscriptions_DB;
 
-		add_filter( 'edd_recurring_subscription_pre_gateway_args', array( $this, 'set_recurring_amount' ), 10, 2 );
-		add_filter( 'edd_sl_license_exp_length', array( $this, 'set_license_length_for_trials' ), 10, 4 );
-		add_filter( 'edd_sl_can_extend_license', array( $this, 'disable_license_extension' ), 10, 2 );
-		add_filter( 'edd_sl_can_renew_license', array( $this, 'disable_license_extension' ), 10, 2 );
-		add_filter( 'edd_recurring_subscription_pre_gateway_args', array( $this, 'add_upgrade_and_renewal_flag' ), 10, 2 );
-		add_filter( 'edd_sl_send_scheduled_reminder_for_license', array( $this, 'maybe_suppress_scheduled_reminder_for_license' ), 10, 3 );
-		add_filter( 'edd_get_renewals_by_date', array( $this, 'renewals_by_date' ), 10, 4 );
-		add_filter( 'edd_subscription_can_renew', array( $this, 'can_renew_subscription' ), 10, 2 );
-		add_filter( 'edd_subscription_renew_url', array( $this, 'get_renew_url' ), 10, 2 );
-		add_filter( 'edd_recurring_show_stripe_update_payment_method_notice', array( $this, 'maybe_suppress_update_payment_method_notice' ), 10, 2 );
-		add_filter( 'edd_recurring_create_subscription_args', array( $this, 'handle_subscription_upgrade_billing' ), 10, 5 );
-		add_filter( 'edd_recurring_pre_record_signup_args', array( $this, 'handle_subscription_upgrade_expiration' ), 10, 2 );
-		add_filter( 'edd_cart_contents', array( $this, 'remove_trial_flags_on_renewals_and_upgrades' ) );
-		add_filter( 'edd_sl_get_time_based_pro_rated_upgrade_cost', array( $this, 'reset_upgrade_cost_when_trialling' ), 10, 4 );
-		add_filter( 'edd_sl_get_cost_based_pro_rated_upgrade_cost', array( $this, 'reset_upgrade_cost_when_trialling' ), 10, 4 );
+		add_filter( 'cs_recurring_subscription_pre_gateway_args', array( $this, 'set_recurring_amount' ), 10, 2 );
+		add_filter( 'cs_sl_license_exp_length', array( $this, 'set_license_length_for_trials' ), 10, 4 );
+		add_filter( 'cs_sl_can_extend_license', array( $this, 'disable_license_extension' ), 10, 2 );
+		add_filter( 'cs_sl_can_renew_license', array( $this, 'disable_license_extension' ), 10, 2 );
+		add_filter( 'cs_recurring_subscription_pre_gateway_args', array( $this, 'add_upgrade_and_renewal_flag' ), 10, 2 );
+		add_filter( 'cs_sl_send_scheduled_reminder_for_license', array( $this, 'maybe_suppress_scheduled_reminder_for_license' ), 10, 3 );
+		add_filter( 'cs_get_renewals_by_date', array( $this, 'renewals_by_date' ), 10, 4 );
+		add_filter( 'cs_subscription_can_renew', array( $this, 'can_renew_subscription' ), 10, 2 );
+		add_filter( 'cs_subscription_renew_url', array( $this, 'get_renew_url' ), 10, 2 );
+		add_filter( 'cs_recurring_show_stripe_update_payment_method_notice', array( $this, 'maybe_suppress_update_payment_method_notice' ), 10, 2 );
+		add_filter( 'cs_recurring_create_subscription_args', array( $this, 'handle_subscription_upgrade_billing' ), 10, 5 );
+		add_filter( 'cs_recurring_pre_record_signup_args', array( $this, 'handle_subscription_upgrade_expiration' ), 10, 2 );
+		add_filter( 'cs_cart_contents', array( $this, 'remove_trial_flags_on_renewals_and_upgrades' ) );
+		add_filter( 'cs_sl_get_time_based_pro_rated_upgrade_cost', array( $this, 'reset_upgrade_cost_when_trialling' ), 10, 4 );
+		add_filter( 'cs_sl_get_cost_based_pro_rated_upgrade_cost', array( $this, 'reset_upgrade_cost_when_trialling' ), 10, 4 );
 
-		add_action( 'edd_recurring_post_create_payment_profiles', array( $this, 'handle_subscription_upgrade' ) );
-		add_action( 'edd_recurring_post_create_payment_profiles', array( $this, 'handle_manual_license_renewal' ) );
-		add_action( 'edd_complete_download_purchase', array( $this, 'handle_non_subscription_upgrade' ), -1, 5 );
-		add_action( 'edd_subscription_post_renew', array( $this, 'renew_license_keys' ), 10, 4 );
-		add_action( 'edd_recurring_add_subscription_payment', array( $this, 'set_renewal_flag' ), 10, 2 );
-		add_action( 'edd_sl_column_purchased', array( $this, 'licenses_table' ), 10 );
-		add_action( 'edd_subscription_after_tables', array( $this, 'subscription_details' ), 10 );
-		add_action( 'edd_sl_license_key_details', array( $this, 'license_key_details' ) );
-		add_action( 'edd_purchase_form_before_submit', array( $this, 'checkout_upgrade_details' ), 9 );
-		add_action( 'edd_purchase_form_before_submit', array( $this, 'checkout_license_renewal_details' ), 9 );
-		add_action( 'edd_sl_license_metabox_after_license_length', array( $this, 'free_trial_settings_notice' ) );
-		add_action( 'edd_recurring_check_expiration', array( $this, 'maybe_sync_license_expiration_on_check_expiration' ), 10, 2 );
-		if ( function_exists( 'edd_get_order' ) ) {
-			add_action( 'edd_refund_order', array( $this, 'rollback_expiration_on_renewal_refund' ), 10, 3 );
+		add_action( 'cs_recurring_post_create_payment_profiles', array( $this, 'handle_subscription_upgrade' ) );
+		add_action( 'cs_recurring_post_create_payment_profiles', array( $this, 'handle_manual_license_renewal' ) );
+		add_action( 'cs_complete_download_purchase', array( $this, 'handle_non_subscription_upgrade' ), -1, 5 );
+		add_action( 'cs_subscription_post_renew', array( $this, 'renew_license_keys' ), 10, 4 );
+		add_action( 'cs_recurring_add_subscription_payment', array( $this, 'set_renewal_flag' ), 10, 2 );
+		add_action( 'cs_sl_column_purchased', array( $this, 'licenses_table' ), 10 );
+		add_action( 'cs_subscription_after_tables', array( $this, 'subscription_details' ), 10 );
+		add_action( 'cs_sl_license_key_details', array( $this, 'license_key_details' ) );
+		add_action( 'cs_purchase_form_before_submit', array( $this, 'checkout_upgrade_details' ), 9 );
+		add_action( 'cs_purchase_form_before_submit', array( $this, 'checkout_license_renewal_details' ), 9 );
+		add_action( 'cs_sl_license_metabox_after_license_length', array( $this, 'free_trial_settings_notice' ) );
+		add_action( 'cs_recurring_check_expiration', array( $this, 'maybe_sync_license_expiration_on_check_expiration' ), 10, 2 );
+		if ( function_exists( 'cs_get_order' ) ) {
+			add_action( 'cs_refund_order', array( $this, 'rollback_expiration_on_renewal_refund' ), 10, 3 );
 		} else {
-			add_action( 'edd_post_refund_payment', array( $this, 'rollback_expiration_on_renewal_refund' ) );
+			add_action( 'cs_post_refund_payment', array( $this, 'rollback_expiration_on_renewal_refund' ) );
 		}
-		add_action( 'edd_recurring_post_record_signup', array( $this, 'cancel_failed_subscription_during_renewal' ), 10, 3 );
+		add_action( 'cs_recurring_post_record_signup', array( $this, 'cancel_failed_subscription_during_renewal' ), 10, 3 );
 
 	}
 
@@ -64,18 +64,18 @@ class EDD_Recurring_Software_Licensing {
 	 * Modifies the recurring amounts in respect to renewal discounts and license upgrades
 	 *
 	 * @since  2.4
-	 * @param array $args This array contains information about the product. The the edd_recurring_subscription_pre_gateway_args filter in edd-recurring-gateway for a list of keys.
-	 * @param array $item The information about this item, as found in the edd_gateway_[ gateway name ] hook.
-	 * @return array The modified args for the edd_recurring_subscription_pre_gateway_args filter.
+	 * @param array $args This array contains information about the product. The the cs_recurring_subscription_pre_gateway_args filter in cs-recurring-gateway for a list of keys.
+	 * @param array $item The information about this item, as found in the cs_gateway_[ gateway name ] hook.
+	 * @return array The modified args for the cs_recurring_subscription_pre_gateway_args filter.
 	 */
 	public function set_recurring_amount( $args = array(), $item = array() ) {
 
 		$adjust  = false;
-		$enabled = get_post_meta( $args['id'], '_edd_sl_enabled', true );
+		$enabled = get_post_meta( $args['id'], '_cs_sl_enabled', true );
 
 		// Only set up a discount if software licensing is enabled for the product.
 		if ( $enabled ) {
-			$discount = edd_sl_get_renewal_discount_percentage( 0, $item['id'] );
+			$discount = cs_sl_get_renewal_discount_percentage( 0, $item['id'] );
 		} else {
 			$discount = 0;
 		}
@@ -83,39 +83,39 @@ class EDD_Recurring_Software_Licensing {
 		// This is an upgrade.
 		if ( ! empty( $item['item_number']['options']['is_upgrade'] ) || ! empty( $item['item_number']['options']['is_renewal'] ) ) {
 
-			if ( edd_has_variable_prices( $item['id'] ) ) {
+			if ( cs_has_variable_prices( $item['id'] ) ) {
 
-				$price = edd_get_price_option_amount( $args['id'], $args['price_id'] );
+				$price = cs_get_price_option_amount( $args['id'], $args['price_id'] );
 
 			} else {
 
-				$price = edd_get_download_price( $item['id'] );
+				$price = cs_get_download_price( $item['id'] );
 
 			}
 
 			if ( $discount > 0 ) {
 
-				$args['recurring_amount'] = (float) edd_sanitize_amount( $price - ( $price * ( $discount / 100 ) ) );
+				$args['recurring_amount'] = (float) cs_sanitize_amount( $price - ( $price * ( $discount / 100 ) ) );
 
 			} else {
 
-				$args['recurring_amount'] = (float) edd_sanitize_amount( $price );
+				$args['recurring_amount'] = (float) cs_sanitize_amount( $price );
 
 			}
 
 			// Set the tax amount according to whether taxes are inclusive or exclusive.
-			if ( edd_use_taxes() ) {
+			if ( cs_use_taxes() ) {
 
-				if ( edd_prices_include_tax() ) {
+				if ( cs_prices_include_tax() ) {
 
 					// If the store is set to bake taxes into the price, bake the taxes into the price.
-					$pre_tax               = $args['recurring_amount'] / ( 1 + edd_get_tax_rate() );
+					$pre_tax               = $args['recurring_amount'] / ( 1 + cs_get_tax_rate() );
 					$args['recurring_tax'] = $args['recurring_amount'] - $pre_tax;
 
 				} else {
 
 					// If the store is set to add tax on-top-of the price, add the taxes to the price.
-					$args['recurring_tax']    = $args['recurring_amount'] * ( edd_get_tax_rate() );
+					$args['recurring_tax']    = $args['recurring_amount'] * ( cs_get_tax_rate() );
 					$args['recurring_amount'] = $args['recurring_amount'] + $args['recurring_tax'];
 				}
 			}
@@ -128,7 +128,7 @@ class EDD_Recurring_Software_Licensing {
 				$renewal_discount = ( $args['recurring_amount'] * ( $discount / 100 ) );
 
 				$args['recurring_amount'] -= $renewal_discount;
-				$args['recurring_amount']  = (float) edd_sanitize_amount( $args['recurring_amount'] );
+				$args['recurring_amount']  = (float) cs_sanitize_amount( $args['recurring_amount'] );
 
 				/**
 				 * The recurring amount has been adjusted so we now need to re-calculate taxes.
@@ -136,7 +136,7 @@ class EDD_Recurring_Software_Licensing {
 				 * The recurring amount has taxes included in it already, so we work backwards,
 				 * just like calculated taxes when prices are inclusive of tax.
 				 */
-				$pre_tax               = $args['recurring_amount'] / ( 1 + edd_get_tax_rate() );
+				$pre_tax               = $args['recurring_amount'] / ( 1 + cs_get_tax_rate() );
 				$args['recurring_tax'] = $args['recurring_amount'] - $pre_tax;
 
 			}
@@ -154,25 +154,25 @@ class EDD_Recurring_Software_Licensing {
 	 */
 	public function set_license_length_for_trials( $expiration, $payment_id, $download_id, $license_id ) {
 
-		if( ! defined( 'EDD_SL_VERSION' ) || version_compare( EDD_SL_VERSION, '3.5', '<' ) ) {
+		if( ! defined( 'CS_SL_VERSION' ) || version_compare( CS_SL_VERSION, '3.5', '<' ) ) {
 			return $expiration; // We need version 3.5 or later
 		}
 
-		$license  = edd_software_licensing()->get_license( $license_id );
+		$license  = cs_software_licensing()->get_license( $license_id );
 		$payments = $license->payment_ids;
 
-		if( count( $payments ) <= 1 && edd_recurring()->has_free_trial( $download_id, $license->price_id ) ) {
+		if( count( $payments ) <= 1 && cs_recurring()->has_free_trial( $download_id, $license->price_id ) ) {
 
 			// If our customer record exists, use that email, otherwise set it to false so it defaults to the currently logged in customer's email
 			$email = ! empty( $license->customer ) && ! empty( $license->customer->email ) ? $license->customer->email : '';
 
 			// Only modify the expiration during initial papyments, not renewals
-			if( ! did_action( 'edd_subscription_pre_renew' ) ) {
+			if( ! did_action( 'cs_subscription_pre_renew' ) ) {
 
-				if( ( edd_get_option( 'recurring_one_time_trials' ) && ! edd_recurring()->has_trialed( $download_id, $email ) ) || ! edd_get_option( 'recurring_one_time_trials' ) ) {
+				if( ( cs_get_option( 'recurring_one_time_trials' ) && ! cs_recurring()->has_trialed( $download_id, $email ) ) || ! cs_get_option( 'recurring_one_time_trials' ) ) {
 
 					// set expiration to trial length
-					$trial_period = edd_recurring()->get_trial_period( $download_id, $license->price_id );
+					$trial_period = cs_recurring()->get_trial_period( $download_id, $license->price_id );
 					$expiration = '+' . $trial_period['quantity'] . ' ' . $trial_period['unit'];
 
 				}
@@ -184,7 +184,7 @@ class EDD_Recurring_Software_Licensing {
 	}
 
 	/**
-	 * Disables the Renew/Extend link in [edd_license_keys] for licenses that are tied to an active, trialling, or failing subscription
+	 * Disables the Renew/Extend link in [cs_license_keys] for licenses that are tied to an active, trialling, or failing subscription
 	 *
 	 * @since  2.4
 	 * @return bool
@@ -225,14 +225,14 @@ class EDD_Recurring_Software_Licensing {
 	}
 
 	/**
-	 * Adds edd_subscription status to the renewals by date query
+	 * Adds cs_subscription status to the renewals by date query
 	 *
 	 * @since  2.5
 	 * @return array
 	 */
 	public function renewals_by_date( $args, $day, $month, $year ) {
 
-		$args['status'][] = 'edd_subscription';
+		$args['status'][] = 'cs_subscription';
 
 		return $args;
 	}
@@ -243,11 +243,11 @@ class EDD_Recurring_Software_Licensing {
 	 * @since  2.5
 	 * @return bool
 	 */
-	public function can_renew_subscription( $can_renew, EDD_Subscription $subscription ) {
+	public function can_renew_subscription( $can_renew, CS_Subscription $subscription ) {
 
-		$license = edd_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
+		$license = cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
 
-		if( ! empty( $license ) && 'expired' == edd_software_licensing()->get_license_status( $license->ID ) && edd_sl_renewals_allowed() ) {
+		if( ! empty( $license ) && 'expired' == cs_software_licensing()->get_license_status( $license->ID ) && cs_sl_renewals_allowed() ) {
 			$can_renew = true;
 		}
 
@@ -260,15 +260,15 @@ class EDD_Recurring_Software_Licensing {
 	 * @since  2.5
 	 * @return bool
 	 */
-	public function get_renew_url( $url, EDD_Subscription $subscription ) {
+	public function get_renew_url( $url, CS_Subscription $subscription ) {
 
-		$license = edd_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
+		$license = cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
 
 		if( ! empty( $license ) ) {
 			$url = add_query_arg( array(
-				'edd_license_key' => edd_software_licensing()->get_license_key( $license->ID ),
+				'cs_license_key' => cs_software_licensing()->get_license_key( $license->ID ),
 				'download_id'     => $subscription->product_id
-			), edd_get_checkout_uri() );
+			), cs_get_checkout_uri() );
 		}
 
 		return $url;
@@ -430,7 +430,7 @@ class EDD_Recurring_Software_Licensing {
 				continue;
 			}
 
-			$license = edd_software_licensing()->get_license( $license_id );
+			$license = cs_software_licensing()->get_license( $license_id );
 			if ( false === $license ) {
 				continue;
 			}
@@ -438,7 +438,7 @@ class EDD_Recurring_Software_Licensing {
 			/*
 			 * If the license never expires, then exit now.
 			 * This logic to sync up with the license expiration date is not necessary if there is no expiration date.
-			 * @link https://github.com/easydigitaldownloads/edd-recurring/issues/1311
+			 * @link https://github.com/commercestore/cs-recurring/issues/1311
 			 */
 			if ( empty( $license->expiration ) ) {
 				continue;
@@ -446,17 +446,17 @@ class EDD_Recurring_Software_Licensing {
 
 			// Due to the order of payment -> subscriptions -> license modification, we need to get all the data for the new expiration
 			// directly from the upgrade paths and new download, instead of the existing license, as it has not changed yet.
-			$upgrade_paths = edd_sl_get_license_upgrades( $license->ID );
+			$upgrade_paths = cs_sl_get_license_upgrades( $license->ID );
 
-			edd_debug_log( sprintf( 'Recurring - License Upgrade paths: %s', print_r( $upgrade_paths, true ) ) );
+			cs_debug_log( sprintf( 'Recurring - License Upgrade paths: %s', print_r( $upgrade_paths, true ) ) );
 
 			$upgrade_path  = ! empty( $upgrade_paths[ $options['upgrade_id'] ] ) ? $upgrade_paths[ $options['upgrade_id'] ] : false;
 			if ( empty( $upgrade_path ) ) {
 				continue;
 			}
 
-			edd_debug_log( sprintf( 'Recurring - Found upgrade path: %s', print_r( $upgrade_path, true ) ) );
-			$upgraded_download = new EDD_SL_Download( $upgrade_path['download_id'] );
+			cs_debug_log( sprintf( 'Recurring - Found upgrade path: %s', print_r( $upgrade_path, true ) ) );
+			$upgraded_download = new CS_SL_Download( $upgrade_path['download_id'] );
 
 			if ( $upgraded_download->has_variable_prices() ) {
 				$download_is_lifetime = $upgraded_download->is_price_lifetime( $upgrade_path['price_id'] );
@@ -485,7 +485,7 @@ class EDD_Recurring_Software_Licensing {
 			// Sync the trial expiration to when the license expires, using the current period's start date plus the length of the upgrade.
 			$license_expiration = strtotime( '+' . $exp_length . ' ' . $exp_unit, $previous_start_time );
 
-			edd_debug_log( sprintf( 'Recurring - License Expiration after Upgrade: %s', print_r( $license_expiration, true ) ) );
+			cs_debug_log( sprintf( 'Recurring - License Expiration after Upgrade: %s', print_r( $license_expiration, true ) ) );
 
 			if ( ! empty( $license_expiration ) ) {
 
@@ -517,7 +517,7 @@ class EDD_Recurring_Software_Licensing {
 						 * If the trial period, likely due to a Software Licensing upgrade, is greater than 90 days,
 						 * we need to split it into two trial periods.
 						 *
-						 * See https://github.com/easydigitaldownloads/edd-recurring/issues/769
+						 * See https://github.com/commercestore/cs-recurring/issues/769
 						 */
 						if( $date_diff->days > 90 && 'D' === $args['t1'] ) {
 
@@ -636,7 +636,7 @@ class EDD_Recurring_Software_Licensing {
 				continue;
 			}
 
-			$license_expiration = edd_software_licensing()->get_license_expiration( $license_id );
+			$license_expiration = cs_software_licensing()->get_license_expiration( $license_id );
 			if ( 'lifetime' === $license_expiration ) {
 				continue;
 			}
@@ -656,33 +656,33 @@ class EDD_Recurring_Software_Licensing {
 	 * @since  2.4
 	 * @return void
 	 */
-	public function handle_subscription_upgrade( EDD_Recurring_Gateway $gateway_data ) {
+	public function handle_subscription_upgrade( CS_Recurring_Gateway $gateway_data ) {
 
 		foreach( $gateway_data->subscriptions as $subscription ) {
 
 			if( ! empty( $subscription['is_upgrade'] ) && ! empty( $subscription['old_subscription_id'] ) ) {
 
-				$old_sub = new EDD_Subscription( $subscription['old_subscription_id'] );
+				$old_sub = new CS_Subscription( $subscription['old_subscription_id'] );
 
 				if( ! $old_sub->can_cancel() && 'manual' !== $old_sub->gateway ) {
 					continue;
 				}
 
-				$gateway = edd_recurring()->get_gateway( $old_sub->gateway );
+				$gateway = cs_recurring()->get_gateway( $old_sub->gateway );
 
 				if( empty( $gateway ) ) {
 					continue;
 				}
 
-				$recurring = edd_recurring();
+				$recurring = cs_recurring();
 
-				remove_action( 'edd_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
+				remove_action( 'cs_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
 
 				if ( $gateway->cancel_immediately( $old_sub ) ) {
 
-					$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'edd-recurring' ), $old_sub->id );
-					edd_insert_payment_note( $old_sub->parent_payment_id, $note );
-					$old_sub->add_note( __( 'Subscription cancelled for license upgrade', 'edd-recurring' ) );
+					$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'cs-recurring' ), $old_sub->id );
+					cs_insert_payment_note( $old_sub->parent_payment_id, $note );
+					$old_sub->add_note( __( 'Subscription cancelled for license upgrade', 'cs-recurring' ) );
 
 					$old_sub->cancel();
 				}
@@ -709,7 +709,7 @@ class EDD_Recurring_Software_Licensing {
 		}
 
 		// Bail if this was a subscription purchase
-		if( edd_get_payment_meta( $payment_id, '_edd_subscription_payment', true ) ) {
+		if( cs_get_payment_meta( $payment_id, '_cs_subscription_payment', true ) ) {
 			return;
 		}
 
@@ -720,26 +720,26 @@ class EDD_Recurring_Software_Licensing {
 			return;
 		}
 
-		$sub = new EDD_Subscription( $subscription->id );
+		$sub = new CS_Subscription( $subscription->id );
 
 		if( ! $sub->can_cancel() && 'manual' !== $sub->gateway ) {
 			return;
 		}
 
-		$gateway = edd_recurring()->get_gateway( $sub->gateway );
+		$gateway = cs_recurring()->get_gateway( $sub->gateway );
 
 		if( empty( $gateway ) ) {
 			return;
 		}
 
-		$recurring = edd_recurring();
+		$recurring = cs_recurring();
 
-		remove_action( 'edd_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
+		remove_action( 'cs_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
 
 		if ( $gateway->cancel_immediately( $sub ) ) {
 
-			$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'edd-recurring' ), $sub->id );
-			edd_insert_payment_note( $sub->parent_payment_id, $note );
+			$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'cs-recurring' ), $sub->id );
+			cs_insert_payment_note( $sub->parent_payment_id, $note );
 
 			$sub->cancel();
 		}
@@ -755,32 +755,32 @@ class EDD_Recurring_Software_Licensing {
 	 * @since  2.6.3
 	 * @return void
 	 */
-	public function handle_manual_license_renewal( EDD_Recurring_Gateway $gateway_data ) {
+	public function handle_manual_license_renewal( CS_Recurring_Gateway $gateway_data ) {
 
 		foreach( $gateway_data->subscriptions as $subscription ) {
 
 			if( ! empty( $subscription['is_renewal'] ) && ! empty( $subscription['old_subscription_id'] ) ) {
 
-				$sub = new EDD_Subscription( $subscription['old_subscription_id'] );
+				$sub = new CS_Subscription( $subscription['old_subscription_id'] );
 
 				if( ! $sub->can_cancel() && 'manual' !== $sub->gateway ) {
 					continue;
 				}
 
-				$gateway = edd_recurring()->get_gateway( $sub->gateway );
+				$gateway = cs_recurring()->get_gateway( $sub->gateway );
 
 				if( empty( $gateway ) ) {
 					continue;
 				}
 
-				$recurring = edd_recurring();
+				$recurring = cs_recurring();
 
-				remove_action( 'edd_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
+				remove_action( 'cs_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
 
 				if ( $gateway->cancel_immediately( $sub ) ) {
 
-					$note = sprintf( __( 'Subscription #%d cancelled for manual license renewal', 'edd-recurring' ), $sub->id );
-					edd_insert_payment_note( $sub->parent_payment_id, $note );
+					$note = sprintf( __( 'Subscription #%d cancelled for manual license renewal', 'cs-recurring' ), $sub->id );
+					cs_insert_payment_note( $sub->parent_payment_id, $note );
 
 					$sub->cancel();
 				}
@@ -798,10 +798,10 @@ class EDD_Recurring_Software_Licensing {
 	 */
 	public function renew_license_keys( $sub_id, $expiration, $subscription, $payment_id ) {
 
-		// Update the expiration date of the associated license key, if EDD Software Licensing is active
+		// Update the expiration date of the associated license key, if CS Software Licensing is active
 
-		$license = apply_filters( 'edd_recurring_sl_renewing_license',
-			edd_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id ),
+		$license = apply_filters( 'cs_recurring_sl_renewing_license',
+			cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id ),
 			$subscription
 		);
 
@@ -809,19 +809,19 @@ class EDD_Recurring_Software_Licensing {
 
 			// Update the expiration dates of the license key
 			$payment_id = ! empty( $payment_id ) ? (int) $payment_id : $subscription->parent_payment_id;
-			edd_software_licensing()->renew_license( $license->ID, $payment_id, $subscription->product_id );
+			cs_software_licensing()->renew_license( $license->ID, $payment_id, $subscription->product_id );
 
 			$log_id = wp_insert_post(
 				array(
-					'post_title'   => sprintf( __( 'LOG - License %d Renewed via Subscription', 'edd_sl' ), $license->ID ),
+					'post_title'   => sprintf( __( 'LOG - License %d Renewed via Subscription', 'cs_sl' ), $license->ID ),
 					'post_name'    => 'log-license-renewed-' . $license->ID . '-' . md5( time() ),
-					'post_type'    => 'edd_license_log',
+					'post_type'    => 'cs_license_log',
 					'post_content' => $subscription->id,
 					'post_status'  => 'publish'
 				 )
 			);
 
-			add_post_meta( $log_id, '_edd_sl_log_license_id', $license->ID );
+			add_post_meta( $log_id, '_cs_sl_log_license_id', $license->ID );
 
 		}
 	}
@@ -834,12 +834,12 @@ class EDD_Recurring_Software_Licensing {
 	 */
 	public function set_renewal_flag( $payment, $subscription ) {
 
-		$license = edd_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
+		$license = cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
 
 		if ( $license ) {
 
-			$payment->update_meta( '_edd_sl_is_renewal', 1 );
-			$payment->add_meta( '_edd_sl_renewal_key', $license->key );
+			$payment->update_meta( '_cs_sl_is_renewal', 1 );
+			$payment->add_meta( '_cs_sl_renewal_key', $license->key );
 
 		}
 	}
@@ -851,9 +851,9 @@ class EDD_Recurring_Software_Licensing {
 	 * @return void
 	 */
 	public function licenses_table( $license ) {
-		$edd_license = edd_software_licensing()->get_license( $license['ID'] );
+		$cs_license = cs_software_licensing()->get_license( $license['ID'] );
 
-		$subs = $this->db->get_subscriptions( array( 'product_id' => $edd_license->download_id, 'parent_payment_id' => $edd_license->payment_id ) );
+		$subs = $this->db->get_subscriptions( array( 'product_id' => $cs_license->download_id, 'parent_payment_id' => $cs_license->payment_id ) );
 		if( $subs ) {
 			foreach( $subs as $sub ) {
 
@@ -862,7 +862,7 @@ class EDD_Recurring_Software_Licensing {
 				}
 
 				echo '<br/>';
-				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=edd-subscriptions&id=' ) . $sub->id ) . '">' . __( 'View Subscription', 'edd-recurring' ) . '</a>';
+				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' ) . $sub->id ) . '">' . __( 'View Subscription', 'cs-recurring' ) . '</a>';
 			}
 		}
 
@@ -874,26 +874,26 @@ class EDD_Recurring_Software_Licensing {
 	 * @since  2.4
 	 * @return void
 	 */
-	public function subscription_details( EDD_Subscription $subscription ) {
+	public function subscription_details( CS_Subscription $subscription ) {
 
-		$license = edd_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
+		$license = cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
 		if( $license ) : ?>
-			<h3><?php _e( 'License Key:', 'edd-recurring' ); ?></h3>
+			<h3><?php _e( 'License Key:', 'cs-recurring' ); ?></h3>
 			<table class="wp-list-table widefat striped payments">
 				<thead>
 				<tr>
-					<th><?php _e( 'License', 'edd-recurring' ); ?></th>
-					<th><?php _e( 'Status', 'edd-recurring' ); ?></th>
-					<th><?php _e( 'Actions', 'edd-recurring' ); ?></th>
+					<th><?php _e( 'License', 'cs-recurring' ); ?></th>
+					<th><?php _e( 'Status', 'cs-recurring' ); ?></th>
+					<th><?php _e( 'Actions', 'cs-recurring' ); ?></th>
 				</tr>
 				</thead>
 				<tbody>
-					<?php $license_key = edd_software_licensing()->get_license_key( $license->ID ); ?>
+					<?php $license_key = cs_software_licensing()->get_license_key( $license->ID ); ?>
 					<tr>
 						<td><?php echo $license_key; ?></td>
-						<td><?php echo edd_software_licensing()->get_license_status( $license->ID ); ?></td>
+						<td><?php echo cs_software_licensing()->get_license_status( $license->ID ); ?></td>
 						<td>
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=edd-licenses&s=' ) . $license_key ); ?>"><?php _e( 'View License', 'edd-recurring' ); ?></a>
+							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-licenses&s=' ) . $license_key ); ?>"><?php _e( 'View License', 'cs-recurring' ); ?></a>
 						</td>
 					</tr>
 				</tbody>
@@ -914,8 +914,8 @@ class EDD_Recurring_Software_Licensing {
 
 		if( $sub ) {
 
-			echo '<div class="edd-recurring-license-renewal">';
-				printf( __( 'Renews automatically on %s', 'edd-recurring' ), date_i18n( get_option( 'date_format' ), strtotime( $sub->expiration ) ) );
+			echo '<div class="cs-recurring-license-renewal">';
+				printf( __( 'Renews automatically on %s', 'cs-recurring' ), date_i18n( get_option( 'date_format' ), strtotime( $sub->expiration ) ) );
 			echo '</div>';
 
 		}
@@ -930,7 +930,7 @@ class EDD_Recurring_Software_Licensing {
 	 */
 	public function checkout_upgrade_details() {
 
-		$items = edd_get_cart_contents();
+		$items = cs_get_cart_contents();
 
 		if( ! is_array( $items ) ) {
 			return;
@@ -958,40 +958,40 @@ class EDD_Recurring_Software_Licensing {
 
 			}
 
-			if( edd_has_variable_prices( $item['id'] ) ) {
-				$price = edd_get_price_option_amount( $item['id'], $item['options']['price_id'] );
+			if( cs_has_variable_prices( $item['id'] ) ) {
+				$price = cs_get_price_option_amount( $item['id'], $item['options']['price_id'] );
 			} else {
-				$price = edd_get_download_price( $item['id'] );
+				$price = cs_get_download_price( $item['id'] );
 			}
 
-			$enabled = get_post_meta( $item['id'], '_edd_sl_enabled', true );
+			$enabled = get_post_meta( $item['id'], '_cs_sl_enabled', true );
 
 			// Only set up a discount if software licensing is enabled for the product.
 			if ( $enabled ) {
-				$discount = edd_sl_get_renewal_discount_percentage( 0, $item['id'] );
+				$discount = cs_sl_get_renewal_discount_percentage( 0, $item['id'] );
 			} else {
 				$discount = 0;
 			}
 
-			$cost     = (float) edd_sanitize_amount( $price - ( $price * ( $discount / 100 ) ) );
-			$period   = EDD_Recurring()->get_pretty_subscription_frequency( $item['options']['recurring']['period'] );
+			$cost     = (float) cs_sanitize_amount( $price - ( $price * ( $discount / 100 ) ) );
+			$period   = CS_Recurring()->get_pretty_subscription_frequency( $item['options']['recurring']['period'] );
 
 			// If the store is set to add tax on-top-of the price, add the taxes to the price.
-			if ( edd_use_taxes() && ! edd_prices_include_tax() ) {
-				$tax = $cost * ( edd_get_tax_rate() );
+			if ( cs_use_taxes() && ! cs_prices_include_tax() ) {
+				$tax = $cost * ( cs_get_tax_rate() );
 				$cost = $cost + $tax;
 			}
 
-			$cost = edd_currency_filter( edd_sanitize_amount( $cost ) );
+			$cost = cs_currency_filter( cs_sanitize_amount( $cost ) );
 
 			$message  = sprintf(
-				__( '%s will now automatically renew %s for %s', 'edd-recurring' ),
+				__( '%s will now automatically renew %s for %s', 'cs-recurring' ),
 				get_the_title( $item['id'] ),
 				$period,
 				$cost
 			);
 
-			echo '<div id="edd-recurring-sl-auto-renew" class="edd-alert edd-alert-warn"><p class="edd_error">' . $message . '</p></div>';
+			echo '<div id="cs-recurring-sl-auto-renew" class="cs-alert cs-alert-warn"><p class="cs_error">' . $message . '</p></div>';
 
 		}
 
@@ -1005,16 +1005,16 @@ class EDD_Recurring_Software_Licensing {
 	 */
 	public function checkout_license_renewal_details() {
 
-		if( ! edd_sl_renewals_allowed() ) {
+		if( ! cs_sl_renewals_allowed() ) {
 			return;
 		}
 
-		if( ! EDD()->session->get( 'edd_is_renewal' ) ) {
+		if( ! CS()->session->get( 'cs_is_renewal' ) ) {
 			return;
 		}
 
-		$cart_items = edd_get_cart_contents();
-		$renewals   = edd_sl_get_renewal_keys();
+		$cart_items = cs_get_cart_contents();
+		$renewals   = cs_sl_get_renewal_keys();
 
 		foreach ( $cart_items as $key => $item ) {
 
@@ -1027,7 +1027,7 @@ class EDD_Recurring_Software_Licensing {
 			}
 
 			$license_key = $renewals[ $key ];
-			$license_id  = edd_software_licensing()->get_license_by_key( $license_key );
+			$license_id  = cs_software_licensing()->get_license_by_key( $license_key );
 			$sub         = $this->get_subscription_of_license( $license_id, array(
 				'status' => array( 'active', 'trialling', 'failing' )
 			) );
@@ -1036,40 +1036,40 @@ class EDD_Recurring_Software_Licensing {
 				continue;
 			}
 
-			if( edd_has_variable_prices( $item['id'] ) ) {
-				$price = edd_get_price_option_amount( $item['id'], $item['options']['price_id'] );
+			if( cs_has_variable_prices( $item['id'] ) ) {
+				$price = cs_get_price_option_amount( $item['id'], $item['options']['price_id'] );
 			} else {
-				$price = edd_get_download_price( $item['id'] );
+				$price = cs_get_download_price( $item['id'] );
 			}
 
-			$enabled = get_post_meta( $item['id'], '_edd_sl_enabled', true );
+			$enabled = get_post_meta( $item['id'], '_cs_sl_enabled', true );
 
 			// Only set up a discount if software licensing is enabled for the product.
 			if ( $enabled ) {
-				$discount = edd_sl_get_renewal_discount_percentage();
+				$discount = cs_sl_get_renewal_discount_percentage();
 			} else {
 				$discount = 0;
 			}
 
-			$cost     = (float) edd_sanitize_amount( $price - ( $price * ( $discount / 100 ) ) );
-			$period   = EDD_Recurring()->get_pretty_subscription_frequency( $item['options']['recurring']['period'] );
+			$cost     = (float) cs_sanitize_amount( $price - ( $price * ( $discount / 100 ) ) );
+			$period   = CS_Recurring()->get_pretty_subscription_frequency( $item['options']['recurring']['period'] );
 
 			// If the store is set to add tax on-top-of the price, add the taxes to the price.
-			if ( edd_use_taxes() && ! edd_prices_include_tax() ) {
-				$tax = $cost * ( edd_get_tax_rate() );
+			if ( cs_use_taxes() && ! cs_prices_include_tax() ) {
+				$tax = $cost * ( cs_get_tax_rate() );
 				$cost = $cost + $tax;
 			}
 
-			$cost = edd_currency_filter( edd_sanitize_amount( $cost ) );
+			$cost = cs_currency_filter( cs_sanitize_amount( $cost ) );
 
 			$message  = sprintf(
-				__( 'Your existing subscription to %s will be cancelled and replaced with a new subscription that automatically renews %s for %s.', 'edd-recurring' ),
+				__( 'Your existing subscription to %s will be cancelled and replaced with a new subscription that automatically renews %s for %s.', 'cs-recurring' ),
 				get_the_title( $item['id'] ),
 				$period,
 				$cost
 			);
 
-			echo '<div id="edd-recurring-sl-cancel-replace" class="edd-alert edd-alert-warn"><p class="edd_error">' . $message . '</p></div>';
+			echo '<div id="cs-recurring-sl-cancel-replace" class="cs-alert cs-alert-warn"><p class="cs_error">' . $message . '</p></div>';
 
 		}
 
@@ -1085,11 +1085,11 @@ class EDD_Recurring_Software_Licensing {
 	 * @param array $sub_args   Subscription query arguments to override the defaults.
 	 *
 	 * @since  2.4
-	 * @return EDD_Subscription|boolean
+	 * @return CS_Subscription|boolean
 	 */
 	private function get_subscription_of_license( $license_id = 0, $sub_args = array() ) {
 
-		$license     = edd_software_licensing()->get_license( $license_id );
+		$license     = cs_software_licensing()->get_license( $license_id );
 		$payment_ids = $license->payment_ids;
 
 		if( ! is_array( $payment_ids ) ) {
@@ -1145,7 +1145,7 @@ class EDD_Recurring_Software_Licensing {
 	public function cart_has_upgrade() {
 
 		$has_upgrade = false;
-		$items       = edd_get_cart_contents();
+		$items       = cs_get_cart_contents();
 
 		if(  is_array( $items ) ) {
 
@@ -1173,9 +1173,9 @@ class EDD_Recurring_Software_Licensing {
 	 */
 	public function free_trial_settings_notice( $download_id = 0 ) {
 
-		$display = edd_recurring()->has_free_trial( $download_id ) ? '' : ' style="display:none;"';
+		$display = cs_recurring()->has_free_trial( $download_id ) ? '' : ' style="display:none;"';
 
-		echo '<p id="edd-sl-free-trial-length-notice"' . $display . '>' . __( 'Note: license keys will remain valid for the duration of the free trial period. Once the free trial is over, the settings defined here determine the license lengths.', 'edd-recurring' ) . '</p>';
+		echo '<p id="cs-sl-free-trial-length-notice"' . $display . '>' . __( 'Note: license keys will remain valid for the duration of the free trial period. Once the free trial is over, the settings defined here determine the license lengths.', 'cs-recurring' ) . '</p>';
 
 	}
 
@@ -1183,16 +1183,16 @@ class EDD_Recurring_Software_Licensing {
 	 * Updates the expiration date on a license key when the renewal date of a subscription is checked
 	 * and synced with a merchant processor
 	 *
-	 * See https://github.com/easydigitaldownloads/edd-recurring/issues/614
+	 * See https://github.com/commercestore/cs-recurring/issues/614
 	 *
 	 * @since  2.6.6
 	 * @return void
 	 */
-	public function maybe_sync_license_expiration_on_check_expiration( EDD_Subscription $subscription, $expiration ) {
+	public function maybe_sync_license_expiration_on_check_expiration( CS_Subscription $subscription, $expiration ) {
 
-		$license = edd_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
+		$license = cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
 
-		if ( is_a( $license, 'EDD_SL_License' ) ) {
+		if ( is_a( $license, 'CS_SL_License' ) ) {
 
 			// If the license expires today, we need to update it with the new date found for the subscription
 			if( strtotime( date( 'Y-n-d', $license->expiration ) ) <= strtotime( $expiration ) ) {
@@ -1214,28 +1214,28 @@ class EDD_Recurring_Software_Licensing {
 	/**
 	 * Rolls a license expiration date back when refunding a renewal payment
 	 *
-	 * See https://github.com/easydigitaldownloads/edd-recurring/issues/559
+	 * See https://github.com/commercestore/cs-recurring/issues/559
 	 *
 	 * @since  2.7
-	 * @param \EDD_Payment|int $payment      The original order ID in EDD 3.0; an EDD_Payment object in 2.x.
-	 * @param int              $refund_id    The refund order ID (EDD 3.0).
-	 * @param bool             $all_refunded Whether the entire order was refunded (EDD 3.0).
+	 * @param \CS_Payment|int $payment      The original order ID in CS 3.0; an CS_Payment object in 2.x.
+	 * @param int              $refund_id    The refund order ID (CS 3.0).
+	 * @param bool             $all_refunded Whether the entire order was refunded (CS 3.0).
 	 * @return void
 	 */
 	public function rollback_expiration_on_renewal_refund( $payment, $refund_id = null, $all_refunded = true ) {
 
-		if ( function_exists( 'edd_get_order_meta' ) ) {
-			$is_renewal      = edd_get_order_meta( $payment, '_edd_sl_is_renewal', true );
-			$subscription_id = edd_get_order_meta( $payment, 'subscription_id', true );
+		if ( function_exists( 'cs_get_order_meta' ) ) {
+			$is_renewal      = cs_get_order_meta( $payment, '_cs_sl_is_renewal', true );
+			$subscription_id = cs_get_order_meta( $payment, 'subscription_id', true );
 
 			// Do not do anything if the original order is not a renewal or if the entire order was not refunded.
 			if ( ! $is_renewal || ! $subscription_id || ! $all_refunded ) {
 				return;
 			}
 		}
-		if ( $payment instanceof EDD_Payment ) {
-			$is_renewal      = edd_get_payment_meta( $payment->ID, '_edd_sl_is_renewal', true );
-			$subscription_id = edd_get_payment_meta( $payment->ID, 'subscription_id', true );
+		if ( $payment instanceof CS_Payment ) {
+			$is_renewal      = cs_get_payment_meta( $payment->ID, '_cs_sl_is_renewal', true );
+			$subscription_id = cs_get_payment_meta( $payment->ID, 'subscription_id', true );
 			if ( ! $is_renewal || ! $subscription_id ) {
 				return;
 			}
@@ -1245,14 +1245,14 @@ class EDD_Recurring_Software_Licensing {
 			return;
 		}
 
-		$licenses = edd_software_licensing()->get_licenses_of_purchase( $id );
+		$licenses = cs_software_licensing()->get_licenses_of_purchase( $id );
 		if ( ! $licenses ) {
 			return;
 		}
 
 		foreach ( $licenses as $license ) {
 
-			if ( ! is_a( $license, 'EDD_SL_License' ) ) {
+			if ( ! is_a( $license, 'CS_SL_License' ) ) {
 				continue;
 			}
 
@@ -1263,11 +1263,11 @@ class EDD_Recurring_Software_Licensing {
 	/**
 	 * If this is a renewal and the old subscription is `failing`, cancel it.
 	 *
-	 * @link https://github.com/easydigitaldownloads/edd-recurring/issues/1288
+	 * @link https://github.com/commercestore/cs-recurring/issues/1288
 	 *
-	 * @param EDD_Subscription|false $subscription Newly created subscription object.
+	 * @param CS_Subscription|false $subscription Newly created subscription object.
 	 * @param array                  $sub_args     Gateway subscription arguments.
-	 * @param EDD_Recurring_Gateway  $gateway      Gateway object.
+	 * @param CS_Recurring_Gateway  $gateway      Gateway object.
 	 *
 	 * @since 2.10.2
 	 * @return void
@@ -1278,15 +1278,15 @@ class EDD_Recurring_Software_Licensing {
 			return;
 		}
 
-		$old_sub = new EDD_Subscription( $sub_args['old_subscription_id'] );
+		$old_sub = new CS_Subscription( $sub_args['old_subscription_id'] );
 		if ( 'failing' === $old_sub->status && $old_sub->can_cancel() ) {
-			$recurring = edd_recurring();
-			remove_action( 'edd_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
+			$recurring = cs_recurring();
+			remove_action( 'cs_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
 
 			$old_sub->cancel();
 
 			if ( $gateway->cancel_immediately( $old_sub ) ) {
-				$old_sub->add_note( sprintf( __( 'Subscription cancelled due to new subscription #%d created while renewing.', 'edd_sl' ), $subscription->id ) );
+				$old_sub->add_note( sprintf( __( 'Subscription cancelled due to new subscription #%d created while renewing.', 'cs_sl' ), $subscription->id ) );
 			}
 		}
 	}

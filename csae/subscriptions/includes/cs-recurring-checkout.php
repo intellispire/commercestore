@@ -9,17 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * This handles modification of the frontend checkout.
  *
- * Some methods introduced before 2.6 were moved here from the main EDD_Recurring class.
+ * Some methods introduced before 2.6 were moved here from the main CS_Recurring class.
  *
  * Note: there are many filters and helper methods that modify aspects of checkout as well,
  * but they are not included here due to many of them being used elsewhere and they
  * cannot be moved in order to maintain backwards compatibility.
  *
- * Look in the main EDD_Recurring class if you do not find the method you are looking for here.
+ * Look in the main CS_Recurring class if you do not find the method you are looking for here.
  *
  * @since  2.6
  */
-class EDD_Recurring_Checkout {
+class CS_Recurring_Checkout {
 
 	/**
 	 * Come alive!
@@ -40,30 +40,30 @@ class EDD_Recurring_Checkout {
 	public function init() {
 
 		// Maybe show subscription terms under purchase link.
-		add_action( 'edd_purchase_link_end', array( $this, 'show_single_terms_notice' ), 10, 2 );
-		add_action( 'edd_after_price_option', array( $this, 'show_variable_terms_notice' ), 10, 3 );
-		add_action( 'edd_after_price_options_list', array( $this, 'show_variable_custom_terms_notice' ), 11, 3 );
-		add_action( 'edd_checkout_cart_item_title_after', array( $this, 'show_terms_on_cart_item' ), 10, 1 );
+		add_action( 'cs_purchase_link_end', array( $this, 'show_single_terms_notice' ), 10, 2 );
+		add_action( 'cs_after_price_option', array( $this, 'show_variable_terms_notice' ), 10, 3 );
+		add_action( 'cs_after_price_options_list', array( $this, 'show_variable_custom_terms_notice' ), 11, 3 );
+		add_action( 'cs_checkout_cart_item_title_after', array( $this, 'show_terms_on_cart_item' ), 10, 1 );
 
 		// Maybe show signup fee under purchase link.
-		add_action( 'edd_purchase_link_end', array( $this, 'show_single_signup_fee_notice' ), 10, 2 );
-		add_action( 'edd_purchase_link_end', array( $this, 'show_single_custom_signup_fee_notice' ), 10, 2 );
-		add_action( 'edd_after_price_option', array( $this, 'show_variable_signup_fee_notice' ), 10, 3 );
-		add_action( 'edd_after_price_options_list', array( $this, 'show_multi_custom_signup_fee_notice' ), 11, 3 );
+		add_action( 'cs_purchase_link_end', array( $this, 'show_single_signup_fee_notice' ), 10, 2 );
+		add_action( 'cs_purchase_link_end', array( $this, 'show_single_custom_signup_fee_notice' ), 10, 2 );
+		add_action( 'cs_after_price_option', array( $this, 'show_variable_signup_fee_notice' ), 10, 3 );
+		add_action( 'cs_after_price_options_list', array( $this, 'show_multi_custom_signup_fee_notice' ), 11, 3 );
 
 		// Maybe show adjusted total on checkout for free trials.
-		add_action( 'edd_purchase_form_before_submit', array( $this, 'maybe_remove_total' ) );
-		add_action( 'edd_purchase_form_before_submit', array( $this, 'free_trial_total' ), 999 );
+		add_action( 'cs_purchase_form_before_submit', array( $this, 'maybe_remove_total' ) );
+		add_action( 'cs_purchase_form_before_submit', array( $this, 'free_trial_total' ), 999 );
 
 		// Accounts for showing the login form when auto register is enabled, and login forms aren't shown.
-		add_action( 'edd_purchase_form_before_register_login', array( $this, 'force_login_fields' ) );
+		add_action( 'cs_purchase_form_before_register_login', array( $this, 'force_login_fields' ) );
 
 		// Notify a user when a subscription failed to be purchased.
-		add_action( 'edd_payment_receipt_before', array( $this, 'display_failed_subscriptions' ), 10, 2 );
-		add_action( 'edd_retry_failed_subs', array( $this, 'process_add_failed' ) );
+		add_action( 'cs_payment_receipt_before', array( $this, 'display_failed_subscriptions' ), 10, 2 );
+		add_action( 'cs_retry_failed_subs', array( $this, 'process_add_failed' ) );
 
 		// Check email entered on checkout for repeat trial purchase attempt.
-		add_action( 'wp_ajax_nopriv_edd_recurring_check_repeat_trial', array( $this, 'check_repeat_trial' ) );
+		add_action( 'wp_ajax_nopriv_cs_recurring_check_repeat_trial', array( $this, 'check_repeat_trial' ) );
 
 	}
 
@@ -76,23 +76,23 @@ class EDD_Recurring_Checkout {
 	 * @return void
 	 */
 	public function force_login_fields() {
-		if ( isset( $_GET['edd-recurring-login'] ) && '1' === $_GET['edd-recurring-login'] ) {
+		if ( isset( $_GET['cs-recurring-login'] ) && '1' === $_GET['cs-recurring-login'] ) {
 			?>
-			<div class="edd-alert edd-alert-info">
-				<p><?php _e( 'An account was detected for your email. Please log in to continue your purchase.', 'edd-recurring' ); ?></p>
+			<div class="cs-alert cs-alert-info">
+				<p><?php _e( 'An account was detected for your email. Please log in to continue your purchase.', 'cs-recurring' ); ?></p>
 				<p>
-					<a href="<?php echo wp_lostpassword_url(); ?>" title="<?php _e( 'Lost Password', 'edd-recurring' ); ?>">
-						<?php _e( 'Lost Password?', 'edd-recurring' ); ?>
+					<a href="<?php echo wp_lostpassword_url(); ?>" title="<?php _e( 'Lost Password', 'cs-recurring' ); ?>">
+						<?php _e( 'Lost Password?', 'cs-recurring' ); ?>
 					</a>
 				</p>
 			</div>
 			<?php
-			$show_register_form = edd_get_option( 'show_register_form', 'none' ) ;
+			$show_register_form = cs_get_option( 'show_register_form', 'none' ) ;
 
 			if ( 'both' === $show_register_form || 'login' === $show_register_form ) {
 				return;
 			}
-			do_action( 'edd_purchase_form_login_fields' );
+			do_action( 'cs_purchase_form_login_fields' );
 		}
 	}
 
@@ -105,8 +105,8 @@ class EDD_Recurring_Checkout {
 	 * @return void
 	 */
 	public function display_failed_subscriptions( $payment, $receipt_args ) {
-		$payment              = edd_get_payment( $payment->ID );
-		$failed_subscriptions = $payment->get_meta( '_edd_recurring_failed_subscriptions', true );
+		$payment              = cs_get_payment( $payment->ID );
+		$failed_subscriptions = $payment->get_meta( '_cs_recurring_failed_subscriptions', true );
 
 		if ( empty( $failed_subscriptions ) ) {
 			return;
@@ -133,29 +133,29 @@ class EDD_Recurring_Checkout {
 		}
 		?>
 		<div class="eddr-failed-subscription-notice">
-			<div class="edd-alert edd-alert-warn">
+			<div class="cs-alert cs-alert-warn">
 				<p>
-					<strong><?php _e( 'Notice', 'edd-recurring' ); ?>:</strong> <?php _e( 'Your purchase is completed, but we encountered an issue while processing payments for the following items', 'edd-recurring' ); ?>:
+					<strong><?php _e( 'Notice', 'cs-recurring' ); ?>:</strong> <?php _e( 'Your purchase is completed, but we encountered an issue while processing payments for the following items', 'cs-recurring' ); ?>:
 				</p>
-				<p class="edd-recurring-failed-list">
+				<p class="cs-recurring-failed-list">
 					<?php foreach ( $failed_subscriptions as $key => $subscription ) : ?>
 						<span>&mdash;&nbsp;<strong><?php echo $subscription['subscription']['name']; ?></strong>: <?php echo $subscription['error']; ?></span>
 					<?php endforeach; ?>
 				</p>
 				<p>
-					<?php _e( 'The above items were removed from the purchase and you were not charged for them. You can attempt to repurchase them at your convenience. All other items were purchased successfully.', 'edd-recurring' ); ?>
+					<?php _e( 'The above items were removed from the purchase and you were not charged for them. You can attempt to repurchase them at your convenience. All other items were purchased successfully.', 'cs-recurring' ); ?>
 				</p>
 				<p>
-					<form id="edd-recurring-add-failed" class="edd-form" method="post">
+					<form id="cs-recurring-add-failed" class="cs-form" method="post">
 						<?php foreach ( $failed_subscriptions as $key => $subscription ) : ?>
 							<input type="hidden" name="failed-subs[<?php echo $key; ?>][id]" value="<?php echo $subscription['subscription']['id']; ?>" />
 							<?php if ( is_numeric( $subscription['subscription']['price_id'] ) ) : ?>
 								<input type="hidden" name="failed-subs[<?php echo $key; ?>][price_id]" value="<?php echo $subscription['subscription']['price_id']; ?>" />
 							<?php endif; ?>
 						<?php endforeach; ?>
-						<input type="submit" class="button" name="edd_recurring_add_failed" value="<?php _e( 'Try Again', 'edd-recurring' ); ?>"/>
-						<input type="hidden" name="edd_action" value="retry_failed_subs"/>
-						<?php wp_nonce_field( 'edd_retry_failed_subs_nonce', 'edd_retry_failed_subs' ); ?>
+						<input type="submit" class="button" name="cs_recurring_add_failed" value="<?php _e( 'Try Again', 'cs-recurring' ); ?>"/>
+						<input type="hidden" name="cs_action" value="retry_failed_subs"/>
+						<?php wp_nonce_field( 'cs_retry_failed_subs_nonce', 'cs_retry_failed_subs' ); ?>
 					</form>
 				</p>
 			</div>
@@ -172,23 +172,23 @@ class EDD_Recurring_Checkout {
 	 * @return void
 	 */
 	public function show_single_signup_fee_notice( $download_id, $args ) {
-		if ( ! edd_recurring()->is_recurring( $download_id ) ) {
+		if ( ! cs_recurring()->is_recurring( $download_id ) ) {
 			return;
 		}
 
-		$show_notice = edd_get_option( 'recurring_show_signup_fee_notice', false );
+		$show_notice = cs_get_option( 'recurring_show_signup_fee_notice', false );
 		if ( false === $show_notice ) {
 			return;
 		}
 
-		$download = new EDD_Download( $download_id );
+		$download = new CS_Download( $download_id );
 
 		if ( $download->has_variable_prices() ) {
 
 			$prices               = $download->get_prices();
 			$variable_signup_fees = array();
 			foreach ( $prices as $price_id => $price ) {
-				$variable_signup_fees[ $price_id ] = edd_recurring()->get_signup_fee( $price_id, $download_id );
+				$variable_signup_fees[ $price_id ] = cs_recurring()->get_signup_fee( $price_id, $download_id );
 			}
 
 			$high_fee = max( $variable_signup_fees );
@@ -203,7 +203,7 @@ class EDD_Recurring_Checkout {
 
 		} else {
 
-			$signup_fee = edd_recurring()->get_signup_fee_single( $download_id );
+			$signup_fee = cs_recurring()->get_signup_fee_single( $download_id );
 
 		}
 
@@ -212,15 +212,15 @@ class EDD_Recurring_Checkout {
 		}
 
 		ob_start();
-		$formatted_price = edd_currency_filter( edd_format_amount( $signup_fee, edd_currency_decimal_filter() ) );
-		$text = edd_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'edd-recurring' ) );
+		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice">
-			<em><?php printf( __( 'With %s %s', 'edd-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
-		echo apply_filters( 'edd_recurring_single_signup_notice', ob_get_clean(), $download, $args );
+		echo apply_filters( 'cs_recurring_single_signup_notice', ob_get_clean(), $download, $args );
 	}
 
 	/**
@@ -233,35 +233,35 @@ class EDD_Recurring_Checkout {
 	 */
 	public function show_single_custom_signup_fee_notice( $download_id, $args ) {
 
-		if ( ! defined( 'EDD_CUSTOM_PRICES' ) ) {
+		if ( ! defined( 'CS_CUSTOM_PRICES' ) ) {
 			return;
 		}
 
-		$show_notice = edd_get_option( 'recurring_show_signup_fee_notice', false );
+		$show_notice = cs_get_option( 'recurring_show_signup_fee_notice', false );
 		if ( false === $show_notice ) {
 			return;
 		}
 
-		if ( ! edd_recurring()->is_custom_recurring( $download_id ) ) {
+		if ( ! cs_recurring()->is_custom_recurring( $download_id ) ) {
 			return;
 		}
 
-		$signup_fee = edd_recurring()->get_custom_signup_fee( $download_id );
+		$signup_fee = cs_recurring()->get_custom_signup_fee( $download_id );
 
 		if ( empty( $signup_fee ) ) {
 			return;
 		}
 
 		ob_start();
-		$formatted_price = edd_currency_filter( edd_format_amount( $signup_fee, edd_currency_decimal_filter() ) );
-		$text = edd_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'edd-recurring' ) );
+		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice eddr-custom-signup-fee-notice" style="display:none">
-			<em><?php printf( __( 'With %s %s', 'edd-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
-		echo apply_filters( 'edd_recurring_custom_single_signup_notice', ob_get_clean(), $download_id, $args );
+		echo apply_filters( 'cs_recurring_custom_single_signup_notice', ob_get_clean(), $download_id, $args );
 	}
 
 	/**
@@ -274,30 +274,30 @@ class EDD_Recurring_Checkout {
 	 * @return void
 	 */
 	public function show_variable_signup_fee_notice( $price_id, $price, $download_id ) {
-		if ( ! edd_recurring()->is_price_recurring( $download_id, $price_id ) ) {
+		if ( ! cs_recurring()->is_price_recurring( $download_id, $price_id ) ) {
 			return;
 		}
 
-		$show_notice = edd_get_option( 'recurring_show_signup_fee_notice', false );
+		$show_notice = cs_get_option( 'recurring_show_signup_fee_notice', false );
 		if ( false === $show_notice ) {
 			return;
 		}
 
-		$signup_fee = edd_recurring()->get_signup_fee( $price_id, $download_id );
+		$signup_fee = cs_recurring()->get_signup_fee( $price_id, $download_id );
 		if ( empty( $signup_fee ) ) {
 			return;
 		}
 
 		ob_start();
-		$formatted_price = edd_currency_filter( edd_format_amount( $signup_fee, edd_currency_decimal_filter() ) );
-		$text = edd_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'edd-recurring' ) );
+		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice variable-prices">
-			<em><?php printf( __( 'With %s %s', 'edd-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
-		echo apply_filters( 'edd_recurring_multi_signup_notice', ob_get_clean(), $download_id, $price_id );
+		echo apply_filters( 'cs_recurring_multi_signup_notice', ob_get_clean(), $download_id, $price_id );
 	}
 
 	/**
@@ -311,30 +311,30 @@ class EDD_Recurring_Checkout {
 	 */
 	public function show_multi_custom_signup_fee_notice( $download_id, $prices, $type ) {
 
-		$show_notice = edd_get_option( 'recurring_show_signup_fee_notice', false );
+		$show_notice = cs_get_option( 'recurring_show_signup_fee_notice', false );
 		if ( false === $show_notice ) {
 			return;
 		}
 
-		if ( ! edd_recurring()->is_custom_recurring( $download_id ) ) {
+		if ( ! cs_recurring()->is_custom_recurring( $download_id ) ) {
 			return;
 		}
 
-		$signup_fee = edd_recurring()->get_custom_signup_fee( $download_id );
+		$signup_fee = cs_recurring()->get_custom_signup_fee( $download_id );
 		if ( empty( $signup_fee ) ) {
 			return;
 		}
 
 		ob_start();
-		$formatted_price = edd_currency_filter( edd_format_amount( $signup_fee, edd_currency_decimal_filter() ) );
-		$text = edd_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'edd-recurring' ) );
+		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice variable-prices eddr-custom-signup-fee-notice" style="display:none">
-			<em><?php printf( __( 'With %s %s', 'edd-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
-		echo apply_filters( 'edd_recurring_multi_custom_signup_notice', ob_get_clean(), $download_id, $prices, $type );
+		echo apply_filters( 'cs_recurring_multi_custom_signup_notice', ob_get_clean(), $download_id, $prices, $type );
 	}
 
 	/**
@@ -346,29 +346,29 @@ class EDD_Recurring_Checkout {
 	 * @return void
 	 */
 	public function show_single_terms_notice( $download_id, $args ) {
-		$is_recurring     = edd_recurring()->is_recurring( $download_id );
-		$custom_recurring = defined( 'EDD_CUSTOM_PRICES' ) && edd_recurring()->is_custom_recurring( $download_id );
+		$is_recurring     = cs_recurring()->is_recurring( $download_id );
+		$custom_recurring = defined( 'CS_CUSTOM_PRICES' ) && cs_recurring()->is_custom_recurring( $download_id );
 		if ( ! $is_recurring && ! $custom_recurring ) {
 			return;
 		}
 
-		$show_notice = edd_get_option( 'recurring_show_terms_notice', false );
+		$show_notice = cs_get_option( 'recurring_show_terms_notice', false );
 		if ( false === $show_notice ) {
 			return;
 		}
 
-		if ( edd_has_variable_prices( $download_id ) ) {
+		if ( cs_has_variable_prices( $download_id ) ) {
 			return;
 		}
 
 		ob_start();
 		if ( $is_recurring ) :
 			$args = array(
-				'period' => edd_recurring()->get_period_single( $download_id ),
-				'times'  => edd_recurring()->get_times_single( $download_id ),
+				'period' => cs_recurring()->get_period_single( $download_id ),
+				'times'  => cs_recurring()->get_times_single( $download_id ),
 			);
-			if ( edd_recurring()->has_free_trial( $download_id ) && ( ! edd_get_option( 'recurring_one_time_trials' ) || ! edd_recurring()->has_trialed( $download_id ) ) ) {
-				$trial                = edd_recurring()->get_trial_period( $download_id );
+			if ( cs_recurring()->has_free_trial( $download_id ) && ( ! cs_get_option( 'recurring_one_time_trials' ) || ! cs_recurring()->has_trialed( $download_id ) ) ) {
+				$trial                = cs_recurring()->get_trial_period( $download_id );
 				$args['trial_period'] = $trial['unit'];
 				$args['trial_unit']   = $trial['quantity'];
 			}
@@ -386,8 +386,8 @@ class EDD_Recurring_Checkout {
 
 		if ( $custom_recurring ) :
 			$custom_args = array(
-				'period' => edd_recurring()->get_custom_period( $download_id ),
-				'times'  => edd_recurring()->get_custom_times( $download_id ),
+				'period' => cs_recurring()->get_custom_period( $download_id ),
+				'times'  => cs_recurring()->get_custom_times( $download_id ),
 			);
 			if ( ! empty( $args['trial_period'] ) ) {
 				$custom_args['trial_period'] = $args['trial_period'];
@@ -404,7 +404,7 @@ class EDD_Recurring_Checkout {
 			<?php
 		endif;
 
-		echo apply_filters( 'edd_recurring_single_terms_notice', ob_get_clean(), $download_id, $args );
+		echo apply_filters( 'cs_recurring_single_terms_notice', ob_get_clean(), $download_id, $args );
 	}
 
 	/**
@@ -417,29 +417,29 @@ class EDD_Recurring_Checkout {
 	 * @return void
 	 */
 	public function show_variable_terms_notice( $price_id, $price, $download_id ) {
-		if ( ! edd_recurring()->is_price_recurring( $download_id, $price_id ) ) {
+		if ( ! cs_recurring()->is_price_recurring( $download_id, $price_id ) ) {
 			return;
 		}
 
-		$show_notice = edd_get_option( 'recurring_show_terms_notice', false );
+		$show_notice = cs_get_option( 'recurring_show_terms_notice', false );
 		if ( false === $show_notice ) {
 			return;
 		}
 
-		$period        = edd_recurring()->get_period( $price_id, $download_id );
-		$period_single = edd_recurring()->get_pretty_singular_subscription_frequency( $period );
-		$times         = edd_recurring()->get_times( $price_id, $download_id );
+		$period        = cs_recurring()->get_period( $price_id, $download_id );
+		$period_single = cs_recurring()->get_pretty_singular_subscription_frequency( $period );
+		$times         = cs_recurring()->get_times( $price_id, $download_id );
 
 		$args = array(
-			'period' => edd_recurring()->get_period( $price_id, $download_id ),
-			'times'  => edd_recurring()->get_times( $price_id, $download_id ),
+			'period' => cs_recurring()->get_period( $price_id, $download_id ),
+			'times'  => cs_recurring()->get_times( $price_id, $download_id ),
 		);
 
-		if ( ! empty( $price['trial-quantity'] ) && ! empty( $price['trial-unit'] ) && ( ! edd_get_option( 'recurring_one_time_trials' ) || ! edd_recurring()->has_trialed( $download_id ) ) ) {
+		if ( ! empty( $price['trial-quantity'] ) && ! empty( $price['trial-unit'] ) && ( ! cs_get_option( 'recurring_one_time_trials' ) || ! cs_recurring()->has_trialed( $download_id ) ) ) {
 			$args['trial_period'] = $price['trial-unit'];
 			$args['trial_unit']   = $price['trial-quantity'];
-		} elseif ( edd_recurring()->has_free_trial( $download_id, $price_id ) && ( ! edd_get_option( 'recurring_one_time_trials' ) || ! edd_recurring()->has_trialed( $download_id ) ) ) {
-			$args['trial_period'] = edd_recurring()->get_trial_period( $download_id, $price_id );
+		} elseif ( cs_recurring()->has_free_trial( $download_id, $price_id ) && ( ! cs_get_option( 'recurring_one_time_trials' ) || ! cs_recurring()->has_trialed( $download_id ) ) ) {
+			$args['trial_period'] = cs_recurring()->get_trial_period( $download_id, $price_id );
 			$args['trial_unit']   = $trial['quantity'];
 
 		}
@@ -454,7 +454,7 @@ class EDD_Recurring_Checkout {
 			</em>
 		</p>
 		<?php
-		echo apply_filters( 'edd_recurring_multi_terms_notice', ob_get_clean(), $download_id, $price_id );
+		echo apply_filters( 'cs_recurring_multi_terms_notice', ob_get_clean(), $download_id, $price_id );
 	}
 
 	/**
@@ -468,30 +468,30 @@ class EDD_Recurring_Checkout {
 	 */
 	public function show_variable_custom_terms_notice( $download_id, $prices, $type ) {
 
-		$show_notice = edd_get_option( 'recurring_show_terms_notice', false );
+		$show_notice = cs_get_option( 'recurring_show_terms_notice', false );
 		if ( false === $show_notice ) {
 			return;
 		}
 
-		if ( ! defined( 'EDD_CUSTOM_PRICES' ) ) {
+		if ( ! defined( 'CS_CUSTOM_PRICES' ) ) {
 
 			return;
 
 		}
 
-		if ( ! edd_recurring()->is_custom_recurring( $download_id ) ) {
+		if ( ! cs_recurring()->is_custom_recurring( $download_id ) ) {
 
 			return;
 
 		}
 
 		$args = array(
-			'period' => edd_recurring()->get_custom_period( $download_id ),
-			'times'  => edd_recurring()->get_custom_times( $download_id ),
+			'period' => cs_recurring()->get_custom_period( $download_id ),
+			'times'  => cs_recurring()->get_custom_times( $download_id ),
 		);
 
-		if ( edd_recurring()->has_free_trial( $download_id ) && ( ! edd_get_option( 'recurring_one_time_trials' ) || ! edd_recurring()->has_trialed( $download_id ) ) ) {
-			$trial                = edd_recurring()->get_trial_period( $download_id );
+		if ( cs_recurring()->has_free_trial( $download_id ) && ( ! cs_get_option( 'recurring_one_time_trials' ) || ! cs_recurring()->has_trialed( $download_id ) ) ) {
+			$trial                = cs_recurring()->get_trial_period( $download_id );
 			$args['trial_period'] = $trial['unit'];
 			$args['trial_unit']   = $args['trial_period']['quantity'];
 		}
@@ -508,7 +508,7 @@ class EDD_Recurring_Checkout {
 		</p>
 		<?php
 
-		echo apply_filters( 'edd_recurring_custom_terms_notice', ob_get_clean(), $download_id, $prices, $type );
+		echo apply_filters( 'cs_recurring_custom_terms_notice', ob_get_clean(), $download_id, $prices, $type );
 	}
 
 	/**
@@ -520,7 +520,7 @@ class EDD_Recurring_Checkout {
 	 */
 	public function show_terms_on_cart_item( $item ) {
 
-		$show_terms_on_checkout = apply_filters( 'edd_recurring_show_terms_on_cart_item', true, $item );
+		$show_terms_on_checkout = apply_filters( 'cs_recurring_show_terms_on_cart_item', true, $item );
 
 		if ( false === $show_terms_on_checkout ) {
 			return;
@@ -536,7 +536,7 @@ class EDD_Recurring_Checkout {
 			'period' => $item['options']['recurring']['period'],
 			'times'  => $item['options']['recurring']['times'],
 		);
-		if ( ! empty( $item['options']['recurring']['trial_period']['unit'] ) && ! empty( $item['options']['recurring']['trial_period']['quantity'] ) && ( ! edd_get_option( 'recurring_one_time_trials' ) || ! edd_recurring()->has_trialed( $download_id ) ) ) {
+		if ( ! empty( $item['options']['recurring']['trial_period']['unit'] ) && ! empty( $item['options']['recurring']['trial_period']['quantity'] ) && ( ! cs_get_option( 'recurring_one_time_trials' ) || ! cs_recurring()->has_trialed( $download_id ) ) ) {
 			$args['trial_period'] = $item['options']['recurring']['trial_period']['unit'];
 			$args['trial_unit']   = $item['options']['recurring']['trial_period']['quantity'];
 		}
@@ -552,7 +552,7 @@ class EDD_Recurring_Checkout {
 		</p>
 		<?php
 
-		echo apply_filters( 'edd_recurring_cart_item_notice', ob_get_clean(), $item );
+		echo apply_filters( 'cs_recurring_cart_item_notice', ob_get_clean(), $item );
 	}
 
 	/**
@@ -575,11 +575,11 @@ class EDD_Recurring_Checkout {
 
 		if ( empty( $details['times'] ) ) {
 			/* translators: the billing period */
-			$output = sprintf( __( 'Billed once per %1$s until cancelled', 'edd-recurring' ), $this->get_frequency_label( $details['period'] ) );
+			$output = sprintf( __( 'Billed once per %1$s until cancelled', 'cs-recurring' ), $this->get_frequency_label( $details['period'] ) );
 			if ( $details['trial_period'] && $details['trial_unit'] ) {
 				$output = sprintf(
 					/* translators: 1. the billing period 2. the number of trial units 3. the trial period unit (week, month) */
-					__( 'Billed once per %1$s until cancelled, after a %2$s %3$s free trial', 'edd-recurring' ),
+					__( 'Billed once per %1$s until cancelled, after a %2$s %3$s free trial', 'cs-recurring' ),
 					$this->get_frequency_label( $details['period'] ),
 					$details['trial_unit'],
 					$this->get_frequency_label( $details['trial_period'] )
@@ -592,7 +592,7 @@ class EDD_Recurring_Checkout {
 					'Billed once per %1$s, %2$s time',
 					'Billed once per %1$s, %2$s times',
 					$details['times'],
-					'edd-recurring'
+					'cs-recurring'
 				),
 				$this->get_frequency_label( $details['period'] ),
 				$details['times']
@@ -604,7 +604,7 @@ class EDD_Recurring_Checkout {
 						'Billed once per %1$s, %2$s time, after a %3$s %4$s free trial',
 						'Billed once per %1$s, %2$s times, after a %3$s %4$s free trial',
 						$details['times'],
-						'edd-recurring'
+						'cs-recurring'
 					),
 					$this->get_frequency_label( $details['period'] ),
 					$details['times'],
@@ -630,22 +630,22 @@ class EDD_Recurring_Checkout {
 		// Format period details
 		switch ( $period ) {
 			case 'day':
-				$frequency = _nx( 'day', 'days', $count, 'subscription term', 'edd-recurring' );
+				$frequency = _nx( 'day', 'days', $count, 'subscription term', 'cs-recurring' );
 				break;
 			case 'week':
-				$frequency = _nx( 'week', 'weeks', $count, 'subscription term', 'edd-recurring' );
+				$frequency = _nx( 'week', 'weeks', $count, 'subscription term', 'cs-recurring' );
 				break;
 			case 'month':
-				$frequency = _nx( 'month', 'months', $count, 'subscription term', 'edd-recurring' );
+				$frequency = _nx( 'month', 'months', $count, 'subscription term', 'cs-recurring' );
 				break;
 			case 'quarter':
-				$frequency = _x( 'quarter', 'subscription term', 'edd-recurring' );
+				$frequency = _x( 'quarter', 'subscription term', 'cs-recurring' );
 				break;
 			case 'semi-year':
-				$frequency = _x( 'six months', 'subscription term', 'edd-recurring' );
+				$frequency = _x( 'six months', 'subscription term', 'cs-recurring' );
 				break;
 			case 'year':
-				$frequency = _nx( 'year', 'years', $count, 'subscription term', 'edd-recurring' );
+				$frequency = _nx( 'year', 'years', $count, 'subscription term', 'cs-recurring' );
 				break;
 			default:
 				$frequency = $period;
@@ -663,11 +663,11 @@ class EDD_Recurring_Checkout {
 	 */
 	public function maybe_remove_total() {
 
-		if ( ! edd_recurring()->cart_has_free_trial() ) {
+		if ( ! cs_recurring()->cart_has_free_trial() ) {
 			return;
 		}
 
-		remove_action( 'edd_purchase_form_before_submit', 'edd_checkout_final_total', 999 );
+		remove_action( 'cs_purchase_form_before_submit', 'cs_checkout_final_total', 999 );
 	}
 
 	/**
@@ -678,16 +678,16 @@ class EDD_Recurring_Checkout {
 	 */
 	public function free_trial_total() {
 
-		if ( ! edd_recurring()->cart_has_free_trial() ) {
+		if ( ! cs_recurring()->cart_has_free_trial() ) {
 			return;
 		}
 
 ?>
-		<p id="edd_final_total_wrap">
-			<strong><?php _e( 'Total Due Today:', 'edd-recurring' ); ?></strong>
-			<span class="edd_recurring_trial_total"><?php echo edd_currency_filter( edd_format_amount( 0.00 ) ); ?></span>
-			<span class="edd_recurring_trial_total_sep">&ndash;</span>
-			<span class="edd_recurring_trial_total_note"><?php _e( 'Your account will be automatically charged when the free trial is completed.', 'edd-recurring' ); ?></span>
+		<p id="cs_final_total_wrap">
+			<strong><?php _e( 'Total Due Today:', 'cs-recurring' ); ?></strong>
+			<span class="cs_recurring_trial_total"><?php echo cs_currency_filter( cs_format_amount( 0.00 ) ); ?></span>
+			<span class="cs_recurring_trial_total_sep">&ndash;</span>
+			<span class="cs_recurring_trial_total_note"><?php _e( 'Your account will be automatically charged when the free trial is completed.', 'cs-recurring' ); ?></span>
 		</p>
 <?php
 	}
@@ -699,14 +699,14 @@ class EDD_Recurring_Checkout {
 	 * @return void
 	 */
 	public function process_add_failed() {
-		if ( empty( $_POST['edd_recurring_add_failed'] ) ) {
+		if ( empty( $_POST['cs_recurring_add_failed'] ) ) {
 			return;
 		}
 		if ( ! is_user_logged_in() ) {
 			return;
 		}
-		if ( ! wp_verify_nonce( $_POST['edd_retry_failed_subs'], 'edd_retry_failed_subs_nonce' ) ) {
-			wp_die( __( 'Nonce verification failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 403 ) );
+		if ( ! wp_verify_nonce( $_POST['cs_retry_failed_subs'], 'cs_retry_failed_subs_nonce' ) ) {
+			wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
 		}
 
 		$failed_subs = $_POST['failed-subs'];
@@ -721,10 +721,10 @@ class EDD_Recurring_Checkout {
 				$options['price_id'] = $sub['price_id'];
 			}
 
-			edd_add_to_cart( absint( $sub['id'] ), $options );
+			cs_add_to_cart( absint( $sub['id'] ), $options );
 		}
 
-		wp_redirect( edd_get_checkout_uri() ); exit;
+		wp_redirect( cs_get_checkout_uri() ); exit;
 	}
 
 	public function check_repeat_trial() {
@@ -744,14 +744,14 @@ class EDD_Recurring_Checkout {
 		if ( ! empty( $download_ids ) ) {
 			foreach( $download_ids as $download_id ) {
 
-				if ( edd_recurring()->has_trialed( $download_id, $email ) ) {
+				if ( cs_recurring()->has_trialed( $download_id, $email ) ) {
 
 					if ( ! empty( $message ) ) {
 						$message .= '<br/>';
 					}
 
 					$message .= sprintf(
-						__( 'You have already used the free trial for <strong>%s</strong>. Please log into your account to complete the purchase. You will be charged immediately.', 'edd-recurring' ),
+						__( 'You have already used the free trial for <strong>%s</strong>. Please log into your account to complete the purchase. You will be charged immediately.', 'cs-recurring' ),
 						get_the_title( $download_id )
 					);
 				}

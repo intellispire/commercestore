@@ -5,14 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-global $edd_recurring_manual;
+global $cs_recurring_manual;
 
-class EDD_Recurring_Manual_Payments extends EDD_Recurring_Gateway {
+class CS_Recurring_Manual_Payments extends CS_Recurring_Gateway {
 
 	public function init() {
 
 		$this->id = 'manual';
-		$this->friendly_name = __( 'Manual', 'edd-recurring' );
+		$this->friendly_name = __( 'Manual', 'cs-recurring' );
 
 	}
 
@@ -59,4 +59,4 @@ class EDD_Recurring_Manual_Payments extends EDD_Recurring_Gateway {
 	}
 
 }
-$edd_recurring_manual = new EDD_Recurring_Manual_Payments;
+$cs_recurring_manual = new CS_Recurring_Manual_Payments;

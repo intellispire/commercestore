@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Integrates EDD Recurring with the EDD Invoices extension
+ * Integrates CS Recurring with the CS Invoices extension
  *
  * @since v2.5.3
  */
-class EDD_Recurring_Invoices {
+class CS_Recurring_Invoices {
 
 
 	/**
@@ -16,15 +16,15 @@ class EDD_Recurring_Invoices {
 	 */
 	public function __construct() {
 
-		if ( ! class_exists( 'EDDInvoices' ) ) {
+		if ( ! class_exists( 'CSInvoices' ) ) {
 			return;
 		}
 
-		add_filter( 'edd_invoices_acceptable_payment_statuses', array( $this, 'add_acceptable_payment_statuses' ), 10, 1 );
+		add_filter( 'cs_invoices_acceptable_payment_statuses', array( $this, 'add_acceptable_payment_statuses' ), 10, 1 );
 	}
 
 	/**
-	 * Add the payment statuses created and used by Recurring to the list of acceptable statuses when EDD Invoices is deciding if it should show the "Generate Invoice" option.
+	 * Add the payment statuses created and used by Recurring to the list of acceptable statuses when CS Invoices is deciding if it should show the "Generate Invoice" option.
 	 *
 	 * @since  2.5.3
 	 * @param  array $acceptable_statuses  The array containing all of the acceptable payment statuses.
@@ -32,7 +32,7 @@ class EDD_Recurring_Invoices {
 	 */
 	public function add_acceptable_payment_statuses( $acceptable_statuses ) {
 
-		$acceptable_statuses[] = 'edd_subscription';
+		$acceptable_statuses[] = 'cs_subscription';
 		
 		return $acceptable_statuses;
 	}

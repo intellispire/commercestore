@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  2.4
  */
-class EDD_Recurring_Subscriber extends EDD_Customer {
+class CS_Recurring_Subscriber extends CS_Customer {
 
 	private $subs_db;
 
@@ -25,7 +25,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 	 */
 	function __construct( $_id_or_email = false, $by_user_id = false ) {
 		parent::__construct( $_id_or_email, $by_user_id );
-		$this->subs_db = new EDD_Subscriptions_DB;
+		$this->subs_db = new CS_Subscriptions_DB;
 	}
 
 	/**
@@ -52,7 +52,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 
 		}
 
-		return apply_filters( 'edd_recurring_has_active_product_subscription', $ret, $product_id, $this );
+		return apply_filters( 'cs_recurring_has_active_product_subscription', $ret, $product_id, $this );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 		$subs = $this->get_subscriptions( $product_id );
 		$ret  = ! empty( $subs );
 
-		return apply_filters( 'edd_recurring_has_product_subscription', $ret, $product_id, $this );
+		return apply_filters( 'cs_recurring_has_product_subscription', $ret, $product_id, $this );
 	}
 
 	/**
@@ -91,7 +91,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 			}
 		}
 
-		return apply_filters( 'edd_recurring_has_active_subscription', $ret, $this );
+		return apply_filters( 'cs_recurring_has_active_subscription', $ret, $this );
 	}
 
 	/**
@@ -106,7 +106,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 	public function has_trialed( $product_id = 0 ) {
 
 		$ret    = false;
-		$trials = (array) $this->get_meta( 'edd_recurring_trials', false );
+		$trials = (array) $this->get_meta( 'cs_recurring_trials', false );
 
 		if( ! empty( $product_id ) ) {
 			$ret = in_array( $product_id, $trials );
@@ -114,7 +114,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 			$ret = ! empty( $trials );
 		}
 
-		return apply_filters( 'edd_recurring_has_trialed', $ret, $product_id, $this );
+		return apply_filters( 'cs_recurring_has_trialed', $ret, $product_id, $this );
 	}
 
 	/**
@@ -122,7 +122,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 	 *
 	 * @since 2.4
 	 * @param array $args
-	 * @return EDD_Subscription|false
+	 * @return CS_Subscription|false
 	 */
 	public function add_subscription( $args = array() ) {
 
@@ -140,7 +140,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 
 		$args['customer_id'] = $this->id;
 
-		$subscription = new EDD_Subscription();
+		$subscription = new CS_Subscription();
 
 		return $subscription->create( $args );
 
@@ -168,7 +168,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 			return false;
 		}
 
-		$subscription = new EDD_Subscription( $args['subscription_id'] );
+		$subscription = new CS_Subscription( $args['subscription_id'] );
 
 		if ( empty( $subscription ) ) {
 			return false;
@@ -185,11 +185,11 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 	 *
 	 * @param int $subscription_id
 	 * @since 2.4
-	 * @return object EDD_Subscription
+	 * @return object CS_Subscription
 	 */
 	public function get_subscription( $subscription_id = 0 ) {
 
-		$sub = new EDD_Subscription( $subscription_id );
+		$sub = new CS_Subscription( $subscription_id );
 
 		if( (int) $sub->customer_id !== (int) $this->id ) {
 			return false;
@@ -203,7 +203,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 	 *
 	 * @since 2.4
 	 * @param string $profile
-	 * @return object EDD_Subscription
+	 * @return object CS_Subscription
 	 */
 	public function get_subscription_by_profile_id( $profile_id = '' ) {
 
@@ -211,7 +211,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 			return false;
 		}
 
-		$sub = new EDD_Subscription( $profile_id, true );
+		$sub = new CS_Subscription( $profile_id, true );
 
 		if( (int) $sub->customer_id !== (int) $this->id ) {
 			return false;
@@ -264,8 +264,8 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 		$user = new WP_User( $this->user_id );
 
 		if ( $user ) {
-			$user->add_role( 'edd_subscriber' );
-			do_action( 'edd_recurring_set_as_subscriber', $this->user_id );
+			$user->add_role( 'cs_subscriber' );
+			do_action( 'cs_recurring_set_as_subscriber', $this->user_id );
 		}
 
 	}
@@ -281,13 +281,13 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 
 		} else {
 
-			if ( edd_has_variable_prices( $download_id ) ) {
+			if ( cs_has_variable_prices( $download_id ) ) {
 
-				$period = edd_recurring()->get_period( $price_id, $download_id );
+				$period = cs_recurring()->get_period( $price_id, $download_id );
 
 			} else {
 
-				$period = edd_recurring()->get_period_single( $download_id );
+				$period = cs_recurring()->get_period_single( $download_id );
 
 			}
 
@@ -340,7 +340,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 			$customer_id = empty( $recurring_ids ) ? false : $recurring_ids;
 		}
 
-		return apply_filters( 'edd_recurring_get_customer_id', $customer_id, $this );
+		return apply_filters( 'cs_recurring_get_customer_id', $customer_id, $this );
 
 	}
 
@@ -359,7 +359,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 			return false;
 		}
 
-		$recurring_id  = apply_filters( 'edd_recurring_set_customer_id', $recurring_id, $this->user_id );
+		$recurring_id  = apply_filters( 'cs_recurring_set_customer_id', $recurring_id, $this->user_id );
 		$recurring_ids = $this->get_recurring_customer_ids();
 
 		if( ! is_array( $recurring_ids ) ) {
@@ -378,7 +378,7 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 
 		$recurring_ids[ $gateway ] = $recurring_id;
 
-		return update_user_meta( $this->user_id, '_edd_recurring_id', $recurring_ids );
+		return update_user_meta( $this->user_id, '_cs_recurring_id', $recurring_ids );
 
 	}
 
@@ -389,8 +389,8 @@ class EDD_Recurring_Subscriber extends EDD_Customer {
 	 * @return mixed The profile IDs
 	 */
 	public function get_recurring_customer_ids() {
-		$ids = get_user_meta( $this->user_id, '_edd_recurring_id', true );
-		return apply_filters( 'edd_recurring_customer_ids', $ids, $this );
+		$ids = get_user_meta( $this->user_id, '_cs_recurring_id', true );
+		return apply_filters( 'cs_recurring_customer_ids', $ids, $this );
 	}
 
 

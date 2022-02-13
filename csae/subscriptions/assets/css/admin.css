@@ -1,52 +1,52 @@
-.edd-recurring-single,
-.edd_recurring_custom_wrap {
+.cs-recurring-single,
+.cs_recurring_custom_wrap {
 	margin-top: 18px;
 }
 
-.edd_recurring_custom_wrap legend {
+.cs_recurring_custom_wrap legend {
 	font-weight: 600;
 }
 
-.edd_recurring_custom_wrap p {
+.cs_recurring_custom_wrap p {
 	flex-basis: 100%;
 }
 
-/* These can be removed when EDD 3.0 is standard. */
-.edd-form-row {
+/* These can be removed when CS 3.0 is standard. */
+.cs-form-row {
 	display: flex;
 	gap: 0 !important;
 	padding-right: 0;
 }
 
-.edd-form-row .edd-form-group {
+.cs-form-row .cs-form-group {
 	margin-bottom: 12px;
 }
 
-.edd-form-row .edd-form-group:not(:last-child) {
+.cs-form-row .cs-form-group:not(:last-child) {
 	margin-right: 12px;
 }
 
-.edd-form-group__control--is-inline {
+.cs-form-group__control--is-inline {
 	display: inline-flex;
 	align-items: flex-end;
 }
 
-.edd-form-row {
+.cs-form-row {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 12px;
 }
 
-.edd-form-row__column {
+.cs-form-row__column {
 	display: inline-flex;
 	flex-direction: column;
 	justify-content: flex-end;
 }
 
-.edd-form-row .edd-form-group__label {
+.cs-form-row .cs-form-group__label {
 	margin-bottom: 0;
 }
 
-.edd-form-group__input.edd-price-field {
+.cs-form-group__input.cs-price-field {
 	padding: 0 8px !important;
 }

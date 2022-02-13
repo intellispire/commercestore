@@ -1,24 +1,24 @@
 <?php
 /**
  * Logging Functions
- * @package     EDD_Recurring
+ * @package     CS_Recurring
  * @subpackage  Logging
  * @copyright   Copyright (c) 2021, Sandhills Development, LLC
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.10.1
  */
 
-add_action( 'init', 'edd_recurring_register_log_type' );
+add_action( 'init', 'cs_recurring_register_log_type' );
 /**
- * Registers the EDD subscription log post type, and
- * edd_log_type taxonomy if it does not exist.
+ * Registers the CS subscription log post type, and
+ * cs_log_type taxonomy if it does not exist.
  *
  * @since 2.10.1
  * @return void
  */
-function edd_recurring_register_log_type() {
+function cs_recurring_register_log_type() {
 	register_post_type(
-		'edd_subscription_log',
+		'cs_subscription_log',
 		array(
 			'public'             => false,
 			'publicly_queryable' => false,
@@ -29,11 +29,11 @@ function edd_recurring_register_log_type() {
 			'has_archive'        => false,
 			'hierarchical'       => false,
 			'supports'           => array( 'title', 'editor' ),
-			'taxonomies'         => array( 'edd_log_type' ),
+			'taxonomies'         => array( 'cs_log_type' ),
 		)
 	);
 
-	if ( ! taxonomy_exists( 'edd_log_type' ) ) {
-		register_taxonomy( 'edd_log_type', 'edd_subscription_log', array( 'public' => false ) );
+	if ( ! taxonomy_exists( 'cs_log_type' ) ) {
+		register_taxonomy( 'cs_log_type', 'cs_subscription_log', array( 'public' => false ) );
 	}
 }

@@ -10,10 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  2.4
  */
-class EDD_Recurring_Reminders {
+class CS_Recurring_Reminders {
 
 	public function __construct() {
-		add_action( 'edd_recurring_daily_scheduled_events', array( $this, 'scheduled_reminders' ) );
+		add_action( 'cs_recurring_daily_scheduled_events', array( $this, 'scheduled_reminders' ) );
 	}
 
 	/**
@@ -25,9 +25,9 @@ class EDD_Recurring_Reminders {
 		$types = $this->get_notice_types();
 		$ret = array();
 		foreach ( $types as $type => $label ) {
-			$ret[ $type ] = edd_get_option( 'recurring_send_' . $type . '_reminders', false );
+			$ret[ $type ] = cs_get_option( 'recurring_send_' . $type . '_reminders', false );
 		}
-		return apply_filters( 'edd_recurring_send_reminders', $ret );
+		return apply_filters( 'cs_recurring_send_reminders', $ret );
 	}
 
 	/**
@@ -38,25 +38,25 @@ class EDD_Recurring_Reminders {
 	*/
 	public function get_notice_periods() {
 		$periods = array(
-			'today'    => __( 'The day of the renewal/expiration', 'edd-recurring' ),
-			'+1day'    => __( 'One day before renewal/expiration', 'edd-recurring' ),
-			'+2days'   => __( 'Two days before renewal/expiration', 'edd-recurring' ),
-			'+3days'   => __( 'Three days before renewal/expiration', 'edd-recurring' ),
-			'+1week'   => __( 'One week before renewal/expiration', 'edd-recurring' ),
-			'+2weeks'  => __( 'Two weeks before renewal/expiration', 'edd-recurring' ),
-			'+1month'  => __( 'One month before renewal/expiration', 'edd-recurring' ),
-			'+2months' => __( 'Two months before renewal/expiration', 'edd-recurring' ),
-			'+3months' => __( 'Three months before renewal/expiration', 'edd-recurring' ),
-			'-1day'    => __( 'One day after expiration', 'edd-recurring' ),
-			'-2days'   => __( 'Two days after expiration', 'edd-recurring' ),
-			'-3days'   => __( 'Three days after expiration', 'edd-recurring' ),
-			'-1week'   => __( 'One week after expiration', 'edd-recurring' ),
-			'-2weeks'  => __( 'Two weeks after expiration', 'edd-recurring' ),
-			'-1month'  => __( 'One month after expiration', 'edd-recurring' ),
-			'-2months' => __( 'Two months after expiration', 'edd-recurring' ),
-			'-3months' => __( 'Three months after expiration', 'edd-recurring' )
+			'today'    => __( 'The day of the renewal/expiration', 'cs-recurring' ),
+			'+1day'    => __( 'One day before renewal/expiration', 'cs-recurring' ),
+			'+2days'   => __( 'Two days before renewal/expiration', 'cs-recurring' ),
+			'+3days'   => __( 'Three days before renewal/expiration', 'cs-recurring' ),
+			'+1week'   => __( 'One week before renewal/expiration', 'cs-recurring' ),
+			'+2weeks'  => __( 'Two weeks before renewal/expiration', 'cs-recurring' ),
+			'+1month'  => __( 'One month before renewal/expiration', 'cs-recurring' ),
+			'+2months' => __( 'Two months before renewal/expiration', 'cs-recurring' ),
+			'+3months' => __( 'Three months before renewal/expiration', 'cs-recurring' ),
+			'-1day'    => __( 'One day after expiration', 'cs-recurring' ),
+			'-2days'   => __( 'Two days after expiration', 'cs-recurring' ),
+			'-3days'   => __( 'Three days after expiration', 'cs-recurring' ),
+			'-1week'   => __( 'One week after expiration', 'cs-recurring' ),
+			'-2weeks'  => __( 'Two weeks after expiration', 'cs-recurring' ),
+			'-1month'  => __( 'One month after expiration', 'cs-recurring' ),
+			'-2months' => __( 'Two months after expiration', 'cs-recurring' ),
+			'-3months' => __( 'Three months after expiration', 'cs-recurring' )
 		);
-		return apply_filters( 'edd_recurring_get_reminder_notice_periods', $periods );
+		return apply_filters( 'cs_recurring_get_reminder_notice_periods', $periods );
 	}
 
 	/**
@@ -71,7 +71,7 @@ class EDD_Recurring_Reminders {
 		$periods = $this->get_notice_periods();
 		$label   = $periods[ $notice['send_period'] ];
 
-		return apply_filters( 'edd_recurring_get_reminder_notice_period_label', $label, $notice_id );
+		return apply_filters( 'cs_recurring_get_reminder_notice_period_label', $label, $notice_id );
 	}
 
 	/**
@@ -82,10 +82,10 @@ class EDD_Recurring_Reminders {
 	*/
 	public function get_notice_types() {
 		$types = array(
-			'renewal'    => __( 'Renewal', 'edd-recurring' ),
-			'expiration' => __( 'Expiration', 'edd-recurring' ),
+			'renewal'    => __( 'Renewal', 'cs-recurring' ),
+			'expiration' => __( 'Expiration', 'cs-recurring' ),
 		);
-		return apply_filters( 'edd_recurring_get_reminder_notice_types', $types );
+		return apply_filters( 'cs_recurring_get_reminder_notice_types', $types );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class EDD_Recurring_Reminders {
 		$types = $this->get_notice_types();
 		$label   = $types[ $notice['type'] ];
 
-		return apply_filters( 'edd_recurring_get_reminder_notice_type_label', $label, $notice_id );
+		return apply_filters( 'cs_recurring_get_reminder_notice_type_label', $label, $notice_id );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class EDD_Recurring_Reminders {
 		$notices  = $this->get_notices();
 
 		$defaults = array(
-			'subject'      => __( 'Your Subscription is About to Renew', 'edd-recurring' ),
+			'subject'      => __( 'Your Subscription is About to Renew', 'cs-recurring' ),
 			'send_period'  => '+1month',
 			'message'      => 'Hello {name},
 
@@ -126,7 +126,7 @@ class EDD_Recurring_Reminders {
 
 		$notice   = wp_parse_args( $notice, $defaults );
 
-		return apply_filters( 'edd_recurring_reminder_notice', $notice, $notice_id );
+		return apply_filters( 'cs_recurring_reminder_notice', $notice, $notice_id );
 
 	}
 
@@ -137,7 +137,7 @@ class EDD_Recurring_Reminders {
 	* @return array Reminder notices defined in settings
 	*/
 	public function get_notices( $type = 'all' ) {
-		$notices = get_option( 'edd_recurring_reminder_notices', array() );
+		$notices = get_option( 'cs_recurring_reminder_notices', array() );
 
 		if ( empty( $notices ) ) {
 
@@ -147,7 +147,7 @@ class EDD_Recurring_Reminders {
 
 			$notices[0] = array(
 				'send_period' => '+1month',
-				'subject'     => __( 'Your Subscription is About to Renew', 'edd-recurring' ),
+				'subject'     => __( 'Your Subscription is About to Renew', 'cs-recurring' ),
 				'message'     => $message,
 				'type'        => 'renewal',
 			);
@@ -158,7 +158,7 @@ class EDD_Recurring_Reminders {
 
 			$notices[1] = array(
 				'send_period' => '+1month',
-				'subject'     => __( 'Your Subscription is About to Expire', 'edd-recurring' ),
+				'subject'     => __( 'Your Subscription is About to Expire', 'cs-recurring' ),
 				'message'     => $message,
 				'type'        => 'expiration',
 			);
@@ -181,7 +181,7 @@ class EDD_Recurring_Reminders {
 
 		}
 
-		return apply_filters( 'edd_recurring_get_reminder_notices', $notices, $type );
+		return apply_filters( 'cs_recurring_get_reminder_notices', $notices, $type );
 	}
 
 	/**
@@ -192,11 +192,11 @@ class EDD_Recurring_Reminders {
 	*/
 	public function scheduled_reminders() {
 
-		$edd_recurring_emails = new EDD_Recurring_Emails();
+		$cs_recurring_emails = new CS_Recurring_Emails();
 
 		$reminders_enabled = $this->reminders_enabled();
 
-		edd_debug_log( 'Running EDD_Recurring_Reminders::scheduled_reminders.' );
+		cs_debug_log( 'Running CS_Recurring_Reminders::scheduled_reminders.' );
 
 		foreach ( $reminders_enabled as $type => $enabled ) {
 
@@ -206,16 +206,16 @@ class EDD_Recurring_Reminders {
 
 			$notices = $this->get_notices( $type );
 
-			edd_debug_log( 'Beginning reminder processing. Found ' . count( $notices ) . ' reminder templates.' );
+			cs_debug_log( 'Beginning reminder processing. Found ' . count( $notices ) . ' reminder templates.' );
 
 			foreach ( $notices as $notice_id => $notice ) {
 
-				edd_debug_log( 'Processing ' . $notice['send_period'] . ' reminder template.' );
+				cs_debug_log( 'Processing ' . $notice['send_period'] . ' reminder template.' );
 
 				$subscriptions = $this->get_reminder_subscriptions( $notice['send_period'], $type );
 
 				$sub_count = is_countable( $subscriptions ) ? count( $subscriptions ) : 0;
-				edd_debug_log( 'Found ' . $sub_count . ' subscriptions to send reminders for.' );
+				cs_debug_log( 'Found ' . $sub_count . ' subscriptions to send reminders for.' );
 
 				if ( ! $subscriptions ) {
 					continue;
@@ -227,42 +227,42 @@ class EDD_Recurring_Reminders {
 
 					// Ensure the subscription should renew based on payments made and bill times.
 					if ( 'renewal' == $type && 0 != $subscription->bill_times && $subscription->get_total_payments() >= $subscription->bill_times ) {
-						edd_debug_log( 'Ignored renewal notice for subscription ID ' . $subscription->id . ' due being billing times being complete.' );
+						cs_debug_log( 'Ignored renewal notice for subscription ID ' . $subscription->id . ' due being billing times being complete.' );
 						continue;
 					}
 
 					// Ensure an expiration notice isn't sent to an auto-renew subscription.
 					if ( 'expiration' == $type && 'active' == $subscription->get_status() && ( $subscription->get_total_payments() < $subscription->bill_times || 0 == $subscription->bill_times ) ) {
-						edd_debug_log( 'Ignored expiration notice for subscription ID ' . $subscription->id . ' due to subscription being active.' );
+						cs_debug_log( 'Ignored expiration notice for subscription ID ' . $subscription->id . ' due to subscription being active.' );
 						continue;
 					}
 
 					// Ensure an expiration notice isn't sent to a still-trialling subscription.
 					if ( 'expiration' == $type && $subscription->get_status() == 'trialling' ) {
-						edd_debug_log( 'Ignored expiration notice for subscription ID ' . $subscription->id . ' due subscription still trialling.' );
+						cs_debug_log( 'Ignored expiration notice for subscription ID ' . $subscription->id . ' due subscription still trialling.' );
 						continue;
 					}
 
-					$sent_time = get_user_meta( $subscription->customer->user_id, sanitize_key( '_edd_recurring_reminder_sent_' . $subscription->id . '_' . $notice_id . '_' . $subscription->get_total_payments() ), true );
+					$sent_time = get_user_meta( $subscription->customer->user_id, sanitize_key( '_cs_recurring_reminder_sent_' . $subscription->id . '_' . $notice_id . '_' . $subscription->get_total_payments() ), true );
 
 					if ( $sent_time ) {
-						edd_debug_log( 'Skipping renewal reminder for subscription ID ' . $subscription->id . ' and reminder ' . $notice['send_period'] . '. Previously sent on ' . date_i18n( get_option( 'date_format' ), $sent_time ), true );
+						cs_debug_log( 'Skipping renewal reminder for subscription ID ' . $subscription->id . ' and reminder ' . $notice['send_period'] . '. Previously sent on ' . date_i18n( get_option( 'date_format' ), $sent_time ), true );
 						continue;
 					}
 
-					edd_debug_log( 'Renewal reminder not previously sent for subscription ID ' . $subscription->id . ' for reminder ' . $notice['send_period'] );
+					cs_debug_log( 'Renewal reminder not previously sent for subscription ID ' . $subscription->id . ' for reminder ' . $notice['send_period'] );
 
-					$edd_recurring_emails->send_reminder( $subscription->id, $notice_id );
+					$cs_recurring_emails->send_reminder( $subscription->id, $notice_id );
 					$processed_subscriptions++;
 
 				}
 
-				edd_debug_log( 'Finished processing ' . $processed_subscriptions . ' for ' . $notice['send_period'] . ' reminder template.' );
+				cs_debug_log( 'Finished processing ' . $processed_subscriptions . ' for ' . $notice['send_period'] . ' reminder template.' );
 
 			}
 		}
 
-		edd_debug_log( 'Finished EDD_Recurring_Reminders::scheduled_reminders.' );
+		cs_debug_log( 'Finished CS_Recurring_Reminders::scheduled_reminders.' );
 
 	}
 
@@ -321,9 +321,9 @@ class EDD_Recurring_Reminders {
 				break;
 		}
 
-		$args = apply_filters( 'edd_recurring_reminder_subscription_args', $args );
+		$args = apply_filters( 'cs_recurring_reminder_subscription_args', $args );
 
-		$subs_db = new EDD_Subscriptions_DB();
+		$subs_db = new CS_Subscriptions_DB();
 		$subscriptions = $subs_db->get_subscriptions( $args[ $type ] );
 
 		if ( ! empty( $subscriptions ) ) {
@@ -343,14 +343,14 @@ class EDD_Recurring_Reminders {
 
 		$notice = $this->get_notice( $notice_id );
 
-		$email_to   = function_exists( 'edd_get_admin_notice_emails' ) ? edd_get_admin_notice_emails() : get_bloginfo( 'admin_email' );
-		$message    = ! empty( $notice['message'] ) ? $notice['message'] : __( "**THIS IS A DEFAULT TEST MESSAGE - Notice message was not retrieved.**\n\nHello {name},\n\nYour subscription for {subscription_name} will renew or expire on {expiration}.", 'edd-recurring' );
+		$email_to   = function_exists( 'cs_get_admin_notice_emails' ) ? cs_get_admin_notice_emails() : get_bloginfo( 'admin_email' );
+		$message    = ! empty( $notice['message'] ) ? $notice['message'] : __( "**THIS IS A DEFAULT TEST MESSAGE - Notice message was not retrieved.**\n\nHello {name},\n\nYour subscription for {subscription_name} will renew or expire on {expiration}.", 'cs-recurring' );
 		$message    = $this->filter_test_notice( $message );
-		$subject    = ! empty( $notice['subject'] ) ? $notice['subject'] : __( 'Default Subject Message - Your Subscription is About to Renew or Expire', 'edd-recurring' );
+		$subject    = ! empty( $notice['subject'] ) ? $notice['subject'] : __( 'Default Subject Message - Your Subscription is About to Renew or Expire', 'cs-recurring' );
 		$subject    = $this->filter_test_notice( $subject );
 
-		if ( class_exists( 'EDD_Emails' ) ) {
-			EDD()->emails->send( $email_to, $subject, $message );
+		if ( class_exists( 'CS_Emails' ) ) {
+			CS()->emails->send( $email_to, $subject, $message );
 		} else {
 			$from_name  = get_bloginfo( 'name' );
 			$from_email = get_bloginfo( 'admin_email' );

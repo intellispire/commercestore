@@ -2,14 +2,14 @@
 
 
 /**
- * Integrates EDD Recurring with the Content Restriction extension
+ * Integrates CS Recurring with the Content Restriction extension
  *
  * This allows content to be restricted to active subscribers only
  *
  * @since v1.0
  */
 
-class EDD_Recurring_Content_Restriction {
+class CS_Recurring_Content_Restriction {
 
 
 	/**
@@ -23,13 +23,13 @@ class EDD_Recurring_Content_Restriction {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
 		// Pre 2.0 filter
-		add_filter( 'edd_cr_is_restricted', array( $this, 'restrict' ), 10, 5 );
+		add_filter( 'cs_cr_is_restricted', array( $this, 'restrict' ), 10, 5 );
 
 		// 2.0+ filter
-		add_filter( 'edd_cr_user_can_access_status_and_message', array( $this, 'can_access_content' ), 10, 4 );
+		add_filter( 'cs_cr_user_can_access_status_and_message', array( $this, 'can_access_content' ), 10, 4 );
 
-		add_filter( 'shortcode_atts_edd_restrict', array( $this, 'restrict_shortcode_atts' ), 10, 3 );
-		add_filter( 'edd_cr_restrict_shortcode_content', array( $this, 'restrict_shortcode_content' ), 10, 3 );
+		add_filter( 'shortcode_atts_cs_restrict', array( $this, 'restrict_shortcode_atts' ), 10, 3 );
+		add_filter( 'cs_cr_restrict_shortcode_content', array( $this, 'restrict_shortcode_content' ), 10, 3 );
 	}
 
 
@@ -42,13 +42,13 @@ class EDD_Recurring_Content_Restriction {
 
 	public function admin_init() {
 
-		if( ! class_exists( 'EDD_Content_Restriction' ) ) {
+		if( ! class_exists( 'CS_Content_Restriction' ) ) {
 			return; // Content Restriction extension not active
 		}
 
-		add_action( 'edd_cr_restricted_table_before', array( $this, 'metabox' ), 10, 1 );
-		add_action( 'edd_cr_metabox', array( $this, 'deprecated_metabox' ), 10, 3 );
-		add_action( 'edd_cr_save_meta_data', array( $this, 'save_data' ), 10, 2 );
+		add_action( 'cs_cr_restricted_table_before', array( $this, 'metabox' ), 10, 1 );
+		add_action( 'cs_cr_metabox', array( $this, 'deprecated_metabox' ), 10, 3 );
+		add_action( 'cs_cr_save_meta_data', array( $this, 'save_data' ), 10, 2 );
 	}
 
 
@@ -61,12 +61,12 @@ class EDD_Recurring_Content_Restriction {
 
 	public function metabox( $post_id ) {
 
-			$active_only = get_post_meta( $post_id, '_edd_cr_active_only', true );
+			$active_only = get_post_meta( $post_id, '_cs_cr_active_only', true );
 
 			echo '<p>';
-				echo '<label for="edd_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'edd-recurring' ) . '">';
-					echo '<input type="checkbox" name="edd_cr_active_only" id="edd_cr_active_only" value="1"' . checked( '1', $active_only, false ) . '/>&nbsp;';
-					echo __( 'Active Subscribers Only?', 'edd-recurring' );
+				echo '<label for="cs_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'cs-recurring' ) . '">';
+					echo '<input type="checkbox" name="cs_cr_active_only" id="cs_cr_active_only" value="1"' . checked( '1', $active_only, false ) . '/>&nbsp;';
+					echo __( 'Active Subscribers Only?', 'cs-recurring' );
 				echo '</label>';
 			echo '</p>';
 
@@ -74,8 +74,8 @@ class EDD_Recurring_Content_Restriction {
 
 	/**
 	 * For backwards compatibility only, this function remains, and is renamed to deprecated_metabox instead of just metabox.
-	 * For the correct/current usage, see the metabox method in this EDD_Recurring_Content_Restriction class,
-	 * and the edd_cr_restricted_table_before hook added in Content Restriction version 2.3
+	 * For the correct/current usage, see the metabox method in this CS_Recurring_Content_Restriction class,
+	 * and the cs_cr_restricted_table_before hook added in Content Restriction version 2.3
 	 * Attach our extra meta box field
 	 *
 	 * @since  2.8
@@ -85,7 +85,7 @@ class EDD_Recurring_Content_Restriction {
 	public function deprecated_metabox( $post_id, $restricted_to, $restricted_variable ) {
 
 		// If the newer hook has been run, don't run this deprecated function
-		if ( did_action( 'edd_cr_restricted_table_before' ) ) {
+		if ( did_action( 'cs_cr_restricted_table_before' ) ) {
 			return;
 		}
 
@@ -93,11 +93,11 @@ class EDD_Recurring_Content_Restriction {
 
 		if( empty( $cr_active_only ) ) {
 
-			$active_only = get_post_meta( $post_id, '_edd_cr_active_only', true );
+			$active_only = get_post_meta( $post_id, '_cs_cr_active_only', true );
 			echo '<p>';
-				echo '<label for="edd_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'edd-recurring' ) . '">';
-					echo '<input type="checkbox" name="edd_cr_active_only" id="edd_cr_active_only" value="1"' . checked( '1', $active_only, false ) . '/>&nbsp;';
-					echo __( 'Active Subscribers Only?', 'edd-recurring' );
+				echo '<label for="cs_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'cs-recurring' ) . '">';
+					echo '<input type="checkbox" name="cs_cr_active_only" id="cs_cr_active_only" value="1"' . checked( '1', $active_only, false ) . '/>&nbsp;';
+					echo __( 'Active Subscribers Only?', 'cs-recurring' );
 				echo '</label>';
 			echo '</p>';
 
@@ -120,10 +120,10 @@ class EDD_Recurring_Content_Restriction {
 		if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return;
 
-		if( isset( $data['edd_cr_active_only'] ) ) {
-			update_post_meta( $post_id, '_edd_cr_active_only', '1' );
+		if( isset( $data['cs_cr_active_only'] ) ) {
+			update_post_meta( $post_id, '_cs_cr_active_only', '1' );
 		} else {
-			delete_post_meta( $post_id, '_edd_cr_active_only' );
+			delete_post_meta( $post_id, '_cs_cr_active_only' );
 		}
 	}
 
@@ -136,21 +136,21 @@ class EDD_Recurring_Content_Restriction {
 	 */
 	public function restrict( $is_restricted = false, $post_id = 0, $download_id = 0, $user_id = 0, $price_id = null ) {
 
-		if ( ! edd_cr_is_restricted( $post_id ) ) {
+		if ( ! cs_cr_is_restricted( $post_id ) ) {
 			return $is_restricted;
 		}
 
-		if ( ! get_post_meta( $post_id, '_edd_cr_active_only', true ) ) {
+		if ( ! get_post_meta( $post_id, '_cs_cr_active_only', true ) ) {
 			return $is_restricted; // Leave untouched
 		}
 
 		// Check if the product is a variably-priced product.
 		if ( $price_id ) {
 			// Check if the variably-riced product is Recurring-enabled or not
-			$is_recurring = EDD_Recurring()->is_price_recurring( $download_id, $price_id );
+			$is_recurring = CS_Recurring()->is_price_recurring( $download_id, $price_id );
 		} else {
 			// Check if the product is Recurring-enabled or not
-			$is_recurring = EDD_Recurring()->is_recurring( $download_id );
+			$is_recurring = CS_Recurring()->is_recurring( $download_id );
 		}
 
 		if ( ! $is_recurring ) {
@@ -161,7 +161,7 @@ class EDD_Recurring_Content_Restriction {
 		}
 
 
-		$subscriber = new EDD_Recurring_Subscriber( $user_id, true );
+		$subscriber = new CS_Recurring_Subscriber( $user_id, true );
 
 		if ( ! $subscriber->has_active_product_subscription( $post_id ) ) {
 			return true;
@@ -184,8 +184,8 @@ class EDD_Recurring_Content_Restriction {
 			return $return;
 		}
 
-		$active_only  = get_post_meta( get_the_ID(), '_edd_cr_active_only', true );
-		$subscriber   = new EDD_Recurring_Subscriber( $user_id, true );
+		$active_only  = get_post_meta( get_the_ID(), '_cs_cr_active_only', true );
+		$subscriber   = new CS_Recurring_Subscriber( $user_id, true );
 
 		if ( $active_only ) {
 
@@ -200,13 +200,13 @@ class EDD_Recurring_Content_Restriction {
 				}
 
 				// Get the Download object so we can use it in variable price checks.
-				$download = new EDD_Download( $item['download'] );
+				$download = new CS_Download( $item['download'] );
 
 				if ( isset( $item['price_id'] ) && $download->has_variable_prices() ) {
 					if ( is_numeric( $item['price_id'] ) ) {
 
 						// Check if the variably-riced product is Recurring-enabled or not.
-						$recurring_enabled = EDD_Recurring()->is_price_recurring( $item['download'], $item['price_id'] );
+						$recurring_enabled = CS_Recurring()->is_price_recurring( $item['download'], $item['price_id'] );
 
 					} elseif ( 'all' === $item['price_id'] ) {
 
@@ -224,7 +224,7 @@ class EDD_Recurring_Content_Restriction {
 				} else {
 
 					// Check if the product is Recurring-enabled or not.
-					$recurring_enabled = EDD_Recurring()->is_recurring( $item['download'] );
+					$recurring_enabled = CS_Recurring()->is_recurring( $item['download'] );
 
 				}
 
@@ -238,11 +238,11 @@ class EDD_Recurring_Content_Restriction {
 
 				} else {
 
-					// The edd_cr_user_can_access_with_purchase was introduced in version 2.3 of Content Restriction, so add a check for it.
-					if ( function_exists( 'edd_cr_user_can_access_with_purchase' ) ) {
+					// The cs_cr_user_can_access_with_purchase was introduced in version 2.3 of Content Restriction, so add a check for it.
+					if ( function_exists( 'cs_cr_user_can_access_with_purchase' ) ) {
 
 						// If this is a non-recurring product, re-check it to see if they have access because of it
-						$has_access_because_of_non_recurring = edd_cr_user_can_access_with_purchase( $user_id, array( $item ), $post_id );
+						$has_access_because_of_non_recurring = cs_cr_user_can_access_with_purchase( $user_id, array( $item ), $post_id );
 
 						if ( $has_access_because_of_non_recurring['status'] ) {
 							$has_access = true;
@@ -251,7 +251,7 @@ class EDD_Recurring_Content_Restriction {
 
 					} else {
 
-						// If the edd_cr_user_can_access_with_purchase function does not exist (because Content Restriction is older than 2.3)
+						// If the cs_cr_user_can_access_with_purchase function does not exist (because Content Restriction is older than 2.3)
 						$has_access = false;
 						break;
 
@@ -267,7 +267,7 @@ class EDD_Recurring_Content_Restriction {
 	}
 
 	/**
-	 * Sets the active subscription restriction on the edd_restrict shortcode by default and allows overriding it
+	 * Sets the active subscription restriction on the cs_restrict shortcode by default and allows overriding it
 	 *
 	 * @since  2.4
 	 * @param  array $out   The attributes to return
@@ -292,7 +292,7 @@ class EDD_Recurring_Content_Restriction {
 	}
 
 	/**
-	 * Allows subscriptions to modify the edd_restrict shortcode
+	 * Allows subscriptions to modify the cs_restrict shortcode
 	 *
 	 * @since  2.4
 	 * @param  string $content       The content between the shortcode tags
@@ -306,7 +306,7 @@ class EDD_Recurring_Content_Restriction {
 
 		if ( ! empty( $user_ID ) && true === filter_var( $atts['subscription'], FILTER_VALIDATE_BOOLEAN ) ) {
 
-			$subscriber = new EDD_Recurring_Subscriber( $user_ID, true );
+			$subscriber = new CS_Recurring_Subscriber( $user_ID, true );
 
 			if ( 'any' === $atts['id'] && $subscriber->has_active_subscription() ) {
 
@@ -326,7 +326,7 @@ class EDD_Recurring_Content_Restriction {
 			}
 
 			if ( false === $has_access ) {
-				$content = __( 'This content is restricted to buyers.', 'edd-cr' );
+				$content = __( 'This content is restricted to buyers.', 'cs-cr' );
 			}
 
 		}

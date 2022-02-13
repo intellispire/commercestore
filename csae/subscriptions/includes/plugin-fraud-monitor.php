@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Integrates EDD Recurring with the Fraud Monitor extension
+ * Integrates CS Recurring with the Fraud Monitor extension
  *
  * @since v2.7.1
  */
-class EDD_Recurring_Fraud_Monitor {
+class CS_Recurring_Fraud_Monitor {
 
 
 	/**
@@ -16,9 +16,9 @@ class EDD_Recurring_Fraud_Monitor {
 	 */
 	public function __construct() {
 
-		if ( class_exists( 'EDD_Fraud_Monitor' ) ) {
+		if ( class_exists( 'CS_Fraud_Monitor' ) ) {
 			// Cancel subscriptions when Fraud Monitor
-			add_action( 'edd_fm_payment_confirmed_as_fraud', array( $this, 'cancel_on_fraud' ), 10, 1 );
+			add_action( 'cs_fm_payment_confirmed_as_fraud', array( $this, 'cancel_on_fraud' ), 10, 1 );
 		}
 
 	}
@@ -36,7 +36,7 @@ class EDD_Recurring_Fraud_Monitor {
 			'status'            => array( 'active', 'trialling' ),
 		);
 
-		$subs_db       = new EDD_Subscriptions_DB;
+		$subs_db       = new CS_Subscriptions_DB;
 		$subscriptions = $subs_db->get_subscriptions( $args );
 		if ( $subscriptions ) {
 			foreach ( $subscriptions as $sub ) {
@@ -45,20 +45,20 @@ class EDD_Recurring_Fraud_Monitor {
 					return;
 				}
 
-				$gateway = edd_recurring()->get_gateway( $sub->gateway );
+				$gateway = cs_recurring()->get_gateway( $sub->gateway );
 
 				if( empty( $gateway ) ) {
 					continue;
 				}
 
-				$recurring = edd_recurring();
+				$recurring = cs_recurring();
 
-				remove_action( 'edd_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
+				remove_action( 'cs_subscription_cancelled', array( $recurring::$emails, 'send_subscription_cancelled' ), 10 );
 
 				// If we were able to cancel the subscription, log a note stating it was because of Fraud Monitor.
 				if( $gateway->cancel( $sub, true ) ) {
 
-					$note = __( 'Subscription cancelled via Fraud Monitor', 'edd-recurring' );
+					$note = __( 'Subscription cancelled via Fraud Monitor', 'cs-recurring' );
 					$sub->add_note( $note );
 
 					$sub->cancel();

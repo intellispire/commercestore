@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
  * Feature flags
  */
 
-define('CS_FEATURE_VARIABLE_PRICE', false);
+define('CS_FEATURE_VARIABLE_PRICE', true);
 define('CS_FEATURE_MARKETING', false);
 
 /**

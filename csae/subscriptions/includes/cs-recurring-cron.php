@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @since  2.4
  */
-class EDD_Recurring_Cron {
+class CS_Recurring_Cron {
 
 	protected $db;
 
@@ -27,12 +27,12 @@ class EDD_Recurring_Cron {
 	 */
 	public function init() {
 
-		$this->db = new EDD_Subscriptions_DB;
+		$this->db = new CS_Subscriptions_DB;
 
-		// Renewal reminders are added to cron in edd-recurring-reminders.php
+		// Renewal reminders are added to cron in cs-recurring-reminders.php
 
-		add_action( 'edd_recurring_daily_scheduled_events', array( $this, 'check_for_expired_subscriptions' ), 20 );
-		add_action( 'edd_recurring_daily_scheduled_events', array( $this, 'check_for_abandoned_subscriptions' ), 20 );
+		add_action( 'cs_recurring_daily_scheduled_events', array( $this, 'check_for_expired_subscriptions' ), 20 );
+		add_action( 'cs_recurring_daily_scheduled_events', array( $this, 'check_for_abandoned_subscriptions' ), 20 );
 	}
 
 	/**
@@ -61,8 +61,8 @@ class EDD_Recurring_Cron {
 				/*
 				 * In the future we can query the merchant processor to confirm the subscription is actually expired
 				 *
-				 * See https://github.com/easydigitaldownloads/edd-recurring/issues/101
-				 * See https://github.com/easydigitaldownloads/edd-recurring/issues/614
+				 * See https://github.com/commercestore/cs-recurring/issues/101
+				 * See https://github.com/commercestore/cs-recurring/issues/614
 				 */
 
 				$sub->expire( true );
@@ -81,7 +81,7 @@ class EDD_Recurring_Cron {
 	*/
 	public function check_for_abandoned_subscriptions() {
 
-		$db = new EDD_Subscriptions_DB;
+		$db = new CS_Subscriptions_DB;
 
 		$args = array(
 			'status'  => 'pending',
@@ -97,9 +97,9 @@ class EDD_Recurring_Cron {
 
 			foreach( $subscriptions as $subscription ) {
 
-				$payment = new EDD_Payment( $subscription->parent_payment_id );
+				$payment = new CS_Payment( $subscription->parent_payment_id );
 				if ( $payment ) {
-					$payment->delete_meta( '_edd_subscription_payment' );
+					$payment->delete_meta( '_cs_subscription_payment' );
 				}
 				$db->delete( $subscription->id );
 
@@ -112,7 +112,7 @@ class EDD_Recurring_Cron {
 }
 
 
-// This is intentionally outside of the class. EDD_Recurring_Cron is loaded too late to register new scheduled events
-if ( ! wp_next_scheduled( 'edd_recurring_daily_scheduled_events' ) ) {
-	wp_schedule_event( current_time( 'timestamp', true ), 'daily', 'edd_recurring_daily_scheduled_events' );
+// This is intentionally outside of the class. CS_Recurring_Cron is loaded too late to register new scheduled events
+if ( ! wp_next_scheduled( 'cs_recurring_daily_scheduled_events' ) ) {
+	wp_schedule_event( current_time( 'timestamp', true ), 'daily', 'cs_recurring_daily_scheduled_events' );
 }

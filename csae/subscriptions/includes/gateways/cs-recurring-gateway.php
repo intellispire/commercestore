@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class EDD_Recurring_Gateway {
+class CS_Recurring_Gateway {
 
 	public $id;
 	public $friendly_name = '';
@@ -38,26 +38,26 @@ class EDD_Recurring_Gateway {
 
 		$this->init();
 
-		add_action( 'edd_checkout_error_checks', array( $this, 'checkout_errors' ), 0, 2 );
-		add_action( 'edd_gateway_' . $this->id, array( $this, 'process_checkout' ), 0 );
+		add_action( 'cs_checkout_error_checks', array( $this, 'checkout_errors' ), 0, 2 );
+		add_action( 'cs_gateway_' . $this->id, array( $this, 'process_checkout' ), 0 );
 		add_action( 'init', array( $this, 'require_login' ), 9 );
 		add_action( 'init', array( $this, 'process_webhooks' ), 9 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 10 );
-		add_action( 'edd_cancel_subscription', array( $this, 'process_cancellation' ) );
-		add_action( 'edd_reactivate_subscription', array( $this, 'process_reactivation' ) );
-		add_filter( 'edd_subscription_can_cancel', array( $this, 'can_cancel' ), 10, 2 );
-		add_filter( 'edd_subscription_can_update', array( $this, 'can_update' ), 10, 2 );
-		add_filter( 'edd_subscription_can_reactivate', array( $this, 'can_reactivate' ), 10, 2 );
-		add_filter( 'edd_subscription_can_retry', array( $this, 'can_retry' ), 10, 2 );
-		add_filter( 'edd_recurring_retry_subscription_' . $this->id, array( $this, 'retry' ), 10, 2 );
-		add_action( 'edd_recurring_cancel_' . $this->id . '_subscription', array( $this, 'cancel' ), 10, 2 );
-		add_action( 'edd_recurring_reactivate_' . $this->id . '_subscription', array( $this, 'reactivate' ), 10, 2 );
-		add_action( 'edd_recurring_update_payment_form', array( $this, 'update_payment_method_form' ), 10, 1 );
-		add_action( 'edd_recurring_update_subscription_payment_method', array( $this, 'process_payment_method_update' ), 10, 3 );
-		add_action( 'edd_recurring_update_' . $this->id . '_subscription', array( $this, 'update_payment_method' ), 10, 2 );
-		add_action( 'edd_after_cc_fields', array( $this, 'after_cc_fields' ) );
+		add_action( 'cs_cancel_subscription', array( $this, 'process_cancellation' ) );
+		add_action( 'cs_reactivate_subscription', array( $this, 'process_reactivation' ) );
+		add_filter( 'cs_subscription_can_cancel', array( $this, 'can_cancel' ), 10, 2 );
+		add_filter( 'cs_subscription_can_update', array( $this, 'can_update' ), 10, 2 );
+		add_filter( 'cs_subscription_can_reactivate', array( $this, 'can_reactivate' ), 10, 2 );
+		add_filter( 'cs_subscription_can_retry', array( $this, 'can_retry' ), 10, 2 );
+		add_filter( 'cs_recurring_retry_subscription_' . $this->id, array( $this, 'retry' ), 10, 2 );
+		add_action( 'cs_recurring_cancel_' . $this->id . '_subscription', array( $this, 'cancel' ), 10, 2 );
+		add_action( 'cs_recurring_reactivate_' . $this->id . '_subscription', array( $this, 'reactivate' ), 10, 2 );
+		add_action( 'cs_recurring_update_payment_form', array( $this, 'update_payment_method_form' ), 10, 1 );
+		add_action( 'cs_recurring_update_subscription_payment_method', array( $this, 'process_payment_method_update' ), 10, 3 );
+		add_action( 'cs_recurring_update_' . $this->id . '_subscription', array( $this, 'update_payment_method' ), 10, 2 );
+		add_action( 'cs_after_cc_fields', array( $this, 'after_cc_fields' ) );
 
-		add_filter( 'edd_subscription_profile_link_' . $this->id, array( $this, 'link_profile_id' ), 10, 2 );
+		add_filter( 'cs_subscription_profile_link_' . $this->id, array( $this, 'link_profile_id' ), 10, 2 );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class EDD_Recurring_Gateway {
 	}
 
 	/**
-	 * Enqueue necessary scripts. Perhaps only enqueue when edd_is_checkout()
+	 * Enqueue necessary scripts. Perhaps only enqueue when cs_is_checkout()
 	 *
 	 * @access      public
 	 * @since       2.4
@@ -95,7 +95,7 @@ class EDD_Recurring_Gateway {
 		/*
 
 		if( true ) {
-			edd_set_error( 'error_id_here', __( 'Error message here', 'edd-recurring' ) );
+			cs_set_error( 'error_id_here', __( 'Error message here', 'cs-recurring' ) );
 		}
 
 		*/
@@ -128,7 +128,7 @@ class EDD_Recurring_Gateway {
 	 */
 	public function complete_signup() {
 
-		wp_redirect( edd_get_success_page_uri() );
+		wp_redirect( cs_get_success_page_uri() );
 		exit;
 	}
 
@@ -141,9 +141,9 @@ class EDD_Recurring_Gateway {
 	 */
 	public function process_webhooks() {
 
-		// set webhook URL to: home_url( 'index.php?edd-listener=' . $this->id );
+		// set webhook URL to: home_url( 'index.php?cs-listener=' . $this->id );
 
-		if ( empty( $_GET['edd-listener'] ) || $this->id !== $_GET['edd-listener'] ) {
+		if ( empty( $_GET['cs-listener'] ) || $this->id !== $_GET['cs-listener'] ) {
 			return;
 		}
 
@@ -170,7 +170,7 @@ class EDD_Recurring_Gateway {
 	 * @return      array
 	 */
 	public function get_cancellable_statuses() {
-		return apply_filters( 'edd_recurring_cancellable_statuses', array( 'active', 'trialling', 'failing' ) );
+		return apply_filters( 'cs_recurring_cancellable_statuses', array( 'active', 'trialling', 'failing' ) );
 	}
 
 	/**
@@ -178,7 +178,7 @@ class EDD_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.4
-	 * @param       EDD_Subscription $subscription The EDD_Subscription object for the EDD Subscription being cancelled.
+	 * @param       CS_Subscription $subscription The CS_Subscription object for the CS Subscription being cancelled.
 	 * @param       bool             $valid Currently this defaults to be true at all times.
 	 * @return      bool
 	 */
@@ -189,7 +189,7 @@ class EDD_Recurring_Gateway {
 	 *
 	 * @access      public
 	 * @since       2.4
-	 * @param       EDD_Subscription $subscription The EDD_Subscription object for the EDD Subscription being cancelled.
+	 * @param       CS_Subscription $subscription The CS_Subscription object for the CS Subscription being cancelled.
 	 * @return      bool
 	 */
 	public function cancel_immediately( $subscription ) {
@@ -257,8 +257,8 @@ class EDD_Recurring_Gateway {
 	 * Process the update payment form
 	 *
 	 * @since  2.4
-	 * @param  int  $subscriber    EDD_Recurring_Subscriber
-	 * @param  int  $subscription  EDD_Subscription
+	 * @param  int  $subscriber    CS_Recurring_Subscriber
+	 * @param  int  $subscription  CS_Subscription
 	 * @return void
 	 */
 	public function update_payment_method( $subscriber, $subscription ) { }
@@ -277,7 +277,7 @@ class EDD_Recurring_Gateway {
 		}
 
 		ob_start();
-		edd_get_cc_form();
+		cs_get_cc_form();
 		echo ob_get_clean();
 
 	}
@@ -328,16 +328,16 @@ class EDD_Recurring_Gateway {
 	 */
 	public function process_checkout( $purchase_data ) {
 
-		if ( ! edd_recurring()->is_purchase_recurring( $purchase_data ) ) {
+		if ( ! cs_recurring()->is_purchase_recurring( $purchase_data ) ) {
 			return; // Not a recurring purchase so bail
 		}
 
-		if ( ! wp_verify_nonce( $purchase_data['gateway_nonce'], 'edd-gateway' ) ) {
-			wp_die( __( 'Nonce verification has failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 403 ) );
+		if ( ! wp_verify_nonce( $purchase_data['gateway_nonce'], 'cs-gateway' ) ) {
+			wp_die( __( 'Nonce verification has failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
 		}
 
-		if ( $purchase_data['user_info']['id'] < 1 && ! class_exists( 'EDD_Auto_Register' ) ) {
-			edd_set_error( 'edd_recurring_logged_in', __( 'You must log in or create an account to purchase a subscription', 'edd-recurring' ) );
+		if ( $purchase_data['user_info']['id'] < 1 && ! class_exists( 'CS_Auto_Register' ) ) {
+			cs_set_error( 'cs_recurring_logged_in', __( 'You must log in or create an account to purchase a subscription', 'cs-recurring' ) );
 		}
 
 		// Never let a user_id be lower than 0 since WP Core absints when doing get_user_meta lookups
@@ -346,24 +346,24 @@ class EDD_Recurring_Gateway {
 		}
 
 		// Initial validation
-		do_action( 'edd_recurring_process_checkout', $purchase_data, $this );
+		do_action( 'cs_recurring_process_checkout', $purchase_data, $this );
 
-		$errors = edd_get_errors();
+		$errors = cs_get_errors();
 
 		if ( $errors ) {
 
-			edd_send_back_to_checkout( '?payment-mode=' . $this->id );
+			cs_send_back_to_checkout( '?payment-mode=' . $this->id );
 
 		}
 
-		$this->purchase_data = apply_filters( 'edd_recurring_purchase_data', $purchase_data, $this );
+		$this->purchase_data = apply_filters( 'cs_recurring_purchase_data', $purchase_data, $this );
 		$this->user_id       = $purchase_data['user_info']['id'];
 		$this->email         = $purchase_data['user_info']['email'];
 
 		if ( empty( $this->user_id ) ) {
-			$subscriber = new EDD_Recurring_Subscriber( $this->email );
+			$subscriber = new CS_Recurring_Subscriber( $this->email );
 		} else {
-			$subscriber = new EDD_Recurring_Subscriber( $this->user_id, true );
+			$subscriber = new CS_Recurring_Subscriber( $this->user_id, true );
 		}
 
 		if ( empty( $subscriber->id ) ) {
@@ -396,15 +396,15 @@ class EDD_Recurring_Gateway {
 			}
 
 			// Check if one time discounts are enabled in the admin settings, which prevent discounts from being used on renewals
-			$recurring_one_time_discounts = edd_get_option( 'recurring_one_time_discounts' ) ? true : false;
+			$recurring_one_time_discounts = cs_get_option( 'recurring_one_time_discounts' ) ? true : false;
 
 			// If there is a trial in the cart for this item, One-Time Discounts have no relevance, and discounts are used no matter what.
 			if( ! empty( $item['item_number']['options']['recurring']['trial_period']['unit'] ) && ! empty( $item['item_number']['options']['recurring']['trial_period']['quantity'] ) ) {
 				$recurring_one_time_discounts = false;
 			}
 
-			$prices_include_tax         = edd_prices_include_tax();
-			$download_is_tax_exclusive  = edd_download_is_tax_exclusive( $item['id'] );
+			$prices_include_tax         = cs_prices_include_tax();
+			$download_is_tax_exclusive  = cs_download_is_tax_exclusive( $item['id'] );
 
 			// If we should NOT apply the discount to the renewal
 			if( $recurring_one_time_discounts ) {
@@ -413,7 +413,7 @@ class EDD_Recurring_Gateway {
 				if ( ! $prices_include_tax ) {
 
 					// Set the tax to be the full amount as well for recurs. Recalculate it using the amount without discounts, which is the subtotal
-					$recurring_tax = $download_is_tax_exclusive ? 0 : edd_calculate_tax( $item['subtotal'] );
+					$recurring_tax = $download_is_tax_exclusive ? 0 : cs_calculate_tax( $item['subtotal'] );
 
 					// When prices don't include tax, the $item['subtotal'] is the cost of the item, including quantities, but NOT including discounts or taxes
 					// Set the recurring amount to be the full amount, with no discounts
@@ -424,7 +424,7 @@ class EDD_Recurring_Gateway {
 					// If prices include tax, we can't use the $item['subtotal'] like we do above, because it does not include taxes, and we need it to include taxes.
 					// So instead, we use the item_price, which is the entered price of the product, without any discounts, and with taxes included.
 					$recurring_amount = $item['item_price'];
-					$recurring_tax    = $download_is_tax_exclusive ? 0 : edd_calculate_tax( $item['item_price'] );
+					$recurring_tax    = $download_is_tax_exclusive ? 0 : cs_calculate_tax( $item['item_price'] );
 
 				}
 
@@ -453,14 +453,14 @@ class EDD_Recurring_Gateway {
 			}
 
 			// Determine tax amount for any fees if it's more than $0
-			$fee_tax = $fees > 0 ? edd_calculate_tax( $fees ) : 0;
+			$fee_tax = $fees > 0 ? cs_calculate_tax( $fees ) : 0;
 
 			// Format the tax rate.
 			$tax_rate = round( floatval( $this->purchase_data['tax_rate'] ), 4 );
 			if ( 4 > strlen( $tax_rate ) ) {
 				/*
 				 * Enforce a minimum of 2 decimals for backwards compatibility.
-				 * @link https://github.com/easydigitaldownloads/edd-recurring/pull/1386#issuecomment-745350210
+				 * @link https://github.com/commercestore/cs-recurring/pull/1386#issuecomment-745350210
 				 */
 				$tax_rate = number_format( $tax_rate, 2, '.', '' );
 			}
@@ -470,13 +470,13 @@ class EDD_Recurring_Gateway {
 				'id'                 => $item['id'],
 				'name'               => $item['name'],
 				'price_id'           => isset( $item['item_number']['options']['price_id'] ) ? $item['item_number']['options']['price_id'] : false,
-				'initial_amount'     => edd_sanitize_amount( $item['price'] + $fees + $fee_tax ),
-				'recurring_amount'   => edd_sanitize_amount( $recurring_amount ),
-				'initial_tax'        => edd_use_taxes() ? edd_sanitize_amount( $item['tax'] + $fee_tax ) : 0,
+				'initial_amount'     => cs_sanitize_amount( $item['price'] + $fees + $fee_tax ),
+				'recurring_amount'   => cs_sanitize_amount( $recurring_amount ),
+				'initial_tax'        => cs_use_taxes() ? cs_sanitize_amount( $item['tax'] + $fee_tax ) : 0,
 				'initial_tax_rate'   => $tax_rate,
-				'recurring_tax'      => edd_use_taxes() ? edd_sanitize_amount( $recurring_tax ) : 0,
+				'recurring_tax'      => cs_use_taxes() ? cs_sanitize_amount( $recurring_tax ) : 0,
 				'recurring_tax_rate' => $tax_rate,
-				'signup_fee'         => edd_sanitize_amount( $fees ),
+				'signup_fee'         => cs_sanitize_amount( $fees ),
 				'period'             => $item['item_number']['options']['recurring']['period'],
 				'frequency'          => 1, // Hard-coded to 1 for now but here in case we offer it later. Example: charge every 3 weeks
 				'bill_times'         => $item['item_number']['options']['recurring']['times'],
@@ -484,9 +484,9 @@ class EDD_Recurring_Gateway {
 				'transaction_id'     => '', // Transaction ID for this subscription - This is set by the payment gateway
 			);
 
-			$args = apply_filters( 'edd_recurring_subscription_pre_gateway_args', $args, $item );
+			$args = apply_filters( 'cs_recurring_subscription_pre_gateway_args', $args, $item );
 
-			if( ! edd_get_option( 'recurring_one_time_trials' ) || ! $subscriber->has_trialed( $item['id'] ) ) {
+			if( ! cs_get_option( 'recurring_one_time_trials' ) || ! $subscriber->has_trialed( $item['id'] ) ) {
 
 				// If the item in the cart has a free trial period
 				if( ! empty( $item['item_number']['options']['recurring']['trial_period']['unit'] ) && ! empty( $item['item_number']['options']['recurring']['trial_period']['quantity'] ) ) {
@@ -508,13 +508,13 @@ class EDD_Recurring_Gateway {
 		// Store this so we can detect if the count changes due to failed subscriptions
 		$initial_subscription_count = count( $this->subscriptions );
 
-		do_action( 'edd_recurring_pre_create_payment_profiles', $this );
+		do_action( 'cs_recurring_pre_create_payment_profiles', $this );
 
 		if ( ! is_user_logged_in() ) {
-			edd_set_error( 'edd_recurring_login', __( 'You must be logged in to purchase a subscription', 'edd-recurring' ) );
-			$redirect_query = '?payment-mode=' . $this->id . '&edd-recurring-login=1';
+			cs_set_error( 'cs_recurring_login', __( 'You must be logged in to purchase a subscription', 'cs-recurring' ) );
+			$redirect_query = '?payment-mode=' . $this->id . '&cs-recurring-login=1';
 
-			edd_send_back_to_checkout( $redirect_query );
+			cs_send_back_to_checkout( $redirect_query );
 		}
 
 		// Create subscription payment profiles in the gateway
@@ -527,7 +527,7 @@ class EDD_Recurring_Gateway {
 			foreach ( $this->failed_subscriptions as $failed_sub ) {
 
 				$item_key = $failed_sub['key'];
-				// Remove it from the subscriptions array so we don't create an EDD Subscription entry
+				// Remove it from the subscriptions array so we don't create an CS Subscription entry
 				unset( $this->subscriptions[ $item_key ] );
 
 				// Remove it from the cart details and downloads so we don't charge the customer and give accees to it
@@ -539,21 +539,21 @@ class EDD_Recurring_Gateway {
 			// Since we allow subscriptions to be marked as failed, make sure that we at least have one valid subscription
 			if ( count( $this->failed_subscriptions ) === $initial_subscription_count ) {
 				if ( ! empty( $failed_sub['error'] ) ) {
-					edd_set_error( 'recurring-failed-sub-error-' . $item_key, $failed_sub['error'] );
+					cs_set_error( 'recurring-failed-sub-error-' . $item_key, $failed_sub['error'] );
 				} else {
-					edd_set_error( 'recurring-all-subscriptions-failed', __( 'There was an error processing your order. Please contact support.', 'edd-recurring' ) );
+					cs_set_error( 'recurring-all-subscriptions-failed', __( 'There was an error processing your order. Please contact support.', 'cs-recurring' ) );
 				}
 			}
 
 		}
 
-		do_action( 'edd_recurring_post_create_payment_profiles', $this );
+		do_action( 'cs_recurring_post_create_payment_profiles', $this );
 
 		// Look for errors after trying to create payment profiles
-		$errors = edd_get_errors();
+		$errors = cs_get_errors();
 
 		if ( $errors ) {
-			edd_send_back_to_checkout( '?payment-mode=' . $this->id );
+			cs_send_back_to_checkout( '?payment-mode=' . $this->id );
 		}
 
 		// Record the subscriptions and finish up
@@ -563,19 +563,19 @@ class EDD_Recurring_Gateway {
 		$this->complete_signup();
 
 		// Look for any last errors
-		$errors = edd_get_errors();
+		$errors = cs_get_errors();
 
 		// We shouldn't usually get here, but just in case a new error was recorded, we need to check for it
 		if ( $errors ) {
 
-			edd_send_back_to_checkout( '?payment-mode=' . $this->id );
+			cs_send_back_to_checkout( '?payment-mode=' . $this->id );
 
 		}
 
 	}
 
 	/**
-	 * Records purchased subscriptions in the database and creates an edd_payment record
+	 * Records purchased subscriptions in the database and creates an cs_payment record
 	 *
 	 * @access      public
 	 * @since       2.4
@@ -589,7 +589,7 @@ class EDD_Recurring_Gateway {
 			'date'         => $this->purchase_data['date'],
 			'user_email'   => $this->purchase_data['user_email'],
 			'purchase_key' => $this->purchase_data['purchase_key'],
-			'currency'     => edd_get_currency(),
+			'currency'     => cs_get_currency(),
 			'downloads'    => $this->purchase_data['downloads'],
 			'user_info'    => $this->purchase_data['user_info'],
 			'cart_details' => $this->purchase_data['cart_details'],
@@ -609,8 +609,8 @@ class EDD_Recurring_Gateway {
 		}
 
 		// Record the pending payment
-		$this->payment_id = edd_insert_payment( $payment_data );
-		$payment          = edd_get_payment( $this->payment_id );
+		$this->payment_id = cs_insert_payment( $payment_data );
+		$payment          = cs_get_payment( $this->payment_id );
 
 		if ( ! $this->offsite ) {
 
@@ -621,18 +621,18 @@ class EDD_Recurring_Gateway {
 		}
 
 		// Set subscription_payment
-		$payment->update_meta( '_edd_subscription_payment', true );
+		$payment->update_meta( '_cs_subscription_payment', true );
 
 
 		/*
 		 * We need to delete pending subscription records to prevent duplicates. This ensures no duplicate subscription records are created when a purchase is being recovered. See:
-		 * https://github.com/easydigitaldownloads/edd-recurring/issues/707
-		 * https://github.com/easydigitaldownloads/edd-recurring/issues/762
+		 * https://github.com/commercestore/cs-recurring/issues/707
+		 * https://github.com/commercestore/cs-recurring/issues/762
 		 */
 		global $wpdb;
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}edd_subscriptions WHERE parent_payment_id = %d AND status = 'pending';", $this->payment_id ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}cs_subscriptions WHERE parent_payment_id = %d AND status = 'pending';", $this->payment_id ) );
 
-		$subscriber = new EDD_Recurring_Subscriber( $this->customer_id );
+		$subscriber = new CS_Recurring_Subscriber( $this->customer_id );
 
 		// Now create the subscription record(s)
 		foreach ( $this->subscriptions as $subscription ) {
@@ -647,7 +647,7 @@ class EDD_Recurring_Gateway {
 			$expiration   = $subscriber->get_new_expiration( $subscription['id'], $subscription['price_id'], $trial_period );
 
 			// Check and see if we have a custom recurring period from the Custom Prices extension.
-			if ( defined( 'EDD_CUSTOM_PRICES' ) ) {
+			if ( defined( 'CS_CUSTOM_PRICES' ) ) {
 
 				$cart_item = $this->purchase_data['cart_details'][ $subscription['cart_index'] ];
 
@@ -699,23 +699,23 @@ class EDD_Recurring_Gateway {
 				'transaction_id'        => $subscription['transaction_id'],
 			);
 
-			$args = apply_filters( 'edd_recurring_pre_record_signup_args', $args, $this );
+			$args = apply_filters( 'cs_recurring_pre_record_signup_args', $args, $this );
 			$sub = $subscriber->add_subscription( $args );
 
 			if( ! $this->offsite && $trial_period ) {
-				$subscriber->add_meta( 'edd_recurring_trials', $subscription['id'] );
+				$subscriber->add_meta( 'cs_recurring_trials', $subscription['id'] );
 			}
 
 			/**
 			 * Triggers right after a subscription is created.
 			 *
-			 * @param EDD_Subscription      $sub          New subscription object.
+			 * @param CS_Subscription      $sub          New subscription object.
 			 * @param array                 $subscription Gateway subscription arguments.
-			 * @param EDD_Recurring_Gateway $this         Gateway object.
+			 * @param CS_Recurring_Gateway $this         Gateway object.
 			 *
 			 * @since 2.10.2
 			 */
-			do_action( 'edd_recurring_post_record_signup', $sub, $subscription, $this );
+			do_action( 'cs_recurring_post_record_signup', $sub, $subscription, $this );
 
 		}
 
@@ -723,11 +723,11 @@ class EDD_Recurring_Gateway {
 		if ( ! empty( $this->failed_subscriptions ) ) {
 
 			foreach ( $this->failed_subscriptions as $failed_subscription ) {
-				$note = sprintf( __( 'Failed creating subscription for %s. Gateway returned: %s', 'edd-recurring' ), $failed_subscription['subscription']['name'], $failed_subscription['error'] );
+				$note = sprintf( __( 'Failed creating subscription for %s. Gateway returned: %s', 'cs-recurring' ), $failed_subscription['subscription']['name'], $failed_subscription['error'] );
 				$payment->add_note( $note );
 			}
 
-			$payment->update_meta( '_edd_recurring_failed_subscriptions', $this->failed_subscriptions );
+			$payment->update_meta( '_cs_recurring_failed_subscriptions', $this->failed_subscriptions );
 		}
 
 		if ( ! empty( $this->custom_meta ) ) {
@@ -749,25 +749,25 @@ class EDD_Recurring_Gateway {
 	 */
 	public function checkout_errors( $data, $posted ) {
 
-		if ( $this->id !== $posted['edd-gateway'] ) {
+		if ( $this->id !== $posted['cs-gateway'] ) {
 			return;
 		}
 
-		if ( ! edd_recurring()->cart_contains_recurring() ) {
+		if ( ! cs_recurring()->cart_contains_recurring() ) {
 			return;
 		}
 
-		if ( edd_recurring()->cart_is_mixed_with_trials() ) {
-			edd_set_error( 'edd_recurring_mixed_trials_cart', __( 'Free trials and non-trials may not be purchased at the same time. Please purchase each separately.', 'edd-recurring' ) );
+		if ( cs_recurring()->cart_is_mixed_with_trials() ) {
+			cs_set_error( 'cs_recurring_mixed_trials_cart', __( 'Free trials and non-trials may not be purchased at the same time. Please purchase each separately.', 'cs-recurring' ) );
 		}
 
 		// Show errors related to mixed carts.
 
-		$enabled_gateways = edd_get_enabled_payment_gateways();
+		$enabled_gateways = cs_get_enabled_payment_gateways();
 
 		$show_mixed_error = (
 			! in_array( 'mixed_cart', $this->supports, true ) &&
-			edd_recurring()->cart_is_mixed()
+			cs_recurring()->cart_is_mixed()
 		);
 
 		if ( $show_mixed_error ) {
@@ -776,21 +776,21 @@ class EDD_Recurring_Gateway {
 
 				// Show generic error to non show managers if no other gateways can be used to complete the purchase.
 				if ( ! current_user_can( 'manage_shop_settings' ) ) {
-					edd_set_error( 'edd_recurring_mixed_cart', __( 'Subscriptions and non-subscriptions may not be purchased at the same time. Please purchase each separately.', 'edd-recurring' ) );
+					cs_set_error( 'cs_recurring_mixed_cart', __( 'Subscriptions and non-subscriptions may not be purchased at the same time. Please purchase each separately.', 'cs-recurring' ) );
 
 				// Alert shop managers that Stripe supports mixed carts.
 				} else {
-					edd_set_error(
-						'edd_recurring_mixed_cart_install_gateway',
+					cs_set_error(
+						'cs_recurring_mixed_cart_install_gateway',
 						wp_kses(
 							wpautop(
-								'<em>' . __( 'This message is showing because you are a shop manager', 'edd-recurring' ) . '</em>'
+								'<em>' . __( 'This message is showing because you are a shop manager', 'cs-recurring' ) . '</em>'
 							) .
 							wpautop(
 								sprintf(
 									/** translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
-									__( 'Your active payment gateways do not support mixed carts. The %1$sStripe Payment Gateway%2$s allows customers to purchase carts containing both recurring subscriptions and one-time charges at the same time.', 'edd-recurring' ),
-									'<a href="https://easydigitaldownloads.com/downloads/stripe-gateway/?utm_source=checkout&utm_medium=recurring&utm_campaign=admin" rel="noopener noreferrer" target="_blank">',
+									__( 'Your active payment gateways do not support mixed carts. The %1$sStripe Payment Gateway%2$s allows customers to purchase carts containing both recurring subscriptions and one-time charges at the same time.', 'cs-recurring' ),
+									'<a href="https://commercestore.com/downloads/stripe-gateway/?utm_source=checkout&utm_medium=recurring&utm_campaign=admin" rel="noopener noreferrer" target="_blank">',
 									'</a>'
 								)
 							),
@@ -814,14 +814,14 @@ class EDD_Recurring_Gateway {
 					array(
 						'payment-mode' => 'stripe',
 					),
-					edd_get_checkout_uri()
+					cs_get_checkout_uri()
 				);
 
-				edd_set_error(
-					'edd_recurring_mixed_cart_use_gateway',
+				cs_set_error(
+					'cs_recurring_mixed_cart_use_gateway',
 					wp_kses(
 						sprintf(
-							__( 'Sorry, purchasing a subscription and non-subscription product is only supported when paying by credit card. %1$sSwitch to this payment method%2$s.', 'edd-recurring' ),
+							__( 'Sorry, purchasing a subscription and non-subscription product is only supported when paying by credit card. %1$sSwitch to this payment method%2$s.', 'cs-recurring' ),
 							'<a href="' . esc_url( $gateway_checkout_uri ) . '">',
 							'</a>'
 						),
@@ -850,38 +850,38 @@ class EDD_Recurring_Gateway {
 	public function process_payment_method_update( $user_id, $subscription_id, $verified ) {
 
 		if ( 1 !== $verified ) {
-			wp_die( __( 'Unable to verify payment update.', 'edd-recurring' ) );
+			wp_die( __( 'Unable to verify payment update.', 'cs-recurring' ) );
 		}
 
 		if ( ! is_user_logged_in() ) {
-			wp_die( __( 'You must be logged in to update a payment method.', 'edd-recurring' ) );
+			wp_die( __( 'You must be logged in to update a payment method.', 'cs-recurring' ) );
 		}
 
-		$subscription = new EDD_Subscription( $subscription_id );
+		$subscription = new CS_Subscription( $subscription_id );
 		if ( $subscription->gateway !== $this->id ) {
 			return;
 		}
 
 		if ( empty( $subscription->id ) ) {
-			wp_die( __( 'Invalid subscription id.', 'edd-recurring' ) );
+			wp_die( __( 'Invalid subscription id.', 'cs-recurring' ) );
 		}
 
-		$subscriber   = new EDD_Recurring_Subscriber( $subscription->customer_id );
+		$subscriber   = new CS_Recurring_Subscriber( $subscription->customer_id );
 		if ( empty( $subscriber->id ) ) {
-			wp_die( __( 'Invalid subscriber.', 'edd-recurring' ) );
+			wp_die( __( 'Invalid subscriber.', 'cs-recurring' ) );
 		}
 
 		// Make sure the User doing the udpate is the user the subscription belongs to
 		if ( $user_id != $subscriber->user_id ) {
-			wp_die( __( 'User ID and Subscriber do not match.', 'edd-recurring' ) );
+			wp_die( __( 'User ID and Subscriber do not match.', 'cs-recurring' ) );
 		}
 
 		// make sure we don't have any left over errors present
-		edd_clear_errors();
+		cs_clear_errors();
 
-		do_action( 'edd_recurring_update_' . $subscription->gateway .'_subscription', $subscriber, $subscription );
+		do_action( 'cs_recurring_update_' . $subscription->gateway .'_subscription', $subscriber, $subscription );
 
-		$errors = edd_get_errors();
+		$errors = cs_get_errors();
 
 		if ( empty( $errors ) ) {
 
@@ -915,12 +915,12 @@ class EDD_Recurring_Gateway {
 			return;
 		}
 
-		if( ! wp_verify_nonce( $data['_wpnonce'], 'edd-recurring-cancel' ) ) {
-			wp_die( __( 'Nonce verification failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 403 ) );
+		if( ! wp_verify_nonce( $data['_wpnonce'], 'cs-recurring-cancel' ) ) {
+			wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
 		}
 
 		$data['sub_id'] = absint( $data['sub_id'] );
-		$subscription   = new EDD_Subscription( $data['sub_id'] );
+		$subscription   = new CS_Subscription( $data['sub_id'] );
 
 		try {
 
@@ -928,20 +928,20 @@ class EDD_Recurring_Gateway {
 
 			if( is_admin() ) {
 
-				wp_redirect( admin_url( 'edit.php?post_type=download&page=edd-subscriptions&edd-message=cancelled&id=' . $subscription->id ) );
+				wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=cancelled&id=' . $subscription->id ) );
 				exit;
 
 			} else {
 
-				$redirect = remove_query_arg( array( '_wpnonce', 'edd_action', 'sub_id' ), add_query_arg( array( 'edd-message' => 'cancelled' ) ) );
-				$redirect = apply_filters( 'edd_recurring_cancellation_redirect', $redirect, $subscription );
+				$redirect = remove_query_arg( array( '_wpnonce', 'cs_action', 'sub_id' ), add_query_arg( array( 'cs-message' => 'cancelled' ) ) );
+				$redirect = apply_filters( 'cs_recurring_cancellation_redirect', $redirect, $subscription );
 				wp_safe_redirect( $redirect );
 				exit;
 
 			}
 
 		} catch ( Exception $e ) {
-			wp_die( $e->getMessage(), __( 'Error', 'edd-recurring' ), array( 'response' => 403 ) );
+			wp_die( $e->getMessage(), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
 		}
 
 	}
@@ -963,42 +963,42 @@ class EDD_Recurring_Gateway {
 			return;
 		}
 
-		if( ! wp_verify_nonce( $data['_wpnonce'], 'edd-recurring-reactivate' ) ) {
-			wp_die( __( 'Nonce verification failed', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 403 ) );
+		if( ! wp_verify_nonce( $data['_wpnonce'], 'cs-recurring-reactivate' ) ) {
+			wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
 		}
 
 
 		$data['sub_id'] = absint( $data['sub_id'] );
-		$subscription   = new EDD_Subscription( $data['sub_id'] );
+		$subscription   = new CS_Subscription( $data['sub_id'] );
 
 		if( ! $subscription->can_reactivate() ) {
-			wp_die( __( 'This subscription cannot be reactivated', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 403 ) );
+			wp_die( __( 'This subscription cannot be reactivated', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
 		}
 
 		try {
 
-			do_action( 'edd_recurring_reactivate_' . $subscription->gateway . '_subscription', $subscription, true );
+			do_action( 'cs_recurring_reactivate_' . $subscription->gateway . '_subscription', $subscription, true );
 
 			$user = is_user_logged_in() ? wp_get_current_user()->user_login : 'gateway';
-			$note = sprintf( __( 'Subscription reactivated by %s', 'edd-recurring' ), $user );
+			$note = sprintf( __( 'Subscription reactivated by %s', 'cs-recurring' ), $user );
 			$subscription->add_note( $note );
 
 			if( is_admin() ) {
 
-				wp_redirect( admin_url( 'edit.php?post_type=download&page=edd-subscriptions&edd-message=reactivated&id=' . $subscription->id ) );
+				wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=reactivated&id=' . $subscription->id ) );
 				exit;
 
 			} else {
 
-				$redirect = remove_query_arg( array( '_wpnonce', 'edd_action', 'sub_id' ), add_query_arg( array( 'edd-message' => 'reactivated' ) ) );
-				$redirect = apply_filters( 'edd_recurring_reactivation_redirect', $redirect, $subscription );
+				$redirect = remove_query_arg( array( '_wpnonce', 'cs_action', 'sub_id' ), add_query_arg( array( 'cs-message' => 'reactivated' ) ) );
+				$redirect = apply_filters( 'cs_recurring_reactivation_redirect', $redirect, $subscription );
 				wp_safe_redirect( $redirect );
 				exit;
 
 			}
 
 		} catch ( Exception $e ) {
-			wp_die( $e->getMessage(), __( 'Error', 'edd-recurring' ), array( 'response' => 403 ) );
+			wp_die( $e->getMessage(), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
 		}
 
 	}
@@ -1012,7 +1012,7 @@ class EDD_Recurring_Gateway {
 	 */
 	public function require_login() {
 
-		$cart_items    = edd_get_cart_contents();
+		$cart_items    = cs_get_cart_contents();
 		$has_recurring = false;
 
 		if ( empty( $cart_items ) ) {
@@ -1031,12 +1031,12 @@ class EDD_Recurring_Gateway {
 
 		}
 
-		$auto_register = class_exists( 'EDD_Auto_Register' );
+		$auto_register = class_exists( 'CS_Auto_Register' );
 
 		if( $has_recurring && ! $auto_register ) {
 
-			add_filter( 'edd_no_guest_checkout', '__return_true' );
-			add_filter( 'edd_logged_in_only', '__return_true' );
+			add_filter( 'cs_no_guest_checkout', '__return_true' );
+			add_filter( 'cs_logged_in_only', '__return_true' );
 
 		}
 
@@ -1051,7 +1051,7 @@ class EDD_Recurring_Gateway {
 	 * @since       2.4
 	 * @return      array
 	 */
-	public function get_subscription_details( EDD_Subscription $subscription ) {
+	public function get_subscription_details( CS_Subscription $subscription ) {
 
 		/*
 		 * Return value for valid subscriptions should be an array containing the following keys:

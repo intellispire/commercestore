@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Class EDD_Recurring_Reports
+ * Class CS_Recurring_Reports
  *
  * @since 2.4
  *
  */
-class EDD_Recurring_Reports {
+class CS_Recurring_Reports {
 
 
 	/**
@@ -14,36 +14,36 @@ class EDD_Recurring_Reports {
 	 */
 	public function __construct() {
 
-		if ( function_exists( 'edd_add_order' ) ) {
-			// EDD 3.0+ Graph Reports
-			add_action( 'edd_reports_init', array( $this, 'register_reports' ) );
+		if ( function_exists( 'cs_add_order' ) ) {
+			// CS 3.0+ Graph Reports
+			add_action( 'cs_reports_init', array( $this, 'register_reports' ) );
 		} else {
-			// EDD 2.9 and below Graph Reports
-			add_filter( 'edd_report_views', array( $this, 'add_subscriptions_reports_view' ) );
-			add_action( 'edd_reports_view_subscriptions', array( $this, 'display_subscriptions_report' ) );
+			// CS 2.9 and below Graph Reports
+			add_filter( 'cs_report_views', array( $this, 'add_subscriptions_reports_view' ) );
+			add_action( 'cs_reports_view_subscriptions', array( $this, 'display_subscriptions_report' ) );
 		}
 
 		//Payments' subscription status column
-		add_filter( 'edd_payments_table_column', array( $this, 'status_column' ), 800, 3 );
+		add_filter( 'cs_payments_table_column', array( $this, 'status_column' ), 800, 3 );
 
 	}
 
 	/**
-	 * Registers reports with EDD
+	 * Registers reports with CS
 	 *
-	 * @param EDD\Reports\Data\Report_Registry $reports
+	 * @param CS\Reports\Data\Report_Registry $reports
 	 *
 	 * @since 2.10.1
 	 * @return void
 	 */
 	public function register_reports( $reports ) {
 		try {
-			$options = EDD\Reports\get_dates_filter_options();
-			$dates   = EDD\Reports\get_filter_value( 'dates' );
+			$options = CS\Reports\get_dates_filter_options();
+			$dates   = CS\Reports\get_filter_value( 'dates' );
 			$label   = $options[ $dates['range'] ];
 
 			$reports->add_report( 'recurring_subscription_renewals', array(
-				'label'     => __( 'Subscription Renewals', 'edd-recurring' ),
+				'label'     => __( 'Subscription Renewals', 'cs-recurring' ),
 				'icon'      => 'chart-area', // @todo is there a better one?
 				'priority'  => 60,
 				'endpoints' => array(
@@ -61,10 +61,10 @@ class EDD_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_number', array(
-				'label' => __( 'Number of Renewals', 'edd-recurring' ),
+				'label' => __( 'Number of Renewals', 'cs-recurring' ),
 				'views' => array(
 					'tile' => array(
-						'data_callback' => 'edd_recurring_renewals_number_callback',
+						'data_callback' => 'cs_recurring_renewals_number_callback',
 						'display_args'  => array(
 							'comparison_label' => $label
 						)
@@ -73,10 +73,10 @@ class EDD_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_refunded_number', array(
-				'label' => __( 'Number of Refunded Renewals', 'edd-recurring' ),
+				'label' => __( 'Number of Refunded Renewals', 'cs-recurring' ),
 				'views' => array(
 					'tile' => array(
-						'data_callback' => 'edd_recurring_renewals_refunded_number_callback',
+						'data_callback' => 'cs_recurring_renewals_refunded_number_callback',
 						'display_args'  => array(
 							'comparison_label' => $label
 						)
@@ -85,11 +85,11 @@ class EDD_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_gross_earnings', array(
-				'label' => __( 'Gross Renewal Earnings', 'edd-recurring' ),
+				'label' => __( 'Gross Renewal Earnings', 'cs-recurring' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => function() {
-							return edd_currency_filter( edd_format_amount( edd_recurring_get_gross_renewal_earnings_for_report_period() ) );
+							return cs_currency_filter( cs_format_amount( cs_recurring_get_gross_renewal_earnings_for_report_period() ) );
 						},
 						'display_args'  => array(
 							'comparison_label' => $label
@@ -99,11 +99,11 @@ class EDD_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_refunded_amount', array(
-				'label' => __( 'Refunded Renewals', 'edd-recurring' ),
+				'label' => __( 'Refunded Renewals', 'cs-recurring' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => function() {
-							return edd_currency_filter( edd_format_amount( abs( edd_recurring_get_refunded_amount_for_report_period() ) ) );
+							return cs_currency_filter( cs_format_amount( abs( cs_recurring_get_refunded_amount_for_report_period() ) ) );
 						},
 						'display_args'  => array(
 							'comparison_label' => $label
@@ -113,13 +113,13 @@ class EDD_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_net_earnings', array(
-				'label' => __( 'Net Renewal Earnings', 'edd-recurring' ),
+				'label' => __( 'Net Renewal Earnings', 'cs-recurring' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => function() {
-							$net = edd_recurring_get_gross_renewal_earnings_for_report_period() - edd_recurring_get_refunded_amount_for_report_period();
+							$net = cs_recurring_get_gross_renewal_earnings_for_report_period() - cs_recurring_get_refunded_amount_for_report_period();
 
-							return edd_currency_filter( edd_format_amount( $net ) );
+							return cs_currency_filter( cs_format_amount( $net ) );
 						},
 						'display_args'  => array(
 							'comparison_label' => $label
@@ -129,15 +129,15 @@ class EDD_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_chart', array(
-				'label' => __( 'Subscription Renewals', 'edd-recurring' ),
+				'label' => __( 'Subscription Renewals', 'cs-recurring' ),
 				'views' => array(
 					'chart' => array(
-						'data_callback' => 'EDD_Recurring_Reports_Chart::get_chart_data',
+						'data_callback' => 'CS_Recurring_Reports_Chart::get_chart_data',
 						'type'          => 'line',
 						'options'       => array(
 							'datasets' => array(
 								'renewals' => array(
-									'label'                => __( 'Renewals', 'edd-recurring' ),
+									'label'                => __( 'Renewals', 'cs-recurring' ),
 									'borderColor'          => 'rgb(237,194,64)',
 									'backgroundColor'      => 'rgba(237,194,64,0.2)',
 									'fill'                 => true,
@@ -149,7 +149,7 @@ class EDD_Recurring_Reports {
 									'pointBackgroundColor' => 'rgb(255,255,255)',
 								),
 								'refunds' => array(
-									'label'                => __( 'Refunds', 'edd-recurring' ),
+									'label'                => __( 'Refunds', 'cs-recurring' ),
 									'borderColor'          => 'rgb(175,216,248)',
 									'backgroundColor'      => 'rgba(175,216,248,0.05)',
 									'fill'                 => true,
@@ -161,7 +161,7 @@ class EDD_Recurring_Reports {
 									'pointBackgroundColor' => 'rgb(255,255,255)',
 								),
 								'earnings' => array(
-									'label'                => __( 'Earnings', 'edd-recurring' ),
+									'label'                => __( 'Earnings', 'cs-recurring' ),
 									'borderColor'          => 'rgb(203,75,75)',
 									'backgroundColor'      => 'rgba(203,75,75,0.05)',
 									'fill'                 => true,
@@ -172,7 +172,7 @@ class EDD_Recurring_Reports {
 									'pointBackgroundColor' => 'rgb(255,255,255)',
 								),
 								'refunded_earnings' => array(
-									'label'                => __( 'Refunded Earnings', 'edd-recurring' ),
+									'label'                => __( 'Refunded Earnings', 'cs-recurring' ),
 									'borderColor'          => 'rgb(77,167,77)',
 									'backgroundColor'      => 'rgba(77,167,77,0.05)',
 									'fill'                 => true,
@@ -201,7 +201,7 @@ class EDD_Recurring_Reports {
 	 * @return mixed
 	 */
 	public function add_subscriptions_reports_view( $views ) {
-		$views['subscriptions'] = __( 'Subscription Renewals', 'edd-recurring' );
+		$views['subscriptions'] = __( 'Subscription Renewals', 'cs-recurring' );
 
 		return $views;
 	}
@@ -223,9 +223,9 @@ class EDD_Recurring_Reports {
 	 */
 	public function get_subscriptions_by_date( $day = null, $month = null, $year = null, $hour = null, $include_taxes = false ) {
 
-		$args = apply_filters( 'edd_get_subscriptions_by_date', array(
+		$args = apply_filters( 'cs_get_subscriptions_by_date', array(
 			'nopaging'    => true,
-			'post_status' => array( 'edd_subscription', 'refunded' ),
+			'post_status' => array( 'cs_subscription', 'refunded' ),
 			'year'        => $year,
 			'monthnum'    => $month,
 			'meta_key'    => 'subscription_id'
@@ -239,7 +239,7 @@ class EDD_Recurring_Reports {
 			$args['hour'] = $hour;
 		}
 
-		$subscriptions = edd_get_payments( $args );
+		$subscriptions = cs_get_payments( $args );
 
 		$return             = array();
 		$return['earnings']       = 0;
@@ -249,16 +249,16 @@ class EDD_Recurring_Reports {
 		if ( $subscriptions ) {
 			foreach ( $subscriptions as $renewal ) {
 
-				$amount = edd_get_payment_amount( $renewal->ID );
+				$amount = cs_get_payment_amount( $renewal->ID );
 
 				switch( $renewal->post_status ) {
 
-					case 'edd_subscription' :
+					case 'cs_subscription' :
 
 						$tax    = 0;
 
 						if( ! $include_taxes ) {
-							$tax = edd_get_payment_tax( $renewal->ID );
+							$tax = cs_get_payment_tax( $renewal->ID );
 						}
 
 						$return['count']    += 1;
@@ -294,11 +294,11 @@ class EDD_Recurring_Reports {
 	public function display_subscriptions_report() {
 
 		if ( ! current_user_can( 'view_shop_reports' ) ) {
-			wp_die( __( 'You do not have permission to view this data', 'edd-recurring' ), __( 'Error', 'edd-recurring' ), array( 'response' => 401 ) );
+			wp_die( __( 'You do not have permission to view this data', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
 		}
 
 		// Retrieve the queried dates
-		$dates = edd_get_report_dates();
+		$dates = cs_get_report_dates();
 
 		// Determine graph options
 		switch ( $dates['range'] ) :
@@ -480,10 +480,10 @@ class EDD_Recurring_Reports {
 		}
 
 		$data = array(
-			__( 'Renewals', 'edd-recurring' )          => $subscription_count,
-			__( 'Refunds', 'edd-recurring' )           => $refunded_counter,
-			__( 'Earnings', 'edd-recurring' )          => $earnings_data,
-			__( 'Refunded Earnings', 'edd-recurring' ) => $refunds_data,
+			__( 'Renewals', 'cs-recurring' )          => $subscription_count,
+			__( 'Refunds', 'cs-recurring' )           => $refunded_counter,
+			__( 'Earnings', 'cs-recurring' )          => $earnings_data,
+			__( 'Refunded Earnings', 'cs-recurring' ) => $refunds_data,
 		);
 
 		$renewals_earnings_max = max( wp_list_pluck( $earnings_data, 1 ) );
@@ -497,17 +497,17 @@ class EDD_Recurring_Reports {
 		ob_start();
 		?>
 		<div class="tablenav top">
-			<div class="alignleft actions"><?php edd_report_views(); ?></div>
+			<div class="alignleft actions"><?php cs_report_views(); ?></div>
 		</div>
-		<?php do_action( 'edd_subscription_reports_graph_before' ); ?>
+		<?php do_action( 'cs_subscription_reports_graph_before' ); ?>
 		<div class="metabox-holder">
 			<div class="postbox">
-				<h3><span><?php _e( 'Subscription Renewals', 'edd-recurring' ); ?></span></h3>
+				<h3><span><?php _e( 'Subscription Renewals', 'cs-recurring' ); ?></span></h3>
 
 				<div class="inside">
 					<?php
-					edd_reports_graph_controls();
-					$graph = new EDD_Graph( $data );
+					cs_reports_graph_controls();
+					$graph = new CS_Graph( $data );
 					$graph->set( 'x_mode', 'time' );
 					$graph->set( 'multiple_y_axes', true );
 					$additional_options = array(
@@ -530,51 +530,51 @@ class EDD_Recurring_Reports {
 					$graph->display();
 					?>
 
-					<p class="edd_graph_totals">
+					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'Gross earnings for period shown: ', 'easy-digital-downloads' );
-							echo edd_currency_filter( edd_format_amount( $earnings_totals  + $refunded_amount) );
+							_e( 'Gross earnings for period shown: ', 'commercestore' );
+							echo cs_currency_filter( cs_format_amount( $earnings_totals  + $refunded_amount) );
 							?>
 						</strong>
 					</p>
 
-					<p class="edd_graph_totals">
+					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'Refunded earnings for period shown: ', 'easy-digital-downloads' );
-							echo edd_currency_filter( edd_format_amount( $refunded_amount ) );
+							_e( 'Refunded earnings for period shown: ', 'commercestore' );
+							echo cs_currency_filter( cs_format_amount( $refunded_amount ) );
 							?>
 						</strong>
 					</p>
 
-					<p class="edd_graph_totals">
+					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'NET earnings for period shown: ', 'easy-digital-downloads' );
-							echo edd_currency_filter( edd_format_amount( $earnings_totals ) );
+							_e( 'NET earnings for period shown: ', 'commercestore' );
+							echo cs_currency_filter( cs_format_amount( $earnings_totals ) );
 							?>
 						</strong>
 					</p>
 
-					<p class="edd_graph_totals">
-						<strong><?php _e( 'Total renewals for period shown: ', 'edd-recurring' ); echo edd_format_amount( $subscriptions_totals, false ); ?></strong>
+					<p class="cs_graph_totals">
+						<strong><?php _e( 'Total renewals for period shown: ', 'cs-recurring' ); echo cs_format_amount( $subscriptions_totals, false ); ?></strong>
 					</p>
 
-					<p class="edd_graph_totals">
+					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'Total renewals refunded for period shown: ', 'easy-digital-downloads' );
-							echo edd_format_amount( $refunded_count, false );
+							_e( 'Total renewals refunded for period shown: ', 'commercestore' );
+							echo cs_format_amount( $refunded_count, false );
 							?>
 						</strong>
 					</p>
 
-					<?php do_action( 'edd_subscription_reports_graph_additional_stats' ); ?>
+					<?php do_action( 'cs_subscription_reports_graph_additional_stats' ); ?>
 
-					<p class="edd_graph_notes">
+					<p class="cs_graph_notes">
 						<?php if ( false === $include_taxes ) : ?>
-							<em><sup>&dagger;</sup> <?php _e( 'Excludes sales tax.', 'easy-digital-downloads' ); ?></em>
+							<em><sup>&dagger;</sup> <?php _e( 'Excludes sales tax.', 'commercestore' ); ?></em>
 						<?php endif; ?>
 					</p>
 
@@ -582,7 +582,7 @@ class EDD_Recurring_Reports {
 				</div>
 			</div>
 		</div>
-		<?php do_action( 'edd_subscription_reports_graph_after' ); ?>
+		<?php do_action( 'cs_subscription_reports_graph_after' ); ?>
 
 		<?php
 		// get output buffer contents and end our own buffer
@@ -602,12 +602,12 @@ class EDD_Recurring_Reports {
 	 */
 	public function status_column( $value, $payment_id, $column_name ) {
 
-		if ( 'status' == $column_name && 'edd_subscription' == get_post_status( $payment_id ) ) {
-			$value = __( 'Renewal Payment', 'edd-recurring' );
+		if ( 'status' == $column_name && 'cs_subscription' == get_post_status( $payment_id ) ) {
+			$value = __( 'Renewal Payment', 'cs-recurring' );
 		}
 
 		return $value;
 	}
 
 }
-new EDD_Recurring_Reports();
+new CS_Recurring_Reports();

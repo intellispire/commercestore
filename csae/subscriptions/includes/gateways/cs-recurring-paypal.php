@@ -5,9 +5,9 @@ if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-global $edd_recurring_paypal;
+global $cs_recurring_paypal;
 
-class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
+class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 	/**
 	 * Get things started
@@ -23,24 +23,24 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		$this->offsite = true;
 
 		// Process PayPal subscription sign ups
-		add_action( 'edd_paypal_subscr_signup', array( $this, 'process_paypal_subscr_signup' ) );
+		add_action( 'cs_paypal_subscr_signup', array( $this, 'process_paypal_subscr_signup' ) );
 
 		// Process PayPal subscription payments
-		add_action( 'edd_paypal_subscr_payment', array( $this, 'process_paypal_subscr_payment' ) );
+		add_action( 'cs_paypal_subscr_payment', array( $this, 'process_paypal_subscr_payment' ) );
 
 		// Process PayPal subscription cancellations
-		add_action( 'edd_paypal_subscr_cancel', array( $this, 'process_paypal_subscr_cancel' ) );
+		add_action( 'cs_paypal_subscr_cancel', array( $this, 'process_paypal_subscr_cancel' ) );
 
 		// Process PayPal subscription end of term notices
-		add_action( 'edd_paypal_subscr_eot', array( $this, 'process_paypal_subscr_eot' ) );
+		add_action( 'cs_paypal_subscr_eot', array( $this, 'process_paypal_subscr_eot' ) );
 
 		// Process PayPal payment failed
-		add_action( 'edd_paypal_subscr_failed', array( $this, 'process_paypal_subscr_failed' ) );
+		add_action( 'cs_paypal_subscr_failed', array( $this, 'process_paypal_subscr_failed' ) );
 
 		//Validate PayPal times server side when a download post is saved
 		add_action( 'save_post', array( $this, 'validate_paypal_recurring_download' ) );
 
-		add_action( 'edd_pre_refund_payment', array( $this, 'refund_renewal_payment' ) );
+		add_action( 'cs_pre_refund_payment', array( $this, 'refund_renewal_payment' ) );
 
 	}
 
@@ -70,15 +70,15 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 */
 	public function validate_fields( $data, $posted ) {
 
-		if( ! edd_get_option( 'paypal_email', false ) ) {
+		if( ! cs_get_option( 'paypal_email', false ) ) {
 
-			edd_set_error( 'edd_recurring_paypal_email_missing', __( 'Please enter your PayPal email address.', 'edd-recurring' ) );
+			cs_set_error( 'cs_recurring_paypal_email_missing', __( 'Please enter your PayPal email address.', 'cs-recurring' ) );
 
 		}
 
-		if( count( edd_get_cart_contents() ) > 1 && ! $this->can_purchase_multiple_subs() ) {
+		if( count( cs_get_cart_contents() ) > 1 && ! $this->can_purchase_multiple_subs() ) {
 
-			edd_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased through PayPal per checkout.', 'edd-recurring') );
+			cs_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased through PayPal per checkout.', 'cs-recurring') );
 
 		}
 
@@ -97,14 +97,14 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		$return_url = add_query_arg( array(
 			'payment-confirmation' => 'paypal',
 			'payment-id' => $this->payment_id
-		), edd_get_success_page_uri() );
+		), cs_get_success_page_uri() );
 
 		// Get the PayPal redirect uri
-		$paypal_redirect = trailingslashit( edd_get_paypal_redirect() ) . '?';
+		$paypal_redirect = trailingslashit( cs_get_paypal_redirect() ) . '?';
 
 		// Setup PayPal arguments
 		$paypal_args = array(
-			'business'      => edd_get_option( 'paypal_email', false ),
+			'business'      => cs_get_option( 'paypal_email', false ),
 			'email'         => $this->purchase_data['user_email'],
 			'first_name'    => $this->purchase_data['user_info']['first_name'],
 			'last_name'     => $this->purchase_data['user_info']['last_name'],
@@ -112,13 +112,13 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			'no_shipping'   => '1',
 			'shipping'      => '0',
 			'no_note'       => '1',
-			'currency_code' => edd_get_currency(),
+			'currency_code' => cs_get_currency(),
 			'charset'       => get_bloginfo( 'charset' ),
 			'custom'        => $this->payment_id,
 			'rm'            => '2',
 			'return'        => $return_url,
-			'cancel_return' => edd_get_failed_transaction_uri( '?payment-id=' . $this->payment_id ),
-			'notify_url'    => add_query_arg( 'edd-listener', 'IPN', home_url( 'index.php' ) ),
+			'cancel_return' => cs_get_failed_transaction_uri( '?payment-id=' . $this->payment_id ),
+			'notify_url'    => add_query_arg( 'cs-listener', 'IPN', home_url( 'index.php' ) ),
 			'cbt'           => get_bloginfo( 'name' ),
 			'bn'            => 'EasyDigitalDownloads_SP',
 			'sra'           => '1',
@@ -126,8 +126,8 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			'cmd'           => '_xclick-subscriptions'
 		);
 
-		if( function_exists( 'edd_get_paypal_image_url' ) ) {
-			$paypal_args['image_url'] = edd_get_paypal_image_url();
+		if( function_exists( 'cs_get_paypal_image_url' ) ) {
+			$paypal_args['image_url'] = cs_get_paypal_image_url();
 		}
 
 		if ( ! empty( $this->purchase_data['user_info']['address'] ) ) {
@@ -160,7 +160,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			// Set purchase description
 			$paypal_args['item_name'] = $subscription['name'];
 			if( ! is_null( $subscription['price_id'] ) ) {
-				$paypal_args['item_name'] .= stripslashes_deep( html_entity_decode(  ' - ' . edd_get_price_option_name( $subscription['id'], $subscription['price_id'] ), ENT_COMPAT, 'UTF-8' ) );
+				$paypal_args['item_name'] .= stripslashes_deep( html_entity_decode(  ' - ' . cs_get_price_option_name( $subscription['id'], $subscription['price_id'] ), ENT_COMPAT, 'UTF-8' ) );
 			}
 
 			// One period unit (every week, every month, etc)
@@ -256,8 +256,8 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 		}
 
-		$paypal_args  = apply_filters( 'edd_recurring_create_subscription_args', $paypal_args, $this->purchase_data['downloads'], $this->id, $subscription['id'], $subscription['price_id'] );
-		$paypal_args  = apply_filters( 'edd_recurring_paypal_args', $paypal_args, $this->purchase_data );
+		$paypal_args  = apply_filters( 'cs_recurring_create_subscription_args', $paypal_args, $this->purchase_data['downloads'], $this->id, $subscription['id'], $subscription['price_id'] );
+		$paypal_args  = apply_filters( 'cs_recurring_paypal_args', $paypal_args, $this->purchase_data );
 
 		// Build query
 		$paypal_redirect .= http_build_query( $paypal_args );
@@ -266,7 +266,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		$paypal_redirect = str_replace( '&amp;', '&', $paypal_redirect );
 
 		// Get rid of cart contents
-		edd_empty_cart();
+		cs_empty_cart();
 
 		// Redirect to PayPal
 		wp_redirect( $paypal_redirect ); exit;
@@ -289,12 +289,12 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			return;
 		}
 
-		if( ! edd_get_payment_by( 'id', $parent_payment_id ) ) {
+		if( ! cs_get_payment_by( 'id', $parent_payment_id ) ) {
 			return;
 		}
 
 		// Record transaction ID
-		edd_insert_payment_note( $parent_payment_id, sprintf( __( 'PayPal Subscription ID: %s', 'edd-recurring' ) , $ipn_data['subscr_id'] ) );
+		cs_insert_payment_note( $parent_payment_id, sprintf( __( 'PayPal Subscription ID: %s', 'cs-recurring' ) , $ipn_data['subscr_id'] ) );
 
 		$subscription = $this->get_subscription( $ipn_data );
 
@@ -302,7 +302,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			return;
 		}
 
-		$subscriber = new EDD_Recurring_Subscriber( $subscription->customer_id );
+		$subscriber = new CS_Recurring_Subscriber( $subscription->customer_id );
 
 		// Validate subscription amount. Subscriptions without a trial period have the same initial and recurring amount, so we look at mc_amount3 for those.
 		$amount_received = isset( $ipn_data['mc_amount1'] ) ? round( $ipn_data['mc_amount1'], 2 ) : round( $ipn_data['mc_amount3'], 2 );
@@ -310,12 +310,12 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 		if( $amount_received < $initial_amount ) {
 
-			$payment         = edd_get_payment( $subscription->parent_payment_id );
+			$payment         = cs_get_payment( $subscription->parent_payment_id );
 			$payment->status = 'failed';
-			$payment->add_note( __( 'Payment failed due to invalid initial amount in PayPal Recurring IPN.', 'edd-recurring' ) );
+			$payment->add_note( __( 'Payment failed due to invalid initial amount in PayPal Recurring IPN.', 'cs-recurring' ) );
 			$payment->save();
 
-			edd_record_gateway_error( __( 'IPN Error', 'edd-recurring' ), sprintf( __( 'Invalid initial payment amount in IPN subscr_signup response. IPN data: %s', 'edd-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
+			cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid initial payment amount in IPN subscr_signup response. IPN data: %s', 'cs-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
 
 			return;
 
@@ -326,24 +326,24 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		$recurring_amount  = round( $subscription->recurring_amount, 2 );
 		if( $amount_to_receive < $recurring_amount ) {
 
-			$payment         = edd_get_payment( $subscription->parent_payment_id );
+			$payment         = cs_get_payment( $subscription->parent_payment_id );
 			$payment->status = 'failed';
-			$payment->add_note( __( 'Payment failed due to invalid recurring amount in PayPal Recurring IPN.', 'edd-recurring' ) );
+			$payment->add_note( __( 'Payment failed due to invalid recurring amount in PayPal Recurring IPN.', 'cs-recurring' ) );
 			$payment->save();
 
-			edd_record_gateway_error( __( 'IPN Error', 'edd-recurring' ), sprintf( __( 'Invalid recurring payment amount in IPN subscr_signup response. IPN data: %s', 'edd-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
+			cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid recurring payment amount in IPN subscr_signup response. IPN data: %s', 'cs-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
 
 			return;
 
 		}
 
 		// Set payment to complete
-		edd_update_payment_status( $subscription->parent_payment_id, 'publish' );
+		cs_update_payment_status( $subscription->parent_payment_id, 'publish' );
 
 		$status = 'trialling' == $subscription->status ? 'trialling' : 'active';
 
 		if( 'trialling' === $subscription->status ) {
-			$subscriber->add_meta( 'edd_recurring_trials', $subscription->product_id );
+			$subscriber->add_meta( 'cs_recurring_trials', $subscription->product_id );
 		}
 
 		// Retrieve pending subscription from database and update it's status to active and set proper profile ID
@@ -369,9 +369,9 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			return;
 		}
 
-		$transaction_id = edd_get_payment_transaction_id( $subscription->parent_payment_id );
+		$transaction_id = cs_get_payment_transaction_id( $subscription->parent_payment_id );
 
-		// Get the Paypal IPN date and the sign up date for the EDD Subscription
+		// Get the Paypal IPN date and the sign up date for the CS Subscription
 		$ipn_payment_date = new DateTime( $ipn_data['payment_date'] );
 		$signup_date = new DateTime( $subscription->created );
 
@@ -384,13 +384,13 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		// Look to see if payment is same day as signup and we have set the transaction ID on the parent payment yet
 		if( $probably_is_initial_ipn && ( ! $transaction_id || $transaction_id == $subscription->parent_payment_id ) ) {
 
-			$payment = edd_get_payment( $subscription->parent_payment_id );
+			$payment = cs_get_payment( $subscription->parent_payment_id );
 
 			// Check if the payment status is failed in the IPN.
 			if ( 'failed' === strtolower( $ipn_data['payment_status'] ) ) {
 				$payment->status = 'failed';
-				$payment->add_note( __( 'Payment failed at PayPal.', 'edd-recurring' ) );
-				$subscription->add_note( __( 'Payment processing failed at PayPal.', 'edd-recurring' ) );
+				$payment->add_note( __( 'Payment failed at PayPal.', 'cs-recurring' ) );
+				$subscription->add_note( __( 'Payment processing failed at PayPal.', 'cs-recurring' ) );
 				$payment->save();
 				$subscription->update( array( 'status' => 'failing' ) );
 
@@ -404,10 +404,10 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			if( $paid_amount < $initial_amount ) {
 
 				$payment->status = 'failed';
-				$payment->add_note( __( 'Payment failed due to invalid amount in PayPal Recurring IPN.', 'edd-recurring' ) );
+				$payment->add_note( __( 'Payment failed due to invalid amount in PayPal Recurring IPN.', 'cs-recurring' ) );
 				$payment->save();
 
-				edd_record_gateway_error( __( 'IPN Error', 'edd-recurring' ), sprintf( __( 'Invalid payment amount in IPN subscr_payment response. IPN data: %s', 'edd-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
+				cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid payment amount in IPN subscr_payment response. IPN data: %s', 'cs-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
 
 				return;
 
@@ -416,7 +416,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			$subscription->set_transaction_id( $ipn_data['txn_id'] );
 
 			// This is the very first payment
-			edd_set_payment_transaction_id( $subscription->parent_payment_id, $ipn_data['txn_id'] );
+			cs_set_payment_transaction_id( $subscription->parent_payment_id, $ipn_data['txn_id'] );
 
 			$payment_status = strtolower( $ipn_data['payment_status'] );
 
@@ -430,62 +430,62 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 					case 'echeck' :
 
-						$note = __( 'Payment made via eCheck and will clear automatically in 5-8 days.', 'edd-recurring' );
+						$note = __( 'Payment made via eCheck and will clear automatically in 5-8 days.', 'cs-recurring' );
 						break;
 
 					case 'address' :
 
-						$note = __( 'Payment requires a confirmed customer address and must be accepted manually through PayPal.', 'edd-recurring' );
+						$note = __( 'Payment requires a confirmed customer address and must be accepted manually through PayPal.', 'cs-recurring' );
 
 						break;
 
 					case 'intl' :
 
-						$note = __( 'Payment must be accepted manually through PayPal due to international account regulations.', 'edd-recurring' );
+						$note = __( 'Payment must be accepted manually through PayPal due to international account regulations.', 'cs-recurring' );
 
 						break;
 
 					case 'multi_currency' :
 
-						$note = __( 'Payment received in non-shop currency and must be accepted manually through PayPal.', 'edd-recurring' );
+						$note = __( 'Payment received in non-shop currency and must be accepted manually through PayPal.', 'cs-recurring' );
 
 						break;
 
 					case 'paymentreview' :
 					case 'regulatory_review' :
 
-						$note = __( 'Payment is being reviewed by PayPal staff as high-risk or in possible violation of government regulations.', 'edd-recurring' );
+						$note = __( 'Payment is being reviewed by PayPal staff as high-risk or in possible violation of government regulations.', 'cs-recurring' );
 
 						break;
 
 					case 'delayed_disbursement' :
 
-						$note = __( 'The transaction has been approved and is currently awaiting funding from the bank. This typically takes less than 48 hrs.', 'edd-recurring' );
+						$note = __( 'The transaction has been approved and is currently awaiting funding from the bank. This typically takes less than 48 hrs.', 'cs-recurring' );
 
 						break;
 
 					case 'unilateral' :
 
-						$note = __( 'Payment was sent to non-confirmed or non-registered email address.', 'edd-recurring' );
+						$note = __( 'Payment was sent to non-confirmed or non-registered email address.', 'cs-recurring' );
 
 						break;
 
 					case 'upgrade' :
 
-						$note = __( 'PayPal account must be upgraded before this payment can be accepted.', 'edd-recurring' );
+						$note = __( 'PayPal account must be upgraded before this payment can be accepted.', 'cs-recurring' );
 
 						break;
 
 					case 'verify' :
 
-						$note = __( 'PayPal account is not verified. Verify account in order to accept this payment.', 'edd-recurring' );
+						$note = __( 'PayPal account is not verified. Verify account in order to accept this payment.', 'cs-recurring' );
 
 						break;
 
 					case 'other' :
 					default :
 
-						$note = __( 'Payment is pending for unknown reasons. Contact PayPal support for assistance.', 'edd-recurring' );
+						$note = __( 'Payment is pending for unknown reasons. Contact PayPal support for assistance.', 'cs-recurring' );
 
 						break;
 
@@ -493,7 +493,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 				if( ! empty( $note ) ) {
 
-					edd_debug_log( sprintf( 'Subscription signup %d not marked as complete because: %s', $payment->ID, $note ) );
+					cs_debug_log( sprintf( 'Subscription signup %d not marked as complete because: %s', $payment->ID, $note ) );
 					$payment->status = 'processing';
 					$payment->save();
 					$payment->add_note( $note );
@@ -510,22 +510,22 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		if ( 'failed' === strtolower( $ipn_data['payment_status'] ) ) {
 			// The payment failed at PayPal.
 			$subscription->update( array( 'status' => 'failing' ) );
-			$subscription->add_note( __( 'Renewal payment processing failed at PayPal.', 'edd-recurring' ) );
+			$subscription->add_note( __( 'Renewal payment processing failed at PayPal.', 'cs-recurring' ) );
 			return;
 		}
 
-		if( edd_get_purchase_id_by_transaction_id( $ipn_data['txn_id'] ) ) {
+		if( cs_get_purchase_id_by_transaction_id( $ipn_data['txn_id'] ) ) {
 			return; // Payment alreay recorded
 		}
 
 		$currency_code = strtolower( $ipn_data['mc_currency'] );
-		$sub_currency  = edd_get_payment_currency_code( $subscription->parent_payment_id );
+		$sub_currency  = cs_get_payment_currency_code( $subscription->parent_payment_id );
 
 		// verify details
 		if( ! empty( $sub_currency ) && $currency_code != strtolower( $sub_currency ) ) {
 			// the currency code is invalid
-			$subscription->add_note( sprintf( __( 'Renewal payment processing failed due to invalid currency. Currency detected in renewal payment: %s', 'edd-recurring' ), $currency_code ) );
-			edd_record_gateway_error( __( 'IPN Error', 'edd-recurring' ), sprintf( __( 'Invalid currency in IPN response. IPN data: ', 'edd-recurring' ), json_encode( $ipn_data ) ) );
+			$subscription->add_note( sprintf( __( 'Renewal payment processing failed due to invalid currency. Currency detected in renewal payment: %s', 'cs-recurring' ), $currency_code ) );
+			cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid currency in IPN response. IPN data: ', 'cs-recurring' ), json_encode( $ipn_data ) ) );
 			return;
 		}
 
@@ -604,7 +604,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 		$subscription->failing();
 
-		do_action( 'edd_recurring_payment_failed', $subscription );
+		do_action( 'cs_recurring_payment_failed', $subscription );
 
 	}
 
@@ -615,7 +615,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 *
 	 * @param array $ipn_data Optional. IPN data from PayPal. Default is empty array.
 	 *
-	 * @return EDD_Subscription|false
+	 * @return CS_Subscription|false
 	 */
 	public function get_subscription( $ipn_data = array() ) {
 
@@ -625,17 +625,17 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			return false;
 		}
 
-		$payment = edd_get_payment_by( 'id', $parent_payment_id );
+		$payment = cs_get_payment_by( 'id', $parent_payment_id );
 
 		if( ! $payment ) {
 			return false;
 		}
 
-		$subscription = new EDD_Subscription( $ipn_data['subscr_id'], true );
+		$subscription = new CS_Subscription( $ipn_data['subscr_id'], true );
 
 		if( ! $subscription || $subscription->id < 1 ) {
 
-			$subs_db      = new EDD_Subscriptions_DB;
+			$subs_db      = new CS_Subscriptions_DB;
 			$subs         = $subs_db->get_subscriptions( array( 'parent_payment_id' => $parent_payment_id, 'number' => 1 ) );
 			$subscription = reset( $subs );
 
@@ -668,7 +668,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	public function validate_paypal_recurring_download( $post_id = 0 ) {
 		global $post;
 		//Sanity Checks
-		if ( ! class_exists( 'EDD_Recurring' ) ) {
+		if ( ! class_exists( 'CS_Recurring' ) ) {
 			return $post_id;
 		}
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) ) {
@@ -683,29 +683,29 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		if ( ! current_user_can( 'edit_products', $post_id ) ) {
 			return $post_id;
 		}
-		if ( ! edd_is_gateway_active('paypal') ) {
+		if ( ! cs_is_gateway_active('paypal') ) {
 			return $post_id;
 		}
 
-		$message = __( 'PayPal Standard requires recurring times to be set to 0 for indefinite subscriptions or a minimum value of 2 and a maximum value of 52 for limited subscriptions.', 'edd-recurring' );
+		$message = __( 'PayPal Standard requires recurring times to be set to 0 for indefinite subscriptions or a minimum value of 2 and a maximum value of 52 for limited subscriptions.', 'cs-recurring' );
 
-		if ( edd_has_variable_prices( $post_id ) ) {
-			$prices = edd_get_variable_prices( $post_id );
+		if ( cs_has_variable_prices( $post_id ) ) {
+			$prices = cs_get_variable_prices( $post_id );
 			foreach ( $prices as $price_id => $price ) {
-				if ( EDD_Recurring()->is_price_recurring( $post_id, $price_id ) ) {
-					$time = EDD_Recurring()->get_times( $price_id, $post_id );
+				if ( CS_Recurring()->is_price_recurring( $post_id, $price_id ) ) {
+					$time = CS_Recurring()->get_times( $price_id, $post_id );
 					//PayPal download allow times of "1" or above "52"
 					//https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
 					if ( $time == 1  || $time >= 53 ) {
-						wp_die( $message, __( 'Error', 'edd-recurring' ), array( 'response' => 400 ) );
+						wp_die( $message, __( 'Error', 'cs-recurring' ), array( 'response' => 400 ) );
 					}
 				}
 			}
 		} else {
-			if ( EDD_Recurring()->is_recurring( $post_id ) ) {
-				$time = EDD_Recurring()->get_times_single( $post_id );
+			if ( CS_Recurring()->is_recurring( $post_id ) ) {
+				$time = CS_Recurring()->get_times_single( $post_id );
 				if ( $time == 1  || $time >= 53 ) {
-					wp_die( $message, __( 'Error', 'edd-recurring' ), array( 'response' => 400 ) );
+					wp_die( $message, __( 'Error', 'cs-recurring' ), array( 'response' => 400 ) );
 				}
 			}
 		}
@@ -718,13 +718,13 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 * @access      public
 	 * @since       2.5
 	 *
-	 * @param  EDD_Payment $payment Pavement to cancel.
+	 * @param  CS_Payment $payment Pavement to cancel.
 	 *
 	 * @return      void
 	 */
-	public function cancel_subscriptions_on_refund( EDD_Payment $payment ) {
+	public function cancel_subscriptions_on_refund( CS_Payment $payment ) {
 
-		$statuses = array( 'edd_subscription', 'publish', 'revoked' );
+		$statuses = array( 'cs_subscription', 'publish', 'revoked' );
 
 		if ( ! in_array( $payment->old_status, $statuses ) ) {
 			return;
@@ -736,13 +736,13 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 		switch( $payment->old_status ) {
 
-			case 'edd_subscription' :
+			case 'cs_subscription' :
 			case 'publish' :
 			case 'revoked' :
 
 				// Cancel all associated subscriptions
 
-				$db   = new EDD_Subscriptions_DB;
+				$db   = new CS_Subscriptions_DB;
 				$subs = $db->get_subscriptions( array( 'parent_payment_id' => $payment->ID, 'number' => 100 ) );
 
 				if( empty( $subs ) ) {
@@ -758,7 +758,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 						// Cancel subscription
 						$this->cancel( $subscription, true );
 						$subscription->cancel();
-						$payment->add_note( sprintf( __( 'Subscription %d cancelled.', 'edd-recurring' ), $subscription->id ) );
+						$payment->add_note( sprintf( __( 'Subscription %d cancelled.', 'cs-recurring' ), $subscription->id ) );
 
 					}
 
@@ -777,17 +777,17 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 * @access      public
 	 * @since       2.5
 	 *
-	 * @param  EDD_Payment $payment Pavement whose renewal is being refunded.
+	 * @param  CS_Payment $payment Pavement whose renewal is being refunded.
 
 	 * @return      void
 	 */
-	public function refund_renewal_payment( EDD_Payment $payment ) {
+	public function refund_renewal_payment( CS_Payment $payment ) {
 
 		if ( 'paypal' !== $payment->gateway ) {
 			return;
 		}
 
-		if( 'edd_subscription' !== $payment->old_status ) {
+		if( 'cs_subscription' !== $payment->old_status ) {
 			return;
 		}
 
@@ -795,11 +795,11 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			return;
 		}
 
-		if( empty( $_POST['edd-paypal-refund'] ) ) {
+		if( empty( $_POST['cs-paypal-refund'] ) ) {
 			return;
 		}
 
-		$processed = $payment->get_meta( '_edd_paypal_refunded', true );
+		$processed = $payment->get_meta( '_cs_paypal_refunded', true );
 
 		// If the payment has already been refunded in the past, return early.
 		if ( $processed ) {
@@ -807,7 +807,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		}
 
 		// Process the refund in PayPal.
-		edd_refund_paypal_purchase( $payment );
+		cs_refund_paypal_purchase( $payment );
 
 	}
 
@@ -818,14 +818,14 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 * @since       2.4
 	 *
 	 * @param $ret
-	 * @param EDD_Subscription $subscription Subscription to cancel.
+	 * @param CS_Subscription $subscription Subscription to cancel.
 	 *
 	 * @return      bool
 	 */
 	public function can_cancel( $ret, $subscription ) {
 
 		if( $subscription->gateway === 'paypal' && ! empty( $subscription->profile_id ) && false !== strpos( $subscription->profile_id, 'I-' ) && in_array( $subscription->status, $this->get_cancellable_statuses() ) ) {
-			$creds = edd_recurring_get_paypal_api_credentials();
+			$creds = cs_recurring_get_paypal_api_credentials();
 			if( ! empty( $creds['username'] ) && ! empty( $creds['password'] ) && ! empty( $creds['signature'] ) ) {
 				return true;
 			}
@@ -839,7 +839,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 * @access      public
 	 * @since       2.4
 	 *
-	 * @param  EDD_Subscription $subscription The subscription object.
+	 * @param  CS_Subscription $subscription The subscription object.
 	 * @param  bool|mixed       $valid        If cancellation is valid.
 	 *
 	 * @return      bool
@@ -851,13 +851,13 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		}
 
 		// Parts needed from the PayPal Express API for the cancellation.
-		if ( edd_is_test_mode() ) {
+		if ( cs_is_test_mode() ) {
 			$api_endpoint = 'https://api-3t.sandbox.paypal.com/nvp';
 		} else {
 			$api_endpoint = 'https://api-3t.paypal.com/nvp';
 		}
 
-		$credentials = edd_recurring_get_paypal_api_credentials();
+		$credentials = cs_recurring_get_paypal_api_credentials();
 		if ( empty( $credentials['username'] ) || empty( $credentials['password'] ) || empty( $credentials['signature'] ) ) {
 			return false;
 		}
@@ -928,7 +928,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 		if ( empty( $success ) ) {
 
-			edd_insert_payment_note( $subscription->parent_payment_id, $error_msg );
+			cs_insert_payment_note( $subscription->parent_payment_id, $error_msg );
 
 			return false;
 		}
@@ -946,7 +946,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 */
 	public function can_retry( $ret, $subscription ) {
 		if( $subscription->gateway === 'paypal' && ! empty( $subscription->profile_id ) && 'failing' === $subscription->status ) {
-			$creds = edd_recurring_get_paypal_api_credentials();
+			$creds = cs_recurring_get_paypal_api_credentials();
 			if( ! empty( $creds['username'] ) && ! empty( $creds['password'] ) && ! empty( $creds['signature'] ) ) {
 				return true;
 			}
@@ -969,7 +969,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			return $result;
 		}
 
-		$creds = edd_recurring_get_paypal_api_credentials();
+		$creds = cs_recurring_get_paypal_api_credentials();
 		if( empty( $creds['username'] ) || empty( $creds['password'] ) || empty( $creds['signature'] ) ) {
 			return $result;
 		}
@@ -981,7 +981,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 			'VERSION'   => '124',
 			'METHOD'    => 'BillOutstandingAmount',
 			'PROFILEID' => $subscription->profile_id,
-			'NOTE'      => __( 'Retry initiated from EDD Recurring', 'edd-recurring' )
+			'NOTE'      => __( 'Retry initiated from CS Recurring', 'cs-recurring' )
 		);
 
 		$error_msg = '';
@@ -1022,7 +1022,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		}
 
 		if( empty( $success ) ) {
-			$result = new WP_Error( 'edd_recurring_paypal_error', $error_msg );
+			$result = new WP_Error( 'cs_recurring_paypal_error', $error_msg );
 		} else {
 			$result = true;
 		}
@@ -1047,7 +1047,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 *
 	 * @since  2.6.6
 	 *
-	 * @param  EDD_Subscription $subscription The subscription object
+	 * @param  CS_Subscription $subscription The subscription object
 	 *
 	 * @return string Expiration date or WP_Error if something went wrong
 	 */
@@ -1068,11 +1068,11 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 * @access      public
 	 * @since       2.6.6
 	 *
-	 * @param  EDD_Subscription $subscription The subscription object
+	 * @param  CS_Subscription $subscription The subscription object
 	 *
 	 * @return      array
 	 */
-	public function get_subscription_details( EDD_Subscription $subscription ) {
+	public function get_subscription_details( CS_Subscription $subscription ) {
 
 		$ret = array(
 			'status'     => '',
@@ -1081,20 +1081,20 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		);
 
 		// Parts needed from the PayPal Express API for the cancellation
-		if ( edd_is_test_mode() ) {
+		if ( cs_is_test_mode() ) {
 			$api_endpoint = 'https://api-3t.sandbox.paypal.com/nvp';
 		} else {
 			$api_endpoint = 'https://api-3t.paypal.com/nvp';
 		}
 
-		$creds = edd_recurring_get_paypal_api_credentials();
+		$creds = cs_recurring_get_paypal_api_credentials();
 		if( empty( $creds['username'] ) || empty( $creds['password'] ) || empty( $creds['password'] ) ) {
-			$ret['error'] = new WP_Error( 'missing_api_credentials', __( 'Missing PayPal API credentials', 'edd-recurring' ) );
+			$ret['error'] = new WP_Error( 'missing_api_credentials', __( 'Missing PayPal API credentials', 'cs-recurring' ) );
 		}
 
 		if( ! $subscription->id > 0 ) {
 
-			$ret['error'] = new WP_Error( 'invalid_subscription', __( 'Invalid subscription object supplied', 'edd-recurring' ) );
+			$ret['error'] = new WP_Error( 'invalid_subscription', __( 'Invalid subscription object supplied', 'cs-recurring' ) );
 
 		} else {
 
@@ -1126,11 +1126,11 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 					}
 
 					if( empty( $code ) || 200 !== (int) $code ) {
-						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Non 200 response code. Response code was: %s', 'edd-recurring' ), $code ) );
+						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Non 200 response code. Response code was: %s', 'cs-recurring' ), $code ) );
 					}
 
 					if( empty( $message ) || 'OK' !== $message ) {
-						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Response message not okay. Response message was: %s', 'edd-recurring' ), $message ) );
+						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Response message not okay. Response message was: %s', 'cs-recurring' ), $message ) );
 					}
 
 					if( isset( $body['ACK'] ) && 'failure' === strtolower( $body['ACK'] ) ) {
@@ -1149,7 +1149,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 
 			} else {
 
-				$ret['error'] = new WP_Error( 'missing_profile_id', __( 'No profile_id set on subscription object', 'edd-recurring' ) );
+				$ret['error'] = new WP_Error( 'missing_profile_id', __( 'No profile_id set on subscription object', 'cs-recurring' ) );
 
 			}
 
@@ -1163,7 +1163,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	 *
 	 * @since  2.4.4
 	 * @param  string $profile_id   The recurring profile id
-	 * @param  EDD_Subscription $subscription The Subscription object
+	 * @param  CS_Subscription $subscription The Subscription object
 	 * @return string               The link to return or just the profile id
 	 */
 	public function link_profile_id( $profile_id, $subscription ) {
@@ -1171,7 +1171,7 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 		if( ! empty( $profile_id ) ) {
 			$html     = '<a href="%s" target="_blank">' . $profile_id . '</a>';
 
-			$payment  = edd_get_payment( $subscription->parent_payment_id );
+			$payment  = cs_get_payment( $subscription->parent_payment_id );
 			$base_url = 'live' === $payment->mode ? 'https://www.paypal.com' : 'https://www.sandbox.paypal.com';
 			$link     = esc_url( $base_url . '/cgi-bin/webscr?cmd=_profile-recurring-payments&encrypted_profile_id=' . $profile_id );
 
@@ -1183,4 +1183,4 @@ class EDD_Recurring_PayPal extends EDD_Recurring_Gateway {
 	}
 
 }
-$edd_recurring_paypal = new EDD_Recurring_PayPal;
+$cs_recurring_paypal = new CS_Recurring_PayPal;

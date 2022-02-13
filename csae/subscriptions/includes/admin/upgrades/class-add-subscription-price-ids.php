@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( class_exists( 'EDD_Batch_Export' ) ) {
+if ( class_exists( 'CS_Batch_Export' ) ) {
 
 	/**
-	 * EDD_Recurring_Add_Subscription_Price_IDs Class
+	 * CS_Recurring_Add_Subscription_Price_IDs Class
 	 *
 	 * @since 2.9
 	 */
-	class EDD_Recurring_Add_Subscription_Price_IDs extends EDD_Batch_Export {
+	class CS_Recurring_Add_Subscription_Price_IDs extends CS_Batch_Export {
 
 		/**
 		 * Our export type. Used for export-type specific filters/actions
@@ -62,8 +62,8 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 			}
 
 			foreach ( $step_items as $subscription_id ) {
-				$subscription   = new EDD_Subscription( $subscription_id );
-				$parent_payment = edd_get_payment( $subscription->parent_payment_id );
+				$subscription   = new CS_Subscription( $subscription_id );
+				$parent_payment = cs_get_payment( $subscription->parent_payment_id );
 
 				if ( false === $parent_payment || empty( $parent_payment->downloads ) ) {
 					continue;
@@ -75,8 +75,8 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 						continue;
 					}
 
-					if ( edd_has_variable_prices( $subscription->product_id ) ) {
-						$price_id = isset( $download['options']['price_id'] ) ? $download['options']['price_id'] : edd_get_default_variable_price( $subscription->product_id );
+					if ( cs_has_variable_prices( $subscription->product_id ) ) {
+						$price_id = isset( $download['options']['price_id'] ) ? $download['options']['price_id'] : cs_get_default_variable_price( $subscription->product_id );
 					} else {
 						$price_id = 0;
 					}
@@ -96,7 +96,7 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 		 */
 		public function get_percentage_complete() {
 
-			$total = (int) get_option( 'edd_recurring_price_id_upgrade_total_count', 0 );
+			$total = (int) get_option( 'cs_recurring_price_id_upgrade_total_count', 0 );
 
 			$percentage = 100;
 
@@ -129,8 +129,8 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 
 			if ( ! $this->can_export() ) {
 				wp_die(
-					__( 'You do not have permission to run this upgrade.', 'edd-recurring' ),
-					__( 'Error', 'easy-digital-downloads' ),
+					__( 'You do not have permission to run this upgrade.', 'cs-recurring' ),
+					__( 'Error', 'commercestore' ),
 					array( 'response' => 403 ) );
 			}
 
@@ -141,9 +141,9 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 				return true;
 			} else {
 				$this->done = true;
-				delete_option( 'edd_recurring_price_id_upgrade_total_count' );
-				$this->message = __( 'Subscription records have been successfully updated.', 'edd-recurring' );
-				edd_set_upgrade_complete( 'recurring_add_price_id_column' );
+				delete_option( 'cs_recurring_price_id_upgrade_total_count' );
+				$this->message = __( 'Subscription records have been successfully updated.', 'cs-recurring' );
+				cs_set_upgrade_complete( 'recurring_add_price_id_column' );
 				return false;
 			}
 		}
@@ -151,7 +151,7 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 		public function headers() {
 			ignore_user_abort( true );
 
-			if ( ! edd_is_func_disabled( 'set_time_limit' ) ) {
+			if ( ! cs_is_func_disabled( 'set_time_limit' ) ) {
 				set_time_limit( 0 );
 			}
 		}
@@ -168,7 +168,7 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 			// Set headers
 			$this->headers();
 
-			edd_die();
+			cs_die();
 		}
 
 		/**
@@ -181,8 +181,8 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 		public function pre_fetch() {
 			global $wpdb;
 
-			$sub_count = $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}edd_subscriptions WHERE price_id IS NULL OR price_id = ''" );
-			update_option( 'edd_recurring_price_id_upgrade_total_count', $sub_count );
+			$sub_count = $wpdb->get_var( "SELECT count(id) FROM {$wpdb->prefix}cs_subscriptions WHERE price_id IS NULL OR price_id = ''" );
+			update_option( 'cs_recurring_price_id_upgrade_total_count', $sub_count );
 		}
 
 		/**
@@ -197,7 +197,7 @@ if ( class_exists( 'EDD_Batch_Export' ) ) {
 			global $wpdb;
 
 			$offset  = ( $this->step * $this->per_step ) - $this->per_step;
-			$sub_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}edd_subscriptions WHERE price_id IS NULL OR price_id = '' LIMIT %d, %d", $offset, $this->per_step ) );
+			$sub_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}cs_subscriptions WHERE price_id IS NULL OR price_id = '' LIMIT %d, %d", $offset, $this->per_step ) );
 
 			// Always return an array.
 			return ! is_wp_error( $sub_ids )

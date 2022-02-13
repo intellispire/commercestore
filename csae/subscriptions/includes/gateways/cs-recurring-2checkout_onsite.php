@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-global $edd_recurring_2co_onsite;
+global $cs_recurring_2co_onsite;
 
-class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
+class CS_Recurring_2Checkout_Onsite extends CS_Recurring_2Checkout {
 
 	private $credentials;
 
@@ -21,12 +21,12 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 	public function init() {
 
 		$this->id          = '2checkout_onsite';
-		$this->friendly_name = __( '2Checkout OnSite', 'edd-recurring' );
+		$this->friendly_name = __( '2Checkout OnSite', 'cs-recurring' );
 		$this->credentials = $this->get_api_credentials();
 		$this->offsite     = false;
 
-		if( ! class_exists( 'Twocheckout' ) && file_exists( WP_PLUGIN_DIR . '/edd-2checkout/sdk/lib/Twocheckout.php' ) ) {
-			require_once WP_PLUGIN_DIR . '/edd-2checkout/sdk/lib/Twocheckout.php';
+		if( ! class_exists( 'Twocheckout' ) && file_exists( WP_PLUGIN_DIR . '/cs-2checkout/sdk/lib/Twocheckout.php' ) ) {
+			require_once WP_PLUGIN_DIR . '/cs-2checkout/sdk/lib/Twocheckout.php';
 		}
 
 	}
@@ -42,13 +42,13 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 
 		if( empty( $this->credentials['tco_secret_word'] ) || empty( $this->credentials['tco_account_number'] ) ) {
 
-			edd_set_error( 'missing_api_keys', __( 'You must enter your account number and secret word in settings', 'edd-recurring' ) );
+			cs_set_error( 'missing_api_keys', __( 'You must enter your account number and secret word in settings', 'cs-recurring' ) );
 
 		}
 
 		if( empty( $this->credentials['tco_private_key'] ) || empty( $this->credentials['tco_public_key'] ) ) {
 
-			edd_set_error( 'missing_api_keys', __( 'You must enter your Private and Publishable API key in settings', 'edd-recurring' ) );
+			cs_set_error( 'missing_api_keys', __( 'You must enter your Private and Publishable API key in settings', 'cs-recurring' ) );
 
 		}
 
@@ -64,19 +64,19 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 	public function create_payment_profiles() {
 
 		if( empty( $_POST['token'] ) ) {
-			edd_set_error( 'missing_card_token', __( 'Missing 2Checkout token, please try again or contact support if the issue persists.', 'edd-recurring' ) );
+			cs_set_error( 'missing_card_token', __( 'Missing 2Checkout token, please try again or contact support if the issue persists.', 'cs-recurring' ) );
 			return;
 		}
 
 		if( ! empty( $subscription['has_trial'] ) ) {
-			edd_set_error( 'free_trial_not_supported', __( 'Free trials are not supported by 2Checkout.', 'edd-recurring' ) );
+			cs_set_error( 'free_trial_not_supported', __( 'Free trials are not supported by 2Checkout.', 'cs-recurring' ) );
 			return;
 		}
 
-		$verify_ssl = ! edd_is_test_mode();
+		$verify_ssl = ! cs_is_test_mode();
 		Twocheckout::privateKey( $this->credentials['tco_private_key'] );
 		Twocheckout::sellerId( $this->credentials['tco_account_number'] );
-		Twocheckout::sandbox( edd_is_test_mode() );
+		Twocheckout::sandbox( cs_is_test_mode() );
 		Twocheckout::verifySSL( $verify_ssl );
 
 		foreach( $this->subscriptions as $key => $subscription ) {
@@ -122,7 +122,7 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 			$charge = Twocheckout_Charge::auth( array(
 				'merchantOrderId' => $this->purchase_data['purchase_key'],
 				'token'           => $this->purchase_data['post_data']['token'],
-				'currency'        => strtoupper( edd_get_currency() ),
+				'currency'        => strtoupper( cs_get_currency() ),
 				'billingAddr'     => array(
 					'name'        => sanitize_text_field( $this->purchase_data['card_info']['card_name'] ),
 					'addrLine1'   => sanitize_text_field( $this->purchase_data['card_info']['card_address'] ),
@@ -143,7 +143,7 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 
 		} catch ( Twocheckout_Error $e ) {
 
-			edd_set_error( '2checkout_error', $e->getMessage() );
+			cs_set_error( '2checkout_error', $e->getMessage() );
 
 		}
 
@@ -158,14 +158,14 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 	 */
 	public function complete_signup() {
 
-		edd_set_payment_transaction_id( $this->payment_id, $this->purchase_data['transaction_id'] );
+		cs_set_payment_transaction_id( $this->payment_id, $this->purchase_data['transaction_id'] );
 
 		if( defined( 'TWOCHECKOUT_ADMIN_USER' ) && defined( 'TWOCHECKOUT_ADMIN_PASSWORD' ) ) {
 
-			$verify_ssl = ! edd_is_test_mode();
+			$verify_ssl = ! cs_is_test_mode();
 			Twocheckout::privateKey( $this->credentials['tco_private_key'] );
 			Twocheckout::sellerId( $this->credentials['tco_account_number'] );
-			Twocheckout::sandbox( edd_is_test_mode() );
+			Twocheckout::sandbox( cs_is_test_mode() );
 			Twocheckout::username( TWOCHECKOUT_ADMIN_USER );
 			Twocheckout::password( TWOCHECKOUT_ADMIN_PASSWORD );
 			Twocheckout::verifySSL( $verify_ssl );
@@ -184,7 +184,7 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 						}
 
 						// Retrieve and set the real ID needed to cancel this particular subscription
-						$sub = new EDD_Subscription( '2checkout-' . $this->purchase_data['purchase_key'] . '-' . $key, true );
+						$sub = new CS_Subscription( '2checkout-' . $this->purchase_data['purchase_key'] . '-' . $key, true );
 						$sub->update( array(
 							'profile_id'     => $line_item['lineitem_id'],
 							'transaction_id' => $this->purchase_data['transaction_id']
@@ -197,7 +197,7 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 
 		}
 
-		wp_redirect( edd_get_success_page_uri() );
+		wp_redirect( cs_get_success_page_uri() );
 		exit;
 
 	}
@@ -236,10 +236,10 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 			return false;
 		}
 
-		$verify_ssl = ! edd_is_test_mode();
+		$verify_ssl = ! cs_is_test_mode();
 		Twocheckout::privateKey( $this->credentials['tco_private_key'] );
 		Twocheckout::sellerId( $this->credentials['tco_account_number'] );
-		Twocheckout::sandbox( edd_is_test_mode() );
+		Twocheckout::sandbox( cs_is_test_mode() );
 		Twocheckout::username( TWOCHECKOUT_ADMIN_USER );
 		Twocheckout::password( TWOCHECKOUT_ADMIN_PASSWORD );
 		Twocheckout::verifySSL( $verify_ssl );
@@ -267,7 +267,7 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 		if( ! empty( $profile_id ) ) {
 			$html     = '<a href="%s" target="_blank">' . $profile_id . '</a>';
 
-			$payment  = edd_get_payment( $subscription->parent_payment_id );
+			$payment  = cs_get_payment( $subscription->parent_payment_id );
 			$base_url = 'live' === $payment->mode ? 'https://2checkout.com/' : 'https://sandbox.2checkout.com/sandbox/';
 			$url      = '<a href="%s" target="_blank">' . $profile_id . '</a>';
 			$link     = esc_url( $base_url . 'sales/detail?sale_id=' . $payment->transaction_id );
@@ -280,4 +280,4 @@ class EDD_Recurring_2Checkout_Onsite extends EDD_Recurring_2Checkout {
 	}
 
 }
-$edd_recurring_2co_onsite = new EDD_Recurring_2Checkout_Onsite;
+$cs_recurring_2co_onsite = new CS_Recurring_2Checkout_Onsite;

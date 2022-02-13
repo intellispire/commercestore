@@ -1,6 +1,6 @@
 <?php
 
-class EDD_Recurring_Summary_Widget {
+class CS_Recurring_Summary_Widget {
 
 	/**
 	 * Get things started
@@ -19,7 +19,7 @@ class EDD_Recurring_Summary_Widget {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'edd_sales_summary_widget_after_stats', array( $this, 'widget' ) );
+		add_action( 'cs_sales_summary_widget_after_stats', array( $this, 'widget' ) );
 	}
 
 	/**
@@ -34,20 +34,20 @@ class EDD_Recurring_Summary_Widget {
 			<table>
 				<thead>
 					<tr>
-						<td colspan="2"><?php _e( 'Subscriptions Created', 'edd-recurring' ) ?></td>
+						<td colspan="2"><?php _e( 'Subscriptions Created', 'cs-recurring' ) ?></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="first t"><?php _e( 'This Year', 'edd-recurring' ); ?></td>
+						<td class="first t"><?php _e( 'This Year', 'cs-recurring' ); ?></td>
 						<td class="b"><?php echo $this->get_subscription_count( 'year' ); ?></td>
 					</tr>
 					<tr>
-						<td class="first t"><?php _e( 'This Month', 'edd-recurring' ); ?></td>
+						<td class="first t"><?php _e( 'This Month', 'cs-recurring' ); ?></td>
 						<td class="b"><?php echo $this->get_subscription_count( 'month' ); ?></td>
 					</tr>
 					<tr>
-						<td class="first t"><?php _e( 'Total', 'edd-recurring' ); ?></td>
+						<td class="first t"><?php _e( 'Total', 'cs-recurring' ); ?></td>
 						<td class="b"><?php echo $this->get_subscription_count(); ?></td>
 					</tr>
 				</tbody>
@@ -57,20 +57,20 @@ class EDD_Recurring_Summary_Widget {
 			<table>
 				<thead>
 					<tr>
-						<td colspan="2"><?php _e( 'Estimated Recurring Revenue', 'edd-recurring' ) ?></td>
+						<td colspan="2"><?php _e( 'Estimated Recurring Revenue', 'cs-recurring' ) ?></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="t"><?php _e( 'Next 365 Days', 'edd-recurring' ); ?></td>
+						<td class="t"><?php _e( 'Next 365 Days', 'cs-recurring' ); ?></td>
 						<td class="last b"><?php echo $this->get_estimated_revenue( 365 ); ?></td>
 					</tr>
 					<tr>
-						<td class="t"><?php _e( 'Next 30 Days', 'edd-recurring' ); ?></td>
+						<td class="t"><?php _e( 'Next 30 Days', 'cs-recurring' ); ?></td>
 						<td class="last b"><?php echo $this->get_estimated_revenue( 30 ); ?></td>
 					</tr>
 					<tr>
-						<td class="t"><?php _e( 'Total', 'edd-recurring' ); ?></td>
+						<td class="t"><?php _e( 'Total', 'cs-recurring' ); ?></td>
 						<td class="last b"><?php echo $this->get_estimated_revenue(); ?></td>
 					</tr>
 				</tbody>
@@ -88,7 +88,7 @@ class EDD_Recurring_Summary_Widget {
 	 */
 	public function get_subscription_count( $period = '' ) {
 
-		$db    = new EDD_Subscriptions_DB;
+		$db    = new CS_Subscriptions_DB;
 		$start = '';
 		$end   = '';
 
@@ -125,7 +125,7 @@ class EDD_Recurring_Summary_Widget {
 			)
 		);
 
-		return edd_format_amount( $db->count( $args ), false );
+		return cs_format_amount( $db->count( $args ), false );
 	}
 
 	/**
@@ -151,7 +151,7 @@ class EDD_Recurring_Summary_Widget {
 		if ( empty( $days ) ) {
 
 			// Get the transient
-			$key    = 'edd_recurring_estimated_revenue';
+			$key    = 'cs_recurring_estimated_revenue';
 			$amount = get_transient( $key );
 
 			// No transient
@@ -159,7 +159,7 @@ class EDD_Recurring_Summary_Widget {
 
 				// SQL
 				$query = "SELECT SUM(recurring_amount)
-						  FROM {$wpdb->prefix}edd_subscriptions
+						  FROM {$wpdb->prefix}cs_subscriptions
 						  WHERE
 							  ( expiration >= %s )
 							  AND status IN( 'active', 'trialling' )";
@@ -179,7 +179,7 @@ class EDD_Recurring_Summary_Widget {
 		} else {
 
 			// Get the transient
-			$key    = 'edd_recurring_estimated_revenue_' . $days;
+			$key    = 'cs_recurring_estimated_revenue_' . $days;
 			$amount = get_transient( $key );
 
 			// No transient
@@ -217,7 +217,7 @@ class EDD_Recurring_Summary_Widget {
 
 				// SQL
 				$query   = "SELECT {$sum_sql}
-							 FROM {$wpdb->prefix}edd_subscriptions
+							 FROM {$wpdb->prefix}cs_subscriptions
 							 WHERE
 							 ( expiration >= %s AND expiration <= %s )
 							 AND status IN( 'active', 'trialling' )";
@@ -239,8 +239,8 @@ class EDD_Recurring_Summary_Widget {
 			}
 		}
 
-		return edd_currency_filter( edd_format_amount( edd_sanitize_amount( $amount ) ) );
+		return cs_currency_filter( cs_format_amount( cs_sanitize_amount( $amount ) ) );
 	}
 }
-$widget = new EDD_Recurring_Summary_Widget;
+$widget = new CS_Recurring_Summary_Widget;
 unset( $widget );

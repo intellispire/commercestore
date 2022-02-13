@@ -2,7 +2,7 @@
 /**
  * Subscribers REST API
  *
- * @package     EDD Recurring
+ * @package     CS Recurring
  * @subpackage  Subscriber API Class
  * @copyright   Copyright (c) 2015, Pippin Williamson
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -14,15 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * EDD_Subscriptions_API
+ * CS_Subscriptions_API
  *
- * Extends the EDD_API to make the /subscriptions endpoint
+ * Extends the CS_API to make the /subscriptions endpoint
  *
- * @class EDD_Subscriptions_API
+ * @class CS_Subscriptions_API
  * @since 2.4
  * @author Chris K, Pippin, Topher
  */
-class EDD_Subscriptions_API extends EDD_API {
+class CS_Subscriptions_API extends CS_API {
 
 	/**
 	 * User ID Performing the API Request
@@ -41,7 +41,7 @@ class EDD_Subscriptions_API extends EDD_API {
 	public $override = true;
 
 	/**
-	 * Adds to the allowed query vars list from EDD Core for API access
+	 * Adds to the allowed query vars list from CS Core for API access
 	 *
 	 * @access public
 	 * @since  2.4.3
@@ -87,7 +87,7 @@ class EDD_Subscriptions_API extends EDD_API {
 		}
 
 		if ( null !== $input_status && '' === $status ) {
-			$error['error'] = sprintf( __( '\'%s\' is not a valid status.', 'edd-recurring' ), $input_status );
+			$error['error'] = sprintf( __( '\'%s\' is not a valid status.', 'cs-recurring' ), $input_status );
 
 			return $error;
 		} else {
@@ -103,8 +103,8 @@ class EDD_Subscriptions_API extends EDD_API {
 	 */
 	public function __construct() {
 		parent::__construct();
-		add_filter( 'edd_api_valid_query_modes', array( $this, 'add_valid_subscriptions_query' ) );
-		add_filter( 'edd_api_output_data', array( $this, 'add_edd_subscription_endpoint' ), 10, 3 );
+		add_filter( 'cs_api_valid_query_modes', array( $this, 'add_valid_subscriptions_query' ) );
+		add_filter( 'cs_api_output_data', array( $this, 'add_cs_subscription_endpoint' ), 10, 3 );
 	}
 
 	/**
@@ -127,7 +127,7 @@ class EDD_Subscriptions_API extends EDD_API {
 	 *
 	 * Add Subscribers Endpoint
 	 *
-	 * @description: This method makes available the http://mycoolsite.com/edd-api/subscriptions/ endpoint
+	 * @description: This method makes available the http://mycoolsite.com/cs-api/subscriptions/ endpoint
 	 * @since      2.4
 	 *
 	 * @param $data
@@ -136,7 +136,7 @@ class EDD_Subscriptions_API extends EDD_API {
 	 *
 	 * @return array $subscriptions
 	 */
-	public function add_edd_subscription_endpoint( $data, $query_mode, $api_object ) {
+	public function add_cs_subscription_endpoint( $data, $query_mode, $api_object ) {
 
 		// Sanity check: don't mess with other API queries!
 		if ( 'subscriptions' !== $query_mode ) {
@@ -156,11 +156,11 @@ class EDD_Subscriptions_API extends EDD_API {
 
 		// Get the customer information from the input.
 		$queried_c = isset( $wp_query->query_vars['customer'] ) ? sanitize_text_field( $wp_query->query_vars['customer'] ) : null;
-		$customer  = new EDD_Customer( $queried_c );
+		$customer  = new CS_Customer( $queried_c );
 
 		if( ! empty( $queried_c ) && ( ! $customer || ! $customer->id > 0 ) ) {
 
-			$error['error'] = sprintf( __( 'No customer found for %s!', 'edd-recurring' ), $queried_c );
+			$error['error'] = sprintf( __( 'No customer found for %s!', 'cs-recurring' ), $queried_c );
 
 			return $error;
 
@@ -171,14 +171,14 @@ class EDD_Subscriptions_API extends EDD_API {
 		if ( isset( $wp_query->query_vars['id'] ) &&  is_numeric( $wp_query->query_vars['id'] ) ) {
 
 			$subscriptions = array(
-				new EDD_Subscription( $wp_query->query_vars['id'] )
+				new CS_Subscription( $wp_query->query_vars['id'] )
 			);
 
 		} else {
 			$paged         = $this->get_paged();
 			$per_page      = $this->per_page();
 			$offset        = $per_page * ( $paged - 1 );
-			$db            = new EDD_Subscriptions_DB;
+			$db            = new CS_Subscriptions_DB;
 			$subscriptions = $db->get_subscriptions( array(
 				'number'      => $per_page,
 				'offset'      => $offset,
@@ -189,7 +189,7 @@ class EDD_Subscriptions_API extends EDD_API {
 
 		if ( $subscriptions ) {
 
-			/** @var EDD_Subscription $subscription */
+			/** @var CS_Subscription $subscription */
 			foreach ( $subscriptions as $subscription ) {
 
 				// Subscription object to array.
@@ -221,13 +221,13 @@ class EDD_Subscriptions_API extends EDD_API {
 
 		} elseif( ! empty( $queried_c ) ) {
 
-			$error['error'] = sprintf( __( 'No subscriptions found for %s!', 'edd-recurring' ), $queried_c );
+			$error['error'] = sprintf( __( 'No subscriptions found for %s!', 'cs-recurring' ), $queried_c );
 
 			return $error;
 
 		} else {
 
-			$error['error'] = __( 'No subscriptions found!', 'edd-recurring' );
+			$error['error'] = __( 'No subscriptions found!', 'cs-recurring' );
 
 			return $error;
 
