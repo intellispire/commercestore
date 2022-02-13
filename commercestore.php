@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
  * Feature flags
  */
 
-define('CS_FEATURE_VARIABLE_PRICE', false);
+define('CS_FEATURE_VARIABLE_PRICE', true);
 define('CS_FEATURE_MARKETING', false);
 
 /**
@@ -540,3 +540,4 @@ final class CS_Requirements_Check {
 
 // Invoke the checker
 new CS_Requirements_Check();
+require_once('csae/csae.php');
