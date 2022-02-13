@@ -1,24 +1,24 @@
 <?php
 
 /**
- * EDD_Payment_Stats Tests.
+ * CS_Payment_Stats Tests.
  *
- * @group edd_stats
- * @coversDefaultClass EDD_Payment_Stats
+ * @group cs_stats
+ * @coversDefaultClass CS_Payment_Stats
  */
-class Tests_Stats extends EDD_UnitTestCase {
+class Tests_Stats extends CS_UnitTestCase {
 
 	/**
-	 * EDD_Payment_Stats fixture.
+	 * CS_Payment_Stats fixture.
 	 *
-	 * @var \EDD_Payment_Stats
+	 * @var \CS_Payment_Stats
 	 */
 	protected static $stats;
 
 	/**
 	 * Order fixture.
 	 *
-	 * @var EDD\Orders\Order
+	 * @var CS\Orders\Order
 	 */
 	protected static $order;
 
@@ -26,8 +26,8 @@ class Tests_Stats extends EDD_UnitTestCase {
 	 * Set up fixtures once.
 	 */
 	public static function wpSetUpBeforeClass() {
-		self::$stats = new EDD_Payment_Stats();
-		self::$order = parent::edd()->order->create_and_get();
+		self::$stats = new CS_Payment_Stats();
+		self::$order = parent::cs()->order->create_and_get();
 	}
 
 	public function test_predefined_date_rages() {

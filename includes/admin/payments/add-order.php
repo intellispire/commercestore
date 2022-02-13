@@ -2,7 +2,7 @@
 /**
  * Add Order Page.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -12,18 +12,18 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Rows\Order as Order;
+use CS\Database\Rows\Order as Order;
 
 /**
  * Output the Add Order page
  *
  * @since 3.0
  */
-function edd_add_order_page_content() {
+function cs_add_order_page_content() {
 
-	wp_enqueue_script( 'edd-admin-orders' );
+	wp_enqueue_script( 'cs-admin-orders' );
 	// Enqueued for backwards compatibility. Empty file.
-	wp_enqueue_script( 'edd-admin-payments' );
+	wp_enqueue_script( 'cs-admin-payments' );
 
 	// Create empty order object to pass to callback functions.
 	$order = new Order( array(
@@ -37,10 +37,10 @@ function edd_add_order_page_content() {
 		'user_id'         => 0,
 		'customer_id'     => 0,
 		'email'           => '',
-		'ip'              => edd_get_ip(),
+		'ip'              => cs_get_ip(),
 		'gateway'         => '',
 		'mode'            => '',
-		'currency'        => edd_get_currency(),
+		'currency'        => cs_get_currency(),
 		'payment_key'     => '',
 		'subtotal'        => 0,
 		'discount'        => 0,
@@ -50,45 +50,45 @@ function edd_add_order_page_content() {
 
 	?>
 
-	<form id="edd-add-order-form" method="post">
+	<form id="cs-add-order-form" method="post">
 
-		<?php edd_order_details_publish( $order ); ?>
+		<?php cs_order_details_publish( $order ); ?>
 
-		<div class="wrap edd-wrap edd-clearfix">
-			<h1><?php esc_html_e( 'New Order', 'easy-digital-downloads' ); ?></h1>
+		<div class="wrap cs-wrap cs-clearfix">
+			<h1><?php esc_html_e( 'New Order', 'commercestore' ); ?></h1>
 
 			<hr class="wp-header-end">
 
-			<div class="notice notice-error inline" id="edd-add-order-customer-error" style="display: none;">
-				<p><strong><?php esc_html_e( 'Error', 'easy-digital-downloads' ); ?>:</strong> <?php esc_html_e( 'Please select an existing customer or create a new customer.', 'easy-digital-downloads' ); ?></p>
+			<div class="notice notice-error inline" id="cs-add-order-customer-error" style="display: none;">
+				<p><strong><?php esc_html_e( 'Error', 'commercestore' ); ?>:</strong> <?php esc_html_e( 'Please select an existing customer or create a new customer.', 'commercestore' ); ?></p>
 			</div>
 
-			<div class="notice notice-error inline" id="edd-add-order-no-items-error" style="display: none">
-				<p><strong><?php esc_html_e( 'Error', 'easy-digital-downloads' ); ?>:</strong> <?php esc_html_e( 'Please add an item to this order.', 'easy-digital-downloads' ); ?></p>
+			<div class="notice notice-error inline" id="cs-add-order-no-items-error" style="display: none">
+				<p><strong><?php esc_html_e( 'Error', 'commercestore' ); ?>:</strong> <?php esc_html_e( 'Please add an item to this order.', 'commercestore' ); ?></p>
 			</div>
 
-			<?php do_action( 'edd_add_order_before' ); ?>
+			<?php do_action( 'cs_add_order_before' ); ?>
 
-			<?php do_action( 'edd_add_order_form_top' ); ?>
+			<?php do_action( 'cs_add_order_form_top' ); ?>
 
 			<div id="poststuff">
-				<div id="edd-dashboard-widgets-wrap">
+				<div id="cs-dashboard-widgets-wrap">
 					<div id="post-body" class="metabox-holder columns-2">
 						<div id="postbox-container-2" class="postbox-container">
 							<div id="normal-sortables">
 								<?php
 
 								// Before body.
-								do_action( 'edd_add_order_details_main_before' );
+								do_action( 'cs_add_order_details_main_before' );
 
 								// Items.
-								edd_order_details_overview( $order );
+								cs_order_details_overview( $order );
 
 								// Details sections.
-								edd_order_details_sections( $order );
+								cs_order_details_sections( $order );
 
 								// After body.
-								do_action( 'edd_add_order_details_main_after' );
+								do_action( 'cs_add_order_details_main_after' );
 
 								?>
 							</div>
@@ -99,16 +99,16 @@ function edd_add_order_page_content() {
 								<?php
 
 								// Before sidebar.
-								do_action( 'edd_add_order_details_sidebar_before' );
+								do_action( 'cs_add_order_details_sidebar_before' );
 
 								// Attributes.
-								edd_order_details_attributes( $order );
+								cs_order_details_attributes( $order );
 
 								// Extras.
-								edd_order_details_extras( $order );
+								cs_order_details_extras( $order );
 
 								// After sidebar.
-								do_action( 'edd_add_order_details_sidebar_after' );
+								do_action( 'cs_add_order_details_sidebar_after' );
 
 								?>
 							</div>
@@ -118,40 +118,40 @@ function edd_add_order_page_content() {
 			</div>
 
 			<?php
-			do_action( 'edd_add_order_form_bottom' );
+			do_action( 'cs_add_order_form_bottom' );
 
-			wp_nonce_field( 'edd_add_order_nonce', 'edd_add_order_nonce' );
+			wp_nonce_field( 'cs_add_order_nonce', 'cs_add_order_nonce' );
 			?>
-			<input type="hidden" name="edd_action" value="add_order" />
+			<input type="hidden" name="cs_action" value="add_order" />
 
-			<?php do_action( 'edd_add_order_after' ); ?>
+			<?php do_action( 'cs_add_order_after' ); ?>
 
 		</div><!-- /.wrap -->
 
 	</form>
 
 	<div
-		id="edd-admin-order-add-item-dialog"
-		title="<?php esc_attr_e( 'Add Download', 'easy-digital-downloads' ); ?>"
+		id="cs-admin-order-add-item-dialog"
+		title="<?php esc_attr_e( 'Add Download', 'commercestore' ); ?>"
 		style="display: none;"
 	>
-		<div id="edd-admin-order-add-item-dialog-content"></div>
+		<div id="cs-admin-order-add-item-dialog-content"></div>
 	</div>
 
 	<div
-		id="edd-admin-order-add-discount-dialog"
-		title="<?php esc_attr_e( 'Add Discount', 'easy-digital-downloads' ); ?>"
+		id="cs-admin-order-add-discount-dialog"
+		title="<?php esc_attr_e( 'Add Discount', 'commercestore' ); ?>"
 		style="display: none;"
 	>
-		<div id="edd-admin-order-add-discount-dialog-content"></div>
+		<div id="cs-admin-order-add-discount-dialog-content"></div>
 	</div>
 
 	<div
-		id="edd-admin-order-add-adjustment-dialog"
-		title="<?php esc_attr_e( 'Add Adjustment', 'easy-digital-downloads' ); ?>"
+		id="cs-admin-order-add-adjustment-dialog"
+		title="<?php esc_attr_e( 'Add Adjustment', 'commercestore' ); ?>"
 		style="display: none;"
 	>
-		<div id="edd-admin-order-add-adjustment-dialog-content"></div>
+		<div id="cs-admin-order-add-adjustment-dialog-content"></div>
 	</div>
 
 <?php

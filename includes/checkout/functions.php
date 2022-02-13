@@ -2,7 +2,7 @@
 /**
  * Checkout Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Checkout
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -18,12 +18,12 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.1.2
  * @return bool True if on the Checkout page, false otherwise
  */
-function edd_is_checkout() {
+function cs_is_checkout() {
 	global $wp_query;
 
 	$is_object_set    = isset( $wp_query->queried_object );
 	$is_object_id_set = isset( $wp_query->queried_object_id );
-	$is_checkout      = is_page( edd_get_option( 'purchase_page' ) );
+	$is_checkout      = is_page( cs_get_option( 'purchase_page' ) );
 
 	if( ! $is_object_set ) {
 		unset( $wp_query->queried_object );
@@ -40,7 +40,7 @@ function edd_is_checkout() {
 		$is_checkout = true;
 	}
 
-	return apply_filters( 'edd_is_checkout', $is_checkout );
+	return apply_filters( 'cs_is_checkout', $is_checkout );
 }
 
 /**
@@ -49,10 +49,10 @@ function edd_is_checkout() {
  * @since 1.3.3
  * @return bool Can user checkout?
  */
-function edd_can_checkout() {
+function cs_can_checkout() {
 	$can_checkout = true; // Always true for now
 
-	return (bool) apply_filters( 'edd_can_checkout', $can_checkout );
+	return (bool) apply_filters( 'cs_can_checkout', $can_checkout );
 }
 
 /**
@@ -61,8 +61,8 @@ function edd_can_checkout() {
  * @since       1.6
  * @return      string
 */
-function edd_get_success_page_uri( $query_string = null ) {
-	$page_id = edd_get_option( 'success_page', 0 );
+function cs_get_success_page_uri( $query_string = null ) {
+	$page_id = cs_get_option( 'success_page', 0 );
 	$page_id = absint( $page_id );
 
 	$success_page = get_permalink( $page_id );
@@ -71,7 +71,7 @@ function edd_get_success_page_uri( $query_string = null ) {
 		$success_page .= $query_string;
 	}
 
-	return apply_filters( 'edd_get_success_page_uri', $success_page );
+	return apply_filters( 'cs_get_success_page_uri', $success_page );
 }
 
 /**
@@ -80,11 +80,11 @@ function edd_get_success_page_uri( $query_string = null ) {
  * @since 1.9.9
  * @return bool True if on the Success page, false otherwise.
  */
-function edd_is_success_page() {
-	$is_success_page = edd_get_option( 'success_page', false );
+function cs_is_success_page() {
+	$is_success_page = cs_get_option( 'success_page', false );
 	$is_success_page = isset( $is_success_page ) ? is_page( $is_success_page ) : false;
 
-	return apply_filters( 'edd_is_success_page', $is_success_page );
+	return apply_filters( 'cs_is_success_page', $is_success_page );
 }
 
 /**
@@ -96,16 +96,16 @@ function edd_is_success_page() {
  * @since       1.0
  * @return      void
 */
-function edd_send_to_success_page( $query_string = null ) {
-	$redirect = edd_get_success_page_uri();
+function cs_send_to_success_page( $query_string = null ) {
+	$redirect = cs_get_success_page_uri();
 
 	if ( $query_string ) {
 		$redirect .= $query_string;
 	}
 
-	$gateway = isset( $_REQUEST['edd-gateway'] ) ? $_REQUEST['edd-gateway'] : '';
+	$gateway = isset( $_REQUEST['cs-gateway'] ) ? $_REQUEST['cs-gateway'] : '';
 
-	edd_redirect( apply_filters('edd_success_page_redirect', $redirect, $gateway, $query_string) );
+	cs_redirect( apply_filters('cs_success_page_redirect', $redirect, $gateway, $query_string) );
 }
 
 /**
@@ -115,17 +115,17 @@ function edd_send_to_success_page( $query_string = null ) {
  * @param array $args Extra query args to add to the URI
  * @return mixed Full URL to the checkout page, if present | null if it doesn't exist
  */
-function edd_get_checkout_uri( $args = array() ) {
+function cs_get_checkout_uri( $args = array() ) {
 	$uri = false;
 
-	if ( edd_is_checkout() ) {
+	if ( cs_is_checkout() ) {
 		global $post;
 		$uri = $post instanceof WP_Post ? get_permalink( $post->ID ) : NULL;
 	}
 
 	// If we are not on a checkout page, determine the URI from the default.
 	if ( empty( $uri ) ) {
-		$uri = edd_get_option( 'purchase_page', false );
+		$uri = cs_get_option( 'purchase_page', false );
 		$uri = isset( $uri ) ? get_permalink( $uri ) : NULL;
 	}
 
@@ -144,15 +144,15 @@ function edd_get_checkout_uri( $args = array() ) {
 
 	$ajax_url = admin_url( 'admin-ajax.php', $scheme );
 
-	if ( ( ! preg_match( '/^https/', $uri ) && preg_match( '/^https/', $ajax_url ) && edd_is_ajax_enabled() ) || edd_is_ssl_enforced() ) {
+	if ( ( ! preg_match( '/^https/', $uri ) && preg_match( '/^https/', $ajax_url ) && cs_is_ajax_enabled() ) || cs_is_ssl_enforced() ) {
 		$uri = preg_replace( '/^http:/', 'https:', $uri );
 	}
 
-	if ( edd_get_option( 'no_cache_checkout', false ) ) {
-		$uri = edd_add_cache_busting( $uri );
+	if ( cs_get_option( 'no_cache_checkout', false ) ) {
+		$uri = cs_add_cache_busting( $uri );
 	}
 
-	return apply_filters( 'edd_get_checkout_uri', $uri );
+	return apply_filters( 'cs_get_checkout_uri', $uri );
 }
 
 /**
@@ -165,8 +165,8 @@ function edd_get_checkout_uri( $args = array() ) {
  * @since  1.0
  * @return Void
  */
-function edd_send_back_to_checkout( $args = array() ) {
-	$redirect = edd_get_checkout_uri();
+function cs_send_back_to_checkout( $args = array() ) {
+	$redirect = cs_get_checkout_uri();
 
 	if ( ! empty( $args ) ) {
 		// Check for backward compatibility
@@ -179,7 +179,7 @@ function edd_send_back_to_checkout( $args = array() ) {
 		$redirect = add_query_arg( $args, $redirect );
 	}
 
-	edd_redirect( apply_filters( 'edd_send_back_to_checkout', $redirect, $args ) );
+	cs_redirect( apply_filters( 'cs_send_back_to_checkout', $redirect, $args ) );
 }
 
 /**
@@ -189,15 +189,15 @@ function edd_send_back_to_checkout( $args = array() ) {
  * @param bool $extras Extras to append to the URL
  * @return mixed|void Full URL to the Transaction Failed page, if present, home page if it doesn't exist
  */
-function edd_get_failed_transaction_uri( $extras = false ) {
-	$uri = edd_get_option( 'failure_page', '' );
+function cs_get_failed_transaction_uri( $extras = false ) {
+	$uri = cs_get_option( 'failure_page', '' );
 	$uri = ! empty( $uri ) ? trailingslashit( get_permalink( $uri ) ) : home_url();
 
 	if ( $extras ) {
 		$uri .= $extras;
 	}
 
-	return apply_filters( 'edd_get_failed_transaction_uri', $uri );
+	return apply_filters( 'cs_get_failed_transaction_uri', $uri );
 }
 
 /**
@@ -206,11 +206,11 @@ function edd_get_failed_transaction_uri( $extras = false ) {
  * @since 2.1
  * @return bool True if on the Failed Transaction page, false otherwise.
  */
-function edd_is_failed_transaction_page() {
-	$ret = edd_get_option( 'failure_page', false );
+function cs_is_failed_transaction_page() {
+	$ret = cs_get_option( 'failure_page', false );
 	$ret = isset( $ret ) ? is_page( $ret ) : false;
 
-	return apply_filters( 'edd_is_failure_page', $ret );
+	return apply_filters( 'cs_is_failure_page', $ret );
 }
 
 /**
@@ -219,22 +219,22 @@ function edd_is_failed_transaction_page() {
  * @since       1.9.9
  * @return      void
 */
-function edd_listen_for_failed_payments() {
+function cs_listen_for_failed_payments() {
 
-	$failed_page = edd_get_option( 'failure_page', 0 );
+	$failed_page = cs_get_option( 'failure_page', 0 );
 
 	if( ! empty( $failed_page ) && is_page( $failed_page ) && ! empty( $_GET['payment-id'] ) ) {
 
 		$payment_id = absint( $_GET['payment-id'] );
 		$payment    = get_post( $payment_id );
-		$status     = edd_get_payment_status( $payment );
+		$status     = cs_get_payment_status( $payment );
 
 		if ( $status && 'pending' === strtolower( $status ) ) {
-			edd_update_payment_status( $payment_id, 'failed' );
+			cs_update_payment_status( $payment_id, 'failed' );
 		}
 	}
 }
-add_action( 'template_redirect', 'edd_listen_for_failed_payments' );
+add_action( 'template_redirect', 'cs_listen_for_failed_payments' );
 
 /**
  * Check if a field is required
@@ -243,8 +243,8 @@ add_action( 'template_redirect', 'edd_listen_for_failed_payments' );
  * @since       1.7
  * @return      bool
 */
-function edd_field_is_required( $field = '' ) {
-	$required_fields = edd_purchase_form_required_fields();
+function cs_field_is_required( $field = '' ) {
+	$required_fields = cs_purchase_form_required_fields();
 	return array_key_exists( $field, $required_fields );
 }
 
@@ -254,15 +254,15 @@ function edd_field_is_required( $field = '' ) {
  * @since       2.0
  * @return      array
  */
-function edd_get_banned_emails() {
-	$banned = edd_get_option( 'banned_emails', array() );
+function cs_get_banned_emails() {
+	$banned = cs_get_option( 'banned_emails', array() );
 	$emails = ! is_array( $banned )
 		? explode( "\n", $banned )
 		: $banned;
 
 	$emails = array_map( 'trim', $emails );
 
-	return apply_filters( 'edd_get_banned_emails', $emails );
+	return apply_filters( 'cs_get_banned_emails', $emails );
 }
 
 /**
@@ -272,7 +272,7 @@ function edd_get_banned_emails() {
  * @param string $email Email to check if is banned.
  * @return bool
  */
-function edd_is_email_banned( $email = '' ) {
+function cs_is_email_banned( $email = '' ) {
 
 	$email = trim( $email );
 	if( empty( $email ) ) {
@@ -280,7 +280,7 @@ function edd_is_email_banned( $email = '' ) {
 	}
 
 	$email         = strtolower( $email );
-	$banned_emails = edd_get_banned_emails();
+	$banned_emails = cs_get_banned_emails();
 
 	if( ! is_array( $banned_emails ) || empty( $banned_emails ) ) {
 		return false;
@@ -313,7 +313,7 @@ function edd_is_email_banned( $email = '' ) {
 		}
 	}
 
-	return apply_filters( 'edd_is_email_banned', $return, $email );
+	return apply_filters( 'cs_is_email_banned', $return, $email );
 }
 
 /**
@@ -322,9 +322,9 @@ function edd_is_email_banned( $email = '' ) {
  * @since       2.0
  * @return      bool True if enforce SSL is enabled, false otherwise
  */
-function edd_is_ssl_enforced() {
-	$ssl_enforced = edd_get_option( 'enforce_ssl', false );
-	return (bool) apply_filters( 'edd_is_ssl_enforced', $ssl_enforced );
+function cs_is_ssl_enforced() {
+	$ssl_enforced = cs_get_option( 'enforce_ssl', false );
+	return (bool) apply_filters( 'cs_is_ssl_enforced', $ssl_enforced );
 }
 
 /**
@@ -333,21 +333,21 @@ function edd_is_ssl_enforced() {
  * @since 2.0
  * @return void
  */
-function edd_enforced_ssl_redirect_handler() {
+function cs_enforced_ssl_redirect_handler() {
 
-	if ( ! edd_is_ssl_enforced() || ! edd_is_checkout() || is_admin() || is_ssl() ) {
+	if ( ! cs_is_ssl_enforced() || ! cs_is_checkout() || is_admin() || is_ssl() ) {
 		return;
 	}
 
-	if ( edd_is_checkout() && false !== strpos( edd_get_current_page_url(), 'https://' ) ) {
+	if ( cs_is_checkout() && false !== strpos( cs_get_current_page_url(), 'https://' ) ) {
 		return;
 	}
 
 	$uri = "https://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 
-	edd_redirect( $uri );
+	cs_redirect( $uri );
 }
-add_action( 'template_redirect', 'edd_enforced_ssl_redirect_handler' );
+add_action( 'template_redirect', 'cs_enforced_ssl_redirect_handler' );
 
 /**
  * Handle rewriting asset URLs for SSL enforced checkouts
@@ -355,8 +355,8 @@ add_action( 'template_redirect', 'edd_enforced_ssl_redirect_handler' );
  * @since 2.0
  * @return void
  */
-function edd_enforced_ssl_asset_handler() {
-	if ( ! edd_is_ssl_enforced() || ! edd_is_checkout() || is_admin() ) {
+function cs_enforced_ssl_asset_handler() {
+	if ( ! cs_is_ssl_enforced() || ! cs_is_checkout() || is_admin() ) {
 		return;
 	}
 
@@ -374,13 +374,13 @@ function edd_enforced_ssl_asset_handler() {
 		'site_url'
 	);
 
-	$filters = apply_filters( 'edd_enforced_ssl_asset_filters', $filters );
+	$filters = apply_filters( 'cs_enforced_ssl_asset_filters', $filters );
 
 	foreach ( $filters as $filter ) {
-		add_filter( $filter, 'edd_enforced_ssl_asset_filter', 1 );
+		add_filter( $filter, 'cs_enforced_ssl_asset_filter', 1 );
 	}
 }
-add_action( 'template_redirect', 'edd_enforced_ssl_asset_handler' );
+add_action( 'template_redirect', 'cs_enforced_ssl_asset_handler' );
 
 /**
  * Filter filters and convert http to https
@@ -389,15 +389,15 @@ add_action( 'template_redirect', 'edd_enforced_ssl_asset_handler' );
  * @param mixed $content
  * @return mixed
  */
-function edd_enforced_ssl_asset_filter( $content ) {
+function cs_enforced_ssl_asset_filter( $content ) {
 
 	if ( is_array( $content ) ) {
-		$content = array_map( 'edd_enforced_ssl_asset_filter', $content );
+		$content = array_map( 'cs_enforced_ssl_asset_filter', $content );
 
 	} else {
 
 		// Detect if URL ends in a common domain suffix. We want to only affect assets
-		$extension = untrailingslashit( edd_get_file_extension( $content ) );
+		$extension = untrailingslashit( cs_get_file_extension( $content ) );
 		$suffixes  = array(
 			'br',
 			'ca',
@@ -434,7 +434,7 @@ function edd_enforced_ssl_asset_filter( $content ) {
  * @param  integer $number The Credit Card Number to validate
  * @return bool            If the card number provided matches a specific format of a valid card
  */
-function edd_validate_card_number_format( $number = 0 ) {
+function cs_validate_card_number_format( $number = 0 ) {
 
 	$number = trim( $number );
 	if ( empty( $number ) ) {
@@ -448,18 +448,18 @@ function edd_validate_card_number_format( $number = 0 ) {
 	$is_valid_format = false;
 
 	// First check if it passes with the passed method, Luhn by default
-	$is_valid_format = edd_validate_card_number_format_luhn( $number );
+	$is_valid_format = cs_validate_card_number_format_luhn( $number );
 
 	// Run additional checks before we start the regexing and looping by type
-	$is_valid_format = apply_filters( 'edd_valiate_card_format_pre_type', $is_valid_format, $number );
+	$is_valid_format = apply_filters( 'cs_valiate_card_format_pre_type', $is_valid_format, $number );
 
 	if ( true === $is_valid_format ) {
 		// We've passed our method check, onto card specific checks
-		$card_type       = edd_detect_cc_type( $number );
+		$card_type       = cs_detect_cc_type( $number );
 		$is_valid_format = ! empty( $card_type ) ? true : false;
 	}
 
-	return apply_filters( 'edd_cc_is_valid_format', $is_valid_format, $number );
+	return apply_filters( 'cs_cc_is_valid_format', $is_valid_format, $number );
 }
 
 /**
@@ -469,7 +469,7 @@ function edd_validate_card_number_format( $number = 0 ) {
  * @param string $number
  * @return bool
  */
-function edd_validate_card_number_format_luhn( $number ) {
+function cs_validate_card_number_format_luhn( $number ) {
 
 	// Strip any non-digits (useful for credit card numbers with spaces and hyphens)
 	$number = preg_replace( '/\D/', '', $number );
@@ -510,7 +510,7 @@ function edd_validate_card_number_format_luhn( $number ) {
  * @param string  $number
  * @return string|bool
  */
-function edd_detect_cc_type( $number ) {
+function cs_detect_cc_type( $number ) {
 
 	$return = false;
 
@@ -567,7 +567,7 @@ function edd_detect_cc_type( $number ) {
 		),
 	);
 
-	$card_types = apply_filters( 'edd_cc_card_types', $card_types );
+	$card_types = apply_filters( 'cs_cc_card_types', $card_types );
 
 	if ( ! is_array( $card_types ) ) {
 		return false;
@@ -585,7 +585,7 @@ function edd_detect_cc_type( $number ) {
 		}
 	}
 
-	return apply_filters( 'edd_cc_found_card_type', $return, $number, $card_types );
+	return apply_filters( 'cs_cc_found_card_type', $return, $number, $card_types );
 }
 
 /**
@@ -596,7 +596,7 @@ function edd_detect_cc_type( $number ) {
  * @param string  $exp_year
  * @return bool
  */
-function edd_purchase_form_validate_cc_exp_date( $exp_month, $exp_year ) {
+function cs_purchase_form_validate_cc_exp_date( $exp_month, $exp_year ) {
 
 	$month_name = date( 'M', mktime( 0, 0, 0, $exp_month, 10 ) );
 	$expiration = strtotime( date( 't', strtotime( $month_name . ' ' . $exp_year ) ) . ' ' . $month_name . ' ' . $exp_year . ' 11:59:59PM' );
@@ -609,15 +609,15 @@ function edd_purchase_form_validate_cc_exp_date( $exp_month, $exp_year ) {
  *
  * @since 3.0
  */
-function edd_print_payment_icons_on_checkout() {
+function cs_print_payment_icons_on_checkout() {
 
-	// Only load icons at EDD Checkout.
-	if ( ! edd_is_checkout() ) {
+	// Only load icons at CommerceStore Checkout.
+	if ( ! cs_is_checkout() ) {
 		return;
 	}
 
 	// Get payment methods.
-	$methods = (array) edd_get_option( 'accepted_cards', array() );
+	$methods = (array) cs_get_option( 'accepted_cards', array() );
 	$icons   = array_keys( $methods );
 
 	if ( is_ssl() ) {
@@ -630,6 +630,6 @@ function edd_print_payment_icons_on_checkout() {
 	}
 
 	// Output icons.
-	edd_print_payment_icons( $icons );
+	cs_print_payment_icons( $icons );
 }
-add_action( 'wp_print_footer_scripts', 'edd_print_payment_icons_on_checkout', 9999 );
+add_action( 'wp_print_footer_scripts', 'cs_print_payment_icons_on_checkout', 9999 );

@@ -2,7 +2,7 @@
 /**
  * Admin Plugins
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Plugins
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -21,21 +21,21 @@ defined( 'ABSPATH' ) || exit;
  * @param string $file plugin file path and name being processed
  * @return array $links
  */
-function edd_plugin_action_links( $links = array(), $file = '' ) {
+function cs_plugin_action_links( $links = array(), $file = '' ) {
 
-	// Only EDD plugin row
-	if ( EDD_PLUGIN_BASE === $file ) {
-		$settings_url = edd_get_admin_url( array(
-			'page' => 'edd-settings'
+	// Only CommerceStore plugin row
+	if ( CS_PLUGIN_BASE === $file ) {
+		$settings_url = cs_get_admin_url( array(
+			'page' => 'cs-settings'
 		) );
 
-		$links['settings'] = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'easy-digital-downloads' ) . '</a>';
+		$links['settings'] = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'commercestore' ) . '</a>';
 	}
 
 	// Return array of links
 	return $links;
 }
-add_filter( 'plugin_action_links', 'edd_plugin_action_links', 10, 2 );
+add_filter( 'plugin_action_links', 'cs_plugin_action_links', 10, 2 );
 
 
 /**
@@ -47,20 +47,20 @@ add_filter( 'plugin_action_links', 'edd_plugin_action_links', 10, 2 );
  * @param string $file plugin file path and name being processed
  * @return array $input
  */
-function edd_plugin_row_meta( $links = array(), $file = '' ) {
+function cs_plugin_row_meta( $links = array(), $file = '' ) {
 
-	// Only EDD plugin row
-	if ( EDD_PLUGIN_BASE === $file ) {
+	// Only CommerceStore plugin row
+	if ( CS_PLUGIN_BASE === $file ) {
 		$extensions_url = add_query_arg( array(
 			'utm_source'   => 'plugins-page',
 			'utm_medium'   => 'plugin-row',
 			'utm_campaign' => 'admin',
-		), 'https://easydigitaldownloads.com/downloads/' );
+		), 'https://commercestore.com/downloads/' );
 
-		$links['extensions'] = '<a href="' . esc_url( $extensions_url ) . '">' . esc_html__( 'Extensions', 'easy-digital-downloads' ) . '</a>';
+		$links['extensions'] = '<a href="' . esc_url( $extensions_url ) . '">' . esc_html__( 'Extensions', 'commercestore' ) . '</a>';
 	}
 
 	// Return array of links
 	return $links;
 }
-add_filter( 'plugin_row_meta', 'edd_plugin_row_meta', 10, 2 );
+add_filter( 'plugin_row_meta', 'cs_plugin_row_meta', 10, 2 );

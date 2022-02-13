@@ -2,7 +2,7 @@
 /**
  * File Download Log Meta Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Logs
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -24,8 +24,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return int|false Meta ID on success, false on failure.
  */
-function edd_add_file_download_log_meta( $file_download_log_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'edd_logs_file_download', $file_download_log_id, $meta_key, $meta_value, $unique );
+function cs_add_file_download_log_meta( $file_download_log_id, $meta_key, $meta_value, $unique = false ) {
+	return add_metadata( 'cs_logs_file_download', $file_download_log_id, $meta_key, $meta_value, $unique );
 }
 
 /**
@@ -42,8 +42,8 @@ function edd_add_file_download_log_meta( $file_download_log_id, $meta_key, $meta
  *
  * @return bool True on success, false on failure.
  */
-function edd_delete_file_download_log_meta( $file_download_log_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'edd_logs_file_download', $file_download_log_id, $meta_key, $meta_value );
+function cs_delete_file_download_log_meta( $file_download_log_id, $meta_key, $meta_value = '' ) {
+	return delete_metadata( 'cs_logs_file_download', $file_download_log_id, $meta_key, $meta_value );
 }
 
 /**
@@ -58,8 +58,8 @@ function edd_delete_file_download_log_meta( $file_download_log_id, $meta_key, $m
  *
  * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
  */
-function edd_get_file_download_log_meta( $file_download_log_id, $key = '', $single = false ) {
-	return get_metadata( 'edd_logs_file_download', $file_download_log_id, $key, $single );
+function cs_get_file_download_log_meta( $file_download_log_id, $key = '', $single = false ) {
+	return get_metadata( 'cs_logs_file_download', $file_download_log_id, $key, $single );
 }
 
 /**
@@ -79,8 +79,8 @@ function edd_get_file_download_log_meta( $file_download_log_id, $key = '', $sing
  *
  * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
  */
-function edd_update_file_download_log_meta( $file_download_log_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'edd_logs_file_download', $file_download_log_id, $meta_key, $meta_value, $prev_value );
+function cs_update_file_download_log_meta( $file_download_log_id, $meta_key, $meta_value, $prev_value = '' ) {
+	return update_metadata( 'cs_logs_file_download', $file_download_log_id, $meta_key, $meta_value, $prev_value );
 }
 
 /**
@@ -92,6 +92,6 @@ function edd_update_file_download_log_meta( $file_download_log_id, $meta_key, $m
  *
  * @return bool Whether the log meta key was deleted from the database.
  */
-function edd_delete_file_download_log_meta_by_key( $meta_key ) {
-	return delete_metadata( 'edd_logs_file_download', null, $meta_key, '', true );
+function cs_delete_file_download_log_meta_by_key( $meta_key ) {
+	return delete_metadata( 'cs_logs_file_download', null, $meta_key, '', true );
 }

@@ -22,12 +22,12 @@ export const FormAddOrderAdjustment = Dialog.extend( {
 	/**
 	 * @since 3.0
 	 */
-	el: '#edd-admin-order-add-adjustment-dialog',
+	el: '#cs-admin-order-add-adjustment-dialog',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-form-add-order-adjustment' ),
+	template: wp.template( 'cs-admin-order-form-add-order-adjustment' ),
 
 	/**
 	 * "Add Adjustment" view.
@@ -227,7 +227,7 @@ export const FormAddOrderAdjustment = Dialog.extend( {
 
 		this.closeDialog();
 
-		const button = $( '[href="#edd_general_address"]' );
+		const button = $( '[href="#cs_general_address"]' );
 
 		if ( ! button ) {
 			return;
@@ -235,7 +235,7 @@ export const FormAddOrderAdjustment = Dialog.extend( {
 
 		button.trigger( 'click' );
 
-		$( '#edd_order_address_country' ).trigger( 'focus' );
+		$( '#cs_order_address_country' ).trigger( 'focus' );
 	},
 
 	/**

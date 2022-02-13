@@ -2,7 +2,7 @@
 /**
  * Notes Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Discounts
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @param array $notes
  * @return string
  */
-function edd_admin_get_notes_html( $notes = array() ) {
+function cs_admin_get_notes_html( $notes = array() ) {
 
 	// Whether to show or hide the "No notes" default text
 	$no_notes_display = ! empty( $notes )
@@ -30,18 +30,18 @@ function edd_admin_get_notes_html( $notes = array() ) {
 	// Start a buffer
 	ob_start(); ?>
 
-	<div id="edd-notes" class="edd-notes">
+	<div id="cs-notes" class="cs-notes">
 		<?php
 
 		// Output notes
 		foreach ( $notes as $note ) {
-			echo edd_admin_get_note_html( $note );
+			echo cs_admin_get_note_html( $note );
 		}
 
 		?>
 
-		<p class="edd-no-notes"<?php echo $no_notes_display; ?>>
-			<?php _e( 'No notes.', 'easy-digital-downloads' ); ?>
+		<p class="cs-no-notes"<?php echo $no_notes_display; ?>>
+			<?php _e( 'No notes.', 'commercestore' ); ?>
 		</p>
 	</div>
 
@@ -59,13 +59,13 @@ function edd_admin_get_notes_html( $notes = array() ) {
  *
  * @return string
  */
-function edd_admin_get_note_html( $note_id = 0 ) {
+function cs_admin_get_note_html( $note_id = 0 ) {
 
-	/** @var $note EDD\Notes\Note For IDE type-hinting purposes. */
+	/** @var $note CS\Notes\Note For IDE type-hinting purposes. */
 
 	// Get the note
 	$note = is_numeric( $note_id )
-		? edd_get_note( $note_id )
+		? cs_get_note( $note_id )
 		: $note_id;
 
 	// No note, so bail
@@ -75,10 +75,10 @@ function edd_admin_get_note_html( $note_id = 0 ) {
 
 	// User
 	$user_id = $note->user_id;
-	$author  = edd_get_bot_name();
+	$author  = cs_get_bot_name();
 	if ( ! empty( $user_id ) ) {
 		/* translators: user ID */
-		$author      = sprintf( __( 'User ID #%s', 'easy-digital-downloads' ), $user_id );
+		$author      = sprintf( __( 'User ID #%s', 'commercestore' ), $user_id );
 		$user_object = get_userdata( $user_id );
 		if ( $user_object ) {
 			$author = ! empty( $user_object->display_name ) ? $user_object->display_name : $user_object->user_login;
@@ -87,20 +87,20 @@ function edd_admin_get_note_html( $note_id = 0 ) {
 
 	// URL to delete note
 	$delete_note_url = wp_nonce_url( add_query_arg( array(
-		'edd-action' => 'delete_note',
+		'cs-action' => 'delete_note',
 		'note_id'    => $note->id,
-	) ), 'edd_delete_note_' . $note->id );
+	) ), 'cs_delete_note_' . $note->id );
 
 	// Start a buffer
 	ob_start();
 	?>
 
-	<div class="edd-note" id="edd-note-<?php echo esc_attr( $note->id ); ?>">
-		<div class="edd-note__header">
-			<strong class="edd-note-author"><?php echo esc_html( $author ); ?></strong>
-			<time datetime="<?php echo esc_attr( EDD()->utils->date( $note->date_created, null, true )->toDateTimeString() ); ?>"><?php echo edd_date_i18n( $note->date_created, 'datetime' ); ?></time>
-			<a href="<?php echo esc_url( $delete_note_url ); ?>#edd-notes" class="edd-delete-note" data-note-id="<?php echo esc_attr( $note->id ); ?>" data-object-id="<?php echo esc_attr( $note->object_id ); ?>" data-object-type="<?php echo esc_attr( $note->object_type ); ?>">
-				<?php echo esc_html_x( '&times;', 'Delete note', 'easy-digital-downloads' ); ?>
+	<div class="cs-note" id="cs-note-<?php echo esc_attr( $note->id ); ?>">
+		<div class="cs-note__header">
+			<strong class="cs-note-author"><?php echo esc_html( $author ); ?></strong>
+			<time datetime="<?php echo esc_attr( CS()->utils->date( $note->date_created, null, true )->toDateTimeString() ); ?>"><?php echo cs_date_i18n( $note->date_created, 'datetime' ); ?></time>
+			<a href="<?php echo esc_url( $delete_note_url ); ?>#cs-notes" class="cs-delete-note" data-note-id="<?php echo esc_attr( $note->id ); ?>" data-object-id="<?php echo esc_attr( $note->object_id ); ?>" data-object-type="<?php echo esc_attr( $note->object_type ); ?>">
+				<?php echo esc_html_x( '&times;', 'Delete note', 'commercestore' ); ?>
 			</a>
 		</div>
 
@@ -123,30 +123,30 @@ function edd_admin_get_note_html( $note_id = 0 ) {
  *
  * @return string
  */
-function edd_admin_get_new_note_form( $object_id = 0, $object_type = '' ) {
+function cs_admin_get_new_note_form( $object_id = 0, $object_type = '' ) {
 
 	// Start a buffer
 	ob_start();?>
 
-	<div class="edd-add-note">
-		<div class="edd-form-group">
-			<label class="edd-form-group__label screen-reader-text" for="edd-note">
-				<?php esc_html_e( 'Note', 'easy-digital-downloads' ); ?>
+	<div class="cs-add-note">
+		<div class="cs-form-group">
+			<label class="cs-form-group__label screen-reader-text" for="cs-note">
+				<?php esc_html_e( 'Note', 'commercestore' ); ?>
 			</label>
 
-			<div id="edd-form-group__control">
-				<textarea name="edd-note" id="edd-note" class="edd-form-group__input"></textarea>
+			<div id="cs-form-group__control">
+				<textarea name="cs-note" id="cs-note" class="cs-form-group__input"></textarea>
 			</div>
 		</div>
 
-		<div class="edd-form-group">
-			<button type="button" id="edd-add-note" class="edd-note-submit button button-secondary left" data-object-id="<?php echo esc_attr( $object_id ); ?>" data-object-type="<?php echo esc_attr( $object_type ); ?>">
-				<?php _e( 'Add Note', 'easy-digital-downloads' ); ?>
+		<div class="cs-form-group">
+			<button type="button" id="cs-add-note" class="cs-note-submit button button-secondary left" data-object-id="<?php echo esc_attr( $object_id ); ?>" data-object-type="<?php echo esc_attr( $object_type ); ?>">
+				<?php _e( 'Add Note', 'commercestore' ); ?>
 			</button>
 			<span class="spinner"></span>
 		</div>
 
-		<?php wp_nonce_field( 'edd_note', 'edd_note_nonce' ); ?>
+		<?php wp_nonce_field( 'cs_note', 'cs_note_nonce' ); ?>
 	</div>
 
 	<?php
@@ -165,7 +165,7 @@ function edd_admin_get_new_note_form( $object_id = 0, $object_type = '' ) {
  *
  * @return string
  */
-function edd_get_note_delete_redirect_url() {
+function cs_get_note_delete_redirect_url() {
 
 	// HTTP or HTTPS
 	$scheme = is_ssl()
@@ -182,7 +182,7 @@ function edd_get_note_delete_redirect_url() {
  * @since 3.0
  * @param array $args
  */
-function edd_admin_get_notes_pagination( $args = array() ) {
+function cs_admin_get_notes_pagination( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -196,7 +196,7 @@ function edd_admin_get_notes_pagination( $args = array() ) {
 	) );
 
 	// Maximum notes per page
-	$per_page    = apply_filters( 'edd_notes_per_page', 20 );
+	$per_page    = apply_filters( 'cs_notes_per_page', 20 );
 	$r['total']  = ceil( $r['total'] / $per_page );
 	$r['format'] = "?{$r['pag_arg']}=%#%";
 
@@ -208,7 +208,7 @@ function edd_admin_get_notes_pagination( $args = array() ) {
 	// Start a buffer
 	ob_start(); ?>
 
-	<div class="edd-note-pagination">
+	<div class="cs-note-pagination">
 		<?php echo paginate_links( $r ); ?>
 	</div>
 

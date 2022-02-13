@@ -4,17 +4,17 @@
  *
  * @link       https://developer.paypal.com/docs/api/webhooks/v1/#verify-webhook-signature_post
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal\Webhooks
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal\Webhooks;
+namespace CS\Gateways\PayPal\Webhooks;
 
-use EDD\Gateways\PayPal\API;
-use EDD\Gateways\PayPal\Exceptions\API_Exception;
+use CS\Gateways\PayPal\API;
+use CS\Gateways\PayPal\Exceptions\API_Exception;
 
 class Webhook_Validator {
 

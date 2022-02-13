@@ -7,7 +7,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +27,7 @@ class Order_Notes extends Base {
 	public function __construct( $step = 1 ) {
 		parent::__construct( $step );
 
-		$this->completed_message = __( 'Order notes migration completed successfully.', 'easy-digital-downloads' );
+		$this->completed_message = __( 'Order notes migration completed successfully.', 'commercestore' );
 		$this->upgrade           = 'migrate_order_notes';
 	}
 
@@ -47,7 +47,7 @@ class Order_Notes extends Base {
 			 WHERE comment_type = %s
 			 ORDER BY comment_id ASC
 			 LIMIT %d, %d",
-			esc_sql( 'edd_payment_note' ), $offset, $this->per_step
+			esc_sql( 'cs_payment_note' ), $offset, $this->per_step
 		) );
 
 		if ( ! empty( $results ) ) {
@@ -70,7 +70,7 @@ class Order_Notes extends Base {
 	 * @return float Percentage.
 	 */
 	public function get_percentage_complete() {
-		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(comment_ID) AS count FROM {$this->get_db()->comments} WHERE comment_type = %s", esc_sql( 'edd_payment_note' ) ) );
+		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(comment_ID) AS count FROM {$this->get_db()->comments} WHERE comment_type = %s", esc_sql( 'cs_payment_note' ) ) );
 
 		if ( empty( $total ) ) {
 			$total = 0;

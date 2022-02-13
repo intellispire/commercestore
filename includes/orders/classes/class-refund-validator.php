@@ -2,16 +2,16 @@
 /**
  * Refund Validator
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     3.0
  */
 
-namespace EDD\Orders;
+namespace CS\Orders;
 
-use EDD\Utils\Exception;
-use EDD\Utils\Exceptions\Invalid_Argument;
+use CS\Utils\Exception;
+use CS\Utils\Exceptions\Invalid_Argument;
 
 class Refund_Validator {
 
@@ -91,7 +91,7 @@ class Refund_Validator {
 	 */
 	private function get_order_adjustments() {
 		$fees    = $this->order->get_fees();
-		$credits = edd_get_order_adjustments( array(
+		$credits = cs_get_order_adjustments( array(
 			'object_id'   => $this->order->id,
 			'object_type' => 'order',
 			'type'        => 'credit'
@@ -233,7 +233,7 @@ class Refund_Validator {
 	private function validate_required_fields( $input, $context ) {
 		// subtotal and total are both required.
 		$required_fields = array( 'subtotal' );
-		if ( edd_use_taxes() ) {
+		if ( cs_use_taxes() ) {
 			$required_fields[] = 'tax';
 		}
 
@@ -257,18 +257,18 @@ class Refund_Validator {
 		if ( $this->total <= 0 ) {
 			throw new Exception( sprintf(
 				/* Translators: %s - 0.00 formatted in store currency */
-				__( 'The refund amount must be greater than %s.', 'easy-digital-downloads' ),
-				edd_currency_filter( edd_format_amount( 0.00 ) )
+				__( 'The refund amount must be greater than %s.', 'commercestore' ),
+				cs_currency_filter( cs_format_amount( 0.00 ) )
 			) );
 		}
 
 		// Overall refund total cannot be over total refundable amount.
-		$order_total = edd_get_order_total( $this->order->id );
+		$order_total = cs_get_order_total( $this->order->id );
 		if ( $this->is_over_refund_amount( $this->total, $order_total ) ) {
 			throw new Exception( sprintf(
 				/* Translators: %s - maximum refund amount as formatted currency */
-				__( 'The maximum refund amount is %s.', 'easy-digital-downloads' ),
-				edd_currency_filter( edd_format_amount( $order_total ) )
+				__( 'The maximum refund amount is %s.', 'commercestore' ),
+				cs_currency_filter( cs_format_amount( $order_total ) )
 			) );
 		}
 	}
@@ -339,7 +339,7 @@ class Refund_Validator {
 			if ( ! array_key_exists( $column_name, $maximum_refundable_amounts ) ) {
 				throw new Exception( sprintf(
 				/* Translators: %s is the type of amount being refunded (e.g. "subtotal" or "tax"). Not translatable at this time. */
-					__( 'An unexpected error occurred while validating the maximum %s amount.', 'easy-digital-downloads' ),
+					__( 'An unexpected error occurred while validating the maximum %s amount.', 'commercestore' ),
 					$column_name
 				) );
 			}
@@ -367,10 +367,10 @@ class Refund_Validator {
 						 * %1$s - product name;
 						 * %3$s - maximum amount allowed for refund
 						 */
-						__( 'The maximum refund %1$s for the product "%2$s" is %3$s.', 'easy-digital-downloads' ),
+						__( 'The maximum refund %1$s for the product "%2$s" is %3$s.', 'commercestore' ),
 						$column_name,
 						$original_item->product_name,
-						edd_currency_filter( $maximum_refundable_amounts[ $column_name ] )
+						cs_currency_filter( $maximum_refundable_amounts[ $column_name ] )
 					);
 				} else {
 					$error_message = sprintf(
@@ -380,10 +380,10 @@ class Refund_Validator {
 						 * %1$s - adjustment description;
 						 * %3$s - maximum amount allowed for refund
 						 */
-						__( 'The maximum refund %s for the adjustment "%s" is %s.', 'easy-digital-downloads' ),
+						__( 'The maximum refund %s for the adjustment "%s" is %s.', 'commercestore' ),
 						$column_name,
 						$original_item->description,
-						edd_currency_filter( $maximum_refundable_amounts[ $column_name ] )
+						cs_currency_filter( $maximum_refundable_amounts[ $column_name ] )
 					);
 				}
 
@@ -396,7 +396,7 @@ class Refund_Validator {
 
 			// If this is an adjustment, and it's _credit_, negate the amount because credit _reduces_ the total.
 			if ( $original_item instanceof Order_Adjustment && 'credit' === $original_item->type ) {
-				$attempted_amount = edd_negate_amount( $attempted_amount );
+				$attempted_amount = cs_negate_amount( $attempted_amount );
 			}
 
 			$this->{$column_name} += $attempted_amount;
@@ -471,11 +471,11 @@ class Refund_Validator {
 
 		// Negate amounts.
 		if ( array_key_exists( 'quantity', $new_args ) ) {
-			$new_args['quantity'] = edd_negate_int( $new_args['quantity'] );
+			$new_args['quantity'] = cs_negate_int( $new_args['quantity'] );
 		}
 		foreach ( array( 'subtotal', 'tax', 'total' ) as $field_to_negate ) {
 			if ( array_key_exists( $field_to_negate, $new_args ) ) {
-				$new_args[ $field_to_negate ] = edd_negate_amount( $new_args[ $field_to_negate ] );
+				$new_args[ $field_to_negate ] = cs_negate_amount( $new_args[ $field_to_negate ] );
 			}
 		}
 
@@ -498,7 +498,7 @@ class Refund_Validator {
 	 * @return boolean
 	 */
 	private function is_over_refund_amount( $attempted_amount, $maximum_amount ) {
-		return edd_sanitize_amount( $attempted_amount ) > edd_sanitize_amount( $maximum_amount );
+		return cs_sanitize_amount( $attempted_amount ) > cs_sanitize_amount( $maximum_amount );
 	}
 }
 

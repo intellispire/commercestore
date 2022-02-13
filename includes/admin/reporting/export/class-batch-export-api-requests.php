@@ -4,7 +4,7 @@
  *
  * This class handles API request logs export
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_API_Requests_Export Class
+ * CS_Batch_API_Requests_Export Class
  *
  * @since 2.7
  */
-class EDD_Batch_API_Requests_Export extends EDD_Batch_Export {
+class CS_Batch_API_Requests_Export extends CS_Batch_Export {
 	/**
 	 * Our export type. Used for export-type specific filters/actions
 	 *
@@ -36,14 +36,14 @@ class EDD_Batch_API_Requests_Export extends EDD_Batch_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'ID'      => __( 'Log ID',   'easy-digital-downloads' ),
-			'request' => __( 'API Request', 'easy-digital-downloads' ),
-			'ip'      => __( 'IP Address', 'easy-digital-downloads' ),
-			'user'    => __( 'API User', 'easy-digital-downloads' ),
-			'key'     => __( 'API Key', 'easy-digital-downloads' ),
-			'version' => __( 'API Version', 'easy-digital-downloads' ),
-			'speed'   => __( 'Request Speed', 'easy-digital-downloads' ),
-			'date'    => __( 'Date', 'easy-digital-downloads' )
+			'ID'      => __( 'Log ID',   'commercestore' ),
+			'request' => __( 'API Request', 'commercestore' ),
+			'ip'      => __( 'IP Address', 'commercestore' ),
+			'user'    => __( 'API User', 'commercestore' ),
+			'key'     => __( 'API Key', 'commercestore' ),
+			'version' => __( 'API Version', 'commercestore' ),
+			'speed'   => __( 'Request Speed', 'commercestore' ),
+			'date'    => __( 'Date', 'commercestore' )
 		);
 
 		return $cols;
@@ -69,10 +69,10 @@ class EDD_Batch_API_Requests_Export extends EDD_Batch_Export {
 			$args['date_query'] = $this->get_date_query();
 		}
 
-		$logs = edd_get_api_request_logs( $args );
+		$logs = cs_get_api_request_logs( $args );
 
 		foreach ( $logs as $log ) {
-			/** @var EDD\Logs\Api_Request_Log $log */
+			/** @var CS\Logs\Api_Request_Log $log */
 
 			$data[] = array(
 				'ID'      => $log->id,
@@ -86,8 +86,8 @@ class EDD_Batch_API_Requests_Export extends EDD_Batch_Export {
 			);
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return ! empty( $data )
 			? $data
@@ -111,7 +111,7 @@ class EDD_Batch_API_Requests_Export extends EDD_Batch_Export {
 			$args['date_query'] = $this->get_date_query();
 		}
 
-		$total = edd_count_api_request_logs( $args );
+		$total = cs_count_api_request_logs( $args );
 		$percentage = 100;
 
 		if ( $total > 0 ) {

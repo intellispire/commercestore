@@ -2,9 +2,9 @@
 /**
  * Exports Actions
  *
- * These are actions related to exporting data from Easy Digital Downloads.
+ * These are actions related to exporting data from CommerceStore.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Export
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -19,20 +19,20 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.4
  */
-function edd_process_batch_export_download() {
-	if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'edd-batch-export' ) ) {
-		wp_die( esc_html__( 'Nonce verification failed', 'easy-digital-downloads' ), esc_html__( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+function cs_process_batch_export_download() {
+	if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'cs-batch-export' ) ) {
+		wp_die( esc_html__( 'Nonce verification failed', 'commercestore' ), esc_html__( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
-	require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export.php';
-	do_action( 'edd_batch_export_class_include', $_REQUEST['class'] );
+	require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export.php';
+	do_action( 'cs_batch_export_class_include', $_REQUEST['class'] );
 
-	if ( class_exists( $_REQUEST['class'] ) && 'EDD_Batch_Export' === get_parent_class( $_REQUEST['class'] ) ) {
+	if ( class_exists( $_REQUEST['class'] ) && 'CS_Batch_Export' === get_parent_class( $_REQUEST['class'] ) ) {
 		$export = new $_REQUEST['class']();
 		$export->export();
 	}
 }
-add_action( 'edd_download_batch_export', 'edd_process_batch_export_download' );
+add_action( 'cs_download_batch_export', 'cs_process_batch_export_download' );
 
 /**
  * Export all the customers to a CSV file.
@@ -43,29 +43,29 @@ add_action( 'edd_download_batch_export', 'edd_process_batch_export_download' );
  * @since 1.4.4
  * @return void
  */
-function edd_export_all_customers() {
-	require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/class-export-customers.php';
+function cs_export_all_customers() {
+	require_once CS_PLUGIN_DIR . 'includes/admin/reporting/class-export-customers.php';
 
-	$customer_export = new EDD_Customers_Export();
+	$customer_export = new CS_Customers_Export();
 
 	$customer_export->export();
 }
-add_action( 'edd_email_export', 'edd_export_all_customers' );
+add_action( 'cs_email_export', 'cs_export_all_customers' );
 
 /**
- * Exports all the downloads to a CSV file using the EDD_Export class.
+ * Exports all the downloads to a CSV file using the CS_Export class.
  *
  * @since 1.4.4
  * @return void
  */
-function edd_export_all_downloads_history() {
-	require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/class-export-download-history.php';
+function cs_export_all_downloads_history() {
+	require_once CS_PLUGIN_DIR . 'includes/admin/reporting/class-export-download-history.php';
 
-	$file_download_export = new EDD_Download_History_Export();
+	$file_download_export = new CS_Download_History_Export();
 
 	$file_download_export->export();
 }
-add_action( 'edd_downloads_history_export', 'edd_export_all_downloads_history' );
+add_action( 'cs_downloads_history_export', 'cs_export_all_downloads_history' );
 
 /**
  * Add a hook allowing extensions to register a hook on the batch export process
@@ -73,21 +73,21 @@ add_action( 'edd_downloads_history_export', 'edd_export_all_downloads_history' )
  * @since  2.4.2
  * @return void
  */
-function edd_register_batch_exporters() {
+function cs_register_batch_exporters() {
 	if ( is_admin() ) {
-		do_action( 'edd_register_batch_exporter' );
+		do_action( 'cs_register_batch_exporter' );
 	}
 }
-add_action( 'plugins_loaded', 'edd_register_batch_exporters', 99 );
+add_action( 'plugins_loaded', 'cs_register_batch_exporters', 99 );
 
 /**
  * Register the payments batch exporter
  * @since  2.4.2
  */
-function edd_register_payments_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_payments_batch_processor', 10, 1 );
+function cs_register_payments_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_payments_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_payments_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_payments_batch_export', 10 );
 
 /**
  * Loads the payments batch processor if needed.
@@ -96,9 +96,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_payments_batch_export',
  *
  * @param string $class The class being requested to run for the batch export
  */
-function edd_include_payments_batch_processor( $class ) {
-	if ( 'EDD_Batch_Payments_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-payments.php';
+function cs_include_payments_batch_processor( $class ) {
+	if ( 'CS_Batch_Payments_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-payments.php';
 	}
 }
 
@@ -107,10 +107,10 @@ function edd_include_payments_batch_processor( $class ) {
  *
  * @since 2.4.2
  */
-function edd_register_customers_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_customers_batch_processor', 10, 1 );
+function cs_register_customers_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_customers_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_customers_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_customers_batch_export', 10 );
 
 /**
  * Loads the customers batch processor if needed.
@@ -119,9 +119,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_customers_batch_export'
  *
  * @param string $class The class being requested to run for the batch export.
  */
-function edd_include_customers_batch_processor( $class ) {
-	if ( 'EDD_Batch_Customers_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-customers.php';
+function cs_include_customers_batch_processor( $class ) {
+	if ( 'CS_Batch_Customers_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-customers.php';
 	}
 }
 
@@ -130,10 +130,10 @@ function edd_include_customers_batch_processor( $class ) {
  *
  * @since  2.5
  */
-function edd_register_downloads_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_downloads_batch_processor', 10, 1 );
+function cs_register_downloads_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_downloads_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_downloads_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_downloads_batch_export', 10 );
 
 /**
  * Loads the file downloads batch process if needed
@@ -142,9 +142,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_downloads_batch_export'
  * @param  string $class The class being requested to run for the batch export
  * @return void
  */
-function edd_include_downloads_batch_processor( $class ) {
-	if ( 'EDD_Batch_Downloads_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-downloads.php';
+function cs_include_downloads_batch_processor( $class ) {
+	if ( 'CS_Batch_Downloads_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-downloads.php';
 	}
 }
 
@@ -152,10 +152,10 @@ function edd_include_downloads_batch_processor( $class ) {
  * Register the file downloads batch exporter
  * @since  2.4.2
  */
-function edd_register_file_downloads_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_file_downloads_batch_processor', 10, 1 );
+function cs_register_file_downloads_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_file_downloads_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_file_downloads_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_file_downloads_batch_export', 10 );
 
 /**
  * Loads the file downloads batch process if needed
@@ -164,9 +164,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_file_downloads_batch_ex
  * @param  string $class The class being requested to run for the batch export
  * @return void
  */
-function edd_include_file_downloads_batch_processor( $class ) {
-	if ( 'EDD_Batch_File_Downloads_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-file-downloads.php';
+function cs_include_file_downloads_batch_processor( $class ) {
+	if ( 'CS_Batch_File_Downloads_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-file-downloads.php';
 	}
 }
 
@@ -175,10 +175,10 @@ function edd_include_file_downloads_batch_processor( $class ) {
  *
  * @since 2.7
  */
-function edd_register_sales_export_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_sales_export_batch_processor', 10, 1 );
+function cs_register_sales_export_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_sales_export_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_sales_export_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_sales_export_batch_export', 10 );
 
 /**
  * Loads the sales export batch process if needed
@@ -187,9 +187,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_sales_export_batch_expo
  * @param  string $class The class being requested to run for the batch export
  * @return void
  */
-function edd_include_sales_export_batch_processor( $class ) {
-	if ( 'EDD_Batch_Sales_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-sales.php';
+function cs_include_sales_export_batch_processor( $class ) {
+	if ( 'CS_Batch_Sales_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-sales.php';
 	}
 }
 
@@ -198,10 +198,10 @@ function edd_include_sales_export_batch_processor( $class ) {
  *
  * @since  2.7
  */
-function edd_register_earnings_report_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_earnings_report_batch_processor', 10, 1 );
+function cs_register_earnings_report_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_earnings_report_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_earnings_report_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_earnings_report_batch_export', 10 );
 
 /**
  * Loads the earnings report batch process if needed
@@ -210,9 +210,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_earnings_report_batch_e
  * @param  string $class The class being requested to run for the batch export
  * @return void
  */
-function edd_include_earnings_report_batch_processor( $class ) {
-	if ( 'EDD_Batch_Earnings_Report_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-earnings-report.php';
+function cs_include_earnings_report_batch_processor( $class ) {
+	if ( 'CS_Batch_Earnings_Report_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-earnings-report.php';
 	}
 }
 
@@ -221,10 +221,10 @@ function edd_include_earnings_report_batch_processor( $class ) {
  *
  * @since  2.7
  */
-function edd_register_api_requests_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_api_requests_batch_processor', 10, 1 );
+function cs_register_api_requests_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_api_requests_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_api_requests_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_api_requests_batch_export', 10 );
 
 /**
  * Loads the API requests batch process if needed
@@ -233,9 +233,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_api_requests_batch_expo
  * @param  string $class The class being requested to run for the batch export
  * @return void
  */
-function edd_include_api_requests_batch_processor( $class ) {
-	if ( 'EDD_Batch_API_Requests_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-api-requests.php';
+function cs_include_api_requests_batch_processor( $class ) {
+	if ( 'CS_Batch_API_Requests_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-api-requests.php';
 	}
 }
 
@@ -244,10 +244,10 @@ function edd_include_api_requests_batch_processor( $class ) {
  *
  * @since 3.0
  */
-function edd_register_taxed_orders_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_taxed_orders_batch_processor', 10, 1 );
+function cs_register_taxed_orders_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_taxed_orders_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_taxed_orders_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_taxed_orders_batch_export', 10 );
 
 /**
  * Loads the taxed orders report batch process if needed.
@@ -256,9 +256,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_taxed_orders_batch_expo
  *
  * @param string $class The class being requested to run for the batch export
  */
-function edd_include_taxed_orders_batch_processor( $class ) {
-	if ( 'EDD_Batch_Taxed_Orders_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-taxed-orders.php';
+function cs_include_taxed_orders_batch_processor( $class ) {
+	if ( 'CS_Batch_Taxed_Orders_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-taxed-orders.php';
 	}
 }
 
@@ -267,10 +267,10 @@ function edd_include_taxed_orders_batch_processor( $class ) {
  *
  * @since 3.0
  */
-function edd_register_taxed_customers_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_taxed_customers_batch_processor', 10, 1 );
+function cs_register_taxed_customers_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_taxed_customers_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_taxed_customers_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_taxed_customers_batch_export', 10 );
 
 /**
  * Loads the taxed customers report batch process if needed.
@@ -279,9 +279,9 @@ add_action( 'edd_register_batch_exporter', 'edd_register_taxed_customers_batch_e
  *
  * @param string $class The class being requested to run for the batch export
  */
-function edd_include_taxed_customers_batch_processor( $class ) {
-	if ( 'EDD_Batch_Taxed_Customers_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-taxed-customers.php';
+function cs_include_taxed_customers_batch_processor( $class ) {
+	if ( 'CS_Batch_Taxed_Customers_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-taxed-customers.php';
 	}
 }
 
@@ -290,10 +290,10 @@ function edd_include_taxed_customers_batch_processor( $class ) {
  *
  * @since 3.0
  */
-function edd_register_sales_and_earnings_batch_export() {
-	add_action( 'edd_batch_export_class_include', 'edd_include_sales_and_earnings_batch_processor', 10, 1 );
+function cs_register_sales_and_earnings_batch_export() {
+	add_action( 'cs_batch_export_class_include', 'cs_include_sales_and_earnings_batch_processor', 10, 1 );
 }
-add_action( 'edd_register_batch_exporter', 'edd_register_sales_and_earnings_batch_export', 10 );
+add_action( 'cs_register_batch_exporter', 'cs_register_sales_and_earnings_batch_export', 10 );
 
 /**
  * Loads the sales and earnings batch process if needed.
@@ -302,8 +302,8 @@ add_action( 'edd_register_batch_exporter', 'edd_register_sales_and_earnings_batc
  *
  * @param string $class The class being requested to run for the batch export
  */
-function edd_include_sales_and_earnings_batch_processor( $class ) {
-	if ( 'EDD_Batch_Sales_And_Earnings_Export' === $class ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-sales-and-earnings.php';
+function cs_include_sales_and_earnings_batch_processor( $class ) {
+	if ( 'CS_Batch_Sales_And_Earnings_Export' === $class ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export-sales-and-earnings.php';
 	}
 }

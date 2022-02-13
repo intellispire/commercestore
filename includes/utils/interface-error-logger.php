@@ -1,5 +1,5 @@
 <?php
-namespace EDD\Utils;
+namespace CS\Utils;
 
 /**
  * Defines error logging methods for use by an implementing class.

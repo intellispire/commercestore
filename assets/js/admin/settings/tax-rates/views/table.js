@@ -18,7 +18,7 @@ const Table = wp.Backbone.View.extend( {
 	className: 'wp-list-table widefat fixed tax-rates',
 
 	// Set ID.
-	id: 'edd_tax_rates',
+	id: 'cs_tax_rates',
 
 	/**
 	 * Output a table with a header, body, and footer.

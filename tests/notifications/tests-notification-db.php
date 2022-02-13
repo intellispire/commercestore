@@ -2,33 +2,33 @@
 /**
  * Notification Database Tests
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  */
 
-namespace EDD\Tests\Notifications;
+namespace CS\Tests\Notifications;
 
-use EDD\Models\Notification;
+use CS\Models\Notification;
 
 /**
- * @coversDefaultClass \EDD\Database\NotificationsDB
- * @group edd_notifications
+ * @coversDefaultClass \CS\Database\NotificationsDB
+ * @group cs_notifications
  */
-class NotificationDBTests extends \EDD_UnitTestCase {
+class NotificationDBTests extends \CS_UnitTestCase {
 
 	/**
-	 * @covers \EDD\Database\NotificationsDB::getActiveNotifications
+	 * @covers \CS\Database\NotificationsDB::getActiveNotifications
 	 */
 	public function test_notification_included_in_active() {
-		EDD()->notifications->insert( array(
+		CS()->notifications->insert( array(
 			'title'     => 'Notification',
 			'content'   => 'Notification',
 			'type'      => 'success',
 			'dismissed' => 0,
 		), 'notification' );
 
-		$notifications = EDD()->notifications->getActiveNotifications();
+		$notifications = CS()->notifications->getActiveNotifications();
 
 		$this->assertSame( 1, count( $notifications ) );
 		$this->assertTrue( $notifications[0] instanceof Notification );
@@ -36,53 +36,53 @@ class NotificationDBTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Database\NotificationsDB::getActiveNotifications
+	 * @covers \CS\Database\NotificationsDB::getActiveNotifications
 	 */
 	public function test_dismissed_notification_not_included_in_active() {
-		EDD()->notifications->insert( array(
+		CS()->notifications->insert( array(
 			'title'     => 'Notification',
 			'content'   => 'Notification',
 			'type'      => 'success',
 			'dismissed' => 1,
 		), 'notification' );
 
-		$this->assertEmpty( EDD()->notifications->getActiveNotifications() );
+		$this->assertEmpty( CS()->notifications->getActiveNotifications() );
 	}
 
 	/**
-	 * @covers \EDD\Database\NotificationsDB::getActiveNotifications
+	 * @covers \CS\Database\NotificationsDB::getActiveNotifications
 	 */
 	public function test_start_date_in_future_not_included_in_active() {
-		EDD()->notifications->insert( array(
+		CS()->notifications->insert( array(
 			'title'   => 'Notification',
 			'content' => 'Notification',
 			'type'    => 'success',
 			'start'   => date( 'Y-m-d H:i:s', strtotime( '+1 week' ) ),
 		), 'notification' );
 
-		$this->assertEmpty( EDD()->notifications->getActiveNotifications() );
+		$this->assertEmpty( CS()->notifications->getActiveNotifications() );
 	}
 
 	/**
-	 * @covers \EDD\Database\NotificationsDB::getActiveNotifications
+	 * @covers \CS\Database\NotificationsDB::getActiveNotifications
 	 */
 	public function test_end_date_in_past_not_included_in_active() {
-		EDD()->notifications->insert( array(
+		CS()->notifications->insert( array(
 			'title'   => 'Notification',
 			'content' => 'Notification',
 			'type'    => 'success',
 			'end'     => date( 'Y-m-d H:i:s', strtotime( '-1 week' ) ),
 		), 'notification' );
 
-		$this->assertEmpty( EDD()->notifications->getActiveNotifications() );
+		$this->assertEmpty( CS()->notifications->getActiveNotifications() );
 	}
 
 	/**
-	 * @covers \EDD\Database\NotificationsDB::getActiveNotifications
+	 * @covers \CS\Database\NotificationsDB::getActiveNotifications
 	 */
 	public function test_end_date_in_future_included_in_active() {
 		// Ends in 1 week - still valid.
-		EDD()->notifications->insert( array(
+		CS()->notifications->insert( array(
 			'title'   => 'Notification',
 			'content' => 'Notification',
 			'type'    => 'success',
@@ -90,14 +90,14 @@ class NotificationDBTests extends \EDD_UnitTestCase {
 		), 'notification' );
 
 		// Ended 1 week ago - should not be in results.
-		EDD()->notifications->insert( array(
+		CS()->notifications->insert( array(
 			'title'   => 'Notification',
 			'content' => 'Notification',
 			'type'    => 'success',
 			'end'     => date( 'Y-m-d H:i:s', strtotime( '-1 week' ) ),
 		), 'notification' );
 
-		$notifications = EDD()->notifications->getActiveNotifications();
+		$notifications = CS()->notifications->getActiveNotifications();
 
 		$this->assertSame( 1, count( $notifications ) );
 	}

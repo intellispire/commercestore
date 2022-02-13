@@ -2,7 +2,7 @@
 /**
  * Order Address Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -28,10 +28,10 @@ defined( 'ABSPATH' ) || exit;
  *     @type string $address       First line of address. Default empty.
  *     @type string $address2      Second line of address. Default empty.
  *     @type string $city          City. Default empty.
- *     @type string $region        Region. See `edd_get_shop_states()` for
+ *     @type string $region        Region. See `cs_get_shop_states()` for
  *                                 accepted values. Default empty.
  *     @type string $postal_code   Postal code. Default empty.
- *     @type string $country       Country. See `edd_get_country_list()` for
+ *     @type string $country       Country. See `cs_get_country_list()` for
  *                                 accepted values. Default empty.
  *     @type string $date_created  Optional. Automatically calculated on add/edit.
  *                                 The date & time the address was inserted.
@@ -42,7 +42,7 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @return int|false ID of newly created order address, false on error.
  */
-function edd_add_order_address( $data ) {
+function cs_add_order_address( $data ) {
 
 	// An order ID must be supplied for every address inserted.
 	if ( empty( $data['order_id'] ) ) {
@@ -65,7 +65,7 @@ function edd_add_order_address( $data ) {
 	}
 
 	// Instantiate a query object
-	$order_addresses = new EDD\Database\Queries\Order_Address();
+	$order_addresses = new CS\Database\Queries\Order_Address();
 
 	return $order_addresses->add_item( $data );
 }
@@ -78,8 +78,8 @@ function edd_add_order_address( $data ) {
  * @param int $order_address_id Order address ID.
  * @return int|false `1` if the address was deleted successfully, false on error.
  */
-function edd_delete_order_address( $order_address_id = 0 ) {
-	$order_addresses = new EDD\Database\Queries\Order_Address();
+function cs_delete_order_address( $order_address_id = 0 ) {
+	$order_addresses = new CS\Database\Queries\Order_Address();
 
 	return $order_addresses->delete_item( $order_address_id );
 }
@@ -98,10 +98,10 @@ function edd_delete_order_address( $order_address_id = 0 ) {
  *     @type string $address       First line of address. Default empty.
  *     @type string $address2      Second line of address. Default empty.
  *     @type string $city          City. Default empty.
- *     @type string $region        Region. See `edd_get_shop_states()` for
+ *     @type string $region        Region. See `cs_get_shop_states()` for
  *                                 accepted values. Default empty.
  *     @type string $postal_code   Postal code. Default empty.
- *     @type string $country       Country. See `edd_get_country_list()` for
+ *     @type string $country       Country. See `cs_get_country_list()` for
  *                                 accepted values. Default empty.
  *     @type string $date_created  Optional. Automatically calculated on add/edit.
  *                                 The date & time the address was inserted.
@@ -113,8 +113,8 @@ function edd_delete_order_address( $order_address_id = 0 ) {
  *
  * @return bool Whether or not the API request order was updated.
  */
-function edd_update_order_address( $order_address_id = 0, $data = array() ) {
-	$order_addresses = new EDD\Database\Queries\Order_Address();
+function cs_update_order_address( $order_address_id = 0, $data = array() ) {
+	$order_addresses = new CS\Database\Queries\Order_Address();
 
 	return $order_addresses->update_item( $order_address_id, $data );
 }
@@ -125,11 +125,11 @@ function edd_update_order_address( $order_address_id = 0, $data = array() ) {
  * @since 3.0
  *
  * @param int $order_address_id Order address ID.
- * @return \EDD\Orders\Order_Address|false Order_Address if successful, false
+ * @return \CS\Orders\Order_Address|false Order_Address if successful, false
  *                                         otherwise.
  */
-function edd_get_order_address( $order_address_id = 0 ) {
-	$order_addresses = new EDD\Database\Queries\Order_Address();
+function cs_get_order_address( $order_address_id = 0 ) {
+	$order_addresses = new CS\Database\Queries\Order_Address();
 
 	// Return order address
 	return $order_addresses->get_item( $order_address_id );
@@ -143,10 +143,10 @@ function edd_get_order_address( $order_address_id = 0 ) {
  * @param string $field Database table field.
  * @param string $value Value of the row.
  *
- * @return \EDD\Orders\Order_Address|false Order_Address if successful, false otherwise.
+ * @return \CS\Orders\Order_Address|false Order_Address if successful, false otherwise.
  */
-function edd_get_order_address_by( $field = '', $value = '' ) {
-	$order_addresses = new EDD\Database\Queries\Order_Address();
+function cs_get_order_address_by( $field = '', $value = '' ) {
+	$order_addresses = new CS\Database\Queries\Order_Address();
 
 	// Return order address
 	return $order_addresses->get_item_by( $field, $value );
@@ -155,15 +155,15 @@ function edd_get_order_address_by( $field = '', $value = '' ) {
 /**
  * Query for order addresses.
  *
- * @see \EDD\Database\Queries\Order_Address::__construct()
+ * @see \CS\Database\Queries\Order_Address::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Address` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Address` for
  *                    accepted arguments.
- * @return \EDD\Orders\Order_Address[] Array of `Order_Address` objects.
+ * @return \CS\Orders\Order_Address[] Array of `Order_Address` objects.
  */
-function edd_get_order_addresses( $args = array() ) {
+function cs_get_order_addresses( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -171,7 +171,7 @@ function edd_get_order_addresses( $args = array() ) {
 	) );
 
 	// Instantiate a query object
-	$order_addresses = new EDD\Database\Queries\Order_Address();
+	$order_addresses = new CS\Database\Queries\Order_Address();
 
 	// Return orders
 	return $order_addresses->query( $r );
@@ -180,15 +180,15 @@ function edd_get_order_addresses( $args = array() ) {
 /**
  * Count order addresses.
  *
- * @see \EDD\Database\Queries\Order_Address::__construct()
+ * @see \CS\Database\Queries\Order_Address::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Address` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Address` for
  *                    accepted arguments.
  * @return int Number of order addresses returned based on query arguments passed.
  */
-function edd_count_order_addresses( $args = array() ) {
+function cs_count_order_addresses( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -196,7 +196,7 @@ function edd_count_order_addresses( $args = array() ) {
 	) );
 
 	// Query for count(s)
-	$order_addresses = new EDD\Database\Queries\Order_Address( $r );
+	$order_addresses = new CS\Database\Queries\Order_Address( $r );
 
 	// Return count(s)
 	return absint( $order_addresses->found_items );

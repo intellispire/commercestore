@@ -2,13 +2,13 @@
 /**
  * Currency
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     3.0
  */
 
-namespace EDD\Currency;
+namespace CS\Currency;
 
 class Currency {
 
@@ -78,8 +78,8 @@ class Currency {
 	 */
 	private function setup() {
 		$this->symbol              = $this->get_symbol();
-		$this->decimal_separator   = edd_get_option( 'decimal_separator', '.' );
-		$this->thousands_separator = edd_get_option( 'thousands_separator', ',' );
+		$this->decimal_separator   = cs_get_option( 'decimal_separator', '.' );
+		$this->thousands_separator = cs_get_option( 'thousands_separator', ',' );
 
 		/**
 		 * Filters the decimal separator.
@@ -89,7 +89,7 @@ class Currency {
 		 *
 		 * @since 3.0
 		 */
-		$this->decimal_separator = apply_filters( 'edd_currency_decimal_separator', $this->decimal_separator, $this->code );
+		$this->decimal_separator = apply_filters( 'cs_currency_decimal_separator', $this->decimal_separator, $this->code );
 
 		/**
 		 * Filters the thousands separator.
@@ -99,10 +99,10 @@ class Currency {
 		 *
 		 * @since 3.0
 		 */
-		$this->thousands_separator = apply_filters( 'edd_currency_thousands_separator', $this->thousands_separator, $this->code );
+		$this->thousands_separator = apply_filters( 'cs_currency_thousands_separator', $this->thousands_separator, $this->code );
 
 		$separator = $this->_has_space_around_symbol() ? ' ' : '';
-		if ( 'before' === edd_get_option( 'currency_position', 'before' ) ) {
+		if ( 'before' === cs_get_option( 'currency_position', 'before' ) ) {
 			$this->prefix = $this->symbol . $separator;
 		} else {
 			$this->suffix = $separator . $this->symbol;
@@ -116,7 +116,7 @@ class Currency {
 		 *
 		 * @since 3.0
 		 */
-		$this->prefix = apply_filters( 'edd_currency_prefix', $this->prefix, $this->code );
+		$this->prefix = apply_filters( 'cs_currency_prefix', $this->prefix, $this->code );
 
 		/**
 		 * Filters the currency suffix.
@@ -126,7 +126,7 @@ class Currency {
 		 *
 		 * @since 3.0
 		 */
-		$this->suffix = apply_filters( 'edd_currency_suffix', $this->suffix, $this->code );
+		$this->suffix = apply_filters( 'cs_currency_suffix', $this->suffix, $this->code );
 
 		$this->number_decimals = $this->_is_zero_decimal() ? 0 : 2;
 	}
@@ -199,7 +199,7 @@ class Currency {
 		 * @param string $symbol Currency symbol.
 		 * @param string $code   Currency code.
 		 */
-		return apply_filters( 'edd_currency_symbol', $symbol, $this->code );
+		return apply_filters( 'cs_currency_symbol', $symbol, $this->code );
 	}
 
 	/**

@@ -7,15 +7,15 @@
  * the connection status on the admin settings page, and also to help
  * determine if we should allow the merchant to start processing payments.
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
-use EDD\Gateways\PayPal;
+use CS\Gateways\PayPal;
 
 class AccountStatusValidator {
 
@@ -71,7 +71,7 @@ class AccountStatusValidator {
 	 */
 	public function __construct( $mode = '' ) {
 		if ( empty( $mode ) ) {
-			$mode = edd_is_test_mode() ? PayPal\API::MODE_SANDBOX : PayPal\API::MODE_LIVE;
+			$mode = cs_is_test_mode() ? PayPal\API::MODE_SANDBOX : PayPal\API::MODE_LIVE;
 		}
 		$this->mode = $mode;
 
@@ -99,13 +99,13 @@ class AccountStatusValidator {
 	 */
 	public function check_rest() {
 		$credentials = array(
-			'client_id'     => edd_get_option( 'paypal_' . $this->mode . '_client_id' ),
-			'client_secret' => edd_get_option( 'paypal_' . $this->mode . '_client_secret' ),
+			'client_id'     => cs_get_option( 'paypal_' . $this->mode . '_client_id' ),
+			'client_secret' => cs_get_option( 'paypal_' . $this->mode . '_client_secret' ),
 		);
 
 		foreach ( $credentials as $credential ) {
 			if ( empty( $credential ) ) {
-				$this->errors_for_credentials->add( 'no_credentials', __( 'Not connected.', 'easy-digital-downloads' ) );
+				$this->errors_for_credentials->add( 'no_credentials', __( 'Not connected.', 'commercestore' ) );
 				break;
 			}
 		}
@@ -130,7 +130,7 @@ class AccountStatusValidator {
 				}
 			}
 		} catch ( Exceptions\MissingMerchantDetails $e ) {
-			$this->errors_for_merchant_account->add( 'missing_merchant_details', __( 'Missing merchant details from PayPal. Please reconnect and make sure you click the button to be redirected back to your site.', 'easy-digital-downloads' ) );
+			$this->errors_for_merchant_account->add( 'missing_merchant_details', __( 'Missing merchant details from PayPal. Please reconnect and make sure you click the button to be redirected back to your site.', 'commercestore' ) );
 		} catch ( Exceptions\InvalidMerchantDetails $e ) {
 			$this->errors_for_merchant_account->add( 'invalid_merchant_details', $e->getMessage() );
 		}
@@ -145,7 +145,7 @@ class AccountStatusValidator {
 		try {
 			$this->webhook = Webhooks\get_webhook_details( $this->mode );
 			if ( empty( $this->webhook->id ) ) {
-				throw new \Exception( __( 'Webhook not configured. Some actions may not work properly.', 'easy-digital-downloads' ) );
+				throw new \Exception( __( 'Webhook not configured. Some actions may not work properly.', 'commercestore' ) );
 			}
 
 			// Now compare the events to make sure we have them all.
@@ -167,7 +167,7 @@ class AccountStatusValidator {
 					'Webhook is configured but missing an event. Click "Sync Webhook" to correct this.',
 					'Webhook is configured but missing events. Click "Sync Webhook" to correct this.',
 					$number_missing,
-					'easy-digital-downloads'
+					'commercestore'
 				) );
 			}
 		} catch ( \Exception $e ) {

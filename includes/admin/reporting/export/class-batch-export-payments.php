@@ -4,7 +4,7 @@
  *
  * This class handles payment export in batches
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Payments_Export Class
+ * CS_Batch_Payments_Export Class
  *
  * @since 2.4
  */
-class EDD_Batch_Payments_Export extends EDD_Batch_Export {
+class CS_Batch_Payments_Export extends CS_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions.
@@ -38,41 +38,41 @@ class EDD_Batch_Payments_Export extends EDD_Batch_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'id'           => __( 'Payment ID', 'easy-digital-downloads' ), // unaltered payment ID (use for querying)
-			'seq_id'       => __( 'Payment Number', 'easy-digital-downloads' ), // sequential payment ID
-			'email'        => __( 'Email', 'easy-digital-downloads' ),
-			'customer_id'  => __( 'Customer ID', 'easy-digital-downloads' ),
-			'name'         => __( 'Customer Name', 'easy-digital-downloads' ),
-			'address1'     => __( 'Address', 'easy-digital-downloads' ),
-			'address2'     => __( 'Address (Line 2)', 'easy-digital-downloads' ),
-			'city'         => __( 'City', 'easy-digital-downloads' ),
-			'state'        => __( 'State', 'easy-digital-downloads' ),
-			'country'      => __( 'Country', 'easy-digital-downloads' ),
-			'zip'          => __( 'Zip / Postal Code', 'easy-digital-downloads' ),
-			'products'     => __( 'Products (Verbose)', 'easy-digital-downloads' ),
-			'products_raw' => __( 'Products (Raw)', 'easy-digital-downloads' ),
-			'skus'         => __( 'SKUs', 'easy-digital-downloads' ),
-			'currency'     => __( 'Currency', 'easy-digital-downloads' ),
-			'amount'       => __( 'Amount', 'easy-digital-downloads' ),
-			'tax'          => __( 'Tax', 'easy-digital-downloads' ),
-			'discount'     => __( 'Discount Code', 'easy-digital-downloads' ),
-			'gateway'      => __( 'Payment Method', 'easy-digital-downloads' ),
-			'trans_id'     => __( 'Transaction ID', 'easy-digital-downloads' ),
-			'key'          => __( 'Purchase Key', 'easy-digital-downloads' ),
-			'date'         => __( 'Date', 'easy-digital-downloads' ),
-			'user'         => __( 'User', 'easy-digital-downloads' ),
-			'ip'           => __( 'IP Address', 'easy-digital-downloads' ),
-			'mode'         => __( 'Mode (Live|Test)', 'easy-digital-downloads' ),
-			'status'       => __( 'Status', 'easy-digital-downloads' ),
-			'country_name' => __( 'Country Name', 'easy-digital-downloads' ),
-			'state_name'   => __( 'State Name', 'easy-digital-downloads' ),
+			'id'           => __( 'Payment ID', 'commercestore' ), // unaltered payment ID (use for querying)
+			'seq_id'       => __( 'Payment Number', 'commercestore' ), // sequential payment ID
+			'email'        => __( 'Email', 'commercestore' ),
+			'customer_id'  => __( 'Customer ID', 'commercestore' ),
+			'name'         => __( 'Customer Name', 'commercestore' ),
+			'address1'     => __( 'Address', 'commercestore' ),
+			'address2'     => __( 'Address (Line 2)', 'commercestore' ),
+			'city'         => __( 'City', 'commercestore' ),
+			'state'        => __( 'State', 'commercestore' ),
+			'country'      => __( 'Country', 'commercestore' ),
+			'zip'          => __( 'Zip / Postal Code', 'commercestore' ),
+			'products'     => __( 'Products (Verbose)', 'commercestore' ),
+			'products_raw' => __( 'Products (Raw)', 'commercestore' ),
+			'skus'         => __( 'SKUs', 'commercestore' ),
+			'currency'     => __( 'Currency', 'commercestore' ),
+			'amount'       => __( 'Amount', 'commercestore' ),
+			'tax'          => __( 'Tax', 'commercestore' ),
+			'discount'     => __( 'Discount Code', 'commercestore' ),
+			'gateway'      => __( 'Payment Method', 'commercestore' ),
+			'trans_id'     => __( 'Transaction ID', 'commercestore' ),
+			'key'          => __( 'Purchase Key', 'commercestore' ),
+			'date'         => __( 'Date', 'commercestore' ),
+			'user'         => __( 'User', 'commercestore' ),
+			'ip'           => __( 'IP Address', 'commercestore' ),
+			'mode'         => __( 'Mode (Live|Test)', 'commercestore' ),
+			'status'       => __( 'Status', 'commercestore' ),
+			'country_name' => __( 'Country Name', 'commercestore' ),
+			'state_name'   => __( 'State Name', 'commercestore' ),
 		);
 
-		if ( ! edd_use_skus() ){
+		if ( ! cs_use_skus() ){
 			unset( $cols['skus'] );
 		}
 
-		if ( ! edd_get_option( 'enable_sequential' ) ) {
+		if ( ! cs_get_option( 'enable_sequential' ) ) {
 			unset( $cols['seq_id'] );
 		}
 
@@ -107,16 +107,16 @@ class EDD_Batch_Payments_Export extends EDD_Batch_Export {
 			unset( $args['status'] );
 		}
 
-		$orders = edd_get_orders( $args );
+		$orders = cs_get_orders( $args );
 
 		foreach ( $orders as $order ) {
-			/** @var EDD\Orders\Order $order */
+			/** @var CS\Orders\Order $order */
 
 			$items        = $order->get_items();
 			$address      = $order->get_address();
 			$total        = $order->total;
 			$user_id      = $order->id && $order->id != - 1 ? $order->id : $order->email;
-			$customer     = edd_get_customer( $order->customer_id );
+			$customer     = cs_get_customer( $order->customer_id );
 			$products     = '';
 			$products_raw = '';
 			$skus         = '';
@@ -124,10 +124,10 @@ class EDD_Batch_Payments_Export extends EDD_Batch_Export {
 			$discounts = $order->get_discounts();
 			$discounts = ! empty( $discounts )
 				? implode( ', ', $discounts )
-				: __( 'none', 'easy-digital-downloads' );
+				: __( 'none', 'commercestore' );
 
 			foreach ( $items as $key => $item ) {
-				/** @var EDD\Orders\Order_Item $item */
+				/** @var CS\Orders\Order_Item $item */
 
 				// Setup item information.
 				$id       = $item->product_id;
@@ -145,8 +145,8 @@ class EDD_Batch_Payments_Export extends EDD_Batch_Export {
 
 				$products .= ' - ';
 
-				if ( edd_use_skus() ) {
-					$sku = edd_get_download_sku( $id );
+				if ( cs_use_skus() ) {
+					$sku = cs_get_download_sku( $id );
 
 					if ( ! empty( $sku ) ) {
 						$skus .= $sku;
@@ -154,15 +154,15 @@ class EDD_Batch_Payments_Export extends EDD_Batch_Export {
 				}
 
 				if ( 0 < $item->price_id ) {
-					$products .= html_entity_decode( edd_get_price_option_name( $id, $item->price_id, $order->id ) ) . ' - ';
+					$products .= html_entity_decode( cs_get_price_option_name( $id, $item->price_id, $order->id ) ) . ' - ';
 				}
 
-				$products .= html_entity_decode( edd_currency_filter( edd_format_amount( $price ), $order->currency ) );
+				$products .= html_entity_decode( cs_currency_filter( cs_format_amount( $price ), $order->currency ) );
 
 				if ( $key != ( count( $items ) -1 ) ) {
 					$products .= ' / ';
 
-					if ( edd_use_skus() ) {
+					if ( cs_use_skus() ) {
 						$skus .= ' / ';
 					}
 				}
@@ -200,24 +200,24 @@ class EDD_Batch_Payments_Export extends EDD_Batch_Export {
 				'products_raw' => $products_raw,
 				'skus'         => $skus,
 				'currency'     => $order->currency,
-				'amount'       => html_entity_decode( edd_format_amount( $total ) ), // The non-discounted item price
-				'tax'          => html_entity_decode( edd_format_amount( $order->tax ) ),
+				'amount'       => html_entity_decode( cs_format_amount( $total ) ), // The non-discounted item price
+				'tax'          => html_entity_decode( cs_format_amount( $order->tax ) ),
 				'discount'     => $discounts,
-				'gateway'      => edd_get_gateway_admin_label( $order->gateway ),
+				'gateway'      => cs_get_gateway_admin_label( $order->gateway ),
 				'trans_id'     => $order->get_transaction_id(),
 				'key'          => $order->payment_key,
 				'date'         => $order->date_created,
-				'user'         => $user ? $user->display_name : __( 'guest', 'easy-digital-downloads' ),
+				'user'         => $user ? $user->display_name : __( 'guest', 'commercestore' ),
 				'ip'           => $order->ip,
 				'mode'         => $order->mode,
 				'status'       => $order->status,
-				'country_name' => isset( $address->country ) ? edd_get_country_name( $address->country ) : '',
-				'state_name'   => isset( $address->country ) && isset( $address->region ) ? edd_get_state_name( $address->country, $address->region ) : '',
+				'country_name' => isset( $address->country ) ? cs_get_country_name( $address->country ) : '',
+				'state_name'   => isset( $address->country ) && isset( $address->region ) ? cs_get_state_name( $address->country, $address->region ) : '',
 			);
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return ! empty( $data )
 			? $data
@@ -245,7 +245,7 @@ class EDD_Batch_Payments_Export extends EDD_Batch_Export {
 			$args['status'] = $this->status;
 		}
 
-		$total = edd_count_orders( $args );
+		$total = cs_count_orders( $args );
 		$percentage = 100;
 
 		if ( $total > 0 ) {

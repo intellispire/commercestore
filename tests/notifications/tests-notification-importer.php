@@ -2,20 +2,20 @@
 /**
  * Notification Importer Tests
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  */
 
-namespace EDD\Tests\Notifications;
+namespace CS\Tests\Notifications;
 
-use EDD\Utils\NotificationImporter;
+use CS\Utils\NotificationImporter;
 
 /**
- * @coversDefaultClass \EDD\Utils\NotificationImporter
- * @group edd_notifications
+ * @coversDefaultClass \CS\Utils\NotificationImporter
+ * @group cs_notifications
  */
-class NotificationImporterTests extends \EDD_UnitTestCase {
+class NotificationImporterTests extends \CS_UnitTestCase {
 
 	/**
 	 * Truncates the notification table before each test.
@@ -24,7 +24,7 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 		parent::setUp();
 
 		global $wpdb;
-		$tableName = EDD()->notifications->table_name;
+		$tableName = CS()->notifications->table_name;
 
 		$wpdb->query( "TRUNCATE TABLE {$tableName}" );
 	}
@@ -36,7 +36,7 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 	 * @return NotificationImporter
 	 */
 	protected function getMockImporter( $returnValue = array() ) {
-		$mock = $this->getMockBuilder( '\\EDD\\Utils\\NotificationImporter' )
+		$mock = $this->getMockBuilder( '\\CS\\Utils\\NotificationImporter' )
 		             ->setMethods( array( 'fetchNotifications' ) )
 		             ->getMock();
 
@@ -54,19 +54,19 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 	 */
 	protected function getNotifications() {
 		global $wpdb;
-		$tableName = EDD()->notifications->table_name;
+		$tableName = CS()->notifications->table_name;
 
 		return $wpdb->get_results( "SELECT * FROM {$tableName}" );
 	}
 
 	/**
-	 * @covers \EDD\Utils\NotificationImporter::insertNewNotification
+	 * @covers \CS\Utils\NotificationImporter::insertNewNotification
 	 */
 	public function test_valid_notification_is_imported() {
 		$importer = $this->getMockImporter( array(
 			array(
-				'title'             => 'Announcing New EDD Feature',
-				'content'           => 'This is an exciting new EDD feature.',
+				'title'             => 'Announcing New CommerceStore Feature',
+				'content'           => 'This is an exciting new CommerceStore feature.',
 				'id'                => 90,
 				'start'             => null,
 				'notification_type' => 'success',
@@ -79,21 +79,21 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 
 		$this->assertSame( 1, count( $notifications ) );
 
-		$this->assertSame( 'Announcing New EDD Feature', $notifications[0]->title );
-		$this->assertSame( 'This is an exciting new EDD feature.', $notifications[0]->content );
+		$this->assertSame( 'Announcing New CommerceStore Feature', $notifications[0]->title );
+		$this->assertSame( 'This is an exciting new CommerceStore feature.', $notifications[0]->content );
 		$this->assertEquals( 90, $notifications[0]->remote_id );
 		$this->assertSame( null, $notifications[0]->start );
 		$this->assertSame( 'success', $notifications[0]->type );
 	}
 
 	/**
-	 * @covers \EDD\Utils\NotificationImporter::validateNotification
+	 * @covers \CS\Utils\NotificationImporter::validateNotification
 	 */
 	public function test_notification_with_no_title_not_imported() {
 		$importer = $this->getMockImporter( array(
 			array(
 				// title is missing
-				'content'           => 'This is an exciting new EDD feature.',
+				'content'           => 'This is an exciting new CommerceStore feature.',
 				'id'                => 90,
 				'start'             => null,
 				'notification_type' => 'success',
@@ -108,13 +108,13 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Utils\NotificationImporter::updateExistingNotification
+	 * @covers \CS\Utils\NotificationImporter::updateExistingNotification
 	 */
 	public function test_existing_notification_updated_with_new_content() {
 		$importer = $this->getMockImporter( array(
 			array(
-				'title'             => 'Announcing New EDD Feature',
-				'content'           => 'This is an exciting new EDD feature.',
+				'title'             => 'Announcing New CommerceStore Feature',
+				'content'           => 'This is an exciting new CommerceStore feature.',
 				'id'                => 90,
 				'start'             => null,
 				'notification_type' => 'success',
@@ -124,12 +124,12 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 		$importer->run();
 
 		$notifications = $this->getNotifications();
-		$this->assertSame( 'This is an exciting new EDD feature.', $notifications[0]->content );
+		$this->assertSame( 'This is an exciting new CommerceStore feature.', $notifications[0]->content );
 
 		$importer = $this->getMockImporter( array(
 			array(
-				'title'             => 'Announcing New EDD Feature',
-				'content'           => 'This is an exciting new EDD feature with updated content.',
+				'title'             => 'Announcing New CommerceStore Feature',
+				'content'           => 'This is an exciting new CommerceStore feature with updated content.',
 				'id'                => 90,
 				'start'             => null,
 				'notification_type' => 'success',
@@ -139,7 +139,7 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 		$importer->run();
 
 		$notifications = $this->getNotifications();
-		$this->assertSame( 'This is an exciting new EDD feature with updated content.', $notifications[0]->content );
+		$this->assertSame( 'This is an exciting new CommerceStore feature with updated content.', $notifications[0]->content );
 	}
 
 	/**
@@ -157,8 +157,8 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 		}
 
 		$notification                    = new \stdClass();
-		$notification->title             = 'Announcing New EDD Feature';
-		$notification->content           = 'This is an exciting new EDD feature.';
+		$notification->title             = 'Announcing New CommerceStore Feature';
+		$notification->content           = 'This is an exciting new CommerceStore feature.';
 		$notification->id                = 90;
 		$notification->end               = date( 'Y-m-d H:i:s', strtotime( '-2 days' ) );
 		$notification->notification_type = 'success';
@@ -167,25 +167,25 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * EDD was installed today, but notification was created 2 days ago. It should not
-	 * validate because we only accept notifications created _after_ EDD was installed.
+	 * CommerceStore was installed today, but notification was created 2 days ago. It should not
+	 * validate because we only accept notifications created _after_ CommerceStore was installed.
 	 *
-	 * @covers \EDD\Utils\NotificationImporter::validateNotification
+	 * @covers \CS\Utils\NotificationImporter::validateNotification
 	 *
 	 * @expectedException \Exception
-	 * @expectedExceptionMessage Notification created prior to EDD activation.
+	 * @expectedExceptionMessage Notification created prior to CommerceStore activation.
 	 * @throws \Exception
 	 */
 	public function test_notification_started_before_installation_date_doesnt_validate() {
 		$importer = new NotificationImporter();
 
 		if ( method_exists( $this, 'setExpectedException' ) ) {
-			$this->setExpectedException( 'Exception', 'Notification created prior to EDD activation.' );
+			$this->setExpectedException( 'Exception', 'Notification created prior to CommerceStore activation.' );
 		}
 
 		$notification                    = new \stdClass();
-		$notification->title             = 'Announcing New EDD Feature';
-		$notification->content           = 'This is an exciting new EDD feature.';
+		$notification->title             = 'Announcing New CommerceStore Feature';
+		$notification->content           = 'This is an exciting new CommerceStore feature.';
 		$notification->id                = 90;
 		$notification->start               = date( 'Y-m-d H:i:s', strtotime( '-2 days' ) );
 		$notification->notification_type = 'success';
@@ -194,7 +194,7 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Utils\NotificationImporter::validateNotification
+	 * @covers \CS\Utils\NotificationImporter::validateNotification
 	 *
 	 * @expectedException \Exception
 	 * @throws \Exception
@@ -207,7 +207,7 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 		}
 
 		$notification                    = new \stdClass();
-		$notification->content           = 'This is an exciting new EDD feature.';
+		$notification->content           = 'This is an exciting new CommerceStore feature.';
 		$notification->id                = 90;
 		$notification->notification_type = 'success';
 
@@ -215,7 +215,7 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Utils\NotificationImporter::validateNotification
+	 * @covers \CS\Utils\NotificationImporter::validateNotification
 	 *
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage Condition(s) not met.
@@ -229,8 +229,8 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 		}
 
 		$notification                    = new \stdClass();
-		$notification->title             = 'Announcing New EDD Feature for Pass Holders';
-		$notification->content           = 'This is an exciting new EDD feature.';
+		$notification->title             = 'Announcing New CommerceStore Feature for Pass Holders';
+		$notification->content           = 'This is an exciting new CommerceStore feature.';
 		$notification->id                = 90;
 		$notification->notification_type = 'success';
 		$notification->type              = array( 'pass-any' );
@@ -239,7 +239,7 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Utils\NotificationImporter::validateNotification
+	 * @covers \CS\Utils\NotificationImporter::validateNotification
 	 *
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage Condition(s) not met.
@@ -253,8 +253,8 @@ class NotificationImporterTests extends \EDD_UnitTestCase {
 		}
 
 		$notification                    = new \stdClass();
-		$notification->title             = 'Announcing New EDD Feature for Pass Holders';
-		$notification->content           = 'This is an exciting new EDD feature.';
+		$notification->title             = 'Announcing New CommerceStore Feature for Pass Holders';
+		$notification->content           = 'This is an exciting new CommerceStore feature.';
 		$notification->id                = 90;
 		$notification->notification_type = 'success';
 		$notification->type              = array( '1-x' );

@@ -2,24 +2,24 @@
 /**
  * Reports API - Report Registry
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Utils;
-use EDD\Reports;
+use CS\Utils;
+use CS\Reports;
 
 /**
  * Implements a singleton registry for registering reports.
  *
  * @since 3.0
  *
- * @see \EDD\Reports\Registry
- * @see \EDD\Utils\Static_Registry
+ * @see \CS\Reports\Registry
+ * @see \CS\Utils\Static_Registry
  *
  * @method array get_report( string $report_id )
  * @method void  remove_report( string $report_id )
@@ -62,7 +62,7 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception in get_report() if the item does not exist.
+	 * @throws \CS_Exception in get_report() if the item does not exist.
 	 *
 	 * @param string $name      Method name.
 	 * @param array  $arguments Method arguments (if any)
@@ -87,8 +87,8 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the 'label' or 'endpoints' attributes are empty.
-	 * @throws \EDD_Exception if one or more endpoints are not of a valid specification.
+	 * @throws \CS_Exception if the 'label' or 'endpoints' attributes are empty.
+	 * @throws \CS_Exception if one or more endpoints are not of a valid specification.
 	 *
 	 * @param string $report_id   Report ID.
 	 * @param array  $attributes {
@@ -121,7 +121,7 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 		try {
 			// Filters can be empty.
 			$this->validate_attributes( $attributes, $report_id, array( 'filters' ) );
-		} catch ( \EDD_Exception $exception ) {
+		} catch ( \CS_Exception $exception ) {
 			$error = true;
 
 			throw $exception;
@@ -130,7 +130,7 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 		if ( isset( $attributes['endpoints'] ) && is_array( $attributes['endpoints'] ) ) {
 			foreach ( $attributes['endpoints'] as $view_group => $endpoints ) {
 				foreach ( $endpoints as $index => $endpoint ) {
-					if ( ! is_string( $endpoint ) && ! ( $endpoint instanceof \EDD\Reports\Data\Endpoint ) ) {
+					if ( ! is_string( $endpoint ) && ! ( $endpoint instanceof \CS\Reports\Data\Endpoint ) ) {
 						unset( $attributes['endpoints'][ $view_group ][ $index ] );
 
 						throw new Utils\Exception( sprintf( 'The \'%1$s\' report contains one or more invalidly defined endpoints.', $report_id ) );
@@ -187,10 +187,10 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the `$label` or `$views` attributes are empty.
-	 * @throws \EDD_Exception if any of the required `$views` sub-attributes are empty.
+	 * @throws \CS_Exception if the `$label` or `$views` attributes are empty.
+	 * @throws \CS_Exception if any of the required `$views` sub-attributes are empty.
 	 *
-	 * @see \EDD\Reports\Data\Endpoint_Registry::register_endpoint()
+	 * @see \CS\Reports\Data\Endpoint_Registry::register_endpoint()
 	 *
 	 * @param string $endpoint_id Reports data endpoint ID.
 	 * @param array  $attributes  Attributes of the endpoint. See Endpoint_Registry::register_endpoint()
@@ -198,8 +198,8 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 	 * @return bool True if the endpoint was successfully registered, otherwise false.
 	 */
 	public function register_endpoint( $endpoint_id, $attributes ) {
-		/** @var \EDD\Reports\Data\Endpoint_Registry|\WP_Error $registry */
-		$registry = EDD()->utils->get_registry( 'reports:endpoints' );
+		/** @var \CS\Reports\Data\Endpoint_Registry|\WP_Error $registry */
+		$registry = CS()->utils->get_registry( 'reports:endpoints' );
 
 		if ( is_wp_error( $registry ) ) {
 			return false;
@@ -213,13 +213,13 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Reports\Data\Endpoint_Registry::unregister_endpoint()
+	 * @see \CS\Reports\Data\Endpoint_Registry::unregister_endpoint()
 	 *
 	 * @param string $endpoint_id Endpoint ID.
 	 */
 	public function unregister_endpoint( $endpoint_id ) {
-		/** @var \EDD\Reports\Data\Endpoint_Registry|\WP_Error $registry */
-		$registry = EDD()->utils->get_registry( 'reports:endpoints' );
+		/** @var \CS\Reports\Data\Endpoint_Registry|\WP_Error $registry */
+		$registry = CS()->utils->get_registry( 'reports:endpoints' );
 
 		if ( ! is_wp_error( $registry ) ) {
 			$registry->unregister_endpoint( $endpoint_id );
@@ -231,9 +231,9 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if all expected attributes are not set.
+	 * @throws \CS_Exception if all expected attributes are not set.
 	 *
-	 * @see \EDD\Reports\Data\Endpoint_View_Registry::register_endpoint_view()
+	 * @see \CS\Reports\Data\Endpoint_View_Registry::register_endpoint_view()
 	 *
 	 * @param string $view_id    View ID. Currently only core endpoint views can be added.
 	 * @param array  $attributes Attributes of the endpoint view. See Endpoint_View_Registry::register_endpoint_view()
@@ -241,8 +241,8 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 	 * @return bool True if the endpoint view was successfully registered, otherwise false.
 	 */
 	public function register_endpoint_view( $view_id, $attributes ) {
-		/** @var \EDD\Reports\Data\Endpoint_View_Registry|\WP_Error $registry */
-		$registry = EDD()->utils->get_registry( 'reports:endpoints:views' );
+		/** @var \CS\Reports\Data\Endpoint_View_Registry|\WP_Error $registry */
+		$registry = CS()->utils->get_registry( 'reports:endpoints:views' );
 
 		if ( is_wp_error( $registry ) ) {
 			return false;
@@ -272,9 +272,9 @@ class Report_Registry extends Reports\Registry implements Utils\Static_Registry 
 		try {
 			$_report = $this->get_report( $report );
 
-		} catch( \EDD_Exception $exception ) {
+		} catch( \CS_Exception $exception ) {
 
-			edd_debug_log_exception( $exception );
+			cs_debug_log_exception( $exception );
 
 			return new \WP_Error( 'invalid_report', $exception->getMessage(), $report );
 		}

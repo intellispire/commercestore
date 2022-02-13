@@ -1,21 +1,21 @@
 {
-	"name": "easy-digital-downloads",
-	"version": "2.11.5",
-	"description": "The easiest way to sell digital products with WordPress.",
+	"name": "commercestore",
+	"version": "4.0.0-a1",
+	"description": "The easiest way to sell digital information with WordPress.",
 	"private": true,
-	"author": "Easy Digital Downloads",
+	"author": "CommerceStore",
 	"license": "GPL-2.0-or-later",
 	"keywords": [
 		"wordpress",
 		"wordpress-plugin"
 	],
-	"homepage": "https://easydigitaldownloads.com",
+	"homepage": "https://commercestore.com",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/easydigitaldownloads/easy-digital-downloads/"
+		"url": "https://github.com/intellispire/commercestore/"
 	},
 	"bugs": {
-		"url": "https://github.com/easydigitaldownloads/easy-digital-downloads/issues"
+		"url": "https://github.com/intellispire/commercestore/issues"
 	},
 	"engines": {
 		"node": ">=10.0.0",

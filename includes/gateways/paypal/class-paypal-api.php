@@ -2,17 +2,17 @@
 /**
  * PayPal REST API Wrapper
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
-use EDD\Gateways\PayPal\Exceptions\API_Exception;
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Gateways\PayPal\Exceptions\API_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
 
 /**
  * Class API
@@ -24,7 +24,7 @@ use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
  * @property string $token_cache_key
  * @property int    $last_response_code
  *
- * @package EDD\PayPal
+ * @package CS\PayPal
  */
 class API {
 
@@ -85,7 +85,7 @@ class API {
 	public function __construct( $mode = '', $credentials = array() ) {
 		// If mode is not provided, use the current store mode.
 		if ( empty( $mode ) ) {
-			$mode = edd_is_test_mode() ? self::MODE_SANDBOX : self::MODE_LIVE;
+			$mode = cs_is_test_mode() ? self::MODE_SANDBOX : self::MODE_LIVE;
 		}
 
 		$this->mode = $mode;
@@ -98,8 +98,8 @@ class API {
 
 		if ( empty( $credentials ) ) {
 			$credentials = array(
-				'client_id'     => edd_get_option( 'paypal_' . $this->mode . '_client_id' ),
-				'client_secret' => edd_get_option( 'paypal_' . $this->mode . '_client_secret' ),
+				'client_id'     => cs_get_option( 'paypal_' . $this->mode . '_client_id' ),
+				'client_secret' => cs_get_option( 'paypal_' . $this->mode . '_client_secret' ),
 			);
 		}
 
@@ -138,7 +138,7 @@ class API {
 		$creds = wp_parse_args( $creds, array(
 			'client_id'     => '',
 			'client_secret' => '',
-			'cache_key'     => 'edd_paypal_commerce_access_token'
+			'cache_key'     => 'cs_paypal_commerce_access_token'
 		) );
 
 		$required_creds = array( 'client_id', 'client_secret', 'cache_key' );
@@ -147,7 +147,7 @@ class API {
 			if ( empty( $creds[ $cred_id ] ) ) {
 				throw new Authentication_Exception( sprintf(
 				/* Translators: %s - The ID of the PayPal credential */
-					__( 'Missing PayPal credential: %s', 'easy-digital-downloads' ),
+					__( 'Missing PayPal credential: %s', 'commercestore' ),
 					$cred_id
 				) );
 			}
@@ -211,7 +211,7 @@ class API {
 		if ( 200 !== $code ) {
 			throw new API_Exception( sprintf(
 			/* Translators: %d - HTTP response code. */
-				__( 'Unexpected response code: %d', 'easy-digital-downloads' ),
+				__( 'Unexpected response code: %d', 'commercestore' ),
 				$code
 			), $code );
 		}
@@ -239,7 +239,7 @@ class API {
 		$headers = wp_parse_args( $headers, array(
 			'Content-Type'                  => 'application/json',
 			'Authorization'                 => sprintf( 'Bearer %s', $this->get_access_token()->token() ),
-			'PayPal-Partner-Attribution-Id' => EDD_PAYPAL_PARTNER_ATTRIBUTION_ID
+			'PayPal-Partner-Attribution-Id' => CS_PAYPAL_PARTNER_ATTRIBUTION_ID
 		) );
 
 		$request_args = array(

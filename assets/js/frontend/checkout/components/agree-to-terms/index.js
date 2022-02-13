@@ -18,12 +18,12 @@ jQueryReady( () => {
 	 *
 	 * @param {Object} e Click event.
 	 */
-	$( document.body ).on( 'click', '.edd_terms_links', function( e ) {
+	$( document.body ).on( 'click', '.cs_terms_links', function( e ) {
 		e.preventDefault();
 
 		const terms = $( this ).parent();
 
-		terms.prev( '.edd-terms' ).slideToggle();
-		terms.find( '.edd_terms_links' ).toggle();
+		terms.prev( '.cs-terms' ).slideToggle();
+		terms.find( '.cs_terms_links' ).toggle();
 	} );
 } );

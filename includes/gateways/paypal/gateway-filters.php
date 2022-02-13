@@ -2,16 +2,16 @@
 /**
  * PayPal Commerce Gateway Filters
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
 /**
- * Removes PayPal Standard from the list of available gateways while we're on the EDD Settings page.
+ * Removes PayPal Standard from the list of available gateways while we're on the CommerceStore Settings page.
  * This prevents PayPal Standard from being enabled as a gateway if:
  *
  *      - The store owner has never used PayPal Standard; or
@@ -23,14 +23,14 @@ namespace EDD\Gateways\PayPal;
  * @return array
  */
 function maybe_remove_paypal_standard( $gateways ) {
-	if ( function_exists( 'edd_is_admin_page' ) && edd_is_admin_page( 'settings' ) && ! paypal_standard_enabled() ) {
+	if ( function_exists( 'cs_is_admin_page' ) && cs_is_admin_page( 'settings' ) && ! paypal_standard_enabled() ) {
 		unset( $gateways['paypal'] );
 	}
 
 	return $gateways;
 }
 
-add_filter( 'edd_payment_gateways', __NAMESPACE__ . '\maybe_remove_paypal_standard' );
+add_filter( 'cs_payment_gateways', __NAMESPACE__ . '\maybe_remove_paypal_standard' );
 
 /**
  * Creates a link to the transaction within PayPal.
@@ -46,7 +46,7 @@ function link_transaction_id( $transaction_id, $payment_id ) {
 		return $transaction_id;
 	}
 
-	$payment = edd_get_payment( $payment_id );
+	$payment = cs_get_payment( $payment_id );
 
 	if ( ! $payment ) {
 		return $transaction_id;
@@ -58,12 +58,12 @@ function link_transaction_id( $transaction_id, $payment_id ) {
 	return '<a href="' . esc_url( $transaction_url ) . '" target="_blank">' . esc_html( $transaction_id ) . '</a>';
 }
 
-add_filter( 'edd_payment_details_transaction_id-paypal_commerce', __NAMESPACE__ . '\link_transaction_id', 10, 2 );
+add_filter( 'cs_payment_details_transaction_id-paypal_commerce', __NAMESPACE__ . '\link_transaction_id', 10, 2 );
 
 /**
- * By default, EDD_Payment converts an empty transaction ID to be the ID of the payment.
+ * By default, CS_Payment converts an empty transaction ID to be the ID of the payment.
  * We don't want that to happen... Empty should be empty.
  *
  * @since 2.11
  */
-add_filter( 'edd_get_payment_transaction_id-paypal_commerce', '__return_false' );
+add_filter( 'cs_get_payment_transaction_id-paypal_commerce', '__return_false' );

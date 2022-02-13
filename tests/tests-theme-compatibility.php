@@ -3,16 +3,16 @@
 /**
  * @group theme_compatibility
  */
-class Tests_Theme_Compatibility extends EDD_UnitTestCase {
+class Tests_Theme_Compatibility extends CS_UnitTestCase {
 
 	/**
 	 * Test that the filter exists of the function.
 	 *
 	 * @since 2.2.4
 	 */
-	public function test_edd_responsive_download_post_class_filter() {
+	public function test_cs_responsive_download_post_class_filter() {
 
-		$this->assertNotFalse( has_filter( 'post_class', 'edd_responsive_download_post_class' ) );
+		$this->assertNotFalse( has_filter( 'post_class', 'cs_responsive_download_post_class' ) );
 
 	}
 
@@ -21,7 +21,7 @@ class Tests_Theme_Compatibility extends EDD_UnitTestCase {
 	 *
 	 * @since 2.2.4
 	 */
-	public function test_edd_responsive_download_post_class_post() {
+	public function test_cs_responsive_download_post_class_post() {
 
 		// Prepare test
 		$post_id = $this->factory->post->create( array(
@@ -47,7 +47,7 @@ class Tests_Theme_Compatibility extends EDD_UnitTestCase {
 	 *
 	 * @since 2.2.4
 	 */
-	public function test_edd_responsive_download_post_class_download() {
+	public function test_cs_responsive_download_post_class_download() {
 
 		// Prepare test
 		$post_id = $this->factory->post->create( array(

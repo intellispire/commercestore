@@ -1,18 +1,18 @@
 <?php
 
 /**
- * EDD Logging Class Tests
+ * CommerceStore Logging Class Tests
  *
- * @group edd_logs
+ * @group cs_logs
  *
- * @coversDefaultClass EDD_Logging
+ * @coversDefaultClass CS_Logging
  */
-class Tests_Logging extends EDD_UnitTestCase {
+class Tests_Logging extends CS_UnitTestCase {
 
 	/**
-	 * EDD_Logging fixture.
+	 * CS_Logging fixture.
 	 *
-	 * @var EDD_Logging
+	 * @var CS_Logging
 	 * @static
 	 */
 	protected static $object;
@@ -29,7 +29,7 @@ class Tests_Logging extends EDD_UnitTestCase {
 	 * Set up fixtures once.
 	 */
 	public static function wpSetUpBeforeClass() {
-		self::$object = new EDD_Logging();
+		self::$object = new CS_Logging();
 
 		self::$log_id = self::$object->insert_log( array(
 			'log_type'     => 'gateway_error',
@@ -101,12 +101,12 @@ class Tests_Logging extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers edd_record_gateway_error()
+	 * @covers cs_record_gateway_error()
 	 */
-	public function test_edd_record_gateway_error() {
+	public function test_cs_record_gateway_error() {
 
-		$log_id     = edd_record_gateway_error( 'Test gateway error', 'Test gateway error content' );
-		$actual_log = edd_get_log( $log_id );
+		$log_id     = cs_record_gateway_error( 'Test gateway error', 'Test gateway error content' );
+		$actual_log = cs_get_log( $log_id );
 
 		$expected = array(
 			'object_id'   => '0',
@@ -126,11 +126,11 @@ class Tests_Logging extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers edd_record_gateway_error()
+	 * @covers cs_record_gateway_error()
 	 */
-	public function test_edd_add_log_with_null_type_and_no_id() {
+	public function test_cs_add_log_with_null_type_and_no_id() {
 
-		$log_id = edd_add_log(
+		$log_id = cs_add_log(
 			array(
 				'object_type' => null,
 				'object_id'   => 0,
@@ -138,7 +138,7 @@ class Tests_Logging extends EDD_UnitTestCase {
 			)
 		);
 
-		$actual_log = edd_get_log( $log_id );
+		$actual_log = cs_get_log( $log_id );
 
 		$expected = array(
 			'object_id'   => '0',
@@ -158,11 +158,11 @@ class Tests_Logging extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers edd_add_log()
+	 * @covers cs_add_log()
 	 */
-	public function test_edd_add_log_with_null_type_and_an_id() {
+	public function test_cs_add_log_with_null_type_and_an_id() {
 
-		$log_id = edd_add_log(
+		$log_id = cs_add_log(
 			array(
 				'object_type' => null,
 				'object_id'   => 1,
@@ -170,7 +170,7 @@ class Tests_Logging extends EDD_UnitTestCase {
 			)
 		);
 
-		$actual_log = edd_get_log( $log_id );
+		$actual_log = cs_get_log( $log_id );
 
 		$expected = false;
 
@@ -178,11 +178,11 @@ class Tests_Logging extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers edd_add_log()
+	 * @covers cs_add_log()
 	 */
-	public function test_edd_add_log_with_empty_type_and_no_id() {
+	public function test_cs_add_log_with_empty_type_and_no_id() {
 
-		$log_id = edd_add_log(
+		$log_id = cs_add_log(
 			array(
 				'object_type' => 0,
 				'object_id'   => 0,
@@ -190,7 +190,7 @@ class Tests_Logging extends EDD_UnitTestCase {
 			)
 		);
 
-		$actual_log = edd_get_log( $log_id );
+		$actual_log = cs_get_log( $log_id );
 
 		$expected = false;
 
@@ -198,11 +198,11 @@ class Tests_Logging extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers edd_add_log()
+	 * @covers cs_add_log()
 	 */
-	public function test_edd_add_log_with_empty_type_and_an_id() {
+	public function test_cs_add_log_with_empty_type_and_an_id() {
 
-		$log_id = edd_add_log(
+		$log_id = cs_add_log(
 			array(
 				'object_type' => 0,
 				'object_id'   => 1,
@@ -210,7 +210,7 @@ class Tests_Logging extends EDD_UnitTestCase {
 			)
 		);
 
-		$actual_log = edd_get_log( $log_id );
+		$actual_log = cs_get_log( $log_id );
 
 		$expected = false;
 

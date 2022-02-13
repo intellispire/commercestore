@@ -2,14 +2,14 @@
 /**
  * File Download Log Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Logs
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-use EDD\Logs\File_Download_Log;
+use CS\Logs\File_Download_Log;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -47,7 +47,7 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @return int|false ID of newly created log, false on error.
  */
-function edd_add_file_download_log( $data = array() ) {
+function cs_add_file_download_log( $data = array() ) {
 
 	// A product ID and an order ID must be supplied for every log that is
 	// inserted into the database.
@@ -55,7 +55,7 @@ function edd_add_file_download_log( $data = array() ) {
 		return false;
 	}
 
-	$file_download_logs = new EDD\Database\Queries\Log_File_Download();
+	$file_download_logs = new CS\Database\Queries\Log_File_Download();
 
 	return $file_download_logs->add_item( $data );
 }
@@ -68,8 +68,8 @@ function edd_add_file_download_log( $data = array() ) {
  * @param int $file_download_log_id File download log ID.
  * @return int|false `1` if the adjustment was deleted successfully, false on error.
  */
-function edd_delete_file_download_log( $file_download_log_id = 0 ) {
-	$file_download_logs = new EDD\Database\Queries\Log_File_Download();
+function cs_delete_file_download_log( $file_download_log_id = 0 ) {
+	$file_download_logs = new CS\Database\Queries\Log_File_Download();
 
 	return $file_download_logs->delete_item( $file_download_log_id );
 }
@@ -106,8 +106,8 @@ function edd_delete_file_download_log( $file_download_log_id = 0 ) {
  *
  * @return int|false Number of rows updated if successful, false otherwise.
  */
-function edd_update_file_download_log( $file_download_log_id = 0, $data = array() ) {
-	$file_download_logs = new EDD\Database\Queries\Log_File_Download();
+function cs_update_file_download_log( $file_download_log_id = 0, $data = array() ) {
+	$file_download_logs = new CS\Database\Queries\Log_File_Download();
 
 	return $file_download_logs->update_item( $file_download_log_id, $data );
 }
@@ -120,8 +120,8 @@ function edd_update_file_download_log( $file_download_log_id = 0, $data = array(
  * @param int $file_download_log_id Log ID.
  * @return File_Download_Log|false Log object if successful, false otherwise.
  */
-function edd_get_file_download_log( $file_download_log_id = 0 ) {
-	$file_download_logs = new EDD\Database\Queries\Log_File_Download();
+function cs_get_file_download_log( $file_download_log_id = 0 ) {
+	$file_download_logs = new CS\Database\Queries\Log_File_Download();
 
 	// Return file download log
 	return $file_download_logs->get_item( $file_download_log_id );
@@ -137,8 +137,8 @@ function edd_get_file_download_log( $file_download_log_id = 0 ) {
  *
  * @return File_Download_Log|false Log object if successful, false otherwise.
  */
-function edd_get_file_download_log_by( $field = '', $value = '' ) {
-	$file_download_logs = new EDD\Database\Queries\Log_File_Download();
+function cs_get_file_download_log_by( $field = '', $value = '' ) {
+	$file_download_logs = new CS\Database\Queries\Log_File_Download();
 
 	// Return file download log
 	return $file_download_logs->get_item_by( $field, $value );
@@ -147,15 +147,15 @@ function edd_get_file_download_log_by( $field = '', $value = '' ) {
 /**
  * Query for file download logs.
  *
- * @see \EDD\Database\Queries\Log_File_Download::__construct()
+ * @see \CS\Database\Queries\Log_File_Download::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Log_File_Download`
+ * @param array $args Arguments. See `CS\Database\Queries\Log_File_Download`
  *                    for accepted arguments.
  * @return File_Download_Log[] Array of `File_Download_Log` objects.
  */
-function edd_get_file_download_logs( $args = array() ) {
+function cs_get_file_download_logs( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -163,7 +163,7 @@ function edd_get_file_download_logs( $args = array() ) {
 	) );
 
 	// Instantiate a query object
-	$file_download_logs = new EDD\Database\Queries\Log_File_Download();
+	$file_download_logs = new CS\Database\Queries\Log_File_Download();
 
 	// Return file download logs
 	return $file_download_logs->query( $r );
@@ -172,15 +172,15 @@ function edd_get_file_download_logs( $args = array() ) {
 /**
  * Count file download logs.
  *
- * @see \EDD\Database\Queries\Log_File_Download::__construct()
+ * @see \CS\Database\Queries\Log_File_Download::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Log_File_Download`
+ * @param array $args Arguments. See `CS\Database\Queries\Log_File_Download`
  *                    for accepted arguments.
  * @return int Number of file download logs returned based on query arguments passed.
  */
-function edd_count_file_download_logs( $args = array() ) {
+function cs_count_file_download_logs( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -188,7 +188,7 @@ function edd_count_file_download_logs( $args = array() ) {
 	) );
 
 	// Query for count(s)
-	$file_download_logs = new EDD\Database\Queries\Log_File_Download( $r );
+	$file_download_logs = new CS\Database\Queries\Log_File_Download( $r );
 
 	// Return count(s)
 	return absint( $file_download_logs->found_items );

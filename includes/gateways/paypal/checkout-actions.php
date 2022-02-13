@@ -2,18 +2,18 @@
 /**
  * PayPal Commerce Checkout Actions
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
-use EDD\Gateways\PayPal\Exceptions\API_Exception;
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
-use EDD\Gateways\PayPal\Exceptions\Gateway_Exception;
+use CS\Gateways\PayPal\Exceptions\API_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Gateways\PayPal\Exceptions\Gateway_Exception;
 
 /**
  * Removes the credit card form for PayPal Commerce
@@ -21,7 +21,7 @@ use EDD\Gateways\PayPal\Exceptions\Gateway_Exception;
  * @access private
  * @since  2.11
  */
-add_action( 'edd_paypal_commerce_cc_form', '__return_false' );
+add_action( 'cs_paypal_commerce_cc_form', '__return_false' );
 
 /**
  * Replaces the "Submit" button with a PayPal smart button.
@@ -32,17 +32,17 @@ add_action( 'edd_paypal_commerce_cc_form', '__return_false' );
  * @return string
  */
 function override_purchase_button( $button ) {
-	if ( 'paypal_commerce' === edd_get_chosen_gateway() && edd_get_cart_total() ) {
+	if ( 'paypal_commerce' === cs_get_chosen_gateway() && cs_get_cart_total() ) {
 		ob_start();
 		if ( ready_to_accept_payments() ) {
-			wp_nonce_field( 'edd_process_paypal', 'edd_process_paypal_nonce' );
+			wp_nonce_field( 'cs_process_paypal', 'cs_process_paypal_nonce' );
 			$timestamp = time();
 			?>
-			<input type="hidden" name="edd-process-paypal-token" data-timestamp="<?php echo esc_attr( $timestamp ); ?>" data-token="<?php echo esc_attr( \EDD\Utils\Tokenizer::tokenize( $timestamp ) ); ?>" />
-			<div id="edd-paypal-errors-wrap"></div>
-			<div id="edd-paypal-container"></div>
-			<div id="edd-paypal-spinner" style="display: none;">
-				<span class="edd-loading-ajax edd-loading"></span>
+			<input type="hidden" name="cs-process-paypal-token" data-timestamp="<?php echo esc_attr( $timestamp ); ?>" data-token="<?php echo esc_attr( \CS\Utils\Tokenizer::tokenize( $timestamp ) ); ?>" />
+			<div id="cs-paypal-errors-wrap"></div>
+			<div id="cs-paypal-container"></div>
+			<div id="cs-paypal-spinner" style="display: none;">
+				<span class="cs-loading-ajax cs-loading"></span>
 			</div>
 			<?php
 			/**
@@ -50,14 +50,14 @@ function override_purchase_button( $button ) {
 			 *
 			 * @since 2.11
 			 */
-			do_action( 'edd_paypal_after_button_container' );
+			do_action( 'cs_paypal_after_button_container' );
 		} else {
 			$error_message = current_user_can( 'manage_options' )
-				? __( 'Please connect your PayPal account in the gateway settings.', 'easy-digital-downloads' )
-				: __( 'Unexpected authentication error. Please contact a site administrator.', 'easy-digital-downloads' );
+				? __( 'Please connect your PayPal account in the gateway settings.', 'commercestore' )
+				: __( 'Unexpected authentication error. Please contact a site administrator.', 'commercestore' );
 			?>
-			<div class="edd_errors edd-alert edd-alert-error">
-				<p class="edd_error">
+			<div class="cs_errors cs-alert cs-alert-error">
+				<p class="cs_error">
 					<?php echo esc_html( $error_message ); ?>
 				</p>
 			</div>
@@ -70,12 +70,12 @@ function override_purchase_button( $button ) {
 	return $button;
 }
 
-add_filter( 'edd_checkout_button_purchase', __NAMESPACE__ . '\override_purchase_button', 10000 );
+add_filter( 'cs_checkout_button_purchase', __NAMESPACE__ . '\override_purchase_button', 10000 );
 
 /**
  * Sends checkout error messages via AJAX.
  *
- * This overrides the normal error behaviour in `edd_process_purchase_form()` because we *always*
+ * This overrides the normal error behaviour in `cs_process_purchase_form()` because we *always*
  * want to send errors back via JSON.
  *
  * @param array $user       User data.
@@ -90,18 +90,18 @@ function send_ajax_errors( $user, $valid_data, $posted ) {
 		return;
 	}
 
-	$errors = edd_get_errors();
+	$errors = cs_get_errors();
 	if ( $errors ) {
-		edd_clear_errors();
+		cs_clear_errors();
 
-		wp_send_json_error( edd_build_errors_html( $errors ) );
+		wp_send_json_error( cs_build_errors_html( $errors ) );
 	}
 }
 
-add_action( 'edd_checkout_user_error_checks', __NAMESPACE__ . '\send_ajax_errors', 99999, 3 );
+add_action( 'cs_checkout_user_error_checks', __NAMESPACE__ . '\send_ajax_errors', 99999, 3 );
 
 /**
- * Creates a new order in PayPal and EDD.
+ * Creates a new order in PayPal and CS.
  *
  * @param array $purchase_data
  *
@@ -109,31 +109,31 @@ add_action( 'edd_checkout_user_error_checks', __NAMESPACE__ . '\send_ajax_errors
  * @return void
  */
 function create_order( $purchase_data ) {
-	edd_debug_log( 'PayPal - create_order()' );
+	cs_debug_log( 'PayPal - create_order()' );
 
 	if ( ! ready_to_accept_payments() ) {
-		edd_record_gateway_error(
-			__( 'PayPal Gateway Error', 'easy-digital-downloads' ),
-			__( 'Account not ready to accept payments.', 'easy-digital-downloads' )
+		cs_record_gateway_error(
+			__( 'PayPal Gateway Error', 'commercestore' ),
+			__( 'Account not ready to accept payments.', 'commercestore' )
 		);
 
 		$error_message = current_user_can( 'manage_options' )
-			? __( 'Please connect your PayPal account in the gateway settings.', 'easy-digital-downloads' )
-			: __( 'Unexpected authentication error. Please contact a site administrator.', 'easy-digital-downloads' );
+			? __( 'Please connect your PayPal account in the gateway settings.', 'commercestore' )
+			: __( 'Unexpected authentication error. Please contact a site administrator.', 'commercestore' );
 
-		wp_send_json_error( edd_build_errors_html( array(
+		wp_send_json_error( cs_build_errors_html( array(
 			'paypal-error' => $error_message
 		) ) );
 	}
 
 	try {
-		// Create pending payment in EDD.
+		// Create pending payment in CS.
 		$payment_args = array(
 			'price'        => $purchase_data['price'],
 			'date'         => $purchase_data['date'],
 			'user_email'   => $purchase_data['user_email'],
 			'purchase_key' => $purchase_data['purchase_key'],
-			'currency'     => edd_get_currency(),
+			'currency'     => cs_get_currency(),
 			'downloads'    => $purchase_data['downloads'],
 			'cart_details' => $purchase_data['cart_details'],
 			'user_info'    => $purchase_data['user_info'],
@@ -141,11 +141,11 @@ function create_order( $purchase_data ) {
 			'gateway'      => 'paypal_commerce'
 		);
 
-		$payment_id = edd_insert_payment( $payment_args );
+		$payment_id = cs_insert_payment( $payment_args );
 
 		if ( ! $payment_id ) {
 			throw new Gateway_Exception(
-				__( 'An unexpected error occurred. Please try again.', 'easy-digital-downloads' ),
+				__( 'An unexpected error occurred. Please try again.', 'commercestore' ),
 				500,
 				sprintf(
 					'Payment creation failed before sending buyer to PayPal. Payment data: %s',
@@ -161,8 +161,8 @@ function create_order( $purchase_data ) {
 				//'locale'              => get_locale(), // PayPal doesn't like this. Might be able to replace `_` with `-`
 				'shipping_preference' => 'NO_SHIPPING',
 				'user_action'         => 'PAY_NOW',
-				'return_url'          => edd_get_checkout_uri(),
-				'cancel_url'          => edd_get_failed_transaction_uri( '?payment-id=' . urlencode( $payment_id ) )
+				'return_url'          => cs_get_checkout_uri(),
+				'cancel_url'          => cs_get_failed_transaction_uri( '?payment-id=' . urlencode( $payment_id ) )
 			),
 			'payment_instructions' => array(
 				'disbursement_mode' => 'INSTANT'
@@ -185,11 +185,11 @@ function create_order( $purchase_data ) {
 		 *
 		 * @param array $order_data    API request arguments.
 		 * @param array $purchase_data Purchase data.
-		 * @param int   $payment_id    ID of the EDD payment.
+		 * @param int   $payment_id    ID of the CommerceStore payment.
 		 *
 		 * @since 2.11
 		 */
-		$order_data = apply_filters( 'edd_paypal_order_arguments', $order_data, $purchase_data, $payment_id );
+		$order_data = apply_filters( 'cs_paypal_order_arguments', $order_data, $purchase_data, $payment_id );
 
 		try {
 			$api      = new API();
@@ -197,11 +197,11 @@ function create_order( $purchase_data ) {
 
 			if ( ! isset( $response->id ) && _is_item_total_mismatch( $response ) ) {
 
-				edd_record_gateway_error(
-					__( 'PayPal Gateway Warning', 'easy-digital-downloads' ),
+				cs_record_gateway_error(
+					__( 'PayPal Gateway Warning', 'commercestore' ),
 					sprintf(
 						/* Translators: %s - Original order data sent to PayPal. */
-						__( 'PayPal could not complete the transaction with the itemized breakdown. Original order data sent: %s', 'easy-digital-downloads' ),
+						__( 'PayPal could not complete the transaction with the itemized breakdown. Original order data sent: %s', 'commercestore' ),
 						json_encode( $order_data )
 					),
 					$payment_id
@@ -213,14 +213,14 @@ function create_order( $purchase_data ) {
 				);
 
 				// Re-apply the filter.
-				$order_data = apply_filters( 'edd_paypal_order_arguments', $order_data, $purchase_data, $payment_id );
+				$order_data = apply_filters( 'cs_paypal_order_arguments', $order_data, $purchase_data, $payment_id );
 
 				$response = $api->make_request( 'v2/checkout/orders', $order_data );
 			}
 
 			if ( ! isset( $response->id ) ) {
 				throw new Gateway_Exception(
-					__( 'An error occurred while communicating with PayPal. Please try again.', 'easy-digital-downloads' ),
+					__( 'An error occurred while communicating with PayPal. Please try again.', 'commercestore' ),
 					$api->last_response_code,
 					sprintf(
 						'Unexpected response when creating order: %s',
@@ -229,9 +229,9 @@ function create_order( $purchase_data ) {
 				);
 			}
 
-			edd_debug_log( sprintf( '-- Successful PayPal response. PayPal order ID: %s; EDD order ID: %d', esc_html( $response->id ), $payment_id ) );
+			cs_debug_log( sprintf( '-- Successful PayPal response. PayPal order ID: %s; CommerceStore order ID: %d', esc_html( $response->id ), $payment_id ) );
 
-			edd_update_payment_meta( $payment_id, 'paypal_order_id', sanitize_text_field( $response->id ) );
+			cs_update_payment_meta( $payment_id, 'paypal_order_id', sanitize_text_field( $response->id ) );
 
 			/*
 			 * Send successfully created order ID back.
@@ -242,15 +242,15 @@ function create_order( $purchase_data ) {
 			$timestamp = time();
 			wp_send_json_success( array(
 				'paypal_order_id' => $response->id,
-				'edd_order_id'    => $payment_id,
-				'nonce'           => wp_create_nonce( 'edd_process_paypal' ),
+				'cs_order_id'    => $payment_id,
+				'nonce'           => wp_create_nonce( 'cs_process_paypal' ),
 				'timestamp'       => $timestamp,
-				'token'           =>  \EDD\Utils\Tokenizer::tokenize( $timestamp ),
+				'token'           =>  \CS\Utils\Tokenizer::tokenize( $timestamp ),
 			) );
 		} catch ( Authentication_Exception $e ) {
-			throw new Gateway_Exception( __( 'An authentication error occurred. Please try again.', 'easy-digital-downloads' ), $e->getCode(), $e->getMessage() );
+			throw new Gateway_Exception( __( 'An authentication error occurred. Please try again.', 'commercestore' ), $e->getCode(), $e->getMessage() );
 		} catch ( API_Exception $e ) {
-			throw new Gateway_Exception( __( 'An error occurred while communicating with PayPal. Please try again.', 'easy-digital-downloads' ), $e->getCode(), $e->getMessage() );
+			throw new Gateway_Exception( __( 'An error occurred while communicating with PayPal. Please try again.', 'commercestore' ), $e->getCode(), $e->getMessage() );
 		}
 	} catch ( Gateway_Exception $e ) {
 		if ( ! isset( $payment_id ) ) {
@@ -259,13 +259,13 @@ function create_order( $purchase_data ) {
 
 		$e->record_gateway_error( $payment_id );
 
-		wp_send_json_error( edd_build_errors_html( array(
+		wp_send_json_error( cs_build_errors_html( array(
 			'paypal-error' => $e->getMessage()
 		) ) );
 	}
 }
 
-add_action( 'edd_gateway_paypal_commerce', __NAMESPACE__ . '\create_order', 9 );
+add_action( 'cs_gateway_paypal_commerce', __NAMESPACE__ . '\create_order', 9 );
 
 /**
  * Captures the order in PayPal
@@ -273,31 +273,31 @@ add_action( 'edd_gateway_paypal_commerce', __NAMESPACE__ . '\create_order', 9 );
  * @since 2.11
  */
 function capture_order() {
-	edd_debug_log( 'PayPal - capture_order()' );
+	cs_debug_log( 'PayPal - capture_order()' );
 	try {
 
 		$token     = isset( $_POST['token'] )     ? sanitize_text_field( $_POST['token'] )     : '';
 		$timestamp = isset( $_POST['timestamp'] ) ? sanitize_text_field( $_POST['timestamp'] ) : '';
 
 		if ( ! empty( $timestamp ) && ! empty( $token ) ) {
-			if ( !\EDD\Utils\Tokenizer::is_token_valid( $token, $timestamp ) ) {
+			if ( !\CS\Utils\Tokenizer::is_token_valid( $token, $timestamp ) ) {
 				throw new Gateway_Exception(
-					__('A validation error occurred. Please try again.', 'easy-digital-downloads'),
+					__('A validation error occurred. Please try again.', 'commercestore'),
 					403,
 					'Token validation failed.'
 				);
 			}
-		} elseif ( empty( $token ) && ! empty( $_POST['edd_process_paypal_nonce'] ) ) {
-			if ( ! wp_verify_nonce( $_POST['edd_process_paypal_nonce'], 'edd_process_paypal' ) ) {
+		} elseif ( empty( $token ) && ! empty( $_POST['cs_process_paypal_nonce'] ) ) {
+			if ( ! wp_verify_nonce( $_POST['cs_process_paypal_nonce'], 'cs_process_paypal' ) ) {
 				throw new Gateway_Exception(
-					__( 'A validation error occurred. Please try again.', 'easy-digital-downloads' ),
+					__( 'A validation error occurred. Please try again.', 'commercestore' ),
 					403,
 					'Nonce validation failed.'
 				);
 			}
 		} else {
 			throw new Gateway_Exception(
-				__( 'A validation error occurred. Please try again.', 'easy-digital-downloads' ),
+				__( 'A validation error occurred. Please try again.', 'commercestore' ),
 				400,
 				'Missing validation fields.'
 			);
@@ -305,7 +305,7 @@ function capture_order() {
 
 		if ( empty( $_POST['paypal_order_id'] ) ) {
 			throw new Gateway_Exception(
-				__( 'An unexpected error occurred. Please try again.', 'easy-digital-downloads' ),
+				__( 'An unexpected error occurred. Please try again.', 'commercestore' ),
 				400,
 				'Missing PayPal order ID during capture.'
 			);
@@ -315,10 +315,10 @@ function capture_order() {
 			$api      = new API();
 			$response = $api->make_request( 'v2/checkout/orders/' . urlencode( $_POST['paypal_order_id'] ) . '/capture' );
 
-			edd_debug_log( sprintf( '-- PayPal Response code: %d; order ID: %s', $api->last_response_code, esc_html( $_POST['paypal_order_id'] ) ) );
+			cs_debug_log( sprintf( '-- PayPal Response code: %d; order ID: %s', $api->last_response_code, esc_html( $_POST['paypal_order_id'] ) ) );
 
 			if ( ! in_array( $api->last_response_code, array( 200, 201 ) ) ) {
-				$message = ! empty( $response->message ) ? $response->message : __( 'Failed to process payment. Please try again.', 'easy-digital-downloads' );
+				$message = ! empty( $response->message ) ? $response->message : __( 'Failed to process payment. Please try again.', 'commercestore' );
 
 				/*
 				 * If capture failed due to funding source, we want to send a `restart` back to PayPal.
@@ -327,7 +327,7 @@ function capture_order() {
 				if ( ! empty( $response->details ) && is_array( $response->details ) ) {
 					foreach ( $response->details as $detail ) {
 						if ( isset( $detail->issue ) && 'INSTRUMENT_DECLINED' === $detail->issue ) {
-							$message = __( 'Unable to complete your order with your chosen payment method. Please choose a new funding source.', 'easy-digital-downloads' );
+							$message = __( 'Unable to complete your order with your chosen payment method. Please choose a new funding source.', 'commercestore' );
 							$retry = true;
 							break;
 						}
@@ -345,7 +345,7 @@ function capture_order() {
 			if ( isset( $response->purchase_units ) && is_array( $response->purchase_units ) ) {
 				foreach ( $response->purchase_units as $purchase_unit ) {
 					if ( ! empty( $purchase_unit->reference_id ) ) {
-						$payment        = edd_get_payment_by( 'key', $purchase_unit->reference_id );
+						$payment        = cs_get_payment_by( 'key', $purchase_unit->reference_id );
 						$transaction_id = isset( $purchase_unit->payments->captures[0]->id ) ? $purchase_unit->payments->captures[0]->id : false;
 
 						if ( ! empty( $payment ) && isset( $purchase_unit->payments->captures[0]->status ) ) {
@@ -379,7 +379,7 @@ function capture_order() {
 					}
 
 					if ( empty( $payment->customer_id ) && ! empty( $payment->email ) ) {
-						$customer = new \EDD_Customer( $payment->email );
+						$customer = new \CS_Customer( $payment->email );
 
 						if ( $customer->id < 1 ) {
 							$customer->create( array(
@@ -394,9 +394,9 @@ function capture_order() {
 				if ( ! empty( $transaction_id ) ) {
 					$payment->transaction_id = sanitize_text_field( $transaction_id );
 
-					edd_insert_payment_note( $payment->ID, sprintf(
+					cs_insert_payment_note( $payment->ID, sprintf(
 					/* Translators: %s - transaction ID */
-						__( 'PayPal Transaction ID: %s', 'easy-digital-downloads' ),
+						__( 'PayPal Transaction ID: %s', 'commercestore' ),
 						esc_html( $transaction_id )
 					) );
 				}
@@ -406,18 +406,18 @@ function capture_order() {
 				if ( 'failed' === $payment->status ) {
 					$retry = true;
 					throw new Gateway_Exception(
-						__( 'Your payment was declined. Please try a new payment method.', 'easy-digital-downloads' ),
+						__( 'Your payment was declined. Please try a new payment method.', 'commercestore' ),
 						400,
 						sprintf( 'Order capture failure. PayPal response: %s', json_encode( $response ) )
 					);
 				}
 			}
 
-			wp_send_json_success( array( 'redirect_url' => edd_get_success_page_uri() ) );
+			wp_send_json_success( array( 'redirect_url' => cs_get_success_page_uri() ) );
 		} catch ( Authentication_Exception $e ) {
-			throw new Gateway_Exception( __( 'An authentication error occurred. Please try again.', 'easy-digital-downloads' ), $e->getCode(), $e->getMessage() );
+			throw new Gateway_Exception( __( 'An authentication error occurred. Please try again.', 'commercestore' ), $e->getCode(), $e->getMessage() );
 		} catch ( API_Exception $e ) {
-			throw new Gateway_Exception( __( 'An error occurred while communicating with PayPal. Please try again.', 'easy-digital-downloads' ), $e->getCode(), $e->getMessage() );
+			throw new Gateway_Exception( __( 'An error occurred while communicating with PayPal. Please try again.', 'commercestore' ), $e->getCode(), $e->getMessage() );
 		}
 	} catch ( Gateway_Exception $e ) {
 		if ( ! isset( $payment_id ) ) {
@@ -427,7 +427,7 @@ function capture_order() {
 		$e->record_gateway_error( $payment_id );
 
 		wp_send_json_error( array(
-			'message' => edd_build_errors_html( array(
+			'message' => cs_build_errors_html( array(
 				'paypal_capture_failure' => $e->getMessage()
 			) ),
 			'retry'   => isset( $retry ) ? $retry : false
@@ -435,21 +435,21 @@ function capture_order() {
 	}
 }
 
-add_action( 'wp_ajax_nopriv_edd_capture_paypal_order', __NAMESPACE__ . '\capture_order' );
-add_action( 'wp_ajax_edd_capture_paypal_order', __NAMESPACE__ . '\capture_order' );
+add_action( 'wp_ajax_nopriv_cs_capture_paypal_order', __NAMESPACE__ . '\capture_order' );
+add_action( 'wp_ajax_cs_capture_paypal_order', __NAMESPACE__ . '\capture_order' );
 
 /**
  * Gets a fresh set of gateway options when a PayPal order is cancelled.
- * @link https://github.com/awesomemotive/easy-digital-downloads/issues/8883
+ * @link https://github.com/awesomemotive/commercestore/issues/8883
  *
  * @since 2.11.3
  * @return void
  */
 function cancel_order() {
 	$nonces   = array();
-	$gateways = edd_get_enabled_payment_gateways( true );
+	$gateways = cs_get_enabled_payment_gateways( true );
 	foreach ( $gateways as $gateway_id => $gateway ) {
-		$nonces[ $gateway_id ] = wp_create_nonce( 'edd-gateway-selected-' . esc_attr( $gateway_id ) );
+		$nonces[ $gateway_id ] = wp_create_nonce( 'cs-gateway-selected-' . esc_attr( $gateway_id ) );
 	}
 
 	wp_send_json_success(
@@ -458,5 +458,5 @@ function cancel_order() {
 		)
 	);
 }
-add_action( 'wp_ajax_nopriv_edd_cancel_paypal_order', __NAMESPACE__ . '\cancel_order' );
-add_action( 'wp_ajax_edd_cancel_paypal_order', __NAMESPACE__ . '\cancel_order' );
+add_action( 'wp_ajax_nopriv_cs_cancel_paypal_order', __NAMESPACE__ . '\cancel_order' );
+add_action( 'wp_ajax_cs_cancel_paypal_order', __NAMESPACE__ . '\cancel_order' );

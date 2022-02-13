@@ -2,7 +2,7 @@
 /**
  * Customer Email Addresses Table Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -12,16 +12,16 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Admin\List_Table;
+use CS\Admin\List_Table;
 
 /**
- * EDD_Customer_Addresses_Table Class
+ * CS_Customer_Addresses_Table Class
  *
  * Renders the Customer Reports table
  *
  * @since 3.0
  */
-class EDD_Customer_Addresses_Table extends List_Table {
+class CS_Customer_Addresses_Table extends List_Table {
 
 	/**
 	 * Get things started
@@ -66,14 +66,14 @@ class EDD_Customer_Addresses_Table extends List_Table {
 		switch ( $column_name ) {
 
 			case 'type' :
-				$value = edd_get_address_type_label( $item['type'] );
+				$value = cs_get_address_type_label( $item['type'] );
 				if ( ! empty( $item['is_primary'] ) ) {
-					$value .= '&nbsp;&nbsp;<span class="edd-chip">' . esc_html__( 'Primary', 'easy-digital-downloads' ) . '</span>';
+					$value .= '&nbsp;&nbsp;<span class="cs-chip">' . esc_html__( 'Primary', 'commercestore' ) . '</span>';
 				}
 				break;
 
 			case 'date_created' :
-				$value = '<time datetime="' . esc_attr( $item['date_created'] ) . '">' . edd_date_i18n( $item['date_created'], 'M. d, Y' ) . '<br>' . edd_date_i18n( $item['date_created'], 'H:i' ) . ' ' . edd_get_timezone_abbr() . '</time>';
+				$value = '<time datetime="' . esc_attr( $item['date_created'] ) . '">' . cs_date_i18n( $item['date_created'], 'M. d, Y' ) . '<br>' . cs_date_i18n( $item['date_created'], 'H:i' ) . ' ' . cs_get_timezone_abbr() . '</time>';
 				break;
 
 			default:
@@ -84,7 +84,7 @@ class EDD_Customer_Addresses_Table extends List_Table {
 		}
 
 		// Filter & return
-		return apply_filters( 'edd_customers_column_' . $column_name, $value, $item['id'] );
+		return apply_filters( 'cs_customers_column_' . $column_name, $value, $item['id'] );
 	}
 
 	/**
@@ -124,37 +124,37 @@ class EDD_Customer_Addresses_Table extends List_Table {
 			: 0;
 
 		// Link to customer
-		$customer_url = edd_get_admin_url( array(
-			'page' => 'edd-customers',
+		$customer_url = cs_get_admin_url( array(
+			'page' => 'cs-customers',
 			'view' => 'overview',
 			'id'   => $customer_id
 		) );
 
 		// Actions
 		$actions  = array(
-			'view' => '<a href="' . esc_url( $customer_url ) . '">' . esc_html__( 'View', 'easy-digital-downloads' ) . '</a>'
+			'view' => '<a href="' . esc_url( $customer_url ) . '">' . esc_html__( 'View', 'commercestore' ) . '</a>'
 		);
 
 		if ( empty( $item['is_primary'] ) ) {
-			$delete_url = wp_nonce_url( edd_get_admin_url( array(
-				'page'       => 'edd-customers',
+			$delete_url = wp_nonce_url( cs_get_admin_url( array(
+				'page'       => 'cs-customers',
 				'view'       => 'overview',
 				'id'         => urlencode( $item['id'] ),
-				'edd_action' => 'customer-remove-address'
-			) ), 'edd-remove-customer-address' );
-			$actions['delete'] = '<a href="' . esc_url( $delete_url ) . '">' . esc_html__( 'Delete', 'easy-digital-downloads' ) . '</a>';
+				'cs_action' => 'customer-remove-address'
+			) ), 'cs-remove-customer-address' );
+			$actions['delete'] = '<a href="' . esc_url( $delete_url ) . '">' . esc_html__( 'Delete', 'commercestore' ) . '</a>';
 		}
 
 		// State
 		if ( ( ! empty( $status ) && ( $status !== $item_status ) ) || ( $item_status !== 'active' ) ) {
 			switch ( $status ) {
 				case 'pending' :
-					$value = __( 'Pending', 'easy-digital-downloads' );
+					$value = __( 'Pending', 'commercestore' );
 					break;
 				case 'verified' :
 				case '' :
 				default :
-					$value = __( 'Active', 'easy-digital-downloads' );
+					$value = __( 'Active', 'commercestore' );
 					break;
 			}
 
@@ -186,7 +186,7 @@ class EDD_Customer_Addresses_Table extends List_Table {
 		}
 
 		// Try to get the customer
-		$customer = edd_get_customer( $customer_id );
+		$customer = cs_get_customer( $customer_id );
 
 		// Bail if customer no longer exists
 		if ( empty( $customer ) ) {
@@ -194,8 +194,8 @@ class EDD_Customer_Addresses_Table extends List_Table {
 		}
 
 		// Link to customer
-		$customer_url = edd_get_admin_url( array(
-			'page'      => 'edd-customers',
+		$customer_url = cs_get_admin_url( array(
+			'page'      => 'cs-customers',
 			'page_type' => 'physical',
 			's'         => 'c:' . absint( $customer_id )
 		) );
@@ -215,10 +215,10 @@ class EDD_Customer_Addresses_Table extends List_Table {
 	 * @return string Displays a checkbox
 	 */
 	public function column_cb( $item ) {
-		$customer = edd_get_customer_by( 'id', $item['customer_id'] );
+		$customer = cs_get_customer_by( 'id', $item['customer_id'] );
 		$name     = sprintf(
 			/* translators: customer address id */
-			__( 'Address ID: %s', 'easy-digital-downloads' ),
+			__( 'Address ID: %s', 'commercestore' ),
 			$item['id']
 		);
 		if ( ! empty( $customer->name ) ) {
@@ -229,7 +229,7 @@ class EDD_Customer_Addresses_Table extends List_Table {
 			/*$1%s*/ 'customer',
 			/*$2%s*/ esc_attr( $item['id'] ),
 			/* translators: customer name or address id */
-			esc_html( sprintf( __( 'Select %s', 'easy-digital-downloads' ), $name ) )
+			esc_html( sprintf( __( 'Select %s', 'commercestore' ), $name ) )
 		);
 	}
 
@@ -241,7 +241,7 @@ class EDD_Customer_Addresses_Table extends List_Table {
 	 * @return void
 	 */
 	public function get_counts() {
-		$this->counts = edd_get_customer_address_counts();
+		$this->counts = cs_get_customer_address_counts();
 	}
 
 	/**
@@ -251,14 +251,14 @@ class EDD_Customer_Addresses_Table extends List_Table {
 	 * @return array $columns Array of all the list table columns
 	 */
 	public function get_columns() {
-		return apply_filters( 'edd_report_customer_columns', array(
+		return apply_filters( 'cs_report_customer_columns', array(
 			'cb'            => '<input type="checkbox" />',
-			'address'       => __( 'Address',     'easy-digital-downloads' ),
-			'region'        => __( 'Region',      'easy-digital-downloads' ),
-			'country'       => __( 'Country',     'easy-digital-downloads' ),
-			'customer'      => __( 'Customer',    'easy-digital-downloads' ),
-			'type'          => __( 'Type',        'easy-digital-downloads' ),
-			'date_created'  => __( 'Date',        'easy-digital-downloads' )
+			'address'       => __( 'Address',     'commercestore' ),
+			'region'        => __( 'Region',      'commercestore' ),
+			'country'       => __( 'Country',     'commercestore' ),
+			'customer'      => __( 'Customer',    'commercestore' ),
+			'type'          => __( 'Type',        'commercestore' ),
+			'date_created'  => __( 'Date',        'commercestore' )
 		) );
 	}
 
@@ -288,7 +288,7 @@ class EDD_Customer_Addresses_Table extends List_Table {
 	 */
 	public function get_bulk_actions() {
 		return array(
-			'delete' => __( 'Delete', 'easy-digital-downloads' )
+			'delete' => __( 'Delete', 'commercestore' )
 		);
 	}
 
@@ -318,7 +318,7 @@ class EDD_Customer_Addresses_Table extends List_Table {
 		foreach ( $ids as $id ) {
 			switch ( $this->current_action() ) {
 				case 'delete' :
-					edd_delete_customer_address( $id );
+					cs_delete_customer_address( $id );
 					break;
 			}
 		}
@@ -374,7 +374,7 @@ class EDD_Customer_Addresses_Table extends List_Table {
 		$this->args = $this->parse_pagination_args( $args );
 
 		// Get the data
-		$addresses = edd_get_customer_addresses( $this->args );
+		$addresses = cs_get_customer_addresses( $this->args );
 
 		if ( ! empty( $addresses ) ) {
 			foreach ( $addresses as $address ) {

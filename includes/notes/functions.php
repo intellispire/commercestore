@@ -2,7 +2,7 @@
 /**
  * Note Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Notes
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
  *                                 be an ID that corresponds to the object type
  *                                 specified. E.g. an object ID of 25 with object
  *                                 type of `order` refers to order 25 in the
- *                                 `edd_orders` table. Default empty.
+ *                                 `cs_orders` table. Default empty.
  *     @type string $object_type   Object type that the note refers to.
  *                                 E.g. `discount` or `order`. Default empty.
  *     @type int    $user_id       ID of the current WordPress user logged in.
@@ -42,7 +42,7 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @return int|false ID of newly created note, false on error.
  */
-function edd_add_note( $data = array() ) {
+function cs_add_note( $data = array() ) {
 
 	// An object ID and object type must be supplied for every note that is
 	// inserted into the database.
@@ -51,7 +51,7 @@ function edd_add_note( $data = array() ) {
 	}
 
 	// Instantiate a query object
-	$notes = new EDD\Database\Queries\Note();
+	$notes = new CS\Database\Queries\Note();
 
 	return $notes->add_item( $data );
 }
@@ -64,8 +64,8 @@ function edd_add_note( $data = array() ) {
  * @param int $note_id Note ID.
  * @return int|false `1` if the note was deleted successfully, false on error.
  */
-function edd_delete_note( $note_id = 0 ) {
-	$notes = new EDD\Database\Queries\Note();
+function cs_delete_note( $note_id = 0 ) {
+	$notes = new CS\Database\Queries\Note();
 
 	return $notes->delete_item( $note_id );
 }
@@ -83,7 +83,7 @@ function edd_delete_note( $note_id = 0 ) {
  *                                 be an ID that corresponds to the object type
  *                                 specified. E.g. an object ID of 25 with object
  *                                 type of `order` refers to order 25 in the
- *                                 `edd_orders` table. Default empty.
+ *                                 `cs_orders` table. Default empty.
  *     @type string $object_type   Object type that the note refers to.
  *                                 E.g. `discount` or `order`. Default empty.
  *     @type int    $user_id       ID of the current WordPress user logged in.
@@ -99,8 +99,8 @@ function edd_delete_note( $note_id = 0 ) {
  *
  * @return int|false Number of rows updated if successful, false otherwise.
  */
-function edd_update_note( $note_id = 0, $data = array() ) {
-	$notes = new EDD\Database\Queries\Note();
+function cs_update_note( $note_id = 0, $data = array() ) {
+	$notes = new CS\Database\Queries\Note();
 
 	return $notes->update_item( $note_id, $data );
 }
@@ -111,10 +111,10 @@ function edd_update_note( $note_id = 0, $data = array() ) {
  * @since 3.0
  *
  * @param int $note_id Note ID.
- * @return EDD\Notes\Note Note object if successful, false otherwise.
+ * @return CS\Notes\Note Note object if successful, false otherwise.
  */
-function edd_get_note( $note_id = 0 ) {
-	$notes = new EDD\Database\Queries\Note();
+function cs_get_note( $note_id = 0 ) {
+	$notes = new CS\Database\Queries\Note();
 
 	// Return note
 	return $notes->get_item( $note_id );
@@ -128,10 +128,10 @@ function edd_get_note( $note_id = 0 ) {
  * @param string $field Database table field.
  * @param string $value Value of the row.
  *
- * @return EDD\Notes\Note Note object if successful, false otherwise.
+ * @return CS\Notes\Note Note object if successful, false otherwise.
  */
-function edd_get_note_by( $field = '', $value = '' ) {
-	$notes = new EDD\Database\Queries\Note();
+function cs_get_note_by( $field = '', $value = '' ) {
+	$notes = new CS\Database\Queries\Note();
 
 	// Return note
 	return $notes->get_item_by( $field, $value );
@@ -140,15 +140,15 @@ function edd_get_note_by( $field = '', $value = '' ) {
 /**
  * Query for notes.
  *
- * @see \EDD\Database\Queries\Note::__construct()
+ * @see \CS\Database\Queries\Note::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Note` for
+ * @param array $args Arguments. See `CS\Database\Queries\Note` for
  *                    accepted arguments.
- * @return \EDD\Notes\Note[] Array of `Note` objects.
+ * @return \CS\Notes\Note[] Array of `Note` objects.
  */
-function edd_get_notes( $args = array() ) {
+function cs_get_notes( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -156,7 +156,7 @@ function edd_get_notes( $args = array() ) {
 	) );
 
 	// Instantiate a query object
-	$notes = new EDD\Database\Queries\Note();
+	$notes = new CS\Database\Queries\Note();
 
 	// Return notes
 	return $notes->query( $r );
@@ -165,15 +165,15 @@ function edd_get_notes( $args = array() ) {
 /**
  * Count notes.
  *
- * @see \EDD\Database\Queries\Note::__construct()
+ * @see \CS\Database\Queries\Note::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Note` for
+ * @param array $args Arguments. See `CS\Database\Queries\Note` for
  *                    accepted arguments.
  * @return int Number of notes returned based on query arguments passed.
  */
-function edd_count_notes( $args = array() ) {
+function cs_count_notes( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -181,7 +181,7 @@ function edd_count_notes( $args = array() ) {
 	) );
 
 	// Query for count(s)
-	$notes = new EDD\Database\Queries\Note( $r );
+	$notes = new CS\Database\Queries\Note( $r );
 
 	// Return count(s)
 	return absint( $notes->found_items );

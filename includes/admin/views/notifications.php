@@ -2,38 +2,38 @@
 /**
  * Displays a list of notifications.
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 ?>
 <div
-	id="edd-notifications"
-	class="edd-hidden"
+	id="cs-notifications"
+	class="cs-hidden"
 	x-data
-	x-init="function() { $el.classList.remove( 'edd-hidden' ) }"
+	x-init="function() { $el.classList.remove( 'cs-hidden' ) }"
 >
 	<div
-		class="edd-overlay"
-		x-show="$store.eddNotifications.isPanelOpen"
-		x-on:click="$store.eddNotifications.closePanel()"
+		class="cs-overlay"
+		x-show="$store.csNotifications.isPanelOpen"
+		x-on:click="$store.csNotifications.closePanel()"
 	></div>
 
 	<div
-		id="edd-notifications-panel"
-		x-show="$store.eddNotifications.isPanelOpen"
-		x-transition:enter-start="edd-slide-in"
-		x-transition:leave-end="edd-slide-in"
+		id="cs-notifications-panel"
+		x-show="$store.csNotifications.isPanelOpen"
+		x-transition:enter-start="cs-slide-in"
+		x-transition:leave-end="cs-slide-in"
 	>
-		<div id="edd-notifications-header" tabindex="-1">
+		<div id="cs-notifications-header" tabindex="-1">
 			<h3>
 				<?php
 				echo wp_kses(
 					sprintf(
 					/* Translators: %s - number of notifications */
-						__( '(%s) New Notifications', 'easy-digital-downloads' ),
-						'<span x-text="$store.eddNotifications.numberActiveNotifications"></span>'
+						__( '(%s) New Notifications', 'commercestore' ),
+						'<span x-text="$store.csNotifications.numberActiveNotifications"></span>'
 					),
 					array( 'span' => array( 'x-text' => true ) )
 				);
@@ -42,32 +42,32 @@
 
 			<button
 				type="button"
-				class="edd-close"
-				x-on:click="$store.eddNotifications.closePanel()"
+				class="cs-close"
+				x-on:click="$store.csNotifications.closePanel()"
 			>
 				<span class="dashicons dashicons-no-alt"></span>
-				<span class="screen-reader-text"><?php esc_html_e( 'Close panel', 'easy-digital-downloads' ); ?></span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Close panel', 'commercestore' ); ?></span>
 			</button>
 		</div>
 
-		<div id="edd-notifications-body">
-			<template x-if="$store.eddNotifications.notificationsLoaded && $store.eddNotifications.activeNotifications.length">
-				<template x-for="(notification, index) in $store.eddNotifications.activeNotifications" :key="notification.id">
-					<div class="edd-notification">
-						<div class="edd-notification--icon" :class="'edd-notification--icon-' + notification.type">
+		<div id="cs-notifications-body">
+			<template x-if="$store.csNotifications.notificationsLoaded && $store.csNotifications.activeNotifications.length">
+				<template x-for="(notification, index) in $store.csNotifications.activeNotifications" :key="notification.id">
+					<div class="cs-notification">
+						<div class="cs-notification--icon" :class="'cs-notification--icon-' + notification.type">
 							<span class="dashicons" :class="'dashicons-' + notification.icon_name"></span>
 						</div>
 
-						<div class="edd-notification--body">
-							<div class="edd-notification--header">
-								<h4 class="edd-notification--title" x-text="notification.title"></h4>
+						<div class="cs-notification--body">
+							<div class="cs-notification--header">
+								<h4 class="cs-notification--title" x-text="notification.title"></h4>
 
-								<div class="edd-notification--date" x-text="notification.relative_date"></div>
+								<div class="cs-notification--date" x-text="notification.relative_date"></div>
 							</div>
 
-							<div class="edd-notification--content" x-html="notification.content"></div>
+							<div class="cs-notification--content" x-html="notification.content"></div>
 
-							<div class="edd-notification--actions">
+							<div class="cs-notification--actions">
 								<template x-for="button in notification.buttons">
 									<a
 										:href="button.url"
@@ -79,10 +79,10 @@
 
 								<button
 									type="button"
-									class="edd-notification--dismiss"
-									x-on:click="$store.eddNotifications.dismiss( $event, index )"
+									class="cs-notification--dismiss"
+									x-on:click="$store.csNotifications.dismiss( $event, index )"
 								>
-									<?php esc_html_e( 'Dismiss', 'easy-digital-downloads' ); ?>
+									<?php esc_html_e( 'Dismiss', 'commercestore' ); ?>
 								</button>
 							</div>
 						</div>
@@ -90,15 +90,15 @@
 				</template>
 			</template>
 
-			<template x-if="$store.eddNotifications.notificationsLoaded && ! $store.eddNotifications.activeNotifications.length">
-				<div id="edd-notifications-none">
-					<?php esc_html_e( 'You have no new notifications.', 'easy-digital-downloads' ); ?>
+			<template x-if="$store.csNotifications.notificationsLoaded && ! $store.csNotifications.activeNotifications.length">
+				<div id="cs-notifications-none">
+					<?php esc_html_e( 'You have no new notifications.', 'commercestore' ); ?>
 				</div>
 			</template>
 
-			<template x-if="! $store.eddNotifications.notificationsLoaded">
+			<template x-if="! $store.csNotifications.notificationsLoaded">
 				<div>
-					<?php esc_html_e( 'Loading notifications...', 'easy-digital-downloads' ); ?>
+					<?php esc_html_e( 'Loading notifications...', 'commercestore' ); ?>
 				</div>
 			</template>
 		</div>

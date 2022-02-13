@@ -7,7 +7,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +27,7 @@ class Customer_Email_Addresses extends Base {
 	public function __construct( $step = 1 ) {
 		parent::__construct( $step );
 
-		$this->completed_message = __( 'Customer email addresses migration completed successfully.', 'easy-digital-downloads' );
+		$this->completed_message = __( 'Customer email addresses migration completed successfully.', 'commercestore' );
 		$this->upgrade           = 'migrate_customer_email_addresses';
 	}
 
@@ -43,7 +43,7 @@ class Customer_Email_Addresses extends Base {
 
 		$results = $this->get_db()->get_results( $this->get_db()->prepare(
 			"SELECT *
-			 FROM {$this->get_db()->edd_customermeta}
+			 FROM {$this->get_db()->cs_customermeta}
 			 WHERE meta_key = %s
 			 LIMIT %d, %d",
 			esc_sql( 'additional_email' ), $offset, $this->per_step
@@ -52,9 +52,9 @@ class Customer_Email_Addresses extends Base {
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $result ) {
 				// Check if email has already been migrated.
-				if ( ! empty( $result->edd_customer_id ) && $result->meta_value ) {
-					$number_results = edd_count_customer_email_addresses( array(
-						'customer_id' => $result->edd_customer_id,
+				if ( ! empty( $result->cs_customer_id ) && $result->meta_value ) {
+					$number_results = cs_count_customer_email_addresses( array(
+						'customer_id' => $result->cs_customer_id,
 						'email'       => $result->meta_value
 					) );
 					if ( $number_results > 0 ) {
@@ -79,7 +79,7 @@ class Customer_Email_Addresses extends Base {
 	 * @return float Percentage.
 	 */
 	public function get_percentage_complete() {
-		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(meta_id) AS count FROM {$this->get_db()->edd_customermeta} WHERE meta_key = %s", esc_sql( 'additional_email' ) ) );
+		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(meta_id) AS count FROM {$this->get_db()->cs_customermeta} WHERE meta_key = %s", esc_sql( 'additional_email' ) ) );
 
 		if ( empty( $total ) ) {
 			$total = 0;

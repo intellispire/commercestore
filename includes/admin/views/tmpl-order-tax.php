@@ -2,7 +2,7 @@
 /**
  * Order Overview: Tax
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2021, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -23,10 +23,10 @@
 				<br />
 			<# } #>
 			<small>
-				<?php esc_html_e( 'Tax', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'Tax', 'commercestore' ); ?>
 			</small>
 		</td>
-		<td class="column-right" data-colname="<?php esc_html_e( 'Amount', 'easy-digital-downloads' ); ?>">
+		<td class="column-right" data-colname="<?php esc_html_e( 'Amount', 'commercestore' ); ?>">
 			{{ data.taxCurrency }}
 		</td>
 	</tr>
@@ -43,7 +43,7 @@
 					<?php
 					echo esc_html(
 						sprintf(
-							__( 'The tax rate has been updated to %1$s. Existing automatically calculated amounts have not been updated.', 'easy-digital-downloads' ),
+							__( 'The tax rate has been updated to %1$s. Existing automatically calculated amounts have not been updated.', 'commercestore' ),
 							'{{ data.state.hasTax.rate }}%'
 						)
 					);
@@ -55,12 +55,12 @@
 						class="button button-secondary button-small update-amounts"
 						style="marign-left: 0;"
 					>
-						<?php esc_html_e( 'Update Amounts', 'easy-digital-downloads' ); ?>
+						<?php esc_html_e( 'Update Amounts', 'commercestore' ); ?>
 					</button>
 				</p>
 
 				<button type="button" class="notice-dismiss">
-					<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'easy-digital-downloads' ); ?></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'commercestore' ); ?></span>
 				</button>
 			</div>
 		</td>

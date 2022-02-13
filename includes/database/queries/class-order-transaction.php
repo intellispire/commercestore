@@ -2,25 +2,25 @@
 /**
  * Order Transaction Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying order transactions.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Order_Transaction::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Order_Transaction::__construct() for accepted arguments.
  */
 class Order_Transaction extends Query {
 
@@ -51,7 +51,7 @@ class Order_Transaction extends Query {
 	 * @access public
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Order_Transactions';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Order_Transactions';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Order_Transaction extends Query {
 	 * @access public
 	 * @var mixed
 	 */
-	protected $item_shape = '\\EDD\\Orders\\Order_Transaction';
+	protected $item_shape = '\\CS\\Orders\\Order_Transaction';
 
 	/** Cache *****************************************************************/
 

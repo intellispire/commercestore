@@ -1,27 +1,27 @@
 <?php
-namespace EDD\Reports\Data\Charts\v2;
+namespace CS\Reports\Data\Charts\v2;
 
-use EDD\Reports\Data\Chart_Endpoint;
+use CS\Reports\Data\Chart_Endpoint;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Manifest class.
  *
- * @group edd_reports
- * @group edd_reports_data
- * @group edd_reports_charts
+ * @group cs_reports
+ * @group cs_reports_data
+ * @group cs_reports_charts
  *
- * @coversDefaultClass \EDD\Reports\Data\Charts\v2\Manifest
+ * @coversDefaultClass \CS\Reports\Data\Charts\v2\Manifest
  */
-class Manifest_Tests extends \EDD_UnitTestCase {
+class Manifest_Tests extends \CS_UnitTestCase {
 
 	/**
-	 * @var \EDD\Reports\Data\Charts\v2\Manifest
+	 * @var \CS\Reports\Data\Charts\v2\Manifest
 	 */
 	protected $mock_Manifest;
 
@@ -38,7 +38,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	 * @covers ::__construct()
 	 */
 	public function test_Manifest_should_implement_Error_Logger_Interface() {
-		$this->assertInstanceOf( 'EDD\\Utils\\Error_Logger_Interface', $this->mock_Manifest );
+		$this->assertInstanceOf( 'CS\\Utils\\Error_Logger_Interface', $this->mock_Manifest );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	 * @covers ::set_endpoint()
 	 */
 	public function test_get_endpoint_should_return_a_Chart_Endpoint() {
-		$this->assertInstanceOf( 'EDD\\Reports\\Data\\Chart_Endpoint', $this->mock_Manifest->get_endpoint() );
+		$this->assertInstanceOf( 'CS\\Reports\\Data\\Chart_Endpoint', $this->mock_Manifest->get_endpoint() );
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	 * @covers ::get_datasets()
 	 */
 	public function test_get_datasets_should_retrieve_an_array_with_Dataset_values() {
-		$this->assertContainsOnlyType( 'EDD\\Reports\\Data\\Charts\\v2\\Dataset', $this->mock_Manifest->get_datasets() );
+		$this->assertContainsOnlyType( 'CS\\Reports\\Data\\Charts\\v2\\Dataset', $this->mock_Manifest->get_datasets() );
 	}
 
 	/**
@@ -90,7 +90,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_has_datasets_should_return_false_if_no_datasets() {
 		$manifest = $this->get_Manifest_mock( 'test', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -134,7 +134,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_get_labels_should_retrieve_an_empty_array_if_not_set() {
 		$manifest = $this->get_Manifest_mock( 'test', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -166,7 +166,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_has_labels_should_return_false_if_no_labels() {
 		$manifest = $this->get_Manifest_mock( 'test', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -191,7 +191,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_add_dataset_should_return_false_on_failure() {
 		$manifest = $this->get_Manifest_mock( 'test', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -213,7 +213,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_get_dataset_handler_should_return_an_empty_handler_string_for_an_invalid_type() {
 		$manifest = $this->get_Manifest_mock( 'test', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -233,7 +233,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	 * @covers ::get_dataset_handler()
 	 */
 	public function test_get_dataset_handler_should_return_a_handler_string_for_a_valid_type() {
-		$this->assertSame( 'EDD\\Reports\\Data\\Charts\\v2\\Pie_Dataset', $this->mock_Manifest->get_dataset_handler() );
+		$this->assertSame( 'CS\\Reports\\Data\\Charts\\v2\\Pie_Dataset', $this->mock_Manifest->get_dataset_handler() );
 	}
 
 	/**
@@ -249,7 +249,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_get_chart_data_with_a_mismatched_dataset_will_skip_including_it() {
 		$manifest = $this->get_Manifest_mock( 'foo', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -262,7 +262,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 						'cutoutPercentage' => 50,
 						'datasets'         => array(
 							'bar' => array(
-								'label'           => __( 'Sales', 'easy-digital-downloads' ),
+								'label'           => __( 'Sales', 'commercestore' ),
 								'backgroundColor' => array(
 									'rgb(234,16,109)',
 									'rgb(98,133,193)',
@@ -318,7 +318,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_get_chart_options_default_non_pie_options_should_match_and_include_the_endpoint_label() {
 		$manifest = $this->get_Manifest_mock( 'foo', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -330,7 +330,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 					'options' => array(
 						'datasets' => array(
 							'foo' => array(
-								'label'           => __( 'Sales', 'easy-digital-downloads' ),
+								'label'           => __( 'Sales', 'commercestore' ),
 								'backgroundColor' => array(
 									'rgb(234,16,109)',
 									'rgb(98,133,193)',
@@ -406,7 +406,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_is_pie_manifest_should_return_true_if_type_is_doughnut() {
 		$manifest = $this->get_Manifest_mock( 'foo', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -419,7 +419,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 						'cutoutPercentage' => 50,
 						'datasets'         => array(
 							'bar' => array(
-								'label'           => __( 'Sales', 'easy-digital-downloads' ),
+								'label'           => __( 'Sales', 'commercestore' ),
 								'backgroundColor' => array(
 									'rgb(234,16,109)',
 									'rgb(98,133,193)',
@@ -443,7 +443,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	public function test_is_pie_manifest_should_return_false_if_type_is_not_pie_or_doughnut() {
 		$manifest = $this->get_Manifest_mock( 'foo', array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() {
@@ -456,7 +456,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 						'cutoutPercentage' => 50,
 						'datasets'         => array(
 							'bar' => array(
-								'label'           => __( 'Sales', 'easy-digital-downloads' ),
+								'label'           => __( 'Sales', 'commercestore' ),
 								'backgroundColor' => array(
 									'rgb(234,16,109)',
 									'rgb(98,133,193)',
@@ -477,12 +477,12 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 	/**
 	 * Mocks a Manifest fixture.
 	 *
-	 * @return \EDD\Reports\Data\Charts\v2\Manifest
+	 * @return \CS\Reports\Data\Charts\v2\Manifest
 	 */
 	protected function get_Manifest_mock( $dataset_id, $endpoint_args = array() ) {
 		$defaults = array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() use ( $dataset_id ) {
@@ -495,7 +495,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 						'cutoutPercentage' => 50,
 						'datasets'         => array(
 							$dataset_id => array(
-								'label'           => __( 'Sales', 'easy-digital-downloads' ),
+								'label'           => __( 'Sales', 'commercestore' ),
 								'backgroundColor' => array(
 									'rgb(234,16,109)',
 									'rgb(98,133,193)',
@@ -513,7 +513,7 @@ class Manifest_Tests extends \EDD_UnitTestCase {
 		$endpoint_args = array_merge( $defaults, $endpoint_args );
 
 		return $this->getMockForAbstractClass(
-			'EDD\\Reports\\Data\\Charts\\v2\\Manifest',
+			'CS\\Reports\\Data\\Charts\\v2\\Manifest',
 			array( new Chart_Endpoint( $endpoint_args ) )
 		);
 	}

@@ -13,7 +13,7 @@ import { jQueryReady } from 'utils/jquery.js';
  */
 jQueryReady( () => {
 	// Show notice if taxes are not enabled.
-	const noticeEl = document.getElementById( 'edd-tax-disabled-notice' );
+	const noticeEl = document.getElementById( 'cs-tax-disabled-notice' );
 
 	if ( noticeEl ) {
 		noticeEl.classList.add( 'notice' );

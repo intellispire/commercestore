@@ -2,25 +2,25 @@
 /**
  * Order Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying orders.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Order::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Order::__construct() for accepted arguments.
  */
 class Order extends Query {
 
@@ -51,7 +51,7 @@ class Order extends Query {
 	 * @access public
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Orders';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Orders';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Order extends Query {
 	 * @access public
 	 * @var mixed
 	 */
-	protected $item_shape = '\\EDD\\Orders\\Order';
+	protected $item_shape = '\\CS\\Orders\\Order';
 
 	/** Cache *****************************************************************/
 
@@ -178,7 +178,7 @@ class Order extends Query {
 	 */
 	public function __construct( $query = array() ) {
 
-		// In EDD 3.0 we converted our use of the status 'publish' to 'complete', this accounts for queries using publish.
+		// In CommerceStore 3.0 we converted our use of the status 'publish' to 'complete', this accounts for queries using publish.
 		if ( isset( $query['status'] ) ) {
 			if ( is_array( $query['status'] ) && in_array( 'publish', $query['status'], true ) ) {
 				foreach ( $query['status'] as $key => $status ) {
@@ -208,21 +208,21 @@ class Order extends Query {
 	 */
 	public function query( $query = array() ) {
 		if ( ! empty( $query['country'] ) ) {
-			add_filter( 'edd_orders_query_clauses', array( $this, 'query_by_country' ) );
+			add_filter( 'cs_orders_query_clauses', array( $this, 'query_by_country' ) );
 		}
 
 		if ( ! empty( $query['product_id'] ) || ( isset( $query['product_price_id'] ) && is_numeric( $query['product_price_id'] ) ) ) {
-			add_filter( 'edd_orders_query_clauses', array( $this, 'query_by_product' ) );
+			add_filter( 'cs_orders_query_clauses', array( $this, 'query_by_product' ) );
 		}
 
 		$result = parent::query( $query );
 
 		if ( ! empty( $query['country'] ) ) {
-			remove_filter( 'edd_orders_query_clauses', array( $this, 'query_by_country' ) );
+			remove_filter( 'cs_orders_query_clauses', array( $this, 'query_by_country' ) );
 		}
 
 		if ( ! empty( $query['product_id'] ) || ( isset( $query['product_price_id'] ) && is_numeric( $query['product_price_id'] ) ) ) {
-			remove_filter( 'edd_orders_query_clauses', array( $this, 'query_by_product' ) );
+			remove_filter( 'cs_orders_query_clauses', array( $this, 'query_by_product' ) );
 		}
 
 		return $result;
@@ -247,7 +247,7 @@ class Order extends Query {
 		$primary_alias  = $this->table_alias;
 		$primary_column = parent::get_primary_column_name();
 
-		$order_addresses_query = new \EDD\Database\Queries\Order_Address();
+		$order_addresses_query = new \CS\Database\Queries\Order_Address();
 		$join_alias            = $order_addresses_query->table_alias;
 
 		// Filter by the order address's region (state/province/etc)..

@@ -2,18 +2,18 @@
 /**
  * Webhook Functions
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal\Webhooks
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal\Webhooks;
+namespace CS\Gateways\PayPal\Webhooks;
 
-use EDD\Gateways\PayPal\API;
-use EDD\Gateways\PayPal\Exceptions\API_Exception;
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Gateways\PayPal\API;
+use CS\Gateways\PayPal\Exceptions\API_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
 
 /**
  * Returns the webhook URL.
@@ -35,18 +35,18 @@ function get_webhook_url() {
  */
 function get_webhook_id( $mode = '' ) {
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
-	return get_option( sanitize_key( 'edd_paypal_commerce_webhook_id_' . $mode ) );
+	return get_option( sanitize_key( 'cs_paypal_commerce_webhook_id_' . $mode ) );
 }
 
 /**
- * Returns the list of webhook events that EDD requires.
+ * Returns the list of webhook events that CommerceStore requires.
  *
  * @link  https://developer.paypal.com/docs/api-basics/notifications/webhooks/event-names/#sales
  *
- * @todo  Would be nice to use the EDD 3.0 registry for this at some point.
+ * @todo  Would be nice to use the CommerceStore 3.0 registry for this at some point.
  *
  * @param string $mode Store mode. Either `sandbox` or `live`.
  *
@@ -55,10 +55,10 @@ function get_webhook_id( $mode = '' ) {
  */
 function get_webhook_events( $mode = '' ) {
 	$events = array(
-		'PAYMENT.CAPTURE.COMPLETED' => '\\EDD\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Completed',
-		'PAYMENT.CAPTURE.DENIED'    => '\\EDD\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Denied',
-		'PAYMENT.CAPTURE.REFUNDED'  => '\\EDD\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Refunded',
-		'PAYMENT.CAPTURE.REVERSED'  => '\\EDD\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Refunded',
+		'PAYMENT.CAPTURE.COMPLETED' => '\\CS\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Completed',
+		'PAYMENT.CAPTURE.DENIED'    => '\\CS\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Denied',
+		'PAYMENT.CAPTURE.REFUNDED'  => '\\CS\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Refunded',
+		'PAYMENT.CAPTURE.REVERSED'  => '\\CS\\Gateways\\PayPal\\Webhooks\\Events\\Payment_Capture_Refunded',
 	);
 
 	/**
@@ -69,7 +69,7 @@ function get_webhook_events( $mode = '' ) {
 	 *
 	 * @since 2.11
 	 */
-	return (array) apply_filters( 'edd_paypal_webhook_events', $events, $mode );
+	return (array) apply_filters( 'cs_paypal_webhook_events', $events, $mode );
 }
 
 /**
@@ -83,11 +83,11 @@ function get_webhook_events( $mode = '' ) {
  */
 function create_webhook( $mode = '' ) {
 	if ( ! is_ssl() ) {
-		throw new API_Exception( __( 'An SSL certificate is required to create a PayPal webhook.', 'easy-digital-downloads' ) );
+		throw new API_Exception( __( 'An SSL certificate is required to create a PayPal webhook.', 'commercestore' ) );
 	}
 
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
 	$webhook_url = get_webhook_url();
@@ -100,7 +100,7 @@ function create_webhook( $mode = '' ) {
 		if ( ! empty( $response->webhooks ) && is_array( $response->webhooks ) ) {
 			foreach ( $response->webhooks as $webhook ) {
 				if ( ! empty( $webook->id ) && ! empty( $webhook->url ) && $webhook_url === $webhook->url ) {
-					update_option( sanitize_key( 'edd_paypal_commerce_webhook_id_' . $mode ), sanitize_text_field( $webhook->id ) );
+					update_option( sanitize_key( 'cs_paypal_commerce_webhook_id_' . $mode ), sanitize_text_field( $webhook->id ) );
 
 					return true;
 				}
@@ -124,24 +124,24 @@ function create_webhook( $mode = '' ) {
 	if ( 201 !== $api->last_response_code ) {
 		throw new API_Exception( sprintf(
 		/* Translators: %d - HTTP response code; %s - Full response from the API. */
-			__( 'Invalid response code %d while creating webhook. Response: %s', 'easy-digital-downloads' ),
+			__( 'Invalid response code %d while creating webhook. Response: %s', 'commercestore' ),
 			$api->last_response_code,
 			json_encode( $response )
 		) );
 	}
 
 	if ( empty( $response->id ) ) {
-		throw new API_Exception( __( 'Unexpected response from PayPal.', 'easy-digital-downloads' ) );
+		throw new API_Exception( __( 'Unexpected response from PayPal.', 'commercestore' ) );
 	}
 
-	update_option( sanitize_key( 'edd_paypal_commerce_webhook_id_' . $mode ), sanitize_text_field( $response->id ) );
+	update_option( sanitize_key( 'cs_paypal_commerce_webhook_id_' . $mode ), sanitize_text_field( $response->id ) );
 
 	return true;
 }
 
 /**
  * Syncs the webhook with expected data. This replaces the webhook URL and event types with
- * what EDD expects them to be. This can be used when the events need to be updated in
+ * what CommerceStore expects them to be. This can be used when the events need to be updated in
  * the event that some are missing.
  *
  * @param string $mode Either `sandbox` or `live` mode. If omitted, current store mode is used.
@@ -153,12 +153,12 @@ function create_webhook( $mode = '' ) {
  */
 function sync_webhook( $mode = '' ) {
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
 	$webhook_id = get_webhook_id( $mode );
 	if ( empty( $webhook_id ) ) {
-		throw new \Exception( esc_html__( 'Webhook not configured.', 'easy-digital-downloads' ) );
+		throw new \Exception( esc_html__( 'Webhook not configured.', 'commercestore' ) );
 	}
 
 	$event_types = array();
@@ -188,7 +188,7 @@ function sync_webhook( $mode = '' ) {
 	if ( 200 !== $api->last_response_code ) {
 		throw new API_Exception( sprintf(
 		/* Translators: %d - HTTP response code; %s - Full response from the API. */
-			__( 'Invalid response code %d while syncing webhook. Response: %s', 'easy-digital-downloads' ),
+			__( 'Invalid response code %d while syncing webhook. Response: %s', 'commercestore' ),
 			$api->last_response_code,
 			json_encode( $response )
 		) );
@@ -198,7 +198,7 @@ function sync_webhook( $mode = '' ) {
 }
 
 /**
- * Retrieves information about the webhook EDD created.
+ * Retrieves information about the webhook CommerceStore created.
  *
  * @param string $mode Mode to get the webhook in. If omitted, current store mode is used.
  *
@@ -208,10 +208,10 @@ function sync_webhook( $mode = '' ) {
  */
 function get_webhook_details( $mode = '' ) {
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
-	$webhook_id = get_option( sanitize_key( 'edd_paypal_commerce_webhook_id_' . $mode ) );
+	$webhook_id = get_option( sanitize_key( 'cs_paypal_commerce_webhook_id_' . $mode ) );
 
 	// Bail if webhook was never set.
 	if ( ! $webhook_id ) {
@@ -223,13 +223,13 @@ function get_webhook_details( $mode = '' ) {
 	if ( 200 !== $api->last_response_code ) {
 		throw new API_Exception( sprintf(
 		/* Translators: %d - HTTP response code. */
-			__( 'Invalid response code %d while retrieving webhook details.', 'easy-digital-downloads' ),
+			__( 'Invalid response code %d while retrieving webhook details.', 'commercestore' ),
 			$api->last_response_code
 		) );
 	}
 
 	if ( empty( $response->id ) ) {
-		throw new API_Exception( __( 'Unexpected response from PayPal when retrieving webhook details.', 'easy-digital-downloads' ) );
+		throw new API_Exception( __( 'Unexpected response from PayPal when retrieving webhook details.', 'commercestore' ) );
 	}
 
 	return $response;
@@ -247,10 +247,10 @@ function get_webhook_details( $mode = '' ) {
  */
 function delete_webhook( $mode = '' ) {
 	if ( empty( $mode ) ) {
-		$mode = edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
+		$mode = cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE;
 	}
 
-	$webhook_name = sanitize_key( 'edd_paypal_commerce_webhook_id_' . $mode );
+	$webhook_name = sanitize_key( 'cs_paypal_commerce_webhook_id_' . $mode );
 	$webhook_id   = get_option( $webhook_name );
 
 	// Bail if webhook was never set.
@@ -268,7 +268,7 @@ function delete_webhook( $mode = '' ) {
 	if ( 204 !== $api->last_response_code ) {
 		throw new API_Exception( sprintf(
 		/* Translators: %d - HTTP response code. */
-			__( 'Invalid response code %d while deleting webhook.', 'easy-digital-downloads' ),
+			__( 'Invalid response code %d while deleting webhook.', 'commercestore' ),
 			$api->last_response_code
 		) );
 	}

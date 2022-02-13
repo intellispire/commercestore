@@ -2,13 +2,13 @@
 /**
  * Invalid_Parameter exception class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Classes/Utilities
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Utils\Exceptions;
+namespace CS\Utils\Exceptions;
 
 /**
  * Implements an Invalid_Argument exception thrown when a given
@@ -17,9 +17,9 @@ namespace EDD\Utils\Exceptions;
  * @since 3.0
  *
  * @see \InvalidArgumentException
- * @see \EDD_Exception
+ * @see \CS_Exception
  */
-class Invalid_Parameter extends Invalid_Argument implements \EDD_Exception {
+class Invalid_Parameter extends Invalid_Argument implements \CS_Exception {
 
 	/**
 	 * Type of value.

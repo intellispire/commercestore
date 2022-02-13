@@ -2,7 +2,7 @@
 /* WordPress Color Schemes */
 
 :root {
-	@include edd-admin-colors();
+	@include cs-admin-colors();
 }
 
 .chosen-container.chosen-container-active .chosen-single,

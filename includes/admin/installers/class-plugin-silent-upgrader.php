@@ -1,6 +1,6 @@
 <?php
 
-namespace EDD\Admin\Installers;
+namespace CS\Admin\Installers;
 
 use WP_Error;
 use WP_Upgrader;
@@ -17,7 +17,7 @@ require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
  * We need to remove all calls to *Skin::feedback() method, as we can't override it in own Skins
  * without breaking support for PHP 5.3-5.5.
  *
- * @internal Please do not use this class outside of core EDD development. May be removed at any time.
+ * @internal Please do not use this class outside of core CommerceStore development. May be removed at any time.
  *
  * @since 1.5.6.1
  */
@@ -600,7 +600,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 
 		$result = parent::install( $package, $args );
 		if ( true === $result ) {
-			do_action( 'edd_plugin_installed', $package );
+			do_action( 'cs_plugin_installed', $package );
 		}
 
 		return $result;

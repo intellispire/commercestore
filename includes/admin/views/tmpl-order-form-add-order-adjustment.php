@@ -2,7 +2,7 @@
 /**
  * Order Overview: Add Adjustment form
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -10,11 +10,11 @@
  */
 ?>
 
-<div class="edd-order-overview-modal">
-	<form class="edd-order-overview-add-adjustment">
+<div class="cs-order-overview-modal">
+	<form class="cs-order-overview-add-adjustment">
 		<fieldset>
 			<legend>
-				<?php esc_html_e( 'Type', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'Type', 'commercestore' ); ?>
 			</legend>
 
 			<p>
@@ -28,7 +28,7 @@
 							checked
 						<# } #>
 					/>
-					<?php echo esc_html_e( 'Fee', 'easy-digital-downloads' ); ?>
+					<?php echo esc_html_e( 'Fee', 'commercestore' ); ?>
 				</label>
 			</p>
 
@@ -43,7 +43,7 @@
 							checked
 						<# } #>
 					/>
-					<?php echo esc_html_e( 'Credit', 'easy-digital-downloads' ); ?>
+					<?php echo esc_html_e( 'Credit', 'commercestore' ); ?>
 				</label>
 			</p>
 		</fieldset>
@@ -51,15 +51,15 @@
 		<# if ( 'fee' === data.type && data.orderItems.length > 0 ) { #>
 		<p>
 			<label for="object_type">
-				<?php esc_html_e( 'Apply to', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'Apply to', 'commercestore' ); ?>
 			</label>
 
 			<select
 				id="object_type"
-				class="edd-select"
+				class="cs-select"
 				required
 			>
-				<option value="order"><?php esc_html_e( 'Entire order', 'easy-digital-downloads' ); ?></option>
+				<option value="order"><?php esc_html_e( 'Entire order', 'commercestore' ); ?></option>
 				<# _.each( data.orderItems, ( item ) => { #>
 					<option
 						value="order_item"
@@ -77,11 +77,11 @@
 
 		<p>
 			<label for="amount">
-				<?php esc_html_e( 'Amount', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'Amount', 'commercestore' ); ?>
 			</label>
-			<span class="edd-amount">
+			<span class="cs-amount">
 				<?php if ( 'before' === $currency_position ) : ?>
-					<?php echo edd_currency_filter( '' ); ?>
+					<?php echo cs_currency_filter( '' ); ?>
 				<?php endif; ?>
 
 				<input
@@ -92,7 +92,7 @@
 				/>
 
 				<?php if ( 'after' === $currency_position ) : ?>
-					<?php echo edd_currency_filter( '' ); ?>
+					<?php echo cs_currency_filter( '' ); ?>
 				<?php endif; ?>
 			</span>
 		</p>
@@ -100,7 +100,7 @@
 		<# if ( 'none' !== data.state.hasTax && 'fee' === data.type ) { #>
 		<p>
 			<label
-				class="edd-toggle"
+				class="cs-toggle"
 				for="no-tax"
 			>
 				<input
@@ -111,13 +111,13 @@
 					<# } #>
 				/>
 				<span class="label">
-					<?php esc_html_e( 'Apply tax to fee', 'easy-digital-downloads' ); ?>
+					<?php esc_html_e( 'Apply tax to fee', 'commercestore' ); ?>
 					<# if ( 'none' !== data.state.hasTax && '' !== data.state.hasTax.country ) { #>
 					<br />
 					<small>
 						<?php
 						printf(
-							esc_html__( 'Tax Rate: %s', 'easy-digital-downloads' ),
+							esc_html__( 'Tax Rate: %s', 'commercestore' ),
 							'{{ data.state.hasTax.country}}<# if ( \'\' !== data.state.hasTax.region ) { #>: {{ data.state.hasTax.region }}<# } #> &ndash; {{ data.state.hasTax.rate }}%'
 						); // WPCS: XSS okay.
 						?>
@@ -137,12 +137,12 @@
 		#>
 			<div class="notice notice-warning">
 				<p>
-					<strong><?php esc_html_e( 'No tax rate has been set.', 'easy-digital-downloads' ); ?></strong><br />
-					<?php esc_html_e( 'Tax rates are defined by the customer\'s billing address.', 'easy-digital-downloads' ); ?>
+					<strong><?php esc_html_e( 'No tax rate has been set.', 'commercestore' ); ?></strong><br />
+					<?php esc_html_e( 'Tax rates are defined by the customer\'s billing address.', 'commercestore' ); ?>
 				</p>
 				<p>
 					<button class="button button-secondary" id="set-address">
-						<?php esc_html_e( 'Set an address', 'easy-digital-downloads' ); ?>
+						<?php esc_html_e( 'Set an address', 'commercestore' ); ?>
 					</button>
 				</p>
 			</div>
@@ -150,7 +150,7 @@
 
 		<p>
 			<label for="description">
-				<?php esc_html_e( 'Description', 'easy-digital-downloads' ); ?>
+				<?php esc_html_e( 'Description', 'commercestore' ); ?>
 			</label>
 			<input
 				type="text"
@@ -163,8 +163,8 @@
 			<input
 				id="submit"
 				type="submit"
-				class="button button-primary edd-ml-auto"
-				value="<?php esc_html_e( 'Add Adjustment', 'easy-digital-downloads' ); ?>"
+				class="button button-primary cs-ml-auto"
+				value="<?php esc_html_e( 'Add Adjustment', 'commercestore' ); ?>"
 				<# if ( 0 === data.total ) { #>
 					disabled
 				<# } #>

@@ -2,21 +2,21 @@
 /**
  * File Download Logs Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Tables
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Tables;
+namespace CS\Database\Tables;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 /**
- * Setup the global "edd_logs_file_downloads" database table
+ * Setup the global "cs_logs_file_downloads" database table
  *
  * @since 3.0
  */

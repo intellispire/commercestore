@@ -2,13 +2,13 @@
 /**
  * Backwards Compatibility Handler for Templates.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Template Class.
  *
- * EDD 3.0 stores data in custom tables making get_post() backwards incompatible. This class handles template changes
+ * CommerceStore 3.0 stores data in custom tables making get_post() backwards incompatible. This class handles template changes
  * required for template to carry on working as expected.
  *
  * @since 3.0
@@ -48,7 +48,7 @@ class Template extends Base {
 	}
 
 	/**
-	 * Update the receipt template to use `edd_get_payment()` instead of `get_post()`.
+	 * Update the receipt template to use `cs_get_payment()` instead of `get_post()`.
 	 *
 	 * @since 3.0
 	 */
@@ -56,10 +56,10 @@ class Template extends Base {
 		$access_type = get_filesystem_method();
 
 		// Retrieve the path to the template being used.
-		$template = edd_locate_template( 'shortcode-receipt.php' );
+		$template = cs_locate_template( 'shortcode-receipt.php' );
 
 		// Bail if the template has not been overridden.
-		if ( false === strpos( $template, 'edd_templates' ) ) {
+		if ( false === strpos( $template, 'cs_templates' ) ) {
 			return false;
 		}
 
@@ -84,9 +84,9 @@ class Template extends Base {
 			if ( $wp_filesystem->exists( $template ) && $wp_filesystem->is_writable( $template ) ) {
 				$contents = $wp_filesystem->get_contents( $template );
 
-				$get_post_call_exists = strstr( $contents, 'get_post( $edd_receipt_args[\'id\'] )' );
+				$get_post_call_exists = strstr( $contents, 'get_post( $cs_receipt_args[\'id\'] )' );
 
-				$contents = str_replace( 'get_post( $edd_receipt_args[\'id\'] )', 'edd_get_payment( $edd_receipt_args[\'id\'] )', $contents );
+				$contents = str_replace( 'get_post( $cs_receipt_args[\'id\'] )', 'cs_get_payment( $cs_receipt_args[\'id\'] )', $contents );
 				$updated  = $wp_filesystem->put_contents( $template, $contents );
 
 				// Only display a notice if a `get_post()` call exists.
@@ -94,9 +94,9 @@ class Template extends Base {
 					add_action( 'admin_notices', function() use ( $template ) {
 						?>
 						<div class="notice notice-error">
-							<p><?php esc_html_e( 'Easy Digital Downloads failed to automatically update your purchase receipt template. This update is necessary for the purchase receipt to display correctly.', 'easy-digital-downloads' ); ?></p>
-							<p><?php printf( __( 'This update must be completed manually. Please click %shere%s for more information.', 'easy-digital-downloads' ), '<a href="https://docs.easydigitaldownloads.com/article/2061-template-update-for-3-0">', '</a>' ); ?></p>
-							<p><?php esc_html_e( 'The file that needs to be updated is located at:', 'easy-digital-downloads' ); ?> <code><?php echo esc_html( $template ); ?></code></p>
+							<p><?php esc_html_e( 'CommerceStore failed to automatically update your purchase receipt template. This update is necessary for the purchase receipt to display correctly.', 'commercestore' ); ?></p>
+							<p><?php printf( __( 'This update must be completed manually. Please click %shere%s for more information.', 'commercestore' ), '<a href="https://docs.commercestore.com/article/2061-template-update-for-3-0">', '</a>' ); ?></p>
+							<p><?php esc_html_e( 'The file that needs to be updated is located at:', 'commercestore' ); ?> <code><?php echo esc_html( $template ); ?></code></p>
 						</div>
 						<?php
 					} );

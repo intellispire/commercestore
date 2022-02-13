@@ -1,24 +1,24 @@
 <?php
 
 /**
- * EDD HTML Elements Tests
+ * CommerceStore HTML Elements Tests
  *
- * @group edd_html
+ * @group cs_html
  *
- * @coversDefaultClass EDD_HTML_Elements
+ * @coversDefaultClass CS_HTML_Elements
  */
-class Test_HTML_Elements extends EDD_UnitTestCase {
+class Test_HTML_Elements extends CS_UnitTestCase {
 
 	/**
 	 * @covers ::product_dropdown
 	 */
 	public function test_product_dropdown() {
-		$expected = '<select name="products" id="products" class="edd-select " data-placeholder="Choose a Download" data-search-type="download" data-search-placeholder="Search Downloads">';
-		$this->assertContains( $expected, EDD()->html->product_dropdown() );
+		$expected = '<select name="products" id="products" class="cs-select " data-placeholder="Choose a Download" data-search-type="download" data-search-placeholder="Search Downloads">';
+		$this->assertContains( $expected, CS()->html->product_dropdown() );
 	}
 
 	/**
-	 * @covers ::edd_parse_product_dropdown_value
+	 * @covers ::cs_parse_product_dropdown_value
 	 */
 	public function test_product_dropdown_value_parse_should_be_123_1() {
 		$expected = array(
@@ -26,11 +26,11 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 			'price_id'    => '1',
 		);
 
-		$this->assertEqualSetsWithIndex( $expected, edd_parse_product_dropdown_value( '123_1' ) );
+		$this->assertEqualSetsWithIndex( $expected, cs_parse_product_dropdown_value( '123_1' ) );
 	}
 
 	/**
-	 * @covers ::edd_parse_product_dropdown_value
+	 * @covers ::cs_parse_product_dropdown_value
 	 */
 	public function test_product_dropdown_value_parse_should_be_123() {
 		$expected = array(
@@ -38,12 +38,12 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 			'price_id'    => false,
 		);
 
-		$this->assertEqualSetsWithIndex( $expected, edd_parse_product_dropdown_value( '123' ) );
-		$this->assertEqualSetsWithIndex( $expected, edd_parse_product_dropdown_value( 123 ) );
+		$this->assertEqualSetsWithIndex( $expected, cs_parse_product_dropdown_value( '123' ) );
+		$this->assertEqualSetsWithIndex( $expected, cs_parse_product_dropdown_value( 123 ) );
 	}
 
 	/**
-	 * @covers ::edd_parse_product_dropdown_value
+	 * @covers ::cs_parse_product_dropdown_value
 	 */
 	public function test_product_dropdown_array_parse() {
 		$saved_values = array( 123, '155_1', '155_2', 99 );
@@ -66,11 +66,11 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 			),
 		);
 
-		$this->assertEqualSetsWithIndex( $expected, edd_parse_product_dropdown_values( $saved_values ) );
+		$this->assertEqualSetsWithIndex( $expected, cs_parse_product_dropdown_values( $saved_values ) );
 	}
 
 	/**
-	 * @covers ::edd_parse_product_dropdown_value
+	 * @covers ::cs_parse_product_dropdown_value
 	 */
 	public function test_product_dropdown_string_parse() {
 		$saved_values = '155';
@@ -81,7 +81,7 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 			),
 		);
 
-		$this->assertEqualSetsWithIndex( $expected, edd_parse_product_dropdown_values( $saved_values ) );
+		$this->assertEqualSetsWithIndex( $expected, cs_parse_product_dropdown_values( $saved_values ) );
 
 		$saved_values = '155_1';
 		$expected     = array(
@@ -91,16 +91,16 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 			),
 		);
 
-		$this->assertEqualSetsWithIndex( $expected, edd_parse_product_dropdown_values( $saved_values ) );
+		$this->assertEqualSetsWithIndex( $expected, cs_parse_product_dropdown_values( $saved_values ) );
 	}
 
 	/**
 	 * @covers ::customer_dropdown
 	 */
 	public function test_customer_dropdown() {
-		$expected = '<select name="customers" id="customers" class="edd-select  edd-customer-select edd-select-chosen" data-placeholder="Choose a Customer" data-search-type="customer" data-search-placeholder="Search Customers"><option value="0" selected=\'selected\'>No customers found</option></select>';
+		$expected = '<select name="customers" id="customers" class="cs-select  cs-customer-select cs-select-chosen" data-placeholder="Choose a Customer" data-search-type="customer" data-search-placeholder="Search Customers"><option value="0" selected=\'selected\'>No customers found</option></select>';
 
-		$this->assertContains( $expected, EDD()->html->customer_dropdown() );
+		$this->assertContains( $expected, CS()->html->customer_dropdown() );
 	}
 
 	/**
@@ -115,19 +115,19 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 			'product_condition' => 'all',
 		);
 
-		edd_store_discount( $meta );
+		cs_store_discount( $meta );
 
-		$expected = '<select name="edd_discounts" id="discounts" class="edd-select  edd-user-select edd-select-chosen" data-placeholder="Choose a Discount"><option value="all" selected=\'selected\'>All Discounts</option><option value="' . edd_get_discount_id_by_code( '50PERCENTOFF' ) . '">50 Percent Off</option></select>';
+		$expected = '<select name="cs_discounts" id="discounts" class="cs-select  cs-user-select cs-select-chosen" data-placeholder="Choose a Discount"><option value="all" selected=\'selected\'>All Discounts</option><option value="' . cs_get_discount_id_by_code( '50PERCENTOFF' ) . '">50 Percent Off</option></select>';
 
-		$this->assertSame( $expected, EDD()->html->discount_dropdown() );
+		$this->assertSame( $expected, CS()->html->discount_dropdown() );
 	}
 
 	/**
 	 * @covers ::category_dropdown
 	 */
 	public function test_category_dropdown() {
-		$expected = '<select name="edd_categories" id="" class="edd-select " data-placeholder=""><option value="all" selected=\'selected\'>All Download Categories</option></select>';
-		$this->assertEquals( $expected, EDD()->html->category_dropdown() );
+		$expected = '<select name="cs_categories" id="" class="cs-select " data-placeholder=""><option value="all" selected=\'selected\'>All Download Categories</option></select>';
+		$this->assertEquals( $expected, CS()->html->category_dropdown() );
 	}
 
 	/**
@@ -135,7 +135,7 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 	 */
 	public function test_year_dropdown() {
 		$current_year = date( 'Y' );
-		$expected     = '<select name="year" id="edd_year_select_year" class="edd-select " data-placeholder="">';
+		$expected     = '<select name="year" id="cs_year_select_year" class="cs-select " data-placeholder="">';
 		$i            = 5;
 
 		while ( $i >= 0 ) {
@@ -147,7 +147,7 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 
 		$expected .= '</select>';
 
-		$this->assertEquals( $expected, EDD()->html->year_dropdown() );
+		$this->assertEquals( $expected, CS()->html->year_dropdown() );
 	}
 
 	/**
@@ -161,7 +161,7 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 		$start_year = $current_year - $years_before;
 		$end_year   = $current_year + $years_after;
 
-		$expected = '<select name="year" id="edd_year_select_year" class="edd-select " data-placeholder="">';
+		$expected = '<select name="year" id="cs_year_select_year" class="cs-select " data-placeholder="">';
 
 		while ( $start_year <= $end_year ) {
 			$selected = (int) $start_year === (int) $current_year
@@ -173,7 +173,7 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 		}
 		$expected .= '</select>';
 
-		$this->assertEquals( $expected, EDD()->html->year_dropdown( 'year', 0, $years_before, $years_after ) );
+		$this->assertEquals( $expected, CS()->html->year_dropdown( 'year', 0, $years_before, $years_after ) );
 
 	}
 
@@ -181,9 +181,9 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 	 * @covers ::month_dropdown
 	 */
 	public function test_month_dropdown() {
-		$out = EDD()->html->month_dropdown();
+		$out = CS()->html->month_dropdown();
 
-		$this->assertContains( '<select name="month" id="edd_month_select_month" class="edd-select "', $out );
+		$this->assertContains( '<select name="month" id="cs_month_select_month" class="cs-select "', $out );
 		$this->assertContains( '<option value="1"', $out );
 		$this->assertContains( '<option value="2"', $out );
 		$this->assertContains( '<option value="3"', $out );
@@ -199,10 +199,10 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers EDD_HTML_Elements::select
+	 * @covers CS_HTML_Elements::select
 	 */
 	public function test_select_is_required() {
-		$select = EDD()->html->select(
+		$select = CS()->html->select(
 			array(
 				'required' => true,
 				'options'  => array(
@@ -217,10 +217,10 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers EDD_HTML_Elements::select
+	 * @covers CS_HTML_Elements::select
 	 */
 	public function test_select_is_not_required() {
-		$select = EDD()->html->select(
+		$select = CS()->html->select(
 			array(
 				'options' => array(
 					1 => '1',
@@ -234,16 +234,16 @@ class Test_HTML_Elements extends EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers EDD_HTML_Elements::text
+	 * @covers CS_HTML_Elements::text
 	 */
 	public function test_text_is_required() {
-		$this->assertContains( 'required', EDD()->html->text( array( 'required' => true ) ) );
+		$this->assertContains( 'required', CS()->html->text( array( 'required' => true ) ) );
 	}
 
 	/**
-	 * @covers EDD_HTML_Elements::text
+	 * @covers CS_HTML_Elements::text
 	 */
 	public function test_text_is_not_required() {
-		$this->assertNotContains( 'required', EDD()->html->text() );
+		$this->assertNotContains( 'required', CS()->html->text() );
 	}
 }

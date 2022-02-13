@@ -2,15 +2,15 @@
 /**
  * Order Transaction Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Orders;
+namespace CS\Orders;
 
-use EDD\Database\Rows as Rows;
+use CS\Database\Rows as Rows;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;

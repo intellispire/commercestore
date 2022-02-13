@@ -47,36 +47,36 @@ const config = {
 		// Alias faked packages. One day these may be published...
 		alias: {
 			...defaultConfig.resolve.alias,
-			'@easy-digital-downloads/currency': path.resolve( __dirname, 'assets/js/packages/currency/src/index.js' ),
+			'@commercestore/currency': path.resolve( __dirname, 'assets/js/packages/currency/src/index.js' ),
 		},
 	},
 	entry: {
 		// Dynamic entry points for individual admin pages.
 		...adminPages.reduce( ( memo, path ) => {
-			memo[ `edd-admin-${ path.replace( '/', '-' ) }` ] = `./assets/js/admin/${ path }`;
+			memo[ `cs-admin-${ path.replace( '/', '-' ) }` ] = `./assets/js/admin/${ path }`;
 			return memo;
 		}, {} ),
 
 		// Static admin pages.
-		'edd-admin': './assets/js/admin',
-		'edd-admin-tax-rates': './assets/js/admin/settings/tax-rates',
-		'edd-admin-email-tags': './assets/js/admin/settings/email-tags',
-		'edd-admin-extension-manager': './assets/js/admin/settings/extension-manager',
-		'edd-admin-notices': './assets/js/admin/notices',
+		'cs-admin': './assets/js/admin',
+		'cs-admin-tax-rates': './assets/js/admin/settings/tax-rates',
+		'cs-admin-email-tags': './assets/js/admin/settings/email-tags',
+		'cs-admin-extension-manager': './assets/js/admin/settings/extension-manager',
+		'cs-admin-notices': './assets/js/admin/notices',
 
 		// Front-end JavaScript.
-		'edd-ajax': './assets/js/frontend/edd-ajax.js',
-		'edd-checkout-global': './assets/js/frontend/checkout',
+		'cs-ajax': './assets/js/frontend/cs-ajax.js',
+		'cs-checkout-global': './assets/js/frontend/checkout',
 		'paypal-checkout': './assets/js/frontend/gateways/paypal.js',
 
 		// Admin styles.
-		'edd-admin-style': './assets/css/admin/style.scss',
-		'edd-admin-chosen-style': './assets/css/admin/chosen/style.scss',
-		'edd-admin-datepicker-style': './assets/css/admin/datepicker.scss',
-		'edd-admin-email-tags-style': './assets/css/admin/email-tags.scss',
-		'edd-admin-menu-style': './assets/css/admin/menu.scss',
-		'edd-admin-tax-rates-style': './assets/css/admin/tax-rates/style.scss',
-		'edd-admin-extension-manager-style': './assets/css/admin/extension-manager.scss'
+		'cs-admin-style': './assets/css/admin/style.scss',
+		'cs-admin-chosen-style': './assets/css/admin/chosen/style.scss',
+		'cs-admin-datepicker-style': './assets/css/admin/datepicker.scss',
+		'cs-admin-email-tags-style': './assets/css/admin/email-tags.scss',
+		'cs-admin-menu-style': './assets/css/admin/menu.scss',
+		'cs-admin-tax-rates-style': './assets/css/admin/tax-rates/style.scss',
+		'cs-admin-extension-manager-style': './assets/css/admin/extension-manager.scss'
 	},
 	output: {
 		filename: 'assets/js/[name].js',
@@ -142,7 +142,7 @@ const config = {
 				},
 				{
 					from: './node_modules/jquery-validation/dist/jquery.validate.min.js',
-					// This file is not registered in EDD so the URL must remain the same.
+					// This file is not registered in CommerceStore so the URL must remain the same.
 					to: 'assets/js/jquery.validate.min.js',
 				},
 				{

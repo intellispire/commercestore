@@ -2,14 +2,14 @@
 /**
  * Currency Functions
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     3.0
  */
 
-use EDD\Currency\Currency;
-use EDD\Currency\Money_Formatter;
+use CS\Currency\Currency;
+use CS\Currency\Money_Formatter;
 
 /**
  * Get Currencies
@@ -17,39 +17,39 @@ use EDD\Currency\Money_Formatter;
  * @since 1.0
  * @return array $currencies A list of the available currencies
  */
-function edd_get_currencies() {
+function cs_get_currencies() {
 	$currencies = array(
-		'USD'  => __( 'US Dollars (&#36;)', 'easy-digital-downloads' ),
-		'EUR'  => __( 'Euros (&euro;)', 'easy-digital-downloads' ),
-		'GBP'  => __( 'Pound Sterling (&pound;)', 'easy-digital-downloads' ),
-		'AUD'  => __( 'Australian Dollars (&#36;)', 'easy-digital-downloads' ),
-		'BRL'  => __( 'Brazilian Real (R&#36;)', 'easy-digital-downloads' ),
-		'CAD'  => __( 'Canadian Dollars (&#36;)', 'easy-digital-downloads' ),
-		'CZK'  => __( 'Czech Koruna', 'easy-digital-downloads' ),
-		'DKK'  => __( 'Danish Krone', 'easy-digital-downloads' ),
-		'HKD'  => __( 'Hong Kong Dollar (&#36;)', 'easy-digital-downloads' ),
-		'HUF'  => __( 'Hungarian Forint', 'easy-digital-downloads' ),
-		'ILS'  => __( 'Israeli Shekel (&#8362;)', 'easy-digital-downloads' ),
-		'JPY'  => __( 'Japanese Yen (&yen;)', 'easy-digital-downloads' ),
-		'MYR'  => __( 'Malaysian Ringgits', 'easy-digital-downloads' ),
-		'MXN'  => __( 'Mexican Peso (&#36;)', 'easy-digital-downloads' ),
-		'NZD'  => __( 'New Zealand Dollar (&#36;)', 'easy-digital-downloads' ),
-		'NOK'  => __( 'Norwegian Krone', 'easy-digital-downloads' ),
-		'PHP'  => __( 'Philippine Pesos', 'easy-digital-downloads' ),
-		'PLN'  => __( 'Polish Zloty', 'easy-digital-downloads' ),
-		'SGD'  => __( 'Singapore Dollar (&#36;)', 'easy-digital-downloads' ),
-		'SEK'  => __( 'Swedish Krona', 'easy-digital-downloads' ),
-		'CHF'  => __( 'Swiss Franc', 'easy-digital-downloads' ),
-		'TWD'  => __( 'Taiwan New Dollars', 'easy-digital-downloads' ),
-		'THB'  => __( 'Thai Baht (&#3647;)', 'easy-digital-downloads' ),
-		'INR'  => __( 'Indian Rupee (&#8377;)', 'easy-digital-downloads' ),
-		'TRY'  => __( 'Turkish Lira (&#8378;)', 'easy-digital-downloads' ),
-		'RIAL' => __( 'Iranian Rial (&#65020;)', 'easy-digital-downloads' ),
-		'RUB'  => __( 'Russian Rubles', 'easy-digital-downloads' ),
-		'AOA'  => __( 'Angolan Kwanza', 'easy-digital-downloads' ),
+		'USD'  => __( 'US Dollars (&#36;)', 'commercestore' ),
+		'EUR'  => __( 'Euros (&euro;)', 'commercestore' ),
+		'GBP'  => __( 'Pound Sterling (&pound;)', 'commercestore' ),
+		'AUD'  => __( 'Australian Dollars (&#36;)', 'commercestore' ),
+		'BRL'  => __( 'Brazilian Real (R&#36;)', 'commercestore' ),
+		'CAD'  => __( 'Canadian Dollars (&#36;)', 'commercestore' ),
+		'CZK'  => __( 'Czech Koruna', 'commercestore' ),
+		'DKK'  => __( 'Danish Krone', 'commercestore' ),
+		'HKD'  => __( 'Hong Kong Dollar (&#36;)', 'commercestore' ),
+		'HUF'  => __( 'Hungarian Forint', 'commercestore' ),
+		'ILS'  => __( 'Israeli Shekel (&#8362;)', 'commercestore' ),
+		'JPY'  => __( 'Japanese Yen (&yen;)', 'commercestore' ),
+		'MYR'  => __( 'Malaysian Ringgits', 'commercestore' ),
+		'MXN'  => __( 'Mexican Peso (&#36;)', 'commercestore' ),
+		'NZD'  => __( 'New Zealand Dollar (&#36;)', 'commercestore' ),
+		'NOK'  => __( 'Norwegian Krone', 'commercestore' ),
+		'PHP'  => __( 'Philippine Pesos', 'commercestore' ),
+		'PLN'  => __( 'Polish Zloty', 'commercestore' ),
+		'SGD'  => __( 'Singapore Dollar (&#36;)', 'commercestore' ),
+		'SEK'  => __( 'Swedish Krona', 'commercestore' ),
+		'CHF'  => __( 'Swiss Franc', 'commercestore' ),
+		'TWD'  => __( 'Taiwan New Dollars', 'commercestore' ),
+		'THB'  => __( 'Thai Baht (&#3647;)', 'commercestore' ),
+		'INR'  => __( 'Indian Rupee (&#8377;)', 'commercestore' ),
+		'TRY'  => __( 'Turkish Lira (&#8378;)', 'commercestore' ),
+		'RIAL' => __( 'Iranian Rial (&#65020;)', 'commercestore' ),
+		'RUB'  => __( 'Russian Rubles', 'commercestore' ),
+		'AOA'  => __( 'Angolan Kwanza', 'commercestore' ),
 	);
 
-	return apply_filters( 'edd_currencies', $currencies );
+	return apply_filters( 'cs_currencies', $currencies );
 }
 
 /**
@@ -64,7 +64,7 @@ function edd_get_currencies() {
  *
  * @return string
  */
-function edd_display_amount( $amount, $currency ) {
+function cs_display_amount( $amount, $currency ) {
 	$formatter = new Money_Formatter( $amount, new Currency( $currency ) );
 
 	return $formatter->format_for_display()
@@ -77,9 +77,9 @@ function edd_display_amount( $amount, $currency ) {
  * @since 1.5.2
  * @return string The currency code
  */
-function edd_get_currency() {
-	$currency = edd_get_option( 'currency', 'USD' );
-	return apply_filters( 'edd_currency', $currency );
+function cs_get_currency() {
+	$currency = cs_get_option( 'currency', 'USD' );
+	return apply_filters( 'cs_currency', $currency );
 }
 
 /**
@@ -92,9 +92,9 @@ function edd_get_currency() {
  *
  * @return string           The symbol to use for the currency
  */
-function edd_currency_symbol( $currency = '' ) {
+function cs_currency_symbol( $currency = '' ) {
 	if ( empty( $currency ) ) {
-		$currency = edd_get_currency();
+		$currency = cs_get_currency();
 	}
 
 	$currency = new Currency( $currency );
@@ -111,9 +111,9 @@ function edd_currency_symbol( $currency = '' ) {
  *
  * @return string The currency's name
  */
-function edd_get_currency_name( $code = 'USD' ) {
-	$currencies = edd_get_currencies();
+function cs_get_currency_name( $code = 'USD' ) {
+	$currencies = cs_get_currencies();
 	$name       = isset( $currencies[ $code ] ) ? $currencies[ $code ] : $code;
-	return apply_filters( 'edd_currency_name', $name );
+	return apply_filters( 'cs_currency_name', $name );
 }
 

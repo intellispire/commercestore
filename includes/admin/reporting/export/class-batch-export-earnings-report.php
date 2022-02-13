@@ -4,7 +4,7 @@
  *
  * This class handles earnings report export.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Earnings_Report_Export Class
+ * CS_Earnings_Report_Export Class
  *
  * @since 2.7
  */
-class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
+class CS_Batch_Earnings_Report_Export extends CS_Batch_Export {
 	/**
 	 * Our export type. Used for export-type specific filters/actions.
 	 *
@@ -34,12 +34,12 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 	 * @since 2.7
 	 */
 	public function headers() {
-		edd_set_time_limit();
+		cs_set_time_limit();
 
 		nocache_headers();
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="' . apply_filters( 'edd_earnings_report_export_filename', 'edd-export-' . $this->export_type . '-' . date( 'm' ) . '-' . date( 'Y' ) ) . '.csv"' );
+		header( 'Content-Disposition: attachment; filename="' . apply_filters( 'cs_earnings_report_export_filename', 'cs-export-' . $this->export_type . '-' . date( 'm' ) . '-' . date( 'Y' ) ) . '.csv"' );
 		header( 'Expires: 0' );
 	}
 
@@ -54,8 +54,8 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 
 		// Always start with the date column.
 		$pre_status_columns = array(
-			__( 'Monthly Sales Activity', 'easy-digital-downloads' ),
-			__( 'Gross Activity', 'easy-digital-downloads' ),
+			__( 'Monthly Sales Activity', 'commercestore' ),
+			__( 'Gross Activity', 'commercestore' ),
 		);
 
 		$status_cols = $this->get_status_cols();
@@ -64,7 +64,7 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 		$cols = array_merge( $pre_status_columns, $status_cols );
 
 		// Include the 'net' after all other columns.
-		$cols[] = __( 'Net Activity', 'easy-digital-downloads' );
+		$cols[] = __( 'Net Activity', 'commercestore' );
 
 		return $cols;
 	}
@@ -77,7 +77,7 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 	 * @return array Order status columns.
 	 */
 	public function get_status_cols() {
-		$status_cols        = edd_get_payment_statuses();
+		$status_cols        = cs_get_payment_statuses();
 		$supported_statuses = $this->get_supported_statuses();
 
 		foreach ( $status_cols as $id => $label ) {
@@ -97,13 +97,13 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 	 * @return array The status keys supported (not labels).
 	 */
 	public function get_supported_statuses() {
-		$statuses = edd_get_payment_statuses();
+		$statuses = cs_get_payment_statuses();
 
 		// Unset a few statuses we don't need in the report:
 		unset( $statuses['pending'], $statuses['processing'], $statuses['preapproval'] );
 		$supported_statuses = array_keys( $statuses );
 
-		return apply_filters( 'edd_export_earnings_supported_statuses', $supported_statuses );
+		return apply_filters( 'cs_export_earnings_supported_statuses', $supported_statuses );
 	}
 
 	/**
@@ -140,8 +140,8 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 
 		$col_data .= ',';
 		for ( $i = 1; $i <= $number_cols; $i++ ) {
-			$col_data .= __( 'Order Count', 'easy-digital-downloads' ) . ',';
-			$col_data .= __( 'Gross Amount', 'easy-digital-downloads' );
+			$col_data .= __( 'Order Count', 'commercestore' ) . ',';
+			$col_data .= __( 'Gross Amount', 'commercestore' );
 
 			if ( $number_cols !== $i ) {
 				$col_data .= ',';
@@ -198,12 +198,12 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 			}
 
 			$row_data .= $gross_count . ',';
-			$row_data .= '"' . edd_format_amount( $gross_amount ) . '",';
+			$row_data .= '"' . cs_format_amount( $gross_amount ) . '",';
 
 			foreach ( $data as $status => $status_data ) {
 				$row_data .= isset( $data[ $status ]['count'] ) ? $data[ $status ]['count'] . ',' : 0 . ',';
 
-				$column_amount = isset( $data[ $status ]['amount'] ) ? edd_format_amount( $data[ $status ]['amount'] ) : 0;
+				$column_amount = isset( $data[ $status ]['amount'] ) ? cs_format_amount( $data[ $status ]['amount'] ) : 0;
 				if ( ! empty( $column_amount ) && 'refunded' == $status ) {
 					$column_amount = '-' . $column_amount;
 				}
@@ -212,7 +212,7 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 			}
 
 			// Allows extensions with other 'completed' statuses to alter net earnings, like recurring.
-			$completed_statuses = apply_filters( 'edd_export_earnings_completed_statuses', array( 'complete', 'revoked' ) );
+			$completed_statuses = apply_filters( 'cs_export_earnings_completed_statuses', array( 'complete', 'revoked' ) );
 
 			$net_count  = 0;
 			$net_amount = 0;
@@ -221,7 +221,7 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 				$net_amount += floatval( $data[ $status ]['amount'] );
 			}
 			$row_data .= $net_count . ',';
-			$row_data .= '"' . edd_format_amount( $net_amount ) . '"';
+			$row_data .= '"' . cs_format_amount( $net_amount ) . '"';
 
 			$row_data .= "\r\n";
 
@@ -261,7 +261,7 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 		$statuses = $this->get_supported_statuses();
 		$totals   = $wpdb->get_results( $wpdb->prepare(
 			"SELECT SUM(total) AS total, COUNT(DISTINCT id) AS count, status
-			 FROM {$wpdb->edd_orders}
+			 FROM {$wpdb->cs_orders}
 			 WHERE date_created >= %s AND date_created <= %s
 			 GROUP BY YEAR(date_created), MONTH(date_created), status
 			 ORDER by date_created ASC", $start_date, $end_date ), ARRAY_A );
@@ -290,8 +290,8 @@ class EDD_Batch_Earnings_Report_Export extends EDD_Batch_Export {
 
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data, $start_date, $end_date );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data, $start_date, $end_date );
 
 		return $data;
 	}

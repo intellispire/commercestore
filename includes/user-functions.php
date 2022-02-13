@@ -4,7 +4,7 @@
  *
  * Functions related to users / customers
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return WP_Post[]|false List of all user purchases.
  */
-function edd_get_users_purchases( $user = 0, $number = 20, $pagination = false, $status = 'complete' ) {
+function cs_get_users_purchases( $user = 0, $number = 20, $pagination = false, $status = 'complete' ) {
 	if ( empty( $user ) ) {
 		$user = get_current_user_id();
 	}
@@ -82,7 +82,7 @@ function edd_get_users_purchases( $user = 0, $number = 20, $pagination = false, 
 		unset( $args['status'] );
 	}
 
-	$purchases = edd_get_payments( apply_filters( 'edd_get_users_purchases_args', $args ) );
+	$purchases = cs_get_payments( apply_filters( 'cs_get_users_purchases_args', $args ) );
 
 	return $purchases
 		? $purchases
@@ -100,7 +100,7 @@ function edd_get_users_purchases( $user = 0, $number = 20, $pagination = false, 
  *
  * @return WP_Post[]|false Array of products, false otherwise.
  */
-function edd_get_users_purchased_products( $user = 0, $status = 'complete' ) {
+function cs_get_users_purchased_products( $user = 0, $status = 'complete' ) {
 
 	if ( $status === 'publish' ) {
 		$status = 'complete';
@@ -118,9 +118,9 @@ function edd_get_users_purchased_products( $user = 0, $status = 'complete' ) {
 
 	// Try to get customer
 	if ( is_numeric( $user ) ) {
-		$customer = edd_get_customer_by( 'user_id', $user );
+		$customer = cs_get_customer_by( 'user_id', $user );
 	} elseif ( is_email( $user ) ) {
-		$customer = edd_get_customer_by( 'email', $user );
+		$customer = cs_get_customer_by( 'email', $user );
 	} else {
 		return false;
 	}
@@ -130,16 +130,16 @@ function edd_get_users_purchased_products( $user = 0, $status = 'complete' ) {
 	}
 
 	// Fetch the order IDs
-	$number = apply_filters( 'edd_users_purchased_products_payments', 9999999 );
+	$number = apply_filters( 'cs_users_purchased_products_payments', 9999999 );
 
-	$order_ids = edd_get_orders( array(
+	$order_ids = cs_get_orders( array(
 		'customer_id' => $customer->id,
 		'fields'      => 'ids',
 		'status'      => $status,
 		'number'      => $number,
 	) );
 
-	$product_ids = edd_get_order_items( array(
+	$product_ids = cs_get_order_items( array(
 		'order_id__in' => $order_ids,
 		'number'       => $number,
 		'fields'       => 'product_id',
@@ -152,13 +152,13 @@ function edd_get_users_purchased_products( $user = 0, $status = 'complete' ) {
 		return false;
 	}
 
-	$args = apply_filters( 'edd_get_users_purchased_products_args', array(
+	$args = apply_filters( 'cs_get_users_purchased_products_args', array(
 		'include'        => $product_ids,
 		'post_type'      => 'download',
 		'posts_per_page' => -1,
 	) );
 
-	return apply_filters( 'edd_users_purchased_products_list', get_posts( $args ) );
+	return apply_filters( 'cs_users_purchased_products_list', get_posts( $args ) );
 }
 
 /**
@@ -173,7 +173,7 @@ function edd_get_users_purchased_products( $user = 0, $status = 'complete' ) {
  *
  * @return bool True if purchased, false otherwise.
  */
-function edd_has_user_purchased( $user_id = 0, $downloads = array(), $variable_price_id = null ) {
+function cs_has_user_purchased( $user_id = 0, $downloads = array(), $variable_price_id = null ) {
 	global $wpdb;
 
 	// Bail if no user ID passed.
@@ -186,7 +186,7 @@ function edd_has_user_purchased( $user_id = 0, $downloads = array(), $variable_p
 	 *
 	 * @since 2.7.7
 	 */
-	do_action( 'edd_has_user_purchased_before', $user_id, $downloads, $variable_price_id );
+	do_action( 'cs_has_user_purchased_before', $user_id, $downloads, $variable_price_id );
 
 	if ( ! is_array( $downloads ) ) {
 		$downloads = array( $downloads );
@@ -197,7 +197,7 @@ function edd_has_user_purchased( $user_id = 0, $downloads = array(), $variable_p
 		return false;
 	}
 
-	$number = apply_filters( 'edd_users_purchased_products_payments', 9999999 );
+	$number = apply_filters( 'cs_users_purchased_products_payments', 9999999 );
 
 	$where_id   = "'" . implode( "', '", $wpdb->_escape( $downloads ) ) . "'";
 	$product_id = "oi.product_id IN ({$where_id})";
@@ -209,8 +209,8 @@ function edd_has_user_purchased( $user_id = 0, $downloads = array(), $variable_p
 	// Perform a direct database query as it is more efficient.
 	$sql = $wpdb->prepare("
 		SELECT COUNT(o.id) AS count
-		FROM {$wpdb->edd_orders} o
-		INNER JOIN {$wpdb->edd_order_items} oi ON o.id = oi.order_id
+		FROM {$wpdb->cs_orders} o
+		INNER JOIN {$wpdb->cs_order_items} oi ON o.id = oi.order_id
 		WHERE {$product_id} {$price_id}
 		AND user_id = %d
 		LIMIT %d",
@@ -229,7 +229,7 @@ function edd_has_user_purchased( $user_id = 0, $downloads = array(), $variable_p
 	 *
 	 * Filter has purchased result
 	 */
-	$return = apply_filters( 'edd_has_user_purchased', $return, $user_id, $downloads, $variable_price_id );
+	$return = apply_filters( 'cs_has_user_purchased', $return, $user_id, $downloads, $variable_price_id );
 
 	return $return;
 }
@@ -242,14 +242,14 @@ function edd_has_user_purchased( $user_id = 0, $downloads = array(), $variable_p
  * @param int $user_id User ID.
  * @return bool True if user has purchased, false otherwise.
  */
-function edd_has_purchases( $user_id = null ) {
+function cs_has_purchases( $user_id = null ) {
 
 	// Maybe fallback to logged in user.
 	if ( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
 	}
 
-	$count = edd_count_orders( array( 'user_id' => $user_id ) );
+	$count = cs_count_orders( array( 'user_id' => $user_id ) );
 
 	return (bool) $count;
 }
@@ -265,7 +265,7 @@ function edd_has_purchases( $user_id = null ) {
  *
  * @return array|false $stats Number of purchases and total amount spent by customer. False otherwise.
  */
-function edd_get_purchase_stats_by_user( $user = '' ) {
+function cs_get_purchase_stats_by_user( $user = '' ) {
 	if ( is_email( $user ) ) {
 		$field = 'email';
 	} elseif ( is_numeric( $user ) ) {
@@ -275,14 +275,14 @@ function edd_get_purchase_stats_by_user( $user = '' ) {
 	}
 
 	$stats    = array();
-	$customer = edd_get_customer_by( $field, $user );
+	$customer = cs_get_customer_by( $field, $user );
 
 	if ( $customer ) {
-		$stats['purchases']   = edd_count_orders( array( $field => $user ) );
-		$stats['total_spent'] = edd_sanitize_amount( $customer->purchase_value );
+		$stats['purchases']   = cs_count_orders( array( $field => $user ) );
+		$stats['total_spent'] = cs_sanitize_amount( $customer->purchase_value );
 	}
 
-	return (array) apply_filters( 'edd_purchase_stats_by_user', $stats, $user );
+	return (array) apply_filters( 'cs_purchase_stats_by_user', $stats, $user );
 }
 
 
@@ -294,13 +294,13 @@ function edd_get_purchase_stats_by_user( $user = '' ) {
  * @param string|int $user User ID or email.
  * @return int Number of purchases.
  */
-function edd_count_purchases_of_customer( $user = null ) {
+function cs_count_purchases_of_customer( $user = null ) {
 	if ( empty( $user ) ) {
 		$user = get_current_user_id();
 	}
 
 	$stats = ! empty( $user )
-		? edd_get_purchase_stats_by_user( $user )
+		? cs_get_purchase_stats_by_user( $user )
 		: false;
 
 	return isset( $stats['purchases'] )
@@ -315,8 +315,8 @@ function edd_count_purchases_of_customer( $user = null ) {
  * @param       mixed $user - ID or email
  * @return      float - the total amount the user has spent
  */
-function edd_purchase_total_of_user( $user = null ) {
-	$stats = edd_get_purchase_stats_by_user( $user );
+function cs_purchase_total_of_user( $user = null ) {
+	$stats = cs_get_purchase_stats_by_user( $user );
 
 	return isset( $stats['total_spent'] ) ? $stats['total_spent'] : 0.00;
 }
@@ -326,21 +326,21 @@ function edd_purchase_total_of_user( $user = null ) {
  * given) has downloaded
  *
  * @since       1.3
- * @since       3.0 Updated to use edd_count_file_download_logs.
+ * @since       3.0 Updated to use cs_count_file_download_logs.
  * @param       mixed $user - ID or email
  * @return      int - The total number of files the user has downloaded
  */
-function edd_count_file_downloads_of_user( $user ) {
+function cs_count_file_downloads_of_user( $user ) {
 
 	// If we got an email, look up the customer ID and call the direct query
 	// for customer download counts.
 	if ( is_email( $user ) ) {
-		return edd_count_file_downloads_of_customer( $user );
+		return cs_count_file_downloads_of_customer( $user );
 	}
 
-	$customer = edd_get_customer_by( 'user_id', $user );
+	$customer = cs_get_customer_by( 'user_id', $user );
 
-	return ! empty( $customer->id ) ? edd_count_file_download_logs(
+	return ! empty( $customer->id ) ? cs_count_file_download_logs(
 		array(
 			'customer_id' => $customer->id,
 		)
@@ -351,15 +351,15 @@ function edd_count_file_downloads_of_user( $user ) {
  * Counts the total number of files a customer has downloaded.
  *
  * @since unknown
- * @since 3.0     Updated to use edd_count_file_download_logs.
+ * @since 3.0     Updated to use cs_count_file_download_logs.
  * @param string|int $customer_id_or_email The email address or id of the customer.
  *
  * @return int The total number of files the customer has downloaded.
  */
-function edd_count_file_downloads_of_customer( $customer_id_or_email = '' ) {
-	$customer = new EDD_Customer( $customer_id_or_email );
+function cs_count_file_downloads_of_customer( $customer_id_or_email = '' ) {
+	$customer = new CS_Customer( $customer_id_or_email );
 
-	return edd_count_file_download_logs(
+	return cs_count_file_download_logs(
 		array(
 			'customer_id' => $customer->id,
 		)
@@ -373,11 +373,11 @@ function edd_count_file_downloads_of_customer( $customer_id_or_email = '' ) {
  * @param       string $username The username to validate
  * @return      bool
  */
-function edd_validate_username( $username ) {
+function cs_validate_username( $username ) {
 	$sanitized = sanitize_user( $username, false );
 	$valid     = ( $sanitized == $username );
 
-	return (bool) apply_filters( 'edd_validate_username', $valid, $username );
+	return (bool) apply_filters( 'cs_validate_username', $valid, $username );
 }
 
 /**
@@ -390,12 +390,12 @@ function edd_validate_username( $username ) {
  *
  * @since  2.8
  * @param  bool   $success     True if payment was added successfully, false otherwise
- * @param  int    $payment_id  The ID of the EDD_Payment that was added
- * @param  int    $customer_id The ID of the EDD_Customer object
- * @param  object $customer    The EDD_Customer object
+ * @param  int    $payment_id  The ID of the CS_Payment that was added
+ * @param  int    $customer_id The ID of the CS_Customer object
+ * @param  object $customer    The CS_Customer object
  * @return void
  */
-function edd_connect_guest_customer_to_existing_user( $success, $payment_id, $customer_id, $customer ) {
+function cs_connect_guest_customer_to_existing_user( $success, $payment_id, $customer_id, $customer ) {
 
 	if( ! empty( $customer->user_id ) ) {
 		return;
@@ -410,11 +410,11 @@ function edd_connect_guest_customer_to_existing_user( $success, $payment_id, $cu
 	$customer->update( array( 'user_id' => $user->ID ) );
 
 	// Set a flag to force the account to be verified before purchase history can be accessed
-	edd_set_user_to_pending( $user->ID  );
-	edd_send_user_verification_email( $user->ID  );
+	cs_set_user_to_pending( $user->ID  );
+	cs_send_user_verification_email( $user->ID  );
 
 }
-add_action( 'edd_customer_post_attach_payment', 'edd_connect_guest_customer_to_existing_user', 10, 4 );
+add_action( 'cs_customer_post_attach_payment', 'cs_connect_guest_customer_to_existing_user', 10, 4 );
 
 /**
  * Attach the newly created user_id to a customer, if one exists
@@ -423,17 +423,17 @@ add_action( 'edd_customer_post_attach_payment', 'edd_connect_guest_customer_to_e
  * @param  int $user_id The User ID that was created
  * @return void
  */
-function edd_connect_existing_customer_to_new_user( $user_id ) {
+function cs_connect_existing_customer_to_new_user( $user_id ) {
 	$email = get_the_author_meta( 'user_email', $user_id );
 
 	// Update the user ID on the customer
-	$customer = new EDD_Customer( $email );
+	$customer = new CS_Customer( $email );
 
 	if( $customer->id > 0 ) {
 		$customer->update( array( 'user_id' => $user_id ) );
 	}
 }
-add_action( 'user_register', 'edd_connect_existing_customer_to_new_user', 10, 1 );
+add_action( 'user_register', 'cs_connect_existing_customer_to_new_user', 10, 1 );
 
 /**
  * Looks up purchases by email that match the registering user
@@ -445,7 +445,7 @@ add_action( 'user_register', 'edd_connect_existing_customer_to_new_user', 10, 1 
  * @param       int $user_id - the new user's ID
  * @return      void
  */
-function edd_add_past_purchases_to_new_user( $user_id ) {
+function cs_add_past_purchases_to_new_user( $user_id ) {
 
 	$email    = get_the_author_meta( 'user_email', $user_id );
 
@@ -453,17 +453,17 @@ function edd_add_past_purchases_to_new_user( $user_id ) {
 		return;
 	}
 
-	$payments = edd_get_payments( array( 's' => $email, 'output' => 'payments' ) );
+	$payments = cs_get_payments( array( 's' => $email, 'output' => 'payments' ) );
 
 	if( $payments ) {
 
 		// Set a flag to force the account to be verified before purchase history can be accessed
-		edd_set_user_to_pending( $user_id );
+		cs_set_user_to_pending( $user_id );
 
-		edd_send_user_verification_email( $user_id );
+		cs_send_user_verification_email( $user_id );
 
 		foreach( $payments as $payment ) {
-			if ( is_object( $payment ) && $payment instanceof EDD_Payment ) {
+			if ( is_object( $payment ) && $payment instanceof CS_Payment ) {
 				if ( intval( $payment->user_id ) > 0 ) {
 					continue; // This payment already associated with an account
 				}
@@ -475,7 +475,7 @@ function edd_add_past_purchases_to_new_user( $user_id ) {
 	}
 
 }
-add_action( 'user_register', 'edd_add_past_purchases_to_new_user', 10, 1 );
+add_action( 'user_register', 'cs_add_past_purchases_to_new_user', 10, 1 );
 
 
 /**
@@ -484,8 +484,8 @@ add_action( 'user_register', 'edd_add_past_purchases_to_new_user', 10, 1 );
  * @since 		1.7
  * @return 		int - The total number of customers.
  */
-function edd_count_total_customers( $args = array() ) {
-	return edd_count_customers();
+function cs_count_total_customers( $args = array() ) {
+	return cs_count_customers();
 }
 
 
@@ -498,21 +498,21 @@ function edd_count_total_customers( $args = array() ) {
  * @param int $user_id User ID.
  * @return array Customer address.
  */
-function edd_get_customer_address( $user_id = 0 ) {
+function cs_get_customer_address( $user_id = 0 ) {
 
 	// Maybe fall back to logged in user ID.
 	if ( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
 	}
 
-	$customer = edd_get_customer_by( 'user_id', $user_id );
+	$customer = cs_get_customer_by( 'user_id', $user_id );
 
 	$parsed_address = array();
 
 	if ( $customer ) {
 		$address = $customer->get_address();
 
-		if ( $address instanceof EDD\Customers\Customer_Address ) {
+		if ( $address instanceof CS\Customers\Customer_Address ) {
 			$parsed_address = array(
 				'line1'   => $address->address,
 				'line2'   => $address->address2,
@@ -545,63 +545,63 @@ function edd_get_customer_address( $user_id = 0 ) {
  *
  * @return      void
  */
-function edd_new_user_notification( $user_id = 0, $user_data = array() ) {
+function cs_new_user_notification( $user_id = 0, $user_data = array() ) {
 
 	if( empty( $user_id ) || empty( $user_data ) ) {
 		return;
 	}
 
-	$emails     = EDD()->emails;
-	$from_name  = edd_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_email = edd_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+	$emails     = CS()->emails;
+	$from_name  = cs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+	$from_email = cs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 
 	// Setup and send the new user email for Admins.
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
 
-	$admin_subject  = apply_filters( 'edd_user_registration_admin_email_subject', sprintf( __('[%s] New User Registration', 'easy-digital-downloads' ), $from_name ), $user_data );
-	$admin_heading  = apply_filters( 'edd_user_registration_admin_email_heading', __( 'New user registration', 'easy-digital-downloads' ), $user_data );
-	$admin_message  = sprintf( __( 'Username: %s', 'easy-digital-downloads'), $user_data['user_login'] ) . "\r\n\r\n";
-	$admin_message .= sprintf( __( 'E-mail: %s', 'easy-digital-downloads'), $user_data['user_email'] ) . "\r\n";
+	$admin_subject  = apply_filters( 'cs_user_registration_admin_email_subject', sprintf( __('[%s] New User Registration', 'commercestore' ), $from_name ), $user_data );
+	$admin_heading  = apply_filters( 'cs_user_registration_admin_email_heading', __( 'New user registration', 'commercestore' ), $user_data );
+	$admin_message  = sprintf( __( 'Username: %s', 'commercestore'), $user_data['user_login'] ) . "\r\n\r\n";
+	$admin_message .= sprintf( __( 'E-mail: %s', 'commercestore'), $user_data['user_email'] ) . "\r\n";
 
-	$admin_message = apply_filters( 'edd_user_registration_admin_email_message', $admin_message, $user_data );
+	$admin_message = apply_filters( 'cs_user_registration_admin_email_message', $admin_message, $user_data );
 
 	$emails->__set( 'heading', $admin_heading );
 
 	$emails->send( get_option( 'admin_email' ), $admin_subject, $admin_message );
 
 	// Setup and send the new user email for the end user.
-	$user_subject  = apply_filters( 'edd_user_registration_email_subject', sprintf( __( '[%s] Your username and password', 'easy-digital-downloads' ), $from_name ), $user_data );
-	$user_heading  = apply_filters( 'edd_user_registration_email_heading', __( 'Your account info', 'easy-digital-downloads' ), $user_data );
-	$user_message  = apply_filters( 'edd_user_registration_email_username', sprintf( __( 'Username: %s', 'easy-digital-downloads' ), $user_data['user_login'] ) . "\r\n", $user_data );
+	$user_subject  = apply_filters( 'cs_user_registration_email_subject', sprintf( __( '[%s] Your username and password', 'commercestore' ), $from_name ), $user_data );
+	$user_heading  = apply_filters( 'cs_user_registration_email_heading', __( 'Your account info', 'commercestore' ), $user_data );
+	$user_message  = apply_filters( 'cs_user_registration_email_username', sprintf( __( 'Username: %s', 'commercestore' ), $user_data['user_login'] ) . "\r\n", $user_data );
 
-	if ( did_action( 'edd_pre_process_purchase' ) ) {
-		$password_message = __( 'Password entered at checkout', 'easy-digital-downloads' );
+	if ( did_action( 'cs_pre_process_purchase' ) ) {
+		$password_message = __( 'Password entered at checkout', 'commercestore' );
 	} else {
-		$password_message = __( 'Password entered at registration', 'easy-digital-downloads' );
+		$password_message = __( 'Password entered at registration', 'commercestore' );
 	}
 
-	$user_message .= apply_filters( 'edd_user_registration_email_password', sprintf( __( 'Password: %s', 'easy-digital-downloads' ), '[' . $password_message . ']' ) . "\r\n" );
+	$user_message .= apply_filters( 'cs_user_registration_email_password', sprintf( __( 'Password: %s', 'commercestore' ), '[' . $password_message . ']' ) . "\r\n" );
 
-	$login_url = apply_filters( 'edd_user_registration_email_login_url', wp_login_url() );
+	$login_url = apply_filters( 'cs_user_registration_email_login_url', wp_login_url() );
 	if( $emails->html ) {
 
-		$user_message .= '<a href="' . $login_url . '"> ' . esc_attr__( 'Click here to log in', 'easy-digital-downloads' ) . ' &raquo;</a>' . "\r\n";
+		$user_message .= '<a href="' . $login_url . '"> ' . esc_attr__( 'Click here to log in', 'commercestore' ) . ' &raquo;</a>' . "\r\n";
 
 	} else {
 
-		$user_message .= sprintf( __( 'To log in, visit: %s', 'easy-digital-downloads' ), $login_url ) . "\r\n";
+		$user_message .= sprintf( __( 'To log in, visit: %s', 'commercestore' ), $login_url ) . "\r\n";
 
 	}
 
-	$user_message = apply_filters( 'edd_user_registration_email_message', $user_message, $user_data );
+	$user_message = apply_filters( 'cs_user_registration_email_message', $user_message, $user_data );
 
 	$emails->__set( 'heading', $user_heading );
 
 	$emails->send( $user_data['user_email'], $user_subject, $user_message );
 
 }
-add_action( 'edd_insert_user', 'edd_new_user_notification', 10, 2 );
+add_action( 'cs_insert_user', 'cs_new_user_notification', 10, 2 );
 
 /**
  * Set a user's status to pending
@@ -610,16 +610,16 @@ add_action( 'edd_insert_user', 'edd_new_user_notification', 10, 2 );
  * @param  integer $user_id The User ID to set to pending
  * @return bool             If the update was successful
  */
-function edd_set_user_to_pending( $user_id = 0 ) {
+function cs_set_user_to_pending( $user_id = 0 ) {
 	if ( empty( $user_id ) ) {
 		return false;
 	}
 
-	do_action( 'edd_pre_set_user_to_pending', $user_id );
+	do_action( 'cs_pre_set_user_to_pending', $user_id );
 
-	$update_successful = (bool) update_user_meta( $user_id, '_edd_pending_verification', '1' );
+	$update_successful = (bool) update_user_meta( $user_id, '_cs_pending_verification', '1' );
 
-	do_action( 'edd_post_set_user_to_pending', $user_id, $update_successful );
+	do_action( 'cs_post_set_user_to_pending', $user_id, $update_successful );
 
 	return $update_successful;
 }
@@ -631,21 +631,21 @@ function edd_set_user_to_pending( $user_id = 0 ) {
  * @param  integer $user_id The User ID to activate
  * @return bool             If the user was marked as active or not
  */
-function edd_set_user_to_verified( $user_id = 0 ) {
+function cs_set_user_to_verified( $user_id = 0 ) {
 
 	if ( empty( $user_id ) ) {
 		return false;
 	}
 
-	if ( ! edd_user_pending_verification( $user_id ) ) {
+	if ( ! cs_user_pending_verification( $user_id ) ) {
 		return false;
 	}
 
-	do_action( 'edd_pre_set_user_to_active', $user_id );
+	do_action( 'cs_pre_set_user_to_active', $user_id );
 
-	$update_successful = delete_user_meta( $user_id, '_edd_pending_verification', '1' );
+	$update_successful = delete_user_meta( $user_id, '_cs_pending_verification', '1' );
 
-	do_action( 'edd_post_set_user_to_active', $user_id, $update_successful );
+	do_action( 'cs_post_set_user_to_active', $user_id, $update_successful );
 
 	return $update_successful;
 }
@@ -656,7 +656,7 @@ function edd_set_user_to_verified( $user_id = 0 ) {
  * @since   2.4.4
  * @return  bool
  */
-function edd_user_pending_verification( $user_id = null ) {
+function cs_user_pending_verification( $user_id = null ) {
 
 	if( is_null( $user_id ) ) {
 		$user_id = get_current_user_id();
@@ -667,9 +667,9 @@ function edd_user_pending_verification( $user_id = null ) {
 		return false;
 	}
 
-	$pending = get_user_meta( $user_id, '_edd_pending_verification', true );
+	$pending = get_user_meta( $user_id, '_cs_pending_verification', true );
 
-	return (bool) apply_filters( 'edd_user_pending_verification', ! empty( $pending ), $user_id );
+	return (bool) apply_filters( 'cs_user_pending_verification', ! empty( $pending ), $user_id );
 
 }
 
@@ -679,22 +679,22 @@ function edd_user_pending_verification( $user_id = null ) {
  * @since   2.4.4
  * @return  string
  */
-function edd_get_user_verification_url( $user_id = 0 ) {
+function cs_get_user_verification_url( $user_id = 0 ) {
 
 	if( empty( $user_id ) ) {
 		return false;
 	}
 
 	$base_url = add_query_arg( array(
-		'edd_action' => 'verify_user',
+		'cs_action' => 'verify_user',
 		'user_id'    => $user_id,
 		'ttl'        => strtotime( '+24 hours' )
-	), untrailingslashit( edd_get_user_verification_page() ) );
+	), untrailingslashit( cs_get_user_verification_page() ) );
 
-	$token = edd_get_user_verification_token( $base_url );
+	$token = cs_get_user_verification_token( $base_url );
 	$url   = add_query_arg( 'token', $token, $base_url );
 
-	return apply_filters( 'edd_get_user_verification_url', $url, $user_id );
+	return apply_filters( 'cs_get_user_verification_url', $url, $user_id );
 
 }
 
@@ -704,17 +704,17 @@ function edd_get_user_verification_url( $user_id = 0 ) {
  * @since   2.4.4
  * @return  string
  */
-function edd_get_user_verification_request_url( $user_id = 0 ) {
+function cs_get_user_verification_request_url( $user_id = 0 ) {
 
 	if( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
 	}
 
 	$url = esc_url( wp_nonce_url( add_query_arg( array(
-		'edd_action' => 'send_verification_email'
-	) ), 'edd-request-verification' ) );
+		'cs_action' => 'send_verification_email'
+	) ), 'cs-request-verification' ) );
 
-	return apply_filters( 'edd_get_user_verification_request_url', $url, $user_id );
+	return apply_filters( 'cs_get_user_verification_request_url', $url, $user_id );
 
 }
 
@@ -724,13 +724,13 @@ function edd_get_user_verification_request_url( $user_id = 0 ) {
  * @since   2.4.4
  * @param int $user_id
  */
-function edd_send_user_verification_email( $user_id = 0 ) {
+function cs_send_user_verification_email( $user_id = 0 ) {
 
 	if( empty( $user_id ) ) {
 		return;
 	}
 
-	if( ! edd_user_pending_verification( $user_id ) ) {
+	if( ! cs_user_pending_verification( $user_id ) ) {
 		return;
 	}
 
@@ -741,22 +741,22 @@ function edd_send_user_verification_email( $user_id = 0 ) {
 	}
 
 	$name       = $user_data->display_name;
-	$url        = edd_get_user_verification_url( $user_id );
-	$from_name  = edd_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_email = edd_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
-	$subject    = apply_filters( 'edd_user_verification_email_subject', __( 'Verify your account', 'easy-digital-downloads' ), $user_id );
-	$heading    = apply_filters( 'edd_user_verification_email_heading', __( 'Verify your account', 'easy-digital-downloads' ), $user_id );
+	$url        = cs_get_user_verification_url( $user_id );
+	$from_name  = cs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+	$from_email = cs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+	$subject    = apply_filters( 'cs_user_verification_email_subject', __( 'Verify your account', 'commercestore' ), $user_id );
+	$heading    = apply_filters( 'cs_user_verification_email_heading', __( 'Verify your account', 'commercestore' ), $user_id );
 	$message    = sprintf(
-		__( "Hello %s,\n\nYour account with %s needs to be verified before you can access your purchase history. <a href='%s'>Click here</a> to verify your account.\n\nLink missing? Visit the following URL: %s", 'easy-digital-downloads' ),
+		__( "Hello %s,\n\nYour account with %s needs to be verified before you can access your purchase history. <a href='%s'>Click here</a> to verify your account.\n\nLink missing? Visit the following URL: %s", 'commercestore' ),
 		$name,
 		$from_name,
 		$url,
 		$url
 	);
 
-	$message    = apply_filters( 'edd_user_verification_email_message', $message, $user_id );
+	$message    = apply_filters( 'cs_user_verification_email_message', $message, $user_id );
 
-	$emails     = new EDD_Emails;
+	$emails     = new CS_Emails;
 
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
@@ -783,11 +783,11 @@ function edd_send_user_verification_email( $user_id = 0 ) {
  * @param  string $url The URL to generate a token for.
  * @return string The token for the URL.
  */
-function edd_get_user_verification_token( $url = '' ) {
+function cs_get_user_verification_token( $url = '' ) {
 
 	$args    = array();
-	$hash    = apply_filters( 'edd_get_user_verification_token_algorithm', 'sha256' );
-	$secret  = apply_filters( 'edd_get_user_verification_token_secret', hash( $hash, wp_salt() ) );
+	$hash    = apply_filters( 'cs_get_user_verification_token_algorithm', 'sha256' );
+	$secret  = apply_filters( 'cs_get_user_verification_token_secret', hash( $hash, wp_salt() ) );
 
 	/*
 	 * Add additional args to the URL for generating the token.
@@ -808,7 +808,7 @@ function edd_get_user_verification_token( $url = '' ) {
 
 			if ( in_array( 'ip', $options ) ) {
 
-				$args['ip'] = edd_get_ip();
+				$args['ip'] = cs_get_ip();
 
 			}
 
@@ -827,7 +827,7 @@ function edd_get_user_verification_token( $url = '' ) {
 	 * Filter to modify arguments and allow custom options to be tested.
 	 * Be sure to rawurlencode any custom options for consistent results.
 	 */
-	$args = apply_filters( 'edd_get_user_verification_token_args', $args, $url, $options );
+	$args = apply_filters( 'cs_get_user_verification_token_args', $args, $url, $options );
 
 	$args['secret'] = $secret;
 	$args['token']  = false; // Removes a token if present.
@@ -857,7 +857,7 @@ function edd_get_user_verification_token( $url = '' ) {
  * @param  string $url URL to test.
  * @return bool
  */
-function edd_validate_user_verification_token( $url = '' ) {
+function cs_validate_user_verification_token( $url = '' ) {
 
 	$ret        = false;
 	$parts      = parse_url( $url );
@@ -869,18 +869,18 @@ function edd_validate_user_verification_token( $url = '' ) {
 
 		if ( isset( $query_args['ttl'] ) && current_time( 'timestamp' ) > $query_args['ttl'] ) {
 
-			do_action( 'edd_user_verification_token_expired' );
+			do_action( 'cs_user_verification_token_expired' );
 
 			$link_text = sprintf(
-				__( 'Sorry but your account verification link has expired. <a href="%s">Click here</a> to request a new verification URL.', 'easy-digital-downloads' ),
-				edd_get_user_verification_request_url()
+				__( 'Sorry but your account verification link has expired. <a href="%s">Click here</a> to request a new verification URL.', 'commercestore' ),
+				cs_get_user_verification_request_url()
 			);
 
-			wp_die( apply_filters( 'edd_verification_link_expired_text', $link_text ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+			wp_die( apply_filters( 'cs_verification_link_expired_text', $link_text ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 
 		}
 
-		if ( isset( $query_args['token'] ) && $query_args['token'] == edd_get_user_verification_token( $url ) ) {
+		if ( isset( $query_args['token'] ) && $query_args['token'] == cs_get_user_verification_token( $url ) ) {
 
 			$ret = true;
 
@@ -888,7 +888,7 @@ function edd_validate_user_verification_token( $url = '' ) {
 
 	}
 
-	return apply_filters( 'edd_validate_user_verification_token', $ret, $url, $query_args );
+	return apply_filters( 'cs_validate_user_verification_token', $ret, $url, $query_args );
 }
 
 /**
@@ -898,31 +898,31 @@ function edd_validate_user_verification_token( $url = '' ) {
  *
  * @return void
  */
-function edd_process_user_verification_request() {
+function cs_process_user_verification_request() {
 
-	if( ! wp_verify_nonce( $_GET['_wpnonce'], 'edd-request-verification' ) ) {
-		wp_die( __( 'Nonce verification failed.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+	if( ! wp_verify_nonce( $_GET['_wpnonce'], 'cs-request-verification' ) ) {
+		wp_die( __( 'Nonce verification failed.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	if( ! is_user_logged_in() ) {
-		wp_die( __( 'You must be logged in to verify your account.', 'easy-digital-downloads' ), __( 'Notice', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+		wp_die( __( 'You must be logged in to verify your account.', 'commercestore' ), __( 'Notice', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
-	if( ! edd_user_pending_verification( get_current_user_id() ) ) {
-		wp_die( __( 'Your account has already been verified.', 'easy-digital-downloads' ), __( 'Notice', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+	if( ! cs_user_pending_verification( get_current_user_id() ) ) {
+		wp_die( __( 'Your account has already been verified.', 'commercestore' ), __( 'Notice', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
-	edd_send_user_verification_email( get_current_user_id() );
+	cs_send_user_verification_email( get_current_user_id() );
 
 	$redirect = apply_filters(
-		'edd_user_account_verification_request_redirect',
-		add_query_arg( 'edd-verify-request', '1', edd_get_user_verification_page() )
+		'cs_user_account_verification_request_redirect',
+		add_query_arg( 'cs-verify-request', '1', cs_get_user_verification_page() )
 	);
 
-	edd_redirect( $redirect );
+	cs_redirect( $redirect );
 
 }
-add_action( 'edd_send_verification_email', 'edd_process_user_verification_request' );
+add_action( 'cs_send_verification_email', 'cs_process_user_verification_request' );
 
 /**
  * Processes an account verification
@@ -931,7 +931,7 @@ add_action( 'edd_send_verification_email', 'edd_process_user_verification_reques
  *
  * @return void
  */
-function edd_process_user_account_verification() {
+function cs_process_user_account_verification() {
 
 	if( empty( $_GET['token'] ) ) {
 		return false;
@@ -947,27 +947,27 @@ function edd_process_user_account_verification() {
 
 	$parts = parse_url( add_query_arg( array() ) );
 	wp_parse_str( $parts['query'], $query_args );
-	$url = add_query_arg( $query_args, untrailingslashit( edd_get_user_verification_page() ) );
+	$url = add_query_arg( $query_args, untrailingslashit( cs_get_user_verification_page() ) );
 
-	if( ! edd_validate_user_verification_token( $url ) ) {
+	if( ! cs_validate_user_verification_token( $url ) ) {
 
-		do_action( 'edd_invalid_user_verification_token' );
+		do_action( 'cs_invalid_user_verification_token' );
 
-		wp_die( __( 'Invalid verification token provided.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+		wp_die( __( 'Invalid verification token provided.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
-	edd_set_user_to_verified( absint( $_GET['user_id'] ) );
+	cs_set_user_to_verified( absint( $_GET['user_id'] ) );
 
-	do_action( 'edd_user_verification_token_validated' );
+	do_action( 'cs_user_verification_token_validated' );
 
 	$redirect = apply_filters(
-		'edd_user_account_verified_redirect',
-		add_query_arg( 'edd-verify-success', '1', edd_get_user_verification_page() )
+		'cs_user_account_verified_redirect',
+		add_query_arg( 'cs-verify-success', '1', cs_get_user_verification_page() )
 	);
 
-	edd_redirect( $redirect );
+	cs_redirect( $redirect );
 }
-add_action( 'edd_verify_user', 'edd_process_user_account_verification' );
+add_action( 'cs_verify_user', 'cs_process_user_account_verification' );
 
 /**
  * Retrieves the purchase history page, or main URL for the account verification process
@@ -975,15 +975,15 @@ add_action( 'edd_verify_user', 'edd_process_user_account_verification' );
  * @since  2.4.6
  * @return string The base URL to use for account verification
  */
-function edd_get_user_verification_page() {
+function cs_get_user_verification_page() {
 	$url              = home_url();
-	$purchase_history = edd_get_option( 'purchase_history_page', 0 );
+	$purchase_history = cs_get_option( 'purchase_history_page', 0 );
 
 	if ( ! empty( $purchase_history ) ) {
 		$url = get_permalink( $purchase_history );
 	}
 
-	return apply_filters( 'edd_user_verification_base_url', $url );
+	return apply_filters( 'cs_user_verification_base_url', $url );
 }
 
 /**
@@ -993,20 +993,20 @@ function edd_get_user_verification_page() {
  * @param  int $user_id The User ID being deleted
  * @return bool         If the detachment was successful
  */
-function edd_detach_deleted_user( $user_id ) {
+function cs_detach_deleted_user( $user_id ) {
 
-	$customer = new EDD_Customer( $user_id, true );
+	$customer = new CS_Customer( $user_id, true );
 	$detached = false;
 
 	if ( $customer->id > 0 ) {
 		$detached = $customer->update( array( 'user_id' => 0 ) );
 	}
 
-	do_action( 'edd_detach_deleted_user', $user_id, $customer, $detached );
+	do_action( 'cs_detach_deleted_user', $user_id, $customer, $detached );
 
 	return $detached;
 }
-add_action( 'delete_user', 'edd_detach_deleted_user', 10, 1 );
+add_action( 'delete_user', 'cs_detach_deleted_user', 10, 1 );
 
 /**
  * Modify User Profile
@@ -1017,7 +1017,7 @@ add_action( 'delete_user', 'edd_detach_deleted_user', 10, 1 );
  * @param object $user Current user info
  * @return void
  */
-function edd_show_user_api_key_field( $user ) {
+function cs_show_user_api_key_field( $user ) {
 
 	// Bail if no user, or user ID is not current user
 	if ( empty( $user ) || ( get_current_user_id() !== $user->ID ) ) {
@@ -1033,30 +1033,30 @@ function edd_show_user_api_key_field( $user ) {
 	 *
 	 * @since 2.9.1
 	 *
-	 * @param boolean If EDD should attempt to load the user API fields
+	 * @param boolean If CommerceStore should attempt to load the user API fields
 	 * @param WP_User The User object currently being viewed.
 	 */
-	$show_fields = apply_filters( 'edd_show_user_api_key_fields', is_admin(), $user );
+	$show_fields = apply_filters( 'cs_show_user_api_key_fields', is_admin(), $user );
 	if ( ! $show_fields ) {
 		return;
 	}
 
-	if ( ( edd_get_option( 'api_allow_user_keys', false ) || current_user_can( 'manage_shop_settings' ) ) && current_user_can( 'edit_user', $user->ID ) ) {
+	if ( ( cs_get_option( 'api_allow_user_keys', false ) || current_user_can( 'manage_shop_settings' ) ) && current_user_can( 'edit_user', $user->ID ) ) {
 		$user = get_userdata( $user->ID );
-		$public_key = EDD()->api->get_user_public_key( $user->ID );
-		$secret_key = EDD()->api->get_user_secret_key( $user->ID );
-		$token      = EDD()->api->get_token( $user->ID );
+		$public_key = CS()->api->get_user_public_key( $user->ID );
+		$secret_key = CS()->api->get_user_secret_key( $user->ID );
+		$token      = CS()->api->get_token( $user->ID );
 		?>
 
 		<style type="text/css">
-			.edd-api-keys strong {
+			.cs-api-keys strong {
 				display: inline-block;
 				width: 100px;
 				font-weight: 400;
 				font-size: 13px;
 			}
 
-			.edd-api-keys .code {
+			.cs-api-keys .code {
 				width: 230px;
 				display: inline-block;
 				background: #fafafa;
@@ -1071,31 +1071,31 @@ function edd_show_user_api_key_field( $user ) {
 			<tbody>
 			<tr>
 				<th>
-					<?php _e( 'Downloads API Keys', 'easy-digital-downloads' ); ?>
+					<?php _e( 'Downloads API Keys', 'commercestore' ); ?>
 				</th>
 				<td>
-					<?php if ( empty( $user->edd_user_public_key ) ) { ?>
+					<?php if ( empty( $user->cs_user_public_key ) ) { ?>
 						<p class="description">
 							<label>
-								<input name="edd_set_api_key" type="checkbox" id="edd_set_api_key" value="0"/>
-								<?php _e( 'Generate API Key', 'easy-digital-downloads' ); ?>
+								<input name="cs_set_api_key" type="checkbox" id="cs_set_api_key" value="0"/>
+								<?php _e( 'Generate API Key', 'commercestore' ); ?>
 							</label>
 						</p>
 					<?php } else { ?>
-						<div class="edd-api-keys">
-							<strong><?php _e( 'Public Key:', 'easy-digital-downloads' ); ?></strong>
+						<div class="cs-api-keys">
+							<strong><?php _e( 'Public Key:', 'commercestore' ); ?></strong>
 								<input type="text" readonly="readonly" class="code" id="publickey" value="<?php echo esc_attr( $public_key ); ?>"/>
 								<br/>
-							<strong><?php _e( 'Secret Key:', 'easy-digital-downloads' ); ?></strong>
+							<strong><?php _e( 'Secret Key:', 'commercestore' ); ?></strong>
 								<input type="text" readonly="readonly" class="code" id="privatekey" value="<?php echo esc_attr( $secret_key ); ?>"/>
 								<br/>
-							<strong><?php _e( 'Token:',      'easy-digital-downloads' ); ?></strong>
-								<input type="text" readonly="readonly" class="code" id="token" value="<?php echo esc_attr( EDD()->api->get_token( $user->ID ) ); ?>"/>
+							<strong><?php _e( 'Token:',      'commercestore' ); ?></strong>
+								<input type="text" readonly="readonly" class="code" id="token" value="<?php echo esc_attr( CS()->api->get_token( $user->ID ) ); ?>"/>
 								<br/>
 							<p class="description">
 								<label>
-									<input name="edd_set_api_key" type="checkbox" id="edd_set_api_key" value="0" />
-									<?php _e( 'Revoke API Keys', 'easy-digital-downloads' ); ?>
+									<input name="cs_set_api_key" type="checkbox" id="cs_set_api_key" value="0" />
+									<?php _e( 'Revoke API Keys', 'commercestore' ); ?>
 								</label>
 							</p>
 						</div>
@@ -1110,14 +1110,14 @@ function edd_show_user_api_key_field( $user ) {
 			<tbody>
 			<tr>
 				<th>
-					<?php printf( __( 'Easy Digital Downloads <a href="%s">iOS App</a>', 'easy-digital-downloads' ), 'https://itunes.apple.com/us/app/easy-digital-downloads-2/id1169488828?ls=1&mt=8' ); ?>
+					<?php printf( __( 'CommerceStore <a href="%s">iOS App</a>', 'commercestore' ), 'https://itunes.apple.com/us/app/commercestore-2/id1169488828?ls=1&mt=8' ); ?>
 				</th>
 				<td>
 					<?php
 					$sitename = get_bloginfo( 'name' );
-					$ios_url  = 'edd://new?sitename=' . $sitename . '&siteurl=' . home_url() . '&key=' . $public_key . '&token=' . $token;
+					$ios_url  = 'cs://new?sitename=' . $sitename . '&siteurl=' . home_url() . '&key=' . $public_key . '&token=' . $token;
 					?>
-					<a class="button-secondary" href="<?php echo $ios_url; ?>"><?php _e( 'Add to iOS App', 'easy-digital-downloads' ); ?></a>
+					<a class="button-secondary" href="<?php echo $ios_url; ?>"><?php _e( 'Add to iOS App', 'commercestore' ); ?></a>
 				</td>
 			</tr>
 			</tbody>
@@ -1126,8 +1126,8 @@ function edd_show_user_api_key_field( $user ) {
 
 	<?php }
 }
-add_action( 'show_user_profile', 'edd_show_user_api_key_field' );
-add_action( 'edit_user_profile', 'edd_show_user_api_key_field' );
+add_action( 'show_user_profile', 'cs_show_user_api_key_field' );
+add_action( 'edit_user_profile', 'cs_show_user_api_key_field' );
 
 /**
  * Generate and Save API key
@@ -1138,22 +1138,22 @@ add_action( 'edit_user_profile', 'edd_show_user_api_key_field' );
  * @param int $user_id
  * @return void
  */
-function edd_update_user_api_key( $user_id ) {
-	if ( current_user_can( 'edit_user', $user_id ) && isset( $_POST['edd_set_api_key'] ) ) {
+function cs_update_user_api_key( $user_id ) {
+	if ( current_user_can( 'edit_user', $user_id ) && isset( $_POST['cs_set_api_key'] ) ) {
 
 		$user       = get_userdata( $user_id );
-		$public_key = EDD()->api->get_user_public_key( $user_id );
+		$public_key = CS()->api->get_user_public_key( $user_id );
 
 		if ( empty( $public_key ) ) {
-			$new_public_key = EDD()->api->generate_public_key( $user->user_email );
-			$new_secret_key = EDD()->api->generate_private_key( $user->ID );
+			$new_public_key = CS()->api->generate_public_key( $user->user_email );
+			$new_secret_key = CS()->api->generate_private_key( $user->ID );
 
-			update_user_meta( $user_id, $new_public_key, 'edd_user_public_key' );
-			update_user_meta( $user_id, $new_secret_key, 'edd_user_secret_key' );
+			update_user_meta( $user_id, $new_public_key, 'cs_user_public_key' );
+			update_user_meta( $user_id, $new_secret_key, 'cs_user_secret_key' );
 		} else {
-			EDD()->api->revoke_api_key( $user_id );
+			CS()->api->revoke_api_key( $user_id );
 		}
 	}
 }
-add_action( 'personal_options_update',  'edd_update_user_api_key' );
-add_action( 'edit_user_profile_update', 'edd_update_user_api_key' );
+add_action( 'personal_options_update',  'cs_update_user_api_key' );
+add_action( 'edit_user_profile_update', 'cs_update_user_api_key' );

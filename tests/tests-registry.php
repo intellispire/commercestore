@@ -1,21 +1,21 @@
 <?php
-namespace EDD\Utils;
+namespace CS\Utils;
 
 /**
  * Tests for the Registry API.
  *
- * @group edd_registry
- * @group edd_utils
+ * @group cs_registry
+ * @group cs_utils
  *
- * @coversDefaultClass \EDD\Utils\Registry
+ * @coversDefaultClass \CS\Utils\Registry
  */
-class Registry_Tests extends \EDD_UnitTestCase {
+class Registry_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Mock registry test fixture.
 	 *
 	 * @access protected
-	 * @var    \EDD\Utils\Registry
+	 * @var    \CS\Utils\Registry
 	 */
 	protected $mockRegistry;
 
@@ -25,7 +25,7 @@ class Registry_Tests extends \EDD_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->mockRegistry = $this->getMockForAbstractClass( '\EDD\Utils\Registry' );
+		$this->mockRegistry = $this->getMockForAbstractClass( '\CS\Utils\Registry' );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_item()
-	 * @expectedException \EDD_Exception
+	 * @expectedException \CS_Exception
 	 */
 	public function test_add_item_with_empty_attributes_should_return_false() {
 		$this->assertFalse( $this->mockRegistry->add_item( 'foo', array() ) );
@@ -49,17 +49,17 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_item_with_empty_attributes_should_throw_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The attributes were missing when attempting to add the 'foo' item." );
+		$this->setExpectedException( '\CS_Exception', "The attributes were missing when attempting to add the 'foo' item." );
 
 		$this->mockRegistry->add_item( 'foo', array() );
 	}
 
 	/**
 	 * @covers ::add_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_item_with_non_empty_attributes_should_return_true() {
 		$result = $this->mockRegistry->add_item( 'foo', array( 'bar' ) );
@@ -69,7 +69,7 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::add_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_add_item_should_register_the_item() {
 		$this->mockRegistry->add_item( 'foobar', array(
@@ -82,7 +82,7 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::remove_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_remove_item_with_invalid_item_id_should_effect_no_change() {
 		$this->mockRegistry->add_item( 'foo', array( 'bar' ) );
@@ -94,7 +94,7 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::remove_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_remove_item_with_valid_item_id_should_remove_that_item() {
 		$this->mockRegistry->add_item( 'foo', array( 'bar' ) );
@@ -106,10 +106,10 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_item_with_invalid_item_id_should_return_an_empty_array() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' item does not exist." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' item does not exist." );
 
 		$result = $this->mockRegistry->get_item( 'foo' );
 
@@ -118,17 +118,17 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_item_with_invalid_item_id_should_throw_an_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' item does not exist." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' item does not exist." );
 
 		$this->mockRegistry->get_item( 'foo' );
 	}
 
 	/**
 	 * @covers ::get_item()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_item_with_valid_item_id_should_return_that_item() {
 		$this->mockRegistry->add_item( 'foo', array( 'key' => 'value' ) );
@@ -149,7 +149,7 @@ class Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_items()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_get_items_should_return_registered_items() {
 		$item = array(

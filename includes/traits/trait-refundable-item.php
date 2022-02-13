@@ -2,13 +2,13 @@
 /**
  * Refundable Item
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     3.0
  */
 
-namespace EDD;
+namespace CS;
 
 trait Refundable_Item {
 
@@ -63,9 +63,9 @@ trait Refundable_Item {
 			}
 		}
 
-		$maximums['subtotal'] = number_format( $maximums['subtotal'], edd_currency_decimal_filter(), '.', '' );
-		$maximums['tax']      = number_format( $maximums['tax'], edd_currency_decimal_filter(), '.', '' );
-		$maximums['total']    = number_format( $maximums['total'], edd_currency_decimal_filter(), '.', '' );
+		$maximums['subtotal'] = number_format( $maximums['subtotal'], cs_currency_decimal_filter(), '.', '' );
+		$maximums['tax']      = number_format( $maximums['tax'], cs_currency_decimal_filter(), '.', '' );
+		$maximums['total']    = number_format( $maximums['total'], cs_currency_decimal_filter(), '.', '' );
 
 		return $maximums;
 	}

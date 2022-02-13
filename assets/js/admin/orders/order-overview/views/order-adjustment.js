@@ -38,11 +38,11 @@ export const OrderAdjustment = Base.extend( {
 		switch ( this.model.get( 'type' ) ) {
 			case 'credit':
 			case 'fee':
-				this.template = wp.template( 'edd-admin-order-adjustment' );
+				this.template = wp.template( 'cs-admin-order-adjustment' );
 				break;
 			default:
 				this.template = wp.template(
-					'edd-admin-order-adjustment-discount'
+					'cs-admin-order-adjustment-discount'
 				);
 		}
 

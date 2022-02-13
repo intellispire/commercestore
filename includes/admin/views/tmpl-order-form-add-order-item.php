@@ -2,19 +2,19 @@
 /**
  * Order Overview: Add Item form
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-$currency_position  = edd_get_option( 'currency_position', 'before' );
+$currency_position  = cs_get_option( 'currency_position', 'before' );
 
 //
 // Retrieve a list of recent Downloads to populate list.
 //
-// @todo this is similar to edd_ajax_download_search() but
+// @todo this is similar to cs_ajax_download_search() but
 //       that cannot be used because it requires $_GET requests.
 //
 $downloads        = array();
@@ -35,18 +35,18 @@ $recent_downloads = get_posts( array(
 if ( ! empty( $recent_downloads ) ) {
 
 	foreach ( $recent_downloads as $download_id ) {
-		$prices = edd_get_variable_prices( $download_id );
+		$prices = cs_get_variable_prices( $download_id );
 
 		// Non-variable items.
 		if ( empty( $prices ) ) {
 			$downloads[] = array(
 				'id'   => $download_id,
-				'name' => edd_get_download_name( $download_id ),
+				'name' => cs_get_download_name( $download_id ),
 			);
 		// Variable items.
 		} else {
 			foreach ( $prices as $key => $value ) {
-				$name = edd_get_download_name( $download_id, $key );
+				$name = cs_get_download_name( $download_id, $key );
 
 				if ( ! empty( $name ) ) {
 					$downloads[] = array(
@@ -60,8 +60,8 @@ if ( ! empty( $recent_downloads ) ) {
 }
 ?>
 
-<div class="edd-order-overview-modal">
-	<form class="edd-order-overview-add-item">
+<div class="cs-order-overview-modal">
+	<form class="cs-order-overview-add-item">
 		<# if ( false !== data.state.error ) { #>
 			<div class="notice notice-error">
 				<p>{{ data.state.error }}</p>
@@ -70,15 +70,15 @@ if ( ! empty( $recent_downloads ) ) {
 
 		<p>
 			<label for="download">
-				<?php echo esc_html( edd_get_label_singular() ); ?>
+				<?php echo esc_html( cs_get_label_singular() ); ?>
 			</label>
 
 			<select
-				name="edd-order-add-download-select"
+				name="cs-order-add-download-select"
 				id="download"
-				class="edd-select edd-order-add-download-select variations variations-only edd-select-chosen"
-				data-placeholder="<?php echo esc_html_e( 'Search for a download', 'easy-digital-downloads' ); ?>"
-				data-search-placeholder="<?php echo esc_html_e( 'Search for a download', 'easy-digital-downloads' ); ?>"
+				class="cs-select cs-order-add-download-select variations variations-only cs-select-chosen"
+				data-placeholder="<?php echo esc_html_e( 'Search for a download', 'commercestore' ); ?>"
+				data-search-placeholder="<?php echo esc_html_e( 'Search for a download', 'commercestore' ); ?>"
 				data-search-type="download">
 					<option value=""></option>
 					<# if ( 0 !== data.productId ) { #>
@@ -90,13 +90,13 @@ if ( ! empty( $recent_downloads ) ) {
 			</select>
 
 			<# if ( true === data.state.isDuplicate ) { #>
-			<span class="edd-order-overview-error">
+			<span class="cs-order-overview-error">
 			<?php
 			/* translators: %s "Download" singular label. */
 			echo esc_html(
 				sprintf(
-					__( 'This %s already exists in the Order. Please remove it before adding it again.', 'easy-digital-downloads' ),
-					edd_get_label_singular()
+					__( 'This %s already exists in the Order. Please remove it before adding it again.', 'commercestore' ),
+					cs_get_label_singular()
 				)
 			);
 			?>
@@ -107,12 +107,12 @@ if ( ! empty( $recent_downloads ) ) {
 		<# if ( false !== data.state.hasQuantity ) { #>
 			<p>
 				<label for="">
-					<?php esc_html_e( 'Quantity', 'easy-digital-downloads' ); ?>
+					<?php esc_html_e( 'Quantity', 'commercestore' ); ?>
 				</label>
 				<input
 					type="number"
 					id="quantity"
-					class="edd-add-order-quantity"
+					class="cs-add-order-quantity"
 					value="{{ data.quantity }}"
 					step="1"
 					min="1"
@@ -125,7 +125,7 @@ if ( ! empty( $recent_downloads ) ) {
 
 		<p>
 			<label
-				class="edd-toggle"
+				class="cs-toggle"
 				for="auto-calculate"
 			>
 				<input
@@ -139,13 +139,13 @@ if ( ! empty( $recent_downloads ) ) {
 					<# } #>
 				/>
 				<span class="label">
-					<?php esc_html_e( 'Automatically calculate amounts', 'easy-digital-downloads' ); ?>
+					<?php esc_html_e( 'Automatically calculate amounts', 'commercestore' ); ?>
 					<# if ( 'none' !== data.state.hasTax && '' !== data.state.hasTax.country ) { #>
 					<br />
 					<small>
 						<?php
 						printf(
-							esc_html__( 'Tax Rate: %s', 'easy-digital-downloads' ),
+							esc_html__( 'Tax Rate: %s', 'commercestore' ),
 							'{{ data.state.hasTax.country}}<# if ( \'\' !== data.state.hasTax.region ) { #>: {{ data.state.hasTax.region }}<# } #> &ndash; {{ data.state.hasTax.rate }}%'
 						); // WPCS: XSS okay.
 						?>
@@ -158,12 +158,12 @@ if ( ! empty( $recent_downloads ) ) {
 		<# if ( 'none' !== data.state.hasTax && '' === data.state.hasTax.country && false === data.state.isAdjustingManually ) { #>
 			<div class="notice notice-warning">
 				<p>
-					<strong><?php esc_html_e( 'No tax rate has been set.', 'easy-digital-downloads' ); ?></strong><br />
-					<?php esc_html_e( 'Tax rates are defined by the customer\'s billing address.', 'easy-digital-downloads' ); ?>
+					<strong><?php esc_html_e( 'No tax rate has been set.', 'commercestore' ); ?></strong><br />
+					<?php esc_html_e( 'Tax rates are defined by the customer\'s billing address.', 'commercestore' ); ?>
 				</p>
 				<p>
 					<button class="button button-secondary" id="set-address">
-						<?php esc_html_e( 'Set an address', 'easy-digital-downloads' ); ?>
+						<?php esc_html_e( 'Set an address', 'commercestore' ); ?>
 					</button>
 				</p>
 			</div>
@@ -172,10 +172,10 @@ if ( ! empty( $recent_downloads ) ) {
 		<# if ( true === data.state.isAdjustingManually ) { #>
 
 			<p>
-				<label for="amount"><?php esc_html_e( 'Unit Price', 'easy-digital-downloads' ); ?></label>
-				<span class="edd-amount">
+				<label for="amount"><?php esc_html_e( 'Unit Price', 'commercestore' ); ?></label>
+				<span class="cs-amount">
 					<?php if ( 'before' === $currency_position ) : ?>
-						<?php echo edd_currency_filter( '' ); ?>
+						<?php echo cs_currency_filter( '' ); ?>
 					<?php endif; ?>
 
 					<input
@@ -185,7 +185,7 @@ if ( ! empty( $recent_downloads ) ) {
 					/>
 
 					<?php if ( 'after' === $currency_position ) : ?>
-						<?php echo edd_currency_filter( '' ); ?>
+						<?php echo cs_currency_filter( '' ); ?>
 					<?php endif; ?>
 				</span>
 			</p>
@@ -193,19 +193,19 @@ if ( ! empty( $recent_downloads ) ) {
 			<# if ( 'none' !== data.state.hasTax ) { #>
 				<p>
 					<label for="tax">
-						<?php esc_html_e( 'Tax', 'easy-digital-downloads' ); ?>
+						<?php esc_html_e( 'Tax', 'commercestore' ); ?>
 						<# if ( '' !== data.state.hasTax.country ) { #>
 							<?php
 							printf(
-								esc_html_x( '(%s)', 'add order item tax rate', 'easy-digital-downloads' ),
+								esc_html_x( '(%s)', 'add order item tax rate', 'commercestore' ),
 								'{{ data.state.hasTax.country}}<# if ( \'\' !== data.state.hasTax.region ) { #>: {{ data.state.hasTax.region }}<# } #> &ndash; {{ data.state.hasTax.rate }}%'
 							); // WPCS: XSS okay.
 							?>
 						<# } #>
 					</label>
-					<span class="edd-amount">
+					<span class="cs-amount">
 						<?php if ( 'before' === $currency_position ) : ?>
-							<?php echo edd_currency_filter( '' ); ?>
+							<?php echo cs_currency_filter( '' ); ?>
 						<?php endif; ?>
 
 						<input
@@ -215,17 +215,17 @@ if ( ! empty( $recent_downloads ) ) {
 						/>
 
 						<?php if ( 'after' === $currency_position ) : ?>
-							<?php echo edd_currency_filter( '' ); ?>
+							<?php echo cs_currency_filter( '' ); ?>
 						<?php endif; ?>
 					</span>
 				</p>
 			<# } #>
 
 			<p>
-				<label for="subtotal"><?php esc_html_e( 'Amount', 'easy-digital-downloads' ); ?></label>
-				<span class="edd-amount">
+				<label for="subtotal"><?php esc_html_e( 'Amount', 'commercestore' ); ?></label>
+				<span class="cs-amount">
 					<?php if ( 'before' === $currency_position ) : ?>
-						<?php echo edd_currency_filter( '' ); ?>
+						<?php echo cs_currency_filter( '' ); ?>
 					<?php endif; ?>
 
 					<input
@@ -235,7 +235,7 @@ if ( ! empty( $recent_downloads ) ) {
 					/>
 
 					<?php if ( 'after' === $currency_position ) : ?>
-						<?php echo edd_currency_filter( '' ); ?>
+						<?php echo cs_currency_filter( '' ); ?>
 					<?php endif; ?>
 				</span>
 			</p>
@@ -244,13 +244,13 @@ if ( ! empty( $recent_downloads ) ) {
 
 		<p class="submit">
 			<# if ( true === data.state.isFetching ) { #>
-				<span class="spinner is-active edd-ml-auto"></span>
+				<span class="spinner is-active cs-ml-auto"></span>
 			<# } #>
 
 			<input
 				type="submit"
-				class="button button-primary edd-ml-auto"
-				value="<?php echo esc_html( sprintf( __( 'Add %s', 'easy-digital-downloads' ), edd_get_label_singular() ) ); ?>"
+				class="button button-primary cs-ml-auto"
+				value="<?php echo esc_html( sprintf( __( 'Add %s', 'commercestore' ), cs_get_label_singular() ) ); ?>"
 				<# if ( 0 === data.productId || true === data.state.isDuplicate || true === data.state.isFetching ) { #>
 					disabled
 				<# } #>

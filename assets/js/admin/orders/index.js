@@ -19,15 +19,15 @@ jQueryReady( () => {
 			const overview = OrderOverview.options.state;
 			const orderItems = overview.get( 'items' );
 
-			const noItemErrorEl = document.getElementById( 'edd-add-order-no-items-error' );
-			const noCustomerErrorEl = document.getElementById( 'edd-add-order-customer-error' );
+			const noItemErrorEl = document.getElementById( 'cs-add-order-no-items-error' );
+			const noCustomerErrorEl = document.getElementById( 'cs-add-order-customer-error' );
 
 			const assignCustomerEl = document.getElementById( 'customer_id' );
-			const newCustomerEmailEl = document.getElementById( 'edd_new_customer_email' );
+			const newCustomerEmailEl = document.getElementById( 'cs_new_customer_email' );
 
 			[
-				'edd-add-order-form',
-				'edd-edit-order-form',
+				'cs-add-order-form',
+				'cs-edit-order-form',
 			].forEach( ( form ) => {
 				const formEl = document.getElementById( form );
 

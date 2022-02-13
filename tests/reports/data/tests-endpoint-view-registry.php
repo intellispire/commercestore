@@ -1,29 +1,29 @@
 <?php
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Report registry API.
  *
- * @group edd_registry
- * @group edd_reports
- * @group edd_reports_endpoints
- * @group edd_reports_endpoints_views
+ * @group cs_registry
+ * @group cs_reports
+ * @group cs_reports_endpoints
+ * @group cs_reports_endpoints_views
  *
- * @coversDefaultClass \EDD\Reports\Data\Endpoint_View_Registry
+ * @coversDefaultClass \CS\Reports\Data\Endpoint_View_Registry
  */
-class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
+class Endpoint_View_Registry_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Report registry fixture.
 	 *
 	 * @access protected
-	 * @var    \EDD\Reports\Data\Endpoint_View_Registry
+	 * @var    \CS\Reports\Data\Endpoint_View_Registry
 	 */
 	protected $registry;
 
@@ -33,7 +33,7 @@ class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->registry = new \EDD\Reports\Data\Endpoint_View_Registry();
+		$this->registry = new \CS\Reports\Data\Endpoint_View_Registry();
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
 	 * @covers ::__call()
 	 */
 	public function test_get_endpoint_view_with_invalid_endpoint_view_id_should_return_an_empty_array() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' endpoint view does not exist." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' endpoint view does not exist." );
 
 		$result = $this->registry->get_endpoint_view( 'foo' );
 
@@ -69,7 +69,7 @@ class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
 	 * @covers ::__call()
 	 */
 	public function test_get_endpoint_view_with_invalid_report_id_should_throw_an_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' endpoint view does not exist." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' endpoint view does not exist." );
 
 		$this->registry->get_endpoint_view( 'foo' );
 	}
@@ -101,17 +101,17 @@ class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::register_endpoint_view()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_register_endpoint_view_with_non_core_view_id_should_throw_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'foo' endpoint view is invalid." );
+		$this->setExpectedException( '\CS_Exception', "The 'foo' endpoint view is invalid." );
 
 		$this->registry->register_endpoint_view( 'foo', array() );
 	}
 
 	/**
 	 * @covers ::register_endpoint_view()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_register_endpoint_view_with_group_callback_should_set_that_group_callback() {
 		$expected = '__return_false';
@@ -127,7 +127,7 @@ class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::register_endpoint_view()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_register_endpoint_view_with_handler_should_set_that_handler() {
 		$expected = '__return_false';
@@ -143,7 +143,7 @@ class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::register_endpoint_view()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_register_endpoint_view_with_fields_display_callback_should_set_that_display_callback() {
 		$expected = '__return_false';
@@ -169,7 +169,7 @@ class Endpoint_View_Registry_Tests extends \EDD_UnitTestCase {
 			foreach ( $core_views as $view_id => $atts ) {
 				$this->registry->register_endpoint_view( $view_id, $atts );
 			}
-		} catch ( \EDD_Exception $exception ) {}
+		} catch ( \CS_Exception $exception ) {}
 	}
 
 	/**

@@ -2,15 +2,15 @@
 /**
  * Order Stats class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD;
+namespace CS;
 
-use EDD\Reports as Reports;
+use CS\Reports as Reports;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -74,7 +74,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      SQL function. Certain methods will only accept certain functions. See each method for
 	 *                                 a list of accepted SQL functions.
@@ -211,7 +211,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      SQL function. Accepts `SUM` and `AVG`. Default `SUM`.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended to the
@@ -225,7 +225,7 @@ class Stats {
 		$this->parse_query( $query );
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['date_query_column'] = 'date_created';
 
 		if ( empty( $this->query_vars['function'] ) ) {
@@ -246,7 +246,7 @@ class Stats {
 		 *
 		 * @param array $statuses Order statuses to include when generating stats.
 		 */
-		$this->query_vars['status'] = apply_filters( 'edd_payment_stats_post_statuses', $this->query_vars['status'] );
+		$this->query_vars['status'] = apply_filters( 'cs_payment_stats_post_statuses', $this->query_vars['status'] );
 
 		// Run pre-query checks and maybe generate SQL.
 		$this->pre_query( $query );
@@ -283,7 +283,7 @@ class Stats {
 			$relative = floatval( $result->relative );
 
 			if ( ( floatval( 0 ) === $total && floatval( 0 ) === $relative ) || ( $total === $relative ) ) {
-				$total = esc_html__( 'No Change', 'easy-digital-downloads' );
+				$total = esc_html__( 'No Change', 'commercestore' );
 			} elseif ( floatval( 0 ) === $relative ) {
 				$total = 0 < $total
 					? '<span class="dashicons dashicons-arrow-up"></span> ' . $this->maybe_format( $total )
@@ -321,7 +321,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `COUNT` and `AVG`. Default `COUNT`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                             query.
@@ -333,7 +333,7 @@ class Stats {
 	public function get_order_count( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -342,7 +342,7 @@ class Stats {
 		 * This may be overridden in $query parameters that get passed through.
 		 */
 		$this->query_vars['type']   = 'sale';
-		$this->query_vars['status'] = edd_get_gross_order_statuses();
+		$this->query_vars['status'] = cs_get_gross_order_statuses();
 
 		/**
 		 * Filters Order statuses that should be included when calculating stats.
@@ -351,7 +351,7 @@ class Stats {
 		 *
 		 * @param array $statuses Order statuses to include when generating stats.
 		 */
-		$this->query_vars['status'] = apply_filters( 'edd_payment_stats_post_statuses', $this->query_vars['status'] );
+		$this->query_vars['status'] = apply_filters( 'cs_payment_stats_post_statuses', $this->query_vars['status'] );
 
 		// Run pre-query checks and maybe generate SQL.
 		$this->pre_query( $query );
@@ -388,7 +388,7 @@ class Stats {
 			$relative = absint( $result->relative );
 
 			if ( ( 0 === $total && 0 === $relative ) || ( $total === $relative ) ) {
-				$total = esc_html__( 'No Change', 'easy-digital-downloads' );
+				$total = esc_html__( 'No Change', 'commercestore' );
 			} elseif ( 0 === $relative ) {
 				$total = 0 < $total
 					? '<span class="dashicons dashicons-arrow-up"></span> ' . absint( $total )
@@ -424,7 +424,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                             query.
@@ -436,7 +436,7 @@ class Stats {
 	public function get_busiest_day( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -453,13 +453,13 @@ class Stats {
 		$result = $this->get_db()->get_row( $sql );
 
 		$days = array(
-			__( 'Sunday', 'easy-digital-downloads' ),
-			__( 'Monday', 'easy-digital-downloads' ),
-			__( 'Tuesday', 'easy-digital-downloads' ),
-			__( 'Wednesday', 'easy-digital-downloads' ),
-			__( 'Thursday', 'easy-digital-downloads' ),
-			__( 'Friday', 'easy-digital-downloads' ),
-			__( 'Saturday', 'easy-digital-downloads' ),
+			__( 'Sunday', 'commercestore' ),
+			__( 'Monday', 'commercestore' ),
+			__( 'Tuesday', 'commercestore' ),
+			__( 'Wednesday', 'commercestore' ),
+			__( 'Thursday', 'commercestore' ),
+			__( 'Friday', 'commercestore' ),
+			__( 'Saturday', 'commercestore' ),
 		);
 
 		$day = null === $result
@@ -477,7 +477,7 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_order_count()
+	 * @see \CS\Stats::get_order_count()
 	 *
 	 * @param array $query {
 	 *     Optional. Array of query parameters.
@@ -490,7 +490,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `COUNT` and `AVG`. Default `COUNT`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                             query.
@@ -518,7 +518,7 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_order_item_count()
+	 * @see \CS\Stats::get_order_item_count()
 	 *
 	 * @param array $query {
 	 *     Optional. Array of query parameters.
@@ -531,7 +531,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `COUNT` and `AVG`. Default `COUNT`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                             query.
@@ -543,7 +543,7 @@ class Stats {
 	public function get_order_item_refund_count( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_items;
+		$this->query_vars['table']             = $this->get_db()->cs_order_items;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -560,7 +560,7 @@ class Stats {
 		 * The type should be `sale` because we're querying for fully refunded order items only.
 		 * That means we look in `type` = `sale` and `status` = `refunded`.
 		 */
-		$this->query_vars['where_sql'] .= " AND {$this->get_db()->edd_orders}.type = 'sale' ";
+		$this->query_vars['where_sql'] .= " AND {$this->get_db()->cs_orders}.type = 'sale' ";
 
 		// Run pre-query checks and maybe generate SQL.
 		$this->pre_query( $query );
@@ -578,7 +578,7 @@ class Stats {
 			? $this->get_db()->prepare( 'AND price_id = %d', absint( $this->query_vars['price_id'] ) )
 			: '';
 
-		$currency_sql = str_replace( $this->get_db()->edd_order_items, $this->get_db()->edd_orders, $this->query_vars['currency_sql'] );
+		$currency_sql = str_replace( $this->get_db()->cs_order_items, $this->get_db()->cs_orders, $this->query_vars['currency_sql'] );
 
 		// Calculating an average requires a subquery.
 		if ( 'AVG' === $this->query_vars['function'] ) {
@@ -586,21 +586,21 @@ class Stats {
 					FROM (
 						SELECT COUNT({$this->query_vars['table']}.id) AS id
 						FROM {$this->query_vars['table']}
-						INNER JOIN {$this->get_db()->edd_orders} ON( {$this->get_db()->edd_orders}.id = {$this->query_vars['table']}.order_id )
+						INNER JOIN {$this->get_db()->cs_orders} ON( {$this->get_db()->cs_orders}.id = {$this->query_vars['table']}.order_id )
 						WHERE 1=1 {$product_id} {$price_id} {$this->query_vars['status_sql']} {$currency_sql} {$this->query_vars['where_sql']} {$this->query_vars['date_query_sql']}
 						GROUP BY order_id
 					) AS counts";
 		} elseif ( true === $this->query_vars['grouped'] ) {
 			$sql = "SELECT {$this->query_vars['table']}.product_id, {$this->query_vars['table']}.price_id, {$function} AS total
 					FROM {$this->query_vars['table']}
-					INNER JOIN {$this->get_db()->edd_orders} ON( {$this->get_db()->edd_orders}.id = {$this->query_vars['table']}.order_id )
+					INNER JOIN {$this->get_db()->cs_orders} ON( {$this->get_db()->cs_orders}.id = {$this->query_vars['table']}.order_id )
 					WHERE 1=1 {$product_id} {$price_id} {$this->query_vars['status_sql']} {$currency_sql} {$this->query_vars['where_sql']} {$this->query_vars['date_query_sql']}
 					GROUP BY product_id, price_id
 					ORDER BY total DESC";
 		} else {
 			$sql = "SELECT {$function} AS total
 					FROM {$this->query_vars['table']}
-					INNER JOIN {$this->get_db()->edd_orders} ON( {$this->get_db()->edd_orders}.id = {$this->query_vars['table']}.order_id )
+					INNER JOIN {$this->get_db()->cs_orders} ON( {$this->get_db()->cs_orders}.id = {$this->query_vars['table']}.order_id )
 					WHERE 1=1 {$product_id} {$price_id} {$this->query_vars['status_sql']} {$currency_sql} {$this->query_vars['where_sql']} {$this->query_vars['date_query_sql']}";
 		}
 
@@ -614,8 +614,8 @@ class Stats {
 				$value->price_id   = absint( $value->price_id );
 				$value->total      = absint( $value->total );
 
-				// Add instance of EDD_Download to resultant object.
-				$value->object = edd_get_download( $value->product_id );
+				// Add instance of CS_Download to resultant object.
+				$value->object = cs_get_download( $value->product_id );
 			} );
 		} else {
 			$result = null === $result[0]->total
@@ -636,7 +636,7 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_order_earnings()
+	 * @see \CS\Stats::get_order_earnings()
 	 *
 	 * @param array $query {
 	 *     Optional. Array of query parameters.
@@ -649,7 +649,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      SQL function. Default `SUM`.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended to the
@@ -687,7 +687,7 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_order_earnings()
+	 * @see \CS\Stats::get_order_earnings()
 	 *
 	 * @param array $query {
 	 *     Optional. Array of query parameters.
@@ -700,7 +700,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `AVG` only. Default `AVG`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                             query.
@@ -712,7 +712,7 @@ class Stats {
 	public function get_average_refund_time( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'date_completed';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -803,7 +803,7 @@ class Stats {
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function      This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                                 query.
@@ -815,7 +815,7 @@ class Stats {
 	public function get_refund_rate( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -870,13 +870,13 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      SQL function. Default `SUM`.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                                 query.
 	 *     @type int    $product_id    Product ID. If empty, an aggregation of the values in the `total` column in the
-	 *                                 `edd_order_items` table will be returned.
+	 *                                 `cs_order_items` table will be returned.
 	 *     @type string $output        The output format of the calculation. Accepts `raw` and `formatted`. Default `raw`.
 	 * }
 	 *
@@ -885,7 +885,7 @@ class Stats {
 	public function get_order_item_earnings( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_items;
+		$this->query_vars['table']             = $this->get_db()->cs_order_items;
 		$this->query_vars['column']            = true === $this->query_vars['exclude_taxes'] ? 'total - tax' : 'total';
 		$this->query_vars['date_query_column'] = 'date_created';
 		$this->query_vars['status']            = array( 'complete' );
@@ -907,20 +907,20 @@ class Stats {
 			: '';
 
 		$region = ! empty( $this->query_vars['region'] )
-			? $this->get_db()->prepare( 'AND edd_oa.region = %s', esc_sql( $this->query_vars['region'] ) )
+			? $this->get_db()->prepare( 'AND cs_oa.region = %s', esc_sql( $this->query_vars['region'] ) )
 			: '';
 
 		$country = ! empty( $this->query_vars['country'] )
-			? $this->get_db()->prepare( 'AND edd_oa.country = %s', esc_sql( $this->query_vars['country'] ) )
+			? $this->get_db()->prepare( 'AND cs_oa.country = %s', esc_sql( $this->query_vars['country'] ) )
 			: '';
 
 		$join = $currency = '';
 		if ( ! empty( $country ) || ! empty( $region ) ) {
-			$join .= " INNER JOIN {$this->get_db()->edd_order_addresses} edd_oa ON {$this->query_vars['table']}.order_id = edd_oa.order_id ";
+			$join .= " INNER JOIN {$this->get_db()->cs_order_addresses} cs_oa ON {$this->query_vars['table']}.order_id = cs_oa.order_id ";
 		}
-		if ( ! empty( $this->query_vars['currency'] ) && array_key_exists( strtoupper( $this->query_vars['currency'] ), edd_get_currencies() ) ) {
-			$join     .= " INNER JOIN {$this->get_db()->edd_orders} edd_o ON ({$this->query_vars['table']}.order_id = edd_o.id) ";
-			$currency = $this->get_db()->prepare( "AND edd_o.currency = %s", strtoupper( $this->query_vars['currency'] ) );
+		if ( ! empty( $this->query_vars['currency'] ) && array_key_exists( strtoupper( $this->query_vars['currency'] ), cs_get_currencies() ) ) {
+			$join     .= " INNER JOIN {$this->get_db()->cs_orders} cs_o ON ({$this->query_vars['table']}.order_id = cs_o.id) ";
+			$currency = $this->get_db()->prepare( "AND cs_o.currency = %s", strtoupper( $this->query_vars['currency'] ) );
 		}
 
 		if ( true === $this->query_vars['grouped'] ) {
@@ -947,8 +947,8 @@ class Stats {
 				$value->price_id   = absint( $value->price_id );
 				$value->total      = $this->maybe_format( $value->total );
 
-				// Add instance of EDD_Download to resultant object.
-				$value->object = edd_get_download( $value->product_id );
+				// Add instance of CS_Download to resultant object.
+				$value->object = cs_get_download( $value->product_id );
 			} );
 		} else {
 			$result = null === $result[0]->total
@@ -978,12 +978,12 @@ class Stats {
 	 *     @type string $start      Start day and time (based on the beginning of the given day).
 	 *     @type string $end        End day and time (based on the end of the given day).
 	 *     @type string $range      Date range. If a range is passed, this will override and `start` and `end`
-	 *                              values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                              values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function   SQL function. Accepts `COUNT` and `AVG`. Default `COUNT`.
 	 *     @type string $where_sql  Reserved for internal use. Allows for additional WHERE clauses to be appended to the
 	 *                              query.
 	 *     @type int    $product_id Product ID. If empty, an aggregation of the values in the `total` column in the
-	 *                              `edd_order_items` table will be returned.
+	 *                              `cs_order_items` table will be returned.
 	 *     @type string $output     The output format of the calculation. Accepts `raw` and `formatted`. Default `raw`.
 	 * }
 	 *
@@ -992,7 +992,7 @@ class Stats {
 	public function get_order_item_count( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_items;
+		$this->query_vars['table']             = $this->get_db()->cs_order_items;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 		$this->query_vars['status']            = array( 'complete' );
@@ -1014,20 +1014,20 @@ class Stats {
 			: '';
 
 		$region = ! empty( $this->query_vars['region'] )
-			? $this->get_db()->prepare( 'AND edd_oa.region = %s', esc_sql( $this->query_vars['region'] ) )
+			? $this->get_db()->prepare( 'AND cs_oa.region = %s', esc_sql( $this->query_vars['region'] ) )
 			: '';
 
 		$country = ! empty( $this->query_vars['country'] )
-			? $this->get_db()->prepare( 'AND edd_oa.country = %s', esc_sql( $this->query_vars['country'] ) )
+			? $this->get_db()->prepare( 'AND cs_oa.country = %s', esc_sql( $this->query_vars['country'] ) )
 			: '';
 
 		$join = $currency = '';
 		if ( ! empty( $country ) || ! empty( $region ) ) {
-			$join .= " INNER JOIN {$this->get_db()->edd_order_addresses} edd_oa ON {$this->query_vars['table']}.order_id = edd_oa.order_id ";
+			$join .= " INNER JOIN {$this->get_db()->cs_order_addresses} cs_oa ON {$this->query_vars['table']}.order_id = cs_oa.order_id ";
 		}
-		if ( ! empty( $this->query_vars['currency'] ) && array_key_exists( strtoupper( $this->query_vars['currency'] ), edd_get_currencies() ) ) {
-			$join     .= " INNER JOIN {$this->get_db()->edd_orders} edd_o ON ({$this->query_vars['table']}.order_id = edd_o.id) ";
-			$currency = $this->get_db()->prepare( "AND edd_o.currency = %s", strtoupper( $this->query_vars['currency'] ) );
+		if ( ! empty( $this->query_vars['currency'] ) && array_key_exists( strtoupper( $this->query_vars['currency'] ), cs_get_currencies() ) ) {
+			$join     .= " INNER JOIN {$this->get_db()->cs_orders} cs_o ON ({$this->query_vars['table']}.order_id = cs_o.id) ";
+			$currency = $this->get_db()->prepare( "AND cs_o.currency = %s", strtoupper( $this->query_vars['currency'] ) );
 		}
 
 		// Calculating an average requires a subquery.
@@ -1064,8 +1064,8 @@ class Stats {
 				$value->price_id   = absint( $value->price_id );
 				$value->total      = absint( $value->total );
 
-				// Add instance of EDD_Download to resultant object.
-				$value->object = edd_get_download( $value->product_id );
+				// Add instance of CS_Download to resultant object.
+				$value->object = cs_get_download( $value->product_id );
 			} );
 		} else {
 			$result = null === $result[0]->total
@@ -1095,7 +1095,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended to the
@@ -1105,12 +1105,12 @@ class Stats {
 	 * }
 	 *
 	 * @return array Array of objects with most valuable order items. Each object has the product ID, total earnings,
-	 *               and an instance of EDD_Download.
+	 *               and an instance of CS_Download.
 	 */
 	public function get_most_valuable_order_items( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_items;
+		$this->query_vars['table']             = $this->get_db()->cs_order_items;
 		$this->query_vars['column']            = 'total';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1129,10 +1129,10 @@ class Stats {
 
 		$join = '';
 		$where = '';
-		if ( ! empty( $this->query_vars['currency'] ) && array_key_exists( strtoupper( $this->query_vars['currency'] ), edd_get_currencies() ) ) {
-			$join = " INNER JOIN {$this->get_db()->edd_orders} ON({$this->get_db()->edd_orders}.id = {$this->query_vars['table']}.order_id) ";
+		if ( ! empty( $this->query_vars['currency'] ) && array_key_exists( strtoupper( $this->query_vars['currency'] ), cs_get_currencies() ) ) {
+			$join = " INNER JOIN {$this->get_db()->cs_orders} ON({$this->get_db()->cs_orders}.id = {$this->query_vars['table']}.order_id) ";
 			$where = $this->get_db()->prepare(
-				" AND {$this->get_db()->edd_orders}.currency = %s ",
+				" AND {$this->get_db()->cs_orders}.currency = %s ",
 				strtoupper( $this->query_vars['currency'] )
 			);
 		}
@@ -1155,8 +1155,8 @@ class Stats {
 			$value->sales      = absint( $value->sales );
 			$value->total      = $this->maybe_format( $value->total );
 
-			// Add instance of EDD_Download to resultant object.
-			$value->object = edd_get_download( $value->product_id );
+			// Add instance of CS_Download to resultant object.
+			$value->object = cs_get_download( $value->product_id );
 		} );
 
 		// Reset query vars.
@@ -1183,7 +1183,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function      This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                                 to the query.
@@ -1196,7 +1196,7 @@ class Stats {
 	public function get_discount_usage_count( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_adjustments;
+		$this->query_vars['table']             = $this->get_db()->cs_order_adjustments;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1239,7 +1239,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function      This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                                 to the query.
@@ -1252,7 +1252,7 @@ class Stats {
 	public function get_most_popular_discounts( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_adjustments;
+		$this->query_vars['table']             = $this->get_db()->cs_order_adjustments;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1277,8 +1277,8 @@ class Stats {
 
 		array_walk( $result, function ( &$value ) {
 
-			// Add instance of EDD_Discount to resultant object.
-			$value->object = edd_get_discount_by_code( $value->code );
+			// Add instance of CS_Discount to resultant object.
+			$value->object = cs_get_discount_by_code( $value->code );
 
 			// Format resultant object.
 			if ( ! empty( $value->object ) ) {
@@ -1312,7 +1312,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended
@@ -1327,7 +1327,7 @@ class Stats {
 	public function get_discount_savings( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_adjustments;
+		$this->query_vars['table']             = $this->get_db()->cs_order_adjustments;
 		$this->query_vars['column']            = true === $this->query_vars['exclude_taxes'] ? 'total - tax' : 'total';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1376,7 +1376,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended
@@ -1389,7 +1389,7 @@ class Stats {
 	public function get_average_discount_amount( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_order_adjustments;
+		$this->query_vars['table']             = $this->get_db()->cs_order_adjustments;
 		$this->query_vars['column']            = 'total';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1436,7 +1436,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                             to the query.
@@ -1448,7 +1448,7 @@ class Stats {
 	public function get_ratio_of_discounted_orders( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1514,7 +1514,7 @@ class Stats {
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function      SQL function. Accepts `COUNT`, `AVG`, and `SUM`. Default `COUNT`.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                                 to the query.
@@ -1529,13 +1529,13 @@ class Stats {
 	private function get_gateway_data( $query = array() ) {
 		$query = wp_parse_args( $query, array(
 			'type'   => 'sale',
-			'status' => edd_get_gross_order_statuses(),
+			'status' => cs_get_gross_order_statuses(),
 		) );
 
 		$this->parse_query( $query );
 
 		// Set up default values.
-		$gateways = edd_get_payment_gateways();
+		$gateways = cs_get_payment_gateways();
 		$defaults = array();
 
 		// Set up an object for each gateway.
@@ -1548,7 +1548,7 @@ class Stats {
 		}
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['date_query_column'] = 'date_created';
 
 		// Run pre-query checks and maybe generate SQL.
@@ -1633,9 +1633,9 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_gateway_data()
+	 * @see \CS\Stats::get_gateway_data()
 	 *
-	 * @param array $query See \EDD\Stats::get_gateway_data().
+	 * @param array $query See \CS\Stats::get_gateway_data().
 	 *
 	 * @return int|array List of objects containing the number of sales processed either for every gateway or the gateway
 	 *               passed as a query parameter.
@@ -1645,7 +1645,7 @@ class Stats {
 		$query['column']   = 'id';
 		$query['function'] = 'COUNT';
 
-		// Dispatch to \EDD\Stats::get_gateway_data().
+		// Dispatch to \CS\Stats::get_gateway_data().
 		return $this->get_gateway_data( $query );
 	}
 
@@ -1654,9 +1654,9 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_gateway_data()
+	 * @see \CS\Stats::get_gateway_data()
 	 *
-	 * @param array $query See \EDD\Stats::get_gateway_data().
+	 * @param array $query See \CS\Stats::get_gateway_data().
 	 *
 	 * @return array List of objects containing the amount processed either for every gateway or the gateway
 	 *               passed as a query parameter.
@@ -1668,7 +1668,7 @@ class Stats {
 			? $query['function']
 			: 'SUM';
 
-		// Dispatch to \EDD\Stats::get_gateway_data().
+		// Dispatch to \CS\Stats::get_gateway_data().
 		$result = $this->get_gateway_data( $query );
 
 		// Rename object var.
@@ -1694,9 +1694,9 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_gateway_earnings()
+	 * @see \CS\Stats::get_gateway_earnings()
 	 *
-	 * @param array $query See \EDD\Stats::get_gateway_earnings().
+	 * @param array $query See \CS\Stats::get_gateway_earnings().
 	 *
 	 * @return array List of objects containing the amount for refunded orders processed either for every
 	 *               gateway or the gateway passed as a query parameter.
@@ -1706,7 +1706,7 @@ class Stats {
 		// Ensure orders are refunded.
 		$this->query_vars['where_sql'] = $this->get_db()->prepare( 'AND status = %s', 'refunded' );
 
-		// Dispatch to \EDD\Stats::get_gateway_data().
+		// Dispatch to \CS\Stats::get_gateway_data().
 		$result = $this->get_gateway_earnings( $query );
 
 		// Reset query vars.
@@ -1721,9 +1721,9 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_gateway_data()
+	 * @see \CS\Stats::get_gateway_data()
 	 *
-	 * @param array $query See \EDD\Stats::get_gateway_data().
+	 * @param array $query See \CS\Stats::get_gateway_data().
 	 *
 	 * @return array List of objects containing the average order value processed either for every gateway
 	 *               pr the gateway passed as a query parameter.
@@ -1733,7 +1733,7 @@ class Stats {
 		// Function needs to be `AVG`.
 		$query['function'] = 'AVG';
 
-		// Dispatch to \EDD\Stats::get_gateway_data().
+		// Dispatch to \CS\Stats::get_gateway_data().
 		$result = $this->get_gateway_data( $query );
 
 		// Rename object var.
@@ -1768,7 +1768,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `SUM` and `AVG`. Default `SUM`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                             to the query.
@@ -1780,7 +1780,7 @@ class Stats {
 	public function get_tax( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'tax';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1825,7 +1825,7 @@ class Stats {
 
 			$sql = "SELECT {$function} AS total
 					FROM {$this->query_vars['table']} o
-					INNER JOIN {$this->get_db()->edd_order_items} oi ON o.id = oi.order_id
+					INNER JOIN {$this->get_db()->cs_order_items} oi ON o.id = oi.order_id
 					WHERE 1=1 {$product_id} {$price_id} {$this->query_vars['status_sql']} {$this->query_vars['currency_sql']} {$this->query_vars['date_query_sql']}";
 
 			$this->pre_query( $query );
@@ -1846,11 +1846,11 @@ class Stats {
 			$relative = floatval( $result->relative );
 
 			if ( ( floatval( 0 ) === $total && floatval( 0 ) === $relative ) || ( $total === $relative ) ) {
-				$total = esc_html__( 'No Change', 'easy-digital-downloads' );
+				$total = esc_html__( 'No Change', 'commercestore' );
 			} elseif ( floatval( 0 ) === $relative ) {
 				$total = 0 < $total
-					? '<span class="dashicons dashicons-arrow-up"></span> ' . edd_currency_filter( edd_format_amount( $total ) )
-					: '<span class="dashicons dashicons-arrow-down"></span> ' . edd_currency_filter( edd_format_amount( $total ) );
+					? '<span class="dashicons dashicons-arrow-up"></span> ' . cs_currency_filter( cs_format_amount( $total ) )
+					: '<span class="dashicons dashicons-arrow-down"></span> ' . cs_currency_filter( cs_format_amount( $total ) );
 			} else {
 				$percentage_change = ( $total - $relative ) / $relative * 100;
 
@@ -1884,7 +1884,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Default `COUNT`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                             to the query.
@@ -1898,7 +1898,7 @@ class Stats {
 	public function get_tax_by_location( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'tax';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -1927,7 +1927,7 @@ class Stats {
 			: '';
 
 		$join = ! empty( $product_id )
-			? "INNER JOIN {$this->get_db()->edd_order_items} oi ON {$this->query_vars['table']}.id = oi.order_id"
+			? "INNER JOIN {$this->get_db()->cs_order_items} oi ON {$this->query_vars['table']}.id = oi.order_id"
 			: '';
 
 		// Re-parse function to fetch tax from the order items table.
@@ -1940,7 +1940,7 @@ class Stats {
 
 		$sql = "SELECT {$function} AS total
 				FROM {$this->query_vars['table']}
-				INNER JOIN {$this->get_db()->edd_order_addresses} oa ON {$this->query_vars['table']}.id = oa.order_id
+				INNER JOIN {$this->get_db()->cs_order_addresses} oa ON {$this->query_vars['table']}.id = oa.order_id
 				{$join}
 				WHERE 1=1 {$region} {$country} {$product_id} {$price_id} {$this->query_vars['status_sql']} {$this->query_vars['currency_sql']} {$this->query_vars['date_query_sql']}";
 
@@ -1976,7 +1976,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                             to the query.
@@ -1988,7 +1988,7 @@ class Stats {
 	public function get_customer_count( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_customers;
+		$this->query_vars['table']             = $this->get_db()->cs_customers;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2023,7 +2023,7 @@ class Stats {
 			$relative = absint( $result->relative );
 
 			if ( ( 0 === $total && 0 === $relative ) || ( $total === $relative ) ) {
-				$total = esc_html__( 'No Change', 'easy-digital-downloads' );
+				$total = esc_html__( 'No Change', 'commercestore' );
 			} elseif ( 0 === $relative ) {
 				$total = 0 < $total
 					? '<span class="dashicons dashicons-arrow-up"></span> ' . $total
@@ -2061,7 +2061,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      SQL function. Accepts `AVG` and `SUM`. Default `SUM`.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended
@@ -2078,7 +2078,7 @@ class Stats {
 		$this->parse_query( $query );
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'total';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2142,7 +2142,7 @@ class Stats {
 			$relative = floatval( $result->relative );
 
 			if ( ( floatval( 0 ) === $total && floatval( 0 ) === $relative ) || ( $total === $relative ) ) {
-				$total = esc_html__( 'No Change', 'easy-digital-downloads' );
+				$total = esc_html__( 'No Change', 'commercestore' );
 			} elseif ( floatval( 0 ) === $relative ) {
 				$total = 0 < $total
 					? '<span class="dashicons dashicons-arrow-up"></span> ' . $this->maybe_format( $total )
@@ -2180,7 +2180,7 @@ class Stats {
 	 *     @type string $start       Start day and time (based on the beginning of the given day).
 	 *     @type string $end         End day and time (based on the end of the given day).
 	 *     @type string $range       Date range. If a range is passed, this will override and `start` and `end`
-	 *                               values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                               values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function    SQL function. Accepts `AVG` and `SUM`. Default `SUM`.
 	 *     @type string $where_sql   Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                               to the query.
@@ -2194,7 +2194,7 @@ class Stats {
 	 */
 	public function get_customer_order_count( $query = array() ) {
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2242,7 +2242,7 @@ class Stats {
 	 *
 	 * @since 3.0
 	 *
-	 * @see \EDD\Stats::get_order_count()
+	 * @see \CS\Stats::get_order_count()
 	 *
 	 * @param array $query {
 	 *     Optional. Array of query parameters.
@@ -2255,7 +2255,7 @@ class Stats {
 	 *     @type string $start       Start day and time (based on the beginning of the given day).
 	 *     @type string $end         End day and time (based on the end of the given day).
 	 *     @type string $range       Date range. If a range is passed, this will override and `start` and `end`
-	 *                               values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                               values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function    This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql   Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                               to the query.
@@ -2267,7 +2267,7 @@ class Stats {
 	public function get_customer_age( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_customers;
+		$this->query_vars['table']             = $this->get_db()->cs_customers;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2304,7 +2304,7 @@ class Stats {
 	 *     @type string $start         Start day and time (based on the beginning of the given day).
 	 *     @type string $end           End day and time (based on the end of the given day).
 	 *     @type string $range         Date range. If a range is passed, this will override and `start` and `end`
-	 *                                 values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                                 values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type bool   $exclude_taxes If taxes should be excluded from calculations. Default `false`.
 	 *     @type string $function      This method does not allow any SQL functions to be passed.
 	 *     @type string $where_sql     Reserved for internal use. Allows for additional WHERE clauses to be appended
@@ -2314,12 +2314,12 @@ class Stats {
 	 * }
 	 *
 	 * @return array Array of objects with most valuable customers. Each object has the customer ID, total amount spent
-	 *               by that customer and an instance of EDD_Customer.
+	 *               by that customer and an instance of CS_Customer.
 	 */
 	public function get_most_valuable_customers( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_orders;
+		$this->query_vars['table']             = $this->get_db()->cs_orders;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2350,8 +2350,8 @@ class Stats {
 			$value->customer_id = absint( $value->customer_id );
 			$value->total       = $this->maybe_format( $value->total );
 
-			// Add instance of EDD_Download to resultant object.
-			$value->object = edd_get_customer( $value->customer_id );
+			// Add instance of CS_Download to resultant object.
+			$value->object = cs_get_customer( $value->customer_id );
 		} );
 
 		// Reset query vars.
@@ -2378,7 +2378,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `COUNT` and `AVG`. Default `COUNT`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                             to the query.
@@ -2390,7 +2390,7 @@ class Stats {
 	public function get_file_download_count( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_logs_file_downloads;
+		$this->query_vars['table']             = $this->get_db()->cs_logs_file_downloads;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2440,7 +2440,7 @@ class Stats {
 			$relative = absint( $result->relative );
 
 			if ( ( 0 === $total && 0 === $relative ) || ( $total === $relative ) ) {
-				$total = esc_html__( 'No Change', 'easy-digital-downloads' );
+				$total = esc_html__( 'No Change', 'commercestore' );
 			} elseif ( 0 === $relative ) {
 				$total = 0 < $total
 					? '<span class="dashicons dashicons-arrow-up"></span> ' . $total
@@ -2478,7 +2478,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `COUNT` and `AVG`. Default `COUNT`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                             to the query.
@@ -2486,12 +2486,12 @@ class Stats {
 	 * }
 	 *
 	 * @return array Array of objects with most valuable order items. Each object has the product ID, number of downloads,
-	 *               and an instance of EDD_Download.
+	 *               and an instance of CS_Download.
 	 */
 	public function get_most_downloaded_products( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_logs_file_downloads;
+		$this->query_vars['table']             = $this->get_db()->cs_logs_file_downloads;
 		$this->query_vars['column']            = 'id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2519,8 +2519,8 @@ class Stats {
 			$value->file_id    = absint( $value->file_id );
 			$value->total      = absint( $value->total );
 
-			// Add instance of EDD_Download to resultant object.
-			$value->object = edd_get_download( $value->product_id );
+			// Add instance of CS_Download to resultant object.
+			$value->object = cs_get_download( $value->product_id );
 		} );
 
 		// Reset query vars.
@@ -2545,7 +2545,7 @@ class Stats {
 	 *     @type string $start     Start day and time (based on the beginning of the given day).
 	 *     @type string $end       End day and time (based on the end of the given day).
 	 *     @type string $range     Date range. If a range is passed, this will override and `start` and `end`
-	 *                             values passed. See \EDD\Reports\get_dates_filter_options() for valid date ranges.
+	 *                             values passed. See \CS\Reports\get_dates_filter_options() for valid date ranges.
 	 *     @type string $function  SQL function. Accepts `COUNT` and `AVG`. Default `COUNT`.
 	 *     @type string $where_sql Reserved for internal use. Allows for additional WHERE clauses to be appended
 	 *                             to the query.
@@ -2557,7 +2557,7 @@ class Stats {
 	public function get_average_file_download_count( $query = array() ) {
 
 		// Add table and column name to query_vars to assist with date query generation.
-		$this->query_vars['table']             = $this->get_db()->edd_logs_file_downloads;
+		$this->query_vars['table']             = $this->get_db()->cs_logs_file_downloads;
 		$this->query_vars['column']            = 'customer_id';
 		$this->query_vars['date_query_column'] = 'date_created';
 
@@ -2604,9 +2604,9 @@ class Stats {
 	 * @since 3.0
 	 * @access private
 	 *
-	 * @see \EDD\Stats::__construct()
+	 * @see \CS\Stats::__construct()
 	 *
-	 * @param array $query Array of arguments. See \EDD\Stats::__construct().
+	 * @param array $query Array of arguments. See \CS\Stats::__construct().
 	 */
 	private function parse_query( $query = array() ) {
 		$query_var_defaults = array(
@@ -2668,7 +2668,7 @@ class Stats {
 		// Validate currency.
 		if ( empty( $this->query_vars['currency'] ) ) {
 			$this->query_vars['currency'] = false;
-		} elseif ( array_key_exists( strtoupper( $this->query_vars['currency'] ), edd_get_currencies() ) ) {
+		} elseif ( array_key_exists( strtoupper( $this->query_vars['currency'] ), cs_get_currencies() ) ) {
 			$this->query_vars['currency'] = strtoupper( $this->query_vars['currency'] );
 		} else {
 			$this->query_vars['currency'] = 'convert';
@@ -2689,7 +2689,7 @@ class Stats {
 			: '';
 
 		if ( $country ) {
-			$country_list = array_filter( edd_get_country_list() );
+			$country_list = array_filter( cs_get_country_list() );
 
 			// Maybe convert country code to country name.
 			$country = in_array( $country, array_flip( $country_list ), true )
@@ -2716,7 +2716,7 @@ class Stats {
 
 		// Only parse state if one was passed.
 		if ( $state ) {
-			$state_list = array_filter( edd_get_shop_states( $this->query_vars['country'] ) );
+			$state_list = array_filter( cs_get_shop_states( $this->query_vars['country'] ) );
 
 			// Maybe convert state code to state name.
 			$state = in_array( $state, array_flip( $state_list ), true )
@@ -2740,9 +2740,9 @@ class Stats {
 		 *
 		 * @since 3.0
 		 *
-		 * @param \EDD\Stats &$this The \EDD\Stats (passed by reference).
+		 * @param \CS\Stats &$this The \CS\Stats (passed by reference).
 		 */
-		do_action_ref_array( 'edd_order_stats_parse_query', array( &$this ) );
+		do_action_ref_array( 'cs_order_stats_parse_query', array( &$this ) );
 	}
 
 	/**
@@ -2854,24 +2854,24 @@ class Stats {
 
 		$currency = $this->query_vars['currency'];
 		if ( empty( $currency ) || 'convert' === strtolower( $currency ) ) {
-			$currency = edd_get_currency();
+			$currency = cs_get_currency();
 		}
 
 		if ( is_object( $data ) ) {
 			foreach ( array_keys( get_object_vars( $data ) ) as $field ) {
 				if ( is_numeric( $data->{$field} ) ) {
-					$data->{$field} = edd_currency_filter( edd_format_amount( $data->{$field} ), $currency );
+					$data->{$field} = cs_currency_filter( cs_format_amount( $data->{$field} ), $currency );
 				}
 			}
 		} elseif ( is_array( $data ) ) {
 			foreach ( array_keys( $data ) as $field ) {
 				if ( is_numeric( $data[ $field ] ) ) {
-					$data[ $field ] = edd_currency_filter( edd_format_amount( $data[ $field ] ), $currency );
+					$data[ $field ] = cs_currency_filter( cs_format_amount( $data[ $field ] ), $currency );
 				}
 			}
 		} else {
 			if ( is_numeric( $data ) ) {
-				$data = edd_currency_filter( edd_format_amount( $data ), $currency );
+				$data = cs_currency_filter( cs_format_amount( $data ), $currency );
 			}
 		}
 
@@ -2942,7 +2942,7 @@ class Stats {
 	private function set_date_ranges() {
 
 		// Retrieve the time in UTC for the date ranges to be correctly parsed.
-		$date = EDD()->utils->date();
+		$date = CS()->utils->date();
 
 		$date_filters = Reports\get_dates_filter_options();
 

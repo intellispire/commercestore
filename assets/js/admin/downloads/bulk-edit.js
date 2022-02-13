@@ -4,15 +4,15 @@ jQuery( document ).ready( function( $ ) {
 
 		post_id = post_id.replace( 'post-', '' );
 
-		const $edd_inline_data = $( '#post-' + post_id );
+		const $cs_inline_data = $( '#post-' + post_id );
 
-		const regprice = $edd_inline_data.find( '.column-price .downloadprice-' + post_id ).val();
+		const regprice = $cs_inline_data.find( '.column-price .downloadprice-' + post_id ).val();
 
 		// If variable priced product disable editing, otherwise allow price changes
 		if ( regprice !== $( '#post-' + post_id + '.column-price .downloadprice-' + post_id ).val() ) {
-			$( '.regprice', '#edd-download-data' ).val( regprice ).attr( 'disabled', false );
+			$( '.regprice', '#cs-download-data' ).val( regprice ).attr( 'disabled', false );
 		} else {
-			$( '.regprice', '#edd-download-data' ).val( edd_vars.quick_edit_warning ).attr( 'disabled', 'disabled' );
+			$( '.regprice', '#cs-download-data' ).val( cs_vars.quick_edit_warning ).attr( 'disabled', 'disabled' );
 		}
 	} );
 
@@ -28,11 +28,11 @@ jQuery( document ).ready( function( $ ) {
 		} );
 
 		// get the stock and price values to save for all the product ID's
-		const $price = $( '#edd-download-data input[name="_edd_regprice"]' ).val();
+		const $price = $( '#cs-download-data input[name="_cs_regprice"]' ).val();
 
 		const data = {
-			action: 'edd_save_bulk_edit',
-			edd_bulk_nonce: $post_ids,
+			action: 'cs_save_bulk_edit',
+			cs_bulk_nonce: $post_ids,
 			post_ids: $post_ids,
 			price: $price,
 		};

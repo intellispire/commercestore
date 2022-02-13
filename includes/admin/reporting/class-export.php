@@ -4,7 +4,7 @@
  *
  * This is the base class for all export methods. Each data export type (customers, payments, etc) extend this class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Export Class
+ * CS_Export Class
  *
  * @since 1.4.4
  */
-class EDD_Export {
+class CS_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions
@@ -36,7 +36,7 @@ class EDD_Export {
 	 * @return bool True if exporting is allowed, false otherwise.
 	 */
 	public function can_export() {
-		return (bool) apply_filters( 'edd_export_capability', current_user_can( 'export_shop_reports' ) );
+		return (bool) apply_filters( 'cs_export_capability', current_user_can( 'export_shop_reports' ) );
 	}
 
 	/**
@@ -46,18 +46,18 @@ class EDD_Export {
 	 * @since 3.0 Add BOM to the CSV export.
 	 */
 	public function headers() {
-		edd_set_time_limit();
+		cs_set_time_limit();
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="edd-export-' . $this->export_type . '-' . date( 'm-d-Y' ) . '.csv"' );
+		header( 'Content-Disposition: attachment; filename="cs-export-' . $this->export_type . '-' . date( 'm-d-Y' ) . '.csv"' );
 		header( 'Expires: 0' );
 
 		/**
 		 * We need to append a BOM to the export so that Microsoft Excel knows
 		 * that the file is in Unicode.
 		 *
-		 * @see https://github.com/easydigitaldownloads/easy-digital-downloads/issues/4859
+		 * @see https://github.com/commercestore/commercestore/issues/4859
 		 */
 		echo "\xEF\xBB\xBF";
 	}
@@ -71,8 +71,8 @@ class EDD_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'id'   => __( 'ID',   'easy-digital-downloads' ),
-			'date' => __( 'Date', 'easy-digital-downloads' ),
+			'id'   => __( 'ID',   'commercestore' ),
+			'date' => __( 'Date', 'commercestore' ),
 		);
 		return $cols;
 	}
@@ -86,7 +86,7 @@ class EDD_Export {
 	 */
 	public function get_csv_cols() {
 		$cols = $this->csv_cols();
-		return apply_filters( 'edd_export_csv_cols_' . $this->export_type, $cols );
+		return apply_filters( 'cs_export_csv_cols_' . $this->export_type, $cols );
 	}
 
 	/**
@@ -133,8 +133,8 @@ class EDD_Export {
 			),
 		);
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return $data;
 	}
@@ -176,16 +176,16 @@ class EDD_Export {
 	 * @since 1.4.4
 	 *
 	 *
-	 * @uses EDD_Export::can_export()
-	 * @uses EDD_Export::headers()
-	 * @uses EDD_Export::csv_cols_out()
-	 * @uses EDD_Export::csv_rows_out()
+	 * @uses CS_Export::can_export()
+	 * @uses CS_Export::headers()
+	 * @uses CS_Export::csv_cols_out()
+	 * @uses CS_Export::csv_rows_out()
 	 */
 	public function export() {
 
 		// Bail if user if unauthorized.
 		if ( ! $this->can_export() ) {
-			wp_die( __( 'You do not have permission to export data.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+			wp_die( __( 'You do not have permission to export data.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		// Set headers
@@ -197,6 +197,6 @@ class EDD_Export {
 		// Output CSV rows
 		$this->csv_rows_out();
 
-		edd_die();
+		cs_die();
 	}
 }

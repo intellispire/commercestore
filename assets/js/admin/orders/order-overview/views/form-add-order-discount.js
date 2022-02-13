@@ -24,12 +24,12 @@ export const FormAddOrderDiscount = Dialog.extend( {
 	/**
 	 * @since 3.0
 	 */
-	el: '#edd-admin-order-add-discount-dialog',
+	el: '#cs-admin-order-add-discount-dialog',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-form-add-order-discount' ),
+	template: wp.template( 'cs-admin-order-form-add-order-discount' ),
 
 	/**
 	 * @since 3.0

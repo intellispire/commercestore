@@ -2,15 +2,15 @@
 /**
  * Backwards Compatibility Handler for Customers.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -46,13 +46,13 @@ class Customer extends Base {
 		switch( $property ) {
 			case 'table_name' :
 				global $wpdb;
-				return $wpdb->edd_customers;
+				return $wpdb->cs_customers;
 
 			case 'primary_key' :
 				return 'id';
 
 			case 'version' :
-				$table = edd_get_component_interface( 'customer', 'table' );
+				$table = cs_get_component_interface( 'customer', 'table' );
 
 				return $table instanceof Table ? $table->get_version() : false;
 			case 'meta_type' :
@@ -81,10 +81,10 @@ class Customer extends Base {
 		switch ( $name ) {
 			case 'add':
 			case 'insert':
-				return edd_add_customer( $arguments[0] );
+				return cs_add_customer( $arguments[0] );
 
 			case 'update':
-				return edd_update_customer( $arguments[0], $arguments[1] );
+				return cs_update_customer( $arguments[0], $arguments[1] );
 
 			case 'delete':
 				if ( ! is_bool( $arguments[0] ) ) {
@@ -92,27 +92,27 @@ class Customer extends Base {
 				}
 
 				$column = is_email( $arguments[0] ) ? 'email' : 'id';
-				$customer = edd_get_customer_by( $column, $arguments[0] );
-				edd_delete_customer( $customer->id );
+				$customer = cs_get_customer_by( $column, $arguments[0] );
+				cs_delete_customer( $customer->id );
 				break;
 			case 'exists':
-				return (bool) edd_get_customer_by( 'email', $arguments[0] );
+				return (bool) cs_get_customer_by( 'email', $arguments[0] );
 
 			case 'get_customer_by':
-				return edd_get_customer_by( $arguments[0], $arguments[1] );
+				return cs_get_customer_by( $arguments[0], $arguments[1] );
 
 			case 'get_customers':
-				return edd_get_customers( $arguments[0] );
+				return cs_get_customers( $arguments[0] );
 
 			case 'count':
-				return edd_count_customers();
+				return cs_count_customers();
 
 			case 'get_column':
-				return edd_get_customer_by( $arguments[0], $arguments[1] );
+				return cs_get_customer_by( $arguments[0], $arguments[1] );
 
 			case 'attach_payment':
-				/** @var $customer \EDD_Customer */
-				$customer = edd_get_customer( $arguments[0] );
+				/** @var $customer \CS_Customer */
+				$customer = cs_get_customer( $arguments[0] );
 
 				if ( ! $customer ) {
 					return false;
@@ -121,8 +121,8 @@ class Customer extends Base {
 				return $customer->attach_payment( $arguments[1], false );
 
 			case 'remove_payment':
-				/** @var $customer \EDD_Customer */
-				$customer = edd_get_customer( $arguments[0] );
+				/** @var $customer \CS_Customer */
+				$customer = cs_get_customer( $arguments[0] );
 
 				if ( ! $customer ) {
 					return false;
@@ -131,8 +131,8 @@ class Customer extends Base {
 				return $customer->remove_payment( $arguments[1], false );
 
 			case 'increment_stats':
-				/** @var $customer \EDD_Customer */
-				$customer = edd_get_customer( $arguments[0] );
+				/** @var $customer \CS_Customer */
+				$customer = cs_get_customer( $arguments[0] );
 
 				if ( ! $customer ) {
 					return false;
@@ -146,8 +146,8 @@ class Customer extends Base {
 					: false;
 
 			case 'decrement_stats':
-				/** @var $customer \EDD_Customer */
-				$customer = edd_get_customer( $arguments[0] );
+				/** @var $customer \CS_Customer */
+				$customer = cs_get_customer( $arguments[0] );
 
 				if ( ! $customer ) {
 					return false;
@@ -191,18 +191,18 @@ class Customer extends Base {
 	 */
 	public function get_user_meta( $value, $object_id, $meta_key, $single ) {
 		if ( 'get_user_metadata' !== current_filter() ) {
-			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'easy-digital-downloads' );
-			_doing_it_wrong( __FUNCTION__, esc_html( $message ), 'EDD 3.0' );
+			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'commercestore' );
+			_doing_it_wrong( __FUNCTION__, esc_html( $message ), 'CS 3.0' );
 		}
 
-		if ( '_edd_user_address' !== $meta_key ) {
+		if ( '_cs_user_address' !== $meta_key ) {
 			return $value;
 		}
 
-		$value = edd_get_customer_address( $object_id );
+		$value = cs_get_customer_address( $object_id );
 
 		if ( $this->show_notices ) {
-			_doing_it_wrong( 'get_user_meta()', 'User addresses being stored in meta have been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_get_customer_address()</code> instead.', 'EDD 3.0' );
+			_doing_it_wrong( 'get_user_meta()', 'User addresses being stored in meta have been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_get_customer_address()</code> instead.', 'CS 3.0' );
 
 			if ( $this->show_backtrace ) {
 				$backtrace = debug_backtrace();
@@ -216,7 +216,7 @@ class Customer extends Base {
 	/**
 	 * Listen for calls to update_user_meta() for customers and see if we need to filter them.
 	 *
-	 * This is here for backwards compatibility purposes with the migration to custom tables in EDD 3.0.
+	 * This is here for backwards compatibility purposes with the migration to custom tables in CommerceStore 3.0.
 	 *
 	 * @since 3.0
 	 *
@@ -230,12 +230,12 @@ class Customer extends Base {
 	 * @return mixed Returns 'null' if no action should be taken and WordPress core can continue, or non-null to avoid usermeta.
 	 */
 	public function update_user_meta( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
-		if ( '_edd_user_address' !== $meta_key ) {
+		if ( '_cs_user_address' !== $meta_key ) {
 			return $check;
 		}
 
 		// Fetch saved primary address.
-		$addresses = edd_get_customer_addresses(
+		$addresses = cs_get_customer_addresses(
 			array(
 				'number'      => 1,
 				'is_primary'  => true,
@@ -258,7 +258,7 @@ class Customer extends Base {
 		if ( is_array( $addresses ) && ! empty( $addresses[0] ) ) {
 			$customer_address = $addresses[0];
 
-			edd_update_customer_address(
+			cs_update_customer_address(
 				$customer_address->id,
 				array(
 					'address'     => $address['line1'],
@@ -270,10 +270,10 @@ class Customer extends Base {
 				)
 			);
 		} else {
-			$customer = edd_get_customer_by( 'user_id', absint( $object_id ) );
+			$customer = cs_get_customer_by( 'user_id', absint( $object_id ) );
 
 			if ( $customer ) {
-				edd_add_customer_address(
+				cs_add_customer_address(
 					array(
 						'customer_id' => $customer->id,
 						'address'     => $address['line1'],
@@ -289,7 +289,7 @@ class Customer extends Base {
 		}
 
 		if ( $this->show_notices ) {
-			_doing_it_wrong( 'add_user_meta()/update_user_meta()', 'User addresses being stored in meta have been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_add_customer_address()/edd_update_customer_address()()</code> instead.', 'EDD 3.0' );
+			_doing_it_wrong( 'add_user_meta()/update_user_meta()', 'User addresses being stored in meta have been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_add_customer_address()/cs_update_customer_address()()</code> instead.', 'CS 3.0' );
 
 			if ( $this->show_backtrace ) {
 				$backtrace = debug_backtrace();

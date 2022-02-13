@@ -1,4 +1,4 @@
-@mixin edd-admin-colors() {
+@mixin cs-admin-colors() {
 	@include admin-scheme(#007cba);
 	@include wordpress-admin-schemes();
 

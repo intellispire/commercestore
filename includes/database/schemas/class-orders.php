@@ -2,18 +2,18 @@
 /**
  * Orders Schema Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Schemas
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Schemas;
+namespace CS\Database\Schemas;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Schema;
+use CS\Database\Schema;
 
 /**
  * Orders Schema Class.
@@ -165,7 +165,7 @@ class Orders extends Schema {
 			'length'     => '18,9',
 			'default'    => '0',
 			'sortable'   => true,
-			'validate'   => 'edd_sanitize_amount'
+			'validate'   => 'cs_sanitize_amount'
 		),
 
 		// discount
@@ -175,7 +175,7 @@ class Orders extends Schema {
 			'length'     => '18,9',
 			'default'    => '0',
 			'sortable'   => true,
-			'validate'   => 'edd_sanitize_amount'
+			'validate'   => 'cs_sanitize_amount'
 		),
 
 		// tax
@@ -185,7 +185,7 @@ class Orders extends Schema {
 			'length'     => '18,9',
 			'default'    => '0',
 			'sortable'   => true,
-			'validate'   => 'edd_sanitize_amount'
+			'validate'   => 'cs_sanitize_amount'
 		),
 
 		// total
@@ -195,7 +195,7 @@ class Orders extends Schema {
 			'length'     => '18,9',
 			'default'    => '0',
 			'sortable'   => true,
-			'validate'   => 'edd_sanitize_amount'
+			'validate'   => 'cs_sanitize_amount'
 		),
 
 		// rate

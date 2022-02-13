@@ -2,14 +2,14 @@
 /**
  * Sections Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-namespace EDD\Admin;
+namespace CS\Admin;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -28,7 +28,7 @@ class Sections {
 	 *
 	 * @var array
 	 */
-	protected $id = 'edd_general_';
+	protected $id = 'cs_general_';
 
 	/**
 	 * Sections
@@ -97,7 +97,7 @@ class Sections {
 		if ( empty( $sections ) ) {
 			$this->add_section( array(
 				'id'       => 'general',
-				'label'    => esc_html__( 'General', 'easy-digital-downloads' ),
+				'label'    => esc_html__( 'General', 'commercestore' ),
 				'callback' => array( $this, 'section_general' )
 			) );
 		} elseif ( count( $sections ) ) {
@@ -131,8 +131,8 @@ class Sections {
 
 		ob_start(); ?>
 
-		<div class="edd-sections-wrap">
-			<div class="edd-vertical-sections<?php echo $use_js; ?>">
+		<div class="cs-sections-wrap">
+			<div class="cs-vertical-sections<?php echo $use_js; ?>">
 				<ul class="section-nav" role="<?php echo esc_attr( $role ); ?>">
 					<?php echo $this->get_all_section_links(); ?>
 				</ul>
@@ -146,7 +146,7 @@ class Sections {
 
 			if ( ! empty( $this->item ) ) : ?>
 
-				<input type="hidden" name="edd-item-id" value="<?php echo esc_attr( $this->item->id ); ?>" />
+				<input type="hidden" name="cs-item-id" value="<?php echo esc_attr( $this->item->id ); ?>" />
 
 			<?php endif; ?>
 		</div>
@@ -195,8 +195,8 @@ class Sections {
 	 */
 	protected function nonce_field() {
 		wp_nonce_field(
-			'edd_' . $this->id . '_sections_nonce',
-			'edd_' . $this->id . 'nonce_sections',
+			'cs_' . $this->id . '_sections_nonce',
+			'cs_' . $this->id . 'nonce_sections',
 			true
 		);
 	}
@@ -280,11 +280,11 @@ class Sections {
 							: call_user_func_array( $section->callback[0], array() );
 
 					} else {
-						_e( 'Invalid section', 'easy-digital-downloads' );
+						_e( 'Invalid section', 'commercestore' );
 					}
 				} else {
 					die;
-					do_action( 'edd_' . $section->id . 'section_contents', $this );
+					do_action( 'cs_' . $section->id . 'section_contents', $this );
 				}
 
 			?></div>
@@ -309,7 +309,7 @@ class Sections {
 			<tbody>
 				<tr>
 					<th>
-						<label><?php esc_html_e( 'Empty', 'easy-digital-downloads' ); ?></label>
+						<label><?php esc_html_e( 'Empty', 'commercestore' ); ?></label>
 					</th>
 
 					<td>

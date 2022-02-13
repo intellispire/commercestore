@@ -2,7 +2,7 @@
 /**
  * Discount Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * @param array $data Discount data.
  * @return int Discount ID.
  */
-function edd_add_discount( $data = array() ) {
+function cs_add_discount( $data = array() ) {
 
 	// Juggle requirements and products.
 	$product_requirements = isset( $data['product_reqs'] )      ? $data['product_reqs']      : null;
@@ -43,7 +43,7 @@ function edd_add_discount( $data = array() ) {
 	}
 
 	// Setup the discounts query.
-	$discounts = new EDD\Compat\Discount_Query();
+	$discounts = new CS\Compat\Discount_Query();
 
 	// Attempt to add the discount.
 	$discount_id = $discounts->add_item( $data );
@@ -59,7 +59,7 @@ function edd_add_discount( $data = array() ) {
 
 			if ( is_array( $product_requirements ) ) {
 				foreach ( $product_requirements as $product_requirement ) {
-					edd_add_adjustment_meta( $discount_id, 'product_requirement', $product_requirement );
+					cs_add_adjustment_meta( $discount_id, 'product_requirement', $product_requirement );
 				}
 			}
 		}
@@ -72,17 +72,17 @@ function edd_add_discount( $data = array() ) {
 
 			if ( is_array( $excluded_products ) ) {
 				foreach ( $excluded_products as $excluded_product ) {
-					edd_add_adjustment_meta( $discount_id, 'excluded_product', $excluded_product );
+					cs_add_adjustment_meta( $discount_id, 'excluded_product', $excluded_product );
 				}
 			}
 		}
 
 		if ( ! empty( $product_condition ) ) {
-			edd_add_adjustment_meta( $discount_id, 'product_condition', $product_condition );
+			cs_add_adjustment_meta( $discount_id, 'product_condition', $product_condition );
 		}
 
 		// If the end date has passed, mark the discount as expired.
-		edd_is_discount_expired( $discount_id );
+		cs_is_discount_expired( $discount_id );
 	}
 
 	/**
@@ -95,7 +95,7 @@ function edd_add_discount( $data = array() ) {
 	 * @param array $pre_convert_args Discount args.
 	 * @param int   $return Discount  ID.
 	 */
-	do_action( 'edd_post_insert_discount', $pre_convert_args, $discount_id );
+	do_action( 'cs_post_insert_discount', $pre_convert_args, $discount_id );
 
 	// Return the new discount ID.
 	return $discount_id;
@@ -109,23 +109,23 @@ function edd_add_discount( $data = array() ) {
  * @param int $discount_id Discount ID.
  * @return int
  */
-function edd_delete_discount( $discount_id = 0 ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_delete_discount( $discount_id = 0 ) {
+	$discount = cs_get_discount( $discount_id );
 
 	// Do not allow for a discount to be deleted if it has been used.
 	if ( $discount && 0 < $discount->use_count ) {
 		return false;
 	}
 
-	$discounts = new EDD\Compat\Discount_Query();
+	$discounts = new CS\Compat\Discount_Query();
 
 	// Pre-3.0 pre action.
-	do_action( 'edd_pre_delete_discount', $discount_id );
+	do_action( 'cs_pre_delete_discount', $discount_id );
 
 	$retval = $discounts->delete_item( $discount_id );
 
 	// Pre-3.0 post action.
-	do_action( 'edd_post_delete_discount', $discount_id );
+	do_action( 'cs_post_delete_discount', $discount_id );
 
 	return $retval;
 }
@@ -134,14 +134,14 @@ function edd_delete_discount( $discount_id = 0 ) {
  * Get Discount.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object
+ * @since 2.7 Updated to use CS_Discount object
  * @since 3.0 Updated to call use new query class.
  *
  * @param int $discount_id Discount ID.
- * @return \EDD_Discount|bool EDD_Discount object or false if not found.
+ * @return \CS_Discount|bool CS_Discount object or false if not found.
  */
-function edd_get_discount( $discount_id = 0 ) {
-	$discounts = new EDD\Compat\Discount_Query();
+function cs_get_discount( $discount_id = 0 ) {
+	$discounts = new CS\Compat\Discount_Query();
 
 	// Return discount
 	return $discounts->get_item( $discount_id );
@@ -151,29 +151,29 @@ function edd_get_discount( $discount_id = 0 ) {
  * Get discount by code.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object
+ * @since 2.7 Updated to use CS_Discount object
  * @since 3.0 Updated to call use new query class.
  *
  * @param string $code Discount code.
- * @return EDD_Discount|bool EDD_Discount object or false if not found.
+ * @return CS_Discount|bool CS_Discount object or false if not found.
  */
-function edd_get_discount_by_code( $code = '' ) {
-	return edd_get_discount_by( 'code', $code );
+function cs_get_discount_by_code( $code = '' ) {
+	return cs_get_discount_by( 'code', $code );
 }
 
 /**
  * Retrieve discount by a given field
  *
  * @since 2.0
- * @since 2.7 Updated to use EDD_Discount object
+ * @since 2.7 Updated to use CS_Discount object
  * @since 3.0 Updated to call use new query class.
  *
  * @param string $field The field to retrieve the discount with.
  * @param mixed  $value The value for $field.
- * @return mixed EDD_Discount|bool EDD_Discount object or false if not found.
+ * @return mixed CS_Discount|bool CS_Discount object or false if not found.
  */
-function edd_get_discount_by( $field = '', $value = '' ) {
-	$discounts = new EDD\Compat\Discount_Query();
+function cs_get_discount_by( $field = '', $value = '' ) {
+	$discounts = new CS\Compat\Discount_Query();
 
 	// Return discount
 	return $discounts->get_item_by( $field, $value );
@@ -183,15 +183,15 @@ function edd_get_discount_by( $field = '', $value = '' ) {
  * Retrieve discount by a given field
  *
  * @since 2.0
- * @since 2.7 Updated to use EDD_Discount object
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int $discount_id Discount ID.
  * @param string $field The field to retrieve the discount with.
- * @return mixed object|bool EDD_Discount object or false if not found.
+ * @return mixed object|bool CS_Discount object or false if not found.
  */
-function edd_get_discount_field( $discount_id, $field = '' ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_get_discount_field( $discount_id, $field = '' ) {
+	$discount = cs_get_discount( $discount_id );
 
 	// Check that field exists
 	return isset( $discount->{$field} )
@@ -207,10 +207,10 @@ function edd_get_discount_field( $discount_id, $field = '' ) {
  * @param array $data
  * @return int
  */
-function edd_update_discount( $discount_id = 0, $data = array() ) {
+function cs_update_discount( $discount_id = 0, $data = array() ) {
 
 	// Pre-3.0 pre action
-	do_action( 'edd_pre_update_discount', $data, $discount_id );
+	do_action( 'cs_pre_update_discount', $data, $discount_id );
 
 	// Product requirements.
 	if ( isset( $data['product_reqs'] ) && ! empty( $data['product_reqs'] ) ) {
@@ -219,19 +219,19 @@ function edd_update_discount( $discount_id = 0, $data = array() ) {
 		}
 
 		if ( is_array( $data['product_reqs'] ) ) {
-			edd_delete_adjustment_meta( $discount_id, 'product_requirement' );
+			cs_delete_adjustment_meta( $discount_id, 'product_requirement' );
 
 			foreach ( $data['product_reqs'] as $product_requirement ) {
-				edd_add_adjustment_meta( $discount_id, 'product_requirement', $product_requirement );
+				cs_add_adjustment_meta( $discount_id, 'product_requirement', $product_requirement );
 			}
 		}
 
 		unset( $data['product_reqs'] );
 	} elseif ( isset( $data['product_reqs'] ) ) {
-		edd_delete_adjustment_meta( $discount_id, 'product_requirement' );
+		cs_delete_adjustment_meta( $discount_id, 'product_requirement' );
 
 		// We don't have product conditions when there are no product requirements.
-		edd_delete_adjustment_meta( $discount_id, 'product_condition' );
+		cs_delete_adjustment_meta( $discount_id, 'product_condition' );
 		unset( $data['product_condition'] );
 	}
 
@@ -242,29 +242,29 @@ function edd_update_discount( $discount_id = 0, $data = array() ) {
 		}
 
 		if ( is_array( $data['excluded_products'] ) ) {
-			edd_delete_adjustment_meta( $discount_id, 'excluded_product' );
+			cs_delete_adjustment_meta( $discount_id, 'excluded_product' );
 
 			foreach ( $data['excluded_products'] as $excluded_product ) {
-				edd_add_adjustment_meta( $discount_id, 'excluded_product', $excluded_product );
+				cs_add_adjustment_meta( $discount_id, 'excluded_product', $excluded_product );
 			}
 		}
 
 		unset( $data['excluded_products'] );
 	} elseif( isset( $data['excluded_products'] ) ) {
-		edd_delete_adjustment_meta( $discount_id, 'excluded_product' );
+		cs_delete_adjustment_meta( $discount_id, 'excluded_product' );
 	}
 
 	if ( isset( $data['product_condition'] ) ) {
 		$product_condition = sanitize_text_field( $data['product_condition'] );
-		edd_update_adjustment_meta( $discount_id, 'product_condition', $product_condition );
+		cs_update_adjustment_meta( $discount_id, 'product_condition', $product_condition );
 	}
 
-	$discounts = new EDD\Compat\Discount_Query();
+	$discounts = new CS\Compat\Discount_Query();
 
 	$retval = $discounts->update_item( $discount_id, $data );
 
 	// Pre-3.0 post action
-	do_action( 'edd_post_update_discount', $data, $discount_id );
+	do_action( 'cs_post_update_discount', $data, $discount_id );
 
 	return $retval;
 }
@@ -278,7 +278,7 @@ function edd_update_discount( $discount_id = 0, $data = array() ) {
  * @param array $args Query arguments
  * @return mixed array if discounts exist, false otherwise
  */
-function edd_get_discounts( $args = array() ) {
+function cs_get_discounts( $args = array() ) {
 
 	// Parse arguments.
 	$r = wp_parse_args( $args, array(
@@ -291,7 +291,7 @@ function edd_get_discounts( $args = array() ) {
 	}
 
 	// Instantiate a query object.
-	$discounts = new EDD\Compat\Discount_Query();
+	$discounts = new CS\Compat\Discount_Query();
 
 	// Return discounts
 	return $discounts->query( $r );
@@ -305,7 +305,7 @@ function edd_get_discounts( $args = array() ) {
  * @param array $args Arguments.
  * @return int
  */
-function edd_get_discount_count( $args = array() ) {
+function cs_get_discount_count( $args = array() ) {
 
 	// Parse args.
 	$r = wp_parse_args( $args, 	array(
@@ -313,7 +313,7 @@ function edd_get_discount_count( $args = array() ) {
 	) );
 
 	// Query for count(s).
-	$discounts = new EDD\Compat\Discount_Query( $r );
+	$discounts = new CS\Compat\Discount_Query( $r );
 
 	// Return count(s).
 	return absint( $discounts->found_items );
@@ -326,7 +326,7 @@ function edd_get_discount_count( $args = array() ) {
  *
  * @return array
  */
-function edd_get_discount_counts( $args = array() ) {
+function cs_get_discount_counts( $args = array() ) {
 
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
@@ -335,10 +335,10 @@ function edd_get_discount_counts( $args = array() ) {
 	) );
 
 	// Query for count.
-	$counts = new EDD\Compat\Discount_Query( $r );
+	$counts = new CS\Compat\Discount_Query( $r );
 
 	// Format & return
-	return edd_format_counts( $counts, $r['groupby'] );
+	return cs_format_counts( $counts, $r['groupby'] );
 }
 
 /**
@@ -349,8 +349,8 @@ function edd_get_discount_counts( $args = array() ) {
  * @param int $discount_id Discount ID.
  * @return array Retrieved notes.
  */
-function edd_get_discount_notes( $discount_id = 0 ) {
-	return edd_get_notes( array(
+function cs_get_discount_notes( $discount_id = 0 ) {
+	return cs_get_notes( array(
 		'object_id'   => $discount_id,
 		'object_type' => 'discount',
 		'order'       => 'asc'
@@ -361,14 +361,14 @@ function edd_get_discount_notes( $discount_id = 0 ) {
  * Checks if there is any active discounts, returns a boolean.
  *
  * @since 1.0
- * @since 3.0 Updated to be more efficient and make direct calls to the EDD_Discount object.
+ * @since 3.0 Updated to be more efficient and make direct calls to the CS_Discount object.
  *
  * @return bool
  */
-function edd_has_active_discounts() {
+function cs_has_active_discounts() {
 
 	// Query for active discounts.
-	$discounts = edd_get_discounts( array(
+	$discounts = cs_get_discounts( array(
 		'number' => 10,
 		'status' => 'active'
 	) );
@@ -380,7 +380,7 @@ function edd_has_active_discounts() {
 
 	// Check each discount for active status, applying filters, etc...
 	foreach ( $discounts as $discount ) {
-		/** @var $discount EDD_Discount */
+		/** @var $discount CS_Discount */
 		if ( $discount->is_active( false, true ) ) {
 			return true;
 		}
@@ -393,17 +393,17 @@ function edd_has_active_discounts() {
  * Stores a discount code. If the code already exists, it updates it, otherwise
  * it creates a new one.
  *
- * @internal This method exists for backwards compatibility. `edd_add_discount()` should be used.
+ * @internal This method exists for backwards compatibility. `cs_add_discount()` should be used.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
+ * @since 2.7 Updated to use CS_Discount object.
  * @since 3.0 Updated to use new query class.
  *
  * @param array $details     Discount args.
  * @param int   $discount_id Discount ID.
  * @return mixed bool|int The discount ID of the discount code, or false on failure.
  */
-function edd_store_discount( $details, $discount_id = null ) {
+function cs_store_discount( $details, $discount_id = null ) {
 
 	// Set default return value to false.
 	$return = false;
@@ -428,27 +428,27 @@ function edd_store_discount( $details, $discount_id = null ) {
 	 *
 	 * @param array $details Discount args.
 	 */
-	$details = apply_filters( 'edd_insert_discount', $details );
+	$details = apply_filters( 'cs_insert_discount', $details );
 
 	/**
 	 * Fires before the discount has been added to the database. This hook
 	 * exists for backwards compatibility purposes. It fires before the
-	 * call to `EDD_Discount::convert_legacy_args` to ensure the arguments
+	 * call to `CS_Discount::convert_legacy_args` to ensure the arguments
 	 * maintain backwards compatible array keys.
 	 *
 	 * @since 2.7
 	 *
 	 * @param array $details Discount args.
 	 */
-	do_action( 'edd_pre_insert_discount', $details );
+	do_action( 'cs_pre_insert_discount', $details );
 
-	// Convert legacy arguments to new ones accepted by `edd_add_discount()`.
-	$details = EDD_Discount::convert_legacy_args( $details );
+	// Convert legacy arguments to new ones accepted by `cs_add_discount()`.
+	$details = CS_Discount::convert_legacy_args( $details );
 
 	if ( null === $discount_id ) {
-		$return = (int) edd_add_discount( $details );
+		$return = (int) cs_add_discount( $details );
 	} else {
-		edd_update_discount( $discount_id, $details );
+		cs_update_discount( $discount_id, $details );
 		$return = $discount_id;
 	}
 
@@ -458,30 +458,30 @@ function edd_store_discount( $details, $discount_id = null ) {
 /**
  * Deletes a discount code.
  *
- * @internal This method exists for backwards compatibility. `edd_delete_discount()` should be used.
+ * @internal This method exists for backwards compatibility. `cs_delete_discount()` should be used.
  *
  * @since 1.0
  * @deprecated 3.0
  *
  * @param int $discount_id Discount ID.
  */
-function edd_remove_discount( $discount_id = 0 ) {
-	edd_delete_discount( $discount_id );
+function cs_remove_discount( $discount_id = 0 ) {
+	cs_delete_discount( $discount_id );
 }
 
 /**
  * Updates a discount status from one status to another.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int    $discount_id Discount ID (default: 0)
  * @param string $new_status  New status (default: active)
  *
  * @return bool Whether the status has been updated or not.
  */
-function edd_update_discount_status( $discount_id = 0, $new_status = 'active' ) {
+function cs_update_discount_status( $discount_id = 0, $new_status = 'active' ) {
 
 	// Bail if an invalid ID is passed.
 	if ( $discount_id <= 0 ) {
@@ -491,7 +491,7 @@ function edd_update_discount_status( $discount_id = 0, $new_status = 'active' ) 
 	// Set defaults.
 	$updated    = false;
 	$new_status = sanitize_key( $new_status );
-	$discount   = edd_get_discount( $discount_id );
+	$discount   = cs_get_discount( $discount_id );
 
 	// No change.
 	if ( $new_status === $discount->status ) {
@@ -500,7 +500,7 @@ function edd_update_discount_status( $discount_id = 0, $new_status = 'active' ) 
 
 	// Try to update status.
 	if ( ! empty( $discount->id ) ) {
-		$updated = (bool) edd_update_discount( $discount->id, array(
+		$updated = (bool) cs_update_discount( $discount->id, array(
 			'status' => $new_status
 		) );
 	}
@@ -513,17 +513,17 @@ function edd_update_discount_status( $discount_id = 0, $new_status = 'active' ) 
  * Checks to see if a discount code already exists.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount().
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount().
  *
  * @param int $discount_id Discount ID.
  *
  * @return bool Whether or not the discount exists.
  */
-function edd_discount_exists( $discount_id ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_discount_exists( $discount_id ) {
+	$discount = cs_get_discount( $discount_id );
 
-	return $discount instanceof EDD_Discount && $discount->exists();
+	return $discount instanceof CS_Discount && $discount->exists();
 }
 
 /**
@@ -531,18 +531,18 @@ function edd_discount_exists( $discount_id ) {
  *
  * @since 1.0
  * @since 2.6.11 Added $update parameter.
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount().
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount().
  *
  * @param int  $discount_id Discount ID.
  * @param bool $update      Update the discount to expired if an one is found but has an active status/
  * @param bool $set_error   Whether an error message should be set in session.
  * @return bool Whether or not the discount is active.
  */
-function edd_is_discount_active( $discount_id = 0, $update = true, $set_error = true ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_is_discount_active( $discount_id = 0, $update = true, $set_error = true ) {
+	$discount = cs_get_discount( $discount_id );
 
-	if ( ! $discount instanceof EDD_Discount ) {
+	if ( ! $discount instanceof CS_Discount ) {
 		return false;
 	}
 
@@ -553,161 +553,161 @@ function edd_is_discount_active( $discount_id = 0, $update = true, $set_error = 
  * Retrieve the discount code.
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field()
  *
  * @param int $discount_id Discount ID.
  * @return string $code Discount Code.
  */
-function edd_get_discount_code( $discount_id = 0 ) {
-	return edd_get_discount_field( $discount_id, 'code' );
+function cs_get_discount_code( $discount_id = 0 ) {
+	return cs_get_discount_field( $discount_id, 'code' );
 }
 
 /**
  * Retrieve the discount code start date.
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field()
  *
  * @param int $discount_id Discount ID.
  * @return string $start Discount start date.
  */
-function edd_get_discount_start_date( $discount_id = 0 ) {
-	return edd_get_discount_field( $discount_id, 'start_date' );
+function cs_get_discount_start_date( $discount_id = 0 ) {
+	return cs_get_discount_field( $discount_id, 'start_date' );
 }
 
 /**
  * Retrieve the discount code expiration date.
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field()
  *
  * @param int $discount_id Discount ID.
  * @return string $expiration Discount expiration.
  */
-function edd_get_discount_expiration( $discount_id = 0 ) {
-	return edd_get_discount_field( $discount_id, 'end_date' );
+function cs_get_discount_expiration( $discount_id = 0 ) {
+	return cs_get_discount_field( $discount_id, 'end_date' );
 }
 
 /**
  * Retrieve the maximum uses that a certain discount code.
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field()
  *
  * @param int $discount_id Discount ID.
  * @return int $max_uses Maximum number of uses for the discount code.
  */
-function edd_get_discount_max_uses( $discount_id = 0 ) {
-	return edd_get_discount_field( $discount_id, 'max_uses' );
+function cs_get_discount_max_uses( $discount_id = 0 ) {
+	return cs_get_discount_field( $discount_id, 'max_uses' );
 }
 
 /**
  * Retrieve number of times a discount has been used.
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field().
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field().
  *
  * @param int $discount_id Discount ID.
  * @return int $uses Number of times a discount has been used.
  */
-function edd_get_discount_uses( $discount_id = 0 ) {
-	return (int) edd_get_discount_field( $discount_id, 'use_count' );
+function cs_get_discount_uses( $discount_id = 0 ) {
+	return (int) cs_get_discount_field( $discount_id, 'use_count' );
 }
 
 /**
  * Retrieve the minimum purchase amount for a discount.
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field().
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field().
  *
  * @param int $discount_id Discount ID.
  * @return float $min_price Minimum purchase amount.
  */
-function edd_get_discount_min_price( $discount_id = 0 ) {
-	return edd_format_amount( edd_get_discount_field( $discount_id, 'min_charge_amount' ) );
+function cs_get_discount_min_price( $discount_id = 0 ) {
+	return cs_format_amount( cs_get_discount_field( $discount_id, 'min_charge_amount' ) );
 }
 
 /**
  * Retrieve the discount amount.
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field().
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field().
  *
  * @param int $discount_id Discount ID.
  * @return float $amount Discount amount.
  */
-function edd_get_discount_amount( $discount_id = 0 ) {
-	return edd_get_discount_field( $discount_id, 'amount' );
+function cs_get_discount_amount( $discount_id = 0 ) {
+	return cs_get_discount_field( $discount_id, 'amount' );
 }
 
 /**
  * Retrieve the discount type
  *
  * @since 1.4
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field().
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field().
  *
  * @param int $discount_id Discount ID.
  * @return string $type Discount type
  */
-function edd_get_discount_type( $discount_id = 0 ) {
-	return edd_get_discount_field( $discount_id, 'type' );
+function cs_get_discount_type( $discount_id = 0 ) {
+	return cs_get_discount_field( $discount_id, 'type' );
 }
 
 /**
  * Retrieve the products the discount cannot be applied to.
  *
  * @since 1.9
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int $discount_id Discount ID.
  * @return array $excluded_products IDs of the required products.
  */
-function edd_get_discount_excluded_products( $discount_id = 0 ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_get_discount_excluded_products( $discount_id = 0 ) {
+	$discount = cs_get_discount( $discount_id );
 
-	return $discount instanceof EDD_Discount ? $discount->excluded_products : array();
+	return $discount instanceof CS_Discount ? $discount->excluded_products : array();
 }
 
 /**
  * Retrieve the discount product requirements.
  *
  * @since 1.5
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int $discount_id Discount ID.
  * @return array $product_reqs IDs of the required products.
  */
-function edd_get_discount_product_reqs( $discount_id = 0 ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_get_discount_product_reqs( $discount_id = 0 ) {
+	$discount = cs_get_discount( $discount_id );
 
-	return $discount instanceof EDD_Discount ? $discount->product_reqs : array();
+	return $discount instanceof CS_Discount ? $discount->product_reqs : array();
 }
 
 /**
  * Retrieve the product condition.
  *
  * @since 1.5
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field()
  *
  * @param int $discount_id Discount ID.
  *
  * @return string Product condition.
  */
-function edd_get_discount_product_condition( $discount_id = 0 ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_get_discount_product_condition( $discount_id = 0 ) {
+	$discount = cs_get_discount( $discount_id );
 
-	return $discount instanceof EDD_Discount ? $discount->product_condition : '';
+	return $discount instanceof CS_Discount ? $discount->product_condition : '';
 }
 
 /**
@@ -718,10 +718,10 @@ function edd_get_discount_product_condition( $discount_id = 0 ) {
  * @param int $discount_id Discount ID.
  * @return string Product condition.
  */
-function edd_get_discount_status_label( $discount_id = null ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_get_discount_status_label( $discount_id = null ) {
+	$discount = cs_get_discount( $discount_id );
 
-	return $discount instanceof EDD_Discount ? $discount->get_status_label() : '';
+	return $discount instanceof CS_Discount ? $discount->get_status_label() : '';
 }
 
 /**
@@ -731,15 +731,15 @@ function edd_get_discount_status_label( $discount_id = null ) {
  * applied only to the products selected as requirements.
  *
  * @since 1.5
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Please use edd_get_discount_scope() instead.
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Please use cs_get_discount_scope() instead.
  *
  * @param int $discount_id Discount ID.
  *
  * @return boolean Whether or not discount code is not global.
  */
-function edd_is_discount_not_global( $discount_id = 0 ) {
-	return ( 'not_global' === edd_get_discount_field( $discount_id, 'scope' ) );
+function cs_is_discount_not_global( $discount_id = 0 ) {
+	return ( 'not_global' === cs_get_discount_field( $discount_id, 'scope' ) );
 }
 
 /**
@@ -754,8 +754,8 @@ function edd_is_discount_not_global( $discount_id = 0 ) {
  *
  * @return string global or not_global.
  */
-function edd_get_discount_scope( $discount_id = 0 ) {
-	return edd_get_discount_field( $discount_id, 'scope' );
+function cs_get_discount_scope( $discount_id = 0 ) {
+	return cs_get_discount_field( $discount_id, 'scope' );
 }
 
 /**
@@ -763,15 +763,15 @@ function edd_get_discount_scope( $discount_id = 0 ) {
  *
  * @since 1.0
  * @since 2.6.11 Added $update parameter.
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int  $discount_id Discount ID.
  * @param bool $update  Update the discount to expired if an one is found but has an active status.
  * @return bool Whether on not the discount has expired.
  */
-function edd_is_discount_expired( $discount_id = 0, $update = true ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_is_discount_expired( $discount_id = 0, $update = true ) {
+	$discount = cs_get_discount( $discount_id );
 	return ! empty( $discount->id )
 		? $discount->is_expired( $update )
 		: false;
@@ -781,15 +781,15 @@ function edd_is_discount_expired( $discount_id = 0, $update = true ) {
  * Checks whether a discount code is available to use yet (start date).
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int  $discount_id   Discount ID.
  * @param bool $set_error Whether an error message be set in session.
  * @return bool Is discount started?
  */
-function edd_is_discount_started( $discount_id = 0, $set_error = true ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_is_discount_started( $discount_id = 0, $set_error = true ) {
+	$discount = cs_get_discount( $discount_id );
 	return ! empty( $discount->id )
 		? $discount->is_started( $set_error )
 		: false;
@@ -799,15 +799,15 @@ function edd_is_discount_started( $discount_id = 0, $set_error = true ) {
  * Is Discount Maxed Out.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int  $discount_id   Discount ID.
  * @param bool $set_error Whether an error message be set in session.
  * @return bool Is discount maxed out?
  */
-function edd_is_discount_maxed_out( $discount_id = 0, $set_error = true ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_is_discount_maxed_out( $discount_id = 0, $set_error = true ) {
+	$discount = cs_get_discount( $discount_id );
 	return ! empty( $discount->id )
 		? $discount->is_maxed_out( $set_error )
 		: false;
@@ -817,15 +817,15 @@ function edd_is_discount_maxed_out( $discount_id = 0, $set_error = true ) {
  * Checks to see if the minimum purchase amount has been met.
  *
  * @since 1.1.7
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int  $discount_id   Discount ID.
  * @param bool $set_error Whether an error message be set in session.
  * @return bool Whether the minimum amount has been met or not.
  */
-function edd_discount_is_min_met( $discount_id = 0, $set_error = true ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_discount_is_min_met( $discount_id = 0, $set_error = true ) {
+	$discount = cs_get_discount( $discount_id );
 	return ! empty( $discount->id )
 		? $discount->is_min_price_met( $set_error )
 		: false;
@@ -835,32 +835,32 @@ function edd_discount_is_min_met( $discount_id = 0, $set_error = true ) {
  * Is the discount limited to a single use per customer?
  *
  * @since 1.5
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_field()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_field()
  *
  * @param int $discount_id Discount ID.
  *
  * @return bool Whether the discount is single use or not.
  */
-function edd_discount_is_single_use( $discount_id = 0 ) {
-	return (bool) edd_get_discount_field( $discount_id, 'once_per_customer' );
+function cs_discount_is_single_use( $discount_id = 0 ) {
+	return (bool) cs_get_discount_field( $discount_id, 'once_per_customer' );
 }
 
 /**
  * Checks to see if the required products are in the cart
  *
  * @since 1.5
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param int  $discount_id   Discount ID.
  * @param bool $set_error Whether an error message be set in session.
  * @return bool Are required products in the cart for the discount to hold.
  */
-function edd_discount_product_reqs_met( $discount_id = 0, $set_error = true ) {
-	$discount = edd_get_discount( $discount_id );
+function cs_discount_product_reqs_met( $discount_id = 0, $set_error = true ) {
+	$discount = cs_get_discount( $discount_id );
 
-	return $discount instanceof EDD_Discount && $discount->is_product_requirements_met( $set_error );
+	return $discount instanceof CS_Discount && $discount->is_product_requirements_met( $set_error );
 }
 
 /**
@@ -868,8 +868,8 @@ function edd_discount_product_reqs_met( $discount_id = 0, $set_error = true ) {
  *
  * @since 1.1.5
  * @since 1.5 Added $discount_id parameter.
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount()
  *
  * @param string $code      Discount Code.
  * @param string $user      User info.
@@ -878,33 +878,33 @@ function edd_discount_product_reqs_met( $discount_id = 0, $set_error = true ) {
  *
  * @return bool $return Whether the the discount code is used.
  */
-function edd_is_discount_used( $code = null, $user = '', $discount_id = 0, $set_error = true ) {
+function cs_is_discount_used( $code = null, $user = '', $discount_id = 0, $set_error = true ) {
 	$discount = ( null == $code )
-		? edd_get_discount( $discount_id )
-		: edd_get_discount_by_code( $code );
+		? cs_get_discount( $discount_id )
+		: cs_get_discount_by_code( $code );
 
-	return $discount instanceof EDD_Discount && $discount->is_used( $user, $set_error );
+	return $discount instanceof CS_Discount && $discount->is_used( $user, $set_error );
 }
 
 /**
  * Check whether a discount code is valid (when purchasing).
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_by_code()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_by_code()
  *
  * @param string $code      Discount Code.
  * @param string $user      User info.
  * @param bool   $set_error Whether an error message be set in session.
  * @return bool Whether the discount code is valid.
  */
-function edd_is_discount_valid( $code = '', $user = '', $set_error = true ) {
-	$discount = edd_get_discount_by_code( $code );
+function cs_is_discount_valid( $code = '', $user = '', $set_error = true ) {
+	$discount = cs_get_discount_by_code( $code );
 
 	if ( ! empty( $discount->id ) ) {
 		return $discount->is_valid( $user, $set_error );
 	} elseif ( $set_error ) {
-		edd_set_error( 'edd-discount-error', _x( 'This discount is invalid.', 'error for when a discount is invalid based on its configuration', 'easy-digital-downloads' ) );
+		cs_set_error( 'cs-discount-error', _x( 'This discount is invalid.', 'error for when a discount is invalid based on its configuration', 'commercestore' ) );
 		return false;
 	} else {
 		return false;
@@ -915,31 +915,31 @@ function edd_is_discount_valid( $code = '', $user = '', $set_error = true ) {
  * Retrieves a discount ID from the code.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_by_code()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_by_code()
  *
  * @param string $code Discount code.
  * @return int|bool Discount ID, or false if discount does not exist.
  */
-function edd_get_discount_id_by_code( $code = '' ) {
-	$discount = edd_get_discount_by_code( $code );
+function cs_get_discount_id_by_code( $code = '' ) {
+	$discount = cs_get_discount_by_code( $code );
 
-	return ( $discount instanceof EDD_Discount ) ? $discount->id : false;
+	return ( $discount instanceof CS_Discount ) ? $discount->id : false;
 }
 
 /**
  * Get Discounted Amount.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_by_code()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_by_code()
  *
  * @param string           $code       Code to calculate a discount for.
  * @param mixed string|int $base_price Price before discount.
  * @return string Amount after discount.
  */
-function edd_get_discounted_amount( $code = '', $base_price = 0 ) {
-	$discount = edd_get_discount_by_code( $code );
+function cs_get_discounted_amount( $code = '', $base_price = 0 ) {
+	$discount = cs_get_discount_by_code( $code );
 
 	return ! empty( $discount->id )
 		? $discount->get_discounted_amount( $base_price )
@@ -950,14 +950,14 @@ function edd_get_discounted_amount( $code = '', $base_price = 0 ) {
  * Increases the use count of a discount code.
  *
  * @since 1.0
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_by_code()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_by_code()
  *
  * @param string $code Discount code to be incremented.
  * @return int New usage.
  */
-function edd_increase_discount_usage( $code = '' ) {
-	$discount = edd_get_discount_by_code( $code );
+function cs_increase_discount_usage( $code = '' ) {
+	$discount = cs_get_discount_by_code( $code );
 
 	// Increase if discount exists
 	return ! empty( $discount->id )
@@ -969,14 +969,14 @@ function edd_increase_discount_usage( $code = '' ) {
  * Decreases the use count of a discount code.
  *
  * @since 2.5.7
- * @since 2.7 Updated to use EDD_Discount object.
- * @since 3.0 Updated to call edd_get_discount_by_code()
+ * @since 2.7 Updated to use CS_Discount object.
+ * @since 3.0 Updated to call cs_get_discount_by_code()
  *
  * @param string $code Discount code to be decremented.
  * @return int New usage.
  */
-function edd_decrease_discount_usage( $code = '' ) {
-	$discount = edd_get_discount_by_code( $code );
+function cs_decrease_discount_usage( $code = '' ) {
+	$discount = cs_get_discount_by_code( $code );
 
 	// Decrease if discount exists
 	return ! empty( $discount->id )
@@ -992,10 +992,10 @@ function edd_decrease_discount_usage( $code = '' ) {
  * @param string|int $amount Discount code amount
  * @return string $amount Formatted amount
  */
-function edd_format_discount_rate( $type = '', $amount = '' ) {
+function cs_format_discount_rate( $type = '', $amount = '' ) {
 	return ( 'flat' === $type )
-		? edd_currency_filter( edd_format_amount( $amount ) )
-		: edd_format_amount( $amount ) . '%';
+		? cs_currency_filter( cs_format_amount( $amount ) )
+		: cs_format_amount( $amount ) . '%';
 }
 
 /**
@@ -1005,8 +1005,8 @@ function edd_format_discount_rate( $type = '', $amount = '' ) {
  *
  * @since 3.0
  *
- * @global float $edd_flat_discount_total Track flat rate discount total for penny adjustments.
- * @link https://github.com/easydigitaldownloads/easy-digital-downloads/issues/2757
+ * @global float $cs_flat_discount_total Track flat rate discount total for penny adjustments.
+ * @link https://github.com/commercestore/commercestore/issues/2757
  *
  * @param array                    $item {
  *   Order Item data, matching Cart line item format.
@@ -1020,12 +1020,12 @@ function edd_format_discount_rate( $type = '', $amount = '' ) {
  *   @type int    $quantity Purchase quantity.
  * }
  * @param array                    $items     All items (including item being calculated).
- * @param \EDD_Discount[]|string[] $discounts Discount to determine adjustment from.
+ * @param \CS_Discount[]|string[] $discounts Discount to determine adjustment from.
  *                                            A discount code can be passed as a string.
  * @return float Discount amount. 0 if Discount is invalid or no Discount is applied.
  */
-function edd_get_item_discount_amount( $item, $items, $discounts ) {
-	global $edd_flat_discount_total;
+function cs_get_item_discount_amount( $item, $items, $discounts ) {
+	global $cs_flat_discount_total;
 
 	// Validate item.
 	if ( empty( $item ) || empty( $item['id'] ) ) {
@@ -1052,10 +1052,10 @@ function edd_get_item_discount_amount( $item, $items, $discounts ) {
 		function( $discount ) {
 			// Convert a Discount code to a Discount object.
 			if ( is_string( $discount ) ) {
-				$discount = edd_get_discount_by_code( $discount );
+				$discount = cs_get_discount_by_code( $discount );
 			}
 
-			if ( ! $discount instanceof \EDD_Discount ) {
+			if ( ! $discount instanceof \CS_Discount ) {
 				return false;
 			}
 
@@ -1067,16 +1067,16 @@ function edd_get_item_discount_amount( $item, $items, $discounts ) {
 	$discounts = array_filter( $discounts );
 
 	// Determine the price of the item.
-	if ( edd_has_variable_prices( $item['id'] ) ) {
-		// Mimics the original behavior of `\EDD_Cart::get_item_amount()` that
+	if ( cs_has_variable_prices( $item['id'] ) ) {
+		// Mimics the original behavior of `\CS_Cart::get_item_amount()` that
 		// does not fallback to the first Price ID if none is provided.
 		if ( ! isset( $item['options']['price_id'] ) ) {
 			return 0;
 		}
 
-		$item_unit_price = edd_get_price_option_amount( $item['id'], $item['options']['price_id'] );
+		$item_unit_price = cs_get_price_option_amount( $item['id'], $item['options']['price_id'] );
 	} else {
-		$item_unit_price = edd_get_download_price( $item['id'] );
+		$item_unit_price = cs_get_download_price( $item['id'] );
 	}
 
 	$item_amount     = ( $item_unit_price * $item['quantity'] );
@@ -1107,10 +1107,10 @@ function edd_get_item_discount_amount( $item, $items, $discounts ) {
 
 					foreach ( $items as $i ) {
 						if ( ! in_array( $i['id'], $excluded_products ) ) {
-							if ( edd_has_variable_prices( $i['id'] ) ) {
-								$i_amount = edd_get_price_option_amount( $i['id'], $i['options']['price_id'] );
+							if ( cs_has_variable_prices( $i['id'] ) ) {
+								$i_amount = cs_get_price_option_amount( $i['id'], $i['options']['price_id'] );
 							} else {
-								$i_amount = edd_get_download_price( $i['id'] );
+								$i_amount = cs_get_download_price( $i['id'] );
 							}
 
 							$items_amount += ( $i_amount * $i['quantity'] );
@@ -1120,10 +1120,10 @@ function edd_get_item_discount_amount( $item, $items, $discounts ) {
 					$subtotal_percent = ! empty( $items_amount ) ? ( $item_amount / $items_amount ) : 0;
 					$discount_amount += ( $discount->get_amount() * $subtotal_percent );
 
-					$edd_flat_discount_total += round( $discount_amount, edd_currency_decimal_filter() );
+					$cs_flat_discount_total += round( $discount_amount, cs_currency_decimal_filter() );
 
-					if ( $item['id'] === end( $items )['id'] && $edd_flat_discount_total < $discount->get_amount() ) {
-						$adjustment       = ( $discount->get_amount() - $edd_flat_discount_total );
+					if ( $item['id'] === end( $items )['id'] && $cs_flat_discount_total < $discount->get_amount() ) {
+						$adjustment       = ( $discount->get_amount() - $cs_flat_discount_total );
 						$discount_amount += $adjustment;
 					}
 
@@ -1149,11 +1149,11 @@ function edd_get_item_discount_amount( $item, $items, $discounts ) {
  * @param string $code Discount code
  * @return string[] All currently active discounts
  */
-function edd_set_cart_discount( $code = '' ) {
+function cs_set_cart_discount( $code = '' ) {
 
 	// Get all active cart discounts
-	if ( edd_multiple_discounts_allowed() ) {
-		$discounts = edd_get_cart_discounts();
+	if ( cs_multiple_discounts_allowed() ) {
+		$discounts = cs_get_cart_discounts();
 
 	// Only one discount allowed per purchase, so override any existing
 	} else {
@@ -1173,10 +1173,10 @@ function edd_set_cart_discount( $code = '' ) {
 		$discounts[] = $code;
 	}
 
-	EDD()->session->set( 'cart_discounts', implode( '|', $discounts ) );
+	CS()->session->set( 'cart_discounts', implode( '|', $discounts ) );
 
-	do_action( 'edd_cart_discount_set', $code, $discounts );
-	do_action( 'edd_cart_discounts_updated', $discounts );
+	do_action( 'cs_cart_discount_set', $code, $discounts );
+	do_action( 'cs_cart_discounts_updated', $discounts );
 
 	return $discounts;
 }
@@ -1188,8 +1188,8 @@ function edd_set_cart_discount( $code = '' ) {
  * @param string $code Discount code
  * @return array $discounts All remaining active discounts
  */
-function edd_unset_cart_discount( $code = '' ) {
-	$discounts = edd_get_cart_discounts();
+function cs_unset_cart_discount( $code = '' ) {
+	$discounts = cs_get_cart_discounts();
 
 	if ( $discounts ) {
 		$discounts = array_map( 'strtoupper', $discounts );
@@ -1201,11 +1201,11 @@ function edd_unset_cart_discount( $code = '' ) {
 
 		$discounts = implode( '|', array_values( $discounts ) );
 		// update the active discounts
-		EDD()->session->set( 'cart_discounts', $discounts );
+		CS()->session->set( 'cart_discounts', $discounts );
 	}
 
-	do_action( 'edd_cart_discount_removed', $code, $discounts );
-	do_action( 'edd_cart_discounts_updated', $discounts );
+	do_action( 'cs_cart_discount_removed', $code, $discounts );
+	do_action( 'cs_cart_discounts_updated', $discounts );
 
 	return $discounts;
 }
@@ -1216,8 +1216,8 @@ function edd_unset_cart_discount( $code = '' ) {
  * @since 1.4.1
  * @return void
  */
-function edd_unset_all_cart_discounts() {
-	EDD()->cart->remove_all_discounts();
+function cs_unset_all_cart_discounts() {
+	CS()->cart->remove_all_discounts();
 }
 
 /**
@@ -1226,8 +1226,8 @@ function edd_unset_all_cart_discounts() {
  * @since 1.4.1
  * @return array $discounts The active discount codes
  */
-function edd_get_cart_discounts() {
-	return EDD()->cart->get_discounts();
+function cs_get_cart_discounts() {
+	return CS()->cart->get_discounts();
 }
 
 /**
@@ -1236,8 +1236,8 @@ function edd_get_cart_discounts() {
  * @since 1.4.1
  * @return bool
  */
-function edd_cart_has_discounts() {
-	return EDD()->cart->has_discounts();
+function cs_cart_has_discounts() {
+	return CS()->cart->has_discounts();
 }
 
 /**
@@ -1249,8 +1249,8 @@ function edd_cart_has_discounts() {
  *
  * @return float|mixed|void Total discounted amount
  */
-function edd_get_cart_discounted_amount( $discounts = false ) {
-	return EDD()->cart->get_discounted_amount( $discounts );
+function cs_get_cart_discounted_amount( $discounts = false ) {
+	return CS()->cart->get_discounted_amount( $discounts );
 }
 
 /**
@@ -1261,8 +1261,8 @@ function edd_get_cart_discounted_amount( $discounts = false ) {
  * @param bool|string $discount False to use the cart discounts or a string to check with a discount code
  * @return float The discounted amount
  */
-function edd_get_cart_item_discount_amount( $item = array(), $discount = false ) {
-	return EDD()->cart->get_item_discount_amount( $item, $discount );
+function cs_get_cart_item_discount_amount( $item = array(), $discount = false ) {
+	return CS()->cart->get_item_discount_amount( $item, $discount );
 }
 
 /**
@@ -1272,8 +1272,8 @@ function edd_get_cart_item_discount_amount( $item = array(), $discount = false )
  *
  * @return void
  */
-function edd_cart_discounts_html() {
-	echo edd_get_cart_discounts_html();
+function cs_cart_discounts_html() {
+	echo cs_get_cart_discounts_html();
 }
 
 /**
@@ -1284,77 +1284,77 @@ function edd_cart_discounts_html() {
  * @param mixed $discounts Array of cart discounts.
  * @return mixed|void
  */
-function edd_get_cart_discounts_html( $discounts = false ) {
+function cs_get_cart_discounts_html( $discounts = false ) {
 	if ( ! $discounts ) {
-		$discounts = EDD()->cart->get_discounts();
+		$discounts = CS()->cart->get_discounts();
 	}
 
 	if ( empty( $discounts ) ) {
 		return;
 	}
 
-	$html = _n( 'Discount', 'Discounts', count( $discounts ), 'easy-digital-downloads' ) . ':&nbsp;';
+	$html = _n( 'Discount', 'Discounts', count( $discounts ), 'commercestore' ) . ':&nbsp;';
 
 	foreach ( $discounts as $discount ) {
-		$discount_id     = edd_get_discount_id_by_code( $discount );
+		$discount_id     = cs_get_discount_id_by_code( $discount );
 		$discount_amount = 0;
-		$items           = EDD()->cart->get_contents();
+		$items           = CS()->cart->get_contents();
 
 		if ( is_array( $items ) && ! empty( $items ) ) {
 			foreach ( $items as $key => $item ) {
-				$discount_amount += edd_get_item_discount_amount( $item, $items, array( $discount ) );
+				$discount_amount += cs_get_item_discount_amount( $item, $items, array( $discount ) );
 			}
 		}
 
-		$type = edd_get_discount_type( $discount_id );
-		$rate = edd_format_discount_rate( $type, edd_get_discount_amount( $discount_id ) );
+		$type = cs_get_discount_type( $discount_id );
+		$rate = cs_format_discount_rate( $type, cs_get_discount_amount( $discount_id ) );
 
 		$remove_url  = add_query_arg(
 			array(
-				'edd_action'    => 'remove_cart_discount',
+				'cs_action'    => 'remove_cart_discount',
 				'discount_id'   => $discount_id,
 				'discount_code' => $discount
 			),
-			edd_get_checkout_uri()
+			cs_get_checkout_uri()
 		);
 
 		$discount_html   = '';
-		$discount_html  .= "<span class=\"edd_discount\">\n";
-		$discount_amount = edd_currency_filter( edd_format_amount( $discount_amount ) );
-		$discount_html  .= "<span class=\"edd_discount_total\">{$discount}&nbsp;&ndash;&nbsp;{$discount_amount}</span>\n";
+		$discount_html  .= "<span class=\"cs_discount\">\n";
+		$discount_amount = cs_currency_filter( cs_format_amount( $discount_amount ) );
+		$discount_html  .= "<span class=\"cs_discount_total\">{$discount}&nbsp;&ndash;&nbsp;{$discount_amount}</span>\n";
 		if ( 'percent' === $type ) {
-			$discount_html .= "<span class=\"edd_discount_rate\">($rate)</span>\n";
+			$discount_html .= "<span class=\"cs_discount_rate\">($rate)</span>\n";
 		}
 		$discount_html .= sprintf(
-			'<a href="%s" data-code="%s" class="edd_discount_remove"><span class="screen-reader-text">%s</span></a>',
+			'<a href="%s" data-code="%s" class="cs_discount_remove"><span class="screen-reader-text">%s</span></a>',
 			esc_url( $remove_url ),
 			esc_attr( $discount ),
-			esc_attr__( 'Remove discount', 'easy-digital-downloads' )
+			esc_attr__( 'Remove discount', 'commercestore' )
 		);
 		$discount_html .= "</span>\n";
 
-		$html .= apply_filters( 'edd_get_cart_discount_html', $discount_html, $discount, $rate, $remove_url );
+		$html .= apply_filters( 'cs_get_cart_discount_html', $discount_html, $discount, $rate, $remove_url );
 	}
 
-	return apply_filters( 'edd_get_cart_discounts_html', $html, $discounts, $rate, $remove_url );
+	return apply_filters( 'cs_get_cart_discounts_html', $html, $discounts, $rate, $remove_url );
 }
 
 /**
  * Show the fully formatted cart discount
  *
  * Note the $formatted parameter was removed from the display_cart_discount() function
- * within EDD_Cart in 2.7 as it was a redundant parameter.
+ * within CS_Cart in 2.7 as it was a redundant parameter.
  *
  * @since 1.4.1
  * @param bool $formatted
  * @param bool $echo Echo?
  * @return string $amount Fully formatted cart discount
  */
-function edd_display_cart_discount( $formatted = false, $echo = false ) {
+function cs_display_cart_discount( $formatted = false, $echo = false ) {
 	if ( ! $echo ) {
-		return EDD()->cart->display_cart_discount( $echo );
+		return CS()->cart->display_cart_discount( $echo );
 	} else {
-		EDD()->cart->display_cart_discount( $echo );
+		CS()->cart->display_cart_discount( $echo );
 	}
 }
 
@@ -1364,7 +1364,7 @@ function edd_display_cart_discount( $formatted = false, $echo = false ) {
  * @since 1.4.1
  * @return void
  */
-function edd_remove_cart_discount() {
+function cs_remove_cart_discount() {
 
 	// Get ID
 	$discount_id = isset( $_GET['discount_id'] )
@@ -1382,17 +1382,17 @@ function edd_remove_cart_discount() {
 	}
 
 	// Pre-3.0 pre action
-	do_action( 'edd_pre_remove_cart_discount', $discount_id );
+	do_action( 'cs_pre_remove_cart_discount', $discount_id );
 
-	edd_unset_cart_discount( $discount_code );
+	cs_unset_cart_discount( $discount_code );
 
 	// Pre-3.0 post action
-	do_action( 'edd_post_remove_cart_discount', $discount_id );
+	do_action( 'cs_post_remove_cart_discount', $discount_id );
 
 	// Redirect
-	edd_redirect( edd_get_checkout_uri() );
+	cs_redirect( cs_get_checkout_uri() );
 }
-add_action( 'edd_remove_cart_discount', 'edd_remove_cart_discount' );
+add_action( 'cs_remove_cart_discount', 'cs_remove_cart_discount' );
 
 /**
  * Checks whether discounts are still valid when removing items from the cart
@@ -1404,21 +1404,21 @@ add_action( 'edd_remove_cart_discount', 'edd_remove_cart_discount' );
  *
  * @param int $cart_key
  */
-function edd_maybe_remove_cart_discount( $cart_key = 0 ) {
+function cs_maybe_remove_cart_discount( $cart_key = 0 ) {
 
-	$discounts = edd_get_cart_discounts();
+	$discounts = cs_get_cart_discounts();
 
 	if ( empty( $discounts ) ) {
 		return;
 	}
 
 	foreach ( $discounts as $discount ) {
-		if ( ! edd_is_discount_valid( $discount ) ) {
-			edd_unset_cart_discount( $discount );
+		if ( ! cs_is_discount_valid( $discount ) ) {
+			cs_unset_cart_discount( $discount );
 		}
 	}
 }
-add_action( 'edd_post_remove_from_cart', 'edd_maybe_remove_cart_discount' );
+add_action( 'cs_post_remove_from_cart', 'cs_maybe_remove_cart_discount' );
 
 /**
  * Checks whether multiple discounts can be applied to the same purchase
@@ -1426,9 +1426,9 @@ add_action( 'edd_post_remove_from_cart', 'edd_maybe_remove_cart_discount' );
  * @since 1.7
  * @return bool
  */
-function edd_multiple_discounts_allowed() {
-	$ret = edd_get_option( 'allow_multiple_discounts', false );
-	return (bool) apply_filters( 'edd_multiple_discounts_allowed', $ret );
+function cs_multiple_discounts_allowed() {
+	$ret = cs_get_option( 'allow_multiple_discounts', false );
+	return (bool) apply_filters( 'cs_multiple_discounts_allowed', $ret );
 }
 
 /**
@@ -1437,7 +1437,7 @@ function edd_multiple_discounts_allowed() {
  * @since 2.0
  * @return void
  */
-function edd_listen_for_cart_discount() {
+function cs_listen_for_cart_discount() {
 
 	// Bail if in admin
 	if ( is_admin() ) {
@@ -1451,40 +1451,40 @@ function edd_listen_for_cart_discount() {
 
 	$code = preg_replace('/[^a-zA-Z0-9-_]+/', '', $_REQUEST['discount'] );
 
-	EDD()->session->set( 'preset_discount', $code );
+	CS()->session->set( 'preset_discount', $code );
 }
-add_action( 'init', 'edd_listen_for_cart_discount', 0 );
+add_action( 'init', 'cs_listen_for_cart_discount', 0 );
 
 /**
- * Applies the preset discount, if any. This is separated from edd_listen_for_cart_discount() in order to allow items to be
+ * Applies the preset discount, if any. This is separated from cs_listen_for_cart_discount() in order to allow items to be
  * added to the cart and for it to persist across page loads if necessary
  *
  * @return void
  */
-function edd_apply_preset_discount() {
+function cs_apply_preset_discount() {
 
 	// Bail if in admin
 	if ( is_admin() ) {
 		return;
 	}
 
-	$code = sanitize_text_field( EDD()->session->get( 'preset_discount' ) );
+	$code = sanitize_text_field( CS()->session->get( 'preset_discount' ) );
 
 	if ( empty( $code ) ) {
 		return;
 	}
 
-	if ( ! edd_is_discount_valid( $code, '', false ) ) {
+	if ( ! cs_is_discount_valid( $code, '', false ) ) {
 		return;
 	}
 
-	$code = apply_filters( 'edd_apply_preset_discount', $code );
+	$code = apply_filters( 'cs_apply_preset_discount', $code );
 
-	edd_set_cart_discount( $code );
+	cs_set_cart_discount( $code );
 
-	EDD()->session->set( 'preset_discount', null );
+	CS()->session->set( 'preset_discount', null );
 }
-add_action( 'init', 'edd_apply_preset_discount', 999 );
+add_action( 'init', 'cs_apply_preset_discount', 999 );
 
 /**
  * Validate discount code.
@@ -1496,7 +1496,7 @@ add_action( 'init', 'edd_apply_preset_discount', 999 );
  *
  * @return boolean True if discount holds, false otherwise.
  */
-function edd_validate_discount( $discount_id = 0, $download_ids = array() ) {
+function cs_validate_discount( $discount_id = 0, $download_ids = array() ) {
 
 	// Bail if discount ID not passed.
 	if ( empty( $discount_id ) ) {
@@ -1506,7 +1506,7 @@ function edd_validate_discount( $discount_id = 0, $download_ids = array() ) {
 	// Set discount to be invalid initially.
 	$is_valid = false;
 
-	$discount = edd_get_discount( $discount_id );
+	$discount = cs_get_discount( $discount_id );
 
 	// Bail if discount not found.
 	if ( ! $discount ) {
@@ -1574,8 +1574,8 @@ function edd_validate_discount( $discount_id = 0, $download_ids = array() ) {
 	 * @since 3.0
 	 *
 	 * @param bool          $is_valid     True if valid, false otherwise.
-	 * @param \EDD_Discount $discount     Discount object.
+	 * @param \CS_Discount $discount     Discount object.
 	 * @param array         $download_ids Download IDs to check against.
 	 */
-	return apply_filters( 'edd_validate_discount', $is_valid, $discount, $download_ids );
+	return apply_filters( 'cs_validate_discount', $is_valid, $discount, $download_ids );
 }

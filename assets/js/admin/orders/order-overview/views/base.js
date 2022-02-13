@@ -194,7 +194,7 @@ export const Base = wp.Backbone.View.extend( {
 	 * @since 3.0
 	 */
 	initializeSelects() {
-		const selects = this.el.querySelectorAll( '.edd-select-chosen' );
+		const selects = this.el.querySelectorAll( '.cs-select-chosen' );
 
 		// Reinialize Chosen.js
 		_.each( selects, ( el ) => {

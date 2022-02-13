@@ -2,15 +2,15 @@
 /**
  * Order Item Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Orders;
+namespace CS\Orders;
 
-use EDD\Refundable_Item;
+use CS\Refundable_Item;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -40,7 +40,7 @@ defined( 'ABSPATH' ) || exit;
  * @property string             $date_modified
  * @property Order_Adjustment[] $adjustments
  */
-class Order_Item extends \EDD\Database\Rows\Order_Item {
+class Order_Item extends \CS\Database\Rows\Order_Item {
 
 	use Refundable_Item;
 
@@ -182,7 +182,7 @@ class Order_Item extends \EDD\Database\Rows\Order_Item {
 	 * Order item adjustments.
 	 *
 	 * @since 3.0
-	 * @var   \EDD\Orders\Order_Adjustment[]
+	 * @var   \CS\Orders\Order_Adjustment[]
 	 */
 	protected $adjustments = null;
 
@@ -197,7 +197,7 @@ class Order_Item extends \EDD\Database\Rows\Order_Item {
 	 */
 	public function __get( $key = '' ) {
 		if ( 'adjustments' === $key && null === $this->adjustments ) {
-			$this->adjustments = edd_get_order_adjustments( array(
+			$this->adjustments = cs_get_order_adjustments( array(
 				'object_id'     => $this->id,
 				'object_type'   => 'order_item',
 				'no_found_rows' => true,
@@ -216,7 +216,7 @@ class Order_Item extends \EDD\Database\Rows\Order_Item {
 	 * @return array $fees Fees applied to this item.
 	 */
 	public function get_fees() {
-		return edd_get_order_adjustments( array(
+		return cs_get_order_adjustments( array(
 			'object_id'   => $this->id,
 			'object_type' => 'order_item',
 			'type'        => 'fee',
@@ -247,7 +247,7 @@ class Order_Item extends \EDD\Database\Rows\Order_Item {
 			return $this->refunded_items;
 		}
 
-		return edd_get_order_items( array(
+		return cs_get_order_items( array(
 			'parent' => $this->id
 		) );
 	}

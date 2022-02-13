@@ -4,7 +4,7 @@
  *
  * This is the base class for all batch import methods. Each data import type (customers, payments, etc) extend this class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Import
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Import Class
+ * CS_Batch_Import Class
  *
  * @since 2.6
  */
-class EDD_Batch_Import {
+class CS_Batch_Import {
 
 	/**
 	 * The file being imported
@@ -109,7 +109,7 @@ class EDD_Batch_Import {
 	 * @return bool Whether we can iport or not
 	 */
 	public function can_import() {
-		return (bool) apply_filters( 'edd_import_capability', current_user_can( $this->capability_type ) );
+		return (bool) apply_filters( 'cs_import_capability', current_user_can( $this->capability_type ) );
 	}
 
 	/**
@@ -185,7 +185,7 @@ class EDD_Batch_Import {
 		$more = false;
 
 		if ( ! $this->can_import() ) {
-			wp_die( __( 'You do not have permission to import data.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+			wp_die( __( 'You do not have permission to import data.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		return $more;

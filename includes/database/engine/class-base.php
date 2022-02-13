@@ -8,7 +8,7 @@
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
-namespace EDD\Database;
+namespace CS\Database;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -47,7 +47,7 @@ class Base {
 	 * @since 1.0.0
 	 * @var   string
 	 */
-	protected $prefix = 'edd';
+	protected $prefix = 'cs';
 
 	/**
 	 * The last database error, if any.

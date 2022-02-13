@@ -4,7 +4,7 @@
  *
  * This class handles customer export
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Download_History_Export Class
+ * CS_Download_History_Export Class
  *
  * @since 1.4.4
  */
-class EDD_Download_History_Export extends EDD_Export {
+class CS_Download_History_Export extends CS_Export {
 	/**
 	 * Our export type. Used for export-type specific filters/actions
 	 *
@@ -36,14 +36,14 @@ class EDD_Download_History_Export extends EDD_Export {
 	 * @return void
 	 */
 	public function headers() {
-		edd_set_time_limit();
+		cs_set_time_limit();
 
 		$month = isset( $_POST['month'] ) ? absint( $_POST['month'] ) : date( 'n' );
 		$year  = isset( $_POST['year']  ) ? absint( $_POST['year']  ) : date( 'Y' );
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="' . apply_filters( 'edd_download_history_export_filename', 'edd-export-' . $this->export_type . '-' . $month . '-' . $year ) . '.csv"' );
+		header( 'Content-Disposition: attachment; filename="' . apply_filters( 'cs_download_history_export_filename', 'cs-export-' . $this->export_type . '-' . $month . '-' . $year ) . '.csv"' );
 		header( 'Expires: 0' );
 	}
 
@@ -56,11 +56,11 @@ class EDD_Download_History_Export extends EDD_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'date'     => __( 'Date',   'easy-digital-downloads' ),
-			'user'     => __( 'Downloaded by', 'easy-digital-downloads' ),
-			'ip'       => __( 'IP Address', 'easy-digital-downloads' ),
-			'download' => __( 'Product', 'easy-digital-downloads' ),
-			'file'     => __( 'File', 'easy-digital-downloads' )
+			'date'     => __( 'Date',   'commercestore' ),
+			'user'     => __( 'Downloaded by', 'commercestore' ),
+			'ip'       => __( 'IP Address', 'commercestore' ),
+			'download' => __( 'Product', 'commercestore' ),
+			'file'     => __( 'File', 'commercestore' )
 		);
 		return $cols;
 	}
@@ -69,11 +69,11 @@ class EDD_Download_History_Export extends EDD_Export {
 	 * Get the Export Data
 	 *
 	 * @since 1.4.4
- 	 * @global object $edd_logs EDD Logs Object
+ 	 * @global object $cs_logs CommerceStore Logs Object
 	 * @return array $data The data for the CSV file
 	 */
 	public function get_data() {
-		$edd_logs = EDD()->debug_log;
+		$cs_logs = CS()->debug_log;
 
 		$data = array();
 
@@ -84,13 +84,13 @@ class EDD_Download_History_Export extends EDD_Export {
 			'year'     => isset( $_POST['year'] ) ? absint( $_POST['year'] ) : date( 'Y' )
 		);
 
-		$logs = $edd_logs->get_connected_logs( $args );
+		$logs = $cs_logs->get_connected_logs( $args );
 
 		if ( $logs ) {
 			foreach ( $logs as $log ) {
-				$user_info = get_post_meta( $log->ID, '_edd_log_user_info', true );
-				$files     = edd_get_download_files( $log->post_parent );
-				$file_id   = (int) get_post_meta( $log->ID, '_edd_log_file_id', true );
+				$user_info = get_post_meta( $log->ID, '_cs_log_user_info', true );
+				$files     = cs_get_download_files( $log->post_parent );
+				$file_id   = (int) get_post_meta( $log->ID, '_cs_log_file_id', true );
 				$file_name = isset( $files[ $file_id ]['name'] ) ? $files[ $file_id ]['name'] : null;
 				$user      = get_userdata( $user_info['id'] );
 				$user      = $user ? $user->user_login : $user_info['email'];
@@ -98,15 +98,15 @@ class EDD_Download_History_Export extends EDD_Export {
 				$data[]    = array(
 					'date'     => $log->post_date,
 					'user'     => $user,
-					'ip'       => get_post_meta( $log->ID, '_edd_log_ip', true ),
+					'ip'       => get_post_meta( $log->ID, '_cs_log_ip', true ),
 					'download' => get_the_title( $log->post_parent ),
 					'file'     => $file_name
 				);
 			}
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return $data;
 	}

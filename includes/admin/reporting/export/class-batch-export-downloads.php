@@ -4,7 +4,7 @@
  *
  * This class handles download products export
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,11 +15,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Downloads_Export Class
+ * CS_Batch_Downloads_Export Class
  *
  * @since 2.5
  */
-class EDD_Batch_Downloads_Export extends EDD_Batch_Export {
+class CS_Batch_Downloads_Export extends CS_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions
@@ -38,24 +38,24 @@ class EDD_Batch_Downloads_Export extends EDD_Batch_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'ID'                     => __( 'ID', 'easy-digital-downloads' ),
-			'post_name'              => __( 'Slug', 'easy-digital-downloads' ),
-			'post_title'             => __( 'Name', 'easy-digital-downloads' ),
-			'post_date'              => __( 'Date Created', 'easy-digital-downloads' ),
-			'post_author'            => __( 'Author', 'easy-digital-downloads' ),
-			'post_content'           => __( 'Description', 'easy-digital-downloads' ),
-			'post_excerpt'           => __( 'Excerpt', 'easy-digital-downloads' ),
-			'post_status'            => __( 'Status', 'easy-digital-downloads' ),
-			'categories'             => __( 'Categories', 'easy-digital-downloads' ),
-			'tags'                   => __( 'Tags', 'easy-digital-downloads' ),
-			'edd_price'              => __( 'Price', 'easy-digital-downloads' ),
-			'_edd_files'             => __( 'Files', 'easy-digital-downloads' ),
-			'_edd_download_limit'    => __( 'File Download Limit', 'easy-digital-downloads' ),
-			'_thumbnail_id'          => __( 'Featured Image', 'easy-digital-downloads' ),
-			'edd_sku'                => __( 'SKU', 'easy-digital-downloads' ),
-			'edd_product_notes'      => __( 'Notes', 'easy-digital-downloads' ),
-			'_edd_download_sales'    => __( 'Sales', 'easy-digital-downloads' ),
-			'_edd_download_earnings' => __( 'Earnings', 'easy-digital-downloads' ),
+			'ID'                     => __( 'ID', 'commercestore' ),
+			'post_name'              => __( 'Slug', 'commercestore' ),
+			'post_title'             => __( 'Name', 'commercestore' ),
+			'post_date'              => __( 'Date Created', 'commercestore' ),
+			'post_author'            => __( 'Author', 'commercestore' ),
+			'post_content'           => __( 'Description', 'commercestore' ),
+			'post_excerpt'           => __( 'Excerpt', 'commercestore' ),
+			'post_status'            => __( 'Status', 'commercestore' ),
+			'categories'             => __( 'Categories', 'commercestore' ),
+			'tags'                   => __( 'Tags', 'commercestore' ),
+			'cs_price'              => __( 'Price', 'commercestore' ),
+			'_cs_files'             => __( 'Files', 'commercestore' ),
+			'_cs_download_limit'    => __( 'File Download Limit', 'commercestore' ),
+			'_thumbnail_id'          => __( 'Featured Image', 'commercestore' ),
+			'cs_sku'                => __( 'SKU', 'commercestore' ),
+			'cs_product_notes'      => __( 'Notes', 'commercestore' ),
+			'_cs_download_sales'    => __( 'Sales', 'commercestore' ),
+			'_cs_download_earnings' => __( 'Earnings', 'commercestore' ),
 		);
 
 		return $cols;
@@ -72,14 +72,14 @@ class EDD_Batch_Downloads_Export extends EDD_Batch_Export {
 		$data = array();
 
 		$meta = array(
-			'edd_price',
-			'_edd_files',
-			'_edd_download_limit',
+			'cs_price',
+			'_cs_files',
+			'_cs_download_limit',
 			'_thumbnail_id',
-			'edd_sku',
-			'edd_product_notes',
-			'_edd_download_sales',
-			'_edd_download_earnings',
+			'cs_sku',
+			'cs_product_notes',
+			'_cs_download_sales',
+			'_cs_download_earnings',
 		);
 
 		$args = array(
@@ -112,26 +112,26 @@ class EDD_Batch_Downloads_Export extends EDD_Batch_Export {
 								$row[ $key ] = wp_get_attachment_url( $image_id );
 								break;
 
-							case 'edd_price' :
-								if ( edd_has_variable_prices( $download->ID ) ) {
+							case 'cs_price' :
+								if ( cs_has_variable_prices( $download->ID ) ) {
 									$prices = array();
-									foreach ( edd_get_variable_prices( $download->ID ) as $price ) {
+									foreach ( cs_get_variable_prices( $download->ID ) as $price ) {
 										$prices[] = $price['name'] . ': ' . $price['amount'];
 									}
 
 									$row[ $key ] = implode( ' | ', $prices );
 								} else {
-									$row[ $key ] = edd_get_download_price( $download->ID );
+									$row[ $key ] = cs_get_download_price( $download->ID );
 								}
 								break;
 
-							case '_edd_files' :
+							case '_cs_files' :
 								$files = array();
 
-								foreach ( edd_get_download_files( $download->ID ) as $file ) {
+								foreach ( cs_get_download_files( $download->ID ) as $file ) {
 									$f = $file['file'];
 
-									if ( edd_has_variable_prices( $download->ID ) ) {
+									if ( cs_has_variable_prices( $download->ID ) ) {
 										$condition = isset( $file['condition'] ) ? $file['condition'] : 'all';
 										$f         .= ';' . $condition;
 									}
@@ -178,8 +178,8 @@ class EDD_Batch_Downloads_Export extends EDD_Batch_Export {
 				$data[] = $row;
 			}
 
-			$data = apply_filters( 'edd_export_get_data', $data );
-			$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+			$data = apply_filters( 'cs_export_get_data', $data );
+			$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 			return $data;
 		}

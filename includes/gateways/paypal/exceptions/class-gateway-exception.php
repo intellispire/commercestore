@@ -2,13 +2,13 @@
 /**
  * PayPal Gateway Exception
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Gateways\PayPal\Exceptions;
+namespace CS\Gateways\PayPal\Exceptions;
 
 class Gateway_Exception extends \Exception {
 
@@ -44,11 +44,11 @@ class Gateway_Exception extends \Exception {
 	public function record_gateway_error( $payment_id = 0 ) {
 		$message = ! empty( $this->debug_message ) ? $this->debug_message : $this->getMessage();
 
-		edd_record_gateway_error(
-			__( 'PayPal Gateway Error', 'easy-digital-downloads' ),
+		cs_record_gateway_error(
+			__( 'PayPal Gateway Error', 'commercestore' ),
 			sprintf(
 			/* Translators: %d - HTTP response code; %s - Error message */
-				__( 'Response Code: %d; Message: %s', 'easy-digital-downloads' ),
+				__( 'Response Code: %d; Message: %s', 'commercestore' ),
 				$this->getCode(),
 				$message
 			),

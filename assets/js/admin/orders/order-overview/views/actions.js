@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { edd_attach_tooltips as setupTooltips } from 'admin/components/tooltips';
+import { cs_attach_tooltips as setupTooltips } from 'admin/components/tooltips';
 import { FormAddOrderItem } from './form-add-order-item.js';
 import { FormAddOrderDiscount } from './form-add-order-discount.js';
 import { FormAddOrderAdjustment } from './form-add-order-adjustment.js';
@@ -18,12 +18,12 @@ export const Actions = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	el: '#edd-order-overview-actions',
+	el: '#cs-order-overview-actions',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-actions' ),
+	template: wp.template( 'cs-admin-order-actions' ),
 
 	/**
 	 * @since 3.0
@@ -45,7 +45,7 @@ export const Actions = wp.Backbone.View.extend( {
 		wp.Backbone.View.prototype.render.apply( this, arguments );
 
 		// Setup Tooltips after render.
-		setupTooltips( $( '.edd-help-tip' ) );
+		setupTooltips( $( '.cs-help-tip' ) );
 
 		return this;
 	},

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class EDD_Helper_Payment.
+ * Class CS_Helper_Payment.
  *
  * Helper class to create and delete a payment easily.
  */
-class EDD_Helper_Payment extends WP_UnitTestCase {
+class CS_Helper_Payment extends WP_UnitTestCase {
 
 	/**
 	 * Delete a payment.
@@ -17,7 +17,7 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 	public static function delete_payment( $payment_id ) {
 
 		// Delete the payment
-		edd_delete_purchase( $payment_id );
+		cs_delete_purchase( $payment_id );
 
 	}
 
@@ -28,7 +28,7 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 	 */
 	public static function create_simple_payment( $args = array() ) {
 
-		global $edd_options;
+		global $cs_options;
 
 		$defaults = array(
 			'discount' => 'none'
@@ -37,10 +37,10 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		$args = wp_parse_args( $args, $defaults );
 
 		// Enable a few options
-		$edd_options['sequential_prefix'] = 'EDD-';
+		$cs_options['sequential_prefix'] = 'CS-';
 
-		$simple_download   = EDD_Helper_Download::create_simple_download();
-		$variable_download = EDD_Helper_Download::create_variable_download();
+		$simple_download   = CS_Helper_Download::create_simple_download();
+		$variable_download = CS_Helper_Download::create_variable_download();
 
 		/** Generate some sales */
 		$user      = get_userdata(1);
@@ -68,8 +68,8 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$total                  = 0;
-		$simple_price           = get_post_meta( $simple_download->ID, 'edd_price', true );
-		$variable_prices        = get_post_meta( $variable_download->ID, 'edd_variable_prices', true );
+		$simple_price           = get_post_meta( $simple_download->ID, 'cs_price', true );
+		$variable_prices        = get_post_meta( $variable_download->ID, 'cs_variable_prices', true );
 		$variable_item_price    = $variable_prices[1]['amount']; // == $100
 
 		$total += $variable_item_price + $simple_price;
@@ -118,17 +118,17 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['SERVER_NAME'] = 'edd-virtual.local';
+		$_SERVER['SERVER_NAME'] = 'cs-virtual.local';
 
-		$payment_id = edd_insert_payment( $purchase_data );
+		$payment_id = cs_insert_payment( $purchase_data );
 		$key        = $purchase_data['purchase_key'];
 
-		$transaction_id = 'EDD_ORDER';
-		$payment = new EDD_Payment( $payment_id );
+		$transaction_id = 'CS_ORDER';
+		$payment = new CS_Payment( $payment_id );
 		$payment->transaction_id = $transaction_id;
 		$payment->save();
 
-		edd_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'easy-digital-downloads' ), $transaction_id ) );
+		cs_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'commercestore' ), $transaction_id ) );
 
 		return $payment_id;
 
@@ -141,13 +141,13 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 	 */
 	public static function create_simple_guest_payment() {
 
-		global $edd_options;
+		global $cs_options;
 
 		// Enable a few options
-		$edd_options['sequential_prefix'] = 'EDD-';
+		$cs_options['sequential_prefix'] = 'CS-';
 
-		$simple_download   = EDD_Helper_Download::create_simple_download();
-		$variable_download = EDD_Helper_Download::create_variable_download();
+		$simple_download   = CS_Helper_Download::create_simple_download();
+		$variable_download = CS_Helper_Download::create_variable_download();
 
 		/** Generate some sales */
 		$user_info = array(
@@ -174,8 +174,8 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$total                  = 0;
-		$simple_price           = get_post_meta( $simple_download->ID, 'edd_price', true );
-		$variable_prices        = get_post_meta( $variable_download->ID, 'edd_variable_prices', true );
+		$simple_price           = get_post_meta( $simple_download->ID, 'cs_price', true );
+		$variable_prices        = get_post_meta( $variable_download->ID, 'cs_variable_prices', true );
 		$variable_item_price    = $variable_prices[1]['amount']; // == $100
 
 		$total += $variable_item_price + $simple_price;
@@ -224,14 +224,14 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['SERVER_NAME'] = 'edd-virtual.local';
+		$_SERVER['SERVER_NAME'] = 'cs-virtual.local';
 
-		$payment_id = edd_insert_payment( $purchase_data );
+		$payment_id = cs_insert_payment( $purchase_data );
 		$key        = $purchase_data['purchase_key'];
 
-		$transaction_id = 'EDD_GUEST_ORDER';
-		edd_set_payment_transaction_id( $payment_id, $transaction_id );
-		edd_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'easy-digital-downloads' ), $transaction_id ) );
+		$transaction_id = 'CS_GUEST_ORDER';
+		cs_set_payment_transaction_id( $payment_id, $transaction_id );
+		cs_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'commercestore' ), $transaction_id ) );
 
 		return $payment_id;
 
@@ -244,13 +244,13 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 	 */
 	public static function create_simple_payment_with_tax() {
 
-		global $edd_options;
+		global $cs_options;
 
 		// Enable a few options
-		$edd_options['sequential_prefix'] = 'EDD-';
+		$cs_options['sequential_prefix'] = 'CS-';
 
-		$simple_download   = EDD_Helper_Download::create_simple_download();
-		$variable_download = EDD_Helper_Download::create_variable_download();
+		$simple_download   = CS_Helper_Download::create_simple_download();
+		$variable_download = CS_Helper_Download::create_variable_download();
 
 		/** Generate some sales */
 		$user      = get_userdata(1);
@@ -278,8 +278,8 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$total                  = 0;
-		$simple_price           = get_post_meta( $simple_download->ID, 'edd_price', true );
-		$variable_prices        = get_post_meta( $variable_download->ID, 'edd_variable_prices', true );
+		$simple_price           = get_post_meta( $simple_download->ID, 'cs_price', true );
+		$variable_prices        = get_post_meta( $variable_download->ID, 'cs_variable_prices', true );
 		$variable_item_price    = $variable_prices[1]['amount']; // == $100
 
 		$total += $variable_item_price + $simple_price + 10 + 1; // Add our tax into the payment total
@@ -329,17 +329,17 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['SERVER_NAME'] = 'edd-virtual.local';
+		$_SERVER['SERVER_NAME'] = 'cs-virtual.local';
 
-		$payment_id = edd_insert_payment( $purchase_data );
+		$payment_id = cs_insert_payment( $purchase_data );
 		$key        = $purchase_data['purchase_key'];
 
-		$transaction_id = 'EDD_ORDER_TAX';
-		$payment = new EDD_Payment( $payment_id );
+		$transaction_id = 'CS_ORDER_TAX';
+		$payment = new CS_Payment( $payment_id );
 		$payment->transaction_id = $transaction_id;
 		$payment->save();
 
-		edd_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'easy-digital-downloads' ), $transaction_id ) );
+		cs_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'commercestore' ), $transaction_id ) );
 
 		return $payment_id;
 
@@ -352,13 +352,13 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 	 */
 	public static function create_simple_payment_with_quantity_tax() {
 
-		global $edd_options;
+		global $cs_options;
 
 		// Enable a few options
-		$edd_options['sequential_prefix'] = 'EDD-';
+		$cs_options['sequential_prefix'] = 'CS-';
 
-		$simple_download   = EDD_Helper_Download::create_simple_download();
-		$variable_download = EDD_Helper_Download::create_variable_download();
+		$simple_download   = CS_Helper_Download::create_simple_download();
+		$variable_download = CS_Helper_Download::create_variable_download();
 
 		/** Generate some sales */
 		$user      = get_userdata(1);
@@ -388,8 +388,8 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$total                  = 0;
-		$simple_price           = get_post_meta( $simple_download->ID, 'edd_price', true );
-		$variable_prices        = get_post_meta( $variable_download->ID, 'edd_variable_prices', true );
+		$simple_price           = get_post_meta( $simple_download->ID, 'cs_price', true );
+		$variable_prices        = get_post_meta( $variable_download->ID, 'cs_variable_prices', true );
 		$variable_item_price    = $variable_prices[1]['amount']; // == $100
 
 		$total += $variable_item_price + $simple_price + 20 + 2; // Add our tax into the payment total
@@ -439,17 +439,17 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['SERVER_NAME'] = 'edd-virtual.local';
+		$_SERVER['SERVER_NAME'] = 'cs-virtual.local';
 
-		$payment_id = edd_insert_payment( $purchase_data );
+		$payment_id = cs_insert_payment( $purchase_data );
 		$key        = $purchase_data['purchase_key'];
 
-		$transaction_id = 'EDD_ORDER_QUANTITY_TAX';
-		$payment = new EDD_Payment( $payment_id );
+		$transaction_id = 'CS_ORDER_QUANTITY_TAX';
+		$payment = new CS_Payment( $payment_id );
 		$payment->transaction_id = $transaction_id;
 		$payment->save();
 
-		edd_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'easy-digital-downloads' ), $transaction_id ) );
+		cs_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'commercestore' ), $transaction_id ) );
 
 		return $payment_id;
 
@@ -457,14 +457,14 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 
 	public static function create_simple_payment_with_fee() {
 
-		global $edd_options;
+		global $cs_options;
 
 		// Enable a few options
-		$edd_options['sequential_prefix'] = 'EDD-';
+		$cs_options['sequential_prefix'] = 'CS-';
 
-		$simple_download   = EDD_Helper_Download::create_simple_download();
+		$simple_download   = CS_Helper_Download::create_simple_download();
 
-		add_filter( 'edd_cart_contents', function( $cart ) use ( $simple_download ) {
+		add_filter( 'cs_cart_contents', function( $cart ) use ( $simple_download ) {
 			return array( 0 => array(
 				'id' => $simple_download->ID,
 				'options' => array(),
@@ -472,7 +472,7 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 			) );
 		}, 10 );
 
-		add_filter( 'edd_item_quantities_enabled', '__return_true' );
+		add_filter( 'cs_item_quantities_enabled', '__return_true' );
 
 		/** Generate some sales */
 		$user      = get_userdata(1);
@@ -495,7 +495,7 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$total                  = 0;
-		$simple_price           = get_post_meta( $simple_download->ID, 'edd_price', true );
+		$simple_price           = get_post_meta( $simple_download->ID, 'cs_price', true );
 
 		$total += $simple_price + 2; // Add our tax into the payment total
 
@@ -535,23 +535,23 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 			'amount' => 5,
 		);
 
-		EDD()->fees->add_fee( $fee_args );
+		CS()->fees->add_fee( $fee_args );
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['SERVER_NAME'] = 'edd-virtual.local';
+		$_SERVER['SERVER_NAME'] = 'cs-virtual.local';
 
-		$payment_id = edd_insert_payment( $purchase_data );
+		$payment_id = cs_insert_payment( $purchase_data );
 		$key        = $purchase_data['purchase_key'];
 
-		$transaction_id = 'EDD_ORDER_FEE';
-		$payment = new EDD_Payment( $payment_id );
+		$transaction_id = 'CS_ORDER_FEE';
+		$payment = new CS_Payment( $payment_id );
 		$payment->transaction_id = $transaction_id;
 		$payment->save();
 
-		edd_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'easy-digital-downloads' ), $transaction_id ) );
+		cs_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'commercestore' ), $transaction_id ) );
 
-		remove_all_filters( 'edd_cart_contents' );
-		remove_filter( 'edd_item_quantities_enabled', '__return_true' );
+		remove_all_filters( 'cs_cart_contents' );
+		remove_filter( 'cs_item_quantities_enabled', '__return_true' );
 
 		return $payment_id;
 
@@ -564,13 +564,13 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 	 */
 	public static function create_simple_payment_with_date( $date ) {
 
-		global $edd_options;
+		global $cs_options;
 
 		// Enable a few options
-		$edd_options['sequential_prefix'] = 'EDD-';
+		$cs_options['sequential_prefix'] = 'CS-';
 
-		$simple_download   = EDD_Helper_Download::create_simple_download();
-		$variable_download = EDD_Helper_Download::create_variable_download();
+		$simple_download   = CS_Helper_Download::create_simple_download();
+		$variable_download = CS_Helper_Download::create_variable_download();
 
 		/** Generate some sales */
 		$user      = get_userdata(1);
@@ -598,8 +598,8 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$total                  = 0;
-		$simple_price           = get_post_meta( $simple_download->ID, 'edd_price', true );
-		$variable_prices        = get_post_meta( $variable_download->ID, 'edd_variable_prices', true );
+		$simple_price           = get_post_meta( $simple_download->ID, 'cs_price', true );
+		$variable_prices        = get_post_meta( $variable_download->ID, 'cs_variable_prices', true );
 		$variable_item_price    = $variable_prices[1]['amount']; // == $100
 
 		$total += $variable_item_price + $simple_price;
@@ -648,18 +648,18 @@ class EDD_Helper_Payment extends WP_UnitTestCase {
 		);
 
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['SERVER_NAME'] = 'edd-virtual.local';
+		$_SERVER['SERVER_NAME'] = 'cs-virtual.local';
 
-		$payment_id = edd_insert_payment( $purchase_data );
+		$payment_id = cs_insert_payment( $purchase_data );
 		$key        = $purchase_data['purchase_key'];
 
-		$transaction_id = 'EDD_ORDER_DATE';
-		$payment = new EDD_Payment( $payment_id );
+		$transaction_id = 'CS_ORDER_DATE';
+		$payment = new CS_Payment( $payment_id );
 		$payment->transaction_id = $transaction_id;
 		$payment->date = $date;
 		$payment->save();
 
-		edd_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'easy-digital-downloads' ), $transaction_id ) );
+		cs_insert_payment_note( $payment_id, sprintf( __( 'PayPal Transaction ID: %s', 'commercestore' ), $transaction_id ) );
 
 		return $payment_id;
 

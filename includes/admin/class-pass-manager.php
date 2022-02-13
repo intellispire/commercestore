@@ -4,13 +4,13 @@
  *
  * Tool for determining what kind of pass, if any, is activated on the site.
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.10.6
  */
 
-namespace EDD\Admin;
+namespace CS\Admin;
 
 class Pass_Manager {
 
@@ -49,9 +49,9 @@ class Pass_Manager {
 	 * might have a pass activated, we just haven't figured it out
 	 * yet and we're still waiting for the first cron to run.
 	 *
-	 * @see \EDD_License::weekly_license_check()
-	 * @see \EDD_License::activate_license()
-	 * @see \EDD_License::maybe_set_pass_flag()
+	 * @see \CS_License::weekly_license_check()
+	 * @see \CS_License::activate_license()
+	 * @see \CS_License::maybe_set_pass_flag()
 	 *
 	 * @var bool
 	 */
@@ -84,7 +84,7 @@ class Pass_Manager {
 	 * Pass_Manager constructor.
 	 */
 	public function __construct() {
-		$pass_data = get_option( 'edd_pass_licenses' );
+		$pass_data = get_option( 'cs_pass_licenses' );
 		if ( false !== $pass_data ) {
 			$this->pass_data     = json_decode( $pass_data, true );
 			$this->has_pass_data = true;
@@ -93,7 +93,7 @@ class Pass_Manager {
 		// Set up the highest pass data.
 		$this->set_highest_pass_data();
 
-		$this->number_license_keys = count( \EDD\Extensions\get_licensed_extension_slugs() );
+		$this->number_license_keys = count( \CS\Extensions\get_licensed_extension_slugs() );
 	}
 
 	/**

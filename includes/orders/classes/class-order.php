@@ -2,16 +2,16 @@
 /**
  * Order Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Orders;
+namespace CS\Orders;
 
-use EDD\Database\Rows as Rows;
-use EDD\Database\Rows\Adjustment;
+use CS\Database\Rows as Rows;
+use CS\Database\Rows\Adjustment;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -238,7 +238,7 @@ class Order extends Rows\Order {
 	 * Order items.
 	 *
 	 * @since 3.0
-	 * @var   \EDD\Orders\Order_Item[]
+	 * @var   \CS\Orders\Order_Item[]
 	 */
 	protected $items = null;
 
@@ -246,7 +246,7 @@ class Order extends Rows\Order {
 	 * Order adjustments.
 	 *
 	 * @since 3.0
-	 * @var   \EDD\Orders\Order_Adjustment[]
+	 * @var   \CS\Orders\Order_Adjustment[]
 	 */
 	protected $adjustments = null;
 
@@ -254,7 +254,7 @@ class Order extends Rows\Order {
 	 * Order address.
 	 *
 	 * @since 3.0
-	 * @var   \EDD\Orders\Order_Address
+	 * @var   \CS\Orders\Order_Address
 	 */
 	protected $address = null;
 
@@ -268,14 +268,14 @@ class Order extends Rows\Order {
 	 */
 	public function __get( $key = '' ) {
 		if ( 'adjustments' === $key && null === $this->adjustments ) {
-			$this->adjustments = edd_get_order_adjustments( array(
+			$this->adjustments = cs_get_order_adjustments( array(
 				'object_id'     => $this->id,
 				'object_type'   => 'order',
 				'no_found_rows' => true,
 				'order'         => 'ASC',
 			) );
 		} elseif ( 'items' === $key && null === $this->items ) {
-			$this->items = edd_get_order_items( array(
+			$this->items = cs_get_order_items( array(
 				'order_id'      => $this->id,
 				'orderby'       => 'cart_index',
 				'order'         => 'ASC',
@@ -298,39 +298,39 @@ class Order extends Rows\Order {
 	 */
 	public function get_number() {
 
-		if ( $this->order_number && edd_get_option( 'enable_sequential' ) ) {
+		if ( $this->order_number && cs_get_option( 'enable_sequential' ) ) {
 			$number = $this->order_number;
 		} else {
 			$number = $this->id;
 		}
 
 		/**
-		 * The edd_payment_number filter allows the order_number value to be changed.
+		 * The cs_payment_number filter allows the order_number value to be changed.
 		 *
-		 * This filter used to run in the  EDD_Payment class's get_number method upon its setup.
-		 * It now exists only here in EDD_Order since EDD 3.0. EDD Payment gets its order_number
-		 * value from EDD_Order (this class), so it gets run for both EDD_Payment and EDD_Order this way.
+		 * This filter used to run in the  CS_Payment class's get_number method upon its setup.
+		 * It now exists only here in CS_Order since CommerceStore 3.0. CommerceStore Payment gets its order_number
+		 * value from CS_Order (this class), so it gets run for both CS_Payment and CS_Order this way.
 		 *
 		 * @since 2.5
-		 * @since 3.0 Updated the 3rd paramater from an EDD_Payment object to an EDD_Order object.
+		 * @since 3.0 Updated the 3rd paramater from an CS_Payment object to an CS_Order object.
 		 *
 		 * @param string    The unique value to represent this order. This is a string because pre-fixes and post-fixes can be appended via the filter.
 		 * @param int       The row ID of the Payment/Order.
-		 * @param Order     Prior to EDD 3.0, this was an EDD_Payment object. Now it is an EDD_Order object.
+		 * @param Order     Prior to CommerceStore 3.0, this was an CS_Payment object. Now it is an CS_Order object.
 		 */
-		$number = apply_filters( 'edd_payment_number', $number, $this->ID, $this );
+		$number = apply_filters( 'cs_payment_number', $number, $this->ID, $this );
 
 		/**
-		 * This filter is exactly the same as edd_payment_number, and exists purely so that
+		 * This filter is exactly the same as cs_payment_number, and exists purely so that
 		 * the "order" terminology has a filter as well.
 		 *
 		 * @since 3.0
 		 *
 		 * @param string    The unique value to represent this order. This is a string because pre-fixes and post-fixes can be appended via the filter.
 		 * @param int       The row ID of the Payment/Order.
-		 * @param Order     The EDD_Order object.
+		 * @param Order     The CS_Order object.
 		 */
-		$number = apply_filters( 'edd_order_number', $number, $this->ID, $this );
+		$number = apply_filters( 'cs_order_number', $number, $this->ID, $this );
 
 		return $number;
 	}
@@ -344,7 +344,7 @@ class Order extends Rows\Order {
 	 */
 	public function get_items() {
 		if ( null === $this->items ) {
-			$this->items = edd_get_order_items( array(
+			$this->items = cs_get_order_items( array(
 				'order_id'      => $this->id,
 				'orderby'       => 'cart_index',
 				'order'         => 'ASC',
@@ -364,7 +364,7 @@ class Order extends Rows\Order {
 	 */
 	public function get_adjustments() {
 		if ( null === $this->adjustments ) {
-			$this->adjustments = edd_get_order_adjustments( array(
+			$this->adjustments = cs_get_order_adjustments( array(
 				'object_id'     => $this->id,
 				'object_type'   => 'order',
 				'no_found_rows' => true,
@@ -473,7 +473,7 @@ class Order extends Rows\Order {
 
 		// Retrieve first transaction ID only.
 		if ( 'primary' === $type ) {
-			$transactions = array_values( edd_get_order_transactions( array(
+			$transactions = array_values( cs_get_order_transactions( array(
 				'object_id'   => $this->id,
 				'object_type' => 'order',
 				'orderby'     => 'date_created',
@@ -488,7 +488,7 @@ class Order extends Rows\Order {
 
 		// Retrieve all transaction IDs.
 		} else {
-			$retval = edd_get_order_transactions( array(
+			$retval = cs_get_order_transactions( array(
 				'object_id'   => $this->id,
 				'object_type' => 'order',
 				'orderby'     => 'date_created',
@@ -508,7 +508,7 @@ class Order extends Rows\Order {
 	 */
 	public function get_tax_rate_object() {
 		if ( $this->tax_rate_id && null === $this->tax_rate ) {
-			$this->tax_rate = edd_get_adjustment( $this->tax_rate_id );
+			$this->tax_rate = cs_get_adjustment( $this->tax_rate_id );
 		}
 
 		return $this->tax_rate;
@@ -537,7 +537,7 @@ class Order extends Rows\Order {
 		 * if they cannot be resolved to an actual adjustment object.
 		 */
 		if ( empty( $rate ) && abs( $this->tax ) > 0 ) {
-			$rate = edd_get_order_meta( $this->id, 'tax_rate', true );
+			$rate = cs_get_order_meta( $this->id, 'tax_rate', true );
 		}
 
 		return floatval( $rate );
@@ -548,12 +548,12 @@ class Order extends Rows\Order {
 	 *
 	 * @since 3.0
 	 *
-	 * @return \EDD\Orders\Order_Address|false Object if successful, false otherwise.
+	 * @return \CS\Orders\Order_Address|false Object if successful, false otherwise.
 	 */
 	public function get_address() {
 
 		// Attempt to get the order address.
-		$address = edd_get_order_address_by( 'order_id', $this->id );
+		$address = cs_get_order_address_by( 'order_id', $this->id );
 
 		// Fallback object if not found.
 		if ( empty( $address ) ) {
@@ -583,7 +583,7 @@ class Order extends Rows\Order {
 	 * @return bool True if unlimited downloads are enabled, false otherwise.
 	 */
 	public function has_unlimited_downloads() {
-		return (bool) edd_get_order_meta( $this->id, 'unlimited_downloads', true );
+		return (bool) cs_get_order_meta( $this->id, 'unlimited_downloads', true );
 	}
 
 	/**
@@ -594,7 +594,7 @@ class Order extends Rows\Order {
 	 * @return array Notes associated with this order.
 	 */
 	public function get_notes() {
-		return edd_get_notes( array(
+		return cs_get_notes( array(
 			'object_id'   => $this->id,
 			'object_type' => 'order',
 			'order'       => 'ASC',
@@ -620,7 +620,7 @@ class Order extends Rows\Order {
 	 * @return bool
 	 */
 	public function is_recoverable() {
-		$recoverable_statuses = edd_recoverable_order_statuses();
+		$recoverable_statuses = cs_recoverable_order_statuses();
 		if ( in_array( $this->status, $recoverable_statuses, true ) && empty( $this->get_transaction_id() ) ) {
 			return true;
 		}
@@ -642,19 +642,19 @@ class Order extends Rows\Order {
 
 		$recovery_url = add_query_arg(
 			array(
-				'edd_action' => 'recover_payment',
+				'cs_action' => 'recover_payment',
 				'payment_id' => urlencode( $this->id ),
 			),
-			edd_get_checkout_uri()
+			cs_get_checkout_uri()
 		);
 
 		/**
 		 * Legacy recovery URL filter.
 		 *
-		 * @param \EDD_Payment $payment The EDD payment object.
+		 * @param \CS_Payment $payment The CommerceStore payment object.
 		 */
-		if ( has_filter( 'edd_payment_recovery_url' ) ) {
-			$recovery_url = apply_filters( 'edd_payment_recovery_url', $recovery_url, edd_get_payment( $this->id ) );
+		if ( has_filter( 'cs_payment_recovery_url' ) ) {
+			$recovery_url = apply_filters( 'cs_payment_recovery_url', $recovery_url, cs_get_payment( $this->id ) );
 		}
 
 		/**
@@ -662,8 +662,8 @@ class Order extends Rows\Order {
 		 *
 		 * @since 3.0
 		 * @param string            $recovery_url The order recovery URL.
-		 * @param \EDD\Orders\Order $this         The order object.
+		 * @param \CS\Orders\Order $this         The order object.
 		 */
-		return apply_filters( 'edd_order_recovery_url', $recovery_url, $this );
+		return apply_filters( 'cs_order_recovery_url', $recovery_url, $this );
 	}
 }

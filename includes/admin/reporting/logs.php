@@ -2,7 +2,7 @@
 /**
  * Logs UI (moved)
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -13,11 +13,11 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-_edd_deprecated_file(
+_cs_deprecated_file(
 	__FILE__,
 	'3.0',
 	'includes/admin/tools/logs.php',
-	__( 'The logs tab has been moved to the Tools screen.', 'easy-digital-downloads' )
+	__( 'The logs tab has been moved to the Tools screen.', 'commercestore' )
 );
 
-require_once EDD_PLUGIN_DIR . 'includes/admin/tools/logs.php';
+require_once CS_PLUGIN_DIR . 'includes/admin/tools/logs.php';

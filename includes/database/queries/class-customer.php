@@ -2,25 +2,25 @@
 /**
  * Customer Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying customers.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Customer::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Customer::__construct() for accepted arguments.
  */
 class Customer extends Query {
 
@@ -51,7 +51,7 @@ class Customer extends Query {
 	 * @access public
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Customers';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Customers';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Customer extends Query {
 	 * @access public
 	 * @var mixed
 	 */
-	protected $item_shape = '\\EDD_Customer';
+	protected $item_shape = '\\CS_Customer';
 
 	/** Cache *****************************************************************/
 

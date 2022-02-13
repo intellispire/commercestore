@@ -18,7 +18,7 @@ const TableAdd = wp.Backbone.View.extend( {
 	className: 'add-new',
 
 	// See https://codex.wordpress.org/Javascript_Reference/wp.template
-	template: wp.template( 'edd-admin-tax-rates-table-add' ),
+	template: wp.template( 'cs-admin-tax-rates-table-add' ),
 
 	// Watch events.
 	events: {
@@ -72,7 +72,7 @@ const TableAdd = wp.Backbone.View.extend( {
 		const self = this;
 
 		const data = {
-			action: 'edd_get_shop_states',
+			action: 'cs_get_shop_states',
 			country: this.model.get( 'country' ),
 			nonce: eddTaxRates.nonce,
 			field_name: 'tax_rate_region',

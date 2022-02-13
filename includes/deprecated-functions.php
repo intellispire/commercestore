@@ -4,14 +4,14 @@
  *
  * All functions that have been deprecated.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Deprecated
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
 
-use EDD\Reports;
+use CS\Reports;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -31,12 +31,12 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return mixed array|bool
 */
-function edd_get_download_sales_log( $download_id, $paginate = false, $number = 10, $offset = 0 ) {
+function cs_get_download_sales_log( $download_id, $paginate = false, $number = 10, $offset = 0 ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.3.4', null, $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.3.4', null, $backtrace );
 
-	$sales_log = get_post_meta( $download_id, '_edd_sales_log', true );
+	$sales_log = get_post_meta( $download_id, '_cs_sales_log', true );
 
 	if ( $sales_log ) {
 		$sales_log = array_reverse( $sales_log );
@@ -66,13 +66,13 @@ function edd_get_download_sales_log( $download_id, $paginate = false, $number = 
  * @param null $payment_meta
  * @return bool|mixed
  */
-function edd_get_downloads_of_purchase( $payment_id, $payment_meta = null ) {
+function cs_get_downloads_of_purchase( $payment_id, $payment_meta = null ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.4', 'edd_get_payment_meta_downloads', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.4', 'cs_get_payment_meta_downloads', $backtrace );
 
 	if ( is_null( $payment_meta ) ) {
-		$payment_meta = edd_get_payment_meta( $payment_id );
+		$payment_meta = cs_get_payment_meta( $payment_id );
 	}
 
 	$downloads = maybe_unserialize( $payment_meta['downloads'] );
@@ -94,36 +94,36 @@ function edd_get_downloads_of_purchase( $payment_id, $payment_meta = null ) {
  * @deprecated 1.4.4
  * @return string
 */
-function edd_get_menu_access_level() {
+function cs_get_menu_access_level() {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.4.4', 'current_user_can(\'manage_shop_settings\')', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.4.4', 'current_user_can(\'manage_shop_settings\')', $backtrace );
 
-	return apply_filters( 'edd_menu_access_level', 'manage_options' );
+	return apply_filters( 'cs_menu_access_level', 'manage_options' );
 }
 
 
 
 /**
  * Check if only local taxes are enabled meaning users must opt in by using the
- * option set from the EDD Settings.
+ * option set from the CommerceStore Settings.
  *
  * @since 1.3.3
  * @deprecated 1.6
- * @global $edd_options
+ * @global $cs_options
  * @return bool $local_only
  */
-function edd_local_taxes_only() {
+function cs_local_taxes_only() {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.6', 'no alternatives', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.6', 'no alternatives', $backtrace );
 
-	global $edd_options;
+	global $cs_options;
 
-	$local_only = isset( $edd_options['tax_condition'] ) && $edd_options['tax_condition'] == 'local';
+	$local_only = isset( $cs_options['tax_condition'] ) && $cs_options['tax_condition'] == 'local';
 
-	return apply_filters( 'edd_local_taxes_only', $local_only );
+	return apply_filters( 'cs_local_taxes_only', $local_only );
 }
 
 /**
@@ -131,16 +131,16 @@ function edd_local_taxes_only() {
  *
  * @since 1.4.1
  * @deprecated 1.6
- * @uses EDD_Session::get()
+ * @uses CS_Session::get()
  * @return bool
  */
-function edd_local_tax_opted_in() {
+function cs_local_tax_opted_in() {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.6', 'no alternatives', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.6', 'no alternatives', $backtrace );
 
-	$opted_in = EDD()->session->get( 'edd_local_tax_opt_in' );
+	$opted_in = CS()->session->get( 'cs_local_tax_opt_in' );
 	return ! empty( $opted_in );
 }
 
@@ -149,17 +149,17 @@ function edd_local_tax_opted_in() {
  *
  * @since 1.4
  * @deprecated 1.9
- * @global $edd_options
+ * @global $cs_options
  * @return bool Whether or not to show taxes on prices
  */
-function edd_taxes_on_prices() {
-	global $edd_options;
+function cs_taxes_on_prices() {
+	global $cs_options;
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.9', 'no alternatives', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.9', 'no alternatives', $backtrace );
 
-	return apply_filters( 'edd_taxes_on_prices', isset( $edd_options['taxes_on_prices'] ) );
+	return apply_filters( 'cs_taxes_on_prices', isset( $cs_options['taxes_on_prices'] ) );
 }
 
 /**
@@ -171,11 +171,11 @@ function edd_taxes_on_prices() {
  * @deprecated 1.8
  * @global $user_ID
  */
-function edd_show_has_purchased_item_message() {
+function cs_show_has_purchased_item_message() {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.8', 'no alternatives', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.8', 'no alternatives', $backtrace );
 
 	global $user_ID, $post;
 
@@ -183,9 +183,9 @@ function edd_show_has_purchased_item_message() {
 		return;
 	}
 
-	if ( edd_has_user_purchased( $user_ID, $post->ID ) ) {
-		$alert = '<p class="edd_has_purchased">' . __( 'You have already purchased this item, but you may purchase it again.', 'easy-digital-downloads' ) . '</p>';
-		echo apply_filters( 'edd_show_has_purchased_item_message', $alert );
+	if ( cs_has_user_purchased( $user_ID, $post->ID ) ) {
+		$alert = '<p class="cs_has_purchased">' . __( 'You have already purchased this item, but you may purchase it again.', 'commercestore' ) . '</p>';
+		echo apply_filters( 'cs_show_has_purchased_item_message', $alert );
 	}
 }
 
@@ -198,15 +198,15 @@ function edd_show_has_purchased_item_message() {
  * @param array $payment_data Payment Data
  * @return void
  */
-function edd_clear_earnings_cache( $payment, $payment_data ) {
+function cs_clear_earnings_cache( $payment, $payment_data ) {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.8.4', 'no alternatives', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.8.4', 'no alternatives', $backtrace );
 
-	delete_transient( 'edd_total_earnings' );
+	delete_transient( 'cs_total_earnings' );
 }
-//add_action( 'edd_insert_payment', 'edd_clear_earnings_cache', 10, 2 );
+//add_action( 'cs_insert_payment', 'cs_clear_earnings_cache', 10, 2 );
 
 /**
  * Get Cart Amount
@@ -217,33 +217,33 @@ function edd_clear_earnings_cache( $payment, $payment_data ) {
  * @param bool $local_override Force the local opt-in param - used for when not reading $_POST (default: false)
  * @return float Total amount
 */
-function edd_get_cart_amount( $add_taxes = true, $local_override = false ) {
+function cs_get_cart_amount( $add_taxes = true, $local_override = false ) {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '1.9', 'edd_get_cart_subtotal() or edd_get_cart_total()', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '1.9', 'cs_get_cart_subtotal() or cs_get_cart_total()', $backtrace );
 
-	$amount = edd_get_cart_subtotal( );
-	if ( ! empty( $_POST['edd-discount'] ) || edd_get_cart_discounts() !== false ) {
+	$amount = cs_get_cart_subtotal( );
+	if ( ! empty( $_POST['cs-discount'] ) || cs_get_cart_discounts() !== false ) {
 		// Retrieve the discount stored in cookies
-		$discounts = edd_get_cart_discounts();
+		$discounts = cs_get_cart_discounts();
 
 		// Check for a posted discount
-		$posted_discount = isset( $_POST['edd-discount'] ) ? trim( $_POST['edd-discount'] ) : '';
+		$posted_discount = isset( $_POST['cs-discount'] ) ? trim( $_POST['cs-discount'] ) : '';
 
 		if ( $posted_discount && ! in_array( $posted_discount, $discounts ) ) {
 			// This discount hasn't been applied, so apply it
-			$amount = edd_get_discounted_amount( $posted_discount, $amount );
+			$amount = cs_get_discounted_amount( $posted_discount, $amount );
 		}
 
 		if ( ! empty( $discounts ) ) {
 			// Apply the discounted amount from discounts already applied
-			$amount -= edd_get_cart_discounted_amount();
+			$amount -= cs_get_cart_discounted_amount();
 		}
 	}
 
-	if ( edd_use_taxes() && edd_is_cart_taxed() && $add_taxes ) {
-		$tax = edd_get_cart_tax();
+	if ( cs_use_taxes() && cs_is_cart_taxed() && $add_taxes ) {
+		$tax = cs_get_cart_tax();
 		$amount += $tax;
 	}
 
@@ -251,7 +251,7 @@ function edd_get_cart_amount( $add_taxes = true, $local_override = false ) {
 		$amount = 0.00;
 	}
 
-	return apply_filters( 'edd_get_cart_amount', $amount, $add_taxes, $local_override );
+	return apply_filters( 'cs_get_cart_amount', $amount, $add_taxes, $local_override );
 }
 
 /**
@@ -264,26 +264,26 @@ function edd_get_cart_amount( $add_taxes = true, $local_override = false ) {
  * @author Daniel J Griffiths
  * @return string $tags
  */
-function edd_get_purchase_receipt_template_tags() {
-	$tags = __('Enter the email that is sent to users after completing a successful purchase. HTML is accepted. Available template tags:','easy-digital-downloads' ) . '<br/>' .
-			'{download_list} - ' . __('A list of download links for each download purchased','easy-digital-downloads' ) . '<br/>' .
-			'{file_urls} - ' . __('A plain-text list of download URLs for each download purchased','easy-digital-downloads' ) . '<br/>' .
-			'{name} - ' . __('The buyer\'s first name','easy-digital-downloads' ) . '<br/>' .
-			'{fullname} - ' . __('The buyer\'s full name, first and last','easy-digital-downloads' ) . '<br/>' .
-			'{username} - ' . __('The buyer\'s user name on the site, if they registered an account','easy-digital-downloads' ) . '<br/>' .
-			'{user_email} - ' . __('The buyer\'s email address','easy-digital-downloads' ) . '<br/>' .
-			'{billing_address} - ' . __('The buyer\'s billing address','easy-digital-downloads' ) . '<br/>' .
-			'{date} - ' . __('The date of the purchase','easy-digital-downloads' ) . '<br/>' .
-			'{subtotal} - ' . __('The price of the purchase before taxes','easy-digital-downloads' ) . '<br/>' .
-			'{tax} - ' . __('The taxed amount of the purchase','easy-digital-downloads' ) . '<br/>' .
-			'{price} - ' . __('The total price of the purchase','easy-digital-downloads' ) . '<br/>' .
-			'{payment_id} - ' . __('The unique ID number for this purchase','easy-digital-downloads' ) . '<br/>' .
-			'{receipt_id} - ' . __('The unique ID number for this purchase receipt','easy-digital-downloads' ) . '<br/>' .
-			'{payment_method} - ' . __('The method of payment used for this purchase','easy-digital-downloads' ) . '<br/>' .
-			'{sitename} - ' . __('Your site name','easy-digital-downloads' ) . '<br/>' .
-			'{receipt_link} - ' . __( 'Adds a link so users can view their receipt directly on your website if they are unable to view it in the browser correctly.', 'easy-digital-downloads' );
+function cs_get_purchase_receipt_template_tags() {
+	$tags = __('Enter the email that is sent to users after completing a successful purchase. HTML is accepted. Available template tags:','commercestore' ) . '<br/>' .
+			'{download_list} - ' . __('A list of download links for each download purchased','commercestore' ) . '<br/>' .
+			'{file_urls} - ' . __('A plain-text list of download URLs for each download purchased','commercestore' ) . '<br/>' .
+			'{name} - ' . __('The buyer\'s first name','commercestore' ) . '<br/>' .
+			'{fullname} - ' . __('The buyer\'s full name, first and last','commercestore' ) . '<br/>' .
+			'{username} - ' . __('The buyer\'s user name on the site, if they registered an account','commercestore' ) . '<br/>' .
+			'{user_email} - ' . __('The buyer\'s email address','commercestore' ) . '<br/>' .
+			'{billing_address} - ' . __('The buyer\'s billing address','commercestore' ) . '<br/>' .
+			'{date} - ' . __('The date of the purchase','commercestore' ) . '<br/>' .
+			'{subtotal} - ' . __('The price of the purchase before taxes','commercestore' ) . '<br/>' .
+			'{tax} - ' . __('The taxed amount of the purchase','commercestore' ) . '<br/>' .
+			'{price} - ' . __('The total price of the purchase','commercestore' ) . '<br/>' .
+			'{payment_id} - ' . __('The unique ID number for this purchase','commercestore' ) . '<br/>' .
+			'{receipt_id} - ' . __('The unique ID number for this purchase receipt','commercestore' ) . '<br/>' .
+			'{payment_method} - ' . __('The method of payment used for this purchase','commercestore' ) . '<br/>' .
+			'{sitename} - ' . __('Your site name','commercestore' ) . '<br/>' .
+			'{receipt_link} - ' . __( 'Adds a link so users can view their receipt directly on your website if they are unable to view it in the browser correctly.', 'commercestore' );
 
-	return apply_filters( 'edd_purchase_receipt_template_tags_description', $tags );
+	return apply_filters( 'cs_purchase_receipt_template_tags_description', $tags );
 }
 
 
@@ -297,25 +297,25 @@ function edd_get_purchase_receipt_template_tags() {
  * @author Daniel J Griffiths
  * @return string $tags
  */
-function edd_get_sale_notification_template_tags() {
-	$tags = __( 'Enter the email that is sent to sale notification emails after completion of a purchase. HTML is accepted. Available template tags:', 'easy-digital-downloads' ) . '<br/>' .
-			'{download_list} - ' . __('A list of download links for each download purchased','easy-digital-downloads' ) . '<br/>' .
-			'{file_urls} - ' . __('A plain-text list of download URLs for each download purchased','easy-digital-downloads' ) . '<br/>' .
-			'{name} - ' . __('The buyer\'s first name','easy-digital-downloads' ) . '<br/>' .
-			'{fullname} - ' . __('The buyer\'s full name, first and last','easy-digital-downloads' ) . '<br/>' .
-			'{username} - ' . __('The buyer\'s user name on the site, if they registered an account','easy-digital-downloads' ) . '<br/>' .
-			'{user_email} - ' . __('The buyer\'s email address','easy-digital-downloads' ) . '<br/>' .
-			'{billing_address} - ' . __('The buyer\'s billing address','easy-digital-downloads' ) . '<br/>' .
-			'{date} - ' . __('The date of the purchase','easy-digital-downloads' ) . '<br/>' .
-			'{subtotal} - ' . __('The price of the purchase before taxes','easy-digital-downloads' ) . '<br/>' .
-			'{tax} - ' . __('The taxed amount of the purchase','easy-digital-downloads' ) . '<br/>' .
-			'{price} - ' . __('The total price of the purchase','easy-digital-downloads' ) . '<br/>' .
-			'{payment_id} - ' . __('The unique ID number for this purchase','easy-digital-downloads' ) . '<br/>' .
-			'{receipt_id} - ' . __('The unique ID number for this purchase receipt','easy-digital-downloads' ) . '<br/>' .
-			'{payment_method} - ' . __('The method of payment used for this purchase','easy-digital-downloads' ) . '<br/>' .
-			'{sitename} - ' . __('Your site name','easy-digital-downloads' );
+function cs_get_sale_notification_template_tags() {
+	$tags = __( 'Enter the email that is sent to sale notification emails after completion of a purchase. HTML is accepted. Available template tags:', 'commercestore' ) . '<br/>' .
+			'{download_list} - ' . __('A list of download links for each download purchased','commercestore' ) . '<br/>' .
+			'{file_urls} - ' . __('A plain-text list of download URLs for each download purchased','commercestore' ) . '<br/>' .
+			'{name} - ' . __('The buyer\'s first name','commercestore' ) . '<br/>' .
+			'{fullname} - ' . __('The buyer\'s full name, first and last','commercestore' ) . '<br/>' .
+			'{username} - ' . __('The buyer\'s user name on the site, if they registered an account','commercestore' ) . '<br/>' .
+			'{user_email} - ' . __('The buyer\'s email address','commercestore' ) . '<br/>' .
+			'{billing_address} - ' . __('The buyer\'s billing address','commercestore' ) . '<br/>' .
+			'{date} - ' . __('The date of the purchase','commercestore' ) . '<br/>' .
+			'{subtotal} - ' . __('The price of the purchase before taxes','commercestore' ) . '<br/>' .
+			'{tax} - ' . __('The taxed amount of the purchase','commercestore' ) . '<br/>' .
+			'{price} - ' . __('The total price of the purchase','commercestore' ) . '<br/>' .
+			'{payment_id} - ' . __('The unique ID number for this purchase','commercestore' ) . '<br/>' .
+			'{receipt_id} - ' . __('The unique ID number for this purchase receipt','commercestore' ) . '<br/>' .
+			'{payment_method} - ' . __('The method of payment used for this purchase','commercestore' ) . '<br/>' .
+			'{sitename} - ' . __('Your site name','commercestore' );
 
-	return apply_filters( 'edd_sale_notification_template_tags_description', $tags );
+	return apply_filters( 'cs_sale_notification_template_tags_description', $tags );
 }
 
 /**
@@ -326,10 +326,10 @@ function edd_get_sale_notification_template_tags() {
  * @deprecated 2.0
  * @return string Email template header
  */
-function edd_get_email_body_header() {
+function cs_get_email_body_header() {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.0', '', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.0', '', $backtrace );
 
 	ob_start();
 	?>
@@ -339,7 +339,7 @@ function edd_get_email_body_header() {
 	</head>
 	<body dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
 	<?php
-	do_action( 'edd_email_body_header' );
+	do_action( 'cs_email_body_header' );
 	return ob_get_clean();
 }
 
@@ -350,14 +350,14 @@ function edd_get_email_body_header() {
  * @deprecated 2.0
  * @return string Email template footer
  */
-function edd_get_email_body_footer() {
+function cs_get_email_body_footer() {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.0', '', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.0', '', $backtrace );
 
 	ob_start();
-	do_action( 'edd_email_body_footer' );
+	do_action( 'cs_email_body_footer' );
 	?>
 	</body>
 	</html>
@@ -375,19 +375,19 @@ function edd_get_email_body_footer() {
  * @param array $payment_data An array of meta information for the payment
  * @return string $email Formatted email with the template applied
  */
-function edd_apply_email_template( $body, $payment_id, $payment_data = array() ) {
-	global $edd_options;
+function cs_apply_email_template( $body, $payment_id, $payment_data = array() ) {
+	global $cs_options;
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.0', '', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.0', '', $backtrace );
 
-	$template_name = isset( $edd_options['email_template'] ) ? $edd_options['email_template'] : 'default';
-	$template_name = apply_filters( 'edd_email_template', $template_name, $payment_id );
+	$template_name = isset( $cs_options['email_template'] ) ? $cs_options['email_template'] : 'default';
+	$template_name = apply_filters( 'cs_email_template', $template_name, $payment_id );
 
 	if ( $template_name == 'none' ) {
 		if ( is_admin() ) {
-			$body = edd_email_preview_template_tags( $body );
+			$body = cs_email_preview_template_tags( $body );
 		}
 
 		// Return the plain email with no template
@@ -396,15 +396,15 @@ function edd_apply_email_template( $body, $payment_id, $payment_data = array() )
 
 	ob_start();
 
-	do_action( 'edd_email_template_' . $template_name );
+	do_action( 'cs_email_template_' . $template_name );
 
 	$template = ob_get_clean();
 
 	if ( is_admin() ) {
-		$body = edd_email_preview_template_tags( $body );
+		$body = cs_email_preview_template_tags( $body );
 	}
 
-	$body = apply_filters( 'edd_purchase_receipt_' . $template_name, $body );
+	$body = apply_filters( 'cs_purchase_receipt_' . $template_name, $body );
 
 	$email = str_replace( '{email}', $body, $template );
 
@@ -418,25 +418,25 @@ function edd_apply_email_template( $body, $payment_id, $payment_data = array() )
  *
  * @since 1.4.1
  * @deprecated 2.1
- * @global $edd_options
+ * @global $cs_options
  * @return bool Whether or not taxes are calculated after discount
  */
-function edd_taxes_after_discounts() {
+function cs_taxes_after_discounts() {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.1', 'none', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.1', 'none', $backtrace );
 
-	global $edd_options;
-	$ret = isset( $edd_options['taxes_after_discounts'] ) && edd_use_taxes();
-	return apply_filters( 'edd_taxes_after_discounts', $ret );
+	global $cs_options;
+	$ret = isset( $cs_options['taxes_after_discounts'] ) && cs_use_taxes();
+	return apply_filters( 'cs_taxes_after_discounts', $ret );
 }
 
 /**
  * Verifies a download purchase using a purchase key and email.
  *
- * @deprecated Please avoid usage of this function in favor of the tokenized urls with edd_validate_url_token()
- * introduced in EDD 2.3
+ * @deprecated Please avoid usage of this function in favor of the tokenized urls with cs_validate_url_token()
+ * introduced in CommerceStore 2.3
  *
  * @since 1.0
  *
@@ -448,28 +448,28 @@ function edd_taxes_after_discounts() {
  *
  * @return bool True if payment and link was verified, false otherwise
  */
-function edd_verify_download_link( $download_id = 0, $key = '', $email = '', $expire = '', $file_key = 0 ) {
+function cs_verify_download_link( $download_id = 0, $key = '', $email = '', $expire = '', $file_key = 0 ) {
 
 	$meta_query = array(
 		'relation'  => 'AND',
 		array(
-			'key'   => '_edd_payment_purchase_key',
+			'key'   => '_cs_payment_purchase_key',
 			'value' => $key
 		),
 		array(
-			'key'   => '_edd_payment_user_email',
+			'key'   => '_cs_payment_user_email',
 			'value' => $email
 		)
 	);
 
-	$accepted_stati = apply_filters( 'edd_allowed_download_stati', array( 'publish', 'complete' ) );
+	$accepted_stati = apply_filters( 'cs_allowed_download_stati', array( 'publish', 'complete' ) );
 
-	$payments = get_posts( array( 'meta_query' => $meta_query, 'post_type' => 'edd_payment', 'post_status' => $accepted_stati ) );
+	$payments = get_posts( array( 'meta_query' => $meta_query, 'post_type' => 'cs_payment', 'post_status' => $accepted_stati ) );
 
 	if ( $payments ) {
 		foreach ( $payments as $payment ) {
 
-			$cart_details = edd_get_payment_meta_cart_details( $payment->ID, true );
+			$cart_details = cs_get_payment_meta_cart_details( $payment->ID, true );
 
 			if ( ! empty( $cart_details ) ) {
 				foreach ( $cart_details as $cart_key => $cart_item ) {
@@ -481,15 +481,15 @@ function edd_verify_download_link( $download_id = 0, $key = '', $email = '', $ex
 					$price_options 	= isset( $cart_item['item_number']['options'] ) ? $cart_item['item_number']['options'] : false;
 					$price_id 		= isset( $price_options['price_id'] ) ? $price_options['price_id'] : false;
 
-					$file_condition = edd_get_file_price_condition( $cart_item['id'], $file_key );
+					$file_condition = cs_get_file_price_condition( $cart_item['id'], $file_key );
 
 					// Check to see if the file download limit has been reached
-					if ( edd_is_file_at_download_limit( $cart_item['id'], $payment->ID, $file_key, $price_id ) ) {
-						wp_die( apply_filters( 'edd_download_limit_reached_text', __( 'Sorry but you have hit your download limit for this file.', 'easy-digital-downloads' ) ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+					if ( cs_is_file_at_download_limit( $cart_item['id'], $payment->ID, $file_key, $price_id ) ) {
+						wp_die( apply_filters( 'cs_download_limit_reached_text', __( 'Sorry but you have hit your download limit for this file.', 'commercestore' ) ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 					}
 
 					// If this download has variable prices, we have to confirm that this file was included in their purchase
-					if ( ! empty( $price_options ) && $file_condition != 'all' && edd_has_variable_prices( $cart_item['id'] ) ) {
+					if ( ! empty( $price_options ) && $file_condition != 'all' && cs_has_variable_prices( $cart_item['id'] ) ) {
 						if ( $file_condition == $price_options['price_id'] ) {
 							return $payment->ID;
 						}
@@ -502,7 +502,7 @@ function edd_verify_download_link( $download_id = 0, $key = '', $email = '', $ex
 					}
 
 					if ( current_time( 'timestamp' ) > $expire ) {
-						wp_die( apply_filters( 'edd_download_link_expired_text', __( 'Sorry but your download link has expired.', 'easy-digital-downloads' ) ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+						wp_die( apply_filters( 'cs_download_link_expired_text', __( 'Sorry but your download link has expired.', 'commercestore' ) ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 					}
 					return $payment->ID; // Payment has been verified and link is still valid
 				}
@@ -510,7 +510,7 @@ function edd_verify_download_link( $download_id = 0, $key = '', $email = '', $ex
 		}
 
 	} else {
-		wp_die( __( 'No payments matching your request were found.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+		wp_die( __( 'No payments matching your request were found.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 	// Payment not verified
 	return false;
@@ -521,16 +521,16 @@ function edd_verify_download_link( $download_id = 0, $key = '', $email = '', $ex
  *
  * @param string $query_string
  * @since       1.0
- * @deprecated  2.6 Please avoid usage of this function in favor of edd_get_success_page_uri()
+ * @deprecated  2.6 Please avoid usage of this function in favor of cs_get_success_page_uri()
  * @return      string
 */
-function edd_get_success_page_url( $query_string = null ) {
+function cs_get_success_page_url( $query_string = null ) {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.6', 'edd_get_success_page_uri()', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.6', 'cs_get_success_page_uri()', $backtrace );
 
-	return apply_filters( 'edd_success_page_url', edd_get_success_page_uri( $query_string ) );
+	return apply_filters( 'cs_success_page_url', cs_get_success_page_uri( $query_string ) );
 }
 
 /**
@@ -540,15 +540,15 @@ function edd_get_success_page_url( $query_string = null ) {
  * @param int $payment_id the ID number of the payment
  * @param string $new_status the status of the payment, probably "publish"
  * @param string $old_status the status of the payment prior to being marked as "complete", probably "pending"
- * @deprecated  2.5.7 Please avoid usage of this function in favor of refund() in EDD_Payment
+ * @deprecated  2.5.7 Please avoid usage of this function in favor of refund() in CS_Payment
  * @internal param Arguments $data passed
  */
-function edd_undo_purchase_on_refund( $payment_id, $new_status, $old_status ) {
+function cs_undo_purchase_on_refund( $payment_id, $new_status, $old_status ) {
 
 	$backtrace = debug_backtrace();
-	_edd_deprecated_function( 'edd_undo_purchase_on_refund', '2.5.7', 'EDD_Payment->refund()', $backtrace );
+	_cs_deprecated_function( 'cs_undo_purchase_on_refund', '2.5.7', 'CS_Payment->refund()', $backtrace );
 
-	$payment = new EDD_Payment( $payment_id );
+	$payment = new CS_Payment( $payment_id );
 	$payment->refund();
 }
 
@@ -563,15 +563,15 @@ function edd_undo_purchase_on_refund( $payment_id, $new_status, $old_status ) {
  * @param int $hour Hour
  * @return int $earnings Earnings
  */
-function edd_get_earnings_by_date( $day, $month_num = null, $year = null, $hour = null, $include_taxes = true ) {
+function cs_get_earnings_by_date( $day, $month_num = null, $year = null, $hour = null, $include_taxes = true ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.7', 'EDD_Payment_Stats()->get_earnings()', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.7', 'CS_Payment_Stats()->get_earnings()', $backtrace );
 
 	global $wpdb;
 
 	$args = array(
-		'post_type'      => 'edd_payment',
+		'post_type'      => 'cs_payment',
 		'nopaging'       => true,
 		'year'           => $year,
 		'monthnum'       => $month_num,
@@ -589,8 +589,8 @@ function edd_get_earnings_by_date( $day, $month_num = null, $year = null, $hour 
 		$args['hour'] = $hour;
 	}
 
-	$args   = apply_filters( 'edd_get_earnings_by_date_args', $args );
-	$cached = get_transient( 'edd_stats_earnings' );
+	$args   = apply_filters( 'cs_get_earnings_by_date_args', $args );
+	$cached = get_transient( 'cs_stats_earnings' );
 	$key    = md5( json_encode( $args ) );
 
 	if ( ! isset( $cached[ $key ] ) ) {
@@ -599,18 +599,18 @@ function edd_get_earnings_by_date( $day, $month_num = null, $year = null, $hour 
 		if ( $sales ) {
 			$sales = implode( ',', $sales );
 
-			$total_earnings = $wpdb->get_var( "SELECT SUM(meta_value) FROM $wpdb->postmeta WHERE meta_key = '_edd_payment_total' AND post_id IN ({$sales})" );
+			$total_earnings = $wpdb->get_var( "SELECT SUM(meta_value) FROM $wpdb->postmeta WHERE meta_key = '_cs_payment_total' AND post_id IN ({$sales})" );
 			$total_tax      = 0;
 
 			if ( ! $include_taxes ) {
-				$total_tax = $wpdb->get_var( "SELECT SUM(meta_value) FROM $wpdb->postmeta WHERE meta_key = '_edd_payment_tax' AND post_id IN ({$sales})" );
+				$total_tax = $wpdb->get_var( "SELECT SUM(meta_value) FROM $wpdb->postmeta WHERE meta_key = '_cs_payment_tax' AND post_id IN ({$sales})" );
 			}
 
 			$earnings += ( $total_earnings - $total_tax );
 		}
 		// Cache the results for one hour
 		$cached[ $key ] = $earnings;
-		set_transient( 'edd_stats_earnings', $cached, HOUR_IN_SECONDS );
+		set_transient( 'cs_stats_earnings', $cached, HOUR_IN_SECONDS );
 	}
 
 	$result = $cached[ $key ];
@@ -630,13 +630,13 @@ function edd_get_earnings_by_date( $day, $month_num = null, $year = null, $hour 
  * @param int $hour Hour
  * @return int $count Sales
  */
-function edd_get_sales_by_date( $day = null, $month_num = null, $year = null, $hour = null ) {
+function cs_get_sales_by_date( $day = null, $month_num = null, $year = null, $hour = null ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.7', 'EDD_Payment_Stats()->get_sales()', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.7', 'CS_Payment_Stats()->get_sales()', $backtrace );
 
 	$args = array(
-		'post_type'      => 'edd_payment',
+		'post_type'      => 'cs_payment',
 		'nopaging'       => true,
 		'year'           => $year,
 		'fields'         => 'ids',
@@ -645,12 +645,12 @@ function edd_get_sales_by_date( $day = null, $month_num = null, $year = null, $h
 		'update_post_term_cache' => false
 	);
 
-	$show_free = apply_filters( 'edd_sales_by_date_show_free', true, $args );
+	$show_free = apply_filters( 'cs_sales_by_date_show_free', true, $args );
 
 	if ( false === $show_free ) {
 		$args['meta_query'] = array(
 			array(
-				'key' => '_edd_payment_total',
+				'key' => '_cs_payment_total',
 				'value' => 0,
 				'compare' => '>',
 				'type' => 'NUMERIC',
@@ -670,9 +670,9 @@ function edd_get_sales_by_date( $day = null, $month_num = null, $year = null, $h
 		$args['hour'] = $hour;
 	}
 
-	$args = apply_filters( 'edd_get_sales_by_date_args', $args  );
+	$args = apply_filters( 'cs_get_sales_by_date_args', $args  );
 
-	$cached = get_transient( 'edd_stats_sales' );
+	$cached = get_transient( 'cs_stats_sales' );
 	$key    = md5( json_encode( $args ) );
 
 	if ( ! isset( $cached[ $key ] ) ) {
@@ -681,7 +681,7 @@ function edd_get_sales_by_date( $day = null, $month_num = null, $year = null, $h
 
 		// Cache the results for one hour
 		$cached[ $key ] = $count;
-		set_transient( 'edd_stats_sales', $cached, HOUR_IN_SECONDS );
+		set_transient( 'cs_stats_sales', $cached, HOUR_IN_SECONDS );
 	}
 
 	$result = $cached[ $key ];
@@ -696,14 +696,14 @@ function edd_get_sales_by_date( $day = null, $month_num = null, $year = null, $h
  * @deprecated 2.8
  * @return string
  */
-function edd_get_paypal_page_style() {
+function cs_get_paypal_page_style() {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '2.8', 'edd_get_paypal_image_url', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '2.8', 'cs_get_paypal_image_url', $backtrace );
 
-	$page_style = trim( edd_get_option( 'paypal_page_style', 'PayPal' ) );
-	return apply_filters( 'edd_paypal_page_style', $page_style );
+	$page_style = trim( cs_get_option( 'paypal_page_style', 'PayPal' ) );
+	return apply_filters( 'cs_paypal_page_style', $page_style );
 }
 
 /**
@@ -711,18 +711,18 @@ function edd_get_paypal_page_style() {
  *
  * @since 1.7
  * @since 3.0 - Deprecated as the switch was made to JSON-LD.
- * @see https://github.com/easydigitaldownloads/easy-digital-downloads/issues/5240
+ * @see https://github.com/commercestore/commercestore/issues/5240
  *
  * @return bool
  */
-function edd_add_schema_microdata() {
+function cs_add_schema_microdata() {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'EDD_Structured_Data', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'CS_Structured_Data', $backtrace );
 
 	// Don't modify anything until after wp_head() is called
 	$ret = (bool)did_action( 'wp_head' );
-	return apply_filters( 'edd_add_schema_microdata', $ret );
+	return apply_filters( 'cs_add_schema_microdata', $ret );
 }
 
 /**
@@ -730,20 +730,20 @@ function edd_add_schema_microdata() {
  *
  * @since 1.5
  * @since 3.0 - Deprecated as the switch was made to JSON-LD.
- * @see https://github.com/easydigitaldownloads/easy-digital-downloads/issues/5240
+ * @see https://github.com/commercestore/commercestore/issues/5240
  *
  * @param string $title Post Title
  * @param int $id Post ID
  * @return string $title New title
  */
-function edd_microdata_title( $title, $id = 0 ) {
+function cs_microdata_title( $title, $id = 0 ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'EDD_Structured_Data', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'CS_Structured_Data', $backtrace );
 
 	global $post;
 
-	if ( ! edd_add_schema_microdata() || ! is_object( $post ) ) {
+	if ( ! cs_add_schema_microdata() || ! is_object( $post ) ) {
 		return $title;
 	}
 
@@ -759,18 +759,18 @@ function edd_microdata_title( $title, $id = 0 ) {
  *
  * @since 2.3
  * @since 3.0 - Deprecated as the switch was made to JSON-LD.
- * @see https://github.com/easydigitaldownloads/easy-digital-downloads/issues/5240
+ * @see https://github.com/commercestore/commercestore/issues/5240
  *
  * @return void
  */
-function edd_microdata_wrapper_open( $query ) {
+function cs_microdata_wrapper_open( $query ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'EDD_Structured_Data', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'CS_Structured_Data', $backtrace );
 
 	static $microdata_open = NULL;
 
-	if ( ! edd_add_schema_microdata() || true === $microdata_open || ! is_object( $query ) ) {
+	if ( ! cs_add_schema_microdata() || true === $microdata_open || ! is_object( $query ) ) {
 		return;
 	}
 
@@ -785,20 +785,20 @@ function edd_microdata_wrapper_open( $query ) {
  *
  * @since 2.3
  * @since 3.0 - Deprecated as the switch was made to JSON-LD.
- * @see https://github.com/easydigitaldownloads/easy-digital-downloads/issues/5240
+ * @see https://github.com/commercestore/commercestore/issues/5240
  *
  * @return void
  */
-function edd_microdata_wrapper_close() {
+function cs_microdata_wrapper_close() {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'EDD_Structured_Data', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'CS_Structured_Data', $backtrace );
 
 	global $post;
 
 	static $microdata_close = NULL;
 
-	if ( ! edd_add_schema_microdata() || true === $microdata_close || ! is_object( $post ) ) {
+	if ( ! cs_add_schema_microdata() || true === $microdata_close || ! is_object( $post ) ) {
 		return;
 	}
 
@@ -813,27 +813,27 @@ function edd_microdata_wrapper_close() {
  *
  * @since 1.5
  * @since 3.0 - Deprecated as the switch was made to JSON-LD.
- * @see https://github.com/easydigitaldownloads/easy-digital-downloads/issues/5240
+ * @see https://github.com/commercestore/commercestore/issues/5240
  *
  * @param $content
  * @return mixed|void New title
  */
-function edd_microdata_description( $content ) {
+function cs_microdata_description( $content ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'EDD_Structured_Data', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'CS_Structured_Data', $backtrace );
 
 	global $post;
 
 	static $microdata_description = NULL;
 
-	if ( ! edd_add_schema_microdata() || true === $microdata_description || ! is_object( $post ) ) {
+	if ( ! cs_add_schema_microdata() || true === $microdata_description || ! is_object( $post ) ) {
 		return $content;
 	}
 
 	if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() ) {
 		$microdata_description = true;
-		$content = apply_filters( 'edd_microdata_wrapper', '<div itemprop="description">' . $content . '</div>' );
+		$content = apply_filters( 'cs_microdata_wrapper', '<div itemprop="description">' . $content . '</div>' );
 	}
 	return $content;
 }
@@ -843,27 +843,27 @@ function edd_microdata_description( $content ) {
  *
  * @since  2.6.14
  * @since 3.0 - Deprecated as the switch was made to JSON-LD.
- * @see https://github.com/easydigitaldownloads/easy-digital-downloads/issues/5240
+ * @see https://github.com/commercestore/commercestore/issues/5240
  *
  * @param  int $download_id The download being output.
  * @return void
  */
-function edd_purchase_link_single_pricing_schema( $download_id = 0, $args = array() ) {
+function cs_purchase_link_single_pricing_schema( $download_id = 0, $args = array() ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'EDD_Structured_Data', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'CS_Structured_Data', $backtrace );
 
 	// Bail if the product has variable pricing, or if we aren't showing schema data.
-	if ( edd_has_variable_prices( $download_id ) || ! edd_add_schema_microdata() ) {
+	if ( cs_has_variable_prices( $download_id ) || ! cs_add_schema_microdata() ) {
 		return;
 	}
 
 	// Grab the information we need.
-	$download = new EDD_Download( $download_id );
+	$download = new CS_Download( $download_id );
 	?>
     <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 		<meta itemprop="price" content="<?php echo esc_attr( $download->price ); ?>" />
-		<meta itemprop="priceCurrency" content="<?php echo esc_attr( edd_get_currency() ); ?>" />
+		<meta itemprop="priceCurrency" content="<?php echo esc_attr( cs_get_currency() ); ?>" />
 	</span>
 	<?php
 }
@@ -872,31 +872,31 @@ function edd_purchase_link_single_pricing_schema( $download_id = 0, $args = arra
  * Renders the Logs tab in the Reports screen.
  *
  * @since 1.3
- * @deprecated 3.0 Use edd_tools_tab_logs() instead.
- * @see edd_tools_tab_logs()
+ * @deprecated 3.0 Use cs_tools_tab_logs() instead.
+ * @see cs_tools_tab_logs()
  * @return void
  */
-function edd_reports_tab_logs() {
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'edd_tools_tab_logs' );
+function cs_reports_tab_logs() {
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'cs_tools_tab_logs' );
 
-	if ( ! function_exists( 'edd_tools_tab_logs' ) ) {
-		require_once EDD_PLUGIN_DIR . 'includes/admin/tools/logs.php';
+	if ( ! function_exists( 'cs_tools_tab_logs' ) ) {
+		require_once CS_PLUGIN_DIR . 'includes/admin/tools/logs.php';
 	}
 
-	edd_tools_tab_logs();
+	cs_tools_tab_logs();
 }
 
 /**
  * Defines views for the legacy 'Reports' tab.
  *
  * @since 1.4
- * @deprecated 3.0 Use \EDD\Reports\get_reports()
- * @see \EDD\Reports\get_reports()
+ * @deprecated 3.0 Use \CS\Reports\get_reports()
+ * @see \CS\Reports\get_reports()
  *
  * @return array $views Report Views
  */
-function edd_reports_default_views() {
-	_edd_deprecated_function( __FUNCTION__, '3.0', '\EDD\Reports\get_reports' );
+function cs_reports_default_views() {
+	_cs_deprecated_function( __FUNCTION__, '3.0', '\CS\Reports\get_reports' );
 
 	return Reports\get_reports();
 }
@@ -907,16 +907,16 @@ function edd_reports_default_views() {
  * @since 1.3
  * @deprecated 3.0 Unused.
  */
-function edd_reports_tab_reports() {
+function cs_reports_tab_reports() {
 
-	_edd_deprecated_function( __FUNCTION__, '3.0' );
+	_cs_deprecated_function( __FUNCTION__, '3.0' );
 
 	if ( ! current_user_can( 'view_shop_reports' ) ) {
-		wp_die( __( 'You do not have permission to access this report', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to access this report', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$current_view = 'earnings';
-	$views        = edd_reports_default_views();
+	$views        = cs_reports_default_views();
 
 	if ( isset( $_GET['view'] ) && array_key_exists( $_GET['view'], $views ) ) {
 		$current_view = $_GET['view'];
@@ -931,7 +931,7 @@ function edd_reports_tab_reports() {
 	 * @since 1.3
 	 * @deprecated 3.0 Unused.
 	 */
-	edd_do_action_deprecated( 'edd_reports_view_' . $current_view, array(), '3.0' );
+	cs_do_action_deprecated( 'cs_reports_view_' . $current_view, array(), '3.0' );
 
 }
 
@@ -947,11 +947,11 @@ function edd_reports_tab_reports() {
  *
  * @return string $view Report View
  */
-function edd_get_reporting_view( $default = 'earnings' ) {
+function cs_get_reporting_view( $default = 'earnings' ) {
 
-	_edd_deprecated_function( __FUNCTION__, '3.0' );
+	_cs_deprecated_function( __FUNCTION__, '3.0' );
 
-	if ( ! isset( $_GET['view'] ) || ! in_array( $_GET['view'], array_keys( edd_reports_default_views() ) ) ) {
+	if ( ! isset( $_GET['view'] ) || ! in_array( $_GET['view'], array_keys( cs_reports_default_views() ) ) ) {
 		$view = $default;
 	} else {
 		$view = $_GET['view'];
@@ -965,7 +965,7 @@ function edd_get_reporting_view( $default = 'earnings' ) {
 	 *
 	 * @param string $view View slug.
 	 */
-	return edd_apply_filters_deprecated( 'edd_get_reporting_view', array( $view ), '3.0' );
+	return cs_apply_filters_deprecated( 'cs_get_reporting_view', array( $view ), '3.0' );
 }
 
 /**
@@ -976,9 +976,9 @@ function edd_get_reporting_view( $default = 'earnings' ) {
  *
  * @return void
  */
-function edd_report_views() {
+function cs_report_views() {
 
-	_edd_deprecated_function( __FUNCTION__, '3.0' );
+	_cs_deprecated_function( __FUNCTION__, '3.0' );
 
 	/**
 	 * Legacy: fired before the view actions drop-down was output.
@@ -986,7 +986,7 @@ function edd_report_views() {
 	 * @since 1.3
 	 * @deprecated 3.0 Unused.
 	 */
-	edd_do_action_deprecated( 'edd_report_view_actions', array(), '3.0' );
+	cs_do_action_deprecated( 'cs_report_view_actions', array(), '3.0' );
 
 	/**
 	 * Legacy: fired after the view actions drop-down was output.
@@ -994,7 +994,7 @@ function edd_report_views() {
 	 * @since 1.3
 	 * @deprecated 3.0 Unused.
 	 */
-	edd_do_action_deprecated( 'edd_report_view_actions_after', array(), '3.0' );
+	cs_do_action_deprecated( 'cs_report_view_actions_after', array(), '3.0' );
 
 	return;
 }
@@ -1005,8 +1005,8 @@ function edd_report_views() {
  * @since 1.3
  * @deprecated 3.0 Unused.
  */
-function edd_reports_graph_controls() {
-	_edd_deprecated_function( __FUNCTION__, 'EDD 3.0' );
+function cs_reports_graph_controls() {
+	_cs_deprecated_function( __FUNCTION__, 'CS 3.0' );
 }
 
 /**
@@ -1016,25 +1016,25 @@ function edd_reports_graph_controls() {
  * selected date-range (if any)
  *
  * @since 1.3
- * @deprecated 3.0 Use \EDD\Reports\get_dates_filter() instead
- * @see \EDD\Reports\get_dates_filter()
+ * @deprecated 3.0 Use \CS\Reports\get_dates_filter() instead
+ * @see \CS\Reports\get_dates_filter()
  *
  * @param string $timezone Optional. Timezone to force for report filter dates calculations.
  *                         Default is the WP timezone.
  * @return array Array of report filter dates.
  */
-function edd_get_report_dates( $timezone = null ) {
+function cs_get_report_dates( $timezone = null ) {
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', '\EDD\Reports\get_dates_filter' );
+	_cs_deprecated_function( __FUNCTION__, '3.0', '\CS\Reports\get_dates_filter' );
 
 	Reports\Init::bootstrap();
 
-	add_filter( 'edd_get_dates_filter_range', '\EDD\Reports\compat_filter_date_range' );
+	add_filter( 'cs_get_dates_filter_range', '\CS\Reports\compat_filter_date_range' );
 
 	$filter_dates = Reports\get_dates_filter( 'objects', $timezone );
 	$range        = Reports\get_dates_filter_range();
 
-	remove_filter( 'edd_get_report_dates_default_range', '\EDD\Reports\compat_filter_date_range' );
+	remove_filter( 'cs_get_report_dates_default_range', '\CS\Reports\compat_filter_date_range' );
 
 	$dates = array(
 		'range'    => $range,
@@ -1054,11 +1054,11 @@ function edd_get_report_dates( $timezone = null ) {
 	 *
 	 * @param array $dates Array of legacy date parts.
 	 */
-	return edd_apply_filters_deprecated( 'edd_report_dates', array( $dates ), '3.0' );
+	return cs_apply_filters_deprecated( 'cs_report_dates', array( $dates ), '3.0' );
 }
 
 /**
- * Intercept default Edit post links for EDD orders and rewrite them to the View Order Details screen.
+ * Intercept default Edit post links for CommerceStore orders and rewrite them to the View Order Details screen.
  *
  * @since 1.8.3
  * @deprecated 3.0 No alternative present as get_post() does not work with orders.
@@ -1069,8 +1069,8 @@ function edd_get_report_dates( $timezone = null ) {
  *
  * @return string
  */
-function edd_override_edit_post_for_payment_link( $url = '', $post_id = 0, $context = '') {
-	_edd_deprecated_function( __FUNCTION__, '3.0', '' );
+function cs_override_edit_post_for_payment_link( $url = '', $post_id = 0, $context = '') {
+	_cs_deprecated_function( __FUNCTION__, '3.0', '' );
 
 	$post = get_post( $post_id );
 
@@ -1078,12 +1078,12 @@ function edd_override_edit_post_for_payment_link( $url = '', $post_id = 0, $cont
 		return $url;
 	}
 
-	if ( 'edd_payment' !== $post->post_type ) {
+	if ( 'cs_payment' !== $post->post_type ) {
 		return $url;
 	}
 
-	return edd_get_admin_url( array(
-		'page' => 'edd-payment-history',
+	return cs_get_admin_url( array(
+		'page' => 'cs-payment-history',
 		'view' => 'view-order-details',
 		'id'   => $post_id
 	) );
@@ -1102,10 +1102,10 @@ function edd_override_edit_post_for_payment_link( $url = '', $post_id = 0, $cont
  * @param int    $price_id    Optional. Price ID.
  * @param string $sale_date   Optional. Date of the sale.
  */
-function edd_record_sale_in_log( $download_id, $payment_id, $price_id = false, $sale_date = null ) {
-	_edd_deprecated_function( __FUNCTION__, '3.0' );
+function cs_record_sale_in_log( $download_id, $payment_id, $price_id = false, $sale_date = null ) {
+	_cs_deprecated_function( __FUNCTION__, '3.0' );
 
-	$edd_logs = EDD()->debug_log;
+	$cs_logs = CS()->debug_log;
 
 	$log_data = array(
 		'post_parent'   => $download_id,
@@ -1119,7 +1119,7 @@ function edd_record_sale_in_log( $download_id, $payment_id, $price_id = false, $
 		'price_id'   => (int) $price_id,
 	);
 
-	$edd_logs->insert_log( $log_data, $log_meta );
+	$cs_logs->insert_log( $log_data, $log_meta );
 }
 
 /**
@@ -1129,8 +1129,8 @@ function edd_record_sale_in_log( $download_id, $payment_id, $price_id = false, $
  * @since 1.0
  * @deprecated 3.0 Moved to external scripts in assets/js/frontend/checkout/components/agree-to-terms
  */
-function edd_agree_to_terms_js() {
-	_edd_deprecated_function( __FUNCTION__, '3.0' );
+function cs_agree_to_terms_js() {
+	_cs_deprecated_function( __FUNCTION__, '3.0' );
 }
 
 /**
@@ -1143,66 +1143,66 @@ function edd_agree_to_terms_js() {
  * @param string $old_status the status of the payment prior to being marked as "complete", probably "pending".
  * @return void
  */
-function edd_record_status_change( $payment_id, $new_status, $old_status ) {
+function cs_record_status_change( $payment_id, $new_status, $old_status ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'edd_record_order_status_change', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'cs_record_order_status_change', $backtrace );
 
 	// Get the list of statuses so that status in the payment note can be translated
-	$stati      = edd_get_payment_statuses();
+	$stati      = cs_get_payment_statuses();
 	$old_status = isset( $stati[ $old_status ] ) ? $stati[ $old_status ] : $old_status;
 	$new_status = isset( $stati[ $new_status ] ) ? $stati[ $new_status ] : $new_status;
 
-	$status_change = sprintf( __( 'Status changed from %s to %s', 'easy-digital-downloads' ), $old_status, $new_status );
+	$status_change = sprintf( __( 'Status changed from %s to %s', 'commercestore' ), $old_status, $new_status );
 
-	edd_insert_payment_note( $payment_id, $status_change );
+	cs_insert_payment_note( $payment_id, $status_change );
 }
 
 /**
  * Shows checkbox to automatically refund payments made in PayPal.
  *
- * @deprecated 3.0 In favour of `edd_paypal_refund_checkbox()`
- * @see edd_paypal_refund_checkbox()
+ * @deprecated 3.0 In favour of `cs_paypal_refund_checkbox()`
+ * @see cs_paypal_refund_checkbox()
  *
  * @since  2.6.0
  *
  * @param int $payment_id The current payment ID.
  * @return void
  */
-function edd_paypal_refund_admin_js( $payment_id = 0 ) {
+function cs_paypal_refund_admin_js( $payment_id = 0 ) {
 
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'edd_paypal_refund_checkbox', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'cs_paypal_refund_checkbox', $backtrace );
 
 	// If not the proper gateway, return early.
-	if ( 'paypal' !== edd_get_payment_gateway( $payment_id ) ) {
+	if ( 'paypal' !== cs_get_payment_gateway( $payment_id ) ) {
 		return;
 	}
 
 	// If our credentials are not set, return early.
-	$key       = edd_get_payment_meta( $payment_id, '_edd_payment_mode', true );
-	$username  = edd_get_option( 'paypal_' . $key . '_api_username' );
-	$password  = edd_get_option( 'paypal_' . $key . '_api_password' );
-	$signature = edd_get_option( 'paypal_' . $key . '_api_signature' );
+	$key       = cs_get_payment_meta( $payment_id, '_cs_payment_mode', true );
+	$username  = cs_get_option( 'paypal_' . $key . '_api_username' );
+	$password  = cs_get_option( 'paypal_' . $key . '_api_password' );
+	$signature = cs_get_option( 'paypal_' . $key . '_api_signature' );
 
 	if ( empty( $username ) || empty( $password ) || empty( $signature ) ) {
 		return;
 	}
 
 	// Localize the refund checkbox label.
-	$label = __( 'Refund Payment in PayPal', 'easy-digital-downloads' );
+	$label = __( 'Refund Payment in PayPal', 'commercestore' );
 
 	?>
 	<script type="text/javascript">
 		jQuery(document).ready(function($) {
-			$('select[name=edd-payment-status]').change(function() {
+			$('select[name=cs-payment-status]').change(function() {
 				if ( 'refunded' === $(this).val() ) {
-					$(this).parent().parent().append('<input type="checkbox" id="edd-paypal-refund" name="edd-paypal-refund" value="1" style="margin-top:0">');
-					$(this).parent().parent().append('<label for="edd-paypal-refund"><?php echo $label; ?></label>');
+					$(this).parent().parent().append('<input type="checkbox" id="cs-paypal-refund" name="cs-paypal-refund" value="1" style="margin-top:0">');
+					$(this).parent().parent().append('<label for="cs-paypal-refund"><?php echo $label; ?></label>');
 				} else {
-					$('#edd-paypal-refund').remove();
-					$('label[for="edd-paypal-refund"]').remove();
+					$('#cs-paypal-refund').remove();
+					$('label[for="cs-paypal-refund"]').remove();
 				}
 			});
 		});
@@ -1213,28 +1213,28 @@ function edd_paypal_refund_admin_js( $payment_id = 0 ) {
 /**
  * Possibly refunds a payment made with PayPal Standard or PayPal Express.
  *
- * @deprecated 3.0 In favour of `edd_paypal_maybe_refund_transaction()`
- * @see edd_paypal_maybe_refund_transaction()
+ * @deprecated 3.0 In favour of `cs_paypal_maybe_refund_transaction()`
+ * @see cs_paypal_maybe_refund_transaction()
  *
  * @since  2.6.0
  *
- * @param object|EDD_Payment $payment The current payment ID.
+ * @param object|CS_Payment $payment The current payment ID.
  * @return void
  */
-function edd_maybe_refund_paypal_purchase( EDD_Payment $payment ) {
+function cs_maybe_refund_paypal_purchase( CS_Payment $payment ) {
 	$backtrace = debug_backtrace();
 
-	_edd_deprecated_function( __FUNCTION__, '3.0', 'edd_paypal_maybe_refund_transaction', $backtrace );
+	_cs_deprecated_function( __FUNCTION__, '3.0', 'cs_paypal_maybe_refund_transaction', $backtrace );
 
 	if ( ! current_user_can( 'edit_shop_payments', $payment->ID ) ) {
 		return;
 	}
 
-	if ( empty( $_POST['edd-paypal-refund'] ) ) {
+	if ( empty( $_POST['cs-paypal-refund'] ) ) {
 		return;
 	}
 
-	$processed = $payment->get_meta( '_edd_paypal_refunded', true );
+	$processed = $payment->get_meta( '_cs_paypal_refunded', true );
 
 	// If the status is not set to "refunded", return early.
 	if ( 'complete' !== $payment->old_status && 'revoked' !== $payment->old_status ) {
@@ -1252,7 +1252,7 @@ function edd_maybe_refund_paypal_purchase( EDD_Payment $payment ) {
 	}
 
 	// Process the refund in PayPal.
-	edd_refund_paypal_purchase( $payment );
+	cs_refund_paypal_purchase( $payment );
 }
 
 /**
@@ -1265,14 +1265,14 @@ function edd_maybe_refund_paypal_purchase( EDD_Payment $payment ) {
  * @param array $args arguments passed by the setting.
  * @return void
  */
-function edd_jilt_callback( $args ) {
+function cs_jilt_callback( $args ) {
 
-	_edd_deprecated_function( __FUNCTION__, '2.10.2' );
+	_cs_deprecated_function( __FUNCTION__, '2.10.2' );
 
-	$activated   = is_callable( 'edd_jilt' );
-	$connected   = $activated && edd_jilt()->get_integration()->is_jilt_connected();
-	$connect_url = $activated ? edd_jilt()->get_connect_url() : '';
-	$account_url = $connected ? edd_jilt()->get_integration()->get_jilt_app_url() : '';
+	$activated   = is_callable( 'cs_jilt' );
+	$connected   = $activated && cs_jilt()->get_integration()->is_jilt_connected();
+	$connect_url = $activated ? cs_jilt()->get_connect_url() : '';
+	$account_url = $connected ? cs_jilt()->get_integration()->get_jilt_app_url() : '';
 
 	echo wp_kses_post( $args['desc'] );
 
@@ -1282,7 +1282,7 @@ function edd_jilt_callback( $args ) {
 		<?php if ( $connected ) : ?>
 
 		<p>
-			<button id="edd-jilt-disconnect" class="button"><?php esc_html_e( 'Disconnect Jilt', 'easy-digital-downloads' ); ?></button>
+			<button id="cs-jilt-disconnect" class="button"><?php esc_html_e( 'Disconnect Jilt', 'commercestore' ); ?></button>
 		</p>
 
 		<p>
@@ -1290,7 +1290,7 @@ function edd_jilt_callback( $args ) {
 			wp_kses_post(
 				sprintf(
 				/* Translators: %1$s - <a> tag, %2$s - </a> tag */
-					__( '%1$sClick here%2$s to visit your Jilt dashboard', 'easy-digital-downloads' ),
+					__( '%1$sClick here%2$s to visit your Jilt dashboard', 'commercestore' ),
 					'<a href="' . esc_url( $account_url ) . '" target="_blank">',
 					'</a>'
 				)
@@ -1301,8 +1301,8 @@ function edd_jilt_callback( $args ) {
 	<?php else : ?>
 
 		<p>
-			<a id="edd-jilt-connect" class="button button-primary" href="<?php echo esc_url( $connect_url ); ?>">
-				<?php esc_html_e( 'Connect to Jilt', 'easy-digital-downloads' ); ?>
+			<a id="cs-jilt-connect" class="button button-primary" href="<?php echo esc_url( $connect_url ); ?>">
+				<?php esc_html_e( 'Connect to Jilt', 'commercestore' ); ?>
 			</a>
 		</p>
 
@@ -1311,8 +1311,8 @@ function edd_jilt_callback( $args ) {
 	<?php elseif( current_user_can( 'install_plugins' ) ) : ?>
 
 		<p>
-			<button id="edd-jilt-connect" class="button button-primary">
-				<?php esc_html_e( 'Install Jilt', 'easy-digital-downloads' ); ?>
+			<button id="cs-jilt-connect" class="button button-primary">
+				<?php esc_html_e( 'Install Jilt', 'commercestore' ); ?>
 			</button>
 		</p>
 
@@ -1326,14 +1326,14 @@ function edd_jilt_callback( $args ) {
  * @deprecated 2.10.2
  * @since n.n.n
  */
-function edd_jilt_remote_install_handler() {
+function cs_jilt_remote_install_handler() {
 
-	_edd_deprecated_function( __FUNCTION__, '2.10.2' );
+	_cs_deprecated_function( __FUNCTION__, '2.10.2' );
 
 	if ( ! current_user_can( 'manage_shop_settings' ) || ! current_user_can( 'install_plugins' ) ) {
 		wp_send_json_error(
 			array(
-				'error' => __( 'You do not have permission to do this.', 'easy-digital-downloads' ),
+				'error' => __( 'You do not have permission to do this.', 'commercestore' ),
 			)
 		);
 	}
@@ -1344,7 +1344,7 @@ function edd_jilt_remote_install_handler() {
 
 	$plugins = get_plugins();
 
-	if ( ! array_key_exists( 'jilt-for-edd/jilt-for-edd.php', $plugins ) ) {
+	if ( ! array_key_exists( 'jilt-for-cs/jilt-for-cs.php', $plugins ) ) {
 		/*
 		* Use the WordPress Plugins API to get the plugin download link.
 		*/
@@ -1382,16 +1382,16 @@ function edd_jilt_remote_install_handler() {
 
 	} else {
 
-		activate_plugin( 'jilt-for-edd/jilt-for-edd.php' );
+		activate_plugin( 'jilt-for-cs/jilt-for-cs.php' );
 	}
 
 	/*
 	* Final check to see if Jilt is available.
 	*/
-	if ( ! class_exists( 'EDD_Jilt_Loader' ) ) {
+	if ( ! class_exists( 'CS_Jilt_Loader' ) ) {
 		wp_send_json_error(
 			array(
-				'error' => __( 'Something went wrong. Jilt was not installed correctly.', 'easy-digital-downloads' ),
+				'error' => __( 'Something went wrong. Jilt was not installed correctly.', 'commercestore' ),
 			)
 		);
 	}
@@ -1405,27 +1405,27 @@ function edd_jilt_remote_install_handler() {
  * @deprecated 2.10.2
  * @since n.n.n
  */
-function edd_jilt_connect_handler() {
+function cs_jilt_connect_handler() {
 
-	_edd_deprecated_function( __FUNCTION__, '2.10.2' );
+	_cs_deprecated_function( __FUNCTION__, '2.10.2' );
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
 		wp_send_json_error(
 			array(
-				'error' => __( 'You do not have permission to do this.', 'easy-digital-downloads' ),
+				'error' => __( 'You do not have permission to do this.', 'commercestore' ),
 			)
 		);
 	}
 
-	if ( ! is_callable( 'edd_jilt' ) ) {
+	if ( ! is_callable( 'cs_jilt' ) ) {
 		wp_send_json_error(
 			array(
-				'error' => __( 'Something went wrong. Jilt was not installed correctly.', 'easy-digital-downloads' ),
+				'error' => __( 'Something went wrong. Jilt was not installed correctly.', 'commercestore' ),
 			)
 		);
 	}
 
-	wp_send_json_success( array( 'connect_url' => edd_jilt()->get_connect_url() ) );
+	wp_send_json_success( array( 'connect_url' => cs_jilt()->get_connect_url() ) );
 }
 
 /**
@@ -1434,26 +1434,26 @@ function edd_jilt_connect_handler() {
  * @deprecated 2.10.2
  * @since n.n.n
  */
-function edd_jilt_disconnect_handler() {
+function cs_jilt_disconnect_handler() {
 
-	_edd_deprecated_function( __FUNCTION__, '2.10.2' );
+	_cs_deprecated_function( __FUNCTION__, '2.10.2' );
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
 		wp_send_json_error(
 			array(
-				'error' => __( 'You do not have permission to do this.', 'easy-digital-downloads' ),
+				'error' => __( 'You do not have permission to do this.', 'commercestore' ),
 			)
 		);
 	}
 
-	if ( is_callable( 'edd_jilt' ) ) {
+	if ( is_callable( 'cs_jilt' ) ) {
 
-		edd_jilt()->get_integration()->unlink_shop();
-		edd_jilt()->get_integration()->revoke_authorization();
-		edd_jilt()->get_integration()->clear_connection_data();
+		cs_jilt()->get_integration()->unlink_shop();
+		cs_jilt()->get_integration()->revoke_authorization();
+		cs_jilt()->get_integration()->clear_connection_data();
 	}
 
-	deactivate_plugins( 'jilt-for-edd/jilt-for-edd.php' );
+	deactivate_plugins( 'jilt-for-cs/jilt-for-cs.php' );
 
 	wp_send_json_success();
 }
@@ -1466,14 +1466,14 @@ function edd_jilt_disconnect_handler() {
  *
  * @param int $payment_id The ID of the abandoned payment, for which a jilt notice is being thrown.
  */
-function maybe_add_jilt_notice_to_abandoned_payment( $payment_id ) {
+function cs_maybe_add_jilt_notice_to_abandoned_payment( $payment_id ) {
 
-	_edd_deprecated_function( __FUNCTION__, '2.10.2' );
+	_cs_deprecated_function( __FUNCTION__, '2.10.2' );
 
-	if ( ! is_callable( 'edd_jilt' )
-		&& ! is_plugin_active( 'recapture-for-edd/recapture.php' )
-		&& 'abandoned' === edd_get_payment_status( $payment_id )
-		&& ! get_user_meta( get_current_user_id(), '_edd_try_jilt_dismissed', true )
+	if ( ! is_callable( 'cs_jilt' )
+		&& ! is_plugin_active( 'recapture-for-cs/recapture.php' )
+		&& 'abandoned' === cs_get_payment_status( $payment_id )
+		&& ! get_user_meta( get_current_user_id(), '_cs_try_jilt_dismissed', true )
 	) {
 		?>
 		<div class="notice notice-warning jilt-notice">
@@ -1482,10 +1482,10 @@ function maybe_add_jilt_notice_to_abandoned_payment( $payment_id ) {
 				echo wp_kses_post(
 					sprintf(
 						/* Translators: %1$s - <strong> tag, %2$s - </strong> tag, %3$s - <a> tag, %4$s - </a> tag */
-						__( '%1$sRecover abandoned purchases like this one.%2$s %3$sTry Jilt for free%4$s.', 'easy-digital-downloads' ),
+						__( '%1$sRecover abandoned purchases like this one.%2$s %3$sTry Jilt for free%4$s.', 'commercestore' ),
 						'<strong>',
 						'</strong>',
-						'<a href="https://easydigitaldownloads.com/downloads/jilt" target="_blank">',
+						'<a href="https://commercestore.com/downloads/jilt" target="_blank">',
 						'</a>'
 					)
 				);
@@ -1495,13 +1495,13 @@ function maybe_add_jilt_notice_to_abandoned_payment( $payment_id ) {
 			echo wp_kses_post(
 				sprintf(
 					/* Translators: %1$s - Opening anchor tag, %2$s - The url to dismiss the ajax notice, %3$s - Complete the opening of the anchor tag, %4$s - Open span tag, %4$s - Close span tag */
-					__( '%1$s %2$s %3$s %4$s Dismiss this notice. %5$s', 'easy-digital-downloads' ),
+					__( '%1$s %2$s %3$s %4$s Dismiss this notice. %5$s', 'commercestore' ),
 					'<a href="',
 					esc_url(
 						add_query_arg(
 							array(
-								'edd_action' => 'dismiss_notices',
-								'edd_notice' => 'try_jilt',
+								'cs_action' => 'dismiss_notices',
+								'cs_notice' => 'try_jilt',
 							)
 						)
 					),
@@ -1526,17 +1526,17 @@ function maybe_add_jilt_notice_to_abandoned_payment( $payment_id ) {
  * @param array $args Arguments passed by the setting
  * @return void
  */
-function edd_sendwp_callback( $args ) {
+function cs_sendwp_callback( $args ) {
 
-	_edd_deprecated_function( __FUNCTION__, '2.11.4' );
+	_cs_deprecated_function( __FUNCTION__, '2.11.4' );
 
 	// Connection status partial label based on the state of the SendWP email sending setting (Tools -> SendWP)
 	$connected  = '<a href="https://app.sendwp.com/dashboard" target="_blank" rel="noopener noreferrer">';
-	$connected .= __( 'Access your SendWP account', 'easy-digital-downloads' );
+	$connected .= __( 'Access your SendWP account', 'commercestore' );
 	$connected .= '</a>.';
 
 	$disconnected = sprintf(
-		__( '<em><strong>Note:</strong> Email sending is currently disabled. <a href="' . admin_url( '/tools.php?page=sendwp' ) . '">Click here</a> to enable it.</em>', 'easy-digital-downloads' )
+		__( '<em><strong>Note:</strong> Email sending is currently disabled. <a href="' . admin_url( '/tools.php?page=sendwp' ) . '">Click here</a> to enable it.</em>', 'commercestore' )
 	);
 
 	// Checks if SendWP is connected
@@ -1553,20 +1553,20 @@ function edd_sendwp_callback( $args ) {
 	if( $client_connected ) :
 		?>
 		<div class="inline notice notice-success">
-			<p><?php _e( 'SendWP plugin activated.', 'easy-digital-downloads' ); ?> <?php echo $forwarding_enabled ? $connected : $disconnected ; ?></p>
+			<p><?php _e( 'SendWP plugin activated.', 'commercestore' ); ?> <?php echo $forwarding_enabled ? $connected : $disconnected ; ?></p>
 
 			<p>
-				<button id="edd-sendwp-disconnect" class="button"><?php _e( 'Disconnect SendWP', 'easy-digital-downloads' ); ?></button>
+				<button id="cs-sendwp-disconnect" class="button"><?php _e( 'Disconnect SendWP', 'commercestore' ); ?></button>
 			</p>
 		</div>
 		<?php
 	else :
 		?>
 		<p>
-			<?php _e( 'We recommend SendWP to ensure quick and reliable delivery of all emails sent from your store, such as purchase receipts, subscription renewal reminders, password resets, and more.', 'easy-digital-downloads' ); ?> <?php printf( __( '%sLearn more%s', 'easy-digital-downloads' ), '<a href="https://sendwp.com/" target="_blank" rel="noopener noreferrer">', '</a>' ); ?>
+			<?php _e( 'We recommend SendWP to ensure quick and reliable delivery of all emails sent from your store, such as purchase receipts, subscription renewal reminders, password resets, and more.', 'commercestore' ); ?> <?php printf( __( '%sLearn more%s', 'commercestore' ), '<a href="https://sendwp.com/" target="_blank" rel="noopener noreferrer">', '</a>' ); ?>
 		</p>
 		<p>
-			<button type="button" id="edd-sendwp-connect" class="button button-primary"><?php esc_html_e( 'Connect with SendWP', 'easy-digital-downloads' ); ?>
+			<button type="button" id="cs-sendwp-connect" class="button button-primary"><?php esc_html_e( 'Connect with SendWP', 'commercestore' ); ?>
 			</button>
 		</p>
 
@@ -1581,13 +1581,13 @@ function edd_sendwp_callback( $args ) {
  *
  * @since 2.9.15
  */
-function edd_sendwp_remote_install_handler () {
+function cs_sendwp_remote_install_handler () {
 
-	_edd_deprecated_function( __FUNCTION__, '2.11.4' );
+	_cs_deprecated_function( __FUNCTION__, '2.11.4' );
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
 		wp_send_json_error( array(
-			'error' => __( 'You do not have permission to do this.', 'easy-digital-downloads' )
+			'error' => __( 'You do not have permission to do this.', 'commercestore' )
 		) );
 	}
 
@@ -1638,7 +1638,7 @@ function edd_sendwp_remote_install_handler () {
 	*/
 	if( ! function_exists('sendwp_get_server_url') ) {
 		wp_send_json_error( array(
-			'error' => __( 'Something went wrong. SendWP was not installed correctly.', 'easy-digital-downloads' )
+			'error' => __( 'Something went wrong. SendWP was not installed correctly.', 'commercestore' )
 		) );
 	}
 
@@ -1647,23 +1647,23 @@ function edd_sendwp_remote_install_handler () {
 		'register_url'    => sendwp_get_server_url() . '_/signup',
 		'client_name'     => sendwp_get_client_name(),
 		'client_secret'   => sendwp_get_client_secret(),
-		'client_redirect' => admin_url( '/edit.php?post_type=download&page=edd-settings&tab=emails&edd-message=sendwp-connected' ),
+		'client_redirect' => admin_url( '/edit.php?post_type=download&page=cs-settings&tab=emails&cs-message=sendwp-connected' ),
 	) );
 }
-add_action( 'wp_ajax_edd_sendwp_remote_install', 'edd_sendwp_remote_install_handler' );
+add_action( 'wp_ajax_cs_sendwp_remote_install', 'cs_sendwp_remote_install_handler' );
 
 /**
  * Handle deactivation of SendWP via ajax
  *
  * @since 2.9.15
  */
-function edd_sendwp_disconnect () {
+function cs_sendwp_disconnect () {
 
-	_edd_deprecated_function( __FUNCTION__, '2.11.4' );
+	_cs_deprecated_function( __FUNCTION__, '2.11.4' );
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
 		wp_send_json_error( array(
-			'error' => __( 'You do not have permission to do this.', 'easy-digital-downloads' )
+			'error' => __( 'You do not have permission to do this.', 'commercestore' )
 		) );
 	}
 
@@ -1673,7 +1673,7 @@ function edd_sendwp_disconnect () {
 
 	wp_send_json_success();
 }
-add_action( 'wp_ajax_edd_sendwp_disconnect', 'edd_sendwp_disconnect' );
+add_action( 'wp_ajax_cs_sendwp_disconnect', 'cs_sendwp_disconnect' );
 
 /**
  * Reverts to the original download URL validation.
@@ -1686,12 +1686,12 @@ add_action( 'wp_ajax_edd_sendwp_disconnect', 'edd_sendwp_disconnect' );
  * @param array  $query_args
  * @param string $original_url
  */
-add_filter( 'edd_validate_url_token', function( $ret, $url, $query_args, $original_url ) {
+add_filter( 'cs_validate_url_token', function( $ret, $url, $query_args, $original_url ) {
 	// If the URL is already validated, we don't need to validate it again.
 	if ( $ret ) {
 		return $ret;
 	}
-	$allowed = edd_get_url_token_parameters();
+	$allowed = cs_get_url_token_parameters();
 	$remove  = array();
 	foreach ( $query_args as $key => $value ) {
 		if ( ! in_array( $key, $allowed, true ) ) {
@@ -1703,7 +1703,7 @@ add_filter( 'edd_validate_url_token', function( $ret, $url, $query_args, $origin
 		$original_url = remove_query_arg( $remove, $original_url );
 	}
 
-	return isset( $query_args['token'] ) && hash_equals( $query_args['token'], edd_get_download_token( $original_url ) );
+	return isset( $query_args['token'] ) && hash_equals( $query_args['token'], cs_get_download_token( $original_url ) );
 }, 10, 4 );
 
 /**
@@ -1713,11 +1713,11 @@ add_filter( 'edd_validate_url_token', function( $ret, $url, $query_args, $origin
  *
  * @return mixed|string
  */
-function edd_reviews_location() {
+function cs_reviews_location() {
 
-	_edd_deprecated_function( __FUNCTION__, '2.11.4' );
+	_cs_deprecated_function( __FUNCTION__, '2.11.4' );
 
-	$possible_locations = array( 'edd-reviews/edd-reviews.php', 'EDD-Reviews/edd-reviews.php' );
+	$possible_locations = array( 'cs-reviews/cs-reviews.php', 'CS-Reviews/cs-reviews.php' );
 	$reviews_location   = '';
 
 	foreach ( $possible_locations as $location ) {
@@ -1737,12 +1737,12 @@ function edd_reviews_location() {
  * @since 2.8
  * @return void
  */
-function edd_render_review_status_metabox() {
+function cs_render_review_status_metabox() {
 
-	_edd_deprecated_function( __FUNCTION__, '2.11.4' );
+	_cs_deprecated_function( __FUNCTION__, '2.11.4' );
 
-	$reviews_location = edd_reviews_location();
-	$is_promo_active  = edd_is_promo_active();
+	$reviews_location = cs_reviews_location();
+	$is_promo_active  = cs_is_promo_active();
 
 	ob_start();
 
@@ -1755,7 +1755,7 @@ function edd_render_review_status_metabox() {
 			'plugin_status' => 'all',
 		);
 		$activate_url = add_query_arg( $args, $base_url );
-		?><p style="text-align: center;"><a href="<?php echo esc_url( $activate_url ); ?>" class="button-secondary"><?php _e( 'Activate Reviews', 'easy-digital-downloads' ); ?></a></p><?php
+		?><p style="text-align: center;"><a href="<?php echo esc_url( $activate_url ); ?>" class="button-secondary"><?php _e( 'Activate Reviews', 'commercestore' ); ?></a></p><?php
 
 	} else {
 
@@ -1775,13 +1775,13 @@ function edd_render_review_status_metabox() {
 			);
 		}
 
-		$base_url = 'https://easydigitaldownloads.com/downloads/product-reviews';
+		$base_url = 'https://commercestore.com/downloads/product-reviews';
 		$url      = add_query_arg( $args, $base_url );
 		?>
 		<p>
 			<?php
 			// Translators: The %s represents the link to the Product Reviews extension.
-			echo wp_kses_post( sprintf( __( 'Would you like to enable reviews for this product? Check out our <a target="_blank" href="%s">Product Reviews</a> extension.', 'easy-digital-downloads' ), esc_url( $url ) ) );
+			echo wp_kses_post( sprintf( __( 'Would you like to enable reviews for this product? Check out our <a target="_blank" href="%s">Product Reviews</a> extension.', 'commercestore' ), esc_url( $url ) ) );
 			?>
 		</p>
 		<?php
@@ -1789,7 +1789,7 @@ function edd_render_review_status_metabox() {
 		if ( true === $is_promo_active ) {
 			?>
 			<p>
-				<?php echo wp_kses_post( __( 'Act now and <strong>SAVE 25%</strong> on your purchase. Sale ends <em>23:59 PM December 6th CST</em>. Use code <code>BFCM2019</code> at checkout.', 'easy-digital-downloads' ) ); ?>
+				<?php echo wp_kses_post( __( 'Act now and <strong>SAVE 25%</strong> on your purchase. Sale ends <em>23:59 PM December 6th CST</em>. Use code <code>BFCM2019</code> at checkout.', 'commercestore' ) ); ?>
 			</p>
 			<?php
 		}

@@ -2,7 +2,7 @@
 /**
  * Order Item Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -51,7 +51,7 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @return int|false ID of newly created order, false on error.
  */
-function edd_add_order_item( $data = array() ) {
+function cs_add_order_item( $data = array() ) {
 
 	// An order ID and product ID must be supplied for every order that is
 	// inserted into the database.
@@ -60,7 +60,7 @@ function edd_add_order_item( $data = array() ) {
 	}
 
 	// Instantiate a query object
-	$order_items = new EDD\Database\Queries\Order_Item();
+	$order_items = new CS\Database\Queries\Order_Item();
 
 	return $order_items->add_item( $data );
 }
@@ -73,8 +73,8 @@ function edd_add_order_item( $data = array() ) {
  * @param int $order_item_id Order item ID.
  * @return int|false `1` if the item was deleted successfully, false on error.
  */
-function edd_delete_order_item( $order_item_id = 0 ) {
-	$order_items = new EDD\Database\Queries\Order_Item();
+function cs_delete_order_item( $order_item_id = 0 ) {
+	$order_items = new CS\Database\Queries\Order_Item();
 
 	return $order_items->delete_item( $order_item_id );
 }
@@ -114,8 +114,8 @@ function edd_delete_order_item( $order_item_id = 0 ) {
  *
  * @return int|false Number of rows updated if successful, false otherwise.
  */
-function edd_update_order_item( $order_item_id = 0, $data = array() ) {
-	$order_items = new EDD\Database\Queries\Order_Item();
+function cs_update_order_item( $order_item_id = 0, $data = array() ) {
+	$order_items = new CS\Database\Queries\Order_Item();
 
 	return $order_items->update_item( $order_item_id, $data );
 }
@@ -126,11 +126,11 @@ function edd_update_order_item( $order_item_id = 0, $data = array() ) {
  * @since 3.0
  *
  * @param int $order_item_id Order item ID.
- * @return EDD\Orders\Order_Item|false Order_Item object if successful, false
+ * @return CS\Orders\Order_Item|false Order_Item object if successful, false
  *                                     otherwise.
  */
-function edd_get_order_item( $order_item_id = 0 ) {
-	$order_items = new EDD\Database\Queries\Order_Item();
+function cs_get_order_item( $order_item_id = 0 ) {
+	$order_items = new CS\Database\Queries\Order_Item();
 
 	// Return order item
 	return $order_items->get_item( $order_item_id );
@@ -144,11 +144,11 @@ function edd_get_order_item( $order_item_id = 0 ) {
  * @param string $field Database table field.
  * @param string $value Value of the row.
  *
- * @return EDD\Orders\Order_Item|false Order_Item object if successful, false
+ * @return CS\Orders\Order_Item|false Order_Item object if successful, false
  *                                     otherwise.
  */
-function edd_get_order_item_by( $field = '', $value = '' ) {
-	$order_items = new EDD\Database\Queries\Order_Item();
+function cs_get_order_item_by( $field = '', $value = '' ) {
+	$order_items = new CS\Database\Queries\Order_Item();
 
 	// Return order item
 	return $order_items->get_item_by( $field, $value );
@@ -157,15 +157,15 @@ function edd_get_order_item_by( $field = '', $value = '' ) {
 /**
  * Query for order items.
  *
- * @see \EDD\Database\Queries\Order_Item::__construct()
+ * @see \CS\Database\Queries\Order_Item::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Item` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Item` for
  *                    accepted arguments.
- * @return \EDD\Orders\Order_Item[] Array of `Order_Item` objects.
+ * @return \CS\Orders\Order_Item[] Array of `Order_Item` objects.
  */
-function edd_get_order_items( $args = array() ) {
+function cs_get_order_items( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -173,7 +173,7 @@ function edd_get_order_items( $args = array() ) {
 	) );
 
 	// Instantiate a query object
-	$order_items = new EDD\Database\Queries\Order_Item();
+	$order_items = new CS\Database\Queries\Order_Item();
 
 	// Return items
 	return $order_items->query( $r );
@@ -182,15 +182,15 @@ function edd_get_order_items( $args = array() ) {
 /**
  * Count order items.
  *
- * @see \EDD\Database\Queries\Order_Item::__construct()
+ * @see \CS\Database\Queries\Order_Item::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Item` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Item` for
  *                    accepted arguments.
  * @return int Number of order items returned based on query arguments passed.
  */
-function edd_count_order_items( $args = array() ) {
+function cs_count_order_items( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -198,7 +198,7 @@ function edd_count_order_items( $args = array() ) {
 	) );
 
 	// Query for count(s)
-	$order_items = new EDD\Database\Queries\Order_Item( $r );
+	$order_items = new CS\Database\Queries\Order_Item( $r );
 
 	// Return count(s)
 	return absint( $order_items->found_items );
@@ -207,15 +207,15 @@ function edd_count_order_items( $args = array() ) {
 /**
  * Query for and return array of order item counts, keyed by status.
  *
- * @see \EDD\Database\Queries\Order_Item::__construct()
+ * @see \CS\Database\Queries\Order_Item::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Order_Item` for
+ * @param array $args Arguments. See `CS\Database\Queries\Order_Item` for
  *                    accepted arguments.
  * @return array Order items keyed by status.
  */
-function edd_get_order_item_counts( $args = array() ) {
+function cs_get_order_item_counts( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -225,8 +225,8 @@ function edd_get_order_item_counts( $args = array() ) {
 	) );
 
 	// Query for count
-	$counts = new EDD\Database\Queries\Order_Item( $r );
+	$counts = new CS\Database\Queries\Order_Item( $r );
 
 	// Format & return
-	return edd_format_counts( $counts, $r['groupby'] );
+	return cs_format_counts( $counts, $r['groupby'] );
 }

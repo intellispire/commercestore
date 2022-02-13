@@ -2,13 +2,13 @@
 /**
  * PayPal Commerce Admin Scripts
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Gateways\PayPal\Admin;
+namespace CS\Gateways\PayPal\Admin;
 
 /**
  * Enqueue PayPal connect admin JS.
@@ -16,10 +16,10 @@ namespace EDD\Gateways\PayPal\Admin;
  * @since 2.11
  */
 function enqueue_connect_scripts() {
-	if ( edd_is_admin_page( 'settings' ) && isset( $_GET['section'] ) && 'paypal_commerce' === $_GET['section'] ) {
-		\EDD\Gateways\PayPal\maybe_enqueue_polyfills();
+	if ( cs_is_admin_page( 'settings' ) && isset( $_GET['section'] ) && 'paypal_commerce' === $_GET['section'] ) {
+		\CS\Gateways\PayPal\maybe_enqueue_polyfills();
 
-		$subdomain = edd_is_test_mode() ? 'sandbox.' : '';
+		$subdomain = cs_is_test_mode() ? 'sandbox.' : '';
 
 		wp_enqueue_script(
 			'sandhills-paypal-partner-js',
@@ -29,8 +29,8 @@ function enqueue_connect_scripts() {
 			true
 		);
 
-		wp_localize_script( 'edd-admin-settings', 'eddPayPalConnectVars', array(
-			'defaultError' => esc_html__( 'An unexpected error occurred. Please refresh the page and try again.', 'easy-digital-downloads' )
+		wp_localize_script( 'cs-admin-settings', 'csPayPalConnectVars', array(
+			'defaultError' => esc_html__( 'An unexpected error occurred. Please refresh the page and try again.', 'commercestore' )
 		) );
 	}
 }

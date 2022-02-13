@@ -1,0 +1,20 @@
+.cs-select-chosen {
+	width: 100%;
+	max-width: 300px;
+}
+
+.cs-select-chosen.cs-customer-select {
+	width: 100% !important;
+}
+
+.cs-select-chosen.cs-time {
+	width: 55px;
+	max-width: 55px;
+}
+
+@media screen and (max-width: $break-medium) {
+	.cs-select-chosen.cs-time {
+		width: 70px;
+		max-width: 70px;
+	}
+}

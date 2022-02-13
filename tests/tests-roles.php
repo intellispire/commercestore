@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @group edd_roles
+ * @group cs_roles
  */
-class Tests_Roles extends EDD_UnitTestCase {
+class Tests_Roles extends CS_UnitTestCase {
 
 	protected $_roles;
 
 	public function setUp() {
 		parent::setUp();
 
-		$this->_roles = new EDD_Roles;
+		$this->_roles = new CS_Roles;
 		$this->_roles->add_roles();
 		$this->_roles->add_caps();
 	}

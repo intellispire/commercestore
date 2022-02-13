@@ -1,10 +1,10 @@
 
 $fixed-column-width: 80px;
-#edd-submit-refund-status {
+#cs-submit-refund-status {
 	text-align: center;
 	font-size: 1.2em;
 
-	.edd-submit-refund-message {
+	.cs-submit-refund-message {
 		&:before{
 			font-family: dashicons;
 			font-size: 1.5em;
@@ -47,7 +47,7 @@ $fixed-column-width: 80px;
 		width: $fixed-column-width;
 	}
 
-	.edd-form-group__control {
+	.cs-form-group__control {
 		display: flex;
 		align-items: center;
 
@@ -75,7 +75,7 @@ $fixed-column-width: 80px;
 		}
 	}
 
-	.edd-refund-submit-line-total {
+	.cs-refund-submit-line-total {
 		background-color: $white !important;
 
 		td {
@@ -83,14 +83,14 @@ $fixed-column-width: 80px;
 		}
 	}
 
-	.edd-refund-submit-line-total-amount {
+	.cs-refund-submit-line-total-amount {
 		display: inline-block;
 		margin-left: 20px;
 		text-align: left;
 		width: $fixed-column-width;
 	}
 
-	#edd-refund-submit-subtotal td {
+	#cs-refund-submit-subtotal td {
 		border-top: 2px solid $wp-border;
 	}
 
@@ -99,20 +99,20 @@ $fixed-column-width: 80px;
 			margin-bottom: 16px;
 		}
 
-		.edd-refund-submit-line-total-amount {
+		.cs-refund-submit-line-total-amount {
 			padding-right: 16px;
 			width: unset;
 		}
 	}
 }
 
-.edd-submit-refund-actions {
+.cs-submit-refund-actions {
 	margin: 16px 0 0;
 }
 
 .did-refund {
 	.refunditems,
-	.edd-submit-refund-actions {
+	.cs-submit-refund-actions {
 		display: none;
 	}
 }

@@ -8,12 +8,12 @@ import { jQueryReady } from 'utils/jquery.js';
 jQueryReady( () => {
 
 	// Change Customer.
-	$( '.edd-payment-change-customer-input' ).on( 'change', function() {
+	$( '.cs-payment-change-customer-input' ).on( 'change', function() {
 		const $this = $( this ),
 			data = {
-				action: 'edd_customer_details',
+				action: 'cs_customer_details',
 				customer_id: $this.val(),
-				nonce: $( '#edd_customer_details_nonce' ).val(),
+				nonce: $( '#cs_customer_details_nonce' ).val(),
 			};
 
 		if ( '' === data.customer_id ) {
@@ -40,14 +40,14 @@ jQueryReady( () => {
 		}, 'json' );
 	} );
 
-	$( '.edd-payment-change-customer-input' ).trigger( 'change' );
+	$( '.cs-payment-change-customer-input' ).trigger( 'change' );
 
 	// New Customer.
-	$( '#edd-customer-details' ).on( 'click', '.edd-payment-new-customer, .edd-payment-new-customer-cancel', function( e ) {
+	$( '#cs-customer-details' ).on( 'click', '.cs-payment-new-customer, .cs-payment-new-customer-cancel', function( e ) {
 		e.preventDefault();
 
-		var new_customer = $( this ).hasClass( 'edd-payment-new-customer' ),
-			cancel = $( this ).hasClass( 'edd-payment-new-customer-cancel' );
+		var new_customer = $( this ).hasClass( 'cs-payment-new-customer' ),
+			cancel = $( this ).hasClass( 'cs-payment-new-customer-cancel' );
 
 		if ( new_customer ) {
 			$( '.order-customer-info' ).hide();
@@ -57,7 +57,7 @@ jQueryReady( () => {
 			$( '.new-customer' ).hide();
 		}
 
-		var new_customer = $( '#edd-new-customer' );
+		var new_customer = $( '#cs-new-customer' );
 
 		if ( $( '.new-customer' ).is( ':visible' ) ) {
 			new_customer.val( 1 );

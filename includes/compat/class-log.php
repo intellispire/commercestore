@@ -2,13 +2,13 @@
 /**
  * Backwards Compatibility Handler for Logs.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -64,37 +64,37 @@ class Log extends Base {
 	 */
 	public function api_request_log_get_post_meta( $value, $object_id, $meta_key, $single ) {
 		if ( 'get_post_metadata' !== current_filter() ) {
-			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'easy-digital-downloads' );
-			_doing_it_wrong( __FUNCTION__, $message, 'EDD 3.0' );
+			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'commercestore' );
+			_doing_it_wrong( __FUNCTION__, $message, 'CS 3.0' );
 		}
 
 		$meta_keys = array(
-			'_edd_log_request_ip',
-			'_edd_log_user',
-			'_edd_log_key',
-			'_edd_log_token',
-			'_edd_log_time',
-			'_edd_log_version',
+			'_cs_log_request_ip',
+			'_cs_log_user',
+			'_cs_log_key',
+			'_cs_log_token',
+			'_cs_log_time',
+			'_cs_log_version',
 		);
 
 		if ( ! in_array( $meta_key, $meta_keys, true ) ) {
 			return $value;
 		}
 
-		$api_request_log = edd_get_api_request_log( $object_id );
+		$api_request_log = cs_get_api_request_log( $object_id );
 
 		if ( ! $api_request_log ) {
 			return $value;
 		}
 
 		switch ( $meta_key ) {
-			case '_edd_log_request_ip':
-			case '_edd_log_user':
-			case '_edd_log_key':
-			case '_edd_log_token':
-			case '_edd_log_time':
-			case '_edd_log_version':
-				$key = str_replace( '_edd_log_', '', $meta_key );
+			case '_cs_log_request_ip':
+			case '_cs_log_user':
+			case '_cs_log_key':
+			case '_cs_log_token':
+			case '_cs_log_time':
+			case '_cs_log_version':
+				$key = str_replace( '_cs_log_', '', $meta_key );
 
 				switch ( $key ) {
 					case 'request_ip':
@@ -113,7 +113,7 @@ class Log extends Base {
 		}
 
 		if ( $this->show_notices ) {
-			_doing_it_wrong( 'get_post_meta()', 'All log postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_get_api_request_log()</code> instead.', 'EDD 3.0' );
+			_doing_it_wrong( 'get_post_meta()', 'All log postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_get_api_request_log()</code> instead.', 'CS 3.0' );
 
 			if ( $this->show_backtrace ) {
 				$backtrace = debug_backtrace();
@@ -127,7 +127,7 @@ class Log extends Base {
 	/**
 	 * Listen for calls to update_post_meta for API request logs and see if we need to filter them.
 	 *
-	 * This is here for backwards compatibility purposes with the migration to custom tables in EDD 3.0.
+	 * This is here for backwards compatibility purposes with the migration to custom tables in CommerceStore 3.0.
 	 *
 	 * @since 3.0
 	 *
@@ -141,32 +141,32 @@ class Log extends Base {
 	 */
 	public function api_request_log_update_post_meta( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$meta_keys = array(
-			'_edd_log_request_ip',
-			'_edd_log_user',
-			'_edd_log_key',
-			'_edd_log_token',
-			'_edd_log_time',
-			'_edd_log_version',
+			'_cs_log_request_ip',
+			'_cs_log_user',
+			'_cs_log_key',
+			'_cs_log_token',
+			'_cs_log_time',
+			'_cs_log_version',
 		);
 
 		if ( ! in_array( $meta_key, $meta_keys, true ) ) {
 			return $check;
 		}
 
-		$api_request_log = edd_get_api_request_log( $object_id );
+		$api_request_log = cs_get_api_request_log( $object_id );
 
 		if ( ! $api_request_log ) {
 			return $check;
 		}
 
 		switch ( $meta_key ) {
-			case '_edd_log_request_ip':
-			case '_edd_log_user':
-			case '_edd_log_key':
-			case '_edd_log_token':
-			case '_edd_log_time':
-			case '_edd_log_version':
-				$key = str_replace( '_edd_log_', '', $meta_key );
+			case '_cs_log_request_ip':
+			case '_cs_log_user':
+			case '_cs_log_key':
+			case '_cs_log_token':
+			case '_cs_log_time':
+			case '_cs_log_version':
+				$key = str_replace( '_cs_log_', '', $meta_key );
 
 				switch ( $key ) {
 					case 'request_ip':
@@ -180,14 +180,14 @@ class Log extends Base {
 						break;
 				}
 
-				$check = edd_update_api_request_log( $object_id, array(
+				$check = cs_update_api_request_log( $object_id, array(
 					$key => $meta_value,
 				) );
 				break;
 		}
 
 		if ( $this->show_notices ) {
-			_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All log postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_add_order_meta()/edd_update_order_meta()()</code> instead.', 'EDD 3.0' );
+			_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All log postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_add_order_meta()/cs_update_order_meta()()</code> instead.', 'CS 3.0' );
 
 			if ( $this->show_backtrace ) {
 				$backtrace = debug_backtrace();
@@ -212,38 +212,38 @@ class Log extends Base {
 	 */
 	public function file_download_log_get_post_meta( $value, $object_id, $meta_key, $single ) {
 		if ( 'get_post_metadata' !== current_filter() ) {
-			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'easy-digital-downloads' );
-			_doing_it_wrong( __FUNCTION__, $message, 'EDD 3.0' );
+			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'commercestore' );
+			_doing_it_wrong( __FUNCTION__, $message, 'CS 3.0' );
 		}
 
 		$meta_keys = array(
-			'_edd_log_user_info',
-			'_edd_log_user_id',
-			'_edd_log_file_id',
-			'_edd_log_ip',
-			'_edd_log_payment_id',
-			'_edd_log_price_id',
-			'_edd_log_customer_id',
+			'_cs_log_user_info',
+			'_cs_log_user_id',
+			'_cs_log_file_id',
+			'_cs_log_ip',
+			'_cs_log_payment_id',
+			'_cs_log_price_id',
+			'_cs_log_customer_id',
 		);
 
 		if ( ! in_array( $meta_key, $meta_keys, true ) ) {
 			return $value;
 		}
 
-		$file_download_log = edd_get_file_download_log( $object_id );
+		$file_download_log = cs_get_file_download_log( $object_id );
 
 		if ( ! $file_download_log ) {
 			return $value;
 		}
 
 		switch ( $meta_key ) {
-			case '_edd_log_user_id':
-			case '_edd_log_file_id':
-			case '_edd_log_ip':
-			case '_edd_log_payment_id':
-			case '_edd_log_price_id':
-			case '_edd_log_customer_id':
-				$key = str_replace( '_edd_log_', '', $meta_key );
+			case '_cs_log_user_id':
+			case '_cs_log_file_id':
+			case '_cs_log_ip':
+			case '_cs_log_payment_id':
+			case '_cs_log_price_id':
+			case '_cs_log_customer_id':
+				$key = str_replace( '_cs_log_', '', $meta_key );
 
 				switch ( $key ) {
 					case 'request_ip':
@@ -265,14 +265,14 @@ class Log extends Base {
 				}
 
 				if ( 'user_id' === $key ) {
-					$customer = new \EDD_Customer( $file_download_log->customer_id );
+					$customer = new \CS_Customer( $file_download_log->customer_id );
 					$value    = ! empty( $customer->user_id ) ? $customer->user_id : 0;
 				}
 				break;
 		}
 
 		if ( $this->show_notices ) {
-			_doing_it_wrong( 'get_post_meta()', __( 'All log postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_get_api_request_log()</code> instead.', 'easy-digital-downloads' ), 'EDD 3.0' );
+			_doing_it_wrong( 'get_post_meta()', __( 'All log postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_get_api_request_log()</code> instead.', 'commercestore' ), 'CS 3.0' );
 
 			if ( $this->show_backtrace ) {
 				$backtrace = debug_backtrace();
@@ -286,7 +286,7 @@ class Log extends Base {
 	/**
 	 * Listen for calls to update_post_meta for file download logs and see if we need to filter them.
 	 *
-	 * This is here for backwards compatibility purposes with the migration to custom tables in EDD 3.0.
+	 * This is here for backwards compatibility purposes with the migration to custom tables in CommerceStore 3.0.
 	 *
 	 * @since 3.0
 	 *
@@ -301,39 +301,39 @@ class Log extends Base {
 	 */
 	public function file_download_log_update_post_meta( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$meta_keys = array(
-			'_edd_log_user_info',
-			'_edd_log_user_id',
-			'_edd_log_file_id',
-			'_edd_log_ip',
-			'_edd_log_payment_id',
-			'_edd_log_price_id',
-			'_edd_log_customer_id',
+			'_cs_log_user_info',
+			'_cs_log_user_id',
+			'_cs_log_file_id',
+			'_cs_log_ip',
+			'_cs_log_payment_id',
+			'_cs_log_price_id',
+			'_cs_log_customer_id',
 		);
 
 		if ( ! in_array( $meta_key, $meta_keys, true ) ) {
 			return $check;
 		}
 
-		$file_download_log = edd_get_file_download_log( $object_id );
+		$file_download_log = cs_get_file_download_log( $object_id );
 
 		if ( ! $file_download_log ) {
 			return $check;
 		}
 
 		switch ( $meta_key ) {
-			case '_edd_log_user_id':
-			case '_edd_log_file_id':
-			case '_edd_key_ip':
-			case '_edd_log_payment_id':
-			case '_edd_log_price_id':
-			case '_edd_log_customer_id':
-				$key = str_replace( '_edd_log_', '', $meta_key );
+			case '_cs_log_user_id':
+			case '_cs_log_file_id':
+			case '_cs_key_ip':
+			case '_cs_log_payment_id':
+			case '_cs_log_price_id':
+			case '_cs_log_customer_id':
+				$key = str_replace( '_cs_log_', '', $meta_key );
 
 				if ( 'payment_id' === $key ) {
 					$key = 'order_id';
 				}
 
-				$check = edd_update_file_download_log( $object_id, array(
+				$check = cs_update_file_download_log( $object_id, array(
 					$key => $meta_value,
 				) );
 				break;

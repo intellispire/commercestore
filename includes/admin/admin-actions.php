@@ -2,7 +2,7 @@
 /**
  * Admin Actions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Actions
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -13,22 +13,22 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Processes all EDD actions sent via POST and GET by looking for the 'edd-action'
+ * Processes all CommerceStore actions sent via POST and GET by looking for the 'cs-action'
  * request and running do_action() to call the function
  *
  * @since 1.0
  * @return void
  */
-function edd_process_actions() {
-	if ( isset( $_POST['edd-action'] ) ) {
-		do_action( 'edd_' . $_POST['edd-action'], $_POST );
+function cs_process_actions() {
+	if ( isset( $_POST['cs-action'] ) ) {
+		do_action( 'cs_' . $_POST['cs-action'], $_POST );
 	}
 
-	if ( isset( $_GET['edd-action'] ) ) {
-		do_action( 'edd_' . $_GET['edd-action'], $_GET );
+	if ( isset( $_GET['cs-action'] ) ) {
+		do_action( 'cs_' . $_GET['cs-action'], $_GET );
 	}
 }
-add_action( 'admin_init', 'edd_process_actions' );
+add_action( 'admin_init', 'cs_process_actions' );
 
 /**
  * When the Download list table loads, call the function to view our tabs.
@@ -40,12 +40,12 @@ add_action( 'admin_init', 'edd_process_actions' );
  *
  * @return mixed
  */
-function edd_products_tabs( $views ) {
-	edd_display_product_tabs();
+function cs_products_tabs( $views ) {
+	cs_display_product_tabs();
 
 	return $views;
 }
-add_filter( 'views_edit-download', 'edd_products_tabs', 10, 1 );
+add_filter( 'views_edit-download', 'cs_products_tabs', 10, 1 );
 
 /**
  * When the Download list table loads, call the function to view our tabs.
@@ -54,7 +54,7 @@ add_filter( 'views_edit-download', 'edd_products_tabs', 10, 1 );
  *
  * @return void
  */
-function edd_taxonomies_tabs() {
+function cs_taxonomies_tabs() {
 
 	// Bail if not viewing a taxonomy
 	if ( empty( $_GET['taxonomy'] ) ) {
@@ -71,9 +71,9 @@ function edd_taxonomies_tabs() {
 	}
 
 	// Output the tabs
-	edd_display_product_tabs();
+	cs_display_product_tabs();
 }
-add_action( 'admin_notices', 'edd_taxonomies_tabs', 10, 1 );
+add_action( 'admin_notices', 'cs_taxonomies_tabs', 10, 1 );
 
 /**
  * Remove the top level taxonomy submenus.
@@ -82,7 +82,7 @@ add_action( 'admin_notices', 'edd_taxonomies_tabs', 10, 1 );
  *
  * @since 3.0
  */
-function edd_admin_adjust_submenus() {
+function cs_admin_adjust_submenus() {
 
 	// Get taxonomies
 	$taxonomies = get_object_taxonomies( 'download' );
@@ -100,7 +100,7 @@ function edd_admin_adjust_submenus() {
 	// Remove the "Add New" link for downloads
 	remove_submenu_page( 'edit.php?post_type=download', 'post-new.php?post_type=download' );
 }
-add_action( 'admin_menu', 'edd_admin_adjust_submenus', 999 );
+add_action( 'admin_menu', 'cs_admin_adjust_submenus', 999 );
 
 /**
  * This tells WordPress to highlight the Downloads > Downloads submenu,
@@ -113,7 +113,7 @@ add_action( 'admin_menu', 'edd_admin_adjust_submenus', 999 );
  *
  * @global string $submenu_file
  */
-function edd_taxonomies_modify_menu_highlight() {
+function cs_taxonomies_modify_menu_highlight() {
 	global $submenu_file;
 
 	// Bail if not viewing a taxonomy
@@ -133,7 +133,7 @@ function edd_taxonomies_modify_menu_highlight() {
 	// Force the submenu file
 	$submenu_file = 'edit.php?post_type=download';
 }
-add_filter( 'admin_head', 'edd_taxonomies_modify_menu_highlight', 9999 );
+add_filter( 'admin_head', 'cs_taxonomies_modify_menu_highlight', 9999 );
 
 /**
  * This tells WordPress to highlight the Downloads > Downloads submenu when
@@ -143,7 +143,7 @@ add_filter( 'admin_head', 'edd_taxonomies_modify_menu_highlight', 9999 );
  *
  * @global string $submenu_file
  */
-function edd_add_new_modify_menu_highlight() {
+function cs_add_new_modify_menu_highlight() {
 	global $submenu_file, $pagenow;
 
 	// Bail if not viewing the right page or post type
@@ -162,20 +162,20 @@ function edd_add_new_modify_menu_highlight() {
 	// Force the submenu file
 	$submenu_file = 'edit.php?post_type=download';
 }
-add_filter( 'admin_head', 'edd_add_new_modify_menu_highlight', 9999 );
+add_filter( 'admin_head', 'cs_add_new_modify_menu_highlight', 9999 );
 
 /**
  * Displays the product tabs for Products, Categories, and Tags
  *
  * @since 2.8.9
  */
-function edd_display_product_tabs() {
+function cs_display_product_tabs() {
 
 	// Initial tabs
 	$tabs = array(
 		'products' => array(
-			'name' => edd_get_label_plural(),
-			'url'  => edd_get_admin_url(),
+			'name' => cs_get_label_plural(),
+			'url'  => cs_get_admin_url(),
 		),
 	);
 
@@ -192,7 +192,7 @@ function edd_display_product_tabs() {
 	}
 
 	// Filter the tabs
-	$tabs = apply_filters( 'edd_add_ons_tabs', $tabs );
+	$tabs = apply_filters( 'cs_add_ons_tabs', $tabs );
 
 	// Taxonomies
 	if ( isset( $_GET['taxonomy'] ) && in_array( $_GET['taxonomy'], array_keys( $taxonomies ), true ) ) {
@@ -207,7 +207,7 @@ function edd_display_product_tabs() {
 	ob_start();
 	?>
 
-	<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Secondary menu', 'easy-digital-downloads' ); ?>">
+	<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Secondary menu', 'commercestore' ); ?>">
 		<?php
 
 		foreach ( $tabs as $tab_id => $tab ) {
@@ -239,12 +239,12 @@ function edd_display_product_tabs() {
  *
  * @return array
  */
-function edd_admin_removable_query_args() {
-	return apply_filters( 'edd_admin_removable_query_args', array(
-		'edd-action',
-		'edd-notice',
-		'edd-message',
-		'edd-redirect'
+function cs_admin_removable_query_args() {
+	return apply_filters( 'cs_admin_removable_query_args', array(
+		'cs-action',
+		'cs-notice',
+		'cs-message',
+		'cs-redirect'
 	) );
 }
 
@@ -255,15 +255,15 @@ function edd_admin_removable_query_args() {
  *
  * @since 3.0
  */
-function edd_admin_print_payment_icons() {
+function cs_admin_print_payment_icons() {
 
 	// Bail if not the gateways page
-	if ( ! edd_is_admin_page( 'settings', 'gateways' ) ) {
+	if ( ! cs_is_admin_page( 'settings', 'gateways' ) ) {
 		return;
 	}
 
 	// Output the SVG icons
-	edd_print_payment_icons( array(
+	cs_print_payment_icons( array(
 		'mastercard',
 		'visa',
 		'americanexpress',
@@ -272,4 +272,4 @@ function edd_admin_print_payment_icons() {
 		'amazon'
 	) );
 }
-add_action( 'admin_footer', 'edd_admin_print_payment_icons', 9999 );
+add_action( 'admin_footer', 'cs_admin_print_payment_icons', 9999 );

@@ -37,7 +37,7 @@ This table's data is intended to be mutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_adjustment_id  | The id of the adjustment to which this row relates. |
+| cs_adjustment_id  | The id of the adjustment to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
@@ -87,7 +87,7 @@ This table's data is intended to be mutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_customer_id  | The id of the customer to which this row relates. |
+| cs_customer_id  | The id of the customer to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
@@ -99,10 +99,10 @@ This table's data is intended to be mutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | id | The unique id of the row, which auto increments. This is also the id of the customer. |
-| user_id  | The id of the WordPress user which is linked to this customer. The same real-world person owns both, the WP user, and the EDD customer.  |
+| user_id  | The id of the WordPress user which is linked to this customer. The same real-world person owns both, the WP user, and the CommerceStore customer.  |
 | email  | The primary email address of this customer. This value will typically match whatever the "primary" email is in the customer emails table in the "type" column. |
 | name | This is the customer's name, and includes their first and last name together in a single string. |
-| status | Currently, this stores the word "active" for all customers, until such time as functionality for "inactive" customers gets added to EDD. |
+| status | Currently, this stores the word "active" for all customers, until such time as functionality for "inactive" customers gets added to CS. |
 | purchase_value | This is the total amount of money this customer has paid. |
 | purchase_count | This is the total number of purchases this customer has initiated. |
 | date_created | The date this row was created. |
@@ -117,7 +117,7 @@ This table's data is intended to be immutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_log_id  | The id of the log to which this row relates. |
+| cs_log_id  | The id of the log to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
@@ -140,7 +140,7 @@ This table's data is intended to be immutable.
 | uuid | A unique identifying string representing this row. |
 
 ## The Logs API Requests Table:
-Every time a request is made to the EDD REST API, that request is logged in this table.
+Every time a request is made to the CommerceStore REST API, that request is logged in this table.
 
 This table's data is intended to be immutable.
 
@@ -166,20 +166,20 @@ This table's data is intended to be immutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_logs_api_request_id  | The id of the api request log to which this row relates. |
+| cs_logs_api_request_id  | The id of the api request log to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
 ## The Logs File Downloads Table:
-Every time a deliverable file is downloaded via EDD, it is logged in this table.
+Every time a deliverable file is downloaded via CS, it is logged in this table.
 
 This table's data is intended to be immutable.
 
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | id | The unique id of the row, which auto increments. |
-| product_id | The ID of the EDD product whose file was downloaded. |
-| file_id | The id of the file being downloaded. This ID comes from the files attached to an EDD product. |
+| product_id | The ID of the CommerceStore product whose file was downloaded. |
+| file_id | The id of the file being downloaded. This ID comes from the files attached to an CommerceStore product. |
 | order_id | The ID of the order which is enabling this download to take place.  |
 | price_id | The variable price ID which was purchased, and which enabled this download to take place. 0 if the product is not variably-priced. |
 | customer_id | The ID of the customer who downloaded this file. |
@@ -197,7 +197,7 @@ This table's data is intended to be immutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_logs_file_download_id  | The id of the file download log to which this row relates. |
+| cs_logs_file_download_id  | The id of the file download log to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
@@ -209,7 +209,7 @@ This table's data is intended to be mutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_note_id  | The id of the note to which this row relates. |
+| cs_note_id  | The id of the note to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
@@ -258,7 +258,7 @@ This table's data is intended to be immutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_order_adjustment_id  | The id of the adjustment to which this row relates. |
+| cs_order_adjustment_id  | The id of the adjustment to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
@@ -272,7 +272,7 @@ This table's data is intended to be immutable.
 | id | The unique id of the row, which auto increments.  |
 | parent | The ID of another order adjustment which is considered to be the parent of this adjustment. This is used for adjustments attached to refunds. The parent references the ID of the original order adjustment that was refunded. |
 | object_id | The ID of the row that this row adjusted the amount/cost of. This is typically an order (in the orders table) or an order_item (in the order_items table). The type of object is indicated in the object_type column. |
-| object_type | This typically indicates the EDD custom table that the object_id value can be found within, and to which row within that table this row relates. For example, the orders table (indicated by the word "order") or the order_items table (indicated by the word "order_item"). |
+| object_type | This typically indicates the CommerceStore custom table that the object_id value can be found within, and to which row within that table this row relates. For example, the orders table (indicated by the word "order") or the order_items table (indicated by the word "order_item"). |
 | type_id | This value indicates the row ID in the adjustments table from which this order adjustment originated. For example, if this value is "25", go to the adjustments table and look at the row with the ID "25" to see the corresponding adjustment. |
 | type | A string which indicates the type of adjustment this is. Typically this is something like "fee", "tax_rate", or "discount". |
 | type_key | The fees API allows for customizing the array key value for a given fee. This can be a string or numeric. This "fee ID" is stored as the type_key, as it represents the fee's key in the 2.x array. |
@@ -292,12 +292,12 @@ This table's data is intended to be immutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_order_item_id  | The id of the order item to which this row relates. |
+| cs_order_item_id  | The id of the order item to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
 ## The Order Items Table:
-This table stores items (or "products", also known as "downloads" in EDD) that were part of an order. It also stores various data about the items, like the tax that was on the item,.
+This table stores items (or "products", also known as "downloads" in CS) that were part of an order. It also stores various data about the items, like the tax that was on the item,.
 
 One way to think about this is that a "for-sale thing" is called a "product" when in an un-purchased state, and called an "item" when in a purchased state.
 
@@ -313,7 +313,7 @@ This table's data is intended to be immutable.
 | price_id | This is the ID of the variable price which was purchased. |
 | price_name | This is what the name of the variable price was at the time of this purchase. |
 | cart_index  | This is the position at which this item was sitting in the cart when this order took place, starting at 0 for the first position. |
-| type | This indicates the type of product that this item is. In its current form, all things sold in EDD have the type of "download", and thus does not currently have any functional relevance. This is here to enable possible future changes only. |
+| type | This indicates the type of product that this item is. In its current form, all things sold in CommerceStore have the type of "download", and thus does not currently have any functional relevance. This is here to enable possible future changes only. |
 | status | This indicates the status of this item in regards to purchase completion. Typical values include (but are not limited to) "completed", and "refunded". When set to "inherit", it will inherit the status of the order to which it belongs. When set to anything other than "inherit" it will override the status of the order, but only for this item. |
 | quantity | A single item in the cart can have a quantity. This indicates that quantity. Through this column's data, a single order_item can actually represent multiple items, and the values in the subtotal and total columns reflect that quantity. |
 | amount | This is what the unadjusted price of this item was at the time of purchase. It does not include tax, discounts, fees, or any other price adjusters. |
@@ -351,30 +351,30 @@ This table's data is intended to be immutable.
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | meta_id | The unique id of the row, which auto increments.  |
-| edd_order_id  | The id of the order item to which this row relates. |
+| cs_order_id  | The id of the order item to which this row relates. |
 | meta_key | The reference key (like a variable name) of the data in question. |
 | meta_value | The value. This can be anything needed as its purpose is for anything extra. |
 
 ## The Orders Table:
-This table stores orders (called "payments" prior to EDD 3.0). It also stores various data about the order, like the customer ID, the email entered by the customer at checkout, the IP address of the machine where checkout was completed, and more. See table below for full breakdown of each column.
+This table stores orders (called "payments" prior to CommerceStore 3.0). It also stores various data about the order, like the customer ID, the email entered by the customer at checkout, the IP address of the machine where checkout was completed, and more. See table below for full breakdown of each column.
 
 This table's data is intended to be immutable. However, some column data is also intended to be mutable. The user_id customer_id, and email column values will change if an order is re-assigned to a new customer.
 
 | Table Column  | Table Column's Description |
 | ------------- | ------------- |
 | id | The unique id of the row, which auto increments. This also serves as the id of the order itself. |
-| parent | The ID of another order which is considered to be the parent of this order. This is used in scenarios like refund orders, which are automatically generated when a refund takes place. Refund orders use this column to refer to the original order where the item being refunded was originally purchased. Another scenario where this is used is for renewal payments done through the EDD Recurring Payments extension. Each renewal payment will use this column to indicate which order was the one where the customer originally initiated the subscription. |
-| order_number | This column serves several different purposes: <br><br> 1. By default, it will be blank for every order (except "refund" orders). <br><br> 2. If the order in question is a "refund" order, this will contain a string in this format: "ORIGINAL_ORDER_NUMBER-R-THE_NUMBER_OF_REFUNDS_IN_THAT_ORDER". So if it is the 2nd refund from order #1, it will be "1-R-2".  <br><br> 3. If you have "Sequential Order Numbers" enabled in your EDD settings, this column will be populated by the value determined by your settings for that.<br><br> 4. If the order in question is a refund for a "Sequentially Ordered" order, the format is the same as for "Non-Sequentially Ordered" orders, but it is important to note that the ORIGINAL_ORDER_NUMBER value will be the value from the "id" column of the original order, not the "order_number" column. <br><br> 5. Extensions may modify the way this column works. For example, the "Advanced Sequential Order Numbers" extension for EDD will put its own value in this column, overriding the values from EDD core. |
+| parent | The ID of another order which is considered to be the parent of this order. This is used in scenarios like refund orders, which are automatically generated when a refund takes place. Refund orders use this column to refer to the original order where the item being refunded was originally purchased. Another scenario where this is used is for renewal payments done through the CommerceStore Recurring Payments extension. Each renewal payment will use this column to indicate which order was the one where the customer originally initiated the subscription. |
+| order_number | This column serves several different purposes: <br><br> 1. By default, it will be blank for every order (except "refund" orders). <br><br> 2. If the order in question is a "refund" order, this will contain a string in this format: "ORIGINAL_ORDER_NUMBER-R-THE_NUMBER_OF_REFUNDS_IN_THAT_ORDER". So if it is the 2nd refund from order #1, it will be "1-R-2".  <br><br> 3. If you have "Sequential Order Numbers" enabled in your CommerceStore settings, this column will be populated by the value determined by your settings for that.<br><br> 4. If the order in question is a refund for a "Sequentially Ordered" order, the format is the same as for "Non-Sequentially Ordered" orders, but it is important to note that the ORIGINAL_ORDER_NUMBER value will be the value from the "id" column of the original order, not the "order_number" column. <br><br> 5. Extensions may modify the way this column works. For example, the "Advanced Sequential Order Numbers" extension for CommerceStore will put its own value in this column, overriding the values from CommerceStore core. |
 | status | This column has 2 purposes:<br><br> 1) It identifies the financial/accounting status of the order. <br>    a) If the transaction(s) for the order have completed successfully, this value here will be "complete". <br>    b) If the transaction(s) for the order have not yet completed successfully, this value here will be "pending". <br>    c) If the transaction(s) for the order have not completed successfully and it has been 7 days, this value here will be "abandoned". <br>    d) If the transaction(s) for the order failed at the payment gateway (for example, insufficient funds), this will be set to "failed". <br>    e) If this order has been partially refunded, the status of the order currently remains set to "complete". <br>    f) If all of the items in this order have been refunded, this value will be "refunded". <br><br>2) It identifies if the order is in the trash. If the order has been put in the trash, the financial status is no longer stored here, but gets moved to the order_meta table with the key "pre_trash_status". The value in this column will then be "trash". |
 | type | The type of order this is. Typical values are "sale" or "refund". |
-| user_id | The ID of the user currently attached to this order. Note that this column is mutable and will change if the user attached to the EDD customer changes, or if the customer attached to an order changes. |
-| customer_id | The ID of the customer currently attached to this order. Note that this column is mutable and will change if the customer attached to the EDD order changes, or if the user attached to a customer changes. |
-| email | The email address currently attached to this order. Note that this column is mutable and will change if the customer attached to the EDD order changes, or if the customer's email is updated. |
+| user_id | The ID of the user currently attached to this order. Note that this column is mutable and will change if the user attached to the CommerceStore customer changes, or if the customer attached to an order changes. |
+| customer_id | The ID of the customer currently attached to this order. Note that this column is mutable and will change if the customer attached to the CommerceStore order changes, or if the user attached to a customer changes. |
+| email | The email address currently attached to this order. Note that this column is mutable and will change if the customer attached to the CommerceStore order changes, or if the customer's email is updated. |
 | ip | The IP address of the machine on which this order was completed. |
 | gateway | A string representing the payment gateway which was used to complete the payments on this order. |
 | mode | This stores whether the order was done in test mode or live mode. |
 | currency | The 3 letter currency code which this order used/will-use.  |
-| payment_key | A unique key representing this payment. This key is generated by combining a few different values about this order, like the email address, the date, an optional auth key which can be defined as a constant, and a unique id generated by the uniqid function in PHP. See class-edd-payment.php for the full breakdown of how this is generated. |
+| payment_key | A unique key representing this payment. This key is generated by combining a few different values about this order, like the email address, the date, an optional auth key which can be defined as a constant, and a unique id generated by the uniqid function in PHP. See class-cs-payment.php for the full breakdown of how this is generated. |
 | subtotal | This is the amount of the items in the cart added together. It does not include any taxes or discounts. Note: Fees are considered to be both line items and adjustments. In relation to the orders table, fees are treated as line items, and are thus included in the subtotal. But note that they are the only "adjustments" that are included in the subtotal, as other adjustments are not included in the subtotal. |
 | discount | This is the total amount of discount(s) that were applied to the order. |
 | tax | This is the total amount of the tax that was applied to the order. |

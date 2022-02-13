@@ -2,21 +2,21 @@
 /**
  * Customer Meta Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Tables
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Tables;
+namespace CS\Database\Tables;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 /**
- * Setup the global "edd_customermeta" database table
+ * Setup the global "cs_customermeta" database table
  *
  * @since 3.0
  */
@@ -61,11 +61,11 @@ final class Customer_Meta extends Table {
 	protected function set_schema() {
 		$max_index_length = 191;
 		$this->schema     = "meta_id bigint(20) unsigned NOT NULL auto_increment,
-			edd_customer_id bigint(20) unsigned NOT NULL default '0',
+			cs_customer_id bigint(20) unsigned NOT NULL default '0',
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext DEFAULT NULL,
 			PRIMARY KEY (meta_id),
-			KEY edd_customer_id (edd_customer_id),
+			KEY cs_customer_id (cs_customer_id),
 			KEY meta_key (meta_key({$max_index_length}))";
 	}
 
@@ -82,13 +82,13 @@ final class Customer_Meta extends Table {
 	 * @since 3.0
 	 */
 	public function maybe_upgrade() {
-		if ( false !== get_option( $this->table_prefix . 'edd_customermeta_db_version', false ) ) {
-			delete_option( $this->table_prefix . 'edd_customermeta_db_version' );
+		if ( false !== get_option( $this->table_prefix . 'cs_customermeta_db_version', false ) ) {
+			delete_option( $this->table_prefix . 'cs_customermeta_db_version' );
 
-			if ( $this->column_exists( 'customer_id' ) && ! $this->column_exists( 'edd_customer_id' ) ) {
-				$this->get_db()->query( "ALTER TABLE {$this->table_name} CHANGE `customer_id` `edd_customer_id` bigint(20) unsigned NOT NULL default '0';" );
+			if ( $this->column_exists( 'customer_id' ) && ! $this->column_exists( 'cs_customer_id' ) ) {
+				$this->get_db()->query( "ALTER TABLE {$this->table_name} CHANGE `customer_id` `cs_customer_id` bigint(20) unsigned NOT NULL default '0';" );
 				$this->get_db()->query( "ALTER TABLE {$this->table_name} DROP INDEX customer_id" );
-				$this->get_db()->query( "ALTER TABLE {$this->table_name} ADD INDEX edd_customer_id (edd_customer_id)" );
+				$this->get_db()->query( "ALTER TABLE {$this->table_name} ADD INDEX cs_customer_id (cs_customer_id)" );
 			}
 		}
 
@@ -97,7 +97,7 @@ final class Customer_Meta extends Table {
 
 	/**
 	 * Upgrade to version 201807111
-	 * - Rename  `customer_id` column to `edd_customer_id`
+	 * - Rename  `customer_id` column to `cs_customer_id`
 	 * - Add `status` column.
 	 *
 	 * @since 3.0
@@ -107,10 +107,10 @@ final class Customer_Meta extends Table {
 	protected function __201807111() {
 
 		// Alter the database with separate queries so indexes succeed
-		if ( $this->column_exists( 'customer_id' ) && ! $this->column_exists( 'edd_customer_id' ) ) {
-			$this->get_db()->query( "ALTER TABLE {$this->table_name} CHANGE `customer_id` `edd_customer_id` bigint(20) unsigned NOT NULL default '0'" );
+		if ( $this->column_exists( 'customer_id' ) && ! $this->column_exists( 'cs_customer_id' ) ) {
+			$this->get_db()->query( "ALTER TABLE {$this->table_name} CHANGE `customer_id` `cs_customer_id` bigint(20) unsigned NOT NULL default '0'" );
 			$this->get_db()->query( "ALTER TABLE {$this->table_name} DROP INDEX customer_id" );
-			$this->get_db()->query( "ALTER TABLE {$this->table_name} ADD INDEX edd_customer_id (edd_customer_id)" );
+			$this->get_db()->query( "ALTER TABLE {$this->table_name} ADD INDEX cs_customer_id (cs_customer_id)" );
 		}
 
 		// Return success/fail

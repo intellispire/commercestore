@@ -2,13 +2,13 @@
 /**
  * Base Core Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Core
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD;
+namespace CS;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;

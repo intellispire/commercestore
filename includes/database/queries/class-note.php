@@ -2,25 +2,25 @@
 /**
  * Note Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying items.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Note::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Note::__construct() for accepted arguments.
  */
 class Note extends Query {
 
@@ -51,7 +51,7 @@ class Note extends Query {
 	 * @access public
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Notes';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Notes';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Note extends Query {
 	 * @access public
 	 * @var mixed
 	 */
-	protected $item_shape = '\\EDD\\Notes\\Note';
+	protected $item_shape = '\\CS\\Notes\\Note';
 
 	/** Cache *****************************************************************/
 

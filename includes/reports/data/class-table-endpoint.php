@@ -2,13 +2,13 @@
 /**
  * Reports API - Table Endpoint Handler
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;

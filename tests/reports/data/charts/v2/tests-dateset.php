@@ -1,27 +1,27 @@
 <?php
-namespace EDD\Reports\Data\Charts\v2;
+namespace CS\Reports\Data\Charts\v2;
 
-use EDD\Reports\Data\Chart_Endpoint;
+use CS\Reports\Data\Chart_Endpoint;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Dataset class.
  *
- * @group edd_reports
- * @group edd_reports_data
- * @group edd_reports_charts
+ * @group cs_reports
+ * @group cs_reports_data
+ * @group cs_reports_charts
  *
- * @coversDefaultClass \EDD\Reports\Data\Charts\v2\Dataset
+ * @coversDefaultClass \CS\Reports\Data\Charts\v2\Dataset
  */
-class Dataset_Tests extends \EDD_UnitTestCase {
+class Dataset_Tests extends \CS_UnitTestCase {
 
 	/**
-	 * @var \EDD\Reports\Data\Charts\v2\Dataset
+	 * @var \CS\Reports\Data\Charts\v2\Dataset
 	 */
 	protected $mock_Dataset;
 
@@ -38,7 +38,7 @@ class Dataset_Tests extends \EDD_UnitTestCase {
 	 * @covers ::__construct()
 	 */
 	public function test_Dataset_should_implement_Error_Logger_Interface() {
-		$this->assertInstanceOf( 'EDD\\Utils\\Error_Logger_Interface', $this->mock_Dataset );
+		$this->assertInstanceOf( 'CS\\Utils\\Error_Logger_Interface', $this->mock_Dataset );
 	}
 
 	/**
@@ -52,10 +52,10 @@ class Dataset_Tests extends \EDD_UnitTestCase {
 	/**
 	 * @covers ::get_endpoint()
 	 *
-	 * @group edd_reports_endpoints
+	 * @group cs_reports_endpoints
 	 */
 	public function test_get_endpoint_should_retrieve_an_Endpoint_object() {
-		$this->assertInstanceOf( 'EDD\\Reports\\Data\\Endpoint', $this->mock_Dataset->get_endpoint() );
+		$this->assertInstanceOf( 'CS\\Reports\\Data\\Endpoint', $this->mock_Dataset->get_endpoint() );
 	}
 
 	/**
@@ -192,12 +192,12 @@ class Dataset_Tests extends \EDD_UnitTestCase {
 	/**
 	 * Mocks a Dataset fixture.
 	 *
-	 * @return \EDD\Reports\Data\Charts\v2\Dataset
+	 * @return \CS\Reports\Data\Charts\v2\Dataset
 	 */
 	protected function get_Dataset_mock( $dataset_id, $endpoint_args = array() ) {
 		$defaults = array(
 			'id'    => 'test_endpoint',
-			'label' => __( 'Foo Dataset', 'easy-digital-downloads' ),
+			'label' => __( 'Foo Dataset', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => function() use ( $dataset_id ) {
@@ -210,7 +210,7 @@ class Dataset_Tests extends \EDD_UnitTestCase {
 						'cutoutPercentage' => 50,
 						'datasets'         => array(
 							$dataset_id => array(
-								'label'           => __( 'Sales', 'easy-digital-downloads' ),
+								'label'           => __( 'Sales', 'commercestore' ),
 								'backgroundColor' => array(
 									'rgb(234,16,109)',
 									'rgb(98,133,193)',
@@ -228,7 +228,7 @@ class Dataset_Tests extends \EDD_UnitTestCase {
 		$endpoint_args = array_merge( $defaults, $endpoint_args );
 
 		return $this->getMockForAbstractClass(
-			'EDD\\Reports\\Data\\Charts\\v2\\Dataset',
+			'CS\\Reports\\Data\\Charts\\v2\\Dataset',
 			array( $dataset_id, new Chart_Endpoint( $endpoint_args ), $endpoint_args['views']['chart']['options'] )
 		);
 	}

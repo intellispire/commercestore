@@ -2,7 +2,7 @@
 /**
  * Manual Gateway
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Gateways
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0
  * @return void
  */
-add_action( 'edd_manual_cc_form', '__return_false' );
+add_action( 'cs_manual_cc_form', '__return_false' );
 
 /**
  * Processes the purchase data and uses the Manual Payment gateway to record
@@ -28,9 +28,9 @@ add_action( 'edd_manual_cc_form', '__return_false' );
  * @param array $purchase_data Purchase Data
  * @return void
 */
-function edd_manual_payment( $purchase_data ) {
-	if( ! wp_verify_nonce( $purchase_data['gateway_nonce'], 'edd-gateway' ) ) {
-		wp_die( __( 'Nonce verification has failed', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ), array( 'response' => 403 ) );
+function cs_manual_payment( $purchase_data ) {
+	if( ! wp_verify_nonce( $purchase_data['gateway_nonce'], 'cs-gateway' ) ) {
+		wp_die( __( 'Nonce verification has failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	/*
@@ -54,7 +54,7 @@ function edd_manual_payment( $purchase_data ) {
 		'date'         => $purchase_data['date'],
 		'user_email'   => $purchase_data['user_email'],
 		'purchase_key' => $purchase_data['purchase_key'],
-		'currency'     => edd_get_currency(),
+		'currency'     => cs_get_currency(),
 		'downloads'    => $purchase_data['downloads'],
 		'user_info'    => $purchase_data['user_info'],
 		'cart_details' => $purchase_data['cart_details'],
@@ -62,17 +62,17 @@ function edd_manual_payment( $purchase_data ) {
 	);
 
 	// Record the pending payment
-	$payment = edd_insert_payment( $payment_data );
+	$payment = cs_insert_payment( $payment_data );
 
 	if ( $payment ) {
-		edd_update_payment_status( $payment, 'complete' );
+		cs_update_payment_status( $payment, 'complete' );
 		// Empty the shopping cart
-		edd_empty_cart();
-		edd_send_to_success_page();
+		cs_empty_cart();
+		cs_send_to_success_page();
 	} else {
-		edd_record_gateway_error( __( 'Payment Error', 'easy-digital-downloads' ), sprintf( __( 'Payment creation failed while processing a manual (free or test) purchase. Payment data: %s', 'easy-digital-downloads' ), json_encode( $payment_data ) ), $payment );
+		cs_record_gateway_error( __( 'Payment Error', 'commercestore' ), sprintf( __( 'Payment creation failed while processing a manual (free or test) purchase. Payment data: %s', 'commercestore' ), json_encode( $payment_data ) ), $payment );
 		// If errors are present, send the user back to the purchase page so they can be corrected
-		edd_send_back_to_checkout( '?payment-mode=' . $purchase_data['post_data']['edd-gateway'] );
+		cs_send_back_to_checkout( '?payment-mode=' . $purchase_data['post_data']['cs-gateway'] );
 	}
 }
-add_action( 'edd_gateway_manual', 'edd_manual_payment' );
+add_action( 'cs_gateway_manual', 'cs_manual_payment' );

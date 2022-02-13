@@ -2,17 +2,17 @@
 /**
  * Webhook Event: PAYMENT.CAPTURE.COMPLETED
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal\Webhooks\Events
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal\Webhooks\Events;
+namespace CS\Gateways\PayPal\Webhooks\Events;
 
-use EDD\Gateways\PayPal\Exceptions\API_Exception;
-use EDD\Gateways\PayPal\Exceptions\Authentication_Exception;
+use CS\Gateways\PayPal\Exceptions\API_Exception;
+use CS\Gateways\PayPal\Exceptions\Authentication_Exception;
 
 class Payment_Capture_Completed extends Webhook_Event {
 
@@ -30,7 +30,7 @@ class Payment_Capture_Completed extends Webhook_Event {
 
 		// Bail if the payment has already been completed.
 		if ( 'complete' === $order->status ) {
-			edd_debug_log( 'PayPal Commerce - Exiting webhook, as order is already complete.' );
+			cs_debug_log( 'PayPal Commerce - Exiting webhook, as order is already complete.' );
 
 			return;
 		}
@@ -48,24 +48,24 @@ class Payment_Capture_Completed extends Webhook_Event {
 		}
 
 		$paypal_amount = (float) $this->event->resource->amount->value;
-		$order_amount  = edd_get_payment_amount( $order->id );
+		$order_amount  = cs_get_payment_amount( $order->id );
 
 		if ( $paypal_amount < $order_amount ) {
-			edd_record_gateway_error(
-				__( 'Webhook Error', 'easy-digital-downloads' ),
+			cs_record_gateway_error(
+				__( 'Webhook Error', 'commercestore' ),
 				sprintf(
 				/* Translators: %s is the webhook data */
-					__( 'Invalid payment about in webhook response. Webhook data: %s', 'easy-digital-downloads' ),
+					__( 'Invalid payment about in webhook response. Webhook data: %s', 'commercestore' ),
 					json_encode( $this->event )
 				)
 			);
 
-			edd_update_order_status( $order->id, 'failed' );
-			edd_add_note( array(
+			cs_update_order_status( $order->id, 'failed' );
+			cs_add_note( array(
 				'object_type' => 'order',
 				'object_id'   => $order->id,
 				'content'     => sprintf(
-					__( 'Payment failed due to invalid amount in PayPal webhook. Expected amount: %s; PayPal amount: %s.', 'easy-digital-downloads' ),
+					__( 'Payment failed due to invalid amount in PayPal webhook. Expected amount: %s; PayPal amount: %s.', 'commercestore' ),
 					$order_amount,
 					esc_html( $paypal_amount )
 				)
@@ -74,6 +74,6 @@ class Payment_Capture_Completed extends Webhook_Event {
 			throw new \Exception( sprintf( 'Webhook amount (%s) doesn\'t match payment amount (%s).', esc_html( $paypal_amount ), esc_html( $order_amount ) ), 200 );
 		}
 
-		edd_update_order_status( $order->id, 'complete' );
+		cs_update_order_status( $order->id, 'complete' );
 	}
 }

@@ -2,18 +2,18 @@
 /**
  * Order Adjustments Schema Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Schemas
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Schemas;
+namespace CS\Database\Schemas;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Schema;
+use CS\Database\Schema;
 
 /**
  * Order Adjustments Schema Class.
@@ -119,7 +119,7 @@ class Order_Adjustments extends Schema {
 			'length'     => '18,9',
 			'default'    => '0',
 			'sortable'   => true,
-			'validate'   => 'edd_sanitize_amount'
+			'validate'   => 'cs_sanitize_amount'
 		),
 
 		// tax
@@ -129,7 +129,7 @@ class Order_Adjustments extends Schema {
 			'length'     => '18,9',
 			'default'    => '0',
 			'sortable'   => true,
-			'validate'   => 'edd_sanitize_amount'
+			'validate'   => 'cs_sanitize_amount'
 		),
 
 		// total
@@ -139,7 +139,7 @@ class Order_Adjustments extends Schema {
 			'length'     => '18,9',
 			'default'    => '0',
 			'sortable'   => true,
-			'validate'   => 'edd_sanitize_amount'
+			'validate'   => 'cs_sanitize_amount'
 		),
 
 		// rate

@@ -1,24 +1,24 @@
 <?php
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Reports;
+use CS\Reports;
 
-if ( ! class_exists( 'EDD\\Reports\\Init' ) ) {
-	require_once( EDD_PLUGIN_DIR . 'includes/reports/class-init.php' );
+if ( ! class_exists( 'CS\\Reports\\Init' ) ) {
+	require_once( CS_PLUGIN_DIR . 'includes/reports/class-init.php' );
 }
 
-new \EDD\Reports\Init();
+new \CS\Reports\Init();
 
 /**
  * Tests for the Report object.
  *
- * @group edd_reports
- * @group edd_reports_endpoints
- * @group edd_objects
+ * @group cs_reports
+ * @group cs_reports_endpoints
+ * @group cs_objects
  *
- * @coversDefaultClass \EDD\Reports\Data\Report
+ * @coversDefaultClass \CS\Reports\Data\Report
  */
-class Report_Tests extends \EDD_UnitTestCase {
+class Report_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * Report fixture with foo endpoint.
@@ -71,8 +71,8 @@ class Report_Tests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Reports\Data\Report
-	 * @group edd_errors
+	 * @covers \CS\Reports\Data\Report
+	 * @group cs_errors
 	 */
 	public function test_Report_with_empty_endpoints_should_flag_WP_Error() {
 		$report = new Report( array(
@@ -88,7 +88,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::$endpoints
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_Report_with_empty_endpoints_should_flag_WP_Error_including_code_missing_endpoints() {
 		$report = new Report( array(
@@ -104,7 +104,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::$capability
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_Report_with_empty_capability_should_flag_WP_Error_including_code_missing_capability() {
 		$report = new Report( array(
@@ -194,7 +194,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::$filters
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_Report_with_an_invalid_filter_should_flag_WP_Error_including_code_invalid_report_filter() {
 		$report = new Report( array(
@@ -220,7 +220,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 			'capability' => 'exist',
 		) );
 
-		$this->assertSame( '\EDD\Reports\default_display_report', $report->get_display_callback() );
+		$this->assertSame( '\CS\Reports\default_display_report', $report->get_display_callback() );
 	}
 
 	/**
@@ -241,7 +241,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::$display_callback
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_Report_with_non_callable_display_callback_should_flag_WP_Error_including_code_invalid_report_arg_type() {
 		$report = new Report( array(
@@ -257,7 +257,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::parse_endpoints()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_parse_endpoints_with_empty_array_should_add_no_new_endpoints() {
 		$report = new Report( array() );
@@ -269,10 +269,10 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::parse_endpoints()
-	 * @throws \EDD_Exception
+	 * @throws \CS_Exception
 	 */
 	public function test_parse_endpoints_with_invalid_view_group_should_throw_exception() {
-		$this->setExpectedException( '\EDD_Exception', "The 'fake' view group does not correspond to a known endpoint view type." );
+		$this->setExpectedException( '\CS_Exception', "The 'fake' view group does not correspond to a known endpoint view type." );
 
 		self::$report->parse_endpoints( array( 'fake' => array() ) );
 	}
@@ -503,7 +503,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_endpoint()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_get_endpoint_with_valid_endpoint_invalid_view_group_should_return_WP_Error() {
 		$endpoint_or_error = self::$report->get_endpoint( 'foo', 'fake' );
@@ -513,7 +513,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_endpoint()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_get_endpoint_with_valid_endpoint_invalid_view_group_should_return_WP_Error_including_code_invalid_report_endpoint() {
 		$endpoint_or_error = self::$report->get_endpoint( 'foo', 'fake' );
@@ -523,7 +523,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_endpoint()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_get_endpoint_with_invalid_endpoint_valid_view_group_should_return_WP_Error() {
 		$endpoint_or_error = self::$report->get_endpoint( 'fake', 'tiles' );
@@ -533,7 +533,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_endpoint()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_get_endpoint_with_invalid_endpoint_valid_view_group_should_return_WP_Error_including_code_invalid_report_endpoint() {
 		$endpoint_or_error = self::$report->get_endpoint( 'fake', 'tiles' );
@@ -543,7 +543,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_endpoint()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_get_endpoint_with_invalid_endpoint_invalid_view_group_should_return_WP_Error() {
 		$endpoint_or_error = self::$report->get_endpoint( 'fake', 'fake' );
@@ -553,7 +553,7 @@ class Report_Tests extends \EDD_UnitTestCase {
 
 	/**
 	 * @covers ::get_endpoint()
-	 * @group edd_errors
+	 * @group cs_errors
 	 */
 	public function test_get_endpoint_with_invalid_endpoint_invalid_view_group_should_return_WP_Error_including_code_invalid_report_endpoint() {
 		$endpoint_or_error = self::$report->get_endpoint( 'fake', 'fake' );

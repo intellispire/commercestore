@@ -8,7 +8,7 @@
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
-namespace EDD\Database;
+namespace CS\Database;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -855,7 +855,7 @@ abstract class Table extends Base {
  		 *
  		 * This is only for 3.0 beta testers, and can be removed in 3.0.1 or above.
  		 *
- 		 * @link https://github.com/easydigitaldownloads/easy-digital-downloads/issues/7579
+ 		 * @link https://github.com/commercestore/commercestore/issues/7579
  		 */
  		if ( version_compare( $this->db_version, $this->version, '<=' ) || ( 12 !== strlen( $this->db_version ) ) ) {
  			return;

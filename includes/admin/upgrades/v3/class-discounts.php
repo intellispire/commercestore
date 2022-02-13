@@ -7,7 +7,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +27,7 @@ class Discounts extends Base {
 	public function __construct( $step = 1 ) {
 		parent::__construct( $step );
 
-		$this->completed_message = __( 'Discounts migration completed successfully.', 'easy-digital-downloads' );
+		$this->completed_message = __( 'Discounts migration completed successfully.', 'commercestore' );
 		$this->upgrade           = 'migrate_discounts';
 	}
 
@@ -46,14 +46,14 @@ class Discounts extends Base {
 			 FROM {$this->get_db()->posts}
 			 WHERE post_type = %s
 			 LIMIT %d, %d",
-			esc_sql( 'edd_discount' ), $offset, $this->per_step
+			esc_sql( 'cs_discount' ), $offset, $this->per_step
 		) );
 
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $result ) {
 
 				// Check if discount has already been migrated.
-				if ( edd_get_discount( $result->ID ) ) {
+				if ( cs_get_discount( $result->ID ) ) {
 					continue;
 				}
 
@@ -74,7 +74,7 @@ class Discounts extends Base {
 	 * @return float Percentage.
 	 */
 	public function get_percentage_complete() {
-		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(ID) AS count FROM {$this->get_db()->posts} WHERE post_type = %s", esc_sql( 'edd_discount' ) ) );
+		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(ID) AS count FROM {$this->get_db()->posts} WHERE post_type = %s", esc_sql( 'cs_discount' ) ) );
 
 		if ( empty( $total ) ) {
 			$total = 0;

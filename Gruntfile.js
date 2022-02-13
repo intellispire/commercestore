@@ -9,7 +9,7 @@ module.exports = function( grunt ) {
 
 		checktextdomain: {
 			options: {
-				text_domain: 'easy-digital-downloads',
+				text_domain: 'commercestore',
 				correct_domain: true,
 				keywords: [
 					'__:1,2d',
@@ -47,8 +47,8 @@ module.exports = function( grunt ) {
 				options: {
 					domainPath: '/languages/', // Where to save the POT file.
 					exclude: [ 'build/.*' ],
-					mainFile: 'easy-digital-downloads.php', // Main project file.
-					potFilename: 'easy-digital-downloads.pot', // Name of the POT file.
+					mainFile: 'commercestore.php', // Main project file.
+					potFilename: 'commercestore.pot', // Name of the POT file.
 					potHeaders: {
 						poedit: true, // Includes common Poedit headers.
 						'x-poedit-keywordslist': true, // Include a list of all possible gettext functions.
@@ -56,7 +56,7 @@ module.exports = function( grunt ) {
 					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
 					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
 					processPot: function( pot, options ) {
-						pot.headers[ 'report-msgid-bugs-to' ] = 'https://easydigitaldownloads.com/';
+						pot.headers[ 'report-msgid-bugs-to' ] = 'https://commercestore.com/';
 						pot.headers[ 'last-translator' ] = 'WP-Translations (http://wp-translations.org/)';
 						pot.headers[ 'language-team' ] = 'WP-Translations <wpt@wp-translations.org>';
 						pot.headers.language = 'en_US';
@@ -120,8 +120,8 @@ module.exports = function( grunt ) {
 				options: {
 					patterns: [
 						{
-							match: /edd_stripe_bootstrap/g,
-							replacement: 'edd_stripe_core_bootstrap',
+							match: /cs_stripe_bootstrap/g,
+							replacement: 'cs_stripe_core_bootstrap',
 							expression: true,
 						},
 						{
@@ -135,7 +135,7 @@ module.exports = function( grunt ) {
 					{
 						expand: true,
 						flatten: true,
-						src: [ 'includes/gateways/stripe/edd-stripe.php' ],
+						src: [ 'includes/gateways/stripe/cs-stripe.php' ],
 						dest: 'includes/gateways/stripe'
 					}
 				]

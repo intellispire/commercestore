@@ -2,13 +2,13 @@
 /**
  * Static_Registry interface
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Interfaces/Utilities
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Utils;
+namespace CS\Utils;
 
 /**
  * Defines the contract for a static (singleton) registry object.
@@ -22,7 +22,7 @@ interface Static_Registry {
 	 *
 	 * @since 3.0
 	 *
-	 * @return \EDD\Utils\Static_Registry Registry instance.
+	 * @return \CS\Utils\Static_Registry Registry instance.
 	 */
 	public static function instance();
 

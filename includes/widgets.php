@@ -4,7 +4,7 @@
  *
  * Widgets related funtions and widget registration.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Widgets
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -32,21 +32,21 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0
  * @return void
 */
-class edd_cart_widget extends WP_Widget {
+class cs_cart_widget extends WP_Widget {
 	/** Constructor */
 	function __construct() {
-		parent::__construct( 'edd_cart_widget', __( 'Downloads Cart', 'easy-digital-downloads' ), array( 'description' => __( 'Display the downloads shopping cart', 'easy-digital-downloads' ) ) );
+		parent::__construct( 'cs_cart_widget', __( 'Downloads Cart', 'commercestore' ), array( 'description' => __( 'Display the downloads shopping cart', 'commercestore' ) ) );
 		add_filter( 'dynamic_sidebar_params', array( $this, 'cart_widget_class' ), 10, 1 );
 	}
 
 	/** @see WP_Widget::widget */
 	function widget( $args, $instance ) {
 
-		if ( ! empty( $instance['hide_on_checkout'] ) && edd_is_checkout() ) {
+		if ( ! empty( $instance['hide_on_checkout'] ) && cs_is_checkout() ) {
 			return;
 		}
 
-		$args['id']        = ( isset( $args['id'] ) ) ? $args['id'] : 'edd_cart_widget';
+		$args['id']        = ( isset( $args['id'] ) ) ? $args['id'] : 'cs_cart_widget';
 		$instance['title'] = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
 
 		$title = apply_filters( 'widget_title', $instance['title'], $instance, $args['id'] );
@@ -57,11 +57,11 @@ class edd_cart_widget extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 
-		do_action( 'edd_before_cart_widget' );
+		do_action( 'cs_before_cart_widget' );
 
-		edd_shopping_cart( true );
+		cs_shopping_cart( true );
 
-		do_action( 'edd_after_cart_widget' );
+		do_action( 'cs_after_cart_widget' );
 
 		echo $args['after_widget'];
 	}
@@ -88,20 +88,20 @@ class edd_cart_widget extends WP_Widget {
 
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'commercestore' ); ?></label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo $instance['title']; ?>"/>
 		</p>
 
 		<!-- Hide on Checkout Page -->
 		<p>
 			<input <?php checked( $instance['hide_on_checkout'], true ); ?> id="<?php echo esc_attr( $this->get_field_id( 'hide_on_checkout' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'hide_on_checkout' ) ); ?>" type="checkbox" />
-			<label for="<?php echo esc_attr( $this->get_field_id( 'hide_on_checkout' ) ); ?>"><?php _e( 'Hide on Checkout Page', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'hide_on_checkout' ) ); ?>"><?php _e( 'Hide on Checkout Page', 'commercestore' ); ?></label>
 		</p>
 
 		<!-- Hide when cart is empty -->
 		<p>
 			<input <?php checked( $instance['hide_on_empty'], true ); ?> id="<?php echo esc_attr( $this->get_field_id( 'hide_on_empty' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'hide_on_empty' ) ); ?>" type="checkbox" />
-			<label for="<?php echo esc_attr( $this->get_field_id( 'hide_on_empty' ) ); ?>"><?php _e( 'Hide if cart is empty', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'hide_on_empty' ) ); ?>"><?php _e( 'Hide if cart is empty', 'commercestore' ); ?></label>
 		</p>
 
 		<?php
@@ -116,16 +116,16 @@ class edd_cart_widget extends WP_Widget {
 	 * @return array
 	 */
 	public function cart_widget_class( $params ) {
-		if ( strpos( $params[0]['widget_id'], 'edd_cart_widget' ) !== false ) {
+		if ( strpos( $params[0]['widget_id'], 'cs_cart_widget' ) !== false ) {
 			$instance_id       = $params[1]['number'];
 			$all_settings      = $this->get_settings();
 			$instance_settings = $all_settings[ $instance_id ];
 
 			if ( ! empty( $instance_settings['hide_on_empty'] ) ) {
-				$cart_quantity = edd_get_cart_quantity();
+				$cart_quantity = cs_get_cart_quantity();
 				$class         = empty( $cart_quantity ) ? 'cart-empty' : 'cart-not-empty';
 
-				$params[0]['before_widget'] = preg_replace( '/class="(.*?)"/', 'class="$1 edd-hide-on-empty ' . $class . '"', $params[0]['before_widget'] );
+				$params[0]['before_widget'] = preg_replace( '/class="(.*?)"/', 'class="$1 cs-hide-on-empty ' . $class . '"', $params[0]['before_widget'] );
 			}
 		}
 
@@ -142,16 +142,16 @@ class edd_cart_widget extends WP_Widget {
  * @since 1.0
  * @return void
 */
-class edd_categories_tags_widget extends WP_Widget {
+class cs_categories_tags_widget extends WP_Widget {
 	/** Constructor */
 	function __construct() {
-		parent::__construct( 'edd_categories_tags_widget', __( 'Downloads Categories / Tags', 'easy-digital-downloads' ), array( 'description' => __( 'Display the downloads categories or tags', 'easy-digital-downloads' ) ) );
+		parent::__construct( 'cs_categories_tags_widget', __( 'Downloads Categories / Tags', 'commercestore' ), array( 'description' => __( 'Display the downloads categories or tags', 'commercestore' ) ) );
 	}
 
 	/** @see WP_Widget::widget */
 	function widget( $args, $instance ) {
 		// Set defaults.
-		$args['id']           = ( isset( $args['id'] ) ) ? $args['id'] : 'edd_categories_tags_widget';
+		$args['id']           = ( isset( $args['id'] ) ) ? $args['id'] : 'cs_categories_tags_widget';
 		$instance['title']    = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
 		$instance['taxonomy'] = ( isset( $instance['taxonomy'] ) ) ? $instance['taxonomy'] : 'download_category';
 
@@ -166,13 +166,13 @@ class edd_categories_tags_widget extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 
-		do_action( 'edd_before_taxonomy_widget' );
+		do_action( 'cs_before_taxonomy_widget' );
 
-		echo "<ul class=\"edd-taxonomy-widget\">\n";
+		echo "<ul class=\"cs-taxonomy-widget\">\n";
 			wp_list_categories( 'title_li=&taxonomy=' . $tax . '&show_count=' . $count . '&hide_empty=' . $hide_empty );
 		echo "</ul>\n";
 
-		do_action( 'edd_after_taxonomy_widget' );
+		do_action( 'cs_after_taxonomy_widget' );
 
 		echo $args['after_widget'];
 	}
@@ -199,26 +199,26 @@ class edd_categories_tags_widget extends WP_Widget {
 
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'commercestore' ); ?></label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo $instance['title']; ?>"/>
 		</p>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>"><?php _e( 'Taxonomy:', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>"><?php _e( 'Taxonomy:', 'commercestore' ); ?></label>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'taxonomy' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>">
 				<?php
-				$category_labels = edd_get_taxonomy_labels( 'download_category' );
-				$tag_labels      = edd_get_taxonomy_labels( 'download_tag' );
+				$category_labels = cs_get_taxonomy_labels( 'download_category' );
+				$tag_labels      = cs_get_taxonomy_labels( 'download_tag' );
 				?>
 				<option value="download_category" <?php selected( 'download_category', $instance['taxonomy'] ); ?>><?php echo $category_labels['name']; ?></option>
 				<option value="download_tag" <?php selected( 'download_tag', $instance['taxonomy'] ); ?>><?php echo $tag_labels['name']; ?></option>
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Show Count:', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Show Count:', 'commercestore' ); ?></label>
 			<input <?php checked( $instance['count'], 'on' ); ?> id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" type="checkbox" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>"><?php _e( 'Hide Empty Categories:', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>"><?php _e( 'Hide Empty Categories:', 'commercestore' ); ?></label>
 			<input <?php checked( $instance['hide_empty'], 'on' ); ?> id="<?php echo $this->get_field_id( 'hide_empty' ); ?>" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" type="checkbox" />
 		</p>
 	<?php
@@ -234,22 +234,22 @@ class edd_categories_tags_widget extends WP_Widget {
  * @since 1.9
  * @return void
  */
-class EDD_Product_Details_Widget extends WP_Widget {
+class CS_Product_Details_Widget extends WP_Widget {
 
 	/** Constructor */
 	public function __construct() {
 		parent::__construct(
-			'edd_product_details',
-			sprintf( __( '%s Details', 'easy-digital-downloads' ), edd_get_label_singular() ),
+			'cs_product_details',
+			sprintf( __( '%s Details', 'commercestore' ), cs_get_label_singular() ),
 			array(
-				'description' => sprintf( __( 'Display the details of a specific %s', 'easy-digital-downloads' ), edd_get_label_singular() ),
+				'description' => sprintf( __( 'Display the details of a specific %s', 'commercestore' ), cs_get_label_singular() ),
 			)
 		);
 	}
 
 	/** @see WP_Widget::widget */
 	public function widget( $args, $instance ) {
-		$args['id'] = ( isset( $args['id'] ) ) ? $args['id'] : 'edd_download_details_widget';
+		$args['id'] = ( isset( $args['id'] ) ) ? $args['id'] : 'cs_download_details_widget';
 
 		if ( ! empty( $instance['download_id'] ) ) {
 			if ( 'current' === ( $instance['download_id'] ) ) {
@@ -279,8 +279,8 @@ class EDD_Product_Details_Widget extends WP_Widget {
 
 		// Variables from widget settings.
 		$title           = apply_filters( 'widget_title', $instance['title'], $instance, $args['id'] );
-		$download_title  = $instance['download_title'] ? apply_filters( 'edd_product_details_widget_download_title', '<h3>' . get_the_title( $download_id ) . '</h3>', $download_id ) : '';
-		$purchase_button = $instance['purchase_button'] ? apply_filters( 'edd_product_details_widget_purchase_button', edd_get_purchase_link( array( 'download_id' => $download_id ) ), $download_id ) : '';
+		$download_title  = $instance['download_title'] ? apply_filters( 'cs_product_details_widget_download_title', '<h3>' . get_the_title( $download_id ) . '</h3>', $download_id ) : '';
+		$purchase_button = $instance['purchase_button'] ? apply_filters( 'cs_product_details_widget_purchase_button', cs_get_purchase_link( array( 'download_id' => $download_id ) ), $download_id ) : '';
 		$categories      = $instance['categories'] ? $instance['categories'] : '';
 		$tags            = $instance['tags'] ? $instance['tags'] : '';
 
@@ -292,12 +292,12 @@ class EDD_Product_Details_Widget extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 
-		do_action( 'edd_product_details_widget_before_title' , $instance , $download_id );
+		do_action( 'cs_product_details_widget_before_title' , $instance , $download_id );
 
 		// Download title.
 		echo $download_title;
 
-		do_action( 'edd_product_details_widget_before_purchase_button' , $instance , $download_id );
+		do_action( 'cs_product_details_widget_before_purchase_button' , $instance , $download_id );
 
 		// Purchase button.
 		echo $purchase_button;
@@ -311,7 +311,7 @@ class EDD_Product_Details_Widget extends WP_Widget {
 			if ( $category_terms && ! is_wp_error( $category_terms ) ) {
 				$category_list     = get_the_term_list( $download_id, 'download_category', '', ', ' );
 				$category_count    = count( $category_terms );
-				$category_labels   = edd_get_taxonomy_labels( 'download_category' );
+				$category_labels   = cs_get_taxonomy_labels( 'download_category' );
 				$category_label    = $category_count > 1 ? $category_labels['name'] : $category_labels['singular_name'];
 			}
 		}
@@ -326,7 +326,7 @@ class EDD_Product_Details_Widget extends WP_Widget {
 			if ( $tag_terms && ! is_wp_error( $tag_terms ) ) {
 				$tag_list     = get_the_term_list( $download_id, 'download_tag', '', ', ' );
 				$tag_count    = count( $tag_terms );
-				$tag_taxonomy = edd_get_taxonomy_labels( 'download_tag' );
+				$tag_taxonomy = cs_get_taxonomy_labels( 'download_tag' );
 				$tag_label    = $tag_count > 1 ? $tag_taxonomy['name'] : $tag_taxonomy['singular_name'];
 			}
 		}
@@ -334,7 +334,7 @@ class EDD_Product_Details_Widget extends WP_Widget {
 		$text = '';
 
 		if ( $category_list || $tag_list ) {
-			$text .= '<p class="edd-meta">';
+			$text .= '<p class="cs-meta">';
 
 			if ( $category_list ) {
 				$text .= '<span class="categories">%1$s: %2$s</span><br/>';
@@ -347,11 +347,11 @@ class EDD_Product_Details_Widget extends WP_Widget {
 			$text .= '</p>';
 		}
 
-		do_action( 'edd_product_details_widget_before_categories_and_tags', $instance, $download_id );
+		do_action( 'cs_product_details_widget_before_categories_and_tags', $instance, $download_id );
 
 		printf( $text, $category_label, $category_list, $tag_label, $tag_list );
 
-		do_action( 'edd_product_details_widget_before_end', $instance, $download_id );
+		do_action( 'cs_product_details_widget_before_end', $instance, $download_id );
 
 		// Used by themes. Closes the widget.
 		echo $args['after_widget'];
@@ -361,7 +361,7 @@ class EDD_Product_Details_Widget extends WP_Widget {
 	public function form( $instance ) {
 		// Set up some default widget settings.
 		$defaults = array(
-			'title'           => sprintf( __( '%s Details', 'easy-digital-downloads' ), edd_get_label_singular() ),
+			'title'           => sprintf( __( '%s Details', 'commercestore' ), cs_get_label_singular() ),
 			'display_type'    => 'current',
 			'download_id'     => false,
 			'download_title'  => 'on',
@@ -384,20 +384,20 @@ class EDD_Product_Details_Widget extends WP_Widget {
 
 		<!-- Title -->
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'easy-digital-downloads' ) ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'commercestore' ) ?></label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo $instance['title']; ?>" />
 		</p>
 
 		<p>
-			<?php _e( 'Display Type:', 'easy-digital-downloads' ); ?><br />
-			<input type="radio" onchange="jQuery(this).parent().next('.download-details-selector').hide();" <?php checked( 'current', $instance['display_type'], true ); ?> value="current" name="<?php echo esc_attr( $this->get_field_name( 'display_type' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-current"><label for="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-current"><?php _e( 'Current', 'easy-digital-downloads' ); ?></label>
-			<input type="radio" onchange="jQuery(this).parent().next('.download-details-selector').show();" <?php checked( 'specific', $instance['display_type'], true ); ?> value="specific" name="<?php echo esc_attr( $this->get_field_name( 'display_type' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-specific"><label for="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-specific"><?php _e( 'Specific', 'easy-digital-downloads' ); ?></label>
+			<?php _e( 'Display Type:', 'commercestore' ); ?><br />
+			<input type="radio" onchange="jQuery(this).parent().next('.download-details-selector').hide();" <?php checked( 'current', $instance['display_type'], true ); ?> value="current" name="<?php echo esc_attr( $this->get_field_name( 'display_type' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-current"><label for="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-current"><?php _e( 'Current', 'commercestore' ); ?></label>
+			<input type="radio" onchange="jQuery(this).parent().next('.download-details-selector').show();" <?php checked( 'specific', $instance['display_type'], true ); ?> value="specific" name="<?php echo esc_attr( $this->get_field_name( 'display_type' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-specific"><label for="<?php echo esc_attr( $this->get_field_id( 'display_type' ) ); ?>-specific"><?php _e( 'Specific', 'commercestore' ); ?></label>
 		</p>
 
 		<!-- Download -->
 		<?php $display = 'current' === $instance['display_type'] ? ' style="display: none;"' : ''; ?>
 		<p class="download-details-selector" <?php echo $display; ?>>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'download_id' ) ); ?>"><?php printf( __( '%s:', 'easy-digital-downloads' ), edd_get_label_singular() ); ?></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'download_id' ) ); ?>"><?php printf( __( '%s:', 'commercestore' ), cs_get_label_singular() ); ?></label>
 		<?php $download_count = wp_count_posts( 'download' ); ?>
 		<?php if ( $download_count->publish < 1000 ) : ?>
 			<?php
@@ -415,37 +415,37 @@ class EDD_Product_Details_Widget extends WP_Widget {
 			</select>
 		<?php else: ?>
 			<br />
-			<input type="text" value="<?php echo esc_attr( $instance['download_id'] ); ?>" placeholder="<?php printf( __( '%s ID', 'easy-digital-downloads' ), edd_get_label_singular() ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'download_id' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'download_id' ) ); ?>">
+			<input type="text" value="<?php echo esc_attr( $instance['download_id'] ); ?>" placeholder="<?php printf( __( '%s ID', 'commercestore' ), cs_get_label_singular() ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'download_id' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'download_id' ) ); ?>">
 		<?php endif; ?>
 		</p>
 
 		<!-- Download title -->
 		<p>
 			<input <?php checked( $instance['download_title'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'download_title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'download_title' ) ); ?>" type="checkbox" />
-			<label for="<?php echo esc_attr( $this->get_field_id( 'download_title' ) ); ?>"><?php printf( __( 'Show %s Title', 'easy-digital-downloads' ), edd_get_label_singular() ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'download_title' ) ); ?>"><?php printf( __( 'Show %s Title', 'commercestore' ), cs_get_label_singular() ); ?></label>
 		</p>
 
 		<!-- Show purchase button -->
 		<p>
 			<input <?php checked( $instance['purchase_button'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'purchase_button' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'purchase_button' ) ); ?>" type="checkbox" />
-			<label for="<?php echo esc_attr( $this->get_field_id( 'purchase_button' ) ); ?>"><?php _e( 'Show Purchase Button', 'easy-digital-downloads' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'purchase_button' ) ); ?>"><?php _e( 'Show Purchase Button', 'commercestore' ); ?></label>
 		</p>
 
 		<!-- Show download categories -->
 		<p>
-			<?php $category_labels = edd_get_taxonomy_labels( 'download_category' ); ?>
+			<?php $category_labels = cs_get_taxonomy_labels( 'download_category' ); ?>
 			<input <?php checked( $instance['categories'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'categories' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'categories' ) ); ?>" type="checkbox" />
-			<label for="<?php echo esc_attr( $this->get_field_id( 'categories' ) ); ?>"><?php printf( __( 'Show %s', 'easy-digital-downloads' ), $category_labels['name'] ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'categories' ) ); ?>"><?php printf( __( 'Show %s', 'commercestore' ), $category_labels['name'] ); ?></label>
 		</p>
 
 		<!-- Show download tags -->
 		<p>
-			<?php $tag_labels = edd_get_taxonomy_labels( 'download_tag' ); ?>
+			<?php $tag_labels = cs_get_taxonomy_labels( 'download_tag' ); ?>
 			<input <?php checked( $instance['tags'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'tags' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'tags' ) ); ?>" type="checkbox" />
-			<label for="<?php echo esc_attr( $this->get_field_id( 'tags' ) ); ?>"><?php printf( __( 'Show %s', 'easy-digital-downloads' ), $tag_labels['name'] ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'tags' ) ); ?>"><?php printf( __( 'Show %s', 'commercestore' ), $tag_labels['name'] ); ?></label>
 		</p>
 
-		<?php do_action( 'edd_product_details_widget_form' , $instance ); ?>
+		<?php do_action( 'cs_product_details_widget_form' , $instance ); ?>
 	<?php }
 
 	/** @see WP_Widget::update */
@@ -460,7 +460,7 @@ class EDD_Product_Details_Widget extends WP_Widget {
 		$instance['categories']      = isset( $new_instance['categories'] )      ? $new_instance['categories']      : '';
 		$instance['tags']            = isset( $new_instance['tags'] )            ? $new_instance['tags']            : '';
 
-		do_action( 'edd_product_details_widget_update', $instance );
+		do_action( 'cs_product_details_widget_update', $instance );
 
 		// If the new view is 'current download' then remove the specific download ID
 		if ( 'current' === $instance['display_type'] ) {
@@ -477,14 +477,14 @@ class EDD_Product_Details_Widget extends WP_Widget {
 /**
  * Register Widgets.
  *
- * Registers the EDD Widgets.
+ * Registers the CommerceStore Widgets.
  *
  * @since 1.0
  * @return void
  */
-function edd_register_widgets() {
-	register_widget( 'edd_cart_widget' );
-	register_widget( 'edd_categories_tags_widget' );
-	register_widget( 'edd_product_details_widget' );
+function cs_register_widgets() {
+	register_widget( 'cs_cart_widget' );
+	register_widget( 'cs_categories_tags_widget' );
+	register_widget( 'cs_product_details_widget' );
 }
-add_action( 'widgets_init', 'edd_register_widgets' );
+add_action( 'widgets_init', 'cs_register_widgets' );

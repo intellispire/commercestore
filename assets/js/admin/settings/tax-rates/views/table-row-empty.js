@@ -8,10 +8,10 @@ const TableRowEmpty = wp.Backbone.View.extend( {
 	tagName: 'tr',
 
 	// Set class.
-	className: 'edd-tax-rate-row edd-tax-rate-row--is-empty',
+	className: 'cs-tax-rate-row cs-tax-rate-row--is-empty',
 
 	// See https://codex.wordpress.org/Javascript_Reference/wp.template
-	template: wp.template( 'edd-admin-tax-rates-table-row-empty' ),
+	template: wp.template( 'cs-admin-tax-rates-table-row-empty' ),
 } );
 
 export default TableRowEmpty;

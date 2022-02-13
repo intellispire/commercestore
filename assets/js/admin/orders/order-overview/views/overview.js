@@ -18,7 +18,7 @@ export const Overview = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	el: '#edd-order-overview',
+	el: '#cs-order-overview',
 
 	/**
 	 * @since 3.0
@@ -41,7 +41,7 @@ export const Overview = wp.Backbone.View.extend( {
 		this.views.add( new Summary( this.options ) );
 
 		// "Actions".
-		if ( document.getElementById( 'edd-order-overview-actions' ) ) {
+		if ( document.getElementById( 'cs-order-overview-actions' ) ) {
 			this.views.add( new Actions( this.options ) );
 		}
 

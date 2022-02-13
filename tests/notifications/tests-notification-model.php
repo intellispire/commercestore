@@ -2,31 +2,31 @@
 /**
  * Notification Model Tests
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  */
 
-namespace EDD\Tests\Notifications;
+namespace CS\Tests\Notifications;
 
-use EDD\Models\Notification;
+use CS\Models\Notification;
 
 /**
- * @coversDefaultClass \EDD\Models\Notification
- * @group edd_notifications
+ * @coversDefaultClass \CS\Models\Notification
+ * @group cs_notifications
  */
-class NotificationModelTests extends \EDD_UnitTestCase {
+class NotificationModelTests extends \CS_UnitTestCase {
 
 	private function insertAndGetNotification( $data ) {
-		$notificationId = EDD()->notifications->insert( $data, 'notification' );
+		$notificationId = CS()->notifications->insert( $data, 'notification' );
 
-		return new Notification( EDD()->notifications->get( $notificationId ) );
+		return new Notification( CS()->notifications->get( $notificationId ) );
 	}
 
 	/**
 	 * The `dismissed` property should be cast to boolean.
 	 *
-	 * @covers \EDD\Models\Notification::castAttribute
+	 * @covers \CS\Models\Notification::castAttribute
 	 */
 	public function test_dismissed_is_boolean() {
 		$notification = $this->insertAndGetNotification( array(
@@ -42,7 +42,7 @@ class NotificationModelTests extends \EDD_UnitTestCase {
 	/**
 	 * The `id` property should be cast to an integer.
 	 *
-	 * @covers \EDD\Models\Notification::castAttribute
+	 * @covers \CS\Models\Notification::castAttribute
 	 */
 	public function test_id_is_integer() {
 		$notification = $this->insertAndGetNotification( array(
@@ -58,7 +58,7 @@ class NotificationModelTests extends \EDD_UnitTestCase {
 	/**
 	 * The `buttons` property should be cast to an array if not empty.
 	 *
-	 * @covers \EDD\Models\Notification::castAttribute
+	 * @covers \CS\Models\Notification::castAttribute
 	 */
 	public function test_non_empty_buttons_is_array() {
 		$notification = $this->insertAndGetNotification( array(
@@ -67,7 +67,7 @@ class NotificationModelTests extends \EDD_UnitTestCase {
 			'buttons'   => array(
 				array(
 					'type' => 'primary',
-					'url'  => 'https://easydigitaldownloads.com',
+					'url'  => 'https://commercestore.com',
 					'text' => 'Learn More',
 				)
 			),
@@ -82,7 +82,7 @@ class NotificationModelTests extends \EDD_UnitTestCase {
 	/**
 	 * The `buttons` property should be null if no data.
 	 *
-	 * @covers \EDD\Models\Notification::castAttribute
+	 * @covers \CS\Models\Notification::castAttribute
 	 */
 	public function test_empty_buttons_is_null() {
 		$notification = $this->insertAndGetNotification( array(

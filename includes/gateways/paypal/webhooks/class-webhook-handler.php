@@ -2,16 +2,16 @@
 /**
  * Webhook Handler
  *
- * @package    easy-digital-downloads
+ * @package    commercestore
  * @subpackage Gateways\PayPal\Webhooks
  * @copyright  Copyright (c) 2021, Sandhills Development, LLC
  * @license    GPL2+
  * @since      2.11
  */
 
-namespace EDD\Gateways\PayPal\Webhooks;
+namespace CS\Gateways\PayPal\Webhooks;
 
-use EDD\Gateways\PayPal;
+use CS\Gateways\PayPal;
 
 class Webhook_Handler {
 	/**
@@ -19,7 +19,7 @@ class Webhook_Handler {
 	 *
 	 * @since 2.11
 	 */
-	const REST_NAMESPACE = 'edd/webhooks/v1';
+	const REST_NAMESPACE = 'cs/webhooks/v1';
 
 	/**
 	 * Endpoint route.
@@ -59,13 +59,13 @@ class Webhook_Handler {
 	 * @return \WP_REST_Response
 	 */
 	public function handle_request( \WP_REST_Request $request ) {
-		edd_debug_log( sprintf(
+		cs_debug_log( sprintf(
 			'PayPal Commerce webhook endpoint loaded. Mode: %s; Event: %s',
-			( edd_is_test_mode() ? 'sandbox' : 'live' ),
+			( cs_is_test_mode() ? 'sandbox' : 'live' ),
 			$request->get_param( 'event_type' )
 		) );
 
-		edd_debug_log( sprintf( 'Payload: %s', json_encode( $this->event ) ) ); // @todo remove
+		cs_debug_log( sprintf( 'Payload: %s', json_encode( $this->event ) ) ); // @todo remove
 
 		try {
 			// We need to match this event to one of our handlers.
@@ -91,7 +91,7 @@ class Webhook_Handler {
 				throw new \Exception( sprintf( 'handle() method doesn\'t exist in class %s.', $class_name ), 500 );
 			}
 
-			edd_debug_log( sprintf( 'PayPal Commerce Webhook - Passing to handler %s', esc_html( $class_name ) ) );
+			cs_debug_log( sprintf( 'PayPal Commerce Webhook - Passing to handler %s', esc_html( $class_name ) ) );
 
 			$handler->handle();
 
@@ -110,21 +110,21 @@ class Webhook_Handler {
 			 *
 			 * @since 2.11
 			 */
-			do_action( 'edd_paypal_webhook_event_' . $action_key, $request );
+			do_action( 'cs_paypal_webhook_event_' . $action_key, $request );
 
 			return new \WP_REST_Response( 'Success', 200 );
 		} catch ( PayPal\Exceptions\Authentication_Exception $e ) {
 			// Failure with PayPal credentials.
-			edd_debug_log( sprintf( 'PayPal Commerce Webhook - Exiting due to authentication exception. Message: %s', $e->getMessage() ), true );
+			cs_debug_log( sprintf( 'PayPal Commerce Webhook - Exiting due to authentication exception. Message: %s', $e->getMessage() ), true );
 
 			return new \WP_REST_Response( $e->getMessage(), 403 );
 		} catch ( PayPal\Exceptions\API_Exception $e ) {
 			// Failure with a PayPal API request.
-			edd_debug_log( sprintf( 'PayPal Commerce Webhook - Failure due to an API exception. Message: %s', $e->getMessage() ) );
+			cs_debug_log( sprintf( 'PayPal Commerce Webhook - Failure due to an API exception. Message: %s', $e->getMessage() ) );
 
 			return new \WP_REST_Response( $e->getMessage(), 500 );
 		} catch ( \Exception $e ) {
-			edd_debug_log( sprintf( 'PayPal Commerce - Exiting webhook due to an exception. Message: %s', $e->getMessage() ), true );
+			cs_debug_log( sprintf( 'PayPal Commerce - Exiting webhook due to an exception. Message: %s', $e->getMessage() ), true );
 
 			$response_code = $e->getCode() > 0 ? $e->getCode() : 500;
 
@@ -148,7 +148,7 @@ class Webhook_Handler {
 		try {
 			Webhook_Validator::validate_from_request( $this->event );
 
-			edd_debug_log( 'PayPal Commerce webhook successfully validated.' );
+			cs_debug_log( 'PayPal Commerce webhook successfully validated.' );
 
 			return true;
 		} catch ( \Exception $e ) {

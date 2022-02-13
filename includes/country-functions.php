@@ -2,7 +2,7 @@
 /**
  * Country Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -19,10 +19,10 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.6
  * @return string $country The two letter country code for the shop's base country
  */
-function edd_get_shop_country() {
-	$country = edd_get_option( 'base_country', 'US' );
+function cs_get_shop_country() {
+	$country = cs_get_option( 'base_country', 'US' );
 
-	return apply_filters( 'edd_shop_country', $country );
+	return apply_filters( 'cs_shop_country', $country );
 }
 
 /**
@@ -31,10 +31,10 @@ function edd_get_shop_country() {
  * @since 1.6
  * @return string $state The shop's base state name
  */
-function edd_get_shop_state() {
-	$state = edd_get_option( 'base_state', false );
+function cs_get_shop_state() {
+	$state = cs_get_option( 'base_state', false );
 
-	return apply_filters( 'edd_shop_state', $state );
+	return apply_filters( 'cs_shop_state', $state );
 }
 
 /**
@@ -45,89 +45,89 @@ function edd_get_shop_state() {
  * @param string $country
  * @return array A list of states for the selected country
  */
-function edd_get_shop_states( $country = null ) {
+function cs_get_shop_states( $country = null ) {
 	if( empty( $country ) )
-		$country = edd_get_shop_country();
+		$country = cs_get_shop_country();
 
 	switch( $country ) :
 
 		case 'US' :
-			$states = edd_get_states_list();
+			$states = cs_get_states_list();
 			break;
 		case 'AO' :
-			$states = edd_get_angola_provinces_list();
+			$states = cs_get_angola_provinces_list();
 			break;
 		case 'CA' :
-			$states = edd_get_provinces_list();
+			$states = cs_get_provinces_list();
 			break;
 		case 'AU' :
-			$states = edd_get_australian_states_list();
+			$states = cs_get_australian_states_list();
 			break;
 		case 'BD' :
-			$states = edd_get_bangladeshi_states_list();
+			$states = cs_get_bangladeshi_states_list();
 			break;
 		case 'BG' :
-			$states = edd_get_bulgarian_states_list();
+			$states = cs_get_bulgarian_states_list();
 			break;
 		case 'BR' :
-			$states = edd_get_brazil_states_list();
+			$states = cs_get_brazil_states_list();
 			break;
 		case 'CN' :
-			$states = edd_get_chinese_states_list();
+			$states = cs_get_chinese_states_list();
 			break;
 		case 'GB' :
-			$states = edd_get_united_kingdom_states_list();
+			$states = cs_get_united_kingdom_states_list();
 			break;
 		case 'HK' :
-			$states = edd_get_hong_kong_states_list();
+			$states = cs_get_hong_kong_states_list();
 			break;
 		case 'HU' :
-			$states = edd_get_hungary_states_list();
+			$states = cs_get_hungary_states_list();
 			break;
 		case 'ID' :
-			$states = edd_get_indonesian_states_list();
+			$states = cs_get_indonesian_states_list();
 			break;
 		case 'IN' :
-			$states = edd_get_indian_states_list();
+			$states = cs_get_indian_states_list();
 			break;
 		case 'IR' :
-			$states = edd_get_iranian_states_list();
+			$states = cs_get_iranian_states_list();
 			break;
 		case 'IT' :
-			$states = edd_get_italian_states_list();
+			$states = cs_get_italian_states_list();
 			break;
 		case 'JP' :
-			$states = edd_get_japanese_states_list();
+			$states = cs_get_japanese_states_list();
 			break;
 		case 'MX' :
-			$states = edd_get_mexican_states_list();
+			$states = cs_get_mexican_states_list();
 			break;
 		case 'MY' :
-			$states = edd_get_malaysian_states_list();
+			$states = cs_get_malaysian_states_list();
 			break;
 		case 'NL' :
-			$states = edd_get_netherlands_provinces_list();
+			$states = cs_get_netherlands_provinces_list();
 			break;
 		case 'NP' :
-			$states = edd_get_nepalese_states_list();
+			$states = cs_get_nepalese_states_list();
 			break;
 		case 'NZ' :
-			$states = edd_get_new_zealand_states_list();
+			$states = cs_get_new_zealand_states_list();
 			break;
 		case 'PE' :
-			$states = edd_get_peruvian_states_list();
+			$states = cs_get_peruvian_states_list();
 			break;
 		case 'TH' :
-			$states = edd_get_thailand_states_list();
+			$states = cs_get_thailand_states_list();
 			break;
 		case 'TR' :
-			$states = edd_get_turkey_states_list();
+			$states = cs_get_turkey_states_list();
 			break;
 		case 'ZA' :
-			$states = edd_get_south_african_states_list();
+			$states = cs_get_south_african_states_list();
 			break;
 		case 'ES' :
-			$states = edd_get_spain_states_list();
+			$states = cs_get_spain_states_list();
 			break;
 		default :
 			$states = array();
@@ -135,7 +135,7 @@ function edd_get_shop_states( $country = null ) {
 
 	endswitch;
 
-	return apply_filters( 'edd_shop_states', $states, $country );
+	return apply_filters( 'cs_shop_states', $states, $country );
 }
 
 
@@ -145,7 +145,7 @@ function edd_get_shop_states( $country = null ) {
  * @since 1.0
  * @return array $countries A list of the available countries
  */
-function edd_get_country_list() {
+function cs_get_country_list() {
 	$countries = array(
 		''   => '',
 		'US' => 'United States',
@@ -402,7 +402,7 @@ function edd_get_country_list() {
 		'ZW' => 'Zimbabwe'
 	);
 
-	return apply_filters( 'edd_countries', $countries );
+	return apply_filters( 'cs_countries', $countries );
 }
 
 /**
@@ -411,7 +411,7 @@ function edd_get_country_list() {
  * @since       1.2
  * @return      array
  */
-function edd_get_states_list() {
+function cs_get_states_list() {
 	$states = array(
 		''   => '',
 		'AL' => 'Alabama',
@@ -482,7 +482,7 @@ function edd_get_states_list() {
 		'AP' => 'Armed Forces - Pacific'
 	);
 
-	return apply_filters( 'edd_us_states', $states );
+	return apply_filters( 'cs_us_states', $states );
 }
 
 /**
@@ -491,7 +491,7 @@ function edd_get_states_list() {
  * @since 2.8.5
  * @return array $states A list of states
  */
-function edd_get_angola_provinces_list() {
+function cs_get_angola_provinces_list() {
 	$provinces = array(
 		''    => '',
 		'BGO' => 'Bengo',
@@ -514,7 +514,7 @@ function edd_get_angola_provinces_list() {
 		'ZAI' => 'Zaire'
 	);
 
-	return apply_filters( 'edd_angola_provinces', $provinces );
+	return apply_filters( 'cs_angola_provinces', $provinces );
 }
 
 /**
@@ -523,7 +523,7 @@ function edd_get_angola_provinces_list() {
  * @since       1.2
  * @return      array
  */
-function edd_get_provinces_list() {
+function cs_get_provinces_list() {
 	$provinces = array(
 		''   => '',
 		'AB' => 'Alberta',
@@ -541,7 +541,7 @@ function edd_get_provinces_list() {
 		'YT' => 'Yukon'
 	);
 
-	return apply_filters( 'edd_canada_provinces', $provinces );
+	return apply_filters( 'cs_canada_provinces', $provinces );
 }
 
 /**
@@ -550,7 +550,7 @@ function edd_get_provinces_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_australian_states_list() {
+function cs_get_australian_states_list() {
 	$states = array(
 		''    => '',
 		'ACT' => 'Australian Capital Territory',
@@ -563,7 +563,7 @@ function edd_get_australian_states_list() {
 		'WA'  => 'Western Australia'
 	);
 
-	return apply_filters( 'edd_australian_states', $states );
+	return apply_filters( 'cs_australian_states', $states );
 }
 
 /**
@@ -572,7 +572,7 @@ function edd_get_australian_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_bangladeshi_states_list() {
+function cs_get_bangladeshi_states_list() {
 	$states = array(
 		''    => '',
 		'BAG' => 'Bagerhat',
@@ -641,7 +641,7 @@ function edd_get_bangladeshi_states_list() {
 		'THA' => 'Thakurgaon'
 	);
 
-	return apply_filters( 'edd_bangladeshi_states', $states );
+	return apply_filters( 'cs_bangladeshi_states', $states );
 }
 
 /**
@@ -650,7 +650,7 @@ function edd_get_bangladeshi_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_brazil_states_list() {
+function cs_get_brazil_states_list() {
 	$states = array(
 		''   => '',
 		'AC' => 'Acre',
@@ -682,7 +682,7 @@ function edd_get_brazil_states_list() {
 		'TO' => 'Tocantins'
 	);
 
-	return apply_filters( 'edd_brazil_states', $states );
+	return apply_filters( 'cs_brazil_states', $states );
 }
 
 /**
@@ -691,7 +691,7 @@ function edd_get_brazil_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_bulgarian_states_list() {
+function cs_get_bulgarian_states_list() {
 	$states = array(
 		''      => '',
 		'BG-01' => 'Blagoevgrad',
@@ -724,7 +724,7 @@ function edd_get_bulgarian_states_list() {
 		'BG-28' => 'Yambol'
 	);
 
-	return apply_filters( 'edd_bulgarian_states', $states );
+	return apply_filters( 'cs_bulgarian_states', $states );
 }
 
 /**
@@ -733,7 +733,7 @@ function edd_get_bulgarian_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_hong_kong_states_list() {
+function cs_get_hong_kong_states_list() {
 	$states = array(
 		''                => '',
 		'HONG KONG'       => 'Hong Kong Island',
@@ -741,7 +741,7 @@ function edd_get_hong_kong_states_list() {
 		'NEW TERRITORIES' => 'New Territories'
 	);
 
-	return apply_filters( 'edd_hong_kong_states', $states );
+	return apply_filters( 'cs_hong_kong_states', $states );
 }
 
 /**
@@ -750,7 +750,7 @@ function edd_get_hong_kong_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_hungary_states_list() {
+function cs_get_hungary_states_list() {
 	$states = array(
 		''   => '',
 		'BK' => 'Bács-Kiskun',
@@ -775,7 +775,7 @@ function edd_get_hungary_states_list() {
 		'ZA' => 'Zala'
 	);
 
-	return apply_filters( 'edd_hungary_states', $states );
+	return apply_filters( 'cs_hungary_states', $states );
 }
 
 /**
@@ -784,7 +784,7 @@ function edd_get_hungary_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_japanese_states_list() {
+function cs_get_japanese_states_list() {
 	$states = array(
 		''     => '',
 		'JP01' => 'Hokkaido',
@@ -836,7 +836,7 @@ function edd_get_japanese_states_list() {
 		'JP47' => 'Okinawa'
 	);
 
-	return apply_filters( 'edd_japanese_states', $states );
+	return apply_filters( 'cs_japanese_states', $states );
 }
 
 /**
@@ -845,7 +845,7 @@ function edd_get_japanese_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_chinese_states_list() {
+function cs_get_chinese_states_list() {
 	$states = array(
 		''     => '',
 	    'CN1'  => 'Yunnan / &#20113;&#21335;',
@@ -882,7 +882,7 @@ function edd_get_chinese_states_list() {
 	    'CN32' => 'Xinjiang / &#26032;&#30086;'
 	);
 
-	return apply_filters( 'edd_chinese_states', $states );
+	return apply_filters( 'cs_chinese_states', $states );
 }
 
 /**
@@ -891,7 +891,7 @@ function edd_get_chinese_states_list() {
  * @since 2.9
  * @return array $states A list of states
  */
-function edd_get_united_kingdom_states_list() {
+function cs_get_united_kingdom_states_list() {
 	$states = array(
 	    ''	    	 => '',
 	    'GB-ABE' => 'Aberdeen City',
@@ -1113,7 +1113,7 @@ function edd_get_united_kingdom_states_list() {
 	    'GB-YOR' => 'York',
 	);
 
-	return apply_filters( 'edd_united_kingdom_states', $states );
+	return apply_filters( 'cs_united_kingdom_states', $states );
 }
 
 /**
@@ -1122,7 +1122,7 @@ function edd_get_united_kingdom_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_new_zealand_states_list() {
+function cs_get_new_zealand_states_list() {
 	$states = array(
 		''   => '',
 		'AK' => 'Auckland',
@@ -1143,7 +1143,7 @@ function edd_get_new_zealand_states_list() {
 		'WC' => 'West Coast'
 	);
 
-	return apply_filters( 'edd_new_zealand_states', $states );
+	return apply_filters( 'cs_new_zealand_states', $states );
 }
 
 /**
@@ -1152,7 +1152,7 @@ function edd_get_new_zealand_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_peruvian_states_list() {
+function cs_get_peruvian_states_list() {
 	$states = array(
 		''    => '',
 		'CAL' => 'El Callao',
@@ -1183,7 +1183,7 @@ function edd_get_peruvian_states_list() {
 		'UCA' => 'Ucayali'
 	);
 
-	return apply_filters( 'edd_peruvian_states', $states );
+	return apply_filters( 'cs_peruvian_states', $states );
 }
 
 /**
@@ -1192,7 +1192,7 @@ function edd_get_peruvian_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_indonesian_states_list() {
+function cs_get_indonesian_states_list() {
 	$states  = array(
 		''   => '',
 		'AC' => 'Daerah Istimewa Aceh',
@@ -1231,7 +1231,7 @@ function edd_get_indonesian_states_list() {
 	    'PB' => 'Papua Barat'
 	);
 
-	return apply_filters( 'edd_indonesia_states', $states );
+	return apply_filters( 'cs_indonesia_states', $states );
 }
 
 /**
@@ -1240,7 +1240,7 @@ function edd_get_indonesian_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_indian_states_list() {
+function cs_get_indian_states_list() {
 	$states = array(
 		''   => '',
 		'AP' => 'Andhra Pradesh',
@@ -1281,7 +1281,7 @@ function edd_get_indian_states_list() {
 		'PY' => 'Pondicherry (Puducherry)'
 	);
 
-	return apply_filters( 'edd_indian_states', $states );
+	return apply_filters( 'cs_indian_states', $states );
 }
 
 /**
@@ -1290,7 +1290,7 @@ function edd_get_indian_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_iranian_states_list() {
+function cs_get_iranian_states_list() {
 	$states = array(
 		''    => '',
 		'KHZ' => 'Khuzestan',
@@ -1326,7 +1326,7 @@ function edd_get_iranian_states_list() {
 		'SBN' => 'Sistan and Baluchestan'
 	);
 
-	return apply_filters( 'edd_iranian_states', $states );
+	return apply_filters( 'cs_iranian_states', $states );
 }
 
 /**
@@ -1335,7 +1335,7 @@ function edd_get_iranian_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_italian_states_list() {
+function cs_get_italian_states_list() {
 	$states = array(
 		''   => '',
 		'AG' => 'Agrigento',
@@ -1449,7 +1449,7 @@ function edd_get_italian_states_list() {
 		'VT' => 'Viterbo'
 	);
 
-	return apply_filters( 'edd_italian_states', $states );
+	return apply_filters( 'cs_italian_states', $states );
 }
 
 /**
@@ -1458,7 +1458,7 @@ function edd_get_italian_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_malaysian_states_list() {
+function cs_get_malaysian_states_list() {
 	$states = array(
 		''    => '',
 		'JHR' => 'Johor',
@@ -1479,7 +1479,7 @@ function edd_get_malaysian_states_list() {
 		'PJY' => 'W.P. Putrajaya'
 	);
 
-	return apply_filters( 'edd_malaysian_states', $states );
+	return apply_filters( 'cs_malaysian_states', $states );
 }
 
 /**
@@ -1488,7 +1488,7 @@ function edd_get_malaysian_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_mexican_states_list() {
+function cs_get_mexican_states_list() {
 	$states = array(
 		''    => '',
 		'DIF' => 'Distrito Federal',
@@ -1525,7 +1525,7 @@ function edd_get_mexican_states_list() {
 		'ZAC' => 'Zacatecas'
 	);
 
-	return apply_filters( 'edd_mexican_states', $states );
+	return apply_filters( 'cs_mexican_states', $states );
 }
 
 /**
@@ -1534,7 +1534,7 @@ function edd_get_mexican_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_nepalese_states_list() {
+function cs_get_nepalese_states_list() {
 	$states = array(
 		''    => '',
 		'ILL' => 'Illam',
@@ -1614,7 +1614,7 @@ function edd_get_nepalese_states_list() {
 		'KAN' => 'Kanchanpur'
 	);
 
-	return apply_filters( 'edd_nepalese_states', $states );
+	return apply_filters( 'cs_nepalese_states', $states );
 }
 
 /**
@@ -1623,7 +1623,7 @@ function edd_get_nepalese_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_south_african_states_list() {
+function cs_get_south_african_states_list() {
 	$states = array(
 		''    => '',
 		'EC'  => 'Eastern Cape',
@@ -1637,7 +1637,7 @@ function edd_get_south_african_states_list() {
 		'WC'  => 'Western Cape'
 	);
 
-	return apply_filters( 'edd_south_african_states', $states );
+	return apply_filters( 'cs_south_african_states', $states );
 }
 
 /**
@@ -1646,7 +1646,7 @@ function edd_get_south_african_states_list() {
  * @since 1.6
  * @return array $states A list of states
  */
-function edd_get_thailand_states_list() {
+function cs_get_thailand_states_list() {
 	$states = array(
 		''      => '',
 		'TH-37' => 'Amnat Charoen (&#3629;&#3635;&#3609;&#3634;&#3592;&#3648;&#3592;&#3619;&#3636;&#3597;)',
@@ -1728,7 +1728,7 @@ function edd_get_thailand_states_list() {
 		'TH-35' => 'Yasothon (&#3618;&#3650;&#3626;&#3608;&#3619;)'
 	);
 
-	return apply_filters( 'edd_thailand_states', $states );
+	return apply_filters( 'cs_thailand_states', $states );
 }
 
 /**
@@ -1737,7 +1737,7 @@ function edd_get_thailand_states_list() {
  * @since 2.2.3
  * @return array $states A list of states
  */
-function edd_get_turkey_states_list() {
+function cs_get_turkey_states_list() {
 	$states = array(
 		''     => '',
 		'TR01' => 'Adana',
@@ -1823,7 +1823,7 @@ function edd_get_turkey_states_list() {
 		'TR81' => 'D&#252;zce'
 	);
 
-	return apply_filters( 'edd_turkey_states', $states );
+	return apply_filters( 'cs_turkey_states', $states );
 }
 
 /**
@@ -1832,64 +1832,64 @@ function edd_get_turkey_states_list() {
  * @since 2.2
  * @return array $states A list of states
  */
-function edd_get_spain_states_list() {
+function cs_get_spain_states_list() {
 	$states = array(
 		''   => '',
-	    'C'  => __( 'A Coru&ntilde;a', 'easy-digital-downloads' ),
-	    'VI' => __( 'Araba', 'easy-digital-downloads' ),
-	    'AB' => __( 'Albacete', 'easy-digital-downloads' ),
-	    'A'  => __( 'Alicante', 'easy-digital-downloads' ),
-	    'AL' => __( 'Almer&iacute;a', 'easy-digital-downloads' ),
-	    'O'  => __( 'Asturias', 'easy-digital-downloads' ),
-	    'AV' => __( '&Aacute;vila', 'easy-digital-downloads' ),
-	    'BA' => __( 'Badajoz', 'easy-digital-downloads' ),
-	    'PM' => __( 'Baleares', 'easy-digital-downloads' ),
-	    'B'  => __( 'Barcelona', 'easy-digital-downloads' ),
-	    'BU' => __( 'Burgos', 'easy-digital-downloads' ),
-	    'CC' => __( 'C&aacute;ceres', 'easy-digital-downloads' ),
-	    'CA' => __( 'C&aacute;diz', 'easy-digital-downloads' ),
-	    'S'  => __( 'Cantabria', 'easy-digital-downloads' ),
-	    'CS' => __( 'Castell&oacute;n', 'easy-digital-downloads' ),
-	    'CE' => __( 'Ceuta', 'easy-digital-downloads' ),
-	    'CR' => __( 'Ciudad Real', 'easy-digital-downloads' ),
-	    'CO' => __( 'C&oacute;rdoba', 'easy-digital-downloads' ),
-	    'CU' => __( 'Cuenca', 'easy-digital-downloads' ),
-	    'GI' => __( 'Girona', 'easy-digital-downloads' ),
-	    'GR' => __( 'Granada', 'easy-digital-downloads' ),
-	    'GU' => __( 'Guadalajara', 'easy-digital-downloads' ),
-	    'SS' => __( 'Gipuzkoa', 'easy-digital-downloads' ),
-	    'H'  => __( 'Huelva', 'easy-digital-downloads' ),
-	    'HU' => __( 'Huesca', 'easy-digital-downloads' ),
-	    'J'  => __( 'Ja&eacute;n', 'easy-digital-downloads' ),
-	    'LO' => __( 'La Rioja', 'easy-digital-downloads' ),
-	    'GC' => __( 'Las Palmas', 'easy-digital-downloads' ),
-	    'LE' => __( 'Le&oacute;n', 'easy-digital-downloads' ),
-	    'L'  => __( 'Lleida', 'easy-digital-downloads' ),
-	    'LU' => __( 'Lugo', 'easy-digital-downloads' ),
-	    'M'  => __( 'Madrid', 'easy-digital-downloads' ),
-	    'MA' => __( 'M&aacute;laga', 'easy-digital-downloads' ),
-	    'ML' => __( 'Melilla', 'easy-digital-downloads' ),
-	    'MU' => __( 'Murcia', 'easy-digital-downloads' ),
-	    'NA' => __( 'Navarra', 'easy-digital-downloads' ),
-	    'OR' => __( 'Ourense', 'easy-digital-downloads' ),
-	    'P'  => __( 'Palencia', 'easy-digital-downloads' ),
-	    'PO' => __( 'Pontevedra', 'easy-digital-downloads' ),
-	    'SA' => __( 'Salamanca', 'easy-digital-downloads' ),
-	    'TF' => __( 'Santa Cruz de Tenerife', 'easy-digital-downloads' ),
-	    'SG' => __( 'Segovia', 'easy-digital-downloads' ),
-	    'SE' => __( 'Sevilla', 'easy-digital-downloads' ),
-	    'SO' => __( 'Soria', 'easy-digital-downloads' ),
-	    'T'  => __( 'Tarragona', 'easy-digital-downloads' ),
-	    'TE' => __( 'Teruel', 'easy-digital-downloads' ),
-	    'TO' => __( 'Toledo', 'easy-digital-downloads' ),
-	    'V'  => __( 'Valencia', 'easy-digital-downloads' ),
-	    'VA' => __( 'Valladolid', 'easy-digital-downloads' ),
-	    'BI' => __( 'Bizkaia', 'easy-digital-downloads' ),
-	    'ZA' => __( 'Zamora', 'easy-digital-downloads' ),
-	    'Z'  => __( 'Zaragoza', 'easy-digital-downloads' )
+	    'C'  => __( 'A Coru&ntilde;a', 'commercestore' ),
+	    'VI' => __( 'Araba', 'commercestore' ),
+	    'AB' => __( 'Albacete', 'commercestore' ),
+	    'A'  => __( 'Alicante', 'commercestore' ),
+	    'AL' => __( 'Almer&iacute;a', 'commercestore' ),
+	    'O'  => __( 'Asturias', 'commercestore' ),
+	    'AV' => __( '&Aacute;vila', 'commercestore' ),
+	    'BA' => __( 'Badajoz', 'commercestore' ),
+	    'PM' => __( 'Baleares', 'commercestore' ),
+	    'B'  => __( 'Barcelona', 'commercestore' ),
+	    'BU' => __( 'Burgos', 'commercestore' ),
+	    'CC' => __( 'C&aacute;ceres', 'commercestore' ),
+	    'CA' => __( 'C&aacute;diz', 'commercestore' ),
+	    'S'  => __( 'Cantabria', 'commercestore' ),
+	    'CS' => __( 'Castell&oacute;n', 'commercestore' ),
+	    'CE' => __( 'Ceuta', 'commercestore' ),
+	    'CR' => __( 'Ciudad Real', 'commercestore' ),
+	    'CO' => __( 'C&oacute;rdoba', 'commercestore' ),
+	    'CU' => __( 'Cuenca', 'commercestore' ),
+	    'GI' => __( 'Girona', 'commercestore' ),
+	    'GR' => __( 'Granada', 'commercestore' ),
+	    'GU' => __( 'Guadalajara', 'commercestore' ),
+	    'SS' => __( 'Gipuzkoa', 'commercestore' ),
+	    'H'  => __( 'Huelva', 'commercestore' ),
+	    'HU' => __( 'Huesca', 'commercestore' ),
+	    'J'  => __( 'Ja&eacute;n', 'commercestore' ),
+	    'LO' => __( 'La Rioja', 'commercestore' ),
+	    'GC' => __( 'Las Palmas', 'commercestore' ),
+	    'LE' => __( 'Le&oacute;n', 'commercestore' ),
+	    'L'  => __( 'Lleida', 'commercestore' ),
+	    'LU' => __( 'Lugo', 'commercestore' ),
+	    'M'  => __( 'Madrid', 'commercestore' ),
+	    'MA' => __( 'M&aacute;laga', 'commercestore' ),
+	    'ML' => __( 'Melilla', 'commercestore' ),
+	    'MU' => __( 'Murcia', 'commercestore' ),
+	    'NA' => __( 'Navarra', 'commercestore' ),
+	    'OR' => __( 'Ourense', 'commercestore' ),
+	    'P'  => __( 'Palencia', 'commercestore' ),
+	    'PO' => __( 'Pontevedra', 'commercestore' ),
+	    'SA' => __( 'Salamanca', 'commercestore' ),
+	    'TF' => __( 'Santa Cruz de Tenerife', 'commercestore' ),
+	    'SG' => __( 'Segovia', 'commercestore' ),
+	    'SE' => __( 'Sevilla', 'commercestore' ),
+	    'SO' => __( 'Soria', 'commercestore' ),
+	    'T'  => __( 'Tarragona', 'commercestore' ),
+	    'TE' => __( 'Teruel', 'commercestore' ),
+	    'TO' => __( 'Toledo', 'commercestore' ),
+	    'V'  => __( 'Valencia', 'commercestore' ),
+	    'VA' => __( 'Valladolid', 'commercestore' ),
+	    'BI' => __( 'Bizkaia', 'commercestore' ),
+	    'ZA' => __( 'Zamora', 'commercestore' ),
+	    'Z'  => __( 'Zaragoza', 'commercestore' )
 	);
 
-	return apply_filters( 'edd_spain_states', $states );
+	return apply_filters( 'cs_spain_states', $states );
 }
 
 /**
@@ -1898,26 +1898,26 @@ function edd_get_spain_states_list() {
  * @since 3.0
  * @return array $states A list of Netherland's provinces.
  */
-function edd_get_netherlands_provinces_list() {
+function cs_get_netherlands_provinces_list() {
 	$provinces = array(
 		''   => '',
-		'DR' => __( 'Drenthe', 'easy-digital-downloads' ),
-		'FL' => __( 'Flevoland', 'easy-digital-downloads' ),
-		'FR' => __( 'Friesland', 'easy-digital-downloads' ),
-		'GE' => __( 'Gelderland', 'easy-digital-downloads' ),
-		'GR' => __( 'Groningen', 'easy-digital-downloads' ),
-		'LI' => __( 'Limburg', 'easy-digital-downloads' ),
-		'NB' => __( 'North Brabant', 'easy-digital-downloads' ),
-		'NH' => __( 'North Holland', 'easy-digital-downloads' ),
-		'OV' => __( 'Overijssel', 'easy-digital-downloads' ),
-		'ZH' => __( 'South Holland', 'easy-digital-downloads' ),
-		'UT' => __( 'Utrecht', 'easy-digital-downloads' ),
-		'ZE' => __( 'Zeeland', 'easy-digital-downloads' ),
+		'DR' => __( 'Drenthe', 'commercestore' ),
+		'FL' => __( 'Flevoland', 'commercestore' ),
+		'FR' => __( 'Friesland', 'commercestore' ),
+		'GE' => __( 'Gelderland', 'commercestore' ),
+		'GR' => __( 'Groningen', 'commercestore' ),
+		'LI' => __( 'Limburg', 'commercestore' ),
+		'NB' => __( 'North Brabant', 'commercestore' ),
+		'NH' => __( 'North Holland', 'commercestore' ),
+		'OV' => __( 'Overijssel', 'commercestore' ),
+		'ZH' => __( 'South Holland', 'commercestore' ),
+		'UT' => __( 'Utrecht', 'commercestore' ),
+		'ZE' => __( 'Zeeland', 'commercestore' ),
 
 		// Caribbean Netherland
-		'BO' => __( 'Bonaire', 'easy-digital-downloads' ),
-		'SA' => __( 'Saba', 'easy-digital-downloads' ),
-		'SE' => __( 'Sint Eustatius', 'easy-digital-downloads' ),
+		'BO' => __( 'Bonaire', 'commercestore' ),
+		'SA' => __( 'Saba', 'commercestore' ),
+		'SE' => __( 'Sint Eustatius', 'commercestore' ),
 	);
 
 	/**
@@ -1927,7 +1927,7 @@ function edd_get_netherlands_provinces_list() {
 	 *
 	 * @param array $states A list of Netherland's provinces.
 	 */
-	$provinces = apply_filters( 'edd_netherlands_provinces', $provinces );
+	$provinces = apply_filters( 'cs_netherlands_provinces', $provinces );
 
 	return $provinces;
 }
@@ -1940,11 +1940,11 @@ function edd_get_netherlands_provinces_list() {
  *
  * @return string
  */
-function edd_get_country_name( $country_code = '' ) {
-	$country_list = edd_get_country_list();
+function cs_get_country_name( $country_code = '' ) {
+	$country_list = cs_get_country_list();
 	$country_name = isset( $country_list[ $country_code ] ) ? $country_list[ $country_code ] : $country_code;
 
-	return apply_filters( 'edd_get_country_name', $country_name, $country_code );
+	return apply_filters( 'cs_get_country_name', $country_name, $country_code );
 }
 
 /**
@@ -1956,9 +1956,9 @@ function edd_get_country_name( $country_code = '' ) {
  *
  * @return string
  */
-function edd_get_state_name( $country_code = '', $state_code = '' ) {
-	$states_list = edd_get_shop_states( $country_code );
+function cs_get_state_name( $country_code = '', $state_code = '' ) {
+	$states_list = cs_get_shop_states( $country_code );
 	$state_name  = isset( $states_list[ $state_code ] ) ? $states_list[ $state_code ] : $state_code;
 
-	return apply_filters( 'edd_get_state_name', $state_name, $state_code );
+	return apply_filters( 'cs_get_state_name', $state_name, $state_code );
 }

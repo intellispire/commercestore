@@ -2,7 +2,7 @@
 /**
  * v3 Upgrade Actions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Upgrades/v3
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -20,14 +20,14 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.0
  * @return void
  */
-function edd_process_v3_upgrade() {
-	check_ajax_referer( 'edd_process_v3_upgrade' );
+function cs_process_v3_upgrade() {
+	check_ajax_referer( 'cs_process_v3_upgrade' );
 
-	$all_upgrades = edd_get_v30_upgrades();
+	$all_upgrades = cs_get_v30_upgrades();
 
 	// Filter out completed upgrades.
 	foreach ( $all_upgrades as $upgrade_key => $upgrade_details ) {
-		if ( edd_has_upgrade_completed( $upgrade_key ) ) {
+		if ( cs_has_upgrade_completed( $upgrade_key ) ) {
 			unset( $all_upgrades[ $upgrade_key ] );
 		}
 	}
@@ -41,13 +41,13 @@ function edd_process_v3_upgrade() {
 	}
 
 	if ( ! array_key_exists( $upgrade_key, $all_upgrades ) ) {
-		wp_send_json_error( sprintf( __( '"%s" is not a valid 3.0 upgrade.', 'easy-digital-downloads' ), $upgrade_key ) );
+		wp_send_json_error( sprintf( __( '"%s" is not a valid 3.0 upgrade.', 'commercestore' ), $upgrade_key ) );
 	}
 
 	$step = ! empty( $_POST['step'] ) ? absint( $_POST['step'] ) : 1;
 
 	// If we have a step already saved, use that instead.
-	$saved_step = get_option( sprintf( 'edd_v3_migration_%s_step', sanitize_key( $upgrade_key ) ) );
+	$saved_step = get_option( sprintf( 'cs_v3_migration_%s_step', sanitize_key( $upgrade_key ) ) );
 	if ( ! empty( $saved_step ) ) {
 		$step = absint( $saved_step );
 	}
@@ -55,14 +55,14 @@ function edd_process_v3_upgrade() {
 	$class_name = $all_upgrades[ $upgrade_key ]['class'];
 
 	// Load the required classes.
-	require_once EDD_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export.php';
-	do_action( 'edd_batch_export_class_include', $class_name );
+	require_once CS_PLUGIN_DIR . 'includes/admin/reporting/export/class-batch-export.php';
+	do_action( 'cs_batch_export_class_include', $class_name );
 
 	if ( ! class_exists( $class_name ) ) {
-		wp_send_json_error( __( 'Error loading migration class.', 'easy-digital-downloads' ) );
+		wp_send_json_error( __( 'Error loading migration class.', 'commercestore' ) );
 	}
 
-	/** @var \EDD_Batch_Export $export */
+	/** @var \CS_Batch_Export $export */
 	$export = new $class_name( $step );
 
 	if ( ! $export->can_export() ) {
@@ -75,7 +75,7 @@ function edd_process_v3_upgrade() {
 	// Build some shared args.
 	$response_args = array(
 		'upgrade_processed' => $upgrade_key,
-		'nonce'             => wp_create_nonce( 'edd_process_v3_upgrade' )
+		'nonce'             => wp_create_nonce( 'cs_process_v3_upgrade' )
 	);
 
 	if ( $was_processed ) {
@@ -103,4 +103,4 @@ function edd_process_v3_upgrade() {
 
 }
 
-add_action( 'wp_ajax_edd_process_v3_upgrade', 'edd_process_v3_upgrade' );
+add_action( 'wp_ajax_cs_process_v3_upgrade', 'cs_process_v3_upgrade' );

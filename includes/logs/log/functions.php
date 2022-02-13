@@ -2,14 +2,14 @@
 /**
  * Log Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Logs
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-use EDD\Logs\Log;
+use CS\Logs\Log;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
  *                                 be an ID that corresponds to the object type
  *                                 specified. E.g. an object ID of 25 with object
  *                                 type of `order` refers to order 25 in the
- *                                 `edd_orders` table. Default empty.
+ *                                 `cs_orders` table. Default empty.
  *     @type string $object_type   Object type that the log refers to.
  *                                 E.g. `discount` or `order`. Default empty.
  *     @type int    $user_id       ID of the current WordPress user logged in.
@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @return int|false ID of newly created log, false on error.
  */
-function edd_add_log( $data = array() ) {
+function cs_add_log( $data = array() ) {
 
 	// An object type must be supplied for every log that is
 	// inserted into the database.
@@ -64,7 +64,7 @@ function edd_add_log( $data = array() ) {
 	}
 
 	// Instantiate a query object.
-	$logs = new EDD\Database\Queries\Log();
+	$logs = new CS\Database\Queries\Log();
 
 	return $logs->add_item( $data );
 }
@@ -77,8 +77,8 @@ function edd_add_log( $data = array() ) {
  * @param int $log_id Log ID.
  * @return int|false `1` if the adjustment was deleted successfully, false on error.
  */
-function edd_delete_log( $log_id = 0 ) {
-	$logs = new EDD\Database\Queries\Log();
+function cs_delete_log( $log_id = 0 ) {
+	$logs = new CS\Database\Queries\Log();
 
 	return $logs->delete_item( $log_id );
 }
@@ -96,7 +96,7 @@ function edd_delete_log( $log_id = 0 ) {
  *                                 be an ID that corresponds to the object type
  *                                 specified. E.g. an object ID of 25 with object
  *                                 type of `order` refers to order 25 in the
- *                                 `edd_orders` table. Default empty.
+ *                                 `cs_orders` table. Default empty.
  *     @type string $object_type   Object type that the log refers to.
  *                                 E.g. `discount` or `order`. Default empty.
  *     @type int    $user_id       ID of the current WordPress user logged in.
@@ -114,8 +114,8 @@ function edd_delete_log( $log_id = 0 ) {
  *
  * @return int|false Number of rows updated if successful, false otherwise.
  */
-function edd_update_log( $log_id = 0, $data = array() ) {
-	$logs = new EDD\Database\Queries\Log();
+function cs_update_log( $log_id = 0, $data = array() ) {
+	$logs = new CS\Database\Queries\Log();
 
 	return $logs->update_item( $log_id, $data );
 }
@@ -128,8 +128,8 @@ function edd_update_log( $log_id = 0, $data = array() ) {
  * @param int $log_id Log ID.
  * @return Log|false Log object if successful, false otherwise.
  */
-function edd_get_log( $log_id = 0 ) {
-	$logs = new EDD\Database\Queries\Log();
+function cs_get_log( $log_id = 0 ) {
+	$logs = new CS\Database\Queries\Log();
 
 	// Return log
 	return $logs->get_item( $log_id );
@@ -145,8 +145,8 @@ function edd_get_log( $log_id = 0 ) {
  *
  * @return Log|false Log object if successful, false otherwise.
  */
-function edd_get_log_by( $field = '', $value = '' ) {
-	$logs = new EDD\Database\Queries\Log();
+function cs_get_log_by( $field = '', $value = '' ) {
+	$logs = new CS\Database\Queries\Log();
 
 	// Return log
 	return $logs->get_item_by( $field, $value );
@@ -155,15 +155,15 @@ function edd_get_log_by( $field = '', $value = '' ) {
 /**
  * Query for logs.
  *
- * @see \EDD\Database\Queries\Log::__construct()
+ * @see \CS\Database\Queries\Log::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Log` for
+ * @param array $args Arguments. See `CS\Database\Queries\Log` for
  *                    accepted arguments.
  * @return Log[] Array of `Log` objects.
  */
-function edd_get_logs( $args = array() ) {
+function cs_get_logs( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -171,7 +171,7 @@ function edd_get_logs( $args = array() ) {
 	) );
 
 	// Instantiate a query object
-	$logs = new EDD\Database\Queries\Log();
+	$logs = new CS\Database\Queries\Log();
 
 	// Return logs
 	return $logs->query( $r );
@@ -180,15 +180,15 @@ function edd_get_logs( $args = array() ) {
 /**
  * Count logs.
  *
- * @see \EDD\Database\Queries\Log::__construct()
+ * @see \CS\Database\Queries\Log::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Log` for
+ * @param array $args Arguments. See `CS\Database\Queries\Log` for
  *                    accepted arguments.
  * @return int Number of logs returned based on query arguments passed.
  */
-function edd_count_logs( $args = array() ) {
+function cs_count_logs( $args = array() ) {
 
 	// Parse args.
 	$r = wp_parse_args(
@@ -199,7 +199,7 @@ function edd_count_logs( $args = array() ) {
 	);
 
 	// Query for count(s).
-	$logs = new EDD\Database\Queries\Log( $r );
+	$logs = new CS\Database\Queries\Log( $r );
 
 	// Return the number of logs found in the query.
 	return absint( $logs->found_items );

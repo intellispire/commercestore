@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { Currency } from '@easy-digital-downloads/currency';
+import { Currency } from '@commercestore/currency';
 
 /**
  * Determine if a pie graph.
@@ -53,11 +53,11 @@ export const toolTipBaseConfig = {
 	 */
 	custom: function( tooltip ) {
 		// Tooltip element.
-		let tooltipEl = document.getElementById( 'edd-chartjs-tooltip' );
+		let tooltipEl = document.getElementById( 'cs-chartjs-tooltip' );
 
 		if ( ! tooltipEl ) {
 			tooltipEl = document.createElement( 'div' );
-			tooltipEl.id = 'edd-chartjs-tooltip';
+			tooltipEl.id = 'cs-chartjs-tooltip';
 			tooltipEl.innerHTML = '<table></table>';
 
 			this._chart.canvas.parentNode.appendChild( tooltipEl );
@@ -112,7 +112,7 @@ export const toolTipBaseConfig = {
 					'border-width: 2px',
 				];
 
-				const span = '<span class="edd-chartjs-tooltip-key" style="' + style.join( ';' ) + '"></span>';
+				const span = '<span class="cs-chartjs-tooltip-key" style="' + style.join( ';' ) + '"></span>';
 
 				innerHtml += '<tr><td>' + span + body + '</td></tr>';
 			} );

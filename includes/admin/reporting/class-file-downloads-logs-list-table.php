@@ -2,7 +2,7 @@
 /**
  * File Downloads Log List Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -10,18 +10,18 @@
  * @since       3.0 Updated to use the custom tables.
  */
 
-use EDD\Logs\File_Download_Log;
+use CS\Logs\File_Download_Log;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_File_Downloads_Log_Table Class
+ * CS_File_Downloads_Log_Table Class
  *
  * @since 1.4
  * @since 3.0 Updated to use the custom tables and new query classes.
  */
-class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
+class CS_File_Downloads_Log_Table extends CS_Base_Log_List_Table {
 
 	/**
 	 * Log type
@@ -70,10 +70,10 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 		$base_url = remove_query_arg( 'paged' );
 		switch ( $column_name ) {
 			case 'download' :
-				$download     = new EDD_Download( $item[ $column_name ] );
+				$download     = new CS_Download( $item[ $column_name ] );
 				$column_value = ! empty( $item['price_id'] )
-					? edd_get_download_name( $download->ID, $item['price_id'] )
-					: edd_get_download_name( $download->ID );
+					? cs_get_download_name( $download->ID, $item['price_id'] )
+					: cs_get_download_name( $download->ID );
 
 				return '<a href="' . esc_url( add_query_arg( 'download', $download->ID, $base_url ) ) . '" >' . $column_value . '</a>';
 			case 'customer' :
@@ -82,9 +82,9 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 					: '&mdash;';
 
 			case 'payment_id' :
-				$number = edd_get_payment_number( $item['payment_id'] );
+				$number = cs_get_payment_number( $item['payment_id'] );
 				return ! empty( $number )
-					? '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id=' . esc_attr( $item['payment_id'] ) ) ) . '">' . esc_html( $number ) . '</a>'
+					? '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . esc_attr( $item['payment_id'] ) ) ) . '">' . esc_html( $number ) . '</a>'
 					: '&mdash;';
 			case 'ip' :
 				return '<a href="' . esc_url( 'https://ipinfo.io/' . esc_attr( $item['ip'] ) )  . '" target="_blank" rel="noopener noreferrer">' . esc_html( $item['ip'] )  . '</a>';
@@ -102,14 +102,14 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'ID'         => __( 'Log ID',       'easy-digital-downloads' ),
-			'download'   => edd_get_label_singular(),
-			'customer'   => __( 'Customer',     'easy-digital-downloads' ),
-			'payment_id' => __( 'Order Number', 'easy-digital-downloads' ),
-			'file'       => __( 'File',         'easy-digital-downloads' ),
-			'ip'         => __( 'IP Address',   'easy-digital-downloads' ),
-			'user_agent' => __( 'User Agent',   'easy-digital-downloads' ),
-			'date'       => __( 'Date',         'easy-digital-downloads' )
+			'ID'         => __( 'Log ID',       'commercestore' ),
+			'download'   => cs_get_label_singular(),
+			'customer'   => __( 'Customer',     'commercestore' ),
+			'payment_id' => __( 'Order Number', 'commercestore' ),
+			'file'       => __( 'File',         'commercestore' ),
+			'ip'         => __( 'IP Address',   'commercestore' ),
+			'user_agent' => __( 'User Agent',   'commercestore' ),
+			'date'       => __( 'Date',         'commercestore' )
 		);
 	}
 
@@ -125,13 +125,13 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 	function get_logs( $log_query = array() ) {
 		$logs_data = array();
 
-		$logs = edd_get_file_download_logs( $log_query );
+		$logs = cs_get_file_download_logs( $log_query );
 
 		if ( $logs ) {
 			foreach ( $logs as $log ) {
 				/** @var $log File_Download_Log */
 
-				$customer_id = ! empty( $log->customer_id ) ? (int) $log->customer_id : edd_get_payment_customer_id( $log->order_id );
+				$customer_id = ! empty( $log->customer_id ) ? (int) $log->customer_id : cs_get_payment_customer_id( $log->order_id );
 
 				$files = $this->get_log_files( $log, $customer_id );
 
@@ -143,7 +143,7 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 				 * @param int               $file_id
 				 * @param File_Download_Log $log
 				 */
-				$file_id = apply_filters( 'edd_log_file_download_file_id', $file_id, $log );
+				$file_id = apply_filters( 'cs_log_file_download_file_id', $file_id, $log );
 
 				$file_name = isset( $files[ $file_id ]['name'] )
 					? $files[ $file_id ]['name']
@@ -153,7 +153,7 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 					$logs_data[] = array(
 						'ID'         => $log->id,
 						'download'   => $log->product_id,
-						'customer'   => new EDD_Customer( $customer_id ),
+						'customer'   => new CS_Customer( $customer_id ),
 						'payment_id' => $log->order_id,
 						'price_id'   => $log->price_id,
 						'file'       => $file_name,
@@ -172,7 +172,7 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 	 * Retrieves the array of files associated with the log.
 	 *
 	 * This method contains a lot of logic to ensure backwards compatibility with how
-	 * the `edd_log_file_download_download_files` filter was formatted in EDD 2.x.
+	 * the `cs_log_file_download_download_files` filter was formatted in CommerceStore 2.x.
 	 *
 	 * @since 3.0
 	 *
@@ -182,22 +182,22 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 	 * @return array
 	 */
 	protected function get_log_files( File_Download_Log $log, $customer_id ) {
-		$customer = ! empty( $customer_id ) ? edd_get_customer( $customer_id ) : false;
+		$customer = ! empty( $customer_id ) ? cs_get_customer( $customer_id ) : false;
 
 		/*
 		 * Get the files associated with this download and store them in a property to prevent
 		 * multiple queries for the same download.
-		 * This is needed for backwards compatibility in the `edd_log_file_download_download_files` filter.
+		 * This is needed for backwards compatibility in the `cs_log_file_download_download_files` filter.
 		 */
 		if ( ! array_key_exists( $log->product_id, $this->queried_files ) ) {
-			$files = get_post_meta( $log->product_id, 'edd_download_files', true );
+			$files = get_post_meta( $log->product_id, 'cs_download_files', true );
 			$this->queried_files[ $log->product_id ] = $files;
 		} else {
 			$files = $this->queried_files[ $log->product_id ];
 		}
 
 		/*
-		 * User info is needed for backwards compatibility in the `edd_log_file_download_download_files` filter.
+		 * User info is needed for backwards compatibility in the `cs_log_file_download_download_files` filter.
 		 */
 		$user = ! empty( $customer->user_id ) ? get_userdata( $customer->user_id ) : false;
 
@@ -212,17 +212,17 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 		/*
 		 * Build up an array of meta.
 		 */
-		$meta = edd_get_file_download_log_meta( $log->id );
+		$meta = cs_get_file_download_log_meta( $log->id );
 
 		// These meta keys no longer exist, but we need to create them for use in the filter.
 		$backwards_compat_meta = array(
-			'_edd_log_user_info'   => $user_info,
-			'_edd_log_user_id'     => ! empty( $customer->user_id ) ? $customer->user_id : false,
-			'_edd_log_customer_id' => $customer_id,
-			'_edd_log_file_id'     => $log->file_id,
-			'_edd_log_ip'          => $log->ip,
-			'_edd_log_payment_id'  => $log->order_id,
-			'_edd_log_price_id'    => $log->price_id,
+			'_cs_log_user_info'   => $user_info,
+			'_cs_log_user_id'     => ! empty( $customer->user_id ) ? $customer->user_id : false,
+			'_cs_log_customer_id' => $customer_id,
+			'_cs_log_file_id'     => $log->file_id,
+			'_cs_log_ip'          => $log->ip,
+			'_cs_log_payment_id'  => $log->order_id,
+			'_cs_log_price_id'    => $log->price_id,
 		);
 
 		foreach( $backwards_compat_meta as $meta_key => $meta_value ) {
@@ -234,9 +234,9 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 		 *
 		 * @param array             $files Files linked to the product.
 		 * @param File_Download_Log $log   Log record from the database.
-		 * @param array             $meta  What used to be the meta array in EDD 2.9 and lower.
+		 * @param array             $meta  What used to be the meta array in CommerceStore 2.9 and lower.
 		 */
-		return apply_filters( 'edd_log_file_download_download_files', $files, $log, $meta );
+		return apply_filters( 'cs_log_file_download_download_files', $files, $log, $meta );
 	}
 
 	/**
@@ -245,6 +245,6 @@ class EDD_File_Downloads_Log_Table extends EDD_Base_Log_List_Table {
 	 * @since 1.5
 	 */
 	public function get_total( $log_query = array() ) {
-		return edd_count_file_download_logs( $log_query );
+		return cs_count_file_download_logs( $log_query );
 	}
 }

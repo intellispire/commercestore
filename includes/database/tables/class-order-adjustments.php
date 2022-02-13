@@ -2,21 +2,21 @@
 /**
  * Order Adjustments Table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Tables
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Tables;
+namespace CS\Database\Tables;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Table;
+use CS\Database\Table;
 
 /**
- * Setup the global "edd_order_adjustments" database table
+ * Setup the global "cs_order_adjustments" database table
  *
  * @since 3.0
  */

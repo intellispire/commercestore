@@ -23,7 +23,7 @@ export const OrderItems = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	className: 'edd-order-overview-summary__items',
+	className: 'cs-order-overview-summary__items',
 
 	/**
 	 * "Order Items" view.

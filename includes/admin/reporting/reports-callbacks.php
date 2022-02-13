@@ -2,7 +2,7 @@
 /**
  * Reports functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -10,7 +10,7 @@
  * @since       3.0 Full refactor of Reports.
  */
 
-use EDD\Reports;
+use CS\Reports;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 3.0
  */
-function edd_overview_sales_earnings_chart() {
+function cs_overview_sales_earnings_chart() {
 	global $wpdb;
 
 	$dates        = Reports\get_dates_filter( 'objects' );
@@ -40,7 +40,7 @@ function edd_overview_sales_earnings_chart() {
 		'orderby' => 'DATE(date_created)',
 	);
 
-	if ( ! empty( $currency ) && array_key_exists( strtoupper( $currency ), edd_get_currencies() ) ) {
+	if ( ! empty( $currency ) && array_key_exists( strtoupper( $currency ), cs_get_currencies() ) ) {
 		$sql_clauses['where'] = $wpdb->prepare( " AND currency = %s ", strtoupper( $currency ) );
 	}
 
@@ -53,13 +53,13 @@ function edd_overview_sales_earnings_chart() {
 	 *
 	 * @param array $statuses Order statuses to include when generating stats.
 	 */
-	$statuses = apply_filters( 'edd_payment_stats_post_statuses', $statuses );
+	$statuses = apply_filters( 'cs_payment_stats_post_statuses', $statuses );
 	$statuses = "'" . implode( "', '", $statuses ) . "'";
 
 	$results = $wpdb->get_results(
 		$wpdb->prepare(
 			"SELECT COUNT(id) AS sales, SUM({$column}) AS earnings, {$sql_clauses['select']}
- 				 FROM {$wpdb->edd_orders} edd_o
+ 				 FROM {$wpdb->cs_orders} cs_o
  				 WHERE date_created >= %s AND date_created <= %s
  				 AND type = 'sale'
  				 AND status IN( {$statuses} )
@@ -133,11 +133,11 @@ function edd_overview_sales_earnings_chart() {
 }
 
 /**
- * The callback function which fetches the data for the edd_overview_refunds_chart reports endpoint.
+ * The callback function which fetches the data for the cs_overview_refunds_chart reports endpoint.
  *
  * @since 3.0
  */
-function edd_overview_refunds_chart() {
+function cs_overview_refunds_chart() {
 	global $wpdb;
 
 	$dates        = Reports\get_dates_filter( 'objects' );
@@ -162,7 +162,7 @@ function edd_overview_refunds_chart() {
 	$results = $wpdb->get_results(
 		$wpdb->prepare(
 			"SELECT COUNT(id) AS number, SUM({$column}) AS amount, {$sql_clauses['select']}
- 				 FROM {$wpdb->edd_orders} edd_o
+ 				 FROM {$wpdb->cs_orders} cs_o
  				 WHERE status IN (%s, %s) AND date_created >= %s AND date_created <= %s AND type = 'refund'
 				{$sql_clauses['where']}
 				 GROUP BY {$sql_clauses['groupby']}

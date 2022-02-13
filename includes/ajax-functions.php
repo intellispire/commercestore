@@ -4,7 +4,7 @@
  *
  * Process the front-end AJAX actions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Functions/AJAX
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -17,25 +17,25 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Checks whether AJAX is enabled.
  *
- * This will be deprecated soon in favor of edd_is_ajax_disabled()
+ * This will be deprecated soon in favor of cs_is_ajax_disabled()
  *
  * @since 1.0
- * @return bool True when EDD AJAX is enabled (for the cart), false otherwise.
+ * @return bool True when CommerceStore AJAX is enabled (for the cart), false otherwise.
  */
-function edd_is_ajax_enabled() {
-	$retval = ! edd_is_ajax_disabled();
-	return apply_filters( 'edd_is_ajax_enabled', $retval );
+function cs_is_ajax_enabled() {
+	$retval = ! cs_is_ajax_disabled();
+	return apply_filters( 'cs_is_ajax_enabled', $retval );
 }
 
 /**
  * Checks whether AJAX is disabled.
  *
  * @since 2.0
- * @since 2.7 Setting to disable AJAX was removed. See https://github.com/easydigitaldownloads/easy-digital-downloads/issues/4758
- * @return bool True when EDD AJAX is disabled (for the cart), false otherwise.
+ * @since 2.7 Setting to disable AJAX was removed. See https://github.com/commercestore/commercestore/issues/4758
+ * @return bool True when CommerceStore AJAX is disabled (for the cart), false otherwise.
  */
-function edd_is_ajax_disabled() {
-	return apply_filters( 'edd_is_ajax_disabled', false );
+function cs_is_ajax_disabled() {
+	return apply_filters( 'cs_is_ajax_disabled', false );
 }
 
 /**
@@ -44,7 +44,7 @@ function edd_is_ajax_disabled() {
  * @since 2.2
  * @return bool True if AJAX works, false otherwise
  */
-function edd_test_ajax_works() {
+function cs_test_ajax_works() {
 
 	// Check if the Airplane Mode plugin is installed
 	if ( class_exists( 'Airplane_Mode_Core' ) ) {
@@ -64,16 +64,16 @@ function edd_test_ajax_works() {
 
 	add_filter( 'block_local_requests', '__return_false' );
 
-	if ( get_transient( '_edd_ajax_works' ) ) {
+	if ( get_transient( '_cs_ajax_works' ) ) {
 		return true;
 	}
 
 	$works = true;
-	$ajax  = wp_remote_post( edd_get_ajax_url(), array(
+	$ajax  = wp_remote_post( cs_get_ajax_url(), array(
 		'sslverify'  => false,
 		'timeout'    => 30,
 		'body'       => array(
-			'action' => 'edd_test_ajax'
+			'action' => 'cs_test_ajax'
 		)
 	) );
 
@@ -100,7 +100,7 @@ function edd_test_ajax_works() {
 	}
 
 	if ( $works ) {
-		set_transient( '_edd_ajax_works', '1', DAY_IN_SECONDS );
+		set_transient( '_cs_ajax_works', '1', DAY_IN_SECONDS );
 	}
 
 	return $works;
@@ -112,17 +112,17 @@ function edd_test_ajax_works() {
  * @since 1.3
  * @return string URL to the AJAX file to call during AJAX requests.
 */
-function edd_get_ajax_url() {
+function cs_get_ajax_url() {
 	$scheme = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ? 'https' : 'admin';
 
-	$current_url = edd_get_current_page_url();
+	$current_url = cs_get_current_page_url();
 	$ajax_url    = admin_url( 'admin-ajax.php', $scheme );
 
 	if ( preg_match( '/^https/', $current_url ) && ! preg_match( '/^https/', $ajax_url ) ) {
 		$ajax_url = preg_replace( '/^http/', 'https', $ajax_url );
 	}
 
-	return apply_filters( 'edd_ajax_url', $ajax_url );
+	return apply_filters( 'cs_ajax_url', $ajax_url );
 }
 
 /**
@@ -131,9 +131,9 @@ function edd_get_ajax_url() {
  * @since 1.0
  * @return void
  */
-function edd_ajax_remove_from_cart() {
+function cs_ajax_remove_from_cart() {
 	if ( ! isset( $_POST['nonce'] ) ) {
-		edd_debug_log( __( 'Missing nonce when removing an item from the cart. Please read the following for more information: https://easydigitaldownloads.com/development/2018/07/05/important-update-to-ajax-requests-in-easy-digital-downloads-2-9-4', 'easy-digital-downloads' ), true );
+		cs_debug_log( __( 'Missing nonce when removing an item from the cart. Please read the following for more information: https://commercestore.com/development/2018/07/05/important-update-to-ajax-requests-in-commercestore-2-9-4', 'commercestore' ), true );
 	}
 
 	if ( isset( $_POST['cart_item'] ) && isset( $_POST['nonce'] ) ) {
@@ -142,35 +142,35 @@ function edd_ajax_remove_from_cart() {
 		$cart_item = absint( $_POST['cart_item'] );
 		$nonce     = sanitize_text_field( $_POST['nonce'] );
 
-		$nonce_verified = wp_verify_nonce( $nonce, 'edd-remove-cart-widget-item' );
+		$nonce_verified = wp_verify_nonce( $nonce, 'cs-remove-cart-widget-item' );
 
 		if ( false === $nonce_verified ) {
 			$return = array( 'removed' => 0 );
 		} else {
-			edd_remove_from_cart( $cart_item );
+			cs_remove_from_cart( $cart_item );
 
 			$return = array(
 				'removed'       => 1,
-				'subtotal'      => html_entity_decode( edd_currency_filter( edd_format_amount( edd_get_cart_subtotal() ) ), ENT_COMPAT, 'UTF-8' ),
-				'total'         => html_entity_decode( edd_currency_filter( edd_format_amount( edd_get_cart_total() ) ), ENT_COMPAT, 'UTF-8' ),
-				'cart_quantity' => html_entity_decode( edd_get_cart_quantity() ),
+				'subtotal'      => html_entity_decode( cs_currency_filter( cs_format_amount( cs_get_cart_subtotal() ) ), ENT_COMPAT, 'UTF-8' ),
+				'total'         => html_entity_decode( cs_currency_filter( cs_format_amount( cs_get_cart_total() ) ), ENT_COMPAT, 'UTF-8' ),
+				'cart_quantity' => html_entity_decode( cs_get_cart_quantity() ),
 			);
 
-			if ( edd_use_taxes() ) {
-				$cart_tax      = (float) edd_get_cart_tax();
-				$return['tax'] = html_entity_decode( edd_currency_filter( edd_format_amount( $cart_tax ) ), ENT_COMPAT, 'UTF-8' );
+			if ( cs_use_taxes() ) {
+				$cart_tax      = (float) cs_get_cart_tax();
+				$return['tax'] = html_entity_decode( cs_currency_filter( cs_format_amount( $cart_tax ) ), ENT_COMPAT, 'UTF-8' );
 			}
 		}
 
-		$return = apply_filters( 'edd_ajax_remove_from_cart_response', $return );
+		$return = apply_filters( 'cs_ajax_remove_from_cart_response', $return );
 
 		echo json_encode( $return );
 
 	}
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_remove_from_cart',        'edd_ajax_remove_from_cart' );
-add_action( 'wp_ajax_nopriv_edd_remove_from_cart', 'edd_ajax_remove_from_cart' );
+add_action( 'wp_ajax_cs_remove_from_cart',        'cs_ajax_remove_from_cart' );
+add_action( 'wp_ajax_nopriv_cs_remove_from_cart', 'cs_ajax_remove_from_cart' );
 
 /**
  * Adds item to the cart via AJAX.
@@ -178,22 +178,22 @@ add_action( 'wp_ajax_nopriv_edd_remove_from_cart', 'edd_ajax_remove_from_cart' )
  * @since 1.0
  * @return void
  */
-function edd_ajax_add_to_cart() {
+function cs_ajax_add_to_cart() {
 	if ( ! isset( $_POST['download_id'] ) ) {
-		edd_die();
+		cs_die();
 	}
 
 	$download_id = absint( $_POST['download_id'] );
 	$request_validated = false;
-	if ( isset( $_POST['timestamp'] ) && isset( $_POST['token'] ) && EDD\Utils\Tokenizer::is_token_valid( $_POST['token'], $_POST['timestamp'] ) ) {
+	if ( isset( $_POST['timestamp'] ) && isset( $_POST['token'] ) && CS\Utils\Tokenizer::is_token_valid( $_POST['token'], $_POST['timestamp'] ) ) {
 		$request_validated = true;
-	} elseif ( isset( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], 'edd-add-to-cart-' . $download_id ) ) {
+	} elseif ( isset( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], 'cs-add-to-cart-' . $download_id ) ) {
 		$request_validated = true;
 	}
 
 	if ( ! $request_validated ) {
-		edd_debug_log( __( 'Missing nonce when adding an item to the cart. Please read the following for more information: https://easydigitaldownloads.com/development/2018/07/05/important-update-to-ajax-requests-in-easy-digital-downloads-2-9-4', 'easy-digital-downloads' ), true );
-		edd_die( '', '', 403 );
+		cs_debug_log( __( 'Missing nonce when adding an item to the cart. Please read the following for more information: https://commercestore.com/development/2018/07/05/important-update-to-ajax-requests-in-commercestore-2-9-4', 'commercestore' ), true );
+		cs_die( '', '', 403 );
 	}
 
 	$to_add = array();
@@ -218,47 +218,47 @@ function edd_ajax_add_to_cart() {
 			$options = array();
 		}
 
-		if ( isset( $options['price_id'] ) && isset( $post_data['edd_download_quantity_' . $options['price_id'] ] ) ) {
+		if ( isset( $options['price_id'] ) && isset( $post_data['cs_download_quantity_' . $options['price_id'] ] ) ) {
 
-			$options['quantity'] = absint( $post_data['edd_download_quantity_' . $options['price_id'] ] );
+			$options['quantity'] = absint( $post_data['cs_download_quantity_' . $options['price_id'] ] );
 
 		} else {
 
-			$options['quantity'] = isset( $post_data['edd_download_quantity'] ) ? absint( $post_data['edd_download_quantity'] ) : 1;
+			$options['quantity'] = isset( $post_data['cs_download_quantity'] ) ? absint( $post_data['cs_download_quantity'] ) : 1;
 
 		}
 
-		$key = edd_add_to_cart( $_POST['download_id'], $options );
+		$key = cs_add_to_cart( $_POST['download_id'], $options );
 
 		$item = array(
 			'id'      => $_POST['download_id'],
 			'options' => $options
 		);
 
-		$item   = apply_filters( 'edd_ajax_pre_cart_item_template', $item );
-		$items .= html_entity_decode( edd_get_cart_item_template( $key, $item, true ), ENT_COMPAT, 'UTF-8' );
+		$item   = apply_filters( 'cs_ajax_pre_cart_item_template', $item );
+		$items .= html_entity_decode( cs_get_cart_item_template( $key, $item, true ), ENT_COMPAT, 'UTF-8' );
 
 	}
 
 	$return = array(
-		'subtotal'      => html_entity_decode( edd_currency_filter( edd_format_amount( edd_get_cart_subtotal() ) ), ENT_COMPAT, 'UTF-8' ),
-		'total'         => html_entity_decode( edd_currency_filter( edd_format_amount( edd_get_cart_total() ) ), ENT_COMPAT, 'UTF-8' ),
+		'subtotal'      => html_entity_decode( cs_currency_filter( cs_format_amount( cs_get_cart_subtotal() ) ), ENT_COMPAT, 'UTF-8' ),
+		'total'         => html_entity_decode( cs_currency_filter( cs_format_amount( cs_get_cart_total() ) ), ENT_COMPAT, 'UTF-8' ),
 		'cart_item'     => $items,
-		'cart_quantity' => html_entity_decode( edd_get_cart_quantity() )
+		'cart_quantity' => html_entity_decode( cs_get_cart_quantity() )
 	);
 
-	if ( edd_use_taxes() ) {
-		$cart_tax = (float) edd_get_cart_tax();
-		$return['tax'] = html_entity_decode( edd_currency_filter( edd_format_amount( $cart_tax ) ), ENT_COMPAT, 'UTF-8' );
+	if ( cs_use_taxes() ) {
+		$cart_tax = (float) cs_get_cart_tax();
+		$return['tax'] = html_entity_decode( cs_currency_filter( cs_format_amount( $cart_tax ) ), ENT_COMPAT, 'UTF-8' );
 	}
 
-	$return = apply_filters( 'edd_ajax_add_to_cart_response', $return );
+	$return = apply_filters( 'cs_ajax_add_to_cart_response', $return );
 
 	echo json_encode( $return );
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_add_to_cart',        'edd_ajax_add_to_cart' );
-add_action( 'wp_ajax_nopriv_edd_add_to_cart', 'edd_ajax_add_to_cart' );
+add_action( 'wp_ajax_cs_add_to_cart',        'cs_ajax_add_to_cart' );
+add_action( 'wp_ajax_nopriv_cs_add_to_cart', 'cs_ajax_add_to_cart' );
 
 /**
  * Gets the cart's subtotal via AJAX.
@@ -266,12 +266,12 @@ add_action( 'wp_ajax_nopriv_edd_add_to_cart', 'edd_ajax_add_to_cart' );
  * @since 1.0
  * @return void
  */
-function edd_ajax_get_subtotal() {
-	echo edd_currency_filter( edd_get_cart_subtotal() );
-	edd_die();
+function cs_ajax_get_subtotal() {
+	echo cs_currency_filter( cs_get_cart_subtotal() );
+	cs_die();
 }
-add_action( 'wp_ajax_edd_get_subtotal',        'edd_ajax_get_subtotal' );
-add_action( 'wp_ajax_nopriv_edd_get_subtotal', 'edd_ajax_get_subtotal' );
+add_action( 'wp_ajax_cs_get_subtotal',        'cs_ajax_get_subtotal' );
+add_action( 'wp_ajax_nopriv_cs_get_subtotal', 'cs_ajax_get_subtotal' );
 
 /**
  * Validates the supplied discount sent via AJAX.
@@ -279,7 +279,7 @@ add_action( 'wp_ajax_nopriv_edd_get_subtotal', 'edd_ajax_get_subtotal' );
  * @since 1.0
  * @return void
  */
-function edd_ajax_apply_discount() {
+function cs_ajax_apply_discount() {
 	if ( isset( $_POST['code'] ) ) { // WPCS: CSRF ok.
 		$discount_code = sanitize_text_field( $_POST['code'] );
 
@@ -294,41 +294,41 @@ function edd_ajax_apply_discount() {
 			$user = get_current_user_id();
 		} else {
 			parse_str( $_POST['form'], $form ); // WPCS: CSRF ok.
-			if ( ! empty( $form['edd_email'] ) ) {
-				$user = urldecode( $form['edd_email'] );
+			if ( ! empty( $form['cs_email'] ) ) {
+				$user = urldecode( $form['cs_email'] );
 			}
 		}
 
-		if ( edd_is_discount_valid( $discount_code, $user ) ) {
-			$discount  = edd_get_discount_by( 'code', $discount_code );
-			$amount    = edd_format_discount_rate( edd_get_discount_type( $discount->id ), edd_get_discount_amount( $discount->id ) );
-			$discounts = edd_set_cart_discount( $discount_code );
-			$total     = edd_get_cart_total( $discounts );
+		if ( cs_is_discount_valid( $discount_code, $user ) ) {
+			$discount  = cs_get_discount_by( 'code', $discount_code );
+			$amount    = cs_format_discount_rate( cs_get_discount_type( $discount->id ), cs_get_discount_amount( $discount->id ) );
+			$discounts = cs_set_cart_discount( $discount_code );
+			$total     = cs_get_cart_total( $discounts );
 
 			$return = array(
 				'msg'         => 'valid',
 				'amount'      => $amount,
 				'total_plain' => $total,
-				'total'       => html_entity_decode( edd_currency_filter( edd_format_amount( $total ) ), ENT_COMPAT, 'UTF-8' ),
+				'total'       => html_entity_decode( cs_currency_filter( cs_format_amount( $total ) ), ENT_COMPAT, 'UTF-8' ),
 				'code'        => $discount_code,
-				'html'        => edd_get_cart_discounts_html( $discounts ),
+				'html'        => cs_get_cart_discounts_html( $discounts ),
 			);
 		} else {
-			$errors        = edd_get_errors();
-			$return['msg'] = $errors['edd-discount-error'];
-			edd_unset_error( 'edd-discount-error' );
+			$errors        = cs_get_errors();
+			$return['msg'] = $errors['cs-discount-error'];
+			cs_unset_error( 'cs-discount-error' );
 		}
 
 		// Allow for custom discount code handling
-		$return = apply_filters( 'edd_ajax_discount_response', $return );
+		$return = apply_filters( 'cs_ajax_discount_response', $return );
 
 		echo wp_json_encode( $return );
 	}
 
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_apply_discount',        'edd_ajax_apply_discount' );
-add_action( 'wp_ajax_nopriv_edd_apply_discount', 'edd_ajax_apply_discount' );
+add_action( 'wp_ajax_cs_apply_discount',        'cs_ajax_apply_discount' );
+add_action( 'wp_ajax_nopriv_cs_apply_discount', 'cs_ajax_apply_discount' );
 
 /**
  * Validates the supplied discount sent via AJAX.
@@ -336,32 +336,32 @@ add_action( 'wp_ajax_nopriv_edd_apply_discount', 'edd_ajax_apply_discount' );
  * @since 1.0
  * @return void
  */
-function edd_ajax_update_cart_item_quantity() {
+function cs_ajax_update_cart_item_quantity() {
 	if ( ! empty( $_POST['quantity'] ) && ! empty( $_POST['download_id'] ) ) {
 
 		$download_id = absint( $_POST['download_id'] );
 		$quantity    = absint( $_POST['quantity'] );
 		$options     = json_decode( stripslashes( $_POST['options'] ), true );
 
-		EDD()->cart->set_item_quantity( $download_id, $quantity, $options );
+		CS()->cart->set_item_quantity( $download_id, $quantity, $options );
 
 		$return = array(
 			'download_id' => $download_id,
-			'quantity'    => EDD()->cart->get_item_quantity( $download_id, $options ),
-			'subtotal'    => html_entity_decode( edd_currency_filter( edd_format_amount( EDD()->cart->get_subtotal() ) ), ENT_COMPAT, 'UTF-8' ),
-			'taxes'       => html_entity_decode( edd_currency_filter( edd_format_amount( EDD()->cart->get_tax() ) ), ENT_COMPAT, 'UTF-8' ),
-			'total'       => html_entity_decode( edd_currency_filter( edd_format_amount( EDD()->cart->get_total() ) ), ENT_COMPAT, 'UTF-8' )
+			'quantity'    => CS()->cart->get_item_quantity( $download_id, $options ),
+			'subtotal'    => html_entity_decode( cs_currency_filter( cs_format_amount( CS()->cart->get_subtotal() ) ), ENT_COMPAT, 'UTF-8' ),
+			'taxes'       => html_entity_decode( cs_currency_filter( cs_format_amount( CS()->cart->get_tax() ) ), ENT_COMPAT, 'UTF-8' ),
+			'total'       => html_entity_decode( cs_currency_filter( cs_format_amount( CS()->cart->get_total() ) ), ENT_COMPAT, 'UTF-8' )
 		);
 
 		// Allow for custom cart item quantity handling
-		$return = apply_filters( 'edd_ajax_cart_item_quantity_response', $return );
+		$return = apply_filters( 'cs_ajax_cart_item_quantity_response', $return );
 
 		echo json_encode($return);
 	}
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_update_quantity',        'edd_ajax_update_cart_item_quantity' );
-add_action( 'wp_ajax_nopriv_edd_update_quantity', 'edd_ajax_update_cart_item_quantity' );
+add_action( 'wp_ajax_cs_update_quantity',        'cs_ajax_update_cart_item_quantity' );
+add_action( 'wp_ajax_nopriv_cs_update_quantity', 'cs_ajax_update_cart_item_quantity' );
 
 /**
  * Removes a discount code from the cart via ajax
@@ -369,19 +369,19 @@ add_action( 'wp_ajax_nopriv_edd_update_quantity', 'edd_ajax_update_cart_item_qua
  * @since 1.7
  * @return void
  */
-function edd_ajax_remove_discount() {
+function cs_ajax_remove_discount() {
 	if ( isset( $_POST['code'] ) ) {
 
-		edd_unset_cart_discount( urldecode( $_POST['code'] ) );
+		cs_unset_cart_discount( urldecode( $_POST['code'] ) );
 
-		$total = edd_get_cart_total();
+		$total = cs_get_cart_total();
 
 		$return = array(
 			'total_plain' => $total,
-			'total'       => html_entity_decode( edd_currency_filter( edd_format_amount( $total ) ), ENT_COMPAT, 'UTF-8' ),
+			'total'       => html_entity_decode( cs_currency_filter( cs_format_amount( $total ) ), ENT_COMPAT, 'UTF-8' ),
 			'code'        => sanitize_text_field( $_POST['code'] ),
-			'discounts'   => edd_get_cart_discounts(),
-			'html'        => edd_get_cart_discounts_html()
+			'discounts'   => cs_get_cart_discounts(),
+			'html'        => cs_get_cart_discounts_html()
 		);
 
 		/**
@@ -389,14 +389,14 @@ function edd_ajax_remove_discount() {
 		 * 
 		 * @since 2.11.4
 		 */
-		$return = apply_filters( 'edd_ajax_remove_discount_response', $return );
+		$return = apply_filters( 'cs_ajax_remove_discount_response', $return );
 
 		wp_send_json( $return );
 	}
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_remove_discount',        'edd_ajax_remove_discount' );
-add_action( 'wp_ajax_nopriv_edd_remove_discount', 'edd_ajax_remove_discount' );
+add_action( 'wp_ajax_cs_remove_discount',        'cs_ajax_remove_discount' );
+add_action( 'wp_ajax_nopriv_cs_remove_discount', 'cs_ajax_remove_discount' );
 
 /**
  * Loads Checkout Login Fields the via AJAX
@@ -404,19 +404,19 @@ add_action( 'wp_ajax_nopriv_edd_remove_discount', 'edd_ajax_remove_discount' );
  * @since 1.0
  * @return void
  */
-function edd_load_checkout_login_fields() {
+function cs_load_checkout_login_fields() {
 	$action = sanitize_text_field( $_POST['action'] );
 	$nonce  = sanitize_text_field( $_POST['nonce'] );
 
-	$nonce_verified = wp_verify_nonce( $nonce, 'edd_' . $action );
+	$nonce_verified = wp_verify_nonce( $nonce, 'cs_' . $action );
 
 	if ( $nonce_verified ) {
-		do_action( 'edd_purchase_form_login_fields' );
+		do_action( 'cs_purchase_form_login_fields' );
 	}
 
-	edd_die();
+	cs_die();
 }
-add_action('wp_ajax_nopriv_checkout_login', 'edd_load_checkout_login_fields');
+add_action('wp_ajax_nopriv_checkout_login', 'cs_load_checkout_login_fields');
 
 /**
  * Load Checkout Register Fields via AJAX
@@ -424,19 +424,19 @@ add_action('wp_ajax_nopriv_checkout_login', 'edd_load_checkout_login_fields');
  * @since 1.0
  * @return void
 */
-function edd_load_checkout_register_fields() {
+function cs_load_checkout_register_fields() {
 	$action = sanitize_text_field( $_POST['action'] );
 	$nonce  = sanitize_text_field( $_POST['nonce'] );
 
-	$nonce_verified = wp_verify_nonce( $nonce, 'edd_' . $action );
+	$nonce_verified = wp_verify_nonce( $nonce, 'cs_' . $action );
 
 	if ( $nonce_verified ) {
-		do_action( 'edd_purchase_form_register_fields' );
+		do_action( 'cs_purchase_form_register_fields' );
 	}
 
-	edd_die();
+	cs_die();
 }
-add_action('wp_ajax_nopriv_checkout_register', 'edd_load_checkout_register_fields');
+add_action('wp_ajax_nopriv_checkout_register', 'cs_load_checkout_register_fields');
 
 /**
  * Get Download Title via AJAX
@@ -445,7 +445,7 @@ add_action('wp_ajax_nopriv_checkout_register', 'edd_load_checkout_register_field
  * @since 2.8 Restrict to just the download post type
  * @return void
  */
-function edd_ajax_get_download_title() {
+function cs_ajax_get_download_title() {
 	if ( isset( $_POST['download_id'] ) ) {
 		$post_id   = absint( $_POST['download_id'] );
 		$post_type = get_post_type( $post_id );
@@ -460,10 +460,10 @@ function edd_ajax_get_download_title() {
 
 		echo $title;
 	}
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_get_download_title',        'edd_ajax_get_download_title' );
-add_action( 'wp_ajax_nopriv_edd_get_download_title', 'edd_ajax_get_download_title' );
+add_action( 'wp_ajax_cs_get_download_title',        'cs_ajax_get_download_title' );
+add_action( 'wp_ajax_nopriv_cs_get_download_title', 'cs_ajax_get_download_title' );
 
 /**
  * Recalculate cart taxes
@@ -471,45 +471,45 @@ add_action( 'wp_ajax_nopriv_edd_get_download_title', 'edd_ajax_get_download_titl
  * @since 1.6
  * @return void
  */
-function edd_ajax_recalculate_taxes() {
+function cs_ajax_recalculate_taxes() {
 	if ( ! isset( $_POST['nonce'] ) ) {
-		edd_debug_log( __( 'Missing nonce when recalculating taxes. Please read the following for more information: https://easydigitaldownloads.com/development/2018/07/05/important-update-to-ajax-requests-in-easy-digital-downloads-2-9-4', 'easy-digital-downloads' ), true );
+		cs_debug_log( __( 'Missing nonce when recalculating taxes. Please read the following for more information: https://commercestore.com/development/2018/07/05/important-update-to-ajax-requests-in-commercestore-2-9-4', 'commercestore' ), true );
 	}
 
 	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
-	$nonce_verified = wp_verify_nonce( $nonce, 'edd-checkout-address-fields' );
+	$nonce_verified = wp_verify_nonce( $nonce, 'cs-checkout-address-fields' );
 
 	if ( false === $nonce_verified ) {
 		return false;
 	}
 
-	if ( ! edd_get_cart_contents() ) {
+	if ( ! cs_get_cart_contents() ) {
 		return false;
 	}
 
 	if ( empty( $_POST['billing_country'] ) ) {
-		$_POST['billing_country'] = edd_get_shop_country();
+		$_POST['billing_country'] = cs_get_shop_country();
 	}
 
 	ob_start();
-	edd_checkout_cart();
+	cs_checkout_cart();
 	$cart     = ob_get_clean();
 	$response = array(
 		'html'         => $cart,
-		'tax_raw'      => edd_get_cart_tax(),
-		'tax'          => html_entity_decode( edd_cart_tax( false ), ENT_COMPAT, 'UTF-8' ),
-		'tax_rate_raw' => edd_get_tax_rate(),
-		'tax_rate'     => html_entity_decode( edd_get_formatted_tax_rate(), ENT_COMPAT, 'UTF-8' ),
-		'total'        => html_entity_decode( edd_cart_total( false ), ENT_COMPAT, 'UTF-8' ),
-		'total_raw'    => edd_get_cart_total(),
+		'tax_raw'      => cs_get_cart_tax(),
+		'tax'          => html_entity_decode( cs_cart_tax( false ), ENT_COMPAT, 'UTF-8' ),
+		'tax_rate_raw' => cs_get_tax_rate(),
+		'tax_rate'     => html_entity_decode( cs_get_formatted_tax_rate(), ENT_COMPAT, 'UTF-8' ),
+		'total'        => html_entity_decode( cs_cart_total( false ), ENT_COMPAT, 'UTF-8' ),
+		'total_raw'    => cs_get_cart_total(),
 	);
 
 	echo json_encode( $response );
 
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_recalculate_taxes',        'edd_ajax_recalculate_taxes' );
-add_action( 'wp_ajax_nopriv_edd_recalculate_taxes', 'edd_ajax_recalculate_taxes' );
+add_action( 'wp_ajax_cs_recalculate_taxes',        'cs_ajax_recalculate_taxes' );
+add_action( 'wp_ajax_nopriv_cs_recalculate_taxes', 'cs_ajax_recalculate_taxes' );
 
 /**
  * Retrieve a states drop down
@@ -518,31 +518,31 @@ add_action( 'wp_ajax_nopriv_edd_recalculate_taxes', 'edd_ajax_recalculate_taxes'
  * @since 2.9.4 Added nonce verification.
  * @since 3.0 Updated listbox with placeholder values.
  */
-function edd_ajax_get_states_field() {
+function cs_ajax_get_states_field() {
 
 	// Check a nonce was sent.
 	if ( empty( $_POST['nonce'] ) ) {
-		edd_debug_log( __( 'Missing nonce when retrieving state list. Please read the following for more information: https://easydigitaldownloads.com/development/2018/07/05/important-update-to-ajax-requests-in-easy-digital-downloads-2-9-4', 'easy-digital-downloads' ), true );
+		cs_debug_log( __( 'Missing nonce when retrieving state list. Please read the following for more information: https://commercestore.com/development/2018/07/05/important-update-to-ajax-requests-in-commercestore-2-9-4', 'commercestore' ), true );
 	}
 
 	$nonce = ! empty( $_POST['nonce'] )
 		? sanitize_text_field( $_POST['nonce'] )
 		: '';
 
-	$nonce_verified = wp_verify_nonce( $nonce, 'edd-country-field-nonce' );
+	$nonce_verified = wp_verify_nonce( $nonce, 'cs-country-field-nonce' );
 
 	// Bail if nonce verification failed.
 	if ( false === $nonce_verified ) {
-		edd_die();
+		cs_die();
 	}
 
 	// Get country.
 	$country = ! empty( $_POST['country'] )
 		? sanitize_text_field( $_POST['country'] ) // Exactly matched
-		: edd_get_shop_country();
+		: cs_get_shop_country();
 
 	// Get states for country.
-	$states = edd_get_shop_states( $country );
+	$states = cs_get_shop_states( $country );
 
 	// Chosen
 	$chosen = ! isset( $_POST['chosen'] ) || ( 'true' === $_POST['chosen'] )
@@ -553,17 +553,17 @@ function edd_ajax_get_states_field() {
 	if ( ! empty( $states ) ) {
 		$field_name = isset( $_POST['field_name'] )
 			? sanitize_text_field( $_POST['field_name'] )
-			: 'edd-state-select';
+			: 'cs-state-select';
 
 		$field_id = isset( $_POST['field_id'] )
 			? sanitize_text_field( $_POST['field_id'] )
 			: $field_name;
 
-		$response = EDD()->html->region_select(
+		$response = CS()->html->region_select(
 			array(
 				'name'            => $field_name,
 				'id'              => $field_id,
-				'class'           => $field_name . ' edd-select',
+				'class'           => $field_name . ' cs-select',
 				'options'         => $states,
 				'chosen'          => $chosen,
 				'show_option_all' => false,
@@ -575,10 +575,10 @@ function edd_ajax_get_states_field() {
 
 	echo $response;
 
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_get_shop_states',        'edd_ajax_get_states_field' );
-add_action( 'wp_ajax_nopriv_edd_get_shop_states', 'edd_ajax_get_states_field' );
+add_action( 'wp_ajax_cs_get_shop_states',        'cs_ajax_get_states_field' );
+add_action( 'wp_ajax_nopriv_cs_get_shop_states', 'cs_ajax_get_states_field' );
 
 /**
  * Retrieve a downloads drop down
@@ -588,12 +588,12 @@ add_action( 'wp_ajax_nopriv_edd_get_shop_states', 'edd_ajax_get_states_field' );
  *
  * @return void
  */
-function edd_ajax_download_search() {
+function cs_ajax_download_search() {
 
 	// We store the last search in a transient for 30 seconds. This _might_
 	// result in a race condition if 2 users are looking at the exact same time,
 	// but we'll worry about that later if that situation ever happens.
-	$args   = get_transient( 'edd_download_search' );
+	$args   = get_transient( 'cs_download_search' );
 
 	// Parse args
 	$search = wp_parse_args( (array) $args, array(
@@ -609,7 +609,7 @@ function edd_ajax_download_search() {
 	// Bail early if the search text has not changed
 	if ( $search['text'] === $new_search ) {
 		echo json_encode( $search['results'] );
-		edd_die();
+		cs_die();
 	}
 
 	// Set the local static search variable
@@ -636,8 +636,8 @@ function edd_ajax_download_search() {
 
 	// Are we including all statuses, or only public ones?
 	$status = ! current_user_can( 'edit_products' )
-		? apply_filters( 'edd_product_dropdown_status_nopriv', array( 'publish' ) )
-		: apply_filters( 'edd_product_dropdown_status',        array( 'publish', 'draft', 'private', 'future' ) );
+		? apply_filters( 'cs_product_dropdown_status_nopriv', array( 'publish' ) )
+		: apply_filters( 'cs_product_dropdown_status',        array( 'publish', 'draft', 'private', 'future' ) );
 
 	// Default query arguments
 	$args = array(
@@ -655,12 +655,12 @@ function edd_ajax_download_search() {
 		$args['meta_query'] = array(
 			'relation' => 'OR',
 			array(
-				'key'     => '_edd_product_type',
+				'key'     => '_cs_product_type',
 				'value'   => 'bundle',
 				'compare' => '!=',
 			),
 			array(
-				'key'     => '_edd_product_type',
+				'key'     => '_cs_product_type',
 				'value'   => 'bundle',
 				'compare' => 'NOT EXISTS',
 			),
@@ -678,10 +678,10 @@ function edd_ajax_download_search() {
 		foreach ( $items as $post_id => $title ) {
 
 			// Look for variable pricing
-			$prices = edd_get_variable_prices( $post_id );
+			$prices = cs_get_variable_prices( $post_id );
 
 			if ( ! empty( $prices ) && ( false === $variations|| ! $variations_only ) ) {
-				$title .= ' (' . __( 'All Price Options', 'easy-digital-downloads' ) . ')';
+				$title .= ' (' . __( 'All Price Options', 'commercestore' ) . ')';
 			}
 
 			if ( empty( $prices ) || ! $variations_only ) {
@@ -713,16 +713,16 @@ function edd_ajax_download_search() {
 	}
 
 	// Update the transient
-	set_transient( 'edd_download_search', $search, 30 );
+	set_transient( 'cs_download_search', $search, 30 );
 
 	// Output the results
 	echo json_encode( $search['results'] );
 
 	// Done!
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_download_search',        'edd_ajax_download_search' );
-add_action( 'wp_ajax_nopriv_edd_download_search', 'edd_ajax_download_search' );
+add_action( 'wp_ajax_cs_download_search',        'cs_ajax_download_search' );
+add_action( 'wp_ajax_nopriv_cs_download_search', 'cs_ajax_download_search' );
 
 /**
  * Search the customers database via AJAX
@@ -730,16 +730,16 @@ add_action( 'wp_ajax_nopriv_edd_download_search', 'edd_ajax_download_search' );
  * @since 2.2
  * @return void
  */
-function edd_ajax_customer_search() {
+function cs_ajax_customer_search() {
 	global $wpdb;
 
 	$search  = esc_sql( sanitize_text_field( $_GET['s'] ) );
 	$results = array();
-	$customer_view_role = apply_filters( 'edd_view_customers_role', 'view_shop_reports' );
+	$customer_view_role = apply_filters( 'cs_view_customers_role', 'view_shop_reports' );
 	if ( ! current_user_can( $customer_view_role ) ) {
 		$customers = array();
 	} else {
-		$select = "SELECT id, name, email FROM {$wpdb->prefix}edd_customers ";
+		$select = "SELECT id, name, email FROM {$wpdb->prefix}cs_customers ";
 		if ( is_numeric( $search ) ) {
 			$where = "WHERE `id` LIKE '%$search%' OR `user_id` LIKE '%$search%' ";
 		} else {
@@ -764,16 +764,16 @@ function edd_ajax_customer_search() {
 
 		$customers[] = array(
 			'id'   => 0,
-			'name' => __( 'No results found', 'easy-digital-downloads' )
+			'name' => __( 'No results found', 'commercestore' )
 		);
 
 	}
 
 	echo json_encode( $results );
 
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_customer_search', 'edd_ajax_customer_search' );
+add_action( 'wp_ajax_cs_customer_search', 'cs_ajax_customer_search' );
 
 /**
  * Search the users database via AJAX
@@ -781,16 +781,16 @@ add_action( 'wp_ajax_edd_customer_search', 'edd_ajax_customer_search' );
  * @since 2.6.9
  * @return void
  */
-function edd_ajax_user_search() {
+function cs_ajax_user_search() {
 
 	// Default results
 	$results = array(
 		'id'   => 0,
-		'name' => __( 'No users found', 'easy-digital-downloads' )
+		'name' => __( 'No users found', 'commercestore' )
 	);
 
 	// Default user role
-	$user_view_role = apply_filters( 'edd_view_users_role', 'view_shop_reports' );
+	$user_view_role = apply_filters( 'cs_view_users_role', 'view_shop_reports' );
 
 	// User can view users
 	if ( current_user_can( $user_view_role ) ) {
@@ -820,9 +820,9 @@ function edd_ajax_user_search() {
 
 	echo json_encode( $results );
 
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_user_search', 'edd_ajax_user_search' );
+add_action( 'wp_ajax_cs_user_search', 'cs_ajax_user_search' );
 
 /**
  * Check for Download Price Variations via AJAX (this function can only be used
@@ -836,7 +836,7 @@ add_action( 'wp_ajax_edd_user_search', 'edd_ajax_user_search' );
  * @since 1.5
  * @return void
  */
-function edd_check_for_download_price_variations() {
+function cs_check_for_download_price_variations() {
 	if ( ! current_user_can( 'edit_products' ) ) {
 		die( '-1' );
 	}
@@ -848,14 +848,14 @@ function edd_check_for_download_price_variations() {
 		die( '-2' );
 	}
 
-	if ( edd_has_variable_prices( $download_id ) ) {
-		$variable_prices = edd_get_variable_prices( $download_id );
+	if ( cs_has_variable_prices( $download_id ) ) {
+		$variable_prices = cs_get_variable_prices( $download_id );
 
 		if ( ! empty( $variable_prices ) ) {
-			$ajax_response = '<select class="edd_price_options_select edd-select edd-select" name="edd_price_option">';
+			$ajax_response = '<select class="cs_price_options_select cs-select cs-select" name="cs_price_option">';
 
 				if ( isset( $_POST['all_prices'] ) ) {
-					$ajax_response .= '<option value="">' . __( 'All Prices', 'easy-digital-downloads' ) . '</option>';
+					$ajax_response .= '<option value="">' . __( 'All Prices', 'commercestore' ) . '</option>';
 				}
 
 				foreach ( $variable_prices as $key => $price ) {
@@ -867,9 +867,9 @@ function edd_check_for_download_price_variations() {
 		}
 	}
 
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_check_for_download_price_variations', 'edd_check_for_download_price_variations' );
+add_action( 'wp_ajax_cs_check_for_download_price_variations', 'cs_check_for_download_price_variations' );
 
 /**
  * Searches for users via ajax and returns a list of results
@@ -877,7 +877,7 @@ add_action( 'wp_ajax_edd_check_for_download_price_variations', 'edd_check_for_do
  * @since 2.0
  * @return void
  */
-function edd_ajax_search_users() {
+function cs_ajax_search_users() {
 
 	// Bail if user cannot manage shop settings
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
@@ -907,7 +907,7 @@ function edd_ajax_search_users() {
 	}
 
 	// Filter query args
-	$get_users_args = apply_filters( 'edd_search_users_args', $defaults );
+	$get_users_args = apply_filters( 'cs_search_users_args', $defaults );
 
 	// Maybe get users
 	$users = ! empty( $get_users_args ) && ! empty( $search_query )
@@ -915,7 +915,7 @@ function edd_ajax_search_users() {
 		: array();
 
 	// Filter users
-	$found_users = apply_filters( 'edd_ajax_found_users', $users, $search_query );
+	$found_users = apply_filters( 'cs_ajax_found_users', $users, $search_query );
 
 	// Put together the results string
 	$user_list = '<ul>';
@@ -924,15 +924,15 @@ function edd_ajax_search_users() {
 			$user_list .= '<li><a href="#" data-userid="' . esc_attr( $user->ID ) . '" data-login="' . esc_attr( $user->user_login ) . '">' . esc_html( $user->user_login ) . '</a></li>';
 		}
 	} else {
-		$user_list .= '<li class="no-users">' . __( 'No users found', 'easy-digital-downloads' ) . '</li>';
+		$user_list .= '<li class="no-users">' . __( 'No users found', 'commercestore' ) . '</li>';
 	}
 	$user_list .= '</ul>';
 
 	echo json_encode( array( 'results' => $user_list ) );
 
-	edd_die();
+	cs_die();
 }
-add_action( 'wp_ajax_edd_search_users', 'edd_ajax_search_users' );
+add_action( 'wp_ajax_cs_search_users', 'cs_ajax_search_users' );
 
 /**
  * Search for download, build, and return HTML.
@@ -941,7 +941,7 @@ add_action( 'wp_ajax_edd_search_users', 'edd_ajax_search_users' );
  *
  * @since 3.0
  */
-function edd_ajax_add_order_item() {
+function cs_ajax_add_order_item() {
 
 	// Bail if user cannot manage shop settings.
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
@@ -954,7 +954,7 @@ function edd_ajax_add_order_item() {
 		: '';
 
 	$download = isset( $_POST['download'] )
-		? edd_parse_product_dropdown_value( sanitize_text_field( $_POST['download'] ) )
+		? cs_parse_product_dropdown_value( sanitize_text_field( $_POST['download'] ) )
 		: array();
 
 	$country = isset( $_POST['country'] )
@@ -973,13 +973,13 @@ function edd_ajax_add_order_item() {
 	}
 
 	// Bail if nonce fails.
-	if ( ! wp_verify_nonce( $nonce, 'edd_add_order_nonce' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'cs_add_order_nonce' ) ) {
 		wp_send_json_error();
 	}
 
 	$response = array();
 
-	$d = edd_get_download( $download['download_id'] );
+	$d = cs_get_download( $download['download_id'] );
 
 	if ( $d ) {
 		$name = $d->get_name();
@@ -996,13 +996,13 @@ function edd_ajax_add_order_item() {
 			}
 		}
 
-		$quantity = edd_item_quantities_enabled() && isset( $_POST['quantity'] )
+		$quantity = cs_item_quantities_enabled() && isset( $_POST['quantity'] )
 			? absint( $_POST['quantity'] )
 			: 1;
 
 		$response['name']     = $name;
 		$response['discount'] = 0.00;
-		$response['tax']      = edd_calculate_tax( $amount * $quantity, $country, $region );
+		$response['tax']      = cs_calculate_tax( $amount * $quantity, $country, $region );
 		$response['quantity'] = $quantity;
 		$response['amount']   = $amount;
 		$response['total']    = floatval( ( $amount * $quantity ) + $response['tax'] );
@@ -1010,35 +1010,35 @@ function edd_ajax_add_order_item() {
 		static $symbol = null;
 
 		if ( null === $symbol ) {
-			$symbol = edd_currency_symbol( edd_get_currency() );
+			$symbol = cs_currency_symbol( cs_get_currency() );
 		}
 
 		ob_start(); ?>
 
-		<tr class="edd-add-order-item" data-key="0">
+		<tr class="cs-add-order-item" data-key="0">
 			<td class="name column-name column-primary"><a class="row-title" href=""><?php echo esc_html( $response['name'] ); ?></a></td>
 
 			<td class="overridable amount column-amount" data-type="amount">
 				<?php echo esc_html( $symbol ); ?>
-				<input type="text" class="download-amount" name="downloads[0][amount]" value="<?php echo esc_attr( edd_format_amount( $response['amount'] ) ); ?>" <?php readonly( $editable ); ?> />
+				<input type="text" class="download-amount" name="downloads[0][amount]" value="<?php echo esc_attr( cs_format_amount( $response['amount'] ) ); ?>" <?php readonly( $editable ); ?> />
 			</td>
 
-			<?php if ( edd_item_quantities_enabled() ) : ?>
+			<?php if ( cs_item_quantities_enabled() ) : ?>
 				<td class="overridable quantity column-quantity" data-type="quantity">
 					<input type="text" class="download-quantity" name="downloads[0][quantity]" value="<?php echo esc_attr( $quantity ); ?>" <?php readonly( $editable ); ?> />
 				</td>
 			<?php endif; ?>
 
-			<?php if ( edd_use_taxes() ) : ?>
+			<?php if ( cs_use_taxes() ) : ?>
 				<td class="overridable tax column-tax" data-type="tax">
 					<?php echo esc_html( $symbol ); ?>
-					<input type="text" class="download-tax" name="downloads[0][tax]" value="<?php echo esc_attr( edd_format_amount( $response['tax'] ) ); ?>" <?php readonly( $editable ); ?> />
+					<input type="text" class="download-tax" name="downloads[0][tax]" value="<?php echo esc_attr( cs_format_amount( $response['tax'] ) ); ?>" <?php readonly( $editable ); ?> />
 				</td>
 			<?php endif; ?>
 
 			<td class="overridable total column-total" data-type="total">
 					<?php echo esc_html( $symbol ); ?>
-					<input type="text" class="download-total" name="downloads[0][total]" value="<?php echo esc_attr( edd_format_amount( $response['total'] ) ); ?>" <?php readonly( $editable ); ?> />
+					<input type="text" class="download-total" name="downloads[0][total]" value="<?php echo esc_attr( cs_format_amount( $response['total'] ) ); ?>" <?php readonly( $editable ); ?> />
 			</td>
 
 			<th scope="row" class="check-column"><a href="#" class="remove-item"><span class="dashicons dashicons-no"></span></a></th>
@@ -1056,9 +1056,9 @@ function edd_ajax_add_order_item() {
 
 	return wp_send_json_success( $response );
 }
-add_action( 'wp_ajax_edd_add_order_item', 'edd_ajax_add_order_item' );
+add_action( 'wp_ajax_cs_add_order_item', 'cs_ajax_add_order_item' );
 
-function edd_ajax_add_adjustment_to_order() {
+function cs_ajax_add_adjustment_to_order() {
 
 	// Bail if user cannot manage shop settings.
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
@@ -1076,11 +1076,11 @@ function edd_ajax_add_adjustment_to_order() {
 
 	// Bail if missing any data.
 	if ( empty( $nonce ) || empty( $type ) ) {
-		edd_die( '-1' );
+		cs_die( '-1' );
 	}
 
 	// Bail if nonce fails.
-	if ( ! wp_verify_nonce( $nonce, 'edd_add_order_nonce' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'cs_add_order_nonce' ) ) {
 		wp_send_json_error();
 	}
 
@@ -1096,7 +1096,7 @@ function edd_ajax_add_adjustment_to_order() {
 	static $symbol = null;
 
 	if ( null === $symbol ) {
-		$symbol = edd_currency_symbol( edd_get_currency() );
+		$symbol = cs_currency_symbol( cs_get_currency() );
 	}
 
 	switch ( $type ) {
@@ -1110,7 +1110,7 @@ function edd_ajax_add_adjustment_to_order() {
 				wp_send_json_error();
 			}
 
-			$discount = edd_get_discount( $discount );
+			$discount = cs_get_discount( $discount );
 
 			// Bail if discount not found.
 			if ( ! $discount ) {
@@ -1121,9 +1121,9 @@ function edd_ajax_add_adjustment_to_order() {
 
 			<tr data-key="0" data-adjustment="discount">
 				<td class="name column-name column-primary"><a class="row-title" href=""><?php echo esc_html( $discount->name ) ?></a></td>
-				<td class="type column-type"><?php esc_html_e( 'Discount', 'easy-digital-downloads' ); ?></td>
+				<td class="type column-type"><?php esc_html_e( 'Discount', 'commercestore' ); ?></td>
 				<td class="description column-description"><code><?php echo esc_html( $discount->code ); ?></code></span></td>
-				<td class="amount column-amount"><span class="value"><?php echo edd_format_discount_rate( $discount->type, $discount->amount ); ?></span></td>
+				<td class="amount column-amount"><span class="value"><?php echo cs_format_discount_rate( $discount->type, $discount->amount ); ?></span></td>
 				<th scope="row" class="check-column"><a href="#" class="remove-item"><span class="dashicons dashicons-no"></span></a></th>
 				<input type="hidden" class="discount-id" name="adjustments[discount][0][id]" value="<?php echo $discount->id; // WPCS: XSS ok. ?>" />
 				<input type="hidden" class="discount-amount" name="adjustments[discount][0][amount]" value="<?php echo $discount->amount; // WPCS: XSS ok. ?>" />
@@ -1153,10 +1153,10 @@ function edd_ajax_add_adjustment_to_order() {
 			ob_start(); ?>
 
 			<tr data-key="0" data-adjustment="credit">
-				<td class="name column-name column-primary"><a class="row-title" href=""><?php esc_html_e( 'Order Credit', 'easy-digital-downloads' ); ?></a></td>
-				<td class="type column-type"><?php esc_html_e( 'Credit', 'easy-digital-downloads' ); ?></td>
+				<td class="name column-name column-primary"><a class="row-title" href=""><?php esc_html_e( 'Order Credit', 'commercestore' ); ?></a></td>
+				<td class="type column-type"><?php esc_html_e( 'Credit', 'commercestore' ); ?></td>
 				<td class="description column-description"><?php echo $description; // WPCS: XSS ok. ?></span></td>
-				<td class="amount column-amount"><?php echo esc_html( $symbol ); ?><span class="value"><?php echo esc_html( edd_format_amount( $amount ) ); ?></span></td>
+				<td class="amount column-amount"><?php echo esc_html( $symbol ); ?><span class="value"><?php echo esc_html( cs_format_amount( $amount ) ); ?></span></td>
 				<th scope="row" class="check-column"><a href="#" class="remove-item"><span class="dashicons dashicons-no"></span></a></th>
 				<input type="hidden" class="credit-description" name="adjustments[credit][0][description]" value="<?php echo $description; // WPCS: XSS ok. ?>" />
 				<input type="hidden" class="credit-amount" name="adjustments[credit][0][amount]" value="<?php echo $amount; // WPCS: XSS ok. ?>" />
@@ -1173,7 +1173,7 @@ function edd_ajax_add_adjustment_to_order() {
 
 	return wp_send_json_success( $response );
 }
-add_action( 'wp_ajax_edd_add_adjustment_to_order', 'edd_ajax_add_adjustment_to_order' );
+add_action( 'wp_ajax_cs_add_adjustment_to_order', 'cs_ajax_add_adjustment_to_order' );
 
 /**
  * Search for customer addresses and return a list.
@@ -1181,7 +1181,7 @@ add_action( 'wp_ajax_edd_add_adjustment_to_order', 'edd_ajax_add_adjustment_to_o
  * @since 3.0
  * @return array Custom address data.
  */
-function edd_ajax_customer_addresses() {
+function cs_ajax_customer_addresses() {
 
 	// Bail if user cannot manage shop settings.
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
@@ -1205,7 +1205,7 @@ function edd_ajax_customer_addresses() {
 	$response = array();
 
 	// Fetch customer.
-	$customer = edd_get_customer( $customer_id );
+	$customer = cs_get_customer( $customer_id );
 
 	if ( $customer ) {
 
@@ -1218,7 +1218,7 @@ function edd_ajax_customer_addresses() {
 
 			foreach ( $addresses as $address ) {
 
-				// Convert EDD\Customer\Customer_Address object to array.
+				// Convert CS\Customer\Customer_Address object to array.
 				$a = $address->to_array();
 
 				// Pass array back as response.
@@ -1229,11 +1229,11 @@ function edd_ajax_customer_addresses() {
 				$a = array_filter( array_intersect_key( $a, $address_keys ) );
 
 				if ( isset( $a['region'] ) && isset( $a['country'] ) ) {
-					$a['region'] = edd_get_state_name( $a['country'], $a['region'] );
+					$a['region'] = cs_get_state_name( $a['country'], $a['region'] );
 				}
 
 				if ( isset( $a['country'] ) ) {
-					$a['country'] = edd_get_country_name( $a['country'] );
+					$a['country'] = cs_get_country_name( $a['country'] );
 				}
 
 				$a = implode( ', ', $a );
@@ -1244,7 +1244,7 @@ function edd_ajax_customer_addresses() {
 
 			// Fetch the select
 			if ( ! empty( $options ) ) {
-				$html  = '<select id="edd_customer_existing_addresses" data-nonce="' . wp_create_nonce( 'edd-country-field-nonce' ) . '" data-placeholder="Select a previously used address" class="add-order-customer-address-select edd-form-group__input">';
+				$html  = '<select id="cs_customer_existing_addresses" data-nonce="' . wp_create_nonce( 'cs-country-field-nonce' ) . '" data-placeholder="Select a previously used address" class="add-order-customer-address-select cs-form-group__input">';
 				$html .= '<option data-key="0" value="0"></option>';
 				foreach ( $options as $key => $value ) {
 					$html .= '<option data-key="' . esc_attr( $key ) . '" value="' . esc_attr( $key ) . '">' . esc_attr( $value ). '</option>';
@@ -1258,14 +1258,14 @@ function edd_ajax_customer_addresses() {
 
 	return wp_send_json_success( $response );
 }
-add_action( 'wp_ajax_edd_customer_addresses', 'edd_ajax_customer_addresses' );
+add_action( 'wp_ajax_cs_customer_addresses', 'cs_ajax_customer_addresses' );
 
 /**
  * Returns details about a Customer.
  *
  * @since 3.0
  */
-function edd_ajax_customer_details() {
+function cs_ajax_customer_details() {
 	// Bail if user cannot manage shop settings.
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
 		return wp_send_json_error();
@@ -1286,12 +1286,12 @@ function edd_ajax_customer_details() {
 	}
 
 	// Bail if nonce verification failed.
-	if ( ! wp_verify_nonce( $nonce, 'edd_customer_details_nonce' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'cs_customer_details_nonce' ) ) {
 		return wp_send_json_error();
 	}
 
 	// Fetch customer.
-	$customer = edd_get_customer( $customer_id );
+	$customer = cs_get_customer( $customer_id );
 
 	if ( ! $customer ) {
 		return wp_send_json_error();
@@ -1303,22 +1303,22 @@ function edd_ajax_customer_details() {
 		'email'             => esc_html( $customer->email ),
 		'avatar'            => get_avatar( $customer->email, 50 ),
 		'date_created'      => esc_html( $customer->date_created ),
-		'date_created_i18n' => esc_html( edd_date_i18n( $customer->date_created ) ),
+		'date_created_i18n' => esc_html( cs_date_i18n( $customer->date_created ) ),
 		'_links'            => array(
-			'self' => esc_url_raw( admin_url( 'edit.php?post_type=download&page=edd-customers&view=overview&id=' . $customer->id ) ),
+			'self' => esc_url_raw( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) ),
 		),
 	);
 
 	return wp_send_json_success( $response );
 }
-add_action( 'wp_ajax_edd_customer_details', 'edd_ajax_customer_details' );
+add_action( 'wp_ajax_cs_customer_details', 'cs_ajax_customer_details' );
 
 /**
  * Recalculates taxes when adding a new order and the country/region field is changed.
  *
  * @since 3.0
  */
-function edd_ajax_get_tax_rate() {
+function cs_ajax_get_tax_rate() {
 
 	// Bail if user cannot manage shop settings.
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
@@ -1344,27 +1344,27 @@ function edd_ajax_get_tax_rate() {
 	}
 
 	// Bail if nonce verification failed.
-	if ( ! wp_verify_nonce( $nonce, 'edd_get_tax_rate_nonce' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'cs_get_tax_rate_nonce' ) ) {
 		return wp_send_json_error();
 	}
 
 	$response = array();
 
-	$rate = edd_get_tax_rate( $country, $region, $fallback = false );
+	$rate = cs_get_tax_rate( $country, $region, $fallback = false );
 
 	$response['tax_rate'] = $rate;
-	$response['prices_include_tax'] = (bool) edd_prices_include_tax();
+	$response['prices_include_tax'] = (bool) cs_prices_include_tax();
 
 	return wp_send_json_success( $response );
 }
-add_action( 'wp_ajax_edd_get_tax_rate', 'edd_ajax_get_tax_rate' );
+add_action( 'wp_ajax_cs_get_tax_rate', 'cs_ajax_get_tax_rate' );
 
 /**
  * Retrieves a potential Order Item's amounts.
  *
  * @since 3.0
  */
-function edd_admin_order_get_item_amounts() {
+function cs_admin_order_get_item_amounts() {
 	// Set up parameters.
 	$nonce = isset( $_POST['nonce'] )
 		? sanitize_text_field( $_POST['nonce'] )
@@ -1373,14 +1373,14 @@ function edd_admin_order_get_item_amounts() {
 	// Bail if missing any data.
 	if ( empty( $nonce ) ) {
 		return wp_send_json_error( array(
-			'message' => esc_html__( 'Unable to verify action. Please refresh the page and try again.', 'easy-digital-downloads' ),
+			'message' => esc_html__( 'Unable to verify action. Please refresh the page and try again.', 'commercestore' ),
 		) );
 	}
 
 	// Bail if nonce verification failed.
-	if ( ! wp_verify_nonce( $nonce, 'edd_admin_order_get_item_amounts' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'cs_admin_order_get_item_amounts' ) ) {
 		return wp_send_json_error( array(
-			'message' => esc_html__( 'Unable to verify action. Please refresh the page and try again.', 'easy-digital-downloads' ),
+			'message' => esc_html__( 'Unable to verify action. Please refresh the page and try again.', 'commercestore' ),
 		) );
 	}
 
@@ -1414,18 +1414,18 @@ function edd_admin_order_get_item_amounts() {
 		? array_unique( array_map( 'intval', $_POST['discounts'] ) )
 		: array();
 
-	$download = edd_get_download( $product_id );
+	$download = cs_get_download( $product_id );
 
 	// Bail if no Download is found.
 	if ( ! $download ) {
 		return wp_send_json_error( array(
-			'message' => esc_html__( 'Unable to find download. Please refresh the page and try again.', 'easy-digital-downloads' ),
+			'message' => esc_html__( 'Unable to find download. Please refresh the page and try again.', 'commercestore' ),
 		) );
 	}
 
 	// Use base Amount if sent.
 	if ( isset( $_POST['amount'] ) && '0' !== $_POST['amount'] ) {
-		$amount = edd_sanitize_amount( sanitize_text_field( $_POST['amount'] ) );
+		$amount = cs_sanitize_amount( sanitize_text_field( $_POST['amount'] ) );
 
 	// Determine amount from Download record.
 	} else {
@@ -1443,7 +1443,7 @@ function edd_admin_order_get_item_amounts() {
 
 	// Use base Subtotal if sent.
 	if ( isset( $_POST['subtotal'] ) && '0' !== $_POST['subtotal'] ) {
-		$subtotal = edd_sanitize_amount( sanitize_text_field( $_POST['subtotal'] ) );
+		$subtotal = cs_sanitize_amount( sanitize_text_field( $_POST['subtotal'] ) );
 	} else {
 		$subtotal = $amount * $quantity;
 	}
@@ -1454,12 +1454,12 @@ function edd_admin_order_get_item_amounts() {
 	// There is not currently API support for `OrderItem`-level `OrderAdjustment`s.
 	$adjustments = array();
 
-	global $edd_flat_discount_total;
+	global $cs_flat_discount_total;
 
 	foreach ( $discounts as $discount_id ) {
-		$edd_flat_discount_total = 0;
+		$cs_flat_discount_total = 0;
 
-		$d = edd_get_discount( $discount_id );
+		$d = cs_get_discount( $discount_id );
 
 		if ( ! $d ) {
 			continue;
@@ -1468,13 +1468,13 @@ function edd_admin_order_get_item_amounts() {
 		// Retrieve total flat rate amount.
 		if ( 'flat' === $d->get_type() ) {
 			foreach ( $products as $product ) {
-				// This incremements the `$edd_flat_discount_total` global.
-				edd_get_item_discount_amount( $product, $products, array( $d ) );
+				// This incremements the `$cs_flat_discount_total` global.
+				cs_get_item_discount_amount( $product, $products, array( $d ) );
 			}
 		}
 
 		// Store total discount and reset global.
-		$total_discount = $edd_flat_discount_total;
+		$total_discount = $cs_flat_discount_total;
 
 		$item = array(
 			'id'       => $download->id,
@@ -1484,7 +1484,7 @@ function edd_admin_order_get_item_amounts() {
 			),
 		);
 
-		$discount_amount = edd_get_item_discount_amount( $item, $products, array( $d ) );
+		$discount_amount = cs_get_item_discount_amount( $item, $products, array( $d ) );
 
 		if (
 			0 !== $discount_amount &&
@@ -1513,10 +1513,10 @@ function edd_admin_order_get_item_amounts() {
 	}
 
 	if (
-		true === edd_use_taxes() &&
-		false === edd_download_is_tax_exclusive( $product_id )
+		true === cs_use_taxes() &&
+		false === cs_download_is_tax_exclusive( $product_id )
 	) {
-		$tax = edd_calculate_tax( floatval( $subtotal - $discount ), $country, $region, false );
+		$tax = cs_calculate_tax( floatval( $subtotal - $discount ), $country, $region, false );
 	} else {
 		$tax = 0;
 	}
@@ -1530,4 +1530,4 @@ function edd_admin_order_get_item_amounts() {
 		'adjustments' => $adjustments,
 	) );
 }
-add_action( 'wp_ajax_edd-admin-order-get-item-amounts', 'edd_admin_order_get_item_amounts' );
+add_action( 'wp_ajax_cs-admin-order-get-item-amounts', 'cs_admin_order_get_item_amounts' );

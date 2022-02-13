@@ -4,27 +4,27 @@
  *
  * Manages automatic activation for Reviews.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reviews
- * @copyright   Copyright (c) 2021, Easy Digital Downloads
+ * @copyright   Copyright (c) 2021, CommerceStore
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.11.4
  */
-namespace EDD\Admin\Settings;
+namespace CS\Admin\Settings;
 
-use \EDD\Admin\Extensions\Extension;
+use \CS\Admin\Extensions\Extension;
 
 class Reviews extends Extension {
 
 	/**
-	 * The product ID on EDD.
+	 * The product ID on CS.
 	 *
 	 * @var integer
 	 */
 	protected $item_id = 37976;
 
 	/**
-	 * The EDD settings tab where this extension should show.
+	 * The CommerceStore settings tab where this extension should show.
 	 *
 	 * @since 2.11.4
 	 * @var string
@@ -42,12 +42,12 @@ class Reviews extends Extension {
 	/**
 	 * The pass level required to access this extension.
 	 */
-	const PASS_LEVEL = \EDD\Admin\Pass_Manager::EXTENDED_PASS_ID;
+	const PASS_LEVEL = \CS\Admin\Pass_Manager::EXTENDED_PASS_ID;
 
 	public function __construct() {
-		add_filter( 'edd_settings_sections_marketing', array( $this, 'add_section' ) );
-		add_action( 'edd_settings_tab_top_marketing_reviews', array( $this, 'settings_field' ) );
-		add_action( 'edd_settings_tab_top_marketing_reviews', array( $this, 'hide_submit_button' ) );
+		add_filter( 'cs_settings_sections_marketing', array( $this, 'add_section' ) );
+		add_action( 'cs_settings_tab_top_marketing_reviews', array( $this, 'settings_field' ) );
+		add_action( 'cs_settings_tab_top_marketing_reviews', array( $this, 'hide_submit_button' ) );
 		add_action( 'add_meta_boxes', array( $this, 'maybe_do_metabox' ) );
 
 		parent::__construct();
@@ -57,10 +57,10 @@ class Reviews extends Extension {
 	 * Gets the custom configuration for Reviews.
 	 *
 	 * @since 2.11.4
-	 * @param \EDD\Admin\Extensions\ProductData $product_data The product data object.
+	 * @param \CS\Admin\Extensions\ProductData $product_data The product data object.
 	 * @return array
 	 */
-	protected function get_configuration( \EDD\Admin\Extensions\ProductData $product_data ) {
+	protected function get_configuration( \CS\Admin\Extensions\ProductData $product_data ) {
 		$configuration          = array(
 			'title' => 'Build Trust With Real Customer Reviews',
 		);
@@ -76,7 +76,7 @@ class Reviews extends Extension {
 				'Vendor Reviews (with Frontend Submissions)',
 			),
 		);
-		return $this->is_edd_settings_screen() ? array_merge( $configuration, $settings_configuration ) : $configuration;
+		return $this->is_cs_settings_screen() ? array_merge( $configuration, $settings_configuration ) : $configuration;
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Reviews extends Extension {
 			return $sections;
 		}
 
-		$sections[ $this->settings_section ] = __( 'Reviews', 'easy-digital-downloads' );
+		$sections[ $this->settings_section ] = __( 'Reviews', 'commercestore' );
 
 		return $sections;
 	}
@@ -124,8 +124,8 @@ class Reviews extends Extension {
 			return;
 		}
 		add_meta_box(
-			'edd-reviews-status',
-			__( 'Product Reviews', 'easy-digital-downloads' ),
+			'cs-reviews-status',
+			__( 'Product Reviews', 'commercestore' ),
 			array( $this, 'settings_field' ),
 			'download',
 			'side',
@@ -134,7 +134,7 @@ class Reviews extends Extension {
 	}
 
 	/**
-	 * Whether EDD Reviews active or not.
+	 * Whether CommerceStore Reviews active or not.
 	 *
 	 * @since 2.11.4
 	 *
@@ -145,7 +145,7 @@ class Reviews extends Extension {
 			return true;
 		}
 
-		return function_exists( 'edd_reviews' );
+		return function_exists( 'cs_reviews' );
 	}
 }
 

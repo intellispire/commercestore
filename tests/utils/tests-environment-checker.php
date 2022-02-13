@@ -2,19 +2,19 @@
 /**
  * tests-environment-checker.php
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  */
 
-namespace EDD\Tests\Utils;
+namespace CS\Tests\Utils;
 
-use EDD\Utils\EnvironmentChecker;
+use CS\Utils\EnvironmentChecker;
 
 /**
- * @coversDefaultClass \EDD\Utils\EnvironmentChecker
+ * @coversDefaultClass \CS\Utils\EnvironmentChecker
  */
-class EnvironmentCheckerTests extends \EDD_UnitTestCase {
+class EnvironmentCheckerTests extends \CS_UnitTestCase {
 
 	/**
 	 * @var EnvironmentChecker
@@ -28,7 +28,7 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 		parent::setUpBeforeClass();
 
 		// This is an admin file, so we need to include it manually.
-		require_once EDD_PLUGIN_DIR . 'includes/admin/class-pass-manager.php';
+		require_once CS_PLUGIN_DIR . 'includes/admin/class-pass-manager.php';
 	}
 
 	/**
@@ -38,15 +38,15 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 		$this->environmentChecker = new EnvironmentChecker();
 
 		// Reset pass data so it can be set explicitly for each test.
-		delete_option( 'edd_pass_licenses' );
-		global $edd_licensed_products;
-		$edd_licensed_products = null;
+		delete_option( 'cs_pass_licenses' );
+		global $cs_licensed_products;
+		$cs_licensed_products = null;
 	}
 
 	/**
 	 * A 2.x wildcard should match version 2.11.3.
 	 *
-	 * @covers \EDD\Utils\EnvironmentChecker::versionNumbersMatch
+	 * @covers \CS\Utils\EnvironmentChecker::versionNumbersMatch
 	 */
 	public function test_2x_wildcard_matches_version_2_11_3() {
 		$this->assertTrue( $this->environmentChecker->versionNumbersMatch( '2.11.3', '2.x' ) );
@@ -56,7 +56,7 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 	/**
 	 * A 2.11.x wildcard should match version 2.11.3.
 	 *
-	 * @covers \EDD\Utils\EnvironmentChecker::versionNumbersMatch
+	 * @covers \CS\Utils\EnvironmentChecker::versionNumbersMatch
 	 */
 	public function test_2_11x_wildcard_matches_version_2_11_3() {
 		$this->assertTrue( $this->environmentChecker->versionNumbersMatch( '2.11.3', '2.11.x' ) );
@@ -66,7 +66,7 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 	/**
 	 * A 2.x wildcard should NOT match version 3.0.
 	 *
-	 * @covers \EDD\Utils\EnvironmentChecker::versionNumbersMatch
+	 * @covers \CS\Utils\EnvironmentChecker::versionNumbersMatch
 	 */
 	public function test_2x_wildcard_doesnt_match_version_3() {
 		$this->assertFalse( $this->environmentChecker->versionNumbersMatch( '3.0', '2.x' ) );
@@ -76,7 +76,7 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 	/**
 	 * A 2.11.x wildcard should NOT match version 3.0.
 	 *
-	 * @covers \EDD\Utils\EnvironmentChecker::versionNumbersMatch
+	 * @covers \CS\Utils\EnvironmentChecker::versionNumbersMatch
 	 */
 	public function test_2_11x_wildcard_doesnt_match_version_3() {
 		$this->assertFalse( $this->environmentChecker->versionNumbersMatch( '3.0', '2.11.x' ) );
@@ -86,7 +86,7 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 	/**
 	 * A 2.11.3 exact version should match version 2.11.3.
 	 *
-	 * @covers \EDD\Utils\EnvironmentChecker::versionNumbersMatch
+	 * @covers \CS\Utils\EnvironmentChecker::versionNumbersMatch
 	 */
 	public function test_exact_version_matches() {
 		$this->assertTrue( $this->environmentChecker->versionNumbersMatch( '2.11.3', '2.11.3' ) );
@@ -94,7 +94,7 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Utils\EnvironmentChecker::hasLicenseType
+	 * @covers \CS\Utils\EnvironmentChecker::hasLicenseType
 	 */
 	public function test_site_with_no_licenses() {
 		$this->assertTrue( $this->environmentChecker->meetsCondition( 'free' ) );
@@ -114,22 +114,22 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 	}
 
 	/**
-	 * @covers \EDD\Utils\EnvironmentChecker::paymentGatewayMatch
+	 * @covers \CS\Utils\EnvironmentChecker::paymentGatewayMatch
 	 */
 	public function test_stripe_gateway_matches_if_stripe_gateway_enabled() {
 		$this->assertTrue( $this->environmentChecker->paymentGatewayMatch( array( 'stripe', 'paypal_commerce' ), 'gateway-stripe' ) );
 	}
 
 	/**
-	 * @covers @covers \EDD\Utils\EnvironmentChecker::paymentGatewayMatch
+	 * @covers @covers \CS\Utils\EnvironmentChecker::paymentGatewayMatch
 	 */
 	public function test_stripe_gateway_doesnt_match_if_stripe_gateway_not_enabled() {
 		$this->assertFalse( $this->environmentChecker->paymentGatewayMatch( array( 'paypal_commerce' ), 'gateway-stripe' ) );
 	}
 
 	/**
-	 * @covers \EDD\Utils\EnvironmentChecker::meetsCondition
-	 * @covers \EDD\Utils\EnvironmentChecker::paymentGatewayMatch
+	 * @covers \CS\Utils\EnvironmentChecker::meetsCondition
+	 * @covers \CS\Utils\EnvironmentChecker::paymentGatewayMatch
 	 */
 	public function test_stripe_condition_met_if_stripe_gateway_enabled() {
 		$callback = static function ( $gateways ) {
@@ -144,12 +144,12 @@ class EnvironmentCheckerTests extends \EDD_UnitTestCase {
 			);
 		};
 
-		add_filter( 'edd_enabled_payment_gateways', $callback );
+		add_filter( 'cs_enabled_payment_gateways', $callback );
 
 		$this->assertTrue( $this->environmentChecker->meetsCondition( 'gateway-stripe' ) );
 		$this->assertFalse( $this->environmentChecker->meetsCondition( 'gateway-paypal_commerce' ) );
 
-		remove_filter( 'edd_enabled_payment_gateways', $callback );
+		remove_filter( 'cs_enabled_payment_gateways', $callback );
 	}
 
 }

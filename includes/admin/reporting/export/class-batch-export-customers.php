@@ -4,7 +4,7 @@
  *
  * This class handles customer export
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,12 +15,12 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_Customers_Export Class
+ * CS_Batch_Customers_Export Class
  *
  * @since 2.4
  * @since 3.0 Allowed customers to be exported by taxonomy.
  */
-class EDD_Batch_Customers_Export extends EDD_Batch_Export {
+class CS_Batch_Customers_Export extends CS_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions.
@@ -48,14 +48,14 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 	public function csv_cols() {
 
 		return array(
-			'id'           => __( 'ID', 'easy-digital-downloads' ),
-			'user_id'      => __( 'User ID', 'easy-digital-downloads' ),
-			'name'         => __( 'Name', 'easy-digital-downloads' ),
-			'email'        => __( 'Email', 'easy-digital-downloads' ),
-			'purchases'    => __( 'Number of Purchases', 'easy-digital-downloads' ),
-			'amount'       => __( 'Customer Value', 'easy-digital-downloads' ),
-			'payment_ids'  => __( 'Payment IDs', 'easy-digital-downloads' ),
-			'date_created' => __( 'Date Created', 'easy-digital-downloads' ),
+			'id'           => __( 'ID', 'commercestore' ),
+			'user_id'      => __( 'User ID', 'commercestore' ),
+			'name'         => __( 'Name', 'commercestore' ),
+			'email'        => __( 'Email', 'commercestore' ),
+			'purchases'    => __( 'Number of Purchases', 'commercestore' ),
+			'amount'       => __( 'Customer Value', 'commercestore' ),
+			'payment_ids'  => __( 'Payment IDs', 'commercestore' ),
+			'date_created' => __( 'Date Created', 'commercestore' ),
 		);
 	}
 
@@ -82,8 +82,8 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 					FROM {$wpdb->terms} t
 					INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
 					INNER JOIN {$wpdb->term_relationships} tr ON tr.term_taxonomy_id = tt.term_taxonomy_id
-					INNER JOIN {$wpdb->edd_order_items} oi ON tr.object_id = oi.product_id
-					INNER JOIN {$wpdb->edd_orders} o ON oi.order_id = o.id
+					INNER JOIN {$wpdb->cs_order_items} oi ON tr.object_id = oi.product_id
+					INNER JOIN {$wpdb->cs_orders} o ON oi.order_id = o.id
 					WHERE {$taxonomy}
 					LIMIT {$limit}";
 
@@ -91,14 +91,14 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 
 			if ( $results ) {
 				foreach ( $results as $customer_id ) {
-					$customer = new EDD_Customer( $customer_id );
+					$customer = new CS_Customer( $customer_id );
 
 					$data[] = array(
 						'id'        => $customer->id,
 						'name'      => $customer->name,
 						'email'     => $customer->email,
 						'purchases' => $customer->purchase_count,
-						'amount'    => edd_format_amount( $customer->purchase_value ),
+						'amount'    => cs_format_amount( $customer->purchase_value ),
 					);
 				}
 			}
@@ -117,13 +117,13 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 				$args['price_id'] = (int) $this->price_id;
 			}
 
-			$order_items = edd_get_order_items( $args );
+			$order_items = cs_get_order_items( $args );
 
 			if ( $order_items ) {
 				foreach ( $order_items as $item ) {
-					$order = edd_get_order( $item->order_id );
+					$order = cs_get_order( $item->order_id );
 
-					$customer = new EDD_Customer( $order->customer_id );
+					$customer = new CS_Customer( $order->customer_id );
 
 					$data[] = array(
 						'id'           => $customer->id,
@@ -131,7 +131,7 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 						'name'         => $customer->name,
 						'email'        => $customer->email,
 						'purchases'    => $customer->purchase_count,
-						'amount'       => edd_format_amount( $customer->purchase_value ),
+						'amount'       => cs_format_amount( $customer->purchase_value ),
 						'payment_ids'  => $customer->payment_ids,
 						'date_created' => $customer->date_created,
 					);
@@ -140,7 +140,7 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 
 		// All customers.
 		} else {
-			$customers = edd_get_customers( array(
+			$customers = cs_get_customers( array(
 				'number' => 30,
 				'offset' => 30 * ( $this->step - 1 ),
 			) );
@@ -154,7 +154,7 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 					'name'         => $customer->name,
 					'email'        => $customer->email,
 					'purchases'    => $customer->purchase_count,
-					'amount'       => edd_format_amount( $customer->purchase_value ),
+					'amount'       => cs_format_amount( $customer->purchase_value ),
 					'payment_ids'  => $customer->payment_ids,
 					'date_created' => $customer->date_created,
 				);
@@ -163,8 +163,8 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 			}
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return $data;
 	}
@@ -181,7 +181,7 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 
 		// We can't count the number when getting them for a specific download.
 		if ( empty( $this->download ) ) {
-			$total = edd_count_customers();
+			$total = cs_count_customers();
 
 			if ( $total > 0 ) {
 				$percentage = ( ( 30 * $this->step ) / $total ) * 100;
@@ -211,8 +211,8 @@ class EDD_Batch_Customers_Export extends EDD_Batch_Export {
 			? absint( $request['download'] )
 			: null;
 
-		$this->price_id = ! empty( $request['edd_price_option'] ) && 0 !== $request['edd_price_option']
-			? absint( $request['edd_price_option'] )
+		$this->price_id = ! empty( $request['cs_price_option'] ) && 0 !== $request['cs_price_option']
+			? absint( $request['cs_price_option'] )
 			: null;
 	}
 }

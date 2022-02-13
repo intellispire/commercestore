@@ -1,7 +1,7 @@
 /**
  * Tools screen JS
  */
-const EDD_Tools = {
+const CS_Tools = {
 
 	init: function() {
 		this.revoke_api_key();
@@ -11,13 +11,13 @@ const EDD_Tools = {
 	},
 
 	revoke_api_key: function() {
-		$( document.body ).on( 'click', '.edd-revoke-api-key', function( e ) {
-			return confirm( edd_vars.revoke_api_key );
+		$( document.body ).on( 'click', '.cs-revoke-api-key', function( e ) {
+			return confirm( cs_vars.revoke_api_key );
 		} );
 	},
 	regenerate_api_key: function() {
-		$( document.body ).on( 'click', '.edd-regenerate-api-key', function( e ) {
-			return confirm( edd_vars.regenerate_api_key );
+		$( document.body ).on( 'click', '.cs-regenerate-api-key', function( e ) {
+			return confirm( cs_vars.regenerate_api_key );
 		} );
 	},
 	create_api_key: function() {
@@ -35,7 +35,7 @@ const EDD_Tools = {
 	},
 	recount_stats: function() {
 		$( document.body ).on( 'change', '#recount-stats-type', function() {
-			const export_form = $( '#edd-tools-recount-form' ),
+			const export_form = $( '#cs-tools-recount-form' ),
 				selected_type = $( 'option:selected', this ).data( 'type' ),
 				submit_button = $( '#recount-stats-submit' ),
 				products = $( '#tools-product-dropdown' );
@@ -44,15 +44,15 @@ const EDD_Tools = {
 			export_form.find( '.notice-wrap' ).remove();
 			submit_button.attr( 'disabled', false ).removeClass( 'updated-message' );
 			products.hide();
-			$( '.edd-recount-stats-descriptions span' ).hide();
+			$( '.cs-recount-stats-descriptions span' ).hide();
 
 			if ( 'recount-download' === selected_type ) {
 				products.show();
-				products.find( '.edd-select-chosen' ).css( 'width', 'auto' );
+				products.find( '.cs-select-chosen' ).css( 'width', 'auto' );
 			} else if ( 'reset-stats' === selected_type ) {
 				export_form.append( '<div class="notice-wrap"></div>' );
 				const notice_wrap = export_form.find( '.notice-wrap' );
-				notice_wrap.html( '<div class="notice notice-warning"><p><input type="checkbox" id="confirm-reset" name="confirm_reset_store" value="1" /> <label for="confirm-reset">' + edd_vars.reset_stats_warn + '</label></p></div>' );
+				notice_wrap.html( '<div class="notice notice-warning"><p><input type="checkbox" id="confirm-reset" name="confirm_reset_store" value="1" /> <label for="confirm-reset">' + cs_vars.reset_stats_warn + '</label></p></div>' );
 
 				$( '#recount-stats-submit' ).attr( 'disabled', true );
 			} else {
@@ -72,7 +72,7 @@ const EDD_Tools = {
 			}
 		} );
 
-		$( '#edd-tools-recount-form' ).submit( function( e ) {
+		$( '#cs-tools-recount-form' ).submit( function( e ) {
 			e.preventDefault();
 
 			const selection = $( '#recount-stats-type' ).val(),
@@ -94,16 +94,16 @@ const EDD_Tools = {
 				has_errors = false;
 
 			if ( null === selection || 0 === selection ) {
-				// Needs to pick a method edd_vars.batch_export_no_class
-				notice_wrap.html( '<div class="updated error"><p>' + edd_vars.batch_export_no_class + '</p></div>' );
+				// Needs to pick a method cs_vars.batch_export_no_class
+				notice_wrap.html( '<div class="updated error"><p>' + cs_vars.batch_export_no_class + '</p></div>' );
 				has_errors = true;
 			}
 
 			if ( 'recount-download' === selected_type ) {
 				const selected_download = $( 'select[name="download_id"]' ).val();
 				if ( selected_download === 0 ) {
-					// Needs to pick download edd_vars.batch_export_no_reqs
-					notice_wrap.html( '<div class="updated error"><p>' + edd_vars.batch_export_no_reqs + '</p></div>' );
+					// Needs to pick download cs_vars.batch_export_no_reqs
+					notice_wrap.html( '<div class="updated error"><p>' + cs_vars.batch_export_no_reqs + '</p></div>' );
 					has_errors = true;
 				}
 			}
@@ -117,5 +117,5 @@ const EDD_Tools = {
 };
 
 jQuery( document ).ready( function( $ ) {
-	EDD_Tools.init();
+	CS_Tools.init();
 } );

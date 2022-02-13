@@ -7,7 +7,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -38,7 +38,7 @@ class Remove_Legacy_Data extends Base {
 	public function __construct( $step = 1 ) {
 		parent::__construct( $step );
 
-		$this->completed_message = __( 'Legacy data removed successfully.', 'easy-digital-downloads' );
+		$this->completed_message = __( 'Legacy data removed successfully.', 'commercestore' );
 		$this->upgrade           = 'v30_legacy_data_removed';
 	}
 
@@ -53,14 +53,14 @@ class Remove_Legacy_Data extends Base {
 		// Perform some database operations on the first step.
 		if ( 1 === $this->step ) {
 			// Drop customer `payment_ids` column. It's no longer needed.
-			$customer_table = edd_get_component_interface( 'customer', 'table' );
-			if ( $customer_table instanceof \EDD\Database\Tables\Customers && $customer_table->column_exists( 'payment_ids' ) ) {
-				$this->get_db()->query( "ALTER TABLE {$this->get_db()->edd_customers} DROP `payment_ids`" );
+			$customer_table = cs_get_component_interface( 'customer', 'table' );
+			if ( $customer_table instanceof \CS\Database\Tables\Customers && $customer_table->column_exists( 'payment_ids' ) ) {
+				$this->get_db()->query( "ALTER TABLE {$this->get_db()->cs_customers} DROP `payment_ids`" );
 			}
 
 			// Delete unneeded meta.
-			$this->get_db()->query( $this->get_db()->prepare( "DELETE FROM {$this->get_db()->edd_customermeta} WHERE meta_key = %s", esc_sql( 'additional_email' ) ) );
-			$this->get_db()->query( $this->get_db()->prepare( "DELETE FROM {$this->get_db()->usermeta} WHERE meta_key = %s", esc_sql( '_edd_user_address' ) ) );
+			$this->get_db()->query( $this->get_db()->prepare( "DELETE FROM {$this->get_db()->cs_customermeta} WHERE meta_key = %s", esc_sql( 'additional_email' ) ) );
+			$this->get_db()->query( $this->get_db()->prepare( "DELETE FROM {$this->get_db()->usermeta} WHERE meta_key = %s", esc_sql( '_cs_user_address' ) ) );
 		}
 
 		// First delete custom post types.
@@ -70,7 +70,7 @@ class Remove_Legacy_Data extends Base {
 			 WHERE post_type IN(%s, %s, %s)
 			 ORDER BY id ASC
 			 LIMIT %d",
-			esc_sql( 'edd_payment' ), esc_sql( 'edd_discount' ), esc_sql( 'edd_log' ), $this->per_step
+			esc_sql( 'cs_payment' ), esc_sql( 'cs_discount' ), esc_sql( 'cs_log' ), $this->per_step
 		), 0 );
 
 		$data_was_deleted = false;
@@ -90,7 +90,7 @@ class Remove_Legacy_Data extends Base {
 			WHERE comment_type = %s
 			ORDER BY comment_ID ASC
 			LIMIT %d",
-			'edd_payment_note', $this->per_step
+			'cs_payment_note', $this->per_step
 		) );
 		if ( ! empty( $results ) ) {
 			foreach( $results as $result ) {
@@ -119,7 +119,7 @@ class Remove_Legacy_Data extends Base {
 			"SELECT COUNT(id) AS count
 			 FROM {$this->get_db()->posts}
 			 WHERE post_type IN(%s, %s, %s)",
-			esc_sql( 'edd_payment' ), esc_sql( 'edd_discount' ), esc_sql( 'edd_log' )
+			esc_sql( 'cs_payment' ), esc_sql( 'cs_discount' ), esc_sql( 'cs_log' )
 		) );
 
 		if ( empty( $total ) ) {
@@ -131,7 +131,7 @@ class Remove_Legacy_Data extends Base {
 			"SELECT COUNT(comment_ID) AS count
 			FROM {$this->get_db()->comments}
 			WHERE comment_type = %s",
-			'edd_payment_note'
+			'cs_payment_note'
 		) );
 
 		if ( empty( $order_note_total ) ) {

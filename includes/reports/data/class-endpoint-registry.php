@@ -2,25 +2,25 @@
 /**
  * Reports API - Data Endpoints Registry
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports/Data
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Utils;
-use EDD\Reports;
-use EDD\Reports\Exceptions as Reports_Exceptions;
+use CS\Utils;
+use CS\Reports;
+use CS\Reports\Exceptions as Reports_Exceptions;
 
 /**
  * Implements a singleton registry for registering reports data endpoints.
  *
  * @since 3.0
  *
- * @see \EDD\Reports\Registry
- * @see \EDD\Utils\Static_Registry
+ * @see \CS\Reports\Registry
+ * @see \CS\Utils\Static_Registry
  *
  * @method array get_endpoint( string $endpoint_id )
  * @method bool  endpoint_exists( string $endpoing_id )
@@ -65,7 +65,7 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception If the endpoint doesn't exist for get_endpoint().
+	 * @throws \CS_Exception If the endpoint doesn't exist for get_endpoint().
 	 *
 	 * @param string $name      Method name.
 	 * @param array  $arguments Method arguments (if any)
@@ -98,7 +98,7 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the endpoint could not be validated.
+	 * @throws \CS_Exception if the endpoint could not be validated.
 	 *
 	 * @param string $endpoint_id Reports data endpoint ID.
 	 * @param array  $attributes  {
@@ -143,7 +143,7 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 
 		try {
 			$valid = $this->validate_endpoint( $endpoint_id, $attributes );
-		} catch ( \EDD_Exception $exception ) {
+		} catch ( \CS_Exception $exception ) {
 			throw $exception;
 		}
 
@@ -152,7 +152,7 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 		} else {
 			try {
 				$return_value = parent::add_item( $endpoint_id, $attributes );
-			} catch ( \EDD_Exception $exception ) {
+			} catch ( \CS_Exception $exception ) {
 				throw $exception;
 			}
 			return $return_value;
@@ -164,8 +164,8 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the `$label` or `$views` attributes are empty.
-	 * @throws \EDD_Exception if any of the `$views` sub-attributes are empty, except `$filters`.
+	 * @throws \CS_Exception if the `$label` or `$views` attributes are empty.
+	 * @throws \CS_Exception if any of the `$views` sub-attributes are empty, except `$filters`.
 	 *
 	 * @param string $endpoint_id Reports data endpoint ID.
 	 * @param array  $attributes  Endpoint attributes. See register_endpoint() for full accepted attributes.
@@ -181,16 +181,16 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 			try {
 				$this->validate_views( $attributes['views'], $endpoint_id );
 
-			} catch( \EDD_Exception $exception ) {
-				edd_debug_log_exception( $exception );
+			} catch( \CS_Exception $exception ) {
+				cs_debug_log_exception( $exception );
 
 				$is_valid = false;
 
 				throw $exception;
 			}
 
-		} catch( \EDD_Exception $exception ) {
-			edd_debug_log_exception( $exception );
+		} catch( \CS_Exception $exception ) {
+			cs_debug_log_exception( $exception );
 
 			$is_valid = false;
 
@@ -220,8 +220,8 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 		try {
 			$_endpoint = $this->get_endpoint( $endpoint );
 
-		} catch( \EDD_Exception $exception ) {
-			edd_debug_log_exception( $exception );
+		} catch( \CS_Exception $exception ) {
+			cs_debug_log_exception( $exception );
 
 			return new \WP_Error( 'invalid_endpoint', $exception->getMessage(), $endpoint );
 		}
@@ -260,7 +260,7 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the view attributes is empty or it's not a valid view.
+	 * @throws \CS_Exception if the view attributes is empty or it's not a valid view.
 	 *
 	 * @param array  $views       List of attributes to check.
 	 * @param string $endpoint_id Endpoint ID.
@@ -292,7 +292,7 @@ class Endpoint_Registry extends Reports\Registry implements Utils\Static_Registr
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if a required view attribute is empty.
+	 * @throws \CS_Exception if a required view attribute is empty.
 	 *
 	 * @param array  $attributes List of view attributes to check for emptiness.
 	 * @param string $view       View slug.

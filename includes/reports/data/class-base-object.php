@@ -2,15 +2,15 @@
 /**
  * Reports API - Base object
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data;
+namespace CS\Reports\Data;
 
-use EDD\Utils\Error_Logger_Interface as Error_Logger;
+use CS\Utils\Error_Logger_Interface as Error_Logger;
 
 /**
  * Represents an abstract base reports object.

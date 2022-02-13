@@ -2,19 +2,19 @@
 /**
  * Earnings by Taxonomy list table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports/Data/File_Downloads
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\Downloads;
+namespace CS\Reports\Data\Downloads;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Reports as Reports;
-use EDD\Admin\List_Table;
+use CS\Reports as Reports;
+use CS\Admin\List_Table;
 
 /**
  * Earnings_By_Taxonomy_List_Table class.
@@ -86,8 +86,8 @@ class Earnings_By_Taxonomy_List_Table extends List_Table {
 
 		if ( empty( $currency ) || 'convert' === $currency ) {
 			$column = sprintf( '(%s) / oi.rate', $column );
-		} elseif ( array_key_exists( strtoupper( $currency ), edd_get_currencies() ) ) {
-			$join            = " INNER JOIN {$wpdb->edd_orders} o ON o.id = oi.order_id ";
+		} elseif ( array_key_exists( strtoupper( $currency ), cs_get_currencies() ) ) {
+			$join            = " INNER JOIN {$wpdb->cs_orders} o ON o.id = oi.order_id ";
 			$currency_clause = $wpdb->prepare(
 				" AND o.currency = %s ",
 				strtoupper( $currency )
@@ -103,7 +103,7 @@ class Earnings_By_Taxonomy_List_Table extends List_Table {
 			$product_id__in = $wpdb->prepare( "product_id IN({$placeholders})", $taxonomies[ $k ]['object_ids'] );
 
 			$sql = "SELECT SUM({$column}) as total, COUNT(oi.id) AS sales
-					FROM {$wpdb->edd_order_items} oi
+					FROM {$wpdb->cs_order_items} oi
 					{$join}
 					WHERE {$product_id__in} {$currency_clause} {$date_query_sql}";
 
@@ -127,8 +127,8 @@ class Earnings_By_Taxonomy_List_Table extends List_Table {
 			$average_earnings = 0.00;
 
 			foreach ( $taxonomies[ $k ]['object_ids'] as $download ) {
-				$average_sales    += edd_get_average_monthly_download_sales( $download );
-				$average_earnings += edd_get_average_monthly_download_earnings( $download );
+				$average_sales    += cs_get_average_monthly_download_sales( $download );
+				$average_earnings += cs_get_average_monthly_download_earnings( $download );
 			}
 
 			$c->average_sales    = $average_sales;
@@ -170,11 +170,11 @@ class Earnings_By_Taxonomy_List_Table extends List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'name'             => __( 'Name',                     'easy-digital-downloads' ),
-			'sales'            => __( 'Total Sales',              'easy-digital-downloads' ),
-			'earnings'         => __( 'Total Earnings',           'easy-digital-downloads' ),
-			'average_sales'    => __( 'Monthly Sales Average',    'easy-digital-downloads' ),
-			'average_earnings' => __( 'Monthly Earnings Average', 'easy-digital-downloads' )
+			'name'             => __( 'Name',                     'commercestore' ),
+			'sales'            => __( 'Total Sales',              'commercestore' ),
+			'earnings'         => __( 'Total Earnings',           'commercestore' ),
+			'average_sales'    => __( 'Monthly Sales Average',    'commercestore' ),
+			'average_earnings' => __( 'Monthly Earnings Average', 'commercestore' )
 		);
 	}
 
@@ -213,7 +213,7 @@ class Earnings_By_Taxonomy_List_Table extends List_Table {
 	 * @return string Data shown in the Earnings column.
 	 */
 	public function column_earnings( $taxonomy ) {
-		return edd_currency_filter( edd_format_amount( $taxonomy->earnings ) );
+		return cs_currency_filter( cs_format_amount( $taxonomy->earnings ) );
 	}
 
 	/**
@@ -237,7 +237,7 @@ class Earnings_By_Taxonomy_List_Table extends List_Table {
 	 * @return string Data shown in the Average Earnings column.
 	 */
 	public function column_average_earnings( $taxonomy ) {
-		return edd_currency_filter( edd_format_amount( $taxonomy->average_earnings ) );
+		return cs_currency_filter( cs_format_amount( $taxonomy->average_earnings ) );
 	}
 
 	/**
@@ -260,7 +260,7 @@ class Earnings_By_Taxonomy_List_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function no_items() {
-		esc_html_e( 'No taxonomies found.', 'easy-digital-downloads' );
+		esc_html_e( 'No taxonomies found.', 'commercestore' );
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * Order Overview: Item
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -22,11 +22,11 @@ $view_url = add_query_arg(
 		<# if ( true === data.state.isAdding ) { #>
 		<button class="button-link delete" >
 			<span class="dashicons dashicons-no" id="remove-item"></span>
-			<span class="screen-reader-text"><?php printf( __( 'Remove %s', 'easy-digital-downloads' ), '{{{ data.productName }}}' ); ?></span>
+			<span class="screen-reader-text"><?php printf( __( 'Remove %s', 'commercestore' ), '{{{ data.productName }}}' ); ?></span>
 		</button>
 		<# } #>
 
-		<div class="edd-order-overview-summary__items-name">
+		<div class="cs-order-overview-summary__items-name">
 			<a
 				href="<?php echo esc_url( $view_url ); ?>&post={{ data.productId }}"
 				class="row-title"
@@ -42,7 +42,7 @@ $view_url = add_query_arg(
 			<div class="row-actions">
 				<# if ( 'none' !== data.state.hasTax ) { #>
 				<span class="text">
-					<strong><?php esc_html_e( 'Tax:', 'easy-digital-downloads' ); ?></strong>
+					<strong><?php esc_html_e( 'Tax:', 'commercestore' ); ?></strong>
 					{{ data.taxCurrency }}
 					<# if ( true === data.config.isAdjustingManually ) { #>&dagger;<# } #>
 				</span>
@@ -51,7 +51,7 @@ $view_url = add_query_arg(
 				<# if ( false === data.state.isAdding && 'complete' === data.status ) { #>
 				<span>
 					<button class="button-link copy-download-link">
-						<?php echo esc_html( sprintf( __( 'Copy %s Links', 'easy-digital-downloads' ), edd_get_label_singular() ) ); ?>
+						<?php echo esc_html( sprintf( __( 'Copy %s Links', 'commercestore' ), cs_get_label_singular() ) ); ?>
 					</button>
 				</span>
 				<# } #>
@@ -59,23 +59,23 @@ $view_url = add_query_arg(
 		</div>
 
 		<button type="button" class="toggle-row">
-			<span class="screen-reader-text"><?php esc_html_e( 'Show more details', 'easy-digital-downloads' ); ?></span>
+			<span class="screen-reader-text"><?php esc_html_e( 'Show more details', 'commercestore' ); ?></span>
 		</button>
 	</div>
 </td>
 
-<td data-colname="<?php esc_html_e( 'Unit Price', 'easy-digital-downloads' ); ?>">
+<td data-colname="<?php esc_html_e( 'Unit Price', 'commercestore' ); ?>">
 	{{ data.amountCurrency }}
 	<# if ( true === data.config.isAdjustingManually ) { #>&dagger;<# } #>
 </td>
 
 <# if ( true === data.state.hasQuantity ) { #>
-<td data-colname="<?php esc_html_e( 'Quantity', 'easy-digital-downloads' ); ?>">
+<td data-colname="<?php esc_html_e( 'Quantity', 'commercestore' ); ?>">
 	{{ data.quantity }}
 </td>
 <# } #>
 
-<td class="column-right" data-colname="<?php esc_html_e( 'Amount', 'easy-digital-downloads' ); ?>">
+<td class="column-right" data-colname="<?php esc_html_e( 'Amount', 'commercestore' ); ?>">
 	{{ data.subtotalCurrency }}
 	<# if ( true === data.config.isAdjustingManually ) { #>&dagger;<# } #>
 </td>

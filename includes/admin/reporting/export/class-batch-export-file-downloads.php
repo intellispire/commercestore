@@ -4,7 +4,7 @@
  *
  * This class handles file downloads export
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reporting/Export
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -15,12 +15,12 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Batch_File_Downloads_Export Class
+ * CS_Batch_File_Downloads_Export Class
  *
  * @since 2.4
  * @since 3.0 Refactored to use new query methods.
  */
-class EDD_Batch_File_Downloads_Export extends EDD_Batch_Export {
+class CS_Batch_File_Downloads_Export extends CS_Batch_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions.
@@ -40,12 +40,12 @@ class EDD_Batch_File_Downloads_Export extends EDD_Batch_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'date'       => __( 'Date', 'easy-digital-downloads' ),
-			'user'       => __( 'Downloaded by', 'easy-digital-downloads' ),
-			'ip'         => __( 'IP Address', 'easy-digital-downloads' ),
-			'user_agent' => __( 'User Agent', 'easy-digital-downloads' ),
-			'download'   => __( 'Product', 'easy-digital-downloads' ),
-			'file'       => __( 'File', 'easy-digital-downloads' ),
+			'date'       => __( 'Date', 'commercestore' ),
+			'user'       => __( 'Downloaded by', 'commercestore' ),
+			'ip'         => __( 'IP Address', 'commercestore' ),
+			'user_agent' => __( 'User Agent', 'commercestore' ),
+			'download'   => __( 'Product', 'commercestore' ),
+			'file'       => __( 'File', 'commercestore' ),
 		);
 
 		return $cols;
@@ -75,22 +75,22 @@ class EDD_Batch_File_Downloads_Export extends EDD_Batch_Export {
 			$args['product_id'] = $this->download_id;
 		}
 
-		$logs = edd_get_file_download_logs( $args );
+		$logs = cs_get_file_download_logs( $args );
 
 		foreach ( $logs as $log ) {
-			/** @var EDD\Logs\File_Download_Log $log */
+			/** @var CS\Logs\File_Download_Log $log */
 
-			$files     = edd_get_download_files( $log->product_id );
+			$files     = cs_get_download_files( $log->product_id );
 			$file_id   = $log->file_id;
 			$file_name = isset( $files[ $file_id ]['name'] ) ? $files[ $file_id ]['name'] : null;
-			$customer  = edd_get_customer( $log->customer_id );
+			$customer  = cs_get_customer( $log->customer_id );
 
 			if ( $customer ) {
 				$customer = ! empty( $customer->name )
 					? $customer->name
 					: $customer->email;
 			} else {
-				$order = edd_get_order( $log->order_id );
+				$order = cs_get_order( $log->order_id );
 
 				if ( $order ) {
 					$customer = $order->email;
@@ -107,8 +107,8 @@ class EDD_Batch_File_Downloads_Export extends EDD_Batch_Export {
 			);
 		}
 
-		$data = apply_filters( 'edd_export_get_data', $data );
-		$data = apply_filters( 'edd_export_get_data_' . $this->export_type, $data );
+		$data = apply_filters( 'cs_export_get_data', $data );
+		$data = apply_filters( 'cs_export_get_data_' . $this->export_type, $data );
 
 		return ! empty( $data )
 			? $data
@@ -136,7 +136,7 @@ class EDD_Batch_File_Downloads_Export extends EDD_Batch_Export {
 			$args['download_id'] = $this->download_id;
 		}
 
-		$total      = edd_count_file_download_logs( $args );
+		$total      = cs_count_file_download_logs( $args );
 		$percentage = 100;
 
 		if ( $total > 0 ) {

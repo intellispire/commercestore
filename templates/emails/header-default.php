@@ -2,8 +2,8 @@
 /**
  * Email Header
  *
- * @author 		Easy Digital Downloads
- * @package 	Easy Digital Downloads/Templates/Emails
+ * @author 		CommerceStore
+ * @package 	CommerceStore/Templates/Emails
  * @version     2.1
  */
 
@@ -60,8 +60,8 @@ $header_content_h1 = "
 	font-weight: 500;
 	line-height: 1.2;
 ";
-$header_img = edd_get_option( 'email_logo', '' );
-$heading    = EDD()->emails->get_heading();
+$header_img = cs_get_option( 'email_logo', '' );
+$heading    = CS()->emails->get_heading();
 ?>
 <!DOCTYPE html>
 <html>

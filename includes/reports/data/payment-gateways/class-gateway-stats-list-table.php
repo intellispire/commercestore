@@ -2,20 +2,20 @@
 /**
  * Gateway Stats list table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports/Data/Customers
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\Payment_Gateways;
+namespace CS\Reports\Data\Payment_Gateways;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Stats as Stats;
-use EDD\Reports as Reports;
-use EDD\Admin\List_Table;
+use CS\Stats as Stats;
+use CS\Reports as Reports;
+use CS\Admin\List_Table;
 
 /**
  * Top_Five_Customers_List_Table class.
@@ -73,11 +73,11 @@ class Gateway_Stats extends List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'label'          => __( 'Gateway', 'easy-digital-downloads' ),
-			'complete_sales' => __( 'Complete Sales', 'easy-digital-downloads' ),
-			'pending_sales'  => __( 'Pending / Failed Sales', 'easy-digital-downloads' ),
-			'refunded_sales' => __( 'Refunds Issued', 'easy-digital-downloads' ),
-			'total_sales'    => __( 'Total Sales', 'easy-digital-downloads' ),
+			'label'          => __( 'Gateway', 'commercestore' ),
+			'complete_sales' => __( 'Complete Sales', 'commercestore' ),
+			'pending_sales'  => __( 'Pending / Failed Sales', 'commercestore' ),
+			'refunded_sales' => __( 'Refunds Issued', 'commercestore' ),
+			'total_sales'    => __( 'Total Sales', 'commercestore' ),
 		);
 	}
 
@@ -92,7 +92,7 @@ class Gateway_Stats extends List_Table {
 		$currency = Reports\get_filter_value( 'currencies' );
 
 		$reports_data = array();
-		$gateways     = edd_get_payment_gateways();
+		$gateways     = cs_get_payment_gateways();
 
 		foreach ( $gateways as $gateway_id => $gateway ) {
 			$stats = new Stats();
@@ -131,11 +131,11 @@ class Gateway_Stats extends List_Table {
 
 			$reports_data[] = array(
 				'ID'             => $gateway_id,
-				'label'          => '<a href="' . admin_url( 'edit.php?post_type=download&page=edd-payment-history&gateway=' . $gateway_id ) . '">' . esc_html( $gateway['admin_label'] ) . '</a>',
-				'complete_sales' => edd_format_amount( $complete_count, false ),
-				'pending_sales'  => edd_format_amount( $pending_count, false ),
-				'refunded_sales' => edd_format_amount( $refunded_count, false ),
-				'total_sales'    => edd_format_amount( $total_count, false ),
+				'label'          => '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-payment-history&gateway=' . $gateway_id ) . '">' . esc_html( $gateway['admin_label'] ) . '</a>',
+				'complete_sales' => cs_format_amount( $complete_count, false ),
+				'pending_sales'  => cs_format_amount( $pending_count, false ),
+				'refunded_sales' => cs_format_amount( $refunded_count, false ),
+				'total_sales'    => cs_format_amount( $total_count, false ),
 			);
 		}
 
@@ -146,9 +146,9 @@ class Gateway_Stats extends List_Table {
 	 * Setup the final data for the table
 	 *
 	 * @since 1.5
-	 * @uses EDD_Gateway_Reports_Table::get_columns()
-	 * @uses EDD_Gateway_Reports_Table::get_sortable_columns()
-	 * @uses EDD_Gateway_Reports_Table::reports_data()
+	 * @uses CS_Gateway_Reports_Table::get_columns()
+	 * @uses CS_Gateway_Reports_Table::get_sortable_columns()
+	 * @uses CS_Gateway_Reports_Table::reports_data()
 	 * @return void
 	 */
 	public function prepare_items() {

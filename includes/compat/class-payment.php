@@ -2,13 +2,13 @@
 /**
  * Backwards Compatibility Handler for Payments.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Payment Class.
  *
- * EDD 3.0 moves away from storing payment data in wp_posts. This class handles all the backwards compatibility for the
+ * CommerceStore 3.0 moves away from storing payment data in wp_posts. This class handles all the backwards compatibility for the
  * transition to custom tables.
  *
  * @since 3.0
@@ -57,7 +57,7 @@ class Payment extends Base {
 	/**
 	 * Backwards compatibility layer for wp_count_posts().
 	 *
-	 * This is here for backwards compatibility purposes with the migration to custom tables in EDD 3.0.
+	 * This is here for backwards compatibility purposes with the migration to custom tables in CommerceStore 3.0.
 	 *
 	 * @since 3.0
 	 *
@@ -68,10 +68,10 @@ class Payment extends Base {
 	public function wp_count_posts( $query ) {
 		global $wpdb;
 
-		$expected = "SELECT post_status, COUNT( * ) AS num_posts FROM {$wpdb->posts} WHERE post_type = 'edd_payment' GROUP BY post_status";
+		$expected = "SELECT post_status, COUNT( * ) AS num_posts FROM {$wpdb->posts} WHERE post_type = 'cs_payment' GROUP BY post_status";
 
 		if ( $expected === $query ) {
-			$query = "SELECT status AS post_status, COUNT( * ) AS num_posts FROM {$wpdb->edd_orders} GROUP BY post_status";
+			$query = "SELECT status AS post_status, COUNT( * ) AS num_posts FROM {$wpdb->cs_orders} GROUP BY post_status";
 		}
 
 		return $query;
@@ -79,9 +79,9 @@ class Payment extends Base {
 
 	/**
 	 * Add a message for anyone to trying to get payments via get_post/get_posts/WP_Query.
-	 * Force filters to run for all queries that have `edd_discount` as the post type.
+	 * Force filters to run for all queries that have `cs_discount` as the post type.
 	 *
-	 * This is here for backwards compatibility purposes with the migration to custom tables in EDD 3.0.
+	 * This is here for backwards compatibility purposes with the migration to custom tables in CommerceStore 3.0.
 	 *
 	 * @since 3.0
 	 *
@@ -91,12 +91,12 @@ class Payment extends Base {
 		global $wpdb;
 
 		if ( 'pre_get_posts' !== current_filter() ) {
-			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'easy-digital-downloads' );
-			_doing_it_wrong( __FUNCTION__, $message, 'EDD 3.0' );
+			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'commercestore' );
+			_doing_it_wrong( __FUNCTION__, $message, 'CS 3.0' );
 		}
 
 		// Bail if not a payment
-		if ( 'edd_payment' !== $query->get( 'post_type' ) ) {
+		if ( 'cs_payment' !== $query->get( 'post_type' ) ) {
 			return;
 		}
 
@@ -105,15 +105,15 @@ class Payment extends Base {
 
 		// Setup doing-it-wrong message
 		$message = sprintf(
-			__( 'As of Easy Digital Downloads 3.0, orders no longer exist in the %1$s table. They have been migrated to %2$s. Orders should be accessed using %3$s or %4$s. See %5$s for more information.', 'easy-digital-downloads' ),
+			__( 'As of CommerceStore 3.0, orders no longer exist in the %1$s table. They have been migrated to %2$s. Orders should be accessed using %3$s or %4$s. See %5$s for more information.', 'commercestore' ),
 			'<code>' . $wpdb->posts . '</code>',
-			'<code>' . edd_get_component_interface( 'order', 'table' )->table_name . '</code>',
-			'<code>edd_get_orders()</code>',
-			'<code>edd_get_order()</code>',
-			'https://easydigitaldownloads.com/development/'
+			'<code>' . cs_get_component_interface( 'order', 'table' )->table_name . '</code>',
+			'<code>cs_get_orders()</code>',
+			'<code>cs_get_order()</code>',
+			'https://commercestore.com/development/'
 		);
 
-		_doing_it_wrong( 'get_posts()/get_post()/WP_Query', $message, 'EDD 3.0' );
+		_doing_it_wrong( 'get_posts()/get_post()/WP_Query', $message, 'CS 3.0' );
 	}
 
 	/**
@@ -131,8 +131,8 @@ class Payment extends Base {
 	public function get_post_metadata( $value, $object_id, $meta_key, $single ) {
 
 		if ( 'get_post_metadata' !== current_filter() ) {
-			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'easy-digital-downloads' );
-			_doing_it_wrong( __FUNCTION__, esc_html( $message ), 'EDD 3.0' );
+			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'commercestore' );
+			_doing_it_wrong( __FUNCTION__, esc_html( $message ), 'CS 3.0' );
 		}
 
 		// Bail early of not a back-compat key
@@ -141,41 +141,41 @@ class Payment extends Base {
 		}
 
 		// Bail if order does not exist
-		$order = edd_get_order( $object_id );
+		$order = cs_get_order( $object_id );
 		if ( empty( $order ) ) {
 			return $value;
 		}
 
 		switch ( $meta_key ) {
-			case '_edd_payment_purchase_key':
+			case '_cs_payment_purchase_key':
 				$value = $order->payment_key;
 				break;
-			case '_edd_payment_transaction_id':
+			case '_cs_payment_transaction_id':
 				$value = $order->get_transaction_id();
 				break;
-			case '_edd_payment_user_email':
+			case '_cs_payment_user_email':
 				$value = $order->email;
 				break;
-			case '_edd_payment_meta':
-				$p = edd_get_payment( $object_id );
-				$value = array( $p->get_meta( '_edd_payment_meta' ) );
+			case '_cs_payment_meta':
+				$p = cs_get_payment( $object_id );
+				$value = array( $p->get_meta( '_cs_payment_meta' ) );
 				break;
-			case '_edd_completed_date':
+			case '_cs_completed_date':
 				$value = $order->date_completed;
 				break;
-			case '_edd_payment_gateway':
+			case '_cs_payment_gateway':
 				$value = $order->gateway;
 				break;
-			case '_edd_payment_user_id':
+			case '_cs_payment_user_id':
 				$value = $order->user_id;
 				break;
-			case '_edd_payment_user_ip':
+			case '_cs_payment_user_ip':
 				$value = $order->ip;
 				break;
-			case '_edd_payment_mode':
+			case '_cs_payment_mode':
 				$value = $order->mode;
 				break;
-			case '_edd_payment_tax_rate':
+			case '_cs_payment_tax_rate':
 				$value = $order->get_tax_rate();
 				/*
 				 * Tax rates are now stored as percentages (e.g. `20.00`) but previously they were stored as
@@ -185,25 +185,25 @@ class Payment extends Base {
 					$value = $value / 100;
 				}
 				break;
-			case '_edd_payment_customer_id':
+			case '_cs_payment_customer_id':
 				$value = $order->customer_id;
 				break;
-			case '_edd_payment_total':
+			case '_cs_payment_total':
 				$value = $order->total;
 				break;
-			case '_edd_payment_tax':
+			case '_cs_payment_tax':
 				$value = $order->tax;
 				break;
-			case '_edd_payment_number':
+			case '_cs_payment_number':
 				$value = $order->get_number();
 				break;
 			default :
-				$value = edd_get_order_meta( $order->id, $meta_key, true );
+				$value = cs_get_order_meta( $order->id, $meta_key, true );
 				break;
 		}
 
 		if ( $this->show_notices ) {
-			_doing_it_wrong( 'get_post_meta()', 'All payment postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_get_order()</code> instead.', 'EDD 3.0' );
+			_doing_it_wrong( 'get_post_meta()', 'All payment postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_get_order()</code> instead.', 'CS 3.0' );
 
 			if ( $this->show_backtrace ) {
 				$backtrace = debug_backtrace();
@@ -235,7 +235,7 @@ class Payment extends Base {
 		}
 
 		// Bail if payment does not exist
-		$payment = edd_get_payment( $object_id );
+		$payment = cs_get_payment( $object_id );
 		if ( empty( $payment ) ) {
 			return $check;
 		}
@@ -243,7 +243,7 @@ class Payment extends Base {
 		$check = $payment->update_meta( $meta_key, $meta_value );
 
 		if ( $this->show_notices ) {
-			_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All payment postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_add_order_meta()/edd_update_order_meta()()</code> instead.', 'EDD 3.0' );
+			_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All payment postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_add_order_meta()/cs_update_order_meta()()</code> instead.', 'CS 3.0' );
 
 			if ( $this->show_backtrace ) {
 				$backtrace = debug_backtrace();
@@ -262,23 +262,23 @@ class Payment extends Base {
 	 */
 	private function get_meta_key_whitelist() {
 		$meta_keys = array(
-			'_edd_payment_purchase_key',
-			'_edd_payment_transaction_id',
-			'_edd_payment_meta',
-			'_edd_completed_date',
-			'_edd_payment_gateway',
-			'_edd_payment_user_id',
-			'_edd_payment_user_email',
-			'_edd_payment_user_ip',
-			'_edd_payment_mode',
-			'_edd_payment_tax_rate',
-			'_edd_payment_customer_id',
-			'_edd_payment_total',
-			'_edd_payment_tax',
-			'_edd_payment_number',
-			'_edd_sl_upgraded_payment_id', // EDD SL
-			'_edd_sl_is_renewal', // EDD SL
-			'_edds_stripe_customer_id', // EDD Stripe
+			'_cs_payment_purchase_key',
+			'_cs_payment_transaction_id',
+			'_cs_payment_meta',
+			'_cs_completed_date',
+			'_cs_payment_gateway',
+			'_cs_payment_user_id',
+			'_cs_payment_user_email',
+			'_cs_payment_user_ip',
+			'_cs_payment_mode',
+			'_cs_payment_tax_rate',
+			'_cs_payment_customer_id',
+			'_cs_payment_total',
+			'_cs_payment_tax',
+			'_cs_payment_number',
+			'_cs_sl_upgraded_payment_id', // CommerceStore SL
+			'_cs_sl_is_renewal', // CommerceStore SL
+			'_css_stripe_customer_id', // CommerceStore Stripe
 		);
 
 		/**
@@ -289,7 +289,7 @@ class Payment extends Base {
 		 *
 		 * @since 3.0
 		 */
-		$meta_keys = apply_filters( 'edd_30_post_meta_key_whitelist', $meta_keys );
+		$meta_keys = apply_filters( 'cs_30_post_meta_key_whitelist', $meta_keys );
 
 		return (array) $meta_keys;
 	}

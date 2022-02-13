@@ -1,4 +1,4 @@
-/* global edd_vars */
+/* global cs_vars */
 
 /**
  * Internal dependencies
@@ -22,12 +22,12 @@ export const Currency = class Currency {
 	 * @since 3.0
 	 *
 	 * @param {Object} config Currency configuration arguments.
-	 * @param {string} [config.currency=edd_vars.currency] Currency (USD, AUD, etc).
-	 * @param {string} [config.currencySymbol=edd_vars.currency_sign] Currency symbol ($, €, etc).
-	 * @param {string} [config.currencySymbolPosition=edd_vars.currency_pos] Currency symbol position (left or right).
-	 * @param {number} [config.decimalPlaces=edd_vars.currency_decimals] The number of decimals places to format to.
-	 * @param {string} [config.decimalSeparator=edd_vars.decimal_separator] The separator between the number and decimal.
-	 * @param {string} [config.thousandsSeparator=edd_vars.thousands_separator] Thousands separator.
+	 * @param {string} [config.currency=cs_vars.currency] Currency (USD, AUD, etc).
+	 * @param {string} [config.currencySymbol=cs_vars.currency_sign] Currency symbol ($, €, etc).
+	 * @param {string} [config.currencySymbolPosition=cs_vars.currency_pos] Currency symbol position (left or right).
+	 * @param {number} [config.decimalPlaces=cs_vars.currency_decimals] The number of decimals places to format to.
+	 * @param {string} [config.decimalSeparator=cs_vars.decimal_separator] The separator between the number and decimal.
+	 * @param {string} [config.thousandsSeparator=cs_vars.thousands_separator] Thousands separator.
 	 */
 	constructor( config = {} ) {
 		const {
@@ -37,7 +37,7 @@ export const Currency = class Currency {
 			currency_decimals: precision,
 			decimal_separator: decimalSeparator,
 			thousands_separator: thousandSeparator,
-		} = edd_vars;
+		} = cs_vars;
 
 		this.config = {
 			currency,

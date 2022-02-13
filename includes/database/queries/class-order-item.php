@@ -2,25 +2,25 @@
 /**
  * Order Item Query Class.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Database\Queries
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Database\Queries;
+namespace CS\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Database\Query;
+use CS\Database\Query;
 
 /**
  * Class used for querying order items.
  *
  * @since 3.0
  *
- * @see \EDD\Database\Queries\Order_Item::__construct() for accepted arguments.
+ * @see \CS\Database\Queries\Order_Item::__construct() for accepted arguments.
  */
 class Order_Item extends Query {
 
@@ -51,7 +51,7 @@ class Order_Item extends Query {
 	 * @access public
 	 * @var string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schemas\\Order_Items';
+	protected $table_schema = '\\CS\\Database\\Schemas\\Order_Items';
 
 	/** Item ******************************************************************/
 
@@ -80,7 +80,7 @@ class Order_Item extends Query {
 	 * @access public
 	 * @var mixed
 	 */
-	protected $item_shape = '\\EDD\\Orders\\Order_Item';
+	protected $item_shape = '\\CS\\Orders\\Order_Item';
 
 	/** Cache *****************************************************************/
 

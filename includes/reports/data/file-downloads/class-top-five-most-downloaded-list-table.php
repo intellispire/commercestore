@@ -2,20 +2,20 @@
 /**
  * Top Five Most Downloaded Products list table.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Reports/Data/File_Downloads
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Reports\Data\File_Downloads;
+namespace CS\Reports\Data\File_Downloads;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Reports as Reports;
-use EDD\Stats as Stats;
-use EDD\Admin\List_Table;
+use CS\Reports as Reports;
+use CS\Stats as Stats;
+use CS\Admin\List_Table;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -54,11 +54,11 @@ class Top_Five_Most_Downloaded_List_Table extends List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'name'           => __( 'Name',           'easy-digital-downloads' ),
-			'download_count' => __( 'File Downloads', 'easy-digital-downloads' ),
-			'price'          => __( 'Price',          'easy-digital-downloads' ),
-			'sales'          => __( 'Sales',          'easy-digital-downloads' ),
-			'earnings'       => __( 'Earnings',       'easy-digital-downloads' )
+			'name'           => __( 'Name',           'commercestore' ),
+			'download_count' => __( 'File Downloads', 'commercestore' ),
+			'price'          => __( 'Price',          'commercestore' ),
+			'sales'          => __( 'Sales',          'commercestore' ),
+			'earnings'       => __( 'Earnings',       'commercestore' )
 		);
 	}
 
@@ -71,7 +71,7 @@ class Top_Five_Most_Downloaded_List_Table extends List_Table {
 	 * @return string Data shown in the Name column.
 	 */
 	public function column_name( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
@@ -88,7 +88,7 @@ class Top_Five_Most_Downloaded_List_Table extends List_Table {
 	 * @return string Data shown in the Download Count column.
 	 */
 	public function column_download_count( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
@@ -104,34 +104,34 @@ class Top_Five_Most_Downloaded_List_Table extends List_Table {
 	 * @return string Data shown in the Price column.
 	 */
 	public function column_price( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
 		if ( $download->object->has_variable_prices() ) {
-			return edd_price_range( $download->object->ID );
+			return cs_price_range( $download->object->ID );
 		} else {
-			return edd_price( $download->object->ID, false );
+			return cs_price( $download->object->ID, false );
 		}
 	}
 
 	public function column_sales( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
 		return current_user_can( 'view_product_stats', $download->object->ID )
-			? edd_get_download_sales_stats( $download->object->ID )
+			? cs_get_download_sales_stats( $download->object->ID )
 			: '&mdash;';
 	}
 
 	public function column_earnings( $download ) {
-		if ( ! $download->object instanceof \EDD_Download ) {
+		if ( ! $download->object instanceof \CS_Download ) {
 			return '&mdash;';
 		}
 
 		return current_user_can( 'view_product_stats', $download->object->ID )
-			? edd_currency_filter( edd_format_amount( edd_get_download_earnings_stats( $download->object->ID ) ) )
+			? cs_currency_filter( cs_format_amount( cs_get_download_earnings_stats( $download->object->ID ) ) )
 			: '&mdash;';
 	}
 
@@ -157,7 +157,7 @@ class Top_Five_Most_Downloaded_List_Table extends List_Table {
 	 * @return string
 	 */
 	public function get_base_url() {
-		return remove_query_arg( edd_admin_removable_query_args(), edd_get_admin_base_url() );
+		return remove_query_arg( cs_admin_removable_query_args(), cs_get_admin_base_url() );
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Top_Five_Most_Downloaded_List_Table extends List_Table {
 	 * @since 3.0
 	 */
 	public function no_items() {
-		esc_html_e( 'No downloads found.', 'easy-digital-downloads' );
+		esc_html_e( 'No downloads found.', 'commercestore' );
 	}
 
 	/**

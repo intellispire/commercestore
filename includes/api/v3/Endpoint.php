@@ -2,17 +2,17 @@
 /**
  * Endpoint for API v3
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\API\v3;
+namespace CS\API\v3;
 
 abstract class Endpoint {
 
-	public static $namespace = 'edd/v3';
+	public static $namespace = 'cs/v3';
 
 	/**
 	 * Registers the endpoint(s).

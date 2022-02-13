@@ -20,12 +20,12 @@ export const OrderRefunds = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	className: 'edd-order-overview-summary__refunds',
+	className: 'cs-order-overview-summary__refunds',
 
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-refunds' ),
+	template: wp.template( 'cs-admin-order-refunds' ),
 
 	/**
 	 * Renders initial view.

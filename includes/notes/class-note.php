@@ -2,15 +2,15 @@
 /**
  * Note Object
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Classes/Notes
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Notes;
+namespace CS\Notes;
 
-use EDD\Base_Object;
+use CS\Base_Object;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;

@@ -4,16 +4,16 @@
  *
  * Contains information about the connected PayPal account.
  *
- * @package   easy-digital-downloads
+ * @package   commercestore
  * @copyright Copyright (c) 2021, Sandhills Development, LLC
  * @license   GPL2+
  * @since     2.11
  */
 
-namespace EDD\Gateways\PayPal;
+namespace CS\Gateways\PayPal;
 
-use EDD\Gateways\PayPal\Exceptions\InvalidMerchantDetails;
-use EDD\Gateways\PayPal\Exceptions\MissingMerchantDetails;
+use CS\Gateways\PayPal\Exceptions\InvalidMerchantDetails;
+use CS\Gateways\PayPal\Exceptions\MissingMerchantDetails;
 
 class MerchantAccount {
 
@@ -129,13 +129,13 @@ class MerchantAccount {
 	 */
 	public function is_account_ready() {
 		if ( ! $this->payments_receivable ) {
-			$this->wp_error->add( 'payments_receivable', __( 'Your account is unable to receive payments. Please contact PayPal customer support.', 'easy-digital-downloads' ) );
+			$this->wp_error->add( 'payments_receivable', __( 'Your account is unable to receive payments. Please contact PayPal customer support.', 'commercestore' ) );
 		}
 
 		if ( ! $this->primary_email_confirmed ) {
 			$this->wp_error->add(
 				'primary_email_confirmed',
-				__( 'Your PayPal email address needs to be confirmed.', 'easy-digital-downloads' )
+				__( 'Your PayPal email address needs to be confirmed.', 'commercestore' )
 			);
 		}
 
@@ -164,8 +164,8 @@ class MerchantAccount {
 	 */
 	private static function get_option_name() {
 		return sprintf(
-			'edd_paypal_%s_merchant_details',
-			edd_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE
+			'cs_paypal_%s_merchant_details',
+			cs_is_test_mode() ? API::MODE_SANDBOX : API::MODE_LIVE
 		);
 	}
 

@@ -2,13 +2,13 @@
 /**
  * Backwards Compatibility Handler for Discounts.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Compat
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Compat;
+namespace CS\Compat;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -53,9 +53,9 @@ class Discount extends Base {
 
 	/**
 	 * Add a message for anyone to trying to get payments via get_post/get_posts/WP_Query.
-	 * Force filters to run for all queries that have `edd_discount` as the post type.
+	 * Force filters to run for all queries that have `cs_discount` as the post type.
 	 *
-	 * This is here for backwards compatibility purposes with the migration to custom tables in EDD 3.0.
+	 * This is here for backwards compatibility purposes with the migration to custom tables in CommerceStore 3.0.
 	 *
 	 * @since 3.0
 	 *
@@ -65,7 +65,7 @@ class Discount extends Base {
 		global $wpdb;
 
 		// Bail if not a discount
-		if ( 'edd_discount' !== $query->get( 'post_type' ) ) {
+		if ( 'cs_discount' !== $query->get( 'post_type' ) ) {
 			return;
 		}
 
@@ -74,13 +74,13 @@ class Discount extends Base {
 
 		// Setup doing-it-wrong message
 		$message = sprintf(
-			__( 'As of Easy Digital Downloads 3.0, discounts no longer exist in the %1$s table. They have been migrated to %2$s. Discounts should be accessed using %3$s, %4$s or instantiating a new instance of %5$s. See %6$s for more information.', 'easy-digital-downloads' ),
+			__( 'As of CommerceStore 3.0, discounts no longer exist in the %1$s table. They have been migrated to %2$s. Discounts should be accessed using %3$s, %4$s or instantiating a new instance of %5$s. See %6$s for more information.', 'commercestore' ),
 			'<code>' . $wpdb->posts . '</code>',
-			'<code>' . edd_get_component_interface( 'adjustment', 'table' )->table_name . '</code>',
-			'<code>edd_get_discounts()</code>',
-			'<code>edd_get_discount()</code>',
-			'<code>EDD_Discount</code>',
-			'https://easydigitaldownloads.com/development/'
+			'<code>' . cs_get_component_interface( 'adjustment', 'table' )->table_name . '</code>',
+			'<code>cs_get_discounts()</code>',
+			'<code>cs_get_discount()</code>',
+			'<code>CS_Discount</code>',
+			'https://commercestore.com/development/'
 		);
 
 		_doing_it_wrong( 'get_posts()/get_post()', $message, '3.0' );
@@ -97,10 +97,10 @@ class Discount extends Base {
 	public function wp_count_posts( $query ) {
 		global $wpdb;
 
-		$expected = "SELECT post_status, COUNT( * ) AS num_posts FROM {$wpdb->posts} WHERE post_type = 'edd_discount' GROUP BY post_status";
+		$expected = "SELECT post_status, COUNT( * ) AS num_posts FROM {$wpdb->posts} WHERE post_type = 'cs_discount' GROUP BY post_status";
 
 		if ( $expected === $query ) {
-			$query = "SELECT status AS post_status, COUNT( * ) AS num_posts FROM {$wpdb->edd_adjustments} WHERE type = 'discount' GROUP BY post_status";
+			$query = "SELECT status AS post_status, COUNT( * ) AS num_posts FROM {$wpdb->cs_adjustments} WHERE type = 'discount' GROUP BY post_status";
 		}
 
 		return $query;
@@ -118,24 +118,24 @@ class Discount extends Base {
 	 */
 	public function posts_results( $posts, $query ) {
 		if ( 'posts_results' !== current_filter() ) {
-			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'easy-digital-downloads' );
-			_doing_it_wrong( __FUNCTION__, esc_html( $message ), 'EDD 3.0' );
+			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'commercestore' );
+			_doing_it_wrong( __FUNCTION__, esc_html( $message ), 'CS 3.0' );
 		}
 
-		if ( 'edd_discount' === $query->get( 'post_type' ) ) {
+		if ( 'cs_discount' === $query->get( 'post_type' ) ) {
 			$new_posts = array();
 
 			foreach ( $posts as $post ) {
-				$discount = edd_get_discount( $post->id );
+				$discount = cs_get_discount( $post->id );
 
 				$object_vars = array(
 					'ID'                => $discount->id,
 					'post_title'        => $discount->name,
 					'post_status'       => $discount->status,
-					'post_type'         => 'edd_discount',
-					'post_date'         => EDD()->utils->date( $discount->date_created, null, true )->toDateTimeString(),
+					'post_type'         => 'cs_discount',
+					'post_date'         => CS()->utils->date( $discount->date_created, null, true )->toDateTimeString(),
 					'post_date_gmt'     => $discount->date_created,
-					'post_modified'     => EDD()->utils->date( $discount->date_modified, null, true )->toDateTimeString(),
+					'post_modified'     => CS()->utils->date( $discount->date_modified, null, true )->toDateTimeString(),
 					'post_modified_gmt' => $discount->date_created,
 				);
 
@@ -168,11 +168,11 @@ class Discount extends Base {
 		global $wpdb;
 
 		if ( 'posts_request' !== current_filter() ) {
-			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'easy-digital-downloads' );
+			$message = __( 'This function is not meant to be called directly. It is only here for backwards compatibility purposes.', 'commercestore' );
 			_doing_it_wrong( __FUNCTION__, esc_html( $message ), '3.0' );
 		}
 
-		if ( 'edd_discount' === $query->get( 'post_type' ) ) {
+		if ( 'cs_discount' === $query->get( 'post_type' ) ) {
 			$defaults = array(
 				'number'  => 30,
 				'status'  => array( 'active', 'inactive', 'expired' ),
@@ -228,7 +228,7 @@ class Discount extends Base {
 				$args['number'] = absint( $args['number'] );
 			}
 
-			$table_name = edd_get_component_interface( 'adjustment', 'table' )->table_name;
+			$table_name = cs_get_component_interface( 'adjustment', 'table' )->table_name;
 
 			$meta_query = $query->get( 'meta_query' );
 
@@ -237,7 +237,7 @@ class Discount extends Base {
 
 			$meta_key   = $query->get( 'meta_key',   false );
 			$meta_value = $query->get( 'meta_value', false );
-			$columns    = wp_list_pluck( edd_get_component_interface( 'adjustment', 'schema' )->columns, 'name' );
+			$columns    = wp_list_pluck( cs_get_component_interface( 'adjustment', 'schema' )->columns, 'name' );
 
 			// 'meta_key' and 'meta_value' passed as arguments
 			if ( $meta_key && $meta_value ) {
@@ -261,7 +261,7 @@ class Discount extends Base {
 
 					if ( is_array( $query ) ) {
 						if ( array_key_exists( 'key', $query ) ) {
-							$query['key'] = str_replace( '_edd_discount_', '', $query['key'] );
+							$query['key'] = str_replace( '_cs_discount_', '', $query['key'] );
 
 							/**
 							 * Check that the key exists as a column in the table.
@@ -343,19 +343,19 @@ class Discount extends Base {
 	 */
 	public function get_post_metadata( $value, $object_id, $meta_key, $single ) {
 
-		$meta_keys = apply_filters( 'edd_post_meta_discount_backwards_compat_keys', array(
-			'_edd_discount_status',
-			'_edd_discount_amount',
-			'_edd_discount_uses',
-			'_edd_discount_name',
-			'_edd_discount_code',
-			'_edd_discount_expiration',
-			'_edd_discount_start',
-			'_edd_discount_is_single_use',
-			'_edd_discount_is_not_global',
-			'_edd_discount_product_condition',
-			'_edd_discount_min_price',
-			'_edd_discount_max_uses'
+		$meta_keys = apply_filters( 'cs_post_meta_discount_backwards_compat_keys', array(
+			'_cs_discount_status',
+			'_cs_discount_amount',
+			'_cs_discount_uses',
+			'_cs_discount_name',
+			'_cs_discount_code',
+			'_cs_discount_expiration',
+			'_cs_discount_start',
+			'_cs_discount_is_single_use',
+			'_cs_discount_is_not_global',
+			'_cs_discount_product_condition',
+			'_cs_discount_min_price',
+			'_cs_discount_max_uses'
 		) );
 
 		// Bail early of not a back-compat key
@@ -364,28 +364,28 @@ class Discount extends Base {
 		}
 
 		// Bail if discount does not exist
-		$discount = edd_get_discount( $object_id );
+		$discount = cs_get_discount( $object_id );
 		if ( empty( $discount->id ) ) {
 			return $value;
 		}
 
 		switch ( $meta_key ) {
-			case '_edd_discount_name':
-			case '_edd_discount_status':
-			case '_edd_discount_amount':
-			case '_edd_discount_uses':
-			case '_edd_discount_code':
-			case '_edd_discount_expiration':
-			case '_edd_discount_start':
-			case '_edd_discount_product_condition':
-			case '_edd_discount_min_price':
-			case '_edd_discount_max_uses':
-				$key = str_replace( '_edd_discount_', '', $meta_key );
+			case '_cs_discount_name':
+			case '_cs_discount_status':
+			case '_cs_discount_amount':
+			case '_cs_discount_uses':
+			case '_cs_discount_code':
+			case '_cs_discount_expiration':
+			case '_cs_discount_start':
+			case '_cs_discount_product_condition':
+			case '_cs_discount_min_price':
+			case '_cs_discount_max_uses':
+				$key = str_replace( '_cs_discount_', '', $meta_key );
 
 				$value = $discount->{$key};
 
 				if ( $this->show_notices ) {
-					_doing_it_wrong( 'get_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_get_adjustment_meta()</code> instead.', 'EDD 3.0' );
+					_doing_it_wrong( 'get_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_get_adjustment_meta()</code> instead.', 'CS 3.0' );
 
 					if ( $this->show_backtrace ) {
 						$backtrace = debug_backtrace();
@@ -395,11 +395,11 @@ class Discount extends Base {
 
 				break;
 
-			case '_edd_discount_is_single_use':
+			case '_cs_discount_is_single_use':
 				$value = $discount->get_once_per_customer();
 
 				if ( $this->show_notices ) {
-					_doing_it_wrong( 'get_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_get_adjustment_meta()</code> instead.', 'EDD 3.0' );
+					_doing_it_wrong( 'get_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_get_adjustment_meta()</code> instead.', 'CS 3.0' );
 
 					if ( $this->show_backtrace ) {
 						$backtrace = debug_backtrace();
@@ -409,11 +409,11 @@ class Discount extends Base {
 
 				break;
 
-			case '_edd_discount_is_not_global':
+			case '_cs_discount_is_not_global':
 				$value = $discount->get_scope();
 
 				if ( $this->show_notices ) {
-					_doing_it_wrong( 'get_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_get_adjustment_meta()</code> instead.', 'EDD 3.0' );
+					_doing_it_wrong( 'get_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_get_adjustment_meta()</code> instead.', 'CS 3.0' );
 
 					if ( $this->show_backtrace ) {
 						$backtrace = debug_backtrace();
@@ -424,10 +424,10 @@ class Discount extends Base {
 				break;
 			default:
 				/*
-				 * Developers can hook in here with add_filter( 'edd_get_post_meta_discount_backwards_compat-meta_key... in order to
-				 * Filter their own meta values for backwards compatibility calls to get_post_meta instead of EDD_Discount::get_meta
+				 * Developers can hook in here with add_filter( 'cs_get_post_meta_discount_backwards_compat-meta_key... in order to
+				 * Filter their own meta values for backwards compatibility calls to get_post_meta instead of CS_Discount::get_meta
 				 */
-				$value = apply_filters( 'edd_get_post_meta_discount_backwards_compat-' . $meta_key, $value, $object_id );
+				$value = apply_filters( 'cs_get_post_meta_discount_backwards_compat-' . $meta_key, $value, $object_id );
 				break;
 		}
 
@@ -450,19 +450,19 @@ class Discount extends Base {
 	 */
 	public function update_post_metadata( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 
-		$meta_keys = apply_filters( 'edd_update_post_meta_discount_backwards_compat_keys', array(
-			'_edd_discount_status',
-			'_edd_discount_amount',
-			'_edd_discount_uses',
-			'_edd_discount_name',
-			'_edd_discount_code',
-			'_edd_discount_expiration',
-			'_edd_discount_start',
-			'_edd_discount_is_single_use',
-			'_edd_discount_is_not_global',
-			'_edd_discount_product_condition',
-			'_edd_discount_min_price',
-			'_edd_discount_max_uses'
+		$meta_keys = apply_filters( 'cs_update_post_meta_discount_backwards_compat_keys', array(
+			'_cs_discount_status',
+			'_cs_discount_amount',
+			'_cs_discount_uses',
+			'_cs_discount_name',
+			'_cs_discount_code',
+			'_cs_discount_expiration',
+			'_cs_discount_start',
+			'_cs_discount_is_single_use',
+			'_cs_discount_is_not_global',
+			'_cs_discount_product_condition',
+			'_cs_discount_min_price',
+			'_cs_discount_max_uses'
 		) );
 
 		// Bail early of not a back-compat key
@@ -471,28 +471,28 @@ class Discount extends Base {
 		}
 
 		// Bail if discount does not exist
-		$discount = edd_get_discount( $object_id );
+		$discount = cs_get_discount( $object_id );
 		if ( empty( $discount->id ) ) {
 			return $check;
 		}
 
 		switch ( $meta_key ) {
-			case '_edd_discount_name':
-			case '_edd_discount_status':
-			case '_edd_discount_amount':
-			case '_edd_discount_uses':
-			case '_edd_discount_code':
-			case '_edd_discount_expiration':
-			case '_edd_discount_start':
-			case '_edd_discount_product_condition':
-			case '_edd_discount_min_price':
-			case '_edd_discount_max_uses':
-				$key              = str_replace( '_edd_discount_', '', $meta_key );
+			case '_cs_discount_name':
+			case '_cs_discount_status':
+			case '_cs_discount_amount':
+			case '_cs_discount_uses':
+			case '_cs_discount_code':
+			case '_cs_discount_expiration':
+			case '_cs_discount_start':
+			case '_cs_discount_product_condition':
+			case '_cs_discount_min_price':
+			case '_cs_discount_max_uses':
+				$key              = str_replace( '_cs_discount_', '', $meta_key );
 				$discount->{$key} = $meta_value;
 				$check            = $discount->save();
 
 				if ( $this->show_notices ) {
-					_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_add_adjustment_meta()/edd_update_adjustment_meta()</code> instead.', 'EDD 3.0' );
+					_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_add_adjustment_meta()/cs_update_adjustment_meta()</code> instead.', 'CS 3.0' );
 
 					if ( $this->show_backtrace ) {
 						$backtrace = debug_backtrace();
@@ -501,13 +501,13 @@ class Discount extends Base {
 				}
 
 				break;
-			case '_edd_discount_is_single_use':
+			case '_cs_discount_is_single_use':
 				$discount->once_per_customer = $meta_value;
 				$check                       = $discount->save();
 
 				// Since the old discounts data was simply stored in a single post meta entry, just don't let it be added.
 				if ( $this->show_notices ) {
-					_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_add_adjustment_meta()/edd_update_adjustment_meta()</code> instead.', 'EDD 3.0' );
+					_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_add_adjustment_meta()/cs_update_adjustment_meta()</code> instead.', 'CS 3.0' );
 
 					if ( $this->show_backtrace ) {
 						$backtrace = debug_backtrace();
@@ -516,13 +516,13 @@ class Discount extends Base {
 				}
 
 				break;
-			case '_edd_discount_is_not_global':
+			case '_cs_discount_is_not_global':
 				$discount->scope = $meta_value;
 				$check           = $discount->save();
 
 				// Since the old discounts data was simply stored in a single post meta entry, just don't let it be added.
 				if ( $this->show_notices ) {
-					_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since Easy Digital Downloads 3.0! Use <code>edd_add_adjustment_meta()/edd_update_adjustment_meta()</code> instead.', 'EDD 3.0' );
+					_doing_it_wrong( 'add_post_meta()/update_post_meta()', 'All discount postmeta has been <strong>deprecated</strong> since CommerceStore 3.0! Use <code>cs_add_adjustment_meta()/cs_update_adjustment_meta()</code> instead.', 'CS 3.0' );
 
 					if ( $this->show_backtrace ) {
 						$backtrace = debug_backtrace();
@@ -533,10 +533,10 @@ class Discount extends Base {
 				break;
 			default:
 				/*
-				 * Developers can hook in here with add_filter( 'edd_get_post_meta_discount_backwards_compat-meta_key... in order to
-				 * Filter their own meta values for backwards compatibility calls to get_post_meta instead of EDD_Discount::get_meta
+				 * Developers can hook in here with add_filter( 'cs_get_post_meta_discount_backwards_compat-meta_key... in order to
+				 * Filter their own meta values for backwards compatibility calls to get_post_meta instead of CS_Discount::get_meta
 				 */
-				$check = apply_filters( 'edd_update_post_meta_discount_backwards_compat-' . $meta_key, $check, $object_id, $meta_value, $prev_value );
+				$check = apply_filters( 'cs_update_post_meta_discount_backwards_compat-' . $meta_key, $check, $object_id, $meta_value, $prev_value );
 				break;
 		}
 

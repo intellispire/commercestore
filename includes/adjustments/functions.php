@@ -2,7 +2,7 @@
 /**
  * Adjustment Functions.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Adjustments
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -61,8 +61,8 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @return int ID of the inserted adjustment.
  */
-function edd_add_adjustment( $data = array() ) {
-	$adjustments = new EDD\Database\Queries\Adjustment();
+function cs_add_adjustment( $data = array() ) {
+	$adjustments = new CS\Database\Queries\Adjustment();
 
 	return $adjustments->add_item( $data );
 }
@@ -75,8 +75,8 @@ function edd_add_adjustment( $data = array() ) {
  * @param int $adjustment_id Adjustment ID.
  * @return int|false `1` if the adjustment was deleted successfully, false on error.
  */
-function edd_delete_adjustment( $adjustment_id = 0 ) {
-	$adjustments = new EDD\Database\Queries\Adjustment();
+function cs_delete_adjustment( $adjustment_id = 0 ) {
+	$adjustments = new CS\Database\Queries\Adjustment();
 
 	return $adjustments->delete_item( $adjustment_id );
 }
@@ -129,8 +129,8 @@ function edd_delete_adjustment( $adjustment_id = 0 ) {
  *
  * @return int|false Number of rows updated if successful, false otherwise.
  */
-function edd_update_adjustment( $adjustment_id = 0, $data = array() ) {
-	$adjustments = new EDD\Database\Queries\Adjustment();
+function cs_update_adjustment( $adjustment_id = 0, $data = array() ) {
+	$adjustments = new CS\Database\Queries\Adjustment();
 
 	return $adjustments->update_item( $adjustment_id, $data );
 }
@@ -141,11 +141,11 @@ function edd_update_adjustment( $adjustment_id = 0, $data = array() ) {
  * @since 3.0
  *
  * @param int $adjustment_id Adjustment ID.
- * @return EDD\Adjustments\Adjustment|false Adjustment object if successful,
+ * @return CS\Adjustments\Adjustment|false Adjustment object if successful,
  *                                          false otherwise.
  */
-function edd_get_adjustment( $adjustment_id = 0 ) {
-	$adjustments = new EDD\Database\Queries\Adjustment();
+function cs_get_adjustment( $adjustment_id = 0 ) {
+	$adjustments = new CS\Database\Queries\Adjustment();
 
 	// Return adjustment
 	return $adjustments->get_item( $adjustment_id );
@@ -159,11 +159,11 @@ function edd_get_adjustment( $adjustment_id = 0 ) {
  * @param string $field Database table field.
  * @param string $value Value of the row.
  *
- * @return EDD\Adjustments\Adjustment|false Adjustment object if successful,
+ * @return CS\Adjustments\Adjustment|false Adjustment object if successful,
  *                                          false otherwise.
  */
-function edd_get_adjustment_by( $field = '', $value = '' ) {
-	$adjustments = new EDD\Database\Queries\Adjustment();
+function cs_get_adjustment_by( $field = '', $value = '' ) {
+	$adjustments = new CS\Database\Queries\Adjustment();
 
 	// Return adjustment
 	return $adjustments->get_item_by( $field, $value );
@@ -172,15 +172,15 @@ function edd_get_adjustment_by( $field = '', $value = '' ) {
 /**
  * Query for adjustments.
  *
- * @see \EDD\Database\Queries\Adjustment::__construct()
+ * @see \CS\Database\Queries\Adjustment::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Adjustment` for
+ * @param array $args Arguments. See `CS\Database\Queries\Adjustment` for
  *                    accepted arguments.
- * @return \EDD\Adjustments\Adjustment[] Array of `Adjustment` objects.
+ * @return \CS\Adjustments\Adjustment[] Array of `Adjustment` objects.
  */
-function edd_get_adjustments( $args = array() ) {
+function cs_get_adjustments( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -188,7 +188,7 @@ function edd_get_adjustments( $args = array() ) {
 	) );
 
 	// Instantiate a query object
-	$adjustments = new EDD\Database\Queries\Adjustment();
+	$adjustments = new CS\Database\Queries\Adjustment();
 
 	// Return adjustments
 	return $adjustments->query( $r );
@@ -197,15 +197,15 @@ function edd_get_adjustments( $args = array() ) {
 /**
  * Count adjustments.
  *
- * @see \EDD\Database\Queries\Adjustment::__construct()
+ * @see \CS\Database\Queries\Adjustment::__construct()
  *
  * @since 3.0
  *
- * @param array $args Arguments. See `EDD\Database\Queries\Adjustment` for
+ * @param array $args Arguments. See `CS\Database\Queries\Adjustment` for
  *                    accepted arguments.
  * @return int Number of adjustments returned based on query arguments passed.
  */
-function edd_count_adjustments( $args = array() ) {
+function cs_count_adjustments( $args = array() ) {
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
@@ -213,7 +213,7 @@ function edd_count_adjustments( $args = array() ) {
 	) );
 
 	// Query for count(s)
-	$adjustments = new EDD\Database\Queries\Adjustment( $r );
+	$adjustments = new CS\Database\Queries\Adjustment( $r );
 
 	// Return count(s)
 	return absint( $adjustments->found_items );

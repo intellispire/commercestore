@@ -4,15 +4,15 @@
  *
  * This class should be extended to create object registries.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Classes/Utilities
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Utils;
+namespace CS\Utils;
 
-use EDD\Utils\Exceptions;
+use CS\Utils\Exceptions;
 
 /**
  * Defines the construct for building an item registry.
@@ -37,7 +37,7 @@ abstract class Registry extends \ArrayObject {
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception If the `$attributes` array is empty.
+	 * @throws \CS_Exception If the `$attributes` array is empty.
 	 *
 	 * @param string $item_id    Item ID.
 	 * @param array  $attributes Array of item attributes. Each extending registry will
@@ -85,7 +85,7 @@ abstract class Registry extends \ArrayObject {
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the item does not exist.
+	 * @throws \CS_Exception if the item does not exist.
 	 *
 	 * @param string $item_id Item ID.
 	 * @return array Array of attributes for the item if the item is set,
@@ -129,8 +129,8 @@ abstract class Registry extends \ArrayObject {
 	 *
 	 * @since 3.0
 	 *
-	 * @throws \EDD_Exception if the item does not exist.
-	 * @throws \EDD_Exception if the attribute and/or item does not exist.
+	 * @throws \CS_Exception if the item does not exist.
+	 * @throws \CS_Exception if the attribute and/or item does not exist.
 	 *
 	 * @param string $key     Key of the attribute to retrieve.
 	 * @param string $item_id Collection to retrieve the attribute from.

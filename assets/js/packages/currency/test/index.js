@@ -3,7 +3,7 @@
  */
 import { Currency, NumberFormat } from './../src';
 
-global.edd_vars = {
+global.cs_vars = {
 	currency: 'EUR',
 	currency_sign: '€',
 	currency_pos: 'after',
@@ -36,7 +36,7 @@ describe( 'Currency', () => {
 		expect( currency.config.thousandSeparator ).toEqual( ',' );
 	} );
 
-	it( 'should be inherit config from edd_vars', () => {
+	it( 'should be inherit config from cs_vars', () => {
 		const currency = new Currency();
 
 		expect( currency.config.currency ).toEqual( 'EUR' );
@@ -128,7 +128,7 @@ describe( 'Number', () => {
 		expect( number.config.thousandSeparator ).toEqual( ',' );
 	} );
 
-	it( 'should be inherit config from edd_vars', () => {
+	it( 'should be inherit config from cs_vars', () => {
 		const number = new Currency();
 
 		expect( number.config.precision ).toEqual( 2 );

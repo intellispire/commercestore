@@ -2,21 +2,21 @@
 /**
  * Logs API - File Download Log Object.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Logs
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Logs;
+namespace CS\Logs;
 
-use EDD\Base_Object;
+use CS\Base_Object;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_File_Download_Log Class.
+ * CS_File_Download_Log Class.
  *
  * @since 3.0
  *

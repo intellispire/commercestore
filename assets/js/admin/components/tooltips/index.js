@@ -3,12 +3,12 @@
  *
  * @param {string} selector
  */
-export const edd_attach_tooltips = function( selector ) {
+export const cs_attach_tooltips = function( selector ) {
 	selector.tooltip( {
 		content: function() {
 			return $( this ).prop( 'title' );
 		},
-		tooltipClass: 'edd-ui-tooltip',
+		tooltipClass: 'cs-ui-tooltip',
 		position: {
 			my: 'center top',
 			at: 'center bottom+10',
@@ -24,5 +24,5 @@ export const edd_attach_tooltips = function( selector ) {
 };
 
 jQuery( document ).ready( function( $ ) {
-	edd_attach_tooltips( $( '.edd-help-tip' ) );
+	cs_attach_tooltips( $( '.cs-help-tip' ) );
 } );

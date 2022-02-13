@@ -2,7 +2,7 @@
 /**
  * Order Meta Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Orders
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -26,8 +26,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return int|false Meta ID on success, false on failure.
  */
-function edd_add_order_meta( $order_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'edd_order', $order_id, $meta_key, $meta_value, $unique );
+function cs_add_order_meta( $order_id, $meta_key, $meta_value, $unique = false ) {
+	return add_metadata( 'cs_order', $order_id, $meta_key, $meta_value, $unique );
 }
 
 /**
@@ -44,8 +44,8 @@ function edd_add_order_meta( $order_id, $meta_key, $meta_value, $unique = false 
  *
  * @return bool True on success, false on failure.
  */
-function edd_delete_order_meta( $order_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'edd_order', $order_id, $meta_key, $meta_value );
+function cs_delete_order_meta( $order_id, $meta_key, $meta_value = '' ) {
+	return delete_metadata( 'cs_order', $order_id, $meta_key, $meta_value );
 }
 
 /**
@@ -60,8 +60,8 @@ function edd_delete_order_meta( $order_id, $meta_key, $meta_value = '' ) {
  *
  * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
  */
-function edd_get_order_meta( $order_id, $key = '', $single = false ) {
-	return get_metadata( 'edd_order', $order_id, $key, $single );
+function cs_get_order_meta( $order_id, $key = '', $single = false ) {
+	return get_metadata( 'cs_order', $order_id, $key, $single );
 }
 
 /**
@@ -81,8 +81,8 @@ function edd_get_order_meta( $order_id, $key = '', $single = false ) {
  *
  * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
  */
-function edd_update_order_meta( $order_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'edd_order', $order_id, $meta_key, $meta_value, $prev_value );
+function cs_update_order_meta( $order_id, $meta_key, $meta_value, $prev_value = '' ) {
+	return update_metadata( 'cs_order', $order_id, $meta_key, $meta_value, $prev_value );
 }
 
 /**
@@ -94,8 +94,8 @@ function edd_update_order_meta( $order_id, $meta_key, $meta_value, $prev_value =
  *
  * @return bool Whether the order meta key was deleted from the database.
  */
-function edd_delete_order_meta_by_key( $meta_key ) {
-	return delete_metadata( 'edd_order', null, $meta_key, '', true );
+function cs_delete_order_meta_by_key( $meta_key ) {
+	return delete_metadata( 'cs_order', null, $meta_key, '', true );
 }
 
 /** Order Items ***************************************************************/
@@ -112,8 +112,8 @@ function edd_delete_order_meta_by_key( $meta_key ) {
  *
  * @return int|false Meta ID on success, false on failure.
  */
-function edd_add_order_item_meta( $order_item_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'edd_order_item', $order_item_id, $meta_key, $meta_value, $unique );
+function cs_add_order_item_meta( $order_item_id, $meta_key, $meta_value, $unique = false ) {
+	return add_metadata( 'cs_order_item', $order_item_id, $meta_key, $meta_value, $unique );
 }
 
 /**
@@ -130,8 +130,8 @@ function edd_add_order_item_meta( $order_item_id, $meta_key, $meta_value, $uniqu
  *
  * @return bool True on success, false on failure.
  */
-function edd_delete_order_item_meta( $order_item_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'edd_order_item', $order_item_id, $meta_key, $meta_value );
+function cs_delete_order_item_meta( $order_item_id, $meta_key, $meta_value = '' ) {
+	return delete_metadata( 'cs_order_item', $order_item_id, $meta_key, $meta_value );
 }
 
 /**
@@ -146,8 +146,8 @@ function edd_delete_order_item_meta( $order_item_id, $meta_key, $meta_value = ''
  *
  * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
  */
-function edd_get_order_item_meta( $order_item_id, $key = '', $single = false ) {
-	return get_metadata( 'edd_order_item', $order_item_id, $key, $single );
+function cs_get_order_item_meta( $order_item_id, $key = '', $single = false ) {
+	return get_metadata( 'cs_order_item', $order_item_id, $key, $single );
 }
 
 /**
@@ -167,8 +167,8 @@ function edd_get_order_item_meta( $order_item_id, $key = '', $single = false ) {
  *
  * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
  */
-function edd_update_order_item_meta( $order_item_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'edd_order_item', $order_item_id, $meta_key, $meta_value, $prev_value );
+function cs_update_order_item_meta( $order_item_id, $meta_key, $meta_value, $prev_value = '' ) {
+	return update_metadata( 'cs_order_item', $order_item_id, $meta_key, $meta_value, $prev_value );
 }
 
 /**
@@ -180,8 +180,8 @@ function edd_update_order_item_meta( $order_item_id, $meta_key, $meta_value, $pr
  *
  * @return bool Whether the order_item meta key was deleted from the database.
  */
-function edd_delete_order_item_meta_by_key( $meta_key ) {
-	return delete_metadata( 'edd_order_item', null, $meta_key, '', true );
+function cs_delete_order_item_meta_by_key( $meta_key ) {
+	return delete_metadata( 'cs_order_item', null, $meta_key, '', true );
 }
 
 /** Order Adjustments *********************************************************/
@@ -198,8 +198,8 @@ function edd_delete_order_item_meta_by_key( $meta_key ) {
  *
  * @return int|false Meta ID on success, false on failure.
  */
-function edd_add_order_adjustment_meta( $adjustment_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'edd_order_adjustment', $adjustment_id, $meta_key, $meta_value, $unique );
+function cs_add_order_adjustment_meta( $adjustment_id, $meta_key, $meta_value, $unique = false ) {
+	return add_metadata( 'cs_order_adjustment', $adjustment_id, $meta_key, $meta_value, $unique );
 }
 
 /**
@@ -216,8 +216,8 @@ function edd_add_order_adjustment_meta( $adjustment_id, $meta_key, $meta_value, 
  *
  * @return bool True on success, false on failure.
  */
-function edd_delete_order_adjustment_meta( $adjustment_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'edd_order_adjustment', $adjustment_id, $meta_key, $meta_value );
+function cs_delete_order_adjustment_meta( $adjustment_id, $meta_key, $meta_value = '' ) {
+	return delete_metadata( 'cs_order_adjustment', $adjustment_id, $meta_key, $meta_value );
 }
 
 /**
@@ -232,8 +232,8 @@ function edd_delete_order_adjustment_meta( $adjustment_id, $meta_key, $meta_valu
  *
  * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
  */
-function edd_get_order_adjustment_meta( $adjustment_id, $key = '', $single = false ) {
-	return get_metadata( 'edd_order_adjustment', $adjustment_id, $key, $single );
+function cs_get_order_adjustment_meta( $adjustment_id, $key = '', $single = false ) {
+	return get_metadata( 'cs_order_adjustment', $adjustment_id, $key, $single );
 }
 
 /**
@@ -253,8 +253,8 @@ function edd_get_order_adjustment_meta( $adjustment_id, $key = '', $single = fal
  *
  * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
  */
-function edd_update_order_adjustment_meta( $adjustment_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'edd_order_adjustment', $adjustment_id, $meta_key, $meta_value, $prev_value );
+function cs_update_order_adjustment_meta( $adjustment_id, $meta_key, $meta_value, $prev_value = '' ) {
+	return update_metadata( 'cs_order_adjustment', $adjustment_id, $meta_key, $meta_value, $prev_value );
 }
 
 /**
@@ -266,6 +266,6 @@ function edd_update_order_adjustment_meta( $adjustment_id, $meta_key, $meta_valu
  *
  * @return bool Whether the order_item meta key was deleted from the database.
  */
-function edd_delete_order_adjustment_meta_by_key( $meta_key ) {
-	return delete_metadata( 'edd_order_adjustment', null, $meta_key, '', true );
+function cs_delete_order_adjustment_meta_by_key( $meta_key ) {
+	return delete_metadata( 'cs_order_adjustment', null, $meta_key, '', true );
 }

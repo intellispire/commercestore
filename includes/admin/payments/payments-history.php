@@ -2,7 +2,7 @@
 /**
  * Functions to render Orders page.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Payments
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -20,15 +20,15 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.0
  * @param string $active_tab
  */
-function edd_orders_page_primary_nav( $active_tab = '' ) {
+function cs_orders_page_primary_nav( $active_tab = '' ) {
 
 	ob_start();?>
 
-	<nav class="nav-tab-wrapper edd-nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Secondary menu', 'easy-digital-downloads' ); ?>">
+	<nav class="nav-tab-wrapper cs-nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Secondary menu', 'commercestore' ); ?>">
 		<?php
 
 		// Get the order pages
-		$tabs = edd_get_order_pages();
+		$tabs = cs_get_order_pages();
 
 		// Loop through order pages and create tabs
 		foreach ( $tabs as $tab_id => $tab_name ) {
@@ -67,10 +67,10 @@ function edd_orders_page_primary_nav( $active_tab = '' ) {
  *
  * @return array
  */
-function edd_get_order_pages() {
+function cs_get_order_pages() {
 
 	// Get types and setup return value
-	$types  = edd_get_order_types();
+	$types  = cs_get_order_types();
 	$retval = array();
 
 	// Loop through and get type IDs and labels
@@ -88,7 +88,7 @@ function edd_get_order_pages() {
 	}
 
 	// Filter & return
-	return (array) apply_filters( 'edd_get_order_pages', $retval );
+	return (array) apply_filters( 'cs_get_order_pages', $retval );
 }
 
 /**
@@ -98,7 +98,7 @@ function edd_get_order_pages() {
  *
  * @return string
  */
-function edd_get_payment_view() {
+function cs_get_payment_view() {
 	return ! empty( $_GET['view'] )     // WPCS: CSRF ok.
 		? sanitize_key( $_GET['view'] ) // WPCS: CSRF ok.
 		: 'list';
@@ -112,32 +112,32 @@ function edd_get_payment_view() {
  *            Add a link to manually add orders.
  *            Changed to switch statement.
  */
-function edd_payment_history_page() {
+function cs_payment_history_page() {
 
 	// What are we viewing?
-	switch ( edd_get_payment_view() ) {
+	switch ( cs_get_payment_view() ) {
 
 		// View Order
 		case 'view-order-details' :
-			require_once EDD_PLUGIN_DIR . 'includes/admin/payments/view-order-details.php';
+			require_once CS_PLUGIN_DIR . 'includes/admin/payments/view-order-details.php';
 			break;
 
 		// Add Order
 		case 'add-order' :
-			require_once EDD_PLUGIN_DIR . 'includes/admin/payments/add-order.php';
-			edd_add_order_page_content();
+			require_once CS_PLUGIN_DIR . 'includes/admin/payments/add-order.php';
+			cs_add_order_page_content();
 			break;
 
 		// View Refund
 		case 'view-refund-details' :
-			require_once EDD_PLUGIN_DIR . 'includes/admin/payments/view-refund.php';
-			edd_view_refund_page_content();
+			require_once CS_PLUGIN_DIR . 'includes/admin/payments/view-refund.php';
+			cs_view_refund_page_content();
 			break;
 
 		// List Table
 		case 'list' :
 		default :
-			edd_order_list_table_content();
+			cs_order_list_table_content();
 			break;
 	}
 }
@@ -147,35 +147,35 @@ function edd_payment_history_page() {
  *
  * @since 3.0
  */
-function edd_order_list_table_content() {
-	require_once EDD_PLUGIN_DIR . 'includes/admin/payments/class-payments-table.php';
-	$orders_table = new EDD_Payment_History_Table();
+function cs_order_list_table_content() {
+	require_once CS_PLUGIN_DIR . 'includes/admin/payments/class-payments-table.php';
+	$orders_table = new CS_Payment_History_Table();
 	$orders_table->prepare_items();
 
 	$active_tab = sanitize_key( $orders_table->get_request_var( 'order_type', 'sale' ) );
-	$admin_url  = edd_get_admin_url( array( 'page' => 'edd-payment-history' ) ); ?>
+	$admin_url  = cs_get_admin_url( array( 'page' => 'cs-payment-history' ) ); ?>
 
 	<div class="wrap">
-		<h1 class="wp-heading-inline"><?php esc_html_e( 'Orders', 'easy-digital-downloads' ); ?></h1>
+		<h1 class="wp-heading-inline"><?php esc_html_e( 'Orders', 'commercestore' ); ?></h1>
 		<?php
 		if ( 'sale' === $active_tab ) {
-			$add_new_url = add_query_arg( array( 'view' => 'add-order' ), edd_get_admin_url( array( 'page' => 'edd-payment-history' ) ) );
+			$add_new_url = add_query_arg( array( 'view' => 'add-order' ), cs_get_admin_url( array( 'page' => 'cs-payment-history' ) ) );
 			printf(
 				'<a href="%s" class="page-title-action">%s</a>',
 				esc_url( $add_new_url ),
-				esc_html__( 'Add New', 'easy-digital-downloads' )
+				esc_html__( 'Add New', 'commercestore' )
 			);
 		}
 		?>
 		<hr class="wp-header-end">
 
-		<?php edd_orders_page_primary_nav( $active_tab ); ?>
+		<?php cs_orders_page_primary_nav( $active_tab ); ?>
 
-		<?php do_action( 'edd_payments_page_top' ); ?>
+		<?php do_action( 'cs_payments_page_top' ); ?>
 
-		<form id="edd-payments-filter" method="get" action="<?php echo esc_url( $admin_url ); ?>">
+		<form id="cs-payments-filter" method="get" action="<?php echo esc_url( $admin_url ); ?>">
 			<input type="hidden" name="post_type" value="download" />
-			<input type="hidden" name="page" value="edd-payment-history" />
+			<input type="hidden" name="page" value="cs-payment-history" />
 			<input type="hidden" name="order_type" value="<?php echo esc_attr( $active_tab ); ?>" />
 			<?php
 			$orders_table->views();
@@ -184,7 +184,7 @@ function edd_order_list_table_content() {
 			?>
 		</form>
 
-		<?php do_action( 'edd_payments_page_bottom' ); ?>
+		<?php do_action( 'cs_payments_page_bottom' ); ?>
 	</div>
 
 	<?php
@@ -201,15 +201,15 @@ function edd_order_list_table_content() {
  *
  * @return string Updated admin title.
  */
-function edd_view_order_details_title( $admin_title, $title ) {
+function cs_view_order_details_title( $admin_title, $title ) {
 
 	// Bail if we aren't on the Orders page.
-	if ( 'download_page_edd-payment-history' !== get_current_screen()->base ) {
+	if ( 'download_page_cs-payment-history' !== get_current_screen()->base ) {
 		return $admin_title;
 	}
 
 	// Get the view
-	$view = edd_get_payment_view();
+	$view = cs_get_payment_view();
 
 	// Which view?
 	switch ( $view ) {
@@ -217,12 +217,12 @@ function edd_view_order_details_title( $admin_title, $title ) {
 		// Edit/View
 		case 'view-order-details':
 		case 'edit-payment':
-			$title = __( 'Edit Order', 'easy-digital-downloads' ) . ' &mdash; ' . $admin_title;
+			$title = __( 'Edit Order', 'commercestore' ) . ' &mdash; ' . $admin_title;
 			break;
 
 		// Add
 		case 'add-order':
-			$title = __( 'Add New Order', 'easy-digital-downloads' ) . ' &mdash; ' . $admin_title;
+			$title = __( 'Add New Order', 'commercestore' ) . ' &mdash; ' . $admin_title;
 			break;
 
 		// List
@@ -234,4 +234,4 @@ function edd_view_order_details_title( $admin_title, $title ) {
 
 	return $title;
 }
-add_filter( 'admin_title', 'edd_view_order_details_title', 10, 2 );
+add_filter( 'admin_title', 'cs_view_order_details_title', 10, 2 );

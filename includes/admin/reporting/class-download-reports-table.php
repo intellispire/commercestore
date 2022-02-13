@@ -2,7 +2,7 @@
 /**
  * Download Reports Table Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -12,16 +12,16 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use EDD\Admin\List_Table;
+use CS\Admin\List_Table;
 
 /**
- * EDD_Download_Reports_Table Class
+ * CS_Download_Reports_Table Class
  *
  * Renders the Download Reports table
  *
  * @since 1.5
  */
-class EDD_Download_Reports_Table extends List_Table {
+class CS_Download_Reports_Table extends List_Table {
 
 	/**
 	 * @var object Query results
@@ -37,12 +37,12 @@ class EDD_Download_Reports_Table extends List_Table {
 	 */
 	public function __construct() {
 		parent::__construct( array(
-			'singular' => 'report-' . edd_get_label_singular(),
-			'plural'   => 'report-' . edd_get_label_plural(),
+			'singular' => 'report-' . cs_get_label_singular(),
+			'plural'   => 'report-' . cs_get_label_plural(),
 			'ajax'     => false
 		) );
 
-		add_action( 'edd_report_view_actions', array( $this, 'category_filter' ) );
+		add_action( 'cs_report_view_actions', array( $this, 'category_filter' ) );
 
 		$this->query();
 	}
@@ -72,13 +72,13 @@ class EDD_Download_Reports_Table extends List_Table {
 	public function column_default( $item, $column_name ) {
 		switch( $column_name ){
 			case 'earnings' :
-				return edd_currency_filter( edd_format_amount( $item[ $column_name ] ) );
+				return cs_currency_filter( cs_format_amount( $item[ $column_name ] ) );
 			case 'average_sales' :
 				return round( $item[ $column_name ] );
 			case 'average_earnings' :
-				return edd_currency_filter( edd_format_amount( $item[ $column_name ] ) );
+				return cs_currency_filter( cs_format_amount( $item[ $column_name ] ) );
 			case 'details' :
-				return '<a href="' . admin_url( 'edit.php?post_type=download&page=edd-reports&view=downloads&download-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'easy-digital-downloads' ) . '</a>';
+				return '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-reports&view=downloads&download-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'commercestore' ) . '</a>';
 			default:
 				return $item[ $column_name ];
 		}
@@ -92,12 +92,12 @@ class EDD_Download_Reports_Table extends List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'title'            => edd_get_label_singular(),
-			'sales'            => __( 'Sales',                    'easy-digital-downloads' ),
-			'earnings'         => __( 'Earnings',                 'easy-digital-downloads' ),
-			'average_sales'    => __( 'Monthly Average Sales',    'easy-digital-downloads' ),
-			'average_earnings' => __( 'Monthly Average Earnings', 'easy-digital-downloads' ),
-			'details'          => __( 'Detailed Report',          'easy-digital-downloads' )
+			'title'            => cs_get_label_singular(),
+			'sales'            => __( 'Sales',                    'commercestore' ),
+			'earnings'         => __( 'Earnings',                 'commercestore' ),
+			'average_sales'    => __( 'Monthly Average Sales',    'commercestore' ),
+			'average_earnings' => __( 'Monthly Average Earnings', 'commercestore' ),
+			'details'          => __( 'Detailed Report',          'commercestore' )
 		);
 	}
 
@@ -152,7 +152,7 @@ class EDD_Download_Reports_Table extends List_Table {
 	 * @return void
 	 */
 	public function bulk_actions( $which = '' ) {
-		edd_report_views();
+		cs_report_views();
 	}
 
 	/**
@@ -163,7 +163,7 @@ class EDD_Download_Reports_Table extends List_Table {
 	 */
 	public function category_filter() {
 		if ( get_terms( 'download_category' ) ) {
-			echo EDD()->html->category_dropdown( 'category', $this->get_category() );
+			echo CS()->html->category_dropdown( 'category', $this->get_category() );
 		}
 	}
 
@@ -205,16 +205,16 @@ class EDD_Download_Reports_Table extends List_Table {
 
 			case 'sales' :
 				$args['orderby']  = 'meta_value_num';
-				$args['meta_key'] = '_edd_download_sales';
+				$args['meta_key'] = '_cs_download_sales';
 				break;
 
 			case 'earnings' :
 				$args['orderby']  = 'meta_value_num';
-				$args['meta_key'] = '_edd_download_earnings';
+				$args['meta_key'] = '_cs_download_earnings';
 				break;
 		}
 
-		$r = apply_filters( 'edd_download_reports_prepare_items_args', $args, $this );
+		$r = apply_filters( 'cs_download_reports_prepare_items_args', $args, $this );
 
 		$this->products = new WP_Query( $r );
 	}
@@ -228,7 +228,7 @@ class EDD_Download_Reports_Table extends List_Table {
 	 * @return array All the data for customer reports.
 	 */
 	public function reports_data() {
-		_edd_deprecated_function( __METHOD__, '3.0', 'EDD_Download_Reports_Table::get_data()' );
+		_cs_deprecated_function( __METHOD__, '3.0', 'CS_Download_Reports_Table::get_data()' );
 
 		return $this->get_data();
 	}
@@ -250,10 +250,10 @@ class EDD_Download_Reports_Table extends List_Table {
 				$reports_data[] = array(
 					'ID'               => $download,
 					'title'            => get_the_title( $download ),
-					'sales'            => edd_get_download_sales_stats( $download ),
-					'earnings'         => edd_get_download_earnings_stats( $download ),
-					'average_sales'    => edd_get_average_monthly_download_sales( $download ),
-					'average_earnings' => edd_get_average_monthly_download_earnings( $download ),
+					'sales'            => cs_get_download_sales_stats( $download ),
+					'earnings'         => cs_get_download_earnings_stats( $download ),
+					'average_sales'    => cs_get_average_monthly_download_sales( $download ),
+					'average_earnings' => cs_get_average_monthly_download_earnings( $download ),
 				);
 			}
 		}
@@ -265,11 +265,11 @@ class EDD_Download_Reports_Table extends List_Table {
 	 * Setup the final data for the table
 	 *
 	 * @since 1.5
-	 * @uses EDD_Download_Reports_Table::get_columns()
-	 * @uses EDD_Download_Reports_Table::get_sortable_columns()
-	 * @uses EDD_Download_Reports_Table::get_total_downloads()
-	 * @uses EDD_Download_Reports_Table::get_data()
-	 * @uses EDD_Download_Reports_Table::set_pagination_args()
+	 * @uses CS_Download_Reports_Table::get_columns()
+	 * @uses CS_Download_Reports_Table::get_sortable_columns()
+	 * @uses CS_Download_Reports_Table::get_total_downloads()
+	 * @uses CS_Download_Reports_Table::get_data()
+	 * @uses CS_Download_Reports_Table::set_pagination_args()
 	 * @return void
 	 */
 	public function prepare_items() {

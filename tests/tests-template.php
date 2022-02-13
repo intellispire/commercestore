@@ -2,9 +2,9 @@
 
 
 /**
- * @group edd_misc
+ * @group cs_misc
  */
-class Test_Template extends EDD_UnitTestCase {
+class Test_Template extends CS_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
@@ -18,7 +18,7 @@ class Test_Template extends EDD_UnitTestCase {
 			'current' => 1,
 		);
 
-		edd_pagination( $args );
+		cs_pagination( $args );
 		$output = ob_get_clean();
 		$this->assertEmpty( $output );
 	}
@@ -31,7 +31,7 @@ class Test_Template extends EDD_UnitTestCase {
 			'current' => 1,
 		);
 
-		edd_pagination( $args );
+		cs_pagination( $args );
 		$output = ob_get_clean();
 		// Verify it has the current page as 1
 		$this->assertSame( 1, preg_match( '/class=(\"|\')page-numbers current(\"|\')>1<\/span>/', $output ) );
@@ -54,7 +54,7 @@ class Test_Template extends EDD_UnitTestCase {
 			'current' => 2,
 		);
 
-		edd_pagination( $args );
+		cs_pagination( $args );
 		$output = ob_get_clean();
 		// Verify it has the current page as 2
 		$this->assertSame( 1, preg_match( '/class=(\"|\')page-numbers current(\"|\')>2<\/span>/', $output ) );
@@ -76,7 +76,7 @@ class Test_Template extends EDD_UnitTestCase {
 			'current' => 3,
 		);
 
-		edd_pagination( $args );
+		cs_pagination( $args );
 		$output = ob_get_clean();
 		// Verify it has the current page as 3
 		$this->assertSame( 1, preg_match( '/class=(\"|\')page-numbers current(\"|\')>3<\/span>/', $output ) );
@@ -100,7 +100,7 @@ class Test_Template extends EDD_UnitTestCase {
 			'current' => 5,
 		);
 
-		edd_pagination( $args );
+		cs_pagination( $args );
 		$output = ob_get_clean();
 		// Verify it has the current page as 5
 		$this->assertSame( 1, preg_match( '/class=(\"|\')page-numbers current(\"|\')>5<\/span>/', $output ) );

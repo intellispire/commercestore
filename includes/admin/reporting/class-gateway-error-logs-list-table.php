@@ -2,7 +2,7 @@
 /**
  * Gateway Error Log View Class
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -12,12 +12,12 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EDD_Gateway_Error_Log_Table Class
+ * CS_Gateway_Error_Log_Table Class
  *
  * @since 1.4
  * @since 3.0 Updated to use the custom tables and new query classes.
  */
-class EDD_Gateway_Error_Log_Table extends EDD_Base_Log_List_Table {
+class CS_Gateway_Error_Log_Table extends CS_Base_Log_List_Table {
 
 	/**
 	 * Get things started
@@ -71,7 +71,7 @@ class EDD_Gateway_Error_Log_Table extends EDD_Base_Log_List_Table {
 	 */
 	public function column_message( $item ) {
 	?>
-		<a href="#TB_inline?width=640&amp;inlineId=log-message-<?php echo $item['ID']; ?>" class="thickbox"><?php _e( 'View Log Message', 'easy-digital-downloads' ); ?></a>
+		<a href="#TB_inline?width=640&amp;inlineId=log-message-<?php echo $item['ID']; ?>" class="thickbox"><?php _e( 'View Log Message', 'commercestore' ); ?></a>
 		<div id="log-message-<?php echo $item['ID']; ?>" style="display:none;">
 			<?php
 
@@ -85,7 +85,7 @@ class EDD_Gateway_Error_Log_Table extends EDD_Base_Log_List_Table {
 				$data   = substr( $log_message, $serialized, strlen( $log_message ) - 1 );
 
 				echo wpautop( $intro );
-				echo '<strong>' . wpautop( __( 'Log data:', 'easy-digital-downloads' ) ) . '</strong>';
+				echo '<strong>' . wpautop( __( 'Log data:', 'commercestore' ) ) . '</strong>';
 				echo '<div style="word-wrap: break-word;">' . wpautop( $data ) . '</div>';
 			} else {
 				// No serialized data found
@@ -104,12 +104,12 @@ class EDD_Gateway_Error_Log_Table extends EDD_Base_Log_List_Table {
 	 */
 	public function get_columns() {
 		return array(
-			'ID'         => __( 'Log ID',        'easy-digital-downloads' ),
-			'payment_id' => __( 'Order Number',  'easy-digital-downloads' ),
-			'error'      => __( 'Error',         'easy-digital-downloads' ),
-			'message'    => __( 'Error Message', 'easy-digital-downloads' ),
-			'gateway'    => __( 'Gateway',       'easy-digital-downloads' ),
-			'date'       => __( 'Date',          'easy-digital-downloads' )
+			'ID'         => __( 'Log ID',        'commercestore' ),
+			'payment_id' => __( 'Order Number',  'commercestore' ),
+			'error'      => __( 'Error',         'commercestore' ),
+			'message'    => __( 'Error Message', 'commercestore' ),
+			'gateway'    => __( 'Gateway',       'commercestore' ),
+			'date'       => __( 'Date',          'commercestore' )
 		);
 	}
 
@@ -118,24 +118,24 @@ class EDD_Gateway_Error_Log_Table extends EDD_Base_Log_List_Table {
 	 *
 	 * @since 1.4
 	 * @param  array  $log_query Query arguments
-	 * @global object $edd_logs EDD Logs Object
+	 * @global object $cs_logs CommerceStore Logs Object
 	 * @return array $logs_data Array of all the Log entries
 	 */
 	public function get_logs( $log_query = array() ) {
 		$logs_data         = array();
 		$log_query['type'] = 'gateway_error';
 
-		$logs = edd_get_logs( $log_query );
+		$logs = cs_get_logs( $log_query );
 
 		if ( $logs ) {
 			foreach ( $logs as $log ) {
-				/** @var $log EDD\Logs\Log */
+				/** @var $log CS\Logs\Log */
 
 				$logs_data[] = array(
 					'ID'         => $log->id,
 					'payment_id' => $log->object_id,
-					'error'      => $log->title ? $log->title : __( 'Payment Error', 'easy-digital-downloads' ),
-					'gateway'    => edd_get_payment_gateway( $log->object_id ),
+					'error'      => $log->title ? $log->title : __( 'Payment Error', 'commercestore' ),
+					'gateway'    => cs_get_payment_gateway( $log->object_id ),
 					'date'       => $log->date_created,
 					'content'    => $log->content,
 				);
@@ -153,6 +153,6 @@ class EDD_Gateway_Error_Log_Table extends EDD_Base_Log_List_Table {
 	public function get_total( $log_query = array() ) {
 		$log_query['type'] = 'gateway_error';
 
-		return edd_count_logs( $log_query );
+		return cs_count_logs( $log_query );
 	}
 }

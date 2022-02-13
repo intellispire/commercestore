@@ -12,7 +12,7 @@ export const OrderRefund = wp.Backbone.View.extend( {
 	/**
 	 * @since 3.0
 	 */
-	template: wp.template( 'edd-admin-order-refund' ),
+	template: wp.template( 'cs-admin-order-refund' ),
 
 	/**
 	 * @since 3.0

@@ -1,9 +1,9 @@
 <?php
 /**
- * Tracking functions for reporting plugin usage to the EDD site for users that
+ * Tracking functions for reporting plugin usage to the CommerceStore site for users that
  * have opted in.
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -19,10 +19,10 @@ defined( 'ABSPATH' ) || exit;
  * @since  1.8.2
  * @return void
  */
-class EDD_Tracking {
+class CS_Tracking {
 
 	/**
-	 * The data to send to the EDD site
+	 * The data to send to the CommerceStore site
 	 *
 	 * @access private
 	 */
@@ -39,11 +39,11 @@ class EDD_Tracking {
 		add_action( 'admin_notices', array( $this, 'admin_notice'  ) );
 
 		// Sanitize setting
-		add_action( 'edd_settings_general_sanitize', array( $this, 'check_for_settings_optin' ) );
+		add_action( 'cs_settings_general_sanitize', array( $this, 'check_for_settings_optin' ) );
 
 		// Handle opting in and out
-		add_action( 'edd_opt_into_tracking',   array( $this, 'check_for_optin'  ) );
-		add_action( 'edd_opt_out_of_tracking', array( $this, 'check_for_optout' ) );
+		add_action( 'cs_opt_into_tracking',   array( $this, 'check_for_optin'  ) );
+		add_action( 'cs_opt_out_of_tracking', array( $this, 'check_for_optout' ) );
 	}
 
 	/**
@@ -53,7 +53,7 @@ class EDD_Tracking {
 	 * @return bool
 	 */
 	private function tracking_allowed() {
-		return (bool) edd_get_option( 'allow_tracking', false );
+		return (bool) cs_get_option( 'allow_tracking', false );
 	}
 
 	/**
@@ -67,7 +67,7 @@ class EDD_Tracking {
 		// Retrieve current theme info
 		$theme_data    = wp_get_theme();
 		$theme         = $theme_data->Name . ' ' . $theme_data->Version;
-		$checkout_page = edd_get_option( 'purchase_page', false );
+		$checkout_page = cs_get_option( 'purchase_page', false );
 		$date          = ( false !== $checkout_page )
 			? get_post_field( 'post_date', $checkout_page )
 			: 'not set';
@@ -78,7 +78,7 @@ class EDD_Tracking {
 		// Setup data
 		$data = array(
 			'php_version'  => phpversion(),
-			'edd_version'  => EDD_VERSION,
+			'cs_version'  => CS_VERSION,
 			'wp_version'   => get_bloginfo( 'version' ),
 			'server'       => $server,
 			'install_date' => $date,
@@ -106,16 +106,16 @@ class EDD_Tracking {
 
 		$data['active_plugins']   = $active_plugins;
 		$data['inactive_plugins'] = $plugins;
-		$data['active_gateways']  = array_keys( edd_get_enabled_payment_gateways() );
+		$data['active_gateways']  = array_keys( cs_get_enabled_payment_gateways() );
 		$data['products']         = wp_count_posts( 'download' )->publish;
-		$data['download_label']   = edd_get_label_singular( true );
+		$data['download_label']   = cs_get_label_singular( true );
 		$data['locale']           = get_locale();
 
 		$this->data = $data;
 	}
 
 	/**
-	 * Send the data to the EDD server
+	 * Send the data to the CommerceStore server
 	 *
 	 * @access private
 	 *
@@ -129,7 +129,7 @@ class EDD_Tracking {
 		$home_url = trailingslashit( home_url() );
 
 		// Allows us to stop our own site from checking in, and a filter for our additional sites
-		if ( $home_url === 'https://easydigitaldownloads.com/' || apply_filters( 'edd_disable_tracking_checkin', false ) ) {
+		if ( $home_url === 'https://commercestore.com/' || apply_filters( 'cs_disable_tracking_checkin', false ) ) {
 			return false;
 		}
 
@@ -145,17 +145,17 @@ class EDD_Tracking {
 
 		$this->setup_data();
 
-		wp_remote_post( 'https://easydigitaldownloads.com/?edd_action=checkin', array(
+		wp_remote_post( 'https://commercestore.com/?cs_action=checkin', array(
 			'method'      => 'POST',
 			'timeout'     => 8,
 			'redirection' => 5,
 			'httpversion' => '1.1',
 			'blocking'    => false,
 			'body'        => $this->data,
-			'user-agent'  => 'EDD/' . EDD_VERSION . '; ' . get_bloginfo( 'url' )
+			'user-agent'  => 'CS/' . CS_VERSION . '; ' . get_bloginfo( 'url' )
 		) );
 
-		update_option( 'edd_tracking_last_send', time() );
+		update_option( 'cs_tracking_last_send', time() );
 
 		return true;
 	}
@@ -187,11 +187,11 @@ class EDD_Tracking {
 			return;
 		}
 
-		edd_update_option( 'allow_tracking', 1 );
+		cs_update_option( 'allow_tracking', 1 );
 
 		$this->send_checkin( true );
 
-		update_option( 'edd_tracking_notice', '1' );
+		update_option( 'cs_tracking_notice', '1' );
 	}
 
 	/**
@@ -204,9 +204,9 @@ class EDD_Tracking {
 			return;
 		}
 
-		edd_delete_option( 'allow_tracking' );
-		update_option( 'edd_tracking_notice', '1' );
-		edd_redirect( remove_query_arg( 'edd_action' ) );
+		cs_delete_option( 'allow_tracking' );
+		update_option( 'cs_tracking_notice', '1' );
+		cs_redirect( remove_query_arg( 'cs_action' ) );
 	}
 
 	/**
@@ -216,7 +216,7 @@ class EDD_Tracking {
 	 * @return false|string
 	 */
 	private function get_last_send() {
-		return get_option( 'edd_tracking_last_send' );
+		return get_option( 'cs_tracking_last_send' );
 	}
 
 	/**
@@ -228,8 +228,8 @@ class EDD_Tracking {
 	 * @return void
 	 */
 	public function schedule_send() {
-		if ( edd_doing_cron() ) {
-			add_action( 'edd_weekly_scheduled_events', array( $this, 'send_checkin' ) );
+		if ( cs_doing_cron() ) {
+			add_action( 'cs_weekly_scheduled_events', array( $this, 'send_checkin' ) );
 		}
 	}
 
@@ -250,12 +250,12 @@ class EDD_Tracking {
 		$once = true;
 
 		// Bail if already noticed
-		if ( get_option( 'edd_tracking_notice' ) ) {
+		if ( get_option( 'cs_tracking_notice' ) ) {
 			return;
 		}
 
 		// Bail if already allowed
-		if ( edd_get_option( 'allow_tracking', false ) ) {
+		if ( cs_get_option( 'allow_tracking', false ) ) {
 			return;
 		}
 
@@ -265,25 +265,25 @@ class EDD_Tracking {
 		}
 
 		// No notices for local installs
-		if ( edd_is_dev_environment() ) {
-			update_option( 'edd_tracking_notice', '1' );
+		if ( cs_is_dev_environment() ) {
+			update_option( 'cs_tracking_notice', '1' );
 
 		// Notify the user
-		} elseif ( edd_is_admin_page() && ! edd_is_admin_page( 'index.php' ) && ! edd_is_insertable_admin_page() ) {
-			$optin_url      = add_query_arg( 'edd_action', 'opt_into_tracking'   );
-			$optout_url     = add_query_arg( 'edd_action', 'opt_out_of_tracking' );
+		} elseif ( cs_is_admin_page() && ! cs_is_admin_page( 'index.php' ) && ! cs_is_insertable_admin_page() ) {
+			$optin_url      = add_query_arg( 'cs_action', 'opt_into_tracking'   );
+			$optout_url     = add_query_arg( 'cs_action', 'opt_out_of_tracking' );
 			$source         = substr( md5( get_bloginfo( 'name' ) ), 0, 10 );
-			$extensions_url = 'https://easydigitaldownloads.com/downloads/?utm_source=' . $source . '&utm_medium=admin&utm_term=notice&utm_campaign=EDDUsageTracking';
+			$extensions_url = 'https://commercestore.com/downloads/?utm_source=' . $source . '&utm_medium=admin&utm_term=notice&utm_campaign=CSUsageTracking';
 
 			// Add the notice
-			EDD()->notices->add_notice( array(
-				'id'      => 'edd-allow-tracking',
+			CS()->notices->add_notice( array(
+				'id'      => 'cs-allow-tracking',
 				'class'   => 'updated',
 				'message' => array(
-					'<strong>' . __( 'Allow Easy Digital Downloads to track plugin usage?', 'easy-digital-downloads' ) . '</strong>',
-					sprintf( __( 'Opt-in to light usage tracking and our newsletter, and immediately be emailed a discount to the EDD shop, valid towards the <a href="%s" target="_blank">purchase of extensions</a>.', 'easy-digital-downloads' ), $extensions_url ),
-					__( 'No sensitive data is tracked.', 'easy-digital-downloads' ),
-					'<a href="' . esc_url( $optin_url ) . '" class="button-secondary">' . __( 'Allow', 'easy-digital-downloads' ) . '</a> <a href="' . esc_url( $optout_url ) . '" class="button-secondary">' . __( 'Do not allow', 'easy-digital-downloads' ) . '</a>'
+					'<strong>' . __( 'Allow CommerceStore to track plugin usage?', 'commercestore' ) . '</strong>',
+					sprintf( __( 'Opt-in to light usage tracking and our newsletter, and immediately be emailed a discount to the CommerceStore shop, valid towards the <a href="%s" target="_blank">purchase of extensions</a>.', 'commercestore' ), $extensions_url ),
+					__( 'No sensitive data is tracked.', 'commercestore' ),
+					'<a href="' . esc_url( $optin_url ) . '" class="button-secondary">' . __( 'Allow', 'commercestore' ) . '</a> <a href="' . esc_url( $optout_url ) . '" class="button-secondary">' . __( 'Do not allow', 'commercestore' ) . '</a>'
 				),
 				'is_dismissible' => false
 			) );

@@ -7,7 +7,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
-namespace EDD\Admin\Upgrades\v3;
+namespace CS\Admin\Upgrades\v3;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +27,7 @@ class Customer_Addresses extends Base {
 	public function __construct( $step = 1 ) {
 		parent::__construct( $step );
 
-		$this->completed_message = __( 'Customer addresses migration completed successfully.', 'easy-digital-downloads' );
+		$this->completed_message = __( 'Customer addresses migration completed successfully.', 'commercestore' );
 		$this->upgrade           = 'migrate_customer_addresses';
 	}
 
@@ -47,7 +47,7 @@ class Customer_Addresses extends Base {
 			 WHERE meta_key = %s
 			 ORDER BY umeta_id ASC
 			 LIMIT %d, %d",
-			esc_sql( '_edd_user_address' ), $offset, $this->per_step
+			esc_sql( '_cs_user_address' ), $offset, $this->per_step
 		) );
 
 		if ( ! empty( $results ) ) {
@@ -69,7 +69,7 @@ class Customer_Addresses extends Base {
 	 * @return float Percentage.
 	 */
 	public function get_percentage_complete() {
-		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(umeta_id) AS count FROM {$this->get_db()->usermeta} WHERE meta_key = %s", esc_sql( '_edd_user_address' ) ) );
+		$total = $this->get_db()->get_var( $this->get_db()->prepare( "SELECT COUNT(umeta_id) AS count FROM {$this->get_db()->usermeta} WHERE meta_key = %s", esc_sql( '_cs_user_address' ) ) );
 
 		if ( empty( $total ) ) {
 			$total = 0;
@@ -88,11 +88,11 @@ class Customer_Addresses extends Base {
 		if ( 100 === $percentage ) {
 			// Now update the most recent billing address entries for customers as the primary address.
 			$sql = "
-				UPDATE {$this->get_db()->edd_customer_addresses} ca
+				UPDATE {$this->get_db()->cs_customer_addresses} ca
 				SET ca.is_primary = 1
 				WHERE ca.id IN (
 					SELECT MAX(ca2.id)
-					FROM ( SELECT * FROM {$this->get_db()->edd_customer_addresses} ) ca2
+					FROM ( SELECT * FROM {$this->get_db()->cs_customer_addresses} ) ca2
 					WHERE ca2.type = 'billing'
 					GROUP BY ca2.customer_id
 				)

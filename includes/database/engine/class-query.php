@@ -8,7 +8,7 @@
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
-namespace EDD\Database;
+namespace CS\Database;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -77,7 +77,7 @@ class Query extends Base {
 	 * @since 1.0.0
 	 * @var   string
 	 */
-	protected $table_schema = '\\EDD\\Database\\Schema';
+	protected $table_schema = '\\CS\\Database\\Schema';
 
 	/** Item ******************************************************************/
 
@@ -113,7 +113,7 @@ class Query extends Base {
 	 * @since 1.0.0
 	 * @var   mixed
 	 */
-	protected $item_shape = '\\EDD\\Database\\Row';
+	protected $item_shape = '\\CS\\Database\\Row';
 
 	/** Cache *****************************************************************/
 
@@ -1508,7 +1508,7 @@ class Query extends Base {
 		/**
 		 * Filters the object query results.
 		 *
-		 * Looks like `edd_get_customers`
+		 * Looks like `cs_get_customers`
 		 *
 		 * @since 1.0.0
 		 *

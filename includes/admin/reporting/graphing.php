@@ -2,14 +2,14 @@
 /**
  * Graphing Functions
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
 */
 
-use EDD\Reports;
+use CS\Reports;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.3
  * @return void
 */
-function edd_reports_graph() {
+function cs_reports_graph() {
 	// Retrieve the queried dates
 	$dates = Reports\get_dates_filter( 'objects' );
 
@@ -42,8 +42,8 @@ function edd_reports_graph() {
 		$start = $dates['start']->format( 'Y-m-d' );
 		$end   = $dates['end']->format( 'Y-m-d' );
 
-		$sales = EDD()->payment_stats->get_sales_by_range( $dates['range'], true, $start, $end );
-		$earnings = EDD()->payment_stats->get_earnings_by_range( $dates['range'], true, $start, $end, $include_taxes );
+		$sales = CS()->payment_stats->get_sales_by_range( $dates['range'], true, $start, $end );
+		$earnings = CS()->payment_stats->get_earnings_by_range( $dates['range'], true, $start, $end, $include_taxes );
 
 		while ( $hour <= 23 ) {
 			$date = mktime( $hour, 0, 0, $month, $dates['start']->day, $dates['start']->year ) * 1000;
@@ -90,8 +90,8 @@ function edd_reports_graph() {
 		$start_date = $report_dates[0];
 		$end_date = end( $report_dates );
 
-		$sales = EDD()->payment_stats->get_sales_by_range( $dates['range'], true, $start_date['year'] . '-' . $start_date['month'] . '-' . $start_date['day'], $end_date['year'] . '-' . $end_date['month'] . '-' . $end_date['day'] );
-		$earnings = EDD()->payment_stats->get_earnings_by_range( $dates['range'], true, $start_date['year'] . '-' . $start_date['month'] . '-' . $start_date['day'], $end_date['year'] . '-' . $end_date['month'] . '-' . $end_date['day'], $include_taxes );
+		$sales = CS()->payment_stats->get_sales_by_range( $dates['range'], true, $start_date['year'] . '-' . $start_date['month'] . '-' . $start_date['day'], $end_date['year'] . '-' . $end_date['month'] . '-' . $end_date['day'] );
+		$earnings = CS()->payment_stats->get_earnings_by_range( $dates['range'], true, $start_date['year'] . '-' . $start_date['month'] . '-' . $start_date['day'], $end_date['year'] . '-' . $end_date['month'] . '-' . $end_date['day'], $include_taxes );
 
 		$i = 0;
 		$j = 0;
@@ -119,8 +119,8 @@ function edd_reports_graph() {
 		$date_start = $dates['start']->format( 'Y-m-d' );
 		$date_end   = $dates['end']->format( 'Y-m-d' );
 
-		$sales = EDD()->payment_stats->get_sales_by_range( $dates['range'], $day_by_day, $date_start, $date_end );
-		$earnings = EDD()->payment_stats->get_earnings_by_range( $dates['range'], $day_by_day, $date_start, $date_end, $include_taxes );
+		$sales = CS()->payment_stats->get_sales_by_range( $dates['range'], $day_by_day, $date_start, $date_end );
+		$earnings = CS()->payment_stats->get_earnings_by_range( $dates['range'], $day_by_day, $date_start, $date_end, $include_taxes );
 
 		$temp_data = array(
 			'sales'    => array(),
@@ -296,65 +296,65 @@ function edd_reports_graph() {
 	}
 
 	$data = array(
-		__( 'Earnings', 'easy-digital-downloads' ) => $earnings_data,
-		__( 'Sales',    'easy-digital-downloads' ) => $sales_data
+		__( 'Earnings', 'commercestore' ) => $earnings_data,
+		__( 'Sales',    'commercestore' ) => $sales_data
 	);
 
 	// start our own output buffer
 	ob_start();
 
-	do_action( 'edd_reports_graph_before' ); ?>
+	do_action( 'cs_reports_graph_before' ); ?>
 
-	<div id="edd-dashboard-widgets-wrap">
+	<div id="cs-dashboard-widgets-wrap">
 		<div class="metabox-holder" style="padding-top: 0;">
 			<div class="postbox">
-				<h3><span><?php _e('Earnings Over Time','easy-digital-downloads' ); ?></span></h3>
+				<h3><span><?php _e('Earnings Over Time','commercestore' ); ?></span></h3>
 
 				<div class="inside">
 					<?php
-					$graph = new EDD_Graph( $data );
+					$graph = new CS_Graph( $data );
 					$graph->set( 'x_mode', 'time' );
 					$graph->set( 'multiple_y_axes', true );
 					$graph->display();
 
 					if( ! empty( $dates['range'] ) && 'this_month' == $dates['range'] ) {
-						$estimated = edd_estimated_monthly_stats( $include_taxes );
+						$estimated = cs_estimated_monthly_stats( $include_taxes );
 					}
 					?>
 
-					<p class="edd_graph_totals">
+					<p class="cs_graph_totals">
 						<strong>
 							<?php
-								_e( 'Total earnings for period shown: ', 'easy-digital-downloads' );
-								echo edd_currency_filter( edd_format_amount( $earnings_totals ) );
+								_e( 'Total earnings for period shown: ', 'commercestore' );
+								echo cs_currency_filter( cs_format_amount( $earnings_totals ) );
 							?>
 						</strong>
 						<?php if ( ! $include_taxes ) : ?>
 							<sup>&dagger;</sup>
 						<?php endif; ?>
 					</p>
-					<p class="edd_graph_totals"><strong><?php _e( 'Total sales for period shown: ', 'easy-digital-downloads' ); echo edd_format_amount( $sales_totals, false ); ?></strong></p>
+					<p class="cs_graph_totals"><strong><?php _e( 'Total sales for period shown: ', 'commercestore' ); echo cs_format_amount( $sales_totals, false ); ?></strong></p>
 
 					<?php if( ! empty( $dates['range'] ) && 'this_month' == $dates['range'] ) : ?>
-						<p class="edd_graph_totals">
+						<p class="cs_graph_totals">
 							<strong>
 								<?php
-									_e( 'Estimated monthly earnings: ', 'easy-digital-downloads' );
-									echo edd_currency_filter( edd_format_amount( $estimated['earnings'] ) );
+									_e( 'Estimated monthly earnings: ', 'commercestore' );
+									echo cs_currency_filter( cs_format_amount( $estimated['earnings'] ) );
 								?>
 							</strong>
 							<?php if ( ! $include_taxes ) : ?>
 								<sup>&dagger;</sup>
 							<?php endif; ?>
 						</p>
-						<p class="edd_graph_totals"><strong><?php _e( 'Estimated monthly sales: ', 'easy-digital-downloads' ); echo edd_format_amount( $estimated['sales'], false ); ?></strong></p>
+						<p class="cs_graph_totals"><strong><?php _e( 'Estimated monthly sales: ', 'commercestore' ); echo cs_format_amount( $estimated['sales'], false ); ?></strong></p>
 					<?php endif; ?>
 
-					<?php do_action( 'edd_reports_graph_additional_stats' ); ?>
+					<?php do_action( 'cs_reports_graph_additional_stats' ); ?>
 
-					<p class="edd_graph_notes">
+					<p class="cs_graph_notes">
 						<?php if ( false === $include_taxes ) : ?>
-							<em><sup>&dagger;</sup> <?php _e( 'Excludes sales tax.', 'easy-digital-downloads' ); ?></em>
+							<em><sup>&dagger;</sup> <?php _e( 'Excludes sales tax.', 'commercestore' ); ?></em>
 						<?php endif; ?>
 					</p>
 				</div>
@@ -362,7 +362,7 @@ function edd_reports_graph() {
 		</div>
 	</div>
 
-	<?php do_action( 'edd_reports_graph_after' );
+	<?php do_action( 'cs_reports_graph_after' );
 
 	// Output the buffer
 	echo ob_get_clean();
@@ -374,9 +374,9 @@ function edd_reports_graph() {
  * @since 1.9
  * @return void
 */
-function edd_reports_graph_of_download( $download_id = 0 ) {
+function cs_reports_graph_of_download( $download_id = 0 ) {
 	// Retrieve the queried dates
-	$dates = edd_get_report_dates();
+	$dates = cs_get_report_dates();
 
 	// Determine graph options
 	switch ( $dates['range'] ) {
@@ -427,10 +427,10 @@ function edd_reports_graph_of_download( $download_id = 0 ) {
 			$date = mktime( $hour, $minute, $second, $month, $dates['day'], $dates['year'] );
 			$date_end = mktime( $hour + 1, $minute, $second, $month, $dates['day'], $dates['year'] );
 
-			$sales = EDD()->payment_stats->get_sales( $download_id, $date, $date_end );
+			$sales = CS()->payment_stats->get_sales( $download_id, $date, $date_end );
 			$sales_totals += $sales;
 
-			$earnings = EDD()->payment_stats->get_earnings( $download_id, $date, $date_end, $include_taxes );
+			$earnings = CS()->payment_stats->get_earnings( $download_id, $date, $date_end, $include_taxes );
 			$earnings_totals += $earnings;
 
 			$sales_data[] = array( $date * 1000, $sales );
@@ -464,10 +464,10 @@ function edd_reports_graph_of_download( $download_id = 0 ) {
 		foreach ( $report_dates as $report_date ) {
 			$date  = mktime( 0, 0, 0, $report_date['month'], $report_date['day'], $report_date['year'] );
 			$date_end = mktime( 23, 59, 59, $report_date['month'], $report_date['day'], $report_date['year'] );
-			$sales = EDD()->payment_stats->get_sales( $download_id, $date, $date_end );
+			$sales = CS()->payment_stats->get_sales( $download_id, $date, $date_end );
 			$sales_totals += $sales;
 
-			$earnings = EDD()->payment_stats->get_earnings( $download_id, $date, $date_end, $include_taxes );
+			$earnings = CS()->payment_stats->get_earnings( $download_id, $date, $date_end, $include_taxes );
 			$earnings_totals += $earnings;
 
 			$sales_data[] = array( $date * 1000, $sales );
@@ -517,10 +517,10 @@ function edd_reports_graph_of_download( $download_id = 0 ) {
 					$date      = mktime( 0, 0, 0, $i, $d, $y );
 					$end_date  = mktime( 23, 59, 59, $i, $d, $y );
 
-					$earnings         = EDD()->payment_stats->get_earnings( $download_id, $date, $end_date, $include_taxes );
+					$earnings         = CS()->payment_stats->get_earnings( $download_id, $date, $end_date, $include_taxes );
 					$earnings_totals += $earnings;
 
-					$sales         = EDD()->payment_stats->get_sales( $download_id, $date, $end_date );
+					$sales         = CS()->payment_stats->get_sales( $download_id, $date, $end_date );
 					$sales_totals += $sales;
 
 					$temp_data['earnings'][ $y ][ $i ][ $d ] = $earnings;
@@ -595,26 +595,26 @@ function edd_reports_graph_of_download( $download_id = 0 ) {
 	}
 
 	$data = array(
-		__( 'Earnings', 'easy-digital-downloads' ) => $earnings_data,
-		__( 'Sales', 'easy-digital-downloads' )    => $sales_data
+		__( 'Earnings', 'commercestore' ) => $earnings_data,
+		__( 'Sales', 'commercestore' )    => $sales_data
 	);
 
 	?>
 	<div class="metabox-holder" style="padding-top: 0;">
 		<div class="postbox">
-			<h3><span><?php printf( __('Earnings Over Time for %s', 'easy-digital-downloads' ), get_the_title( $download_id ) ); ?></span></h3>
+			<h3><span><?php printf( __('Earnings Over Time for %s', 'commercestore' ), get_the_title( $download_id ) ); ?></span></h3>
 
 			<div class="inside">
 				<?php
-				$graph = new EDD_Graph( $data );
+				$graph = new CS_Graph( $data );
 				$graph->set( 'x_mode', 'time' );
 				$graph->set( 'multiple_y_axes', true );
 				$graph->display();
 				?>
-				<p class="edd_graph_totals"><strong><?php _e( 'Total earnings for period shown: ', 'easy-digital-downloads' ); echo edd_currency_filter( edd_format_amount( $earnings_totals ) ); ?></strong></p>
-				<p class="edd_graph_totals"><strong><?php _e( 'Total sales for period shown: ', 'easy-digital-downloads' ); echo $sales_totals; ?></strong></p>
-				<p class="edd_graph_totals"><strong><?php printf( __( 'Average monthly earnings: %s', 'easy-digital-downloads' ), edd_currency_filter( edd_format_amount( edd_get_average_monthly_download_earnings( $download_id ) ) ) ); ?>
-				<p class="edd_graph_totals"><strong><?php printf( __( 'Average monthly sales: %s', 'easy-digital-downloads' ), number_format( edd_get_average_monthly_download_sales( $download_id ), 0 ) ); ?>
+				<p class="cs_graph_totals"><strong><?php _e( 'Total earnings for period shown: ', 'commercestore' ); echo cs_currency_filter( cs_format_amount( $earnings_totals ) ); ?></strong></p>
+				<p class="cs_graph_totals"><strong><?php _e( 'Total sales for period shown: ', 'commercestore' ); echo $sales_totals; ?></strong></p>
+				<p class="cs_graph_totals"><strong><?php printf( __( 'Average monthly earnings: %s', 'commercestore' ), cs_currency_filter( cs_format_amount( cs_get_average_monthly_download_earnings( $download_id ) ) ) ); ?>
+				<p class="cs_graph_totals"><strong><?php printf( __( 'Average monthly sales: %s', 'commercestore' ), number_format( cs_get_average_monthly_download_sales( $download_id ), 0 ) ); ?>
 			</div>
 		</div>
 	</div>
@@ -629,7 +629,7 @@ function edd_reports_graph_of_download( $download_id = 0 ) {
  *
  * @param array $form_data POSTed data from the filters form.
  */
-function edd_parse_report_dates( $form_data ) {
+function cs_parse_report_dates( $form_data ) {
 	// Load the Reports API dependencies.
 	Reports\Init::bootstrap();
 
@@ -652,12 +652,12 @@ function edd_parse_report_dates( $form_data ) {
 						 * This validates the input dates before saving. If they're not valid, an exception
 						 * will be thrown.
 						 */
-						EDD()->utils->date( $form_data['filter_from'] );
-						EDD()->utils->date( $form_data['filter_to'] );
+						CS()->utils->date( $form_data['filter_from'] );
+						CS()->utils->date( $form_data['filter_to'] );
 					} catch ( \Exception $e ) {
 						wp_die(
-							esc_html__( 'Invalid date format. Please enter a date in the format: YYYY-mm-dd.', 'easy-digital-downloads' ),
-							esc_html__( 'Invalid Date Error', 'easy-digital-downloads' ),
+							esc_html__( 'Invalid date format. Please enter a date in the format: YYYY-mm-dd.', 'commercestore' ),
+							esc_html__( 'Invalid Date Error', 'commercestore' ),
 							array( 'response' => 400, 'back_link' => true )
 						);
 					}
@@ -697,8 +697,8 @@ function edd_parse_report_dates( $form_data ) {
 
 	}
 
-	if ( ! empty( $form_data['edd_redirect'] ) ) {
-		$redirect = $form_data['edd_redirect'];
+	if ( ! empty( $form_data['cs_redirect'] ) ) {
+		$redirect = $form_data['cs_redirect'];
 
 		// Ensure data is available in the URL for legacy reports.
 		if ( ! empty( $form_data['range'] ) ) {
@@ -719,47 +719,47 @@ function edd_parse_report_dates( $form_data ) {
 			);
 		}
 
-		edd_redirect( $redirect );
+		cs_redirect( $redirect );
 	}
 }
-add_action( 'edd_filter_reports', 'edd_parse_report_dates' );
+add_action( 'cs_filter_reports', 'cs_parse_report_dates' );
 
 /**
- * EDD Reports Refresh Button
+ * CommerceStore Reports Refresh Button
  * @since 2.7
  * @description: Outputs a "Refresh Reports" button for graphs
  */
-function edd_reports_refresh_button() {
+function cs_reports_refresh_button() {
 
 	$url = wp_nonce_url( add_query_arg( array(
-		'edd_action'  => 'refresh_reports_transients',
-		'edd-message' => 'refreshed-reports'
-	) ), 'edd-refresh-reports' );
+		'cs_action'  => 'refresh_reports_transients',
+		'cs-message' => 'refreshed-reports'
+	) ), 'cs-refresh-reports' );
 
-	echo '<a href="' . esc_url( $url ) . '" title="' . __( 'Clicking this will clear the reports cache', 'easy-digital-downloads' ) . '"  class="button edd-refresh-reports-button">' . __( 'Refresh Reports', 'easy-digital-downloads' ) . '</a>';
+	echo '<a href="' . esc_url( $url ) . '" title="' . __( 'Clicking this will clear the reports cache', 'commercestore' ) . '"  class="button cs-refresh-reports-button">' . __( 'Refresh Reports', 'commercestore' ) . '</a>';
 }
 
-add_action( 'edd_reports_graph_after', 'edd_reports_refresh_button' );
+add_action( 'cs_reports_graph_after', 'cs_reports_refresh_button' );
 
 /**
- * EDD trigger the refresh of reports transients
+ * CommerceStore trigger the refresh of reports transients
  *
  * @since 2.7
  *
  * @param array $data Parameters sent from Settings page
  * @return void
  */
-function edd_run_refresh_reports_transients( $data ) {
-	if ( ! wp_verify_nonce( $data['_wpnonce'], 'edd-refresh-reports' ) ) {
+function cs_run_refresh_reports_transients( $data ) {
+	if ( ! wp_verify_nonce( $data['_wpnonce'], 'cs-refresh-reports' ) ) {
 		return;
 	}
 
 	// Delete transients
-	delete_transient( 'edd_stats_earnings' );
-	delete_transient( 'edd_stats_sales' );
-	delete_transient( 'edd_estimated_monthly_stats' );
-	delete_transient( 'edd_earnings_total' );
-	delete_transient( md5( 'edd_earnings_this_monththis_month' ) );
-	delete_transient( md5( 'edd_earnings_todaytoday' ) );
+	delete_transient( 'cs_stats_earnings' );
+	delete_transient( 'cs_stats_sales' );
+	delete_transient( 'cs_estimated_monthly_stats' );
+	delete_transient( 'cs_earnings_total' );
+	delete_transient( md5( 'cs_earnings_this_monththis_month' ) );
+	delete_transient( md5( 'cs_earnings_todaytoday' ) );
 }
-add_action( 'edd_refresh_reports_transients', 'edd_run_refresh_reports_transients' );
+add_action( 'cs_refresh_reports_transients', 'cs_run_refresh_reports_transients' );

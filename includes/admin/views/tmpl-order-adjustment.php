@@ -2,17 +2,17 @@
 /**
  * Order Overview: Adjustment
  *
- * @package     EDD
+ * @package     CS
  * @subpackage  Admin/Views
  * @copyright   Copyright (c) 2020, Sandhills Development, LLC
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       3.0
  */
 
-$view_url = edd_get_admin_url(
+$view_url = cs_get_admin_url(
 	array(
-		'page'       => 'edd-discounts',
-		'edd-action' => 'edit_discount',
+		'page'       => 'cs-discounts',
+		'cs-action' => 'edit_discount',
 	)
 );
 ?>
@@ -24,7 +24,7 @@ $view_url = edd_get_admin_url(
 		<# if ( true === data.state.isAdding ) { #>
 		<button class="button-link delete">
 			<span class="dashicons dashicons-no"></span>
-			<span class="screen-reader-text"><?php printf( __( 'Remove %s', 'easy-digital-downloads' ), '{{{ data.type }}}' ); ?></span>
+			<span class="screen-reader-text"><?php printf( __( 'Remove %s', 'commercestore' ), '{{{ data.type }}}' ); ?></span>
 		</button>
 		<# } #>
 
@@ -41,9 +41,9 @@ $view_url = edd_get_admin_url(
 				<small>
 			<# } #>
 				<# if ( 'credit' === data.type ) { #>
-					<?php esc_html_e( 'Order Credit', 'easy-digital-downloads' ); ?>
+					<?php esc_html_e( 'Order Credit', 'commercestore' ); ?>
 				<# } else { #>
-					<?php esc_html_e( 'Order Fee', 'easy-digital-downloads' ); ?>
+					<?php esc_html_e( 'Order Fee', 'commercestore' ); ?>
 				<# } #>
 			<# if ( '' !== data.description || false !== data.orderItem ) { #>
 				</small>
@@ -52,7 +52,7 @@ $view_url = edd_get_admin_url(
 	</div>
 </td>
 
-<td class="column-right" data-colname="<?php esc_html_e( 'Amount', 'easy-digital-downloads' ); ?>">
+<td class="column-right" data-colname="<?php esc_html_e( 'Amount', 'commercestore' ); ?>">
 	<# if ( 'fee' !== data.type || data.subtotal < 0 ) { #>&ndash;<# } #>{{ data.subtotalCurrency }}
 </td>
 

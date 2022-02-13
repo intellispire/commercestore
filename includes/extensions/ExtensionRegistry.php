@@ -2,15 +2,15 @@
 /**
  * License Registry
  *
- * Responsible for holding information about premium EDD extensions in use on this site.
+ * Responsible for holding information about premium CommerceStore extensions in use on this site.
  *
- * @package   easy-digital-downloads
- * @copyright Copyright (c) 2021, Easy Digital Downloads
+ * @package   commercestore
+ * @copyright Copyright (c) 2021, CommerceStore
  * @license   GPL2+
  * @since     2.11.4
  */
 
-namespace EDD\Extensions;
+namespace CS\Extensions;
 
 class ExtensionRegistry extends \ArrayObject {
 
@@ -21,7 +21,7 @@ class ExtensionRegistry extends \ArrayObject {
 	 *
 	 * @param string      $pluginFile     Path to the plugin's main file.
 	 * @param string      $pluginName     Display name of the plugin.
-	 * @param int         $pluginId       EDD product ID for the plugin.
+	 * @param int         $pluginId       CommerceStore product ID for the plugin.
 	 * @param string      $currentVersion Current version number.
 	 * @param string|null $optionName     Option name where the license key is stored. If omitted, automatically generated.
 	 */
@@ -35,7 +35,7 @@ class ExtensionRegistry extends \ArrayObject {
 
 		$this->offsetSet(
 			$pluginId,
-			new \EDD_License( $pluginFile, $pluginName, $currentVersion, 'Easy Digital Downloads', $optionName, null, $pluginId )
+			new \CS_License( $pluginFile, $pluginName, $currentVersion, 'CommerceStore', $optionName, null, $pluginId )
 		);
 	}
 
@@ -47,7 +47,7 @@ class ExtensionRegistry extends \ArrayObject {
 	 *
 	 * @since 2.11.4
 	 *
-	 * @return \EDD_License[]
+	 * @return \CS_License[]
 	 */
 	private function getExtensions() {
 		return $this->getArrayCopy();
@@ -64,7 +64,7 @@ class ExtensionRegistry extends \ArrayObject {
 	 * @return int
 	 */
 	public function countLicensedExtensions() {
-		$licensedExtensions = array_filter( $this->getExtensions(), function ( \EDD_License $license ) {
+		$licensedExtensions = array_filter( $this->getExtensions(), function ( \CS_License $license ) {
 			return ! empty( $license->license );
 		} );
 

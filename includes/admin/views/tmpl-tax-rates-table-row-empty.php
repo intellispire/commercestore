@@ -4,13 +4,13 @@
  *
  * @since 3.0
  *
- * @package EDD
+ * @package CS
  * @category Template
- * @author Easy Digital Downloads
+ * @author CommerceStore
  * @version 1.0.0
  */
 ?>
 
 <td colspan="5">
-  <?php esc_html_e( 'No rates found.', 'easy-digital-downloads' ); ?>
+  <?php esc_html_e( 'No rates found.', 'commercestore' ); ?>
 </td>
