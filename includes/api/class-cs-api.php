@@ -1755,6 +1755,9 @@ class CS_API {
 	 *
 	 * @param array $args Arguments provided by API Request
 	 *
+	 * @todo: FIXME NLT: integrations should not be hardcoded here, instead have an API to determine.
+	 * if it's running.
+	 *
 	 * @return array
 	 */
 	public function get_info() {

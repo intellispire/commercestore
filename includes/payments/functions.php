@@ -526,6 +526,8 @@ function cs_check_for_existing_payment( $order_id ) {
  * @param bool  $return_label Whether to return the payment status or not
  *
  * @return bool|mixed if payment status exists, false otherwise
+ *
+ * @todo: FIXME - the tests for this are broken. Is it the test or the function?
  */
 function cs_get_payment_status( $order, $return_label = false ) {
 	if ( is_numeric( $order ) ) {
@@ -619,11 +621,12 @@ function cs_get_payment_statuses() {
  *
  * @return array $payment_status All the available payment statuses.
  */
-function cs_get_payment_status_keys() {
+function cs_get_payment_status_keys() : array {
 	$statuses = array_keys( cs_get_payment_statuses() );
-	asort( $statuses );
+	$values = array_values( $statuses);
+	asort( $values );
 
-	return array_values( $statuses );
+	return $values;
 }
 
 /**

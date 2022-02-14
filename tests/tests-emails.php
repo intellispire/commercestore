@@ -174,12 +174,13 @@ class Tests_Emails extends CS_UnitTestCase {
 		$this->assertEquals( 'default', CS()->emails->get_template() );
 	}
 
+	// @todo: refactor email.
 	public function test_cs_get_default_sale_notification_email() {
 		$email = cs_get_default_sale_notification_email();
 
 		$this->assertContains( 'Hello', $email );
-		$this->assertContains( 'A Downloads purchase has been made', $email );
-		$this->assertContains( 'Downloads sold:', $email );
+		$this->assertContains( 'A Products purchase has been made', $email );
+		$this->assertContains( 'Products sold:', $email );
 		$this->assertContains( '{download_list}', $email );
 		$this->assertContains( 'Amount:  {price}', $email );
 	}

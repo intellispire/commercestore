@@ -13,7 +13,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	 * @covers ::product_dropdown
 	 */
 	public function test_product_dropdown() {
-		$expected = '<select name="products" id="products" class="cs-select " data-placeholder="Choose a Download" data-search-type="download" data-search-placeholder="Search Downloads">';
+		$expected = '<select name="products" id="products" class="cs-select " data-placeholder="Choose a Product" data-search-type="download" data-search-placeholder="Search Products">';
 		$this->assertContains( $expected, CS()->html->product_dropdown() );
 	}
 
@@ -126,7 +126,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	 * @covers ::category_dropdown
 	 */
 	public function test_category_dropdown() {
-		$expected = '<select name="cs_categories" id="" class="cs-select " data-placeholder=""><option value="all" selected=\'selected\'>All Download Categories</option></select>';
+		$expected = '<select name="cs_categories" id="" class="cs-select " data-placeholder=""><option value="all" selected=\'selected\'>All Product Categories</option></select>';
 		$this->assertEquals( $expected, CS()->html->category_dropdown() );
 	}
 
