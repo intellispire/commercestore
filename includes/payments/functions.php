@@ -619,11 +619,12 @@ function cs_get_payment_statuses() {
  *
  * @return array $payment_status All the available payment statuses.
  */
-function cs_get_payment_status_keys() {
+function cs_get_payment_status_keys() : array {
 	$statuses = array_keys( cs_get_payment_statuses() );
-	asort( $statuses );
+	$values = array_values( $statuses);
+	asort( $values );
 
-	return array_values( $statuses );
+	return $values;
 }
 
 /**

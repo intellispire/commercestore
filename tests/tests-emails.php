@@ -180,7 +180,7 @@ class Tests_Emails extends CS_UnitTestCase {
 
 		$this->assertContains( 'Hello', $email );
 		$this->assertContains( 'A Products purchase has been made', $email );
-		$this->assertContains( 'Downloads sold:', $email );
+		$this->assertContains( 'Products sold:', $email );
 		$this->assertContains( '{download_list}', $email );
 		$this->assertContains( 'Amount:  {price}', $email );
 	}

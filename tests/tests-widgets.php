@@ -396,13 +396,13 @@ class Tests_Widgets extends CS_UnitTestCase {
 		$this->assertRegExp( '/<label for="widget-cs_product_details--download_id">Product:<\/label>/', $output );
 		$this->assertRegExp( '/<select class="widefat" name="widget-cs_product_details\[\]\[download_id\]" id="widget-cs_product_details--download_id">/', $output );
 		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--download_title" name="widget-cs_product_details\[\]\[download_title\]" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--download_title">Show Download Title<\/label>/', $output );
+		$this->assertRegExp( '/<label for="widget-cs_product_details--download_title">Show Product Title<\/label>/', $output );
 		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--purchase_button" name="widget-cs_product_details\[\]\[purchase_button\]" type="checkbox" \/>/', $output );
 		$this->assertRegExp( '/<label for="widget-cs_product_details--purchase_button">Show Purchase Button<\/label>/', $output );
 		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--categories" name="widget-cs_product_details\[\]\[categories\]" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--categories">Show Download Categories<\/label>/', $output );
+		$this->assertRegExp( '/<label for="widget-cs_product_details--categories">Show Product Categories<\/label>/', $output );
 		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--tags" name="widget-cs_product_details\[\]\[tags\]" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--tags">Show Download Tags<\/label>/', $output );
+		$this->assertRegExp( '/<label for="widget-cs_product_details--tags">Show Product Tags<\/label>/', $output );
 
 	}
 

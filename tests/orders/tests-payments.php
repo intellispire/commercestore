@@ -206,7 +206,7 @@ class Payment_Tests extends \CS_UnitTestCase {
 
 			// Subscriptions are now core
 			'preapproval'		 => __( 'Preapproved','commercestore' ),
-			'preapproval_pending'=> __( 'Preappproval Pending', 'commercestore' ),
+			'preapproval_pending'=> __( 'Preapproval Pending', 'commercestore' ),
 			'cancelled'	         => __( 'Cancelled', 'commercestore' ),
 			'cs_subscription'	 => __( 'Renewal', 'commercestore' ),
 		);

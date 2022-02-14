@@ -47,8 +47,8 @@ class Tests_Post_Type_Labels extends CS_UnitTestCase {
 		$this->assertInternalType( 'array', $category_labels );
 		$this->assertArrayHasKey( 'name', $category_labels );
 		$this->assertArrayHasKey( 'singular_name', $category_labels );
-		$this->assertTrue( in_array( 'Download Category', $category_labels ) );
-		$this->assertTrue( in_array( 'Download Categories', $category_labels ) );
+		$this->assertTrue( in_array( 'Product Category', $category_labels ) );
+		$this->assertTrue( in_array( 'Product Categories', $category_labels ) );
 		// Negative test for our change to exclude singular post type label in #3212
 		$this->assertTrue( in_array( 'Categories', $category_labels ) );
 
@@ -56,8 +56,8 @@ class Tests_Post_Type_Labels extends CS_UnitTestCase {
 		$this->assertInternalType( 'array', $tag_labels );
 		$this->assertArrayHasKey( 'name', $tag_labels );
 		$this->assertArrayHasKey( 'singular_name', $tag_labels );
-		$this->assertTrue( in_array( 'Download Tag', $tag_labels ) );
-		$this->assertTrue( in_array( 'Download Tags', $tag_labels ) );
+		$this->assertTrue( in_array( 'Product Tag', $tag_labels ) );
+		$this->assertTrue( in_array( 'Product Tags', $tag_labels ) );
 		// Negative test for our change to exclude singular post type label in #3212
 		$this->assertTrue( in_array( 'Tags', $tag_labels ) );
 
