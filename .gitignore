@@ -22,6 +22,8 @@ CommerceStore.iml
 # Tools
 rebrand.pl
 
+# vendor
+/vendor/
 
 # Eclipse
 *.pydevproject
