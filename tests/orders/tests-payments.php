@@ -183,7 +183,7 @@ class Payment_Tests extends \CS_UnitTestCase {
 
 			// Subscriptions are now core
 			'preapproval'		 => 'Preapproved',
-			'preapproval_pending'=> 'Preappproval Pending',
+			'preapproval_pending'=> 'Preapproval Pending',
 			'cancelled'	         => 'Cancelled',
 			'cs_subscription'	 => 'Renewal',
 		);
@@ -211,9 +211,9 @@ class Payment_Tests extends \CS_UnitTestCase {
 			'cs_subscription'	 => __( 'Renewal', 'commercestore' ),
 		);
 
-		asort( $expected );
 
 		$expected = array_keys( $expected );
+		asort( $expected );
 
 		$this->assertInternalType( 'array', $out );
 		$this->assertEquals( $expected, $out );
