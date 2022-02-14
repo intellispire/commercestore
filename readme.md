@@ -1,6 +1,6 @@
 # [CommerceStore](https://commercestore.com) #
 
-![Plugin Version](https://img.shields.io/wordpress/plugin/v/commercestore.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/commercestore.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/commercestore.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/commercestore.svg?maxAge=2592000) [![Build status](https://buildkite.com/intellispire/commercestore-build?branch=develop) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/intellispire/commercestore/blob/master/license.txt)
+![Plugin Version](https://img.shields.io/wordpress/plugin/v/commercestore.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/commercestore.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/commercestore.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/commercestore.svg?maxAge=2592000) [![Build status](https://badge.buildkite.com/5003366a016d97531ed332b9bcb48c528f8824008d716704d0.svg?branch=main)](https://buildkite.com/intellispire/commercestore?branch=main) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/intellispire/commercestore/blob/master/license.txt)
 
 ### Welcome to our GitHub Repository
 
@@ -13,9 +13,11 @@ More information can be found at [commercestore.com](https://commercestore.com/)
 For detailed setup instructions, visit the official [Documentation](https://commercestore.com/documentation/) page.
 
 1. You can clone the GitHub repository: `https://github.com/commercestore/commercestore.git`
-2. Or download it directly as a ZIP file: `https://github.com/commercestore/commercestore/archive/master.zip`
+2. Or download it directly as a ZIP file: `https://github.com/commercestore/commercestore/archive/min.zip`
 
 This will download the latest developer copy of CommerceStore.
+
+Once downloaded, you must cd into the commercestore directory and run `composer install` in order to install the dependencies.
 
 ## Bugs ##
 If you find an issue, let us know [here](https://github.com/intellispire/commercestore/issues?state=open)!
