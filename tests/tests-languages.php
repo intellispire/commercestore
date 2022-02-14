@@ -14,10 +14,16 @@ class Tests_Languages extends CS_UnitTestCase {
 		parent::tearDown();
 	}
 
+	/**
+	 * @todo: Remove test. No languages are currently supported.
+	 * @since 4.0
+	 * @return void
+	 */
 	public function test_included_languages() {
 		// As we work towards getting files included into language packs on WordPress.org, this allows us
 		// to make sure we don't keep including translations that hit 100% and shoudl be removed
-
+		$this->assertTrue( true );
+/*
 		$this->assertTrue( file_exists( CS_PLUGIN_DIR . '/languages/commercestore-af.mo') );
 		$this->assertTrue( file_exists( CS_PLUGIN_DIR . '/languages/commercestore-an.mo') );
 		$this->assertTrue( file_exists( CS_PLUGIN_DIR . '/languages/commercestore-az.mo') );
@@ -110,7 +116,7 @@ class Tests_Languages extends CS_UnitTestCase {
 		$this->assertTrue( file_exists( CS_PLUGIN_DIR . '/languages/commercestore-vi.mo') );
 		$this->assertTrue( file_exists( CS_PLUGIN_DIR . '/languages/commercestore-zh_CN.mo') );
 		$this->assertTrue( file_exists( CS_PLUGIN_DIR . '/languages/commercestore-zh_TW.mo') );
-
+     */
 	}
 
 }

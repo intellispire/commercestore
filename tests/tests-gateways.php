@@ -65,6 +65,13 @@ class Test_Gateways extends CS_UnitTestCase {
 		$this->assertFalse( cs_is_gateway_active( 'paypal' ) );
 	}
 
+	/**
+	 * @todo - rewrite test. As of 3.0, there is a new sort order that this test should be exercising.
+	 * @see cs_order_gateways
+	 *
+	 * @return void
+	 */
+
 	public function test_default_gateway() {
 
 		global $cs_options;
@@ -82,7 +89,7 @@ class Test_Gateways extends CS_UnitTestCase {
 		$cs_options['gateways']['manual'] = '1';
 		$cs_options['gateways']['stripe'] = '1';
 
-		$this->assertEquals( 'manual', cs_get_default_gateway() );
+		$this->assertEquals( 'stripe', cs_get_default_gateway() );
 	}
 
 	public function test_get_gateway_admin_label() {

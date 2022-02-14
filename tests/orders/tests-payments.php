@@ -143,6 +143,11 @@ class Payment_Tests extends \CS_UnitTestCase {
 		$this->assertFalse( cs_get_payment_status( 1212121212121 ) );
 	}
 
+	/**
+	 * FIXME: We have removed translations for now, skipping test.
+	 * @return void
+	 *
+
 	public function test_get_payment_status_translated() {
 		add_filter( 'locale', function() { return 'fr_FR'; }, 10 );
 		$lang_file = CS_PLUGIN_DIR . 'languages/commercestore-fr_FR.mo';
@@ -155,6 +160,7 @@ class Payment_Tests extends \CS_UnitTestCase {
 		remove_filter( 'locale', function() { return 'fr_FR'; }, 10 );
 		unload_textdomain( 'commercestore' );
 	}
+	*/
 
 	public function test_get_payment_status_label() {
 		$this->assertEquals( 'Pending', cs_get_payment_status( self::$payment->ID, true ) );
@@ -174,6 +180,12 @@ class Payment_Tests extends \CS_UnitTestCase {
 			'revoked'            => 'Revoked',
 			'abandoned'          => 'Abandoned',
 			'processing'         => 'Processing',
+
+			// Subscriptions are now core
+			'preapproval'		 => 'Preapproved',
+			'preapproval_pending'=> 'Preappproval Pending',
+			'cancelled'	         => 'Cancelled',
+			'cs_subscription'	 => 'Renewal',
 		);
 
 		$this->assertEquals( $expected, $out );
@@ -190,7 +202,13 @@ class Payment_Tests extends \CS_UnitTestCase {
 			'partially_refunded' => __( 'Partially Refunded', 'commercestore' ),
 			'revoked'            => __( 'Revoked',    'commercestore' ),
 			'failed'             => __( 'Failed',     'commercestore' ),
-			'abandoned'          => __( 'Abandoned',  'commercestore' )
+			'abandoned'          => __( 'Abandoned',  'commercestore' ),
+
+			// Subscriptions are now core
+			'preapproval'		 => __( 'Preapproved','commercestore' ),
+			'preapproval_pending'=> __( 'Preappproval Pending', 'commercestore' ),
+			'cancelled'	         => __( 'Cancelled', 'commercestore' ),
+			'cs_subscription'	 => __( 'Renewal', 'commercestore' ),
 		);
 
 		asort( $expected );

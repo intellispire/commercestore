@@ -19,18 +19,18 @@ class Tests_Post_Type_Labels extends CS_UnitTestCase {
 		$this->assertArrayHasKey( 'singular', $out );
 		$this->assertArrayHasKey( 'plural', $out );
 
-		$this->assertEquals( 'Download', $out['singular'] );
-		$this->assertEquals( 'Downloads', $out['plural'] );
+		$this->assertEquals( 'Product', $out['singular'] );
+		$this->assertEquals( 'Products', $out['plural'] );
 	}
 
 	public function test_singular_label() {
-		$this->assertEquals( 'Download', cs_get_label_singular() );
-		$this->assertEquals( 'download', cs_get_label_singular( true ) );
+		$this->assertEquals( 'Product', cs_get_label_singular() );
+		$this->assertEquals( 'product', cs_get_label_singular( true ) );
 	}
 
 	public function test_plural_label() {
-		$this->assertEquals( 'Downloads', cs_get_label_plural() );
-		$this->assertEquals( 'downloads', cs_get_label_plural( true ) );
+		$this->assertEquals( 'Products', cs_get_label_plural() );
+		$this->assertEquals( 'products', cs_get_label_plural( true ) );
 	}
 
 	public function test_taxonomy_labels() {
@@ -39,8 +39,8 @@ class Tests_Post_Type_Labels extends CS_UnitTestCase {
 		$this->assertInternalType( 'array', $category_labels );
 		$this->assertArrayHasKey( 'name', $category_labels );
 		$this->assertArrayHasKey( 'singular_name', $category_labels );
-		$this->assertTrue( in_array( 'Download Category', $category_labels ) );
-		$this->assertTrue( in_array( 'Download Categories', $category_labels ) );
+		$this->assertTrue( in_array( 'Product Category', $category_labels ) );
+		$this->assertTrue( in_array( 'Product Categories', $category_labels ) );
 		// Negative test for our change to exclude singular post type label in #3212
 		$this->assertTrue( in_array( 'Categories', $category_labels ) );
 
