@@ -2,7 +2,7 @@
 rm -rf includes/gateways/square
 
 # Initial clone
-git clone -b master git@github.com:intellispire/cs-square includes/gateways/stripe
+git clone -b main git@github.com:intellispire/cs-square includes/gateways/square
 
 # Install dependencies
 cd includes/gateways/square

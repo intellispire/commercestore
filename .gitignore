@@ -34,12 +34,8 @@ tests/clover.xml
 # Node
 node_modules
 
-# Vendor
-/vendor
-
 # Temporary files
 *~
 
 # Gateways
-includes/gateways/stripe
 includes/gateways/square

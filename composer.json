@@ -2,7 +2,7 @@
     "name": "intellispire/commercestore",
     "type": "wordpress-plugin",
     "description": "The easiest way to sell digital information with WordPress.",
-    "keywords": ["cs", "cswp", "commercestore"],
+    "keywords": ["cs", "cstore", "commercestore"],
     "homepage": "https://commercestore.com/",
     "license": "GPL-2.0+",
     "support": {
@@ -17,12 +17,19 @@
     },
     "require": {
         "php": ">=7.0",
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "timber/timber": "dev-master",
+        "stripe/stripe-php": "^7.113"
     },
     "require-dev": {
         "phpunit/phpunit": "4.8.* || 5.7.* || ^6.5.14",
         "phpunit/php-invoker": "1.1.3",
         "yoast/phpunit-polyfills": "1.x-dev"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "autoload": {
+      "psr-4": {
+        "": "lib/"
+      }
+    }
 }
