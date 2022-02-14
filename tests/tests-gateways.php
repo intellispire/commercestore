@@ -90,6 +90,12 @@ class Test_Gateways extends CS_UnitTestCase {
 		$cs_options['gateways']['stripe'] = '1';
 
 		$this->assertEquals( 'stripe', cs_get_default_gateway() );
+
+		$cs_options['default_gateway'] = 'manual';
+		$cs_options['gateways'] = array();
+		$cs_options['gateways']['manual'] = '1';
+
+		$this->assertEquals( 'manual', cs_get_default_gateway() );
 	}
 
 	public function test_get_gateway_admin_label() {
