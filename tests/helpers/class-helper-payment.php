@@ -30,12 +30,6 @@ class CS_Helper_Payment extends WP_UnitTestCase {
 
 		global $cs_options;
 
-		// Use the manual gateway, which may or may not be the default
-		$cs_options['default_gateway'] = 'manual';
-		$cs_options['gateways'] = array();
-		$cs_options['gateways']['manual'] = '1';
-
-
 		$defaults = array(
 			'discount' => 'none'
 		);
