@@ -88,7 +88,7 @@ function cs_recurring_cancel_subscription_during_refund_option( $payment_id = 0 
 					var cancel_sub_container = $(this).parent().parent().append( '<div class="cs-recurring-cancel-sub"></div>' );
 
 					cancel_sub_container.append( '<input type="checkbox" id="cs_recurring_cancel_subscription" name="cs_recurring_cancel_subscription" value="1" style="margin-top: 0;" />' );
-					cancel_sub_container.append( '<label for="cs_recurring_cancel_subscription"><?php echo esc_js( __( 'Cancel Subscription', 'cs-recurring' ) ); ?></label></div>' );
+					cancel_sub_container.append( '<label for="cs_recurring_cancel_subscription"><?php echo esc_js( __( 'Cancel Subscription', 'commercestore' ) ); ?></label></div>' );
 
 				} else {
 
@@ -125,7 +125,7 @@ function cs_recurring_show_cancel_checkbox( $order ) {
 	foreach ( $subscriptions as $sub ) {
 		$label = sprintf(
 			/* translators: 1. The subscription ID 2. The download name. */
-			__( 'Cancel Subscription ID #%1$d (%2$s)', 'cs-recurring' ),
+			__( 'Cancel Subscription ID #%1$d (%2$s)', 'commercestore' ),
 			$sub->id,
 			cs_get_download_name( $sub->product_id )
 		);
@@ -187,7 +187,7 @@ function cs_recurring_cancel_subscription_on_order_refund( $order_id ) {
 				'object_type' => 'order',
 				'object_id'   => $order_id,
 				/* translators: the subscription ID. */
-				'content'     => sprintf( __( 'Subscription %d cancelled because of refund.', 'cs-recurring' ), $sub->id ),
+				'content'     => sprintf( __( 'Subscription %d cancelled because of refund.', 'commercestore' ), $sub->id ),
 				'user_id'     => get_current_user_id(),
 			)
 		);
@@ -242,7 +242,7 @@ function cs_recurring_cancel_subscription_during_refund( $payment ) {
 			// Run the cancel method in the CS_Subscription class. This also cancels the sub at the gateway.
 			$cs_sub->cancel();
 
-			$payment->add_note( sprintf( __( 'Subscription %d cancelled because of refund.', 'cs-recurring' ), $cs_sub->id ) );
+			$payment->add_note( sprintf( __( 'Subscription %d cancelled because of refund.', 'commercestore' ), $cs_sub->id ) );
 
 		}
 
@@ -276,7 +276,7 @@ function cs_recurring_cancel_subscription_during_refund( $payment ) {
 		// Run the cancel method in the CS_Subscription class. This also cancels the sub at the gateway.
 		$cs_sub->cancel();
 
-		$payment->add_note( sprintf( __( 'Subscription %d cancelled because of refund.', 'cs-recurring' ), $sub_id ) );
+		$payment->add_note( sprintf( __( 'Subscription %d cancelled because of refund.', 'commercestore' ), $sub_id ) );
 
 	}
 

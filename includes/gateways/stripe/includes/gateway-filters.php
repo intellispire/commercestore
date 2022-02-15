@@ -28,9 +28,9 @@ add_filter( 'cs_enabled_payment_gateways', 'csx_require_recurring_290', 20 );
  * @return array
  */
 function csx_payment_status_labels( $statuses ) {
-	$statuses['preapproval']         = __( 'Preapproved', 'csx' );
-	$statuses['preapproval_pending'] = __( 'Preapproval Pending', 'csx' );
-	$statuses['cancelled']           = __( 'Cancelled', 'csx' );
+	$statuses['preapproval']         = __( 'Preapproved', 'commercestore' );
+	$statuses['preapproval_pending'] = __( 'Preapproval Pending', 'commercestore' );
+	$statuses['cancelled']           = __( 'Cancelled', 'commercestore' );
 	return $statuses;
 }
 add_filter( 'cs_payment_statuses', 'csx_payment_status_labels' );
@@ -117,7 +117,7 @@ function csx_process_post_data( $purchase_data ) {
 
 	// Require a name for new cards.
 	if ( ! isset( $_POST['card_name'] ) || strlen( trim( $_POST['card_name'] ) ) === 0 ) {
-		cs_set_error( 'no_card_name', __( 'Please enter a name for the credit card.', 'csx' ) );
+		cs_set_error( 'no_card_name', __( 'Please enter a name for the credit card.', 'commercestore' ) );
 	}
 }
 add_action( 'cs_checkout_error_checks', 'csx_process_post_data' );

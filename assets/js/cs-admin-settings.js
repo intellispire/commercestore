@@ -1,1 +1,432 @@
-!function(e){var t={};function n(a){if(t[a])return t[a].exports;var o=t[a]={i:a,l:!1,exports:{}};return e[a].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=e,n.c=t,n.d=function(e,t,a){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:a})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var a=Object.create(null);if(n.r(a),Object.defineProperty(a,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(a,o,function(t){return e[t]}.bind(null,o));return a},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=59)}({0:function(e,t){e.exports=jQuery},30:function(e,t,n){"use strict";(function(e){n.d(t,"a",(function(){return a}));var a=function(){e.post(ajaxurl,{action:"cs_recapture_remote_install"},(function(e){e.success||!confirm(e.data.error)?window.location.href="https://recapture.io/register":location.reload()}))}}).call(this,n(0))},59:function(e,t,n){"use strict";n.r(t),function(e,t){var a=n(30),o=(n(60),{init:function(){this.general(),this.misc(),this.gateways(),this.emails()},general:function(){var n=e(".cs-color-picker");if(n.length&&n.wpColorPicker(),"undefined"==typeof wp||"1"!==cs_vars.new_media_ui){var a=e(".cs_settings_upload_button");a.length>0&&(window.formfield="",e(document.body).on("click",a,(function(n){n.preventDefault(),window.formfield=e(this).parent().prev(),window.tbframe_interval=setInterval((function(){t("#TB_iframeContent").contents().find(".savesend .button").val(cs_vars.use_this_file).end().find("#insert-gallery, .wp-post-thumbnail").hide()}),2e3),tb_show(cs_vars.add_new_download,"media-upload.php?TB_iframe=true")})),window.cs_send_to_editor=window.send_to_editor,window.send_to_editor=function(t){window.formfield?(imgurl=e("a","<div>"+t+"</div>").attr("href"),window.formfield.val(imgurl),window.clearInterval(window.tbframe_interval),tb_remove()):window.cs_send_to_editor(t),window.send_to_editor=window.cs_send_to_editor,window.formfield="",window.imagefield=!1})}else{var o;window.formfield="",e(document.body).on("click",".cs_settings_upload_button",(function(t){t.preventDefault();var n=e(this);window.formfield=e(this).parent().prev(),o||((o=wp.media.frames.file_frame=wp.media({title:n.data("uploader_title"),library:{type:"image"},button:{text:n.data("uploader_button_text")},multiple:!1})).on("menu:render:default",(function(e){e.unset("library-separator"),e.unset("gallery"),e.unset("featured-image"),e.unset("embed"),e.set({})})),o.on("select",(function(){o.state().get("selection").each((function(e,t){e=e.toJSON(),window.formfield.val(e.url)}))}))),o.open()})),window.formfield=""}},misc:function(){var t=e('select[name="cs_settings[download_method]"]'),n=t.parent().parent().next();"direct"===t.val()&&(n.css("opacity","0.4"),n.find("input").prop("checked",!1).prop("disabled",!0)),t.on("change",(function(){"direct"===e(this).val()?(n.css("opacity","0.4"),n.find("input").prop("checked",!1).prop("disabled",!0)):(n.find("input").prop("disabled",!1),n.css("opacity","1"))}))},gateways:function(){e('#cs-payment-gateways input[type="checkbox"]').on("change",(function(){var t=e(this).data("gateway-key"),n=e("#cs_settings\\[default_gateway\\]"),a=n.find('option[value="'+t+'"]');a.prop("disabled",(function(e,t){return!t})),a.prop("selected")&&a.prop("selected",!1),n.trigger("chosen:updated")}))},emails:function(){e("#cs-recapture-connect").on("click",(function(t){t.preventDefault(),e(this).html(cs_vars.wait+' <span class="cs-loading"></span>'),document.body.style.cursor="wait",Object(a.a)()}))}});t(document).ready((function(e){o.init()}))}.call(this,n(0),n(0))},60:function(e,t,n){(function(e){e(document).ready((function(e){function t(){var t=document.getElementById("cs-paypal-commerce-connect-wrap");t&&e.post(ajaxurl,{action:"cs_paypal_commerce_get_account_info",_ajax_nonce:t.getAttribute("data-nonce")},(function(e){var n="<p>"+csPayPalConnectVars.defaultError+"</p>";e.success?(n=e.data.account_status,e.data.actions&&e.data.actions.length&&(n+='<p class="cs-paypal-connect-actions">'+e.data.actions.join(" ")+"</p>")):e.data&&e.data.message&&(n=e.data.message),t.innerHTML=n,t.classList.remove("notice-success","notice-warning","notice-error");var a=e.success&&e.data.status?"notice-"+e.data.status:"notice-error";t.classList.add(a)}))}e("#cs-paypal-commerce-connect").on("click",(function(t){t.preventDefault();var n=e("#cs-paypal-commerce-errors");n.empty().removeClass("notice notice-error");var a=document.getElementById("cs-paypal-commerce-connect");a.classList.add("updating-message"),a.disabled=!0,e.post(ajaxurl,{action:"cs_paypal_commerce_connect",_ajax_nonce:e(this).data("nonce")},(function(e){if(!e.success)return console.log("Connection failure",e.data),a.classList.remove("updating-message"),a.disabled=!1,void n.html("<p>"+e.data+"</p>").addClass("notice notice-error");var t=document.getElementById("cs-paypal-commerce-link");t.href=e.data.signupLink+"&displayMode=minibrowser",t.click()}))})),t(),e(document).on("click",".cs-paypal-connect-action",(function(n){n.preventDefault();var a=e(this);a.prop("disabled",!0),a.addClass("updating-message");var o=e("#cs-paypal-commerce-connect-wrap").find(".cs-paypal-actions-error-wrap");o.length&&o.remove(),e.post(ajaxurl,{action:a.data("action"),_ajax_nonce:a.data("nonce")},(function(e){a.prop("disabled",!1),a.removeClass("updating-message"),e.success?(a.addClass("updated-message"),t()):a.parent().after('<p class="cs-paypal-actions-error-wrap">'+e.data+"</p>")}))}))})),window.csPayPalOnboardingCallback=function(t,n){var a=document.getElementById("cs-paypal-commerce-connect"),o=document.getElementById("cs-paypal-commerce-errors");e.post(ajaxurl,{action:"cs_paypal_commerce_get_access_token",auth_code:t,share_id:n,_ajax_nonce:a.getAttribute("data-nonce")},(function(e){if(a.classList.remove("updating-message"),!e.success)return a.disabled=!1,o.innerHTML="<p>"+e.data+"</p>",void o.classList.add("notice notice-error");a.classList.add("updated-message"),window.location.reload()}))}}).call(this,n(0))}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/admin/settings/index.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./assets/js/admin/settings/gateways/paypal.js":
+/*!*****************************************************!*\
+  !*** ./assets/js/admin/settings/gateways/paypal.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(jQuery) {jQuery(document).ready(function ($) {
+  /**
+   * Connect to PayPal
+   */
+  $('#cs-paypal-commerce-connect').on('click', function (e) {
+    e.preventDefault(); // Clear errors.
+
+    var errorContainer = $('#cs-paypal-commerce-errors');
+    errorContainer.empty().removeClass('notice notice-error');
+    var button = document.getElementById('cs-paypal-commerce-connect');
+    button.classList.add('updating-message');
+    button.disabled = true;
+    $.post(ajaxurl, {
+      action: 'cs_paypal_commerce_connect',
+      _ajax_nonce: $(this).data('nonce')
+    }, function (response) {
+      if (!response.success) {
+        console.log('Connection failure', response.data);
+        button.classList.remove('updating-message');
+        button.disabled = false; // Set errors.
+
+        errorContainer.html('<p>' + response.data + '</p>').addClass('notice notice-error');
+        return;
+      }
+
+      var paypalLinkEl = document.getElementById('cs-paypal-commerce-link');
+      paypalLinkEl.href = response.data.signupLink + '&displayMode=minibrowser';
+      paypalLinkEl.click();
+    });
+  });
+  /**
+   * Checks the PayPal connection & webhook status.
+   */
+
+  function csPayPalGetAccountStatus() {
+    var accountInfoEl = document.getElementById('cs-paypal-commerce-connect-wrap');
+
+    if (accountInfoEl) {
+      $.post(ajaxurl, {
+        action: 'cs_paypal_commerce_get_account_info',
+        _ajax_nonce: accountInfoEl.getAttribute('data-nonce')
+      }, function (response) {
+        var newHtml = '<p>' + csPayPalConnectVars.defaultError + '</p>';
+
+        if (response.success) {
+          newHtml = response.data.account_status;
+
+          if (response.data.actions && response.data.actions.length) {
+            newHtml += '<p class="cs-paypal-connect-actions">' + response.data.actions.join(' ') + '</p>';
+          }
+        } else if (response.data && response.data.message) {
+          newHtml = response.data.message;
+        }
+
+        accountInfoEl.innerHTML = newHtml; // Remove old status messages.
+
+        accountInfoEl.classList.remove('notice-success', 'notice-warning', 'notice-error'); // Add new one.
+
+        var newClass = response.success && response.data.status ? 'notice-' + response.data.status : 'notice-error';
+        accountInfoEl.classList.add(newClass);
+      });
+    }
+  }
+
+  csPayPalGetAccountStatus();
+  /**
+   * Create webhook
+   */
+
+  $(document).on('click', '.cs-paypal-connect-action', function (e) {
+    e.preventDefault();
+    var button = $(this);
+    button.prop('disabled', true);
+    button.addClass('updating-message');
+    var errorWrap = $('#cs-paypal-commerce-connect-wrap').find('.cs-paypal-actions-error-wrap');
+
+    if (errorWrap.length) {
+      errorWrap.remove();
+    }
+
+    $.post(ajaxurl, {
+      action: button.data('action'),
+      _ajax_nonce: button.data('nonce')
+    }, function (response) {
+      button.prop('disabled', false);
+      button.removeClass('updating-message');
+
+      if (response.success) {
+        button.addClass('updated-message'); // Refresh account status.
+
+        csPayPalGetAccountStatus();
+      } else {
+        button.parent().after('<p class="cs-paypal-actions-error-wrap">' + response.data + '</p>');
+      }
+    });
+  });
+});
+
+window.csPayPalOnboardingCallback = function csPayPalOnboardingCallback(authCode, shareId) {
+  var connectButton = document.getElementById('cs-paypal-commerce-connect');
+  var errorContainer = document.getElementById('cs-paypal-commerce-errors');
+  jQuery.post(ajaxurl, {
+    action: 'cs_paypal_commerce_get_access_token',
+    auth_code: authCode,
+    share_id: shareId,
+    _ajax_nonce: connectButton.getAttribute('data-nonce')
+  }, function (response) {
+    connectButton.classList.remove('updating-message');
+
+    if (!response.success) {
+      connectButton.disabled = false;
+      errorContainer.innerHTML = '<p>' + response.data + '</p>';
+      errorContainer.classList.add('notice notice-error');
+      return;
+    }
+
+    connectButton.classList.add('updated-message');
+    window.location.reload();
+  });
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/admin/settings/index.js":
+/*!*******************************************!*\
+  !*** ./assets/js/admin/settings/index.js ***!
+  \*******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($, jQuery) {/* harmony import */ var _recapture__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./recapture */ "./assets/js/admin/settings/recapture/index.js");
+/* harmony import */ var _gateways_paypal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./gateways/paypal */ "./assets/js/admin/settings/gateways/paypal.js");
+/* harmony import */ var _gateways_paypal__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_gateways_paypal__WEBPACK_IMPORTED_MODULE_1__);
+
+
+/**
+ * Settings screen JS
+ */
+
+var CS_Settings = {
+  init: function init() {
+    this.general();
+    this.misc();
+    this.gateways();
+    this.emails();
+  },
+  general: function general() {
+    var cs_color_picker = $('.cs-color-picker');
+
+    if (cs_color_picker.length) {
+      cs_color_picker.wpColorPicker();
+    } // Settings Upload field JS
+
+
+    if (typeof wp === 'undefined' || '1' !== cs_vars.new_media_ui) {
+      // Old Thickbox uploader
+      var cs_settings_upload_button = $('.cs_settings_upload_button');
+
+      if (cs_settings_upload_button.length > 0) {
+        window.formfield = '';
+        $(document.body).on('click', cs_settings_upload_button, function (e) {
+          e.preventDefault();
+          window.formfield = $(this).parent().prev();
+          window.tbframe_interval = setInterval(function () {
+            jQuery('#TB_iframeContent').contents().find('.savesend .button').val(cs_vars.use_this_file).end().find('#insert-gallery, .wp-post-thumbnail').hide();
+          }, 2000);
+          tb_show(cs_vars.add_new_download, 'media-upload.php?TB_iframe=true');
+        });
+        window.cs_send_to_editor = window.send_to_editor;
+
+        window.send_to_editor = function (html) {
+          if (window.formfield) {
+            imgurl = $('a', '<div>' + html + '</div>').attr('href');
+            window.formfield.val(imgurl);
+            window.clearInterval(window.tbframe_interval);
+            tb_remove();
+          } else {
+            window.cs_send_to_editor(html);
+          }
+
+          window.send_to_editor = window.cs_send_to_editor;
+          window.formfield = '';
+          window.imagefield = false;
+        };
+      }
+    } else {
+      // WP 3.5+ uploader
+      var file_frame;
+      window.formfield = '';
+      $(document.body).on('click', '.cs_settings_upload_button', function (e) {
+        e.preventDefault();
+        var button = $(this);
+        window.formfield = $(this).parent().prev(); // If the media frame already exists, reopen it.
+
+        if (file_frame) {
+          //file_frame.uploader.uploader.param( 'post_id', set_to_post_id );
+          file_frame.open();
+          return;
+        } // Create the media frame.
+
+
+        file_frame = wp.media.frames.file_frame = wp.media({
+          title: button.data('uploader_title'),
+          library: {
+            type: 'image'
+          },
+          button: {
+            text: button.data('uploader_button_text')
+          },
+          multiple: false
+        });
+        file_frame.on('menu:render:default', function (view) {
+          // Store our views in an object.
+          var views = {}; // Unset default menu items
+
+          view.unset('library-separator');
+          view.unset('gallery');
+          view.unset('featured-image');
+          view.unset('embed'); // Initialize the views in our view object.
+
+          view.set(views);
+        }); // When an image is selected, run a callback.
+
+        file_frame.on('select', function () {
+          var selection = file_frame.state().get('selection');
+          selection.each(function (attachment, index) {
+            attachment = attachment.toJSON();
+            window.formfield.val(attachment.url);
+          });
+        }); // Finally, open the modal
+
+        file_frame.open();
+      }); // WP 3.5+ uploader
+
+      var file_frame;
+      window.formfield = '';
+    }
+  },
+  misc: function misc() {
+    var downloadMethod = $('select[name="cs_settings[download_method]"]'),
+        symlink = downloadMethod.parent().parent().next(); // Hide Symlink option if Download Method is set to Direct
+
+    if (downloadMethod.val() === 'direct') {
+      symlink.css('opacity', '0.4');
+      symlink.find('input').prop('checked', false).prop('disabled', true);
+    } // Toggle download method option
+
+
+    downloadMethod.on('change', function () {
+      if ($(this).val() === 'direct') {
+        symlink.css('opacity', '0.4');
+        symlink.find('input').prop('checked', false).prop('disabled', true);
+      } else {
+        symlink.find('input').prop('disabled', false);
+        symlink.css('opacity', '1');
+      }
+    });
+  },
+  gateways: function gateways() {
+    $('#cs-payment-gateways input[type="checkbox"]').on('change', function () {
+      var gateway = $(this),
+          gateway_key = gateway.data('gateway-key'),
+          default_gateway = $('#cs_settings\\[default_gateway\\]'),
+          option = default_gateway.find('option[value="' + gateway_key + '"]'); // Toggle enable/disable based
+
+      option.prop('disabled', function (i, v) {
+        return !v;
+      }); // Maybe deselect
+
+      if (option.prop('selected')) {
+        option.prop('selected', false);
+      }
+
+      default_gateway.trigger('chosen:updated');
+    });
+  },
+  emails: function emails() {
+    $('#cs-recapture-connect').on('click', function (e) {
+      e.preventDefault();
+      $(this).html(cs_vars.wait + ' <span class="cs-loading"></span>');
+      document.body.style.cursor = 'wait';
+      Object(_recapture__WEBPACK_IMPORTED_MODULE_0__["recaptureRemoteInstall"])();
+    });
+  }
+};
+jQuery(document).ready(function ($) {
+  CS_Settings.init();
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery"), __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/admin/settings/recapture/index.js":
+/*!*****************************************************!*\
+  !*** ./assets/js/admin/settings/recapture/index.js ***!
+  \*****************************************************/
+/*! exports provided: recaptureRemoteInstall */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recaptureRemoteInstall", function() { return recaptureRemoteInstall; });
+var recaptureRemoteInstall = function recaptureRemoteInstall() {
+  var data = {
+    'action': 'cs_recapture_remote_install'
+  };
+  jQuery.post(ajaxurl, data, function (response) {
+    if (!response.success) {
+      if (confirm(response.data.error)) {
+        location.reload();
+        return;
+      }
+    }
+
+    window.location.href = 'https://recapture.io/register';
+  });
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=cs-admin-settings.js.map

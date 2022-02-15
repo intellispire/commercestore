@@ -26,7 +26,7 @@ class Billing_Subscription_Payment_Failed extends Billing_Subscription {
 		if ( isset( $this->event->resource->billing_info->last_failed_payment ) ) {
 			$subscription->add_note( sprintf(
 			/* Translators: %s - information about the last failed payment */
-				__( 'Failed payment details from PayPal: %s', 'cs-recurring' ),
+				__( 'Failed payment details from PayPal: %s', 'commercestore' ),
 				json_encode( $this->event->resource->billing_info->last_failed_payment )
 			) );
 		}

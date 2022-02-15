@@ -89,7 +89,7 @@ class CS_Stripe_Admin_Notices_Registry extends CS_Stripe_Utils_Registry implemen
 		$notice_args = array_merge( $defaults, $notice_args );
 
 		if ( empty( $notice_args['message'] ) ) {
-			throw new Exception( esc_html__( 'A message must be specified for each notice.', 'csx' ) );
+			throw new Exception( esc_html__( 'A message must be specified for each notice.', 'commercestore' ) );
 		}
 
 		if ( ! in_array( $notice_args['type'], array( 'success', 'info', 'warning', 'error' ), true ) ) {

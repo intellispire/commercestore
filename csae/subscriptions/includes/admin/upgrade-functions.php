@@ -68,7 +68,7 @@ function cs_show_recurring_upgrade_notices() {
 		}
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the subscriptions database, click <a href="%s">here</a> to start the upgrade.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the subscriptions database, click <a href="%s">here</a> to start the upgrade.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=upgrade_24_subscriptions' ) )
 		);
 	}
@@ -82,7 +82,7 @@ function cs_show_recurring_upgrade_notices() {
 		}
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the subscription customer database, click <a href="%s">here</a> to start the upgrade.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the subscription customer database, click <a href="%s">here</a> to start the upgrade.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=fix_24_stripe_customers' ) )
 		);
 
@@ -91,7 +91,7 @@ function cs_show_recurring_upgrade_notices() {
 	if ( ! cs_has_upgrade_completed( 'recurring_27_subscription_meta' ) ) {
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the subscription payments database, click <a href="%s">here</a> to start the upgrade.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the subscription payments database, click <a href="%s">here</a> to start the upgrade.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=recurring_27_subscription_meta' ) )
 		);
 
@@ -100,7 +100,7 @@ function cs_show_recurring_upgrade_notices() {
 	if ( ! cs_has_upgrade_completed( 'recurring_paypalproexpress_logs' ) ) {
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the payment gateway error logs, click <a href="%s">here</a> to start the upgrade.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade the payment gateway error logs, click <a href="%s">here</a> to start the upgrade.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=recurring_paypalproexpress_logs' ) )
 		);
 
@@ -109,7 +109,7 @@ function cs_show_recurring_upgrade_notices() {
 	if ( ! cs_has_upgrade_completed( 'recurring_add_tax_columns_to_subs_table' ) ) {
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade subscriptions table, click <a href="%s">here</a> to start the upgrade.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade subscriptions table, click <a href="%s">here</a> to start the upgrade.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=recurring_add_tax_columns_to_subs_table' ) )
 		);
 
@@ -118,7 +118,7 @@ function cs_show_recurring_upgrade_notices() {
 	if ( ! cs_has_upgrade_completed( 'recurring_cancel_subs_if_times_met' ) ) {
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads wants to check to see if any subscriptions need to be set to complete. Click <a href="%s">here</a> to start.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads wants to check to see if any subscriptions need to be set to complete. Click <a href="%s">here</a> to start.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=recurring_cancel_subs_if_times_met' ) )
 		);
 
@@ -127,7 +127,7 @@ function cs_show_recurring_upgrade_notices() {
 	if ( ! cs_has_upgrade_completed( 'recurring_add_price_id_column' ) ) {
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade subscriptions table, click <a href="%s">here</a> to start the upgrade.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to upgrade subscriptions table, click <a href="%s">here</a> to start the upgrade.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=recurring_add_price_id_column' ) )
 		);
 
@@ -136,7 +136,7 @@ function cs_show_recurring_upgrade_notices() {
 	if ( ! cs_has_upgrade_completed( 'recurring_update_price_id_column' ) ) {
 
 		printf(
-			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to update the subscriptions table, click <a href="%s">here</a> to start the upgrade.', 'cs-recurring' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Easy Digital Downloads needs to update the subscriptions table, click <a href="%s">here</a> to start the upgrade.', 'commercestore' ) . '</p></div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=recurring_update_price_id_column' ) )
 		);
 
@@ -155,7 +155,7 @@ function cs_recurring_v24_migrate_subscriptions() {
 	global $wpdb;
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to do shop upgrades', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to do shop upgrades', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -515,7 +515,7 @@ function cs_recurring_fix_24_stripe_customers() {
 	global $wpdb;
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to do shop upgrades', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to do shop upgrades', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -857,7 +857,7 @@ function cs_recurring_fix_24_stripe_customers() {
 								$customer->subscriptions->retrieve( $subscription_id )->cancel();
 
 								$cs_sub->customer->add_note( sprintf(
-									__( 'Customer\'s subscription #%d was improperly attributed to the incorrect Stripe customer record. It was automatically cancelled to prevent incorrect renewal payments.', 'cs-recurring' ),
+									__( 'Customer\'s subscription #%d was improperly attributed to the incorrect Stripe customer record. It was automatically cancelled to prevent incorrect renewal payments.', 'commercestore' ),
 									$cs_sub->id
 								) );
 							}
@@ -978,7 +978,7 @@ function cs_recurring_27_add_subscription_id_meta() {
 	global $wpdb;
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to do shop upgrades', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to do shop upgrades', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -1057,7 +1057,7 @@ function cs_recurring_paypalproexpress_logs() {
 	global $wpdb;
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to do shop upgrades', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to do shop upgrades', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -1137,7 +1137,7 @@ function cs_recurring_add_tax_columns_to_subs_table() {
 	global $wpdb;
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to do shop upgrades', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to do shop upgrades', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -1227,7 +1227,7 @@ function cs_recurring_cancel_subs_if_times_met() {
 	global $wpdb;
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to do shop upgrades', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to do shop upgrades', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );
@@ -1301,7 +1301,7 @@ function cs_upgrade_render_recurring_add_price_id_column() {
 	if ( $migration_complete ) : ?>
 		<div id="cs-sl-migration-complete" class="notice notice-success">
 			<p>
-				<?php _e( '<strong>Migration complete:</strong> You have already completed the subscription Price ID upgrade.', 'cs-recurring' ); ?>
+				<?php _e( '<strong>Migration complete:</strong> You have already completed the subscription Price ID upgrade.', 'commercestore' ); ?>
 			</p>
 		</div>
 		<?php return; ?>
@@ -1309,15 +1309,15 @@ function cs_upgrade_render_recurring_add_price_id_column() {
 
 	<div id="cs-migration-ready" class="notice notice-success" style="display: none;">
 		<p>
-			<?php _e( '<strong>Database Upgrade Complete:</strong> All database upgrades have been completed.', 'cs-recurring' ); ?>
+			<?php _e( '<strong>Database Upgrade Complete:</strong> All database upgrades have been completed.', 'commercestore' ); ?>
 			<br /><br />
-			<?php _e( 'You may now leave this page.', 'cs-recurring' ); ?>
+			<?php _e( 'You may now leave this page.', 'commercestore' ); ?>
 		</p>
 	</div>
 
 	<div id="cs-migration-nav-warn" class="notice notice-info">
 		<p>
-			<?php _e( '<strong>Important:</strong> Please leave this screen open and do not navigate away until the process completes.', 'cs-recurring' ); ?>
+			<?php _e( '<strong>Important:</strong> Please leave this screen open and do not navigate away until the process completes.', 'commercestore' ); ?>
 		</p>
 	</div>
 
@@ -1360,12 +1360,12 @@ function cs_upgrade_render_recurring_add_price_id_column() {
 	<div class="metabox-holder">
 		<div class="postbox">
 			<h2 class="hndle">
-				<span><?php _e( 'Update subscription records', 'cs-recurring' ); ?></span>
+				<span><?php _e( 'Update subscription records', 'commercestore' ); ?></span>
 				<span class="dashicons dashicons-yes"></span>
 			</h2>
 			<div class="inside update-subscription-records-control">
 				<p>
-					<?php _e( 'This update will add the price ID of any variably priced subscription to the subscription record in the database.', 'cs-recurring' ); ?>
+					<?php _e( 'This update will add the price ID of any variably priced subscription to the subscription record in the database.', 'commercestore' ); ?>
 				</p>
 				<form method="post" id="cs-add-price-id-column-subs-form" class="cs-export-form cs-import-export-form">
 			<span class="step-instructions-wrapper">
@@ -1374,11 +1374,11 @@ function cs_upgrade_render_recurring_add_price_id_column() {
 
 				<?php if ( ! $migration_complete ) : ?>
 					<span class="cs-migration allowed">
-						<input type="submit" id="add-price-ids-submit" value="<?php _e( 'Update Subscriptions', 'cs-recurring' ); ?>" class="button-primary"/>
+						<input type="submit" id="add-price-ids-submit" value="<?php _e( 'Update Subscriptions', 'commercestore' ); ?>" class="button-primary"/>
 					</span>
 				<?php else: ?>
-					<input type="submit" disabled="disabled" id="migrate-logs-submit" value="<?php _e( 'Update Subscriptions', 'cs-recurring' ); ?>" class="button-secondary"/>
-					&mdash; <?php _e( 'Subscription records have already been updated.', 'cs-recurring' ); ?>
+					<input type="submit" disabled="disabled" id="migrate-logs-submit" value="<?php _e( 'Update Subscriptions', 'commercestore' ); ?>" class="button-secondary"/>
+					&mdash; <?php _e( 'Subscription records have already been updated.', 'commercestore' ); ?>
 				<?php endif; ?>
 
 				<input type="hidden" name="cs-export-class" value="CS_Recurring_Add_Subscription_Price_IDs" />
@@ -1406,7 +1406,7 @@ function cs_upgrade_render_recurring_update_price_id_column() {
 	if ( $migration_complete ) : ?>
 		<div id="cs-sl-migration-complete" class="notice notice-success">
 			<p>
-				<?php _e( '<strong>Migration complete:</strong> You have already completed the subscription Price ID upgrade.', 'cs-recurring' ); ?>
+				<?php _e( '<strong>Migration complete:</strong> You have already completed the subscription Price ID upgrade.', 'commercestore' ); ?>
 			</p>
 		</div>
 		<?php return; ?>
@@ -1414,15 +1414,15 @@ function cs_upgrade_render_recurring_update_price_id_column() {
 
 	<div id="cs-migration-ready" class="notice notice-success" style="display: none;">
 		<p>
-			<?php _e( '<strong>Database Upgrade Complete:</strong> All database upgrades have been completed.', 'cs-recurring' ); ?>
+			<?php _e( '<strong>Database Upgrade Complete:</strong> All database upgrades have been completed.', 'commercestore' ); ?>
 			<br /><br />
-			<?php _e( 'You may now leave this page.', 'cs-recurring' ); ?>
+			<?php _e( 'You may now leave this page.', 'commercestore' ); ?>
 		</p>
 	</div>
 
 	<div id="cs-migration-nav-warn" class="notice notice-info">
 		<p>
-			<?php _e( '<strong>Important:</strong> Please leave this screen open and do not navigate away until the process completes.', 'cs-recurring' ); ?>
+			<?php _e( '<strong>Important:</strong> Please leave this screen open and do not navigate away until the process completes.', 'commercestore' ); ?>
 		</p>
 	</div>
 
@@ -1465,12 +1465,12 @@ function cs_upgrade_render_recurring_update_price_id_column() {
 	<div class="metabox-holder">
 		<div class="postbox">
 			<h2 class="hndle">
-				<span><?php _e( 'Update subscription records', 'cs-recurring' ); ?></span>
+				<span><?php _e( 'Update subscription records', 'commercestore' ); ?></span>
 				<span class="dashicons dashicons-yes"></span>
 			</h2>
 			<div class="inside update-subscription-records-control">
 				<p>
-					<?php _e( 'This update will update the price ID of any variably priced subscription to the subscription record in the database.', 'cs-recurring' ); ?>
+					<?php _e( 'This update will update the price ID of any variably priced subscription to the subscription record in the database.', 'commercestore' ); ?>
 				</p>
 				<form method="post" id="cs-add-price-id-column-subs-form" class="cs-export-form cs-import-export-form">
 			<span class="step-instructions-wrapper">
@@ -1479,11 +1479,11 @@ function cs_upgrade_render_recurring_update_price_id_column() {
 
 				<?php if ( ! $migration_complete ) : ?>
 					<span class="cs-migration allowed">
-						<input type="submit" id="update-price-ids-submit" value="<?php _e( 'Update Subscriptions', 'cs-recurring' ); ?>" class="button-primary"/>
+						<input type="submit" id="update-price-ids-submit" value="<?php _e( 'Update Subscriptions', 'commercestore' ); ?>" class="button-primary"/>
 					</span>
 				<?php else: ?>
-					<input type="submit" disabled="disabled" id="migrate-logs-submit" value="<?php _e( 'Update Subscriptions', 'cs-recurring' ); ?>" class="button-secondary"/>
-					&mdash; <?php _e( 'Subscription records have already been updated.', 'cs-recurring' ); ?>
+					<input type="submit" disabled="disabled" id="migrate-logs-submit" value="<?php _e( 'Update Subscriptions', 'commercestore' ); ?>" class="button-secondary"/>
+					&mdash; <?php _e( 'Subscription records have already been updated.', 'commercestore' ); ?>
 				<?php endif; ?>
 
 				<input type="hidden" name="cs-export-class" value="CS_Recurring_Update_Subscription_Price_IDs" />

@@ -33,7 +33,7 @@ function csx_admin_notices_register() {
 	$registry = csx_get_registry( 'admin-notices' );
 
 	if ( ! $registry ) {
-		return new WP_Error( 'csx-invalid-registry', esc_html__( 'Unable to locate registry', 'cs-stripe' ) );
+		return new WP_Error( 'csx-invalid-registry', esc_html__( 'Unable to locate registry', 'commercestore' ) );
 	}
 
 	try {
@@ -44,7 +44,7 @@ function csx_admin_notices_register() {
 				'message'     => '<p>' . wp_kses(
 					sprintf(
 						/* translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
-						__( 'The Stripe extension for Easy Digital Downloads supports Stripe Connect for easier setup and improved security. %1$sClick here%2$s to learn more about connecting your Stripe account.', 'csx' ),
+						__( 'The Stripe extension for Easy Digital Downloads supports Stripe Connect for easier setup and improved security. %1$sClick here%2$s to learn more about connecting your Stripe account.', 'commercestore' ),
 						'<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ) ) . '">',
 						'</a>'
 					),
@@ -80,14 +80,14 @@ function csx_admin_notices_register() {
 				'message'     => '<p>' . wp_kses(
 					sprintf(
 						/* translators: %1$s Opening strong tag, do not translate. %2$s Closing strong tag, do not translate. */
-						__( '%1$sCredit card payments with Stripe are currently disabled.%2$s', 'csx' ),
+						__( '%1$sCredit card payments with Stripe are currently disabled.%2$s', 'commercestore' ),
 						'<strong>',
 						'</strong>'
 					) 
 					. '<br />' .
 					sprintf(
 						/* translators: %1$s Opening code tag, do not translate. %2$s Closing code tag, do not translate. */
-					 	__( 'To continue accepting credit card payments with Stripe please update the Recurring Payments extension to version %1$s2.9%2$s.', 'csx' ),
+					 	__( 'To continue accepting credit card payments with Stripe please update the Recurring Payments extension to version %1$s2.9%2$s.', 'commercestore' ),
 						'<code>',
 						'</code>'
 					),

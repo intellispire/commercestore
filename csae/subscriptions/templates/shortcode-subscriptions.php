@@ -15,7 +15,7 @@ if ( is_user_logged_in() ):
 
 		?>
 			<div class="cs-alert cs-alert-success">
-				<?php _e( '<strong>Success:</strong> Subscription payment method updated', 'cs-recurring' ); ?>
+				<?php _e( '<strong>Success:</strong> Subscription payment method updated', 'commercestore' ); ?>
 			</div>
 		<?php
 
@@ -32,18 +32,18 @@ if ( is_user_logged_in() ):
 			<thead>
 			<tr class="cs_purchase_row">
 				<?php do_action( 'cs_recurring_history_header_before' ); ?>
-				<th><?php _e( 'Subscription', 'cs-recurring' ); ?></th>
-				<th><?php _e( 'Status', 'cs-recurring' ); ?></th>
-				<th><?php _e( 'Renewal Date', 'cs-recurring' ); ?></th>
-				<th><?php _e( 'Initial Amount', 'cs-recurring' ); ?></th>
-				<th><?php _e( 'Times Billed', 'cs-recurring' ); ?></th>
-				<th><?php _e( 'Actions', 'cs-recurring' ); ?></th>
+				<th><?php _e( 'Subscription', 'commercestore' ); ?></th>
+				<th><?php _e( 'Status', 'commercestore' ); ?></th>
+				<th><?php _e( 'Renewal Date', 'commercestore' ); ?></th>
+				<th><?php _e( 'Initial Amount', 'commercestore' ); ?></th>
+				<th><?php _e( 'Times Billed', 'commercestore' ); ?></th>
+				<th><?php _e( 'Actions', 'commercestore' ); ?></th>
 				<?php do_action( 'cs_recurring_history_header_after' ); ?>
 			</tr>
 			</thead>
 			<?php foreach ( $subscriptions as $subscription ) :
 				$frequency    = CS_Recurring()->get_pretty_subscription_frequency( $subscription->period );
-				$renewal_date = ! empty( $subscription->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $subscription->expiration ) ) : __( 'N/A', 'cs-recurring' );
+				$renewal_date = ! empty( $subscription->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $subscription->expiration ) ) : __( 'N/A', 'commercestore' );
 				?>
 				<tr>
 					<?php do_action( 'cs_recurring_history_row_start', $subscription ); ?>
@@ -72,7 +72,7 @@ if ( is_user_logged_in() ):
 					</td>
 					<td>
 						<?php if( 'trialling' == $subscription->status ) : ?>
-							<?php _e( 'Trialling Until:', 'cs-recurring' ); ?>
+							<?php _e( 'Trialling Until:', 'commercestore' ); ?>
 						<?php endif; ?>
 						<span class="cs_subscription_renewal_date"><?php echo $renewal_date; ?></span>
 					</td>
@@ -80,32 +80,32 @@ if ( is_user_logged_in() ):
 						<span class="cs_subscription_initial_amount"><?php echo cs_currency_filter( cs_format_amount( $subscription->initial_amount ), cs_get_payment_currency_code( $subscription->parent_payment_id ) ); ?></span>
 					</td>
 					<td>
-						<span class="cs_subscriptiontimes_billed"><?php echo $subscription->get_times_billed() . ' / ' . ( ( $subscription->bill_times == 0 ) ? __( 'Until cancelled', 'cs-recurring' ) : $subscription->bill_times ); ?></span>
+						<span class="cs_subscriptiontimes_billed"><?php echo $subscription->get_times_billed() . ' / ' . ( ( $subscription->bill_times == 0 ) ? __( 'Until cancelled', 'commercestore' ) : $subscription->bill_times ); ?></span>
 					</td>
 					<td>
 						<a
 							href="<?php echo esc_url( add_query_arg( array( 'action' => 'view_transactions', 'subscription_id' => urlencode( $subscription->id ) ) ) ); ?>"
 							class="cs_subscription_invoice"
 						>
-							<?php esc_html_e( 'View Transactions', 'cs-recurring' ); ?>
+							<?php esc_html_e( 'View Transactions', 'commercestore' ); ?>
 						</a>
 						<?php if( $subscription->can_update() ) : ?>
 							&nbsp;|&nbsp;
-							<a href="<?php echo esc_url( $subscription->get_update_url() ); ?>"><?php _e( 'Update Payment Method', 'cs-recurring' ); ?></a>
+							<a href="<?php echo esc_url( $subscription->get_update_url() ); ?>"><?php _e( 'Update Payment Method', 'commercestore' ); ?></a>
 						<?php endif; ?>
 						<?php if( $subscription->can_renew() ) : ?>
 							&nbsp;|&nbsp;
-							<a href="<?php echo esc_url( $subscription->get_renew_url() ); ?>" class="cs_subscription_renew"><?php _e( 'Renew', 'cs-recurring' ); ?></a>
+							<a href="<?php echo esc_url( $subscription->get_renew_url() ); ?>" class="cs_subscription_renew"><?php _e( 'Renew', 'commercestore' ); ?></a>
 						<?php endif; ?>
 						<?php if( $subscription->can_cancel() ) : ?>
 							&nbsp;|&nbsp;
 							<a href="<?php echo esc_url( $subscription->get_cancel_url() ); ?>" class="cs_subscription_cancel">
-								<?php echo cs_get_option( 'recurring_cancel_button_text', __( 'Cancel', 'cs-recurring' ) ); ?>
+								<?php echo cs_get_option( 'recurring_cancel_button_text', __( 'Cancel', 'commercestore' ) ); ?>
 							</a>
 						<?php endif; ?>
 						<?php if( $subscription->can_reactivate() ) : ?>
 							&nbsp;|&nbsp;
-							<a href="<?php echo esc_url( $subscription->get_reactivation_url() ); ?>" class="cs-subscription-reactivate"><?php _e( 'Reactivate', 'cs-recurring' ); ?></a>
+							<a href="<?php echo esc_url( $subscription->get_reactivation_url() ); ?>" class="cs-subscription-reactivate"><?php _e( 'Reactivate', 'commercestore' ); ?></a>
 						<?php endif; ?>
 					</td>
 					<?php do_action( 'cs_recurring_history_row_end', $subscription ); ?>
@@ -118,7 +118,7 @@ if ( is_user_logged_in() ):
 
 	<?php else : ?>
 
-		<p class="cs-no-purchases"><?php _e( 'You have not made any subscription purchases.', 'cs-recurring' ); ?></p>
+		<p class="cs-no-purchases"><?php _e( 'You have not made any subscription purchases.', 'commercestore' ); ?></p>
 
 	<?php endif; //end if subscription ?>
 

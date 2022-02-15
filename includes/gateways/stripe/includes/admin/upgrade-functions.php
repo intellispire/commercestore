@@ -28,12 +28,12 @@ function cs_stripe_upgrade_notices() {
 		printf(
 			'<div class="updated">' .
 			'<p>' .
-			__( 'Easy Digital Downloads - Stripe Gateway needs to upgrade the customers database, click <a href="%s">here</a> to start the upgrade. <a href="#" onClick="jQuery(this).parent().next(\'p\').slideToggle()">Learn more about this upgrade</a>', 'csx' ) .
+			__( 'Easy Digital Downloads - Stripe Gateway needs to upgrade the customers database, click <a href="%s">here</a> to start the upgrade. <a href="#" onClick="jQuery(this).parent().next(\'p\').slideToggle()">Learn more about this upgrade</a>', 'commercestore' ) .
 			'</p>' .
 			'<p style="display: none;">' .
-			__( '<strong>About this upgrade:</strong><br />This upgrade will improve the reliability of associating purchase records with your existing customer records in Stripe by changing their Stripe Customer IDs to be stored locally on their CS customer record, instead of their user record.', 'csx' ) .
+			__( '<strong>About this upgrade:</strong><br />This upgrade will improve the reliability of associating purchase records with your existing customer records in Stripe by changing their Stripe Customer IDs to be stored locally on their CS customer record, instead of their user record.', 'commercestore' ) .
 			'<br /><br />' .
-			__( '<strong>Advanced User?</strong><br />This upgrade can also be run via WPCLI with the following command:<br /><code>wp cs-stripe migrate_customer_ids</code>', 'csx' ) .
+			__( '<strong>Advanced User?</strong><br />This upgrade can also be run via WPCLI with the following command:<br /><code>wp cs-stripe migrate_customer_ids</code>', 'commercestore' ) .
 			'</p>' .
 			'</div>',
 			esc_url( admin_url( 'index.php?page=cs-upgrades&cs-upgrade=stripe_customer_id_migration' ) )
@@ -53,7 +53,7 @@ function cs_stripe_customer_id_migration() {
 	global $wpdb;
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to do shop upgrades', 'csx' ), __( 'Error', 'csx' ), array( 'response' => 403 ) );
+		wp_die( __( 'You do not have permission to do shop upgrades', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	ignore_user_abort( true );

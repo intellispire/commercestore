@@ -34,20 +34,20 @@ class CS_Recurring_Summary_Widget {
 			<table>
 				<thead>
 					<tr>
-						<td colspan="2"><?php _e( 'Subscriptions Created', 'cs-recurring' ) ?></td>
+						<td colspan="2"><?php _e( 'Subscriptions Created', 'commercestore' ) ?></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="first t"><?php _e( 'This Year', 'cs-recurring' ); ?></td>
+						<td class="first t"><?php _e( 'This Year', 'commercestore' ); ?></td>
 						<td class="b"><?php echo $this->get_subscription_count( 'year' ); ?></td>
 					</tr>
 					<tr>
-						<td class="first t"><?php _e( 'This Month', 'cs-recurring' ); ?></td>
+						<td class="first t"><?php _e( 'This Month', 'commercestore' ); ?></td>
 						<td class="b"><?php echo $this->get_subscription_count( 'month' ); ?></td>
 					</tr>
 					<tr>
-						<td class="first t"><?php _e( 'Total', 'cs-recurring' ); ?></td>
+						<td class="first t"><?php _e( 'Total', 'commercestore' ); ?></td>
 						<td class="b"><?php echo $this->get_subscription_count(); ?></td>
 					</tr>
 				</tbody>
@@ -57,20 +57,20 @@ class CS_Recurring_Summary_Widget {
 			<table>
 				<thead>
 					<tr>
-						<td colspan="2"><?php _e( 'Estimated Recurring Revenue', 'cs-recurring' ) ?></td>
+						<td colspan="2"><?php _e( 'Estimated Recurring Revenue', 'commercestore' ) ?></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="t"><?php _e( 'Next 365 Days', 'cs-recurring' ); ?></td>
+						<td class="t"><?php _e( 'Next 365 Days', 'commercestore' ); ?></td>
 						<td class="last b"><?php echo $this->get_estimated_revenue( 365 ); ?></td>
 					</tr>
 					<tr>
-						<td class="t"><?php _e( 'Next 30 Days', 'cs-recurring' ); ?></td>
+						<td class="t"><?php _e( 'Next 30 Days', 'commercestore' ); ?></td>
 						<td class="last b"><?php echo $this->get_estimated_revenue( 30 ); ?></td>
 					</tr>
 					<tr>
-						<td class="t"><?php _e( 'Total', 'cs-recurring' ); ?></td>
+						<td class="t"><?php _e( 'Total', 'commercestore' ); ?></td>
 						<td class="last b"><?php echo $this->get_estimated_revenue(); ?></td>
 					</tr>
 				</tbody>

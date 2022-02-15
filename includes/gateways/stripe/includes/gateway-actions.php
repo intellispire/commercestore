@@ -8,28 +8,28 @@
  */
 function csx_register_post_statuses() {
 	register_post_status( 'preapproval_pending', array(
-		'label'                     => _x( 'Preapproval Pending', 'Pending preapproved payment', 'csx' ),
+		'label'                     => _x( 'Preapproval Pending', 'Pending preapproved payment', 'commercestore' ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Active <span class="count">(%s)</span>', 'Active <span class="count">(%s)</span>', 'csx' )
+		'label_count'               => _n_noop( 'Active <span class="count">(%s)</span>', 'Active <span class="count">(%s)</span>', 'commercestore' )
 	) );
 	register_post_status( 'preapproval', array(
-		'label'                     => _x( 'Preapproved', 'Preapproved payment', 'csx' ),
+		'label'                     => _x( 'Preapproved', 'Preapproved payment', 'commercestore' ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Active <span class="count">(%s)</span>', 'Active <span class="count">(%s)</span>', 'csx' )
+		'label_count'               => _n_noop( 'Active <span class="count">(%s)</span>', 'Active <span class="count">(%s)</span>', 'commercestore' )
 	) );
 	register_post_status( 'cancelled', array(
-		'label'                     => _x( 'Cancelled', 'Cancelled payment', 'csx' ),
+		'label'                     => _x( 'Cancelled', 'Cancelled payment', 'commercestore' ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Active <span class="count">(%s)</span>', 'Active <span class="count">(%s)</span>', 'csx' )
+		'label_count'               => _n_noop( 'Active <span class="count">(%s)</span>', 'Active <span class="count">(%s)</span>', 'commercestore' )
 	) );
 }
 add_action( 'init',  'csx_register_post_statuses', 110 );
@@ -43,7 +43,7 @@ add_action( 'init',  'csx_register_post_statuses', 110 );
 function cs_stripe_register_email_tags() {
 	$statement_descriptor = csx_get_statement_descriptor();
 	if ( ! empty( $statement_descriptor ) ) {
-		cs_add_email_tag( 'stripe_statement_descriptor', __( 'Outputs a line stating what charges will appear as on customer\'s credit card statements.', 'csx' ), 'cs_stripe_statement_descriptor_template_tag' );
+		cs_add_email_tag( 'stripe_statement_descriptor', __( 'Outputs a line stating what charges will appear as on customer\'s credit card statements.', 'commercestore' ), 'cs_stripe_statement_descriptor_template_tag' );
 	}
 }
 add_action( 'cs_add_email_tags', 'cs_stripe_register_email_tags' );
@@ -68,7 +68,7 @@ function cs_stripe_statement_descriptor_template_tag( $payment_id ) {
 	}
 
 	// If you want to filter this, use the %s to define where you want the actual statement descriptor to show in your message.
-	$email_tag_output = __( apply_filters( 'cs_stripe_statement_descriptor_email_tag', 'Charges will appear on your card statement as %s' ), 'csx' );
+	$email_tag_output = __( apply_filters( 'cs_stripe_statement_descriptor_email_tag', 'Charges will appear on your card statement as %s' ), 'commercestore' );
 
 	return sprintf( $email_tag_output, $statement_descriptor );
 }

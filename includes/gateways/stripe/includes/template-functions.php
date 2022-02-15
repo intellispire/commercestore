@@ -23,7 +23,7 @@ function csx_credit_card_form( $echo = true ) {
 	global $cs_options;
 
 	if ( cs_stripe()->rate_limiting->has_hit_card_error_limit() ) {
-		cs_set_error( 'cs_stripe_error_limit', __( 'We are unable to process your payment at this time, please try again later or contact support.', 'csx' ) );
+		cs_set_error( 'cs_stripe_error_limit', __( 'We are unable to process your payment at this time, please try again later or contact support.', 'commercestore' ) );
 		return;
 	}
 
@@ -36,7 +36,7 @@ function csx_credit_card_form( $echo = true ) {
 	<?php do_action( 'cs_before_cc_fields' ); ?>
 
 	<fieldset id="cs_cc_fields" class="cs-do-validate">
-		<legend><?php _e( 'Credit Card Info', 'csx' ); ?></legend>
+		<legend><?php _e( 'Credit Card Info', 'commercestore' ); ?></legend>
 		<?php if( is_ssl() ) : ?>
 			<div id="cs_secure_site_wrapper">
 				<span class="padlock">
@@ -44,7 +44,7 @@ function csx_credit_card_form( $echo = true ) {
 						<path d="M5 12h8V9c0-2.203-1.797-4-4-4S5 6.797 5 9v3zm13 1.5v9c0 .828-.672 1.5-1.5 1.5h-15C.672 24 0 23.328 0 22.5v-9c0-.828.672-1.5 1.5-1.5H2V9c0-3.844 3.156-7 7-7s7 3.156 7 7v3h.5c.828 0 1.5.672 1.5 1.5z"/>
 					</svg>
 				</span>
-				<span><?php _e( 'This is a secure SSL encrypted payment.', 'csx' ); ?></span>
+				<span><?php _e( 'This is a secure SSL encrypted payment.', 'commercestore' ); ?></span>
 			</div>
 		<?php endif; ?>
 
@@ -81,7 +81,7 @@ add_action( 'cs_stripe_cc_form', 'csx_credit_card_form' );
  */
 function cs_stripe_new_card_form() {
 	if ( cs_stripe()->rate_limiting->has_hit_card_error_limit() ) {
-		cs_set_error( 'cs_stripe_error_limit', __( 'Adding new payment methods is currently unavailable.', 'csx' ) );
+		cs_set_error( 'cs_stripe_error_limit', __( 'Adding new payment methods is currently unavailable.', 'commercestore' ) );
 		cs_print_errors();
 		return;
 	}
@@ -89,16 +89,16 @@ function cs_stripe_new_card_form() {
 
 <p id="cs-card-name-wrap">
 	<label for="card_name" class="cs-label">
-		<?php esc_html_e( 'Name on the Card', 'csx' ); ?>
+		<?php esc_html_e( 'Name on the Card', 'commercestore' ); ?>
 		<span class="cs-required-indicator">*</span>
 	</label>
-	<span class="cs-description"><?php esc_html_e( 'The name printed on the front of your credit card.', 'csx' ); ?></span>
-	<input type="text" name="card_name" id="card_name" class="card-name cs-input required" placeholder="<?php esc_attr_e( 'Card name', 'csx' ); ?>" autocomplete="cc-name" />
+	<span class="cs-description"><?php esc_html_e( 'The name printed on the front of your credit card.', 'commercestore' ); ?></span>
+	<input type="text" name="card_name" id="card_name" class="card-name cs-input required" placeholder="<?php esc_attr_e( 'Card name', 'commercestore' ); ?>" autocomplete="cc-name" />
 </p>
 
 <div id="cs-card-wrap">
 	<label for="cs-card-element" class="cs-label">
-		<?php esc_html_e( 'Credit Card', 'csx' ); ?>
+		<?php esc_html_e( 'Credit Card', 'commercestore' ); ?>
 		<span class="cs-required-indicator">*</span>
 	</label>
 
@@ -173,7 +173,7 @@ function cs_stripe_update_billing_address_field() {
 
 	<p class="cs-stripe-update-billing-address-wrapper">
 		<input type="checkbox" name="cs_stripe_update_billing_address" id="cs-stripe-update-billing-address" value="1" />
-		<label for="cs-stripe-update-billing-address"><?php _e( 'Enter new billing address', 'csx' ); ?></label>
+		<label for="cs-stripe-update-billing-address"><?php _e( 'Enter new billing address', 'commercestore' ); ?></label>
 	</p>
 	<?php
 }
@@ -189,7 +189,7 @@ add_action( 'cs_cc_billing_top', 'cs_stripe_update_billing_address_field', 10 );
  */
 function cs_stripe_existing_card_field_radio( $user_id = 0 ) {
 	if ( cs_stripe()->rate_limiting->has_hit_card_error_limit() ) {
-		cs_set_error( 'cs_stripe_error_limit', __( 'We are unable to process your payment at this time, please try again later or contacts support.', 'csx' ) );
+		cs_set_error( 'cs_stripe_error_limit', __( 'We are unable to process your payment at this time, please try again later or contacts support.', 'commercestore' ) );
 		return;
 	}
 
@@ -217,12 +217,12 @@ function cs_stripe_existing_card_field_radio( $user_id = 0 ) {
 						<span class="card-data">
 							<span class="card-name-number">
 								<span class="card-brand"><?php echo $source->brand; ?></span>
-								<span class="card-ending-label"><?php _e( 'ending in', 'csx' ); ?></span>
+								<span class="card-ending-label"><?php _e( 'ending in', 'commercestore' ); ?></span>
 								<span class="card-last-4"><?php echo $source->last4; ?></span>
 							</span>
 							<span class="card-expires-on">
 								<span class="default-card-sep"><?php echo '&mdash; '; ?></span>
-								<span class="card-expiration-label"><?php _e( 'expires', 'csx' ); ?></span>
+								<span class="card-expiration-label"><?php _e( 'expires', 'commercestore' ); ?></span>
 								<span class="card-expiration">
 									<?php echo $source->exp_month . '/' . $source->exp_year; ?>
 								</span>
@@ -234,7 +234,7 @@ function cs_stripe_existing_card_field_radio( $user_id = 0 ) {
 							if ( $exp_date < $current ) :
 							?>
 							<span class="card-expired">
-									<?php _e( 'Expired', 'csx' ); ?>
+									<?php _e( 'Expired', 'commercestore' ); ?>
 								</span>
 							<?php
 							endif;
@@ -243,7 +243,7 @@ function cs_stripe_existing_card_field_radio( $user_id = 0 ) {
 					<?php if ( $card['default'] && $is_checkout ) { ?>
 						<span class="card-status">
 							<span class="default-card-sep"><?php echo '&mdash; '; ?></span>
-							<span class="card-is-default"><?php _e( 'Default', 'csx'); ?></span>
+							<span class="card-is-default"><?php _e( 'Default', 'commercestore'); ?></span>
 						</span>
 					<?php } ?>
 				</label>
@@ -251,7 +251,7 @@ function cs_stripe_existing_card_field_radio( $user_id = 0 ) {
 		<?php endforeach; ?>
 		<div class="cs-stripe-card-radio-item new-card-wrapper">
 			<input type="radio" id="cs-stripe-add-new" class="cs-stripe-existing-card" name="cs_stripe_existing_card" value="new" />
-			<label for="cs-stripe-add-new"><span class="add-new-card"><?php _e( 'Add New Card', 'csx' ); ?></span></label>
+			<label for="cs-stripe-add-new"><span class="add-new-card"><?php _e( 'Add New Card', 'commercestore' ); ?></span></label>
 		</div>
 	</div>
 	<?php endif;
@@ -275,7 +275,7 @@ function cs_stripe_manage_cards() {
 	}
 
 	if ( cs_stripe()->rate_limiting->has_hit_card_error_limit() ) {
-		cs_set_error( 'cs_stripe_error_limit', __( 'Payment method management is currently unavailable.', 'csx' ) );
+		cs_set_error( 'cs_stripe_error_limit', __( 'Payment method management is currently unavailable.', 'commercestore' ) );
 		cs_print_errors();
 		return;
 	}
@@ -288,7 +288,7 @@ function cs_stripe_manage_cards() {
 ?>
 	<div id="cs-stripe-manage-cards">
 		<fieldset>
-			<legend><?php _e( 'Manage Payment Methods', 'csx' ); ?></legend>
+			<legend><?php _e( 'Manage Payment Methods', 'commercestore' ); ?></legend>
 			<input type="hidden" id="stripe-update-card-user_id" name="stripe-update-user-id" value="<?php echo get_current_user_id(); ?>" />
 			<?php if ( ! empty( $existing_cards ) ) : ?>
 				<?php foreach( $existing_cards as $card ) : ?>
@@ -297,16 +297,16 @@ function cs_stripe_manage_cards() {
 
 					<span class="card-details">
 						<span class="card-brand"><?php echo $source->brand; ?></span>
-						<span class="card-ending-label"><?php _e( 'ending in', 'csx' ); ?></span>
+						<span class="card-ending-label"><?php _e( 'ending in', 'commercestore' ); ?></span>
 						<span class="card-last-4"><?php echo $source->last4; ?></span>
 						<?php if ( $card['default'] ) { ?>
 							<span class="default-card-sep"><?php echo '&mdash; '; ?></span>
-							<span class="card-is-default"><?php _e( 'Default', 'csx'); ?></span>
+							<span class="card-is-default"><?php _e( 'Default', 'commercestore'); ?></span>
 						<?php } ?>
 					</span>
 
 					<span class="card-meta">
-						<span class="card-expiration"><span class="card-expiration-label"><?php _e( 'Expires', 'csx' ); ?>: </span><span class="card-expiration-date"><?php echo $source->exp_month; ?>/<?php echo $source->exp_year; ?></span></span>
+						<span class="card-expiration"><span class="card-expiration-label"><?php _e( 'Expires', 'commercestore' ); ?>: </span><span class="card-expiration-date"><?php echo $source->exp_month; ?>/<?php echo $source->exp_year; ?></span></span>
 						<span class="card-address">
 							<?php
 							$address_fields = array( 
@@ -322,13 +322,13 @@ function cs_stripe_manage_cards() {
 
 					<span id="<?php echo esc_attr( $source->id ); ?>-card-actions" class="card-actions">
 						<span class="card-update">
-							<a href="#" class="cs-stripe-update-card" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Update', 'csx' ); ?></a>
+							<a href="#" class="cs-stripe-update-card" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Update', 'commercestore' ); ?></a>
 						</span>
 
 						<?php if ( ! $card['default'] ) : ?>
 						 |
 						<span class="card-set-as-default">
-							<a href="#" class="cs-stripe-default-card" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Set as Default', 'csx' ); ?></a>
+							<a href="#" class="cs-stripe-default-card" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Set as Default', 'commercestore' ); ?></a>
 						</span>
 						<?php
 						endif;
@@ -338,7 +338,7 @@ function cs_stripe_manage_cards() {
 						?>
 						|
 						<span class="card-delete">
-							<a href="#" class="cs-stripe-delete-card delete" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Delete', 'csx' ); ?></a>
+							<a href="#" class="cs-stripe-delete-card delete" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Delete', 'commercestore' ); ?></a>
 						</span>
 						<?php endif; ?>
 						
@@ -346,7 +346,7 @@ function cs_stripe_manage_cards() {
 					</span>
 
 					<form id="<?php echo esc_attr( $source->id ); ?>-update-form" class="card-update-form" data-source="<?php echo esc_attr( $source->id ); ?>">
-						<label><?php _e( 'Billing Details', 'csx' ); ?></label>
+						<label><?php _e( 'Billing Details', 'commercestore' ); ?></label>
 
 						<div class="card-address-fields">
 							<p class="csx-card-address-field csx-card-address-field--address1">
@@ -354,7 +354,7 @@ function cs_stripe_manage_cards() {
 							echo CS()->html->text( array(
 								'id'    => sprintf( 'csx_address_line1_%1$s', $source->id ),
 								'value' => sanitize_text_field( isset( $source->address_line1 ) ? $source->address_line1 : '' ),
-								'label' => esc_html__( 'Address Line 1', 'csx' ),
+								'label' => esc_html__( 'Address Line 1', 'commercestore' ),
 								'name'  => 'address_line1',
 								'class' => 'card-update-field address_line1 text cs-input',
 								'data'  => array(
@@ -368,7 +368,7 @@ function cs_stripe_manage_cards() {
 							echo CS()->html->text( array(
 								'id'    => sprintf( 'csx_address_line2_%1$s', $source->id ),
 								'value' => sanitize_text_field( isset( $source->address_line2 ) ? $source->address_line2 : '' ),
-								'label' => esc_html__( 'Address Line 2', 'csx' ),
+								'label' => esc_html__( 'Address Line 2', 'commercestore' ),
 								'name'  => 'address_line2',
 								'class' => 'card-update-field address_line2 text cs-input',
 								'data'  => array(
@@ -382,7 +382,7 @@ function cs_stripe_manage_cards() {
 							echo CS()->html->text( array(
 								'id'    => sprintf( 'csx_address_city_%1$s', $source->id ),
 								'value' => sanitize_text_field( isset( $source->address_city ) ? $source->address_city : '' ),
-								'label' => esc_html__( 'City', 'csx' ),
+								'label' => esc_html__( 'City', 'commercestore' ),
 								'name'  => 'address_city',
 								'class' => 'card-update-field address_city text cs-input',
 								'data'  => array(
@@ -396,7 +396,7 @@ function cs_stripe_manage_cards() {
 							echo CS()->html->text( array(
 								'id'    => sprintf( 'csx_address_zip_%1$s', $source->id ),
 								'value' => sanitize_text_field( isset( $source->address_zip ) ? $source->address_zip : '' ),
-								'label' => esc_html__( 'ZIP Code', 'csx' ),
+								'label' => esc_html__( 'ZIP Code', 'commercestore' ),
 								'name'  => 'address_zip',
 								'class' => 'card-update-field address_zip text cs-input',
 								'data'  => array(
@@ -407,7 +407,7 @@ function cs_stripe_manage_cards() {
 							</p>
 							<p class="csx-card-address-field csx-card-address-field--country">
 								<label for="<?php echo esc_attr( sprintf( 'csx_address_country_%1$s', $source->id ) ); ?>">
-									<?php esc_html_e( 'Country', 'csx' ); ?>
+									<?php esc_html_e( 'Country', 'commercestore' ); ?>
 								</label>
 
 								<?php
@@ -416,7 +416,7 @@ function cs_stripe_manage_cards() {
 								echo CS()->html->select( array(
 									'id'               => sprintf( 'csx_address_country_%1$s', $source->id ),
 									'name'             => 'address_country',
-									'label'            => esc_html__( 'Country', 'csx' ),
+									'label'            => esc_html__( 'Country', 'commercestore' ),
 									'options'          => $countries,
 									'selected'         => $country,
 									'class'            => 'card-update-field address_country',
@@ -429,7 +429,7 @@ function cs_stripe_manage_cards() {
 
 							<p class="csx-card-address-field csx-card-address-field--state">
 								<label for="<?php echo esc_attr( sprintf( 'csx_address_state_%1$s', $source->id ) ); ?>">
-									<?php esc_html_e( 'State', 'csx' ); ?>
+									<?php esc_html_e( 'State', 'commercestore' ); ?>
 								</label>
 
 								<?php
@@ -451,7 +451,7 @@ function cs_stripe_manage_cards() {
 
 						<p class="card-expiration-fields">
 							<label for="<?php echo esc_attr( sprintf( 'csx_card_exp_month_%1$s', $source->id ) ); ?>" class="cs-label">
-								<?php _e( 'Expiration (MM/YY)', 'csx' ); ?>
+								<?php _e( 'Expiration (MM/YY)', 'commercestore' ); ?>
 							</label>
 
 							<?php
@@ -489,12 +489,12 @@ function cs_stripe_manage_cards() {
 							<input
 								type="submit"
 								class="cs-stripe-submit-update"
-								data-loading="<?php echo esc_attr__( 'Please Wait…', 'csx' ); ?>"
-								data-submit="<?php echo esc_attr__( 'Update Card', 'csx' ); ?>"
-								value="<?php echo esc_attr__( 'Update Card', 'csx' ); ?>"
+								data-loading="<?php echo esc_attr__( 'Please Wait…', 'commercestore' ); ?>"
+								data-submit="<?php echo esc_attr__( 'Update Card', 'commercestore' ); ?>"
+								value="<?php echo esc_attr__( 'Update Card', 'commercestore' ); ?>"
 							/>
 
-							<a href="#" class="cs-stripe-cancel-update" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Cancel', 'csx' ); ?></a>
+							<a href="#" class="cs-stripe-cancel-update" data-source="<?php echo esc_attr( $source->id ); ?>"><?php _e( 'Cancel', 'commercestore' ); ?></a>
 
 							<input type="hidden" name="card_id" data-key="id" value="<?php echo $source->id; ?>" />
 							<?php wp_nonce_field( $source->id . '_update', 'card_update_nonce_' . $source->id, true ); ?>
@@ -505,7 +505,7 @@ function cs_stripe_manage_cards() {
 			<?php endif; ?>
 			<form id="cs-stripe-add-new-card">
 				<div class="cs-stripe-add-new-card" style="display: none;">
-					<label><?php _e( 'Add New Card', 'csx' ); ?></label>
+					<label><?php _e( 'Add New Card', 'commercestore' ); ?></label>
 					<fieldset id="cs_cc_card_info" class="cc-card-info">
 						<legend><?php _e( 'Credit Card Details', 'commercestore' ); ?></legend>
 						<?php do_action( 'cs_stripe_new_card_form' ); ?>
@@ -530,11 +530,11 @@ function cs_stripe_manage_cards() {
 					<input
 						type="submit"
 						class="cs-button cs-stripe-add-new"
-						data-loading="<?php echo esc_attr__( 'Please Wait…', 'csx' ); ?>"
-						data-submit="<?php echo esc_attr__( 'Add new card', 'csx' ); ?>"
-						value="<?php echo esc_attr__( 'Add new card', 'csx' ); ?>"
+						data-loading="<?php echo esc_attr__( 'Please Wait…', 'commercestore' ); ?>"
+						data-submit="<?php echo esc_attr__( 'Add new card', 'commercestore' ); ?>"
+						value="<?php echo esc_attr__( 'Add new card', 'commercestore' ); ?>"
 					/>
-					<a href="#" id="cs-stripe-add-new-cancel" style="display: none;"><?php _e( 'Cancel', 'csx' ); ?></a>
+					<a href="#" id="cs-stripe-add-new-cancel" style="display: none;"><?php _e( 'Cancel', 'commercestore' ); ?></a>
 					<?php wp_nonce_field( 'cs-stripe-add-card', 'cs-stripe-add-card-nonce', false, true ); ?>
 				</div>
 			</form>
@@ -601,15 +601,15 @@ function cs_stripe_zip_and_country() {
 	}
 ?>
 	<fieldset id="cs_cc_address" class="cc-address">
-		<legend><?php _e( 'Billing Details', 'csx' ); ?></legend>
+		<legend><?php _e( 'Billing Details', 'commercestore' ); ?></legend>
 		<p id="cs-card-country-wrap">
 			<label for="billing_country" class="cs-label">
-				<?php _e( 'Billing Country', 'csx' ); ?>
+				<?php _e( 'Billing Country', 'commercestore' ); ?>
 				<?php if( cs_field_is_required( 'billing_country' ) ) { ?>
 					<span class="cs-required-indicator">*</span>
 				<?php } ?>
 			</label>
-			<span class="cs-description"><?php _e( 'The country for your billing address.', 'csx' ); ?></span>
+			<span class="cs-description"><?php _e( 'The country for your billing address.', 'commercestore' ); ?></span>
 			<select name="billing_country" id="billing_country" class="billing_country cs-select<?php if( cs_field_is_required( 'billing_country' ) ) { echo ' required'; } ?>"<?php if( cs_field_is_required( 'billing_country' ) ) {  echo ' required '; } ?> autocomplete="billing country">
 				<?php
 
@@ -628,13 +628,13 @@ function cs_stripe_zip_and_country() {
 		</p>
 		<p id="cs-card-zip-wrap">
 			<label for="card_zip" class="cs-label">
-				<?php _e( 'Billing Zip / Postal Code', 'csx' ); ?>
+				<?php _e( 'Billing Zip / Postal Code', 'commercestore' ); ?>
 				<?php if( cs_field_is_required( 'card_zip' ) ) { ?>
 					<span class="cs-required-indicator">*</span>
 				<?php } ?>
 			</label>
-			<span class="cs-description"><?php _e( 'The zip or postal code for your billing address.', 'csx' ); ?></span>
-			<input type="text" size="4" name="card_zip" id="card_zip" class="card-zip cs-input<?php if( cs_field_is_required( 'card_zip' ) ) { echo ' required'; } ?>" placeholder="<?php _e( 'Zip / Postal Code', 'csx' ); ?>" value="<?php echo $customer['address']['zip']; ?>"<?php if( cs_field_is_required( 'card_zip' ) ) {  echo ' required '; } ?> autocomplete="billing postal-code" />
+			<span class="cs-description"><?php _e( 'The zip or postal code for your billing address.', 'commercestore' ); ?></span>
+			<input type="text" size="4" name="card_zip" id="card_zip" class="card-zip cs-input<?php if( cs_field_is_required( 'card_zip' ) ) { echo ' required'; } ?>" placeholder="<?php _e( 'Zip / Postal Code', 'commercestore' ); ?>" value="<?php echo $customer['address']['zip']; ?>"<?php if( cs_field_is_required( 'card_zip' ) ) {  echo ' required '; } ?> autocomplete="billing postal-code" />
 		</p>
 	</fieldset>
 <?php
@@ -700,12 +700,12 @@ function cs_stripe_require_zip_and_country( $fields ) {
 
 	$fields['card_zip'] = array(
 		'error_id' => 'invalid_zip_code',
-		'error_message' => __( 'Please enter your zip / postal code', 'csx' )
+		'error_message' => __( 'Please enter your zip / postal code', 'commercestore' )
 	);
 
 	$fields['billing_country'] = array(
 		'error_id' => 'invalid_country',
-		'error_message' => __( 'Please select your billing country', 'csx' )
+		'error_message' => __( 'Please select your billing country', 'commercestore' )
 	);
 
 	return $fields;

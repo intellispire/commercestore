@@ -26,11 +26,11 @@ function csx_preapproved_payment_needs_action_notification( $payment_id ) {
 		$to_email = $payment->email;
 	}
 
-	$subject = esc_html__( 'Your Preapproved Payment Requires Action', 'csx' );
-	$heading = cs_do_email_tags( esc_html__( 'Payment Requires Action', 'csx' ), $payment_id );
+	$subject = esc_html__( 'Your Preapproved Payment Requires Action', 'commercestore' );
+	$heading = cs_do_email_tags( esc_html__( 'Payment Requires Action', 'commercestore' ), $payment_id );
 
-	$message  = esc_html__( 'Dear {name},', 'csx' ) . "\n\n";
-	$message .= esc_html__( 'Your preapproved payment requires further action before your purchase can be completed. Please click the link below to take finalize your purchase', 'csx' ) . "\n\n";
+	$message  = esc_html__( 'Dear {name},', 'commercestore' ) . "\n\n";
+	$message .= esc_html__( 'Your preapproved payment requires further action before your purchase can be completed. Please click the link below to take finalize your purchase', 'commercestore' ) . "\n\n";
 	$message .= esc_url( add_query_arg( 'payment_key', $payment->key, cs_get_success_page_uri() ) );
 	$message  = cs_do_email_tags( $message, $payment_id );
 

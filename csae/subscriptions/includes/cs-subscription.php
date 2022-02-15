@@ -117,7 +117,7 @@ class CS_Subscription {
 
 		} else {
 
-			return new WP_Error( 'cs-subscription-invalid-property', sprintf( __( 'Can\'t get property %s', 'cs-recurring' ), $key ) );
+			return new WP_Error( 'cs-subscription-invalid-property', sprintf( __( 'Can\'t get property %s', 'commercestore' ), $key ) );
 
 		}
 
@@ -199,11 +199,11 @@ class CS_Subscription {
 			}
 
 			if ( isset( $args['product_id'] ) && $current_product != $args['product_id'] ) {
-				$this->add_note( sprintf( __( 'Product ID changed from %d to %d.', 'cs-recurring' ), $current_product, $args['product_id'] ) );
+				$this->add_note( sprintf( __( 'Product ID changed from %d to %d.', 'commercestore' ), $current_product, $args['product_id'] ) );
 			}
 
 			if ( isset( $args['price_id'] ) && ! is_null( $args['price_id'] ) && $current_price_id != $args['price_id'] ) {
-				$this->add_note( sprintf( __( 'Price ID changed from %d to %d.', 'cs-recurring' ), $current_price_id, $args['price_id'] ) );
+				$this->add_note( sprintf( __( 'Price ID changed from %d to %d.', 'commercestore' ), $current_price_id, $args['price_id'] ) );
 			}
 		}
 
@@ -723,13 +723,13 @@ class CS_Subscription {
 
 			} else {
 
-				$user = __( 'gateway', 'cs-recurring' );
+				$user = __( 'gateway', 'commercestore' );
 
 			}
 
 			do_action( 'cs_recurring_cancel_' . $this->gateway . '_subscription', $this, true );
 
-			$note = sprintf( __( 'Subscription #%d cancelled by %s', 'cs-recurring' ), $this->id, $user );
+			$note = sprintf( __( 'Subscription #%d cancelled by %s', 'commercestore' ), $this->id, $user );
 			$this->add_note( $note );
 
 			do_action( 'cs_subscription_cancelled', $this->id, $this );
@@ -868,7 +868,7 @@ class CS_Subscription {
 
 		// Only mark a subscription as complete if it's not already cancelled.
 		if ( ! $this->can_retry() ) {
-			return new WP_Error( 'cs_recurring_not_failing', __( 'This subscription is not failing so cannot be retried.', 'cs-recurring' ) );
+			return new WP_Error( 'cs_recurring_not_failing', __( 'This subscription is not failing so cannot be retried.', 'commercestore' ) );
 		}
 
 		$result = false;
@@ -886,7 +886,7 @@ class CS_Subscription {
 
 		if( ! $result ) {
 			// Set up a generic error response
-			$result = new WP_Error( 'cs_recurring_retry_failed', __( 'An error was encountered. Please check your merchant account logs.', 'cs-recurring' ) );
+			$result = new WP_Error( 'cs_recurring_retry_failed', __( 'An error was encountered. Please check your merchant account logs.', 'commercestore' ) );
 		}
 
 		return $result;
@@ -1008,7 +1008,7 @@ class CS_Subscription {
 					$this->expiration = $expiration;
 					$ret = true;
 
-					$this->add_note( sprintf( __( 'Expiration synced with gateway and updated to %s', 'cs-recurring' ), $expiration ) );
+					$this->add_note( sprintf( __( 'Expiration synced with gateway and updated to %s', 'commercestore' ), $expiration ) );
 
 					do_action( 'cs_recurring_check_expiration', $this, $expiration );
 
@@ -1054,31 +1054,31 @@ class CS_Subscription {
 
 		switch( $this->get_status() ) {
 			case 'active' :
-				$status = __( 'Active', 'cs-recurring' );
+				$status = __( 'Active', 'commercestore' );
 				break;
 
 			case 'cancelled' :
-				$status = __( 'Cancelled', 'cs-recurring' );
+				$status = __( 'Cancelled', 'commercestore' );
 				break;
 
 			case 'expired' :
-				$status = __( 'Expired', 'cs-recurring' );
+				$status = __( 'Expired', 'commercestore' );
 				break;
 
 			case 'pending' :
-				$status = __( 'Pending', 'cs-recurring' );
+				$status = __( 'Pending', 'commercestore' );
 				break;
 
 			case 'failing' :
-				$status = __( 'Failing', 'cs-recurring' );
+				$status = __( 'Failing', 'commercestore' );
 				break;
 
 			case 'trialling' :
-				$status = __( 'Trialling', 'cs-recurring' );
+				$status = __( 'Trialling', 'commercestore' );
 				break;
 
 			case 'completed' :
-				$status = __( 'Completed', 'cs-recurring' );
+				$status = __( 'Completed', 'commercestore' );
 				break;
 
 			default:
@@ -1251,12 +1251,12 @@ class CS_Subscription {
 
 		} else {
 
-			$user = __( 'gateway', 'cs-recurring' );
+			$user = __( 'gateway', 'commercestore' );
 
 		}
 
 		if( strtolower( $this->status ) !== strtolower( $old_status ) ) {
-			$this->add_note( sprintf( __( 'Status changed from %s to %s by %s', 'cs-recurring' ), $old_status, $this->status, $user ) );
+			$this->add_note( sprintf( __( 'Status changed from %s to %s by %s', 'commercestore' ), $old_status, $this->status, $user ) );
 		}
 		do_action( 'cs_subscription_status_change', $old_status, $new_status, $this );
 	}

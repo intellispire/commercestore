@@ -31,14 +31,14 @@ if ( ! $payments ) {
 }
 $action_url = remove_query_arg( array( 'subscription_id', 'view_transactions' ), cs_get_current_page_url() );
 ?>
-<a href="<?php echo esc_url( $action_url ); ?>">&larr;&nbsp;<?php esc_html_e( 'Back', 'cs-recurring' ); ?></a>
-<h3><?php esc_html_e( 'Transactions for Subscription #', 'cs-recurring' ); ?><?php echo esc_html( $subscription->id ); ?></h3>
+<a href="<?php echo esc_url( $action_url ); ?>">&larr;&nbsp;<?php esc_html_e( 'Back', 'commercestore' ); ?></a>
+<h3><?php esc_html_e( 'Transactions for Subscription #', 'commercestore' ); ?><?php echo esc_html( $subscription->id ); ?></h3>
 <table class="cs-recurring-subscription-transactions">
 	<thead>
 		<tr>
-			<th><?php esc_html_e( 'Order', 'cs-recurring' ); ?></th>
-			<th><?php esc_html_e( 'Order Amount', 'cs-recurring' ); ?></th>
-			<th><?php esc_html_e( 'Order Date', 'cs-recurring' ); ?></th>
+			<th><?php esc_html_e( 'Order', 'commercestore' ); ?></th>
+			<th><?php esc_html_e( 'Order Amount', 'commercestore' ); ?></th>
+			<th><?php esc_html_e( 'Order Date', 'commercestore' ); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -54,7 +54,7 @@ $action_url = remove_query_arg( array( 'subscription_id', 'view_transactions' ),
 					</a>
 					<?php
 					if ( $payment->ID == $subscription->parent_payment_id ) {
-						echo ' ' . esc_html__( '(original order)', 'cs-recurring' );
+						echo ' ' . esc_html__( '(original order)', 'commercestore' );
 					}
 					?>
 				</td>

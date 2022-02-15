@@ -60,7 +60,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	 */
 	public function init() {
 		$this->id            = 'stripe';
-		$this->friendly_name = __( 'Stripe', 'cs-recurring' );
+		$this->friendly_name = __( 'Stripe', 'commercestore' );
 		$this->supports      = array(
 			'mixed_cart',
 		);
@@ -143,14 +143,14 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			echo wpautop( wp_kses(
 				sprintf(
 					/* translators: %1$s Opening strong tag, do not translate. %2$s Closing strong tag, do not translate. */
-					__( '%1$sCredit card payments with Stripe are currently disabled.%2$s', 'cs-recurring' ),
+					__( '%1$sCredit card payments with Stripe are currently disabled.%2$s', 'commercestore' ),
 					'<strong>',
 					'</strong>'
 				)
 				. '<br />' .
 				sprintf(
 					/* translators: %1$s Opening code tag, do not translate. %2$s Closing code tag, do not translate. */
-					__( 'To continue accepting recurring credit card payments with Stripe please update the Stripe Payment Gateway extension to version %1$s2.7%2$s.', 'cs-recurring' ),
+					__( 'To continue accepting recurring credit card payments with Stripe please update the Stripe Payment Gateway extension to version %1$s2.7%2$s.', 'commercestore' ),
 					'<code>',
 					'</code>'
 				),
@@ -187,7 +187,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			// Check if the user exists and is not logged in.
 			if ( ! is_user_logged_in() ) {
 				/* translators: %1$s Email address of an existing account used during checkout. */
-				throw new \Exception( sprintf( __( 'A customer account for %1$s already exists. Please log in to complete your purchase.', 'cs-recurring' ), esc_html( $purchase_data['user_email'] ) ) );
+				throw new \Exception( sprintf( __( 'A customer account for %1$s already exists. Please log in to complete your purchase.', 'commercestore' ), esc_html( $purchase_data['user_email'] ) ) );
 			}
 		}
 	}
@@ -206,7 +206,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 	public function setup_stripe_api() {
 		_doing_it_wrong(
 			__METHOD__,
-			__( 'Use csx_api_request() to make Stripe API requests.', 'cs-recurring' ),
+			__( 'Use csx_api_request() to make Stripe API requests.', 'commercestore' ),
 			'2.10.0'
 		);
 	}
@@ -264,7 +264,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			throw new \Exception(
 				sprintf(
 					/* translators: %1$s Customer currency. */
-					__( 'Unable to complete your purchase. Your order must be completed in %1$s.', 'cs-recurring' ),
+					__( 'Unable to complete your purchase. Your order must be completed in %1$s.', 'commercestore' ),
 					strtoupper( $customer->currency )
 				)
 			);
@@ -815,7 +815,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			// record after talking to the gateway.
 			$failed_subscription['subscription']['cs_subscription']->delete();
 
-			$this->payment->add_note( sprintf( __( 'Failed creating subscription for %s. Gateway returned: %s', 'cs-recurring' ), $failed_subscription['subscription']['name'], $failed_subscription['error'] ) );
+			$this->payment->add_note( sprintf( __( 'Failed creating subscription for %s. Gateway returned: %s', 'commercestore' ), $failed_subscription['subscription']['name'], $failed_subscription['error'] ) );
 
 			$this->payment->remove_download( $failed_subscription['subscription']['id'], array(
 				'price_id' => $failed_subscription['subscription']['price_id'],
@@ -857,7 +857,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 				'cancellation_reason' => 'abandoned',
 			) );
 
-			$payment->add_note( esc_html__( 'PaymentIntent cancelled because there is nothing to collect.', 'cs-recurring' ) );
+			$payment->add_note( esc_html__( 'PaymentIntent cancelled because there is nothing to collect.', 'commercestore' ) );
 
 			cs_empty_cart();
 			return;
@@ -985,7 +985,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 				case 'invoice.payment_failed' :
 
 					$subscription->failing();
-					$subscription->add_note( sprintf( __( 'Failing invoice URL: %s', 'cs-recurring' ), $event->data->object->hosted_invoice_url ) );
+					$subscription->add_note( sprintf( __( 'Failing invoice URL: %s', 'commercestore' ), $event->data->object->hosted_invoice_url ) );
 
 					do_action( 'cs_recurring_payment_failed', $subscription );
 					do_action( 'cs_recurring_stripe_event_' . $event->type, $event );
@@ -1087,7 +1087,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 
 					if ( $new_amount !== $old_amount ) {
 						$subscription->update( array( 'recurring_amount' => $new_amount ) );
-						$subscription->add_note( sprintf( __( 'Recurring amount changed from %s to %s in Stripe.', ' cs-recurring' ), $old_amount, $new_amount ) );
+						$subscription->add_note( sprintf( __( 'Recurring amount changed from %s to %s in Stripe.', 'commercestore' ), $old_amount, $new_amount ) );
 
 					}
 
@@ -1642,7 +1642,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			}
 		} catch ( Exception $e ) {
 			// Translators: The error message from Stripe.
-			$subscription->add_note( sprintf( esc_html__( 'Attempted cancellation but was unable. Message was "%s".', 'cs-recurring' ), wp_json_encode( $e ) ) );
+			$subscription->add_note( sprintf( esc_html__( 'Attempted cancellation but was unable. Message was "%s".', 'commercestore' ), wp_json_encode( $e ) ) );
 			return false;
 		}
 
@@ -1681,7 +1681,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			}
 		} catch ( Exception $e ) {
 			// Translators: The error message from Stripe.
-			$subscription->add_note( sprintf( esc_html__( 'Attempted cancellation but was unable. Message was "%s".', 'cs-recurring' ), wp_json_encode( $e ) ) );
+			$subscription->add_note( sprintf( esc_html__( 'Attempted cancellation but was unable. Message was "%s".', 'commercestore' ), wp_json_encode( $e ) ) );
 			return false;
 		}
 
@@ -1806,7 +1806,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 
 				// Subscription could not be fully reactivated.
 				if ( 'incomplete' === $stripe_sub->status ) {
-					$subscription->add_note( esc_html__( 'Subscription reactivation requires payment by customer and will be cancelled in 24 hours if no action is taken.', 'cs-recurring' ) );
+					$subscription->add_note( esc_html__( 'Subscription reactivation requires payment by customer and will be cancelled in 24 hours if no action is taken.', 'commercestore' ) );
 				}
 
 				$subscription->update(
@@ -1835,7 +1835,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			}
 
 		} catch ( Exception $e ) {
-			wp_die( esc_html( $e->getMessage() ), esc_html( __( 'Error', 'cs-recurring' ) ), array( 'response' => 403 ) );
+			wp_die( esc_html( $e->getMessage() ), esc_html( __( 'Error', 'commercestore' ) ), array( 'response' => 403 ) );
 		}
 
 		return true;
@@ -2067,12 +2067,12 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 					$payment->add_note(
 						sprintf(
 							/* translators: %s Refund ID. */
-							__( 'Charge refunded in Stripe. Refund ID %s', 'cs-recurring' ),
+							__( 'Charge refunded in Stripe. Refund ID %s', 'commercestore' ),
 							$refund->id
 						)
 					);
 				} catch ( \Exception $e ) {
-					wp_die( $e->getMessage(), __( 'Error', 'cs-recurring' ), array( 'response' => 400 ) );
+					wp_die( $e->getMessage(), __( 'Error', 'commercestore' ), array( 'response' => 400 ) );
 				}
 
 				break;
@@ -2113,7 +2113,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			'csRecurringStripe',
 			array(
 				'i18n' => array(
-					'loading' => esc_html__( 'Please Wait…', 'cs-recurring' ),
+					'loading' => esc_html__( 'Please Wait…', 'commercestore' ),
 				),
 			)
 		);
@@ -2173,13 +2173,13 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'update-payment' ) ) {
 			return wp_send_json_error( array(
-				'message' => esc_html__( 'Invalid request. Please try again', 'cs-recurring' ),
+				'message' => esc_html__( 'Invalid request. Please try again', 'commercestore' ),
 			) );
 		}
 
 		if ( ! $subscription_id || ! $payment_method_id ) {
 			return wp_send_json_error( array(
-				'message' => esc_html__( 'Unable to locate Subscription. Please try again', 'cs-recurring' ),
+				'message' => esc_html__( 'Unable to locate Subscription. Please try again', 'commercestore' ),
 			) );
 		}
 
@@ -2215,7 +2215,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 			) );
 
 			return wp_send_json_success( array(
-				'message'      => esc_html__( 'Payment method updated.', 'cs-recurring' ),
+				'message'      => esc_html__( 'Payment method updated.', 'commercestore' ),
 				'subscription' => $subscription,
 			) );
 		} catch( \Exception $e ) {

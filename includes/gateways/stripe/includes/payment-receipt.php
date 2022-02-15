@@ -41,7 +41,7 @@ function csx_payment_receipt_authorize_payment_form( $payment ) {
 	<?php endif; ?>
 >
 	<h3>Authorize Payment</h3>
-	<p><?php esc_html_e( 'To finalize your preapproved purchase, please confirm your payment method.', 'csx' ); ?></p>
+	<p><?php esc_html_e( 'To finalize your preapproved purchase, please confirm your payment method.', 'commercestore' ); ?></p>
 
 	<div id="cs_checkout_form_wrap">
 		<?php

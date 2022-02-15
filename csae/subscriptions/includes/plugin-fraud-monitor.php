@@ -58,7 +58,7 @@ class CS_Recurring_Fraud_Monitor {
 				// If we were able to cancel the subscription, log a note stating it was because of Fraud Monitor.
 				if( $gateway->cancel( $sub, true ) ) {
 
-					$note = __( 'Subscription cancelled via Fraud Monitor', 'cs-recurring' );
+					$note = __( 'Subscription cancelled via Fraud Monitor', 'commercestore' );
 					$sub->add_note( $note );
 
 					$sub->cancel();

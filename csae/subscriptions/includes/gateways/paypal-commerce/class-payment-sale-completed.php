@@ -86,8 +86,8 @@ class Payment_Sale_Completed extends Webhook_Event {
 			case 'declined' :
 				$payment->status = 'failed';
 				$payment->add_note( sprintf(
-					__( 'PayPal payment declined. Details: %s', 'cs-recurring' ),
-					( ! empty( $this->event->resource->status_details ) ? json_encode( $this->event->resource->status_details ) : __( 'n/a', 'cs-recurring' ) )
+					__( 'PayPal payment declined. Details: %s', 'commercestore' ),
+					( ! empty( $this->event->resource->status_details ) ? json_encode( $this->event->resource->status_details ) : __( 'n/a', 'commercestore' ) )
 				) );
 				$payment->save();
 				$subscription->failing();
@@ -96,7 +96,7 @@ class Payment_Sale_Completed extends Webhook_Event {
 			case 'pending' :
 				if ( ! empty( $this->event->resource->capture_status_details->reason ) ) {
 					$reason = $cs_recurring_paypal_commerce::capture_status_to_note( $this->event->resource->capture_status_details->reason );
-					$payment->add_note( __( 'Payment still processing in PayPal.', 'cs-recurring' ) . ' ' . $reason );
+					$payment->add_note( __( 'Payment still processing in PayPal.', 'commercestore' ) . ' ' . $reason );
 				}
 
 				if ( 'processing' !== $payment->status ) {
@@ -119,7 +119,7 @@ class Payment_Sale_Completed extends Webhook_Event {
 				} catch ( \Exception $e ) {
 					$note = sprintf(
 						/* Translators: %1$s error message; %2$s payment data from API */
-						__( 'Payment failed. Error message: %1$s. Payment data: %2$s.', 'cs-recurring' ),
+						__( 'Payment failed. Error message: %1$s. Payment data: %2$s.', 'commercestore' ),
 						$e->getMessage(),
 						json_encode( $this->event->resource )
 					);
@@ -196,7 +196,7 @@ class Payment_Sale_Completed extends Webhook_Event {
 			cs_debug_log( 'PayPal Recurring - Payment status is declined.' );
 
 			$subscription->failing();
-			$subscription->add_note( __( 'Renewal payment processing failed at PayPal.', 'cs-recurring' ) );
+			$subscription->add_note( __( 'Renewal payment processing failed at PayPal.', 'commercestore' ) );
 
 			return;
 		}
@@ -208,7 +208,7 @@ class Payment_Sale_Completed extends Webhook_Event {
 			if ( ! empty( $this->event->resource->amount->currency ) && strtoupper( $subscription_currency ) !== strtoupper( $this->event->resource->amount->currency ) ) {
 				$subscription->add_note( sprintf(
 				/* Translators: %s - currency code */
-					__( 'Renewal payment processing failed due to invalid currency. PayPal currency: %s', 'cs-recurring' ),
+					__( 'Renewal payment processing failed due to invalid currency. PayPal currency: %s', 'commercestore' ),
 					strtoupper( sanitize_text_field( $this->event->resource->amount->currency ) )
 				) );
 

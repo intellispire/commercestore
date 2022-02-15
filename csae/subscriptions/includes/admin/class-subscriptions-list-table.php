@@ -200,7 +200,7 @@ class CS_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_renewal_date( $item ) {
-		return $renewal_date = ! empty( $item->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $item->expiration ) ) : __( 'N/A', 'cs-recurring' );
+		return $renewal_date = ! empty( $item->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $item->expiration ) ) : __( 'N/A', 'commercestore' );
 	}
 
 	/**
@@ -248,7 +248,7 @@ class CS_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_actions( $item ) {
-		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $item->id ) ) . '" title="' . esc_attr( __( 'View View or edit subscription', 'cs-recurring' ) ) . '">' . __( 'View', 'cs-recurring' ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $item->id ) ) . '" title="' . esc_attr( __( 'View View or edit subscription', 'commercestore' ) ) . '">' . __( 'View', 'commercestore' ) . '</a>';
 	}
 
 
@@ -262,14 +262,14 @@ class CS_Subscription_Reports_Table extends WP_List_Table {
 
 	function get_columns(){
 		$columns = array(
-			'customer_id'       => __( 'Customer', 'cs-recurring' ),
-			'status'            => __( 'Status', 'cs-recurring' ),
-			'period'            => __( 'Billing Cycle', 'cs-recurring' ),
-			'initial_amount'    => __( 'Initial Amount', 'cs-recurring' ),
-			'renewal_date'      => __( 'Renewal Date', 'cs-recurring' ),
-			'parent_payment_id' => __( 'Payment', 'cs-recurring' ),
+			'customer_id'       => __( 'Customer', 'commercestore' ),
+			'status'            => __( 'Status', 'commercestore' ),
+			'period'            => __( 'Billing Cycle', 'commercestore' ),
+			'initial_amount'    => __( 'Initial Amount', 'commercestore' ),
+			'renewal_date'      => __( 'Renewal Date', 'commercestore' ),
+			'parent_payment_id' => __( 'Payment', 'commercestore' ),
 			'product_id'        => cs_get_label_singular(),
-			'actions'           => __( 'Actions', 'cs-recurring' ),
+			'actions'           => __( 'Actions', 'commercestore' ),
 		);
 
 		return apply_filters( 'cs_report_subscription_columns', $columns );

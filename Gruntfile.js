@@ -37,6 +37,7 @@ module.exports = function( grunt ) {
 					'**/*.php', // Include all files
 					'!node_modules/**', // Exclude node_modules/
 					'!build/**', // Exclude build/
+					'!vendor/**', // exclude vendor
 				],
 				expand: true,
 			},
@@ -90,15 +91,38 @@ module.exports = function( grunt ) {
 		copy: {
 			main: {
 				src: [
+					'lib/**',
+					'csae/**',
 					'assets/**',
 					'includes/**',
 					'languages/**',
 					'templates/**',
-					'*.php',
+					'composer.json',
+					'composer.lock',
+					'commercestore.php',
+					'uninstall.php',
 					'*.txt',
 				],
 				dest: 'build/<%= pkg.name %>/',
 			},
+		},
+
+		shell: {
+			main: {
+				command: [
+					'composer install --no-dev',
+					'find . -mindepth 2 -type d -name .git | xargs rm -rf',
+					'find . -mindepth 2 -type d -name .github | xargs rm -rf',
+					'find . -mindepth 2 -type d -name .gitignore | xargs rm -rf',
+					// Run PHPScoper here.
+					].join(' && '),
+	      options: {
+					stderr: false,
+					execOptions: {
+						cwd: 'build/commercestore'
+					}
+				},
+			}
 		},
 
 		// Compress build directory into <name>.zip and <name>-<version>.zip
@@ -144,5 +168,5 @@ module.exports = function( grunt ) {
 	} );
 
 	// Build task(s).
-	grunt.registerTask( 'build', [ 'force:checktextdomain', 'makepot', 'replace', 'clean', 'copy', 'compress' ] );
+	grunt.registerTask( 'build', [ 'force:checktextdomain', 'makepot', 'replace', 'clean', 'copy', 'shell', 'compress' ] );
 };

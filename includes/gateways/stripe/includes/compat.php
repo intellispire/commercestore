@@ -187,7 +187,7 @@ function _csx_process_purchase_form() {
 
 		// Make sure the cart isn't empty.
 		if ( ! cs_get_cart_contents() && ! cs_cart_has_fees() ) {
-			throw new \Exception( esc_html__( 'Your cart is empty.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Your cart is empty.', 'commercestore' ) );
 		}
 
 		if ( ! isset( $_POST['cs-process-checkout-nonce'] ) ) {

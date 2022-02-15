@@ -107,8 +107,8 @@ class CS_Recurring_Shortcodes {
 		$link       = sprintf(
 			$link,
 			$cancel_url,
-			__( 'Cancel your subscription', 'cs-recurring' ),
-			empty( $atts['text'] ) ? __( 'Cancel Subscription', 'cs-recurring' ) : esc_html( $atts['text'] )
+			__( 'Cancel your subscription', 'commercestore' ),
+			empty( $atts['text'] ) ? __( 'Cancel Subscription', 'commercestore' ) : esc_html( $atts['text'] )
 		);
 
 		return apply_filters( 'cs_recurring_cancel_link', $link, $user_ID );
@@ -147,13 +147,13 @@ class CS_Recurring_Shortcodes {
 		$passed_nonce = isset( $_POST['cs_recurring_update_nonce'] ) ? $_POST['cs_recurring_update_nonce'] : false;
 
 		if ( false === $passed_nonce || ! isset( $_POST['_wp_http_referer'] ) ) {
-			wp_die( __( 'Invalid Payment Update', 'cs-recurring' ) );
+			wp_die( __( 'Invalid Payment Update', 'commercestore' ) );
 		}
 
 		$verified = wp_verify_nonce( $passed_nonce, 'update-payment' );
 
 		if ( 1 !== $verified || (int) $user_id !== (int) get_current_user_id() ) {
-			wp_die( __( 'Unable to verify payment update. Please try again later.', 'cs-recurring' ) );
+			wp_die( __( 'Unable to verify payment update. Please try again later.', 'commercestore' ) );
 		}
 
 		// Check if a subscription_id is passed to use the new update methods

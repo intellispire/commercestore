@@ -1,1 +1,237 @@
-!function(e){var n={};function t(o){if(n[o])return n[o].exports;var d=n[o]={i:o,l:!1,exports:{}};return e[o].call(d.exports,d,d.exports,t),d.l=!0,d.exports}t.m=e,t.c=n,t.d=function(e,n,o){t.o(e,n)||Object.defineProperty(e,n,{enumerable:!0,get:o})},t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t.t=function(e,n){if(1&n&&(e=t(e)),8&n)return e;if(4&n&&"object"==typeof e&&e&&e.__esModule)return e;var o=Object.create(null);if(t.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:e}),2&n&&"string"!=typeof e)for(var d in e)t.d(o,d,function(n){return e[n]}.bind(null,d));return o},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},t.p="",t(t.s=43)}({0:function(e,n){e.exports=jQuery},43:function(e,n,t){(function(e,n){var t={init:function(){this.enter_key(),this.add_note(),this.remove_note()},enter_key:function(){e(document.body).on("keydown","#cs-note",(function(n){13===n.keyCode&&(n.metaKey||n.ctrlKey)&&(n.preventDefault(),e("#cs-add-note").click())}))},add_note:function(){e("#cs-add-note").on("click",(function(n){n.preventDefault();var t=e(this),o=e("#cs-note"),d=e(".cs-notes"),r=e(".cs-no-notes"),i=e(".cs-add-note .spinner"),a={action:"cs_add_note",nonce:e("#cs_note_nonce").val(),object_id:t.data("object-id"),object_type:t.data("object-type"),note:o.val()};if(a.note)t.prop("disabled",!0),i.css("visibility","visible"),e.ajax({type:"POST",data:a,url:ajaxurl,success:function(e){var n=wpAjax.parseAjaxResponse(e);n=n.responses[0],d.append(n.data),r.hide(),t.prop("disabled",!1),i.css("visibility","hidden"),o.val("")}}).fail((function(e){window.console&&window.console.log&&console.log(e),t.prop("disabled",!1),i.css("visibility","hidden")}));else{var c=o.css("border-color");o.css("border-color","red"),setTimeout((function(){o.css("border-color",c)}),userInteractionInterval)}}))},remove_note:function(){e(document.body).on("click",".cs-delete-note",(function(n){n.preventDefault();var t=e(this),o=e(".cs-note"),d=t.parents(".cs-note"),r=e(".cs-no-notes"),i=e("#cs_note_nonce");if(confirm(cs_vars.delete_note)){var a={action:"cs_delete_note",nonce:i.val(),note_id:t.data("note-id")};return d.addClass("deleting"),e.ajax({type:"POST",data:a,url:ajaxurl,success:function(e){return"1"===e&&d.remove(),1===o.length&&r.show(),!1}}).fail((function(e){window.console&&window.console.log&&console.log(e),d.removeClass("deleting")})),!0}}))}};n(document).ready((function(e){t.init()}))}).call(this,t(0),t(0))}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/admin/notes/index.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./assets/js/admin/notes/index.js":
+/*!****************************************!*\
+  !*** ./assets/js/admin/notes/index.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function($, jQuery) {/**
+ * Notes
+ */
+var CS_Notes = {
+  init: function init() {
+    this.enter_key();
+    this.add_note();
+    this.remove_note();
+  },
+  enter_key: function enter_key() {
+    $(document.body).on('keydown', '#cs-note', function (e) {
+      if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        $('#cs-add-note').click();
+      }
+    });
+  },
+
+  /**
+   * Ajax handler for adding new notes
+   *
+   * @since 3.0
+   */
+  add_note: function add_note() {
+    $('#cs-add-note').on('click', function (e) {
+      e.preventDefault();
+      var cs_button = $(this),
+          cs_note = $('#cs-note'),
+          cs_notes = $('.cs-notes'),
+          cs_no_notes = $('.cs-no-notes'),
+          cs_spinner = $('.cs-add-note .spinner'),
+          cs_note_nonce = $('#cs_note_nonce');
+      var postData = {
+        action: 'cs_add_note',
+        nonce: cs_note_nonce.val(),
+        object_id: cs_button.data('object-id'),
+        object_type: cs_button.data('object-type'),
+        note: cs_note.val()
+      };
+
+      if (postData.note) {
+        cs_button.prop('disabled', true);
+        cs_spinner.css('visibility', 'visible');
+        $.ajax({
+          type: 'POST',
+          data: postData,
+          url: ajaxurl,
+          success: function success(response) {
+            var res = wpAjax.parseAjaxResponse(response);
+            res = res.responses[0];
+            cs_notes.append(res.data);
+            cs_no_notes.hide();
+            cs_button.prop('disabled', false);
+            cs_spinner.css('visibility', 'hidden');
+            cs_note.val('');
+          }
+        }).fail(function (data) {
+          if (window.console && window.console.log) {
+            console.log(data);
+          }
+
+          cs_button.prop('disabled', false);
+          cs_spinner.css('visibility', 'hidden');
+        });
+      } else {
+        var border_color = cs_note.css('border-color');
+        cs_note.css('border-color', 'red');
+        setTimeout(function () {
+          cs_note.css('border-color', border_color);
+        }, userInteractionInterval);
+      }
+    });
+  },
+
+  /**
+   * Ajax handler for deleting existing notes
+   *
+   * @since 3.0
+   */
+  remove_note: function remove_note() {
+    $(document.body).on('click', '.cs-delete-note', function (e) {
+      e.preventDefault();
+      var cs_link = $(this),
+          cs_notes = $('.cs-note'),
+          cs_note = cs_link.parents('.cs-note'),
+          cs_no_notes = $('.cs-no-notes'),
+          cs_note_nonce = $('#cs_note_nonce');
+
+      if (confirm(cs_vars.delete_note)) {
+        var postData = {
+          action: 'cs_delete_note',
+          nonce: cs_note_nonce.val(),
+          note_id: cs_link.data('note-id')
+        };
+        cs_note.addClass('deleting');
+        $.ajax({
+          type: 'POST',
+          data: postData,
+          url: ajaxurl,
+          success: function success(response) {
+            if ('1' === response) {
+              cs_note.remove();
+            }
+
+            if (cs_notes.length === 1) {
+              cs_no_notes.show();
+            }
+
+            return false;
+          }
+        }).fail(function (data) {
+          if (window.console && window.console.log) {
+            console.log(data);
+          }
+
+          cs_note.removeClass('deleting');
+        });
+        return true;
+      }
+    });
+  }
+};
+jQuery(document).ready(function ($) {
+  CS_Notes.init();
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery"), __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=cs-admin-notes.js.map

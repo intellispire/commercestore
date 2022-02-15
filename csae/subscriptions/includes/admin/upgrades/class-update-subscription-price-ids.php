@@ -129,7 +129,7 @@ if ( class_exists( 'CS_Batch_Export' ) ) {
 
 			if ( ! $this->can_export() ) {
 				wp_die(
-					__( 'You do not have permission to run this upgrade.', 'cs-recurring' ),
+					__( 'You do not have permission to run this upgrade.', 'commercestore' ),
 					__( 'Error', 'commercestore' ),
 					array( 'response' => 403 ) );
 			}
@@ -142,7 +142,7 @@ if ( class_exists( 'CS_Batch_Export' ) ) {
 			} else {
 				$this->done = true;
 				delete_option( 'cs_recurring_price_id_update_total_count' );
-				$this->message = __( 'Subscription records have been successfully updated.', 'cs-recurring' );
+				$this->message = __( 'Subscription records have been successfully updated.', 'commercestore' );
 				cs_set_upgrade_complete( 'recurring_update_price_id_column' );
 				return false;
 			}

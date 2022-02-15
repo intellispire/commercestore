@@ -39,7 +39,7 @@ function csx_process_purchase_form( $purchase_data ) {
 
 	if ( cs_stripe()->rate_limiting->has_hit_card_error_limit() ) {
 		return wp_send_json_error( array(
-			'message' => __( 'We are unable to process your payment at this time, please try again later or contact support.', 'csx' ),
+			'message' => __( 'We are unable to process your payment at this time, please try again later or contact support.', 'commercestore' ),
 		) );
 	}
 
@@ -57,7 +57,7 @@ function csx_process_purchase_form( $purchase_data ) {
 		$payment_method_exists = isset( $_POST['payment_method_exists'] ) ? 'true' == $_POST['payment_method_exists'] : false;
 
 		if ( ! $payment_method_id ) {
-			throw new \Exception( esc_html__( 'Unable to locate Payment Method.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to locate Payment Method.', 'commercestore' ) );
 		}
 
 		if ( csx_is_zero_decimal_currency() ) {
@@ -70,7 +70,7 @@ function csx_process_purchase_form( $purchase_data ) {
 		$customer = csx_checkout_setup_customer( $purchase_data );
 
 		if ( ! $customer ) {
-			throw new \Exception( esc_html__( 'Customer creation failed while processing a payment.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Customer creation failed while processing a payment.', 'commercestore' ) );
 		}
 
 		/**
@@ -185,7 +185,7 @@ function csx_process_purchase_form( $purchase_data ) {
 							: $value;
 				}
 
-				cs_debug_log( __( 'Charges are no longer directly created in Stripe. Please read the following for more information: https://commercestore.com/development/', 'cs-stripe' ), true );
+				cs_debug_log( __( 'Charges are no longer directly created in Stripe. Please read the following for more information: https://commercestore.com/development/', 'commercestore' ), true );
 			}
 		}
 
@@ -298,9 +298,9 @@ function csx_process_purchase_form( $purchase_data ) {
 
 		// Record error in log.
 		cs_record_gateway_error(
-			esc_html__( 'Stripe Error', 'csx' ),
+			esc_html__( 'Stripe Error', 'commercestore' ),
 			sprintf(
-				esc_html__( 'There was an error while processing a Stripe payment. Payment data: %s', ' csx' ), 
+				esc_html__( 'There was an error while processing a Stripe payment. Payment data: %s', 'commercestore' ), 
 				wp_json_encode( $e->getJsonBody()['error'] )
 			),
 			0
@@ -502,13 +502,13 @@ function csx_create_payment() {
 		$intent = isset( $_REQUEST['intent'] ) ? $_REQUEST['intent'] : array();
 
 		if ( ! isset( $intent['id'] ) ) {
-			throw new \Exception( esc_html__( 'Unable to verify intent.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to verify intent.', 'commercestore' ) );
 		}
 
 		$purchase_data = cs_get_purchase_session();
 
 		if ( false === $purchase_data ) {
-			throw new \Exception( __( 'Unable to verify purchase session.', 'csx' ) );
+			throw new \Exception( __( 'Unable to verify purchase session.', 'commercestore' ) );
 		}
 
 		$payment_data = array(
@@ -528,7 +528,7 @@ function csx_create_payment() {
 		$payment_id = cs_insert_payment( $payment_data );
 
 		if ( false === $payment_id ) {
-			throw new \Exception( __( 'Unable to create payment.', 'csx' ) );
+			throw new \Exception( __( 'Unable to create payment.', 'commercestore' ) );
 		}
 
 		// Retrieve created payment.
@@ -586,13 +586,13 @@ function csx_create_payment() {
 				'payment' => $payment,
 			) );
 		} else {
-			throw new \Exception( esc_html__( 'Unable to create payment.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to create payment.', 'commercestore' ) );
 		}
 	} catch( \Exception $e ) {
 		// Record error in log.
 		cs_record_gateway_error(
-			esc_html__( 'Stripe Error', 'csx' ),
-			esc_html__( 'There was an error while completing payment made with Stripe.', ' csx' ) . ' ' . $e->getMessage(),
+			esc_html__( 'Stripe Error', 'commercestore' ),
+			esc_html__( 'There was an error while completing payment made with Stripe.', 'commercestore' ) . ' ' . $e->getMessage(),
 			0
 		);
 
@@ -617,13 +617,13 @@ function csx_complete_payment() {
 
 	try {
 		if ( ! isset( $intent['id'] ) ) {
-			throw new \Exception( esc_html__( 'Unable to complete payment.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to complete payment.', 'commercestore' ) );
 		}
 
 		$payment = cs_get_payment( $intent['metadata']['cs_payment_id'] );
 
 		if ( ! $payment ) {
-			throw new \Exception( esc_html__( 'Unable to complete payment.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to complete payment.', 'commercestore' ) );
 		}
 
 		if ( 'setup_intent' !== $intent['object'] ) {
@@ -665,13 +665,13 @@ function csx_complete_payment() {
 				'intent'  => $intent,
 			) );
 		} else {
-			throw new \Exception( esc_html__( 'Unable to complete payment.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to complete payment.', 'commercestore' ) );
 		}
 	} catch( \Exception $e ) {
 		// Record error in log.
 		cs_record_gateway_error(
-			esc_html__( 'Stripe Error', 'csx' ),
-			esc_html__( 'There was an error while completing payment made wiwth Stripe.', ' csx' ) . ' ' . $e->getMessage(),
+			esc_html__( 'Stripe Error', 'commercestore' ),
+			esc_html__( 'There was an error while completing payment made wiwth Stripe.', 'commercestore' ) . ' ' . $e->getMessage(),
 			0
 		);
 
@@ -696,7 +696,7 @@ function csx_complete_payment_authorization() {
 		$cs_payment_id = $intent->metadata->cs_payment_id ? $intent->metadata->cs_payment_id : false;
 
 		if ( ! $cs_payment_id ) {
-			throw new \Exception( esc_html__( 'Unable to complete payment.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to complete payment.', 'commercestore' ) );
 		}
 
 		$payment   = cs_get_payment( $cs_payment_id );
@@ -723,7 +723,7 @@ function csx_complete_payment_authorization() {
 				'payment' => $payment,
 			) );
 		} else {
-			throw new \Exception( esc_html__( 'Unable to complete payment.', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to complete payment.', 'commercestore' ) );
 		}
 	} catch( \Exception $e ) {
 		return wp_send_json_error( array(
@@ -998,10 +998,10 @@ function cs_stripe_process_refund( $payment_id, $new_status, $old_status ) {
 
 		$refund = csx_api_request( 'Refund', 'create', $args, $sec_args );
 
-		cs_insert_payment_note( $payment_id, sprintf( __( 'Charge refunded in Stripe. Refund ID %s', 'csx' ), $refund->id ) );
+		cs_insert_payment_note( $payment_id, sprintf( __( 'Charge refunded in Stripe. Refund ID %s', 'commercestore' ), $refund->id ) );
 
 	} catch ( Exception $e ) {
-		wp_die( $e->getMessage(), __( 'Error', 'csx' ) , array( 'response' => 400 ) );
+		wp_die( $e->getMessage(), __( 'Error', 'commercestore' ) , array( 'response' => 400 ) );
 	}
 
 	do_action( 'csx_payment_refunded', $payment_id );

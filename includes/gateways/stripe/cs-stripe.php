@@ -51,7 +51,7 @@ class CS_Stripe {
 	}
 
 	function below_php_version_notice() {
-		echo '<div class="error"><p>' . __( 'Your version of PHP is below the minimum version of PHP required by Easy Digital Downloads - Stripe Payment Gateway. Please contact your host and request that your version be upgraded to 5.6.0 or greater.', 'csx' ) . '</p></div>';
+		echo '<div class="error"><p>' . __( 'Your version of PHP is below the minimum version of PHP required by Easy Digital Downloads - Stripe Payment Gateway. Please contact your host and request that your version be upgraded to 5.6.0 or greater.', 'commercestore' ) . '</p></div>';
 	}
 
 	private function setup_constants() {
@@ -183,7 +183,7 @@ class CS_Stripe {
 		// Format: ID => Name
 		$gateways['stripe'] = array(
 			'admin_label'    => 'Stripe',
-			'checkout_label' => __( 'Credit Card', 'csx' ),
+			'checkout_label' => __( 'Credit Card', 'commercestore' ),
 			'supports'       => array(
 				'buy_now'
 			)

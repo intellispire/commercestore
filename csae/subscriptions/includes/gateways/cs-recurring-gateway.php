@@ -346,11 +346,11 @@ class CS_Recurring_Gateway {
 		}
 
 		if ( ! wp_verify_nonce( $purchase_data['gateway_nonce'], 'cs-gateway' ) ) {
-			wp_die( __( 'Nonce verification has failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+			wp_die( __( 'Nonce verification has failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		if ( $purchase_data['user_info']['id'] < 1 && ! class_exists( 'CS_Auto_Register' ) ) {
-			cs_set_error( 'cs_recurring_logged_in', __( 'You must log in or create an account to purchase a subscription', 'cs-recurring' ) );
+			cs_set_error( 'cs_recurring_logged_in', __( 'You must log in or create an account to purchase a subscription', 'commercestore' ) );
 		}
 
 		// Never let a user_id be lower than 0 since WP Core absints when doing get_user_meta lookups
@@ -531,7 +531,7 @@ class CS_Recurring_Gateway {
 		do_action( 'cs_recurring_pre_create_payment_profiles', $this );
 
 		if ( ! is_user_logged_in() ) {
-			cs_set_error( 'cs_recurring_login', __( 'You must be logged in to purchase a subscription', 'cs-recurring' ) );
+			cs_set_error( 'cs_recurring_login', __( 'You must be logged in to purchase a subscription', 'commercestore' ) );
 
 			$this->handle_errors( cs_get_errors() );
 		}
@@ -560,7 +560,7 @@ class CS_Recurring_Gateway {
 				if ( ! empty( $failed_sub['error'] ) ) {
 					cs_set_error( 'recurring-failed-sub-error-' . $item_key, $failed_sub['error'] );
 				} else {
-					cs_set_error( 'recurring-all-subscriptions-failed', __( 'There was an error processing your order. Please contact support.', 'cs-recurring' ) );
+					cs_set_error( 'recurring-all-subscriptions-failed', __( 'There was an error processing your order. Please contact support.', 'commercestore' ) );
 				}
 			}
 
@@ -751,7 +751,7 @@ class CS_Recurring_Gateway {
 		if ( ! empty( $this->failed_subscriptions ) ) {
 
 			foreach ( $this->failed_subscriptions as $failed_subscription ) {
-				$note = sprintf( __( 'Failed creating subscription for %s. Gateway returned: %s', 'cs-recurring' ), $failed_subscription['subscription']['name'], $failed_subscription['error'] );
+				$note = sprintf( __( 'Failed creating subscription for %s. Gateway returned: %s', 'commercestore' ), $failed_subscription['subscription']['name'], $failed_subscription['error'] );
 				$payment->add_note( $note );
 			}
 
@@ -786,7 +786,7 @@ class CS_Recurring_Gateway {
 		}
 
 		if ( cs_recurring()->cart_is_mixed_with_trials() ) {
-			cs_set_error( 'cs_recurring_mixed_trials_cart', __( 'Free trials and non-trials may not be purchased at the same time. Please purchase each separately.', 'cs-recurring' ) );
+			cs_set_error( 'cs_recurring_mixed_trials_cart', __( 'Free trials and non-trials may not be purchased at the same time. Please purchase each separately.', 'commercestore' ) );
 		}
 
 		// Show errors related to mixed carts.
@@ -804,7 +804,7 @@ class CS_Recurring_Gateway {
 
 				// Show generic error to non show managers if no other gateways can be used to complete the purchase.
 				if ( ! current_user_can( 'manage_shop_settings' ) ) {
-					cs_set_error( 'cs_recurring_mixed_cart', __( 'Subscriptions and non-subscriptions may not be purchased at the same time. Please purchase each separately.', 'cs-recurring' ) );
+					cs_set_error( 'cs_recurring_mixed_cart', __( 'Subscriptions and non-subscriptions may not be purchased at the same time. Please purchase each separately.', 'commercestore' ) );
 
 				// Alert shop managers that Stripe supports mixed carts.
 				} else {
@@ -812,12 +812,12 @@ class CS_Recurring_Gateway {
 						'cs_recurring_mixed_cart_install_gateway',
 						wp_kses(
 							wpautop(
-								'<em>' . __( 'This message is showing because you are a shop manager', 'cs-recurring' ) . '</em>'
+								'<em>' . __( 'This message is showing because you are a shop manager', 'commercestore' ) . '</em>'
 							) .
 							wpautop(
 								sprintf(
 									/** translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
-									__( 'Your active payment gateways do not support mixed carts. The %1$sStripe Payment Gateway%2$s allows customers to purchase carts containing both recurring subscriptions and one-time charges at the same time.', 'cs-recurring' ),
+									__( 'Your active payment gateways do not support mixed carts. The %1$sStripe Payment Gateway%2$s allows customers to purchase carts containing both recurring subscriptions and one-time charges at the same time.', 'commercestore' ),
 									'<a href="https://commercestore.com/downloads/stripe-gateway/?utm_source=checkout&utm_medium=recurring&utm_campaign=admin" rel="noopener noreferrer" target="_blank">',
 									'</a>'
 								)
@@ -849,7 +849,7 @@ class CS_Recurring_Gateway {
 					'cs_recurring_mixed_cart_use_gateway',
 					wp_kses(
 						sprintf(
-							__( 'Sorry, purchasing a subscription and non-subscription product is only supported when paying by credit card. %1$sSwitch to this payment method%2$s.', 'cs-recurring' ),
+							__( 'Sorry, purchasing a subscription and non-subscription product is only supported when paying by credit card. %1$sSwitch to this payment method%2$s.', 'commercestore' ),
 							'<a href="' . esc_url( $gateway_checkout_uri ) . '">',
 							'</a>'
 						),
@@ -878,11 +878,11 @@ class CS_Recurring_Gateway {
 	public function process_payment_method_update( $user_id, $subscription_id, $verified ) {
 
 		if ( 1 !== $verified ) {
-			wp_die( __( 'Unable to verify payment update.', 'cs-recurring' ) );
+			wp_die( __( 'Unable to verify payment update.', 'commercestore' ) );
 		}
 
 		if ( ! is_user_logged_in() ) {
-			wp_die( __( 'You must be logged in to update a payment method.', 'cs-recurring' ) );
+			wp_die( __( 'You must be logged in to update a payment method.', 'commercestore' ) );
 		}
 
 		$subscription = new CS_Subscription( $subscription_id );
@@ -891,17 +891,17 @@ class CS_Recurring_Gateway {
 		}
 
 		if ( empty( $subscription->id ) ) {
-			wp_die( __( 'Invalid subscription id.', 'cs-recurring' ) );
+			wp_die( __( 'Invalid subscription id.', 'commercestore' ) );
 		}
 
 		$subscriber   = new CS_Recurring_Subscriber( $subscription->customer_id );
 		if ( empty( $subscriber->id ) ) {
-			wp_die( __( 'Invalid subscriber.', 'cs-recurring' ) );
+			wp_die( __( 'Invalid subscriber.', 'commercestore' ) );
 		}
 
 		// Make sure the User doing the udpate is the user the subscription belongs to
 		if ( $user_id != $subscriber->user_id ) {
-			wp_die( __( 'User ID and Subscriber do not match.', 'cs-recurring' ) );
+			wp_die( __( 'User ID and Subscriber do not match.', 'commercestore' ) );
 		}
 
 		// make sure we don't have any left over errors present
@@ -944,7 +944,7 @@ class CS_Recurring_Gateway {
 		}
 
 		if( ! wp_verify_nonce( $data['_wpnonce'], 'cs-recurring-cancel' ) ) {
-			wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+			wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		$data['sub_id'] = absint( $data['sub_id'] );
@@ -969,7 +969,7 @@ class CS_Recurring_Gateway {
 			}
 
 		} catch ( Exception $e ) {
-			wp_die( $e->getMessage(), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+			wp_die( $e->getMessage(), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 	}
@@ -992,7 +992,7 @@ class CS_Recurring_Gateway {
 		}
 
 		if( ! wp_verify_nonce( $data['_wpnonce'], 'cs-recurring-reactivate' ) ) {
-			wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+			wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 
@@ -1000,7 +1000,7 @@ class CS_Recurring_Gateway {
 		$subscription   = new CS_Subscription( $data['sub_id'] );
 
 		if( ! $subscription->can_reactivate() ) {
-			wp_die( __( 'This subscription cannot be reactivated', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+			wp_die( __( 'This subscription cannot be reactivated', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		try {
@@ -1008,7 +1008,7 @@ class CS_Recurring_Gateway {
 			do_action( 'cs_recurring_reactivate_' . $subscription->gateway . '_subscription', $subscription, true );
 
 			$user = is_user_logged_in() ? wp_get_current_user()->user_login : 'gateway';
-			$note = sprintf( __( 'Subscription reactivated by %s', 'cs-recurring' ), $user );
+			$note = sprintf( __( 'Subscription reactivated by %s', 'commercestore' ), $user );
 			$subscription->add_note( $note );
 
 			if( is_admin() ) {
@@ -1026,7 +1026,7 @@ class CS_Recurring_Gateway {
 			}
 
 		} catch ( Exception $e ) {
-			wp_die( $e->getMessage(), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+			wp_die( $e->getMessage(), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 	}

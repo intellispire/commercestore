@@ -8,7 +8,7 @@
 */
 function cs_recurring_settings_section( $sections ) {
 
-	$sections['recurring'] = __( 'Recurring Payments', 'cs-recurring' );
+	$sections['recurring'] = __( 'Recurring Payments', 'commercestore' );
 
 	return $sections;
 }
@@ -28,55 +28,55 @@ function cs_recurring_settings( $settings ) {
 		'recurring' => array(
 			array(
 				'id'    => 'recurring_download_limit',
-				'name'  => __( 'Limit File Downloads', 'cs-recurring' ),
-				'desc'  => __( 'Check this if you\'d like to require users have an active subscription in order to download files associated with a recurring product.', 'cs-recurring' ),
+				'name'  => __( 'Limit File Downloads', 'commercestore' ),
+				'desc'  => __( 'Check this if you\'d like to require users have an active subscription in order to download files associated with a recurring product.', 'commercestore' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'recurring_treat_completed_subs_as_active',
-				'name'  => __( 'Allow "Completed" subscriptions to download their files', 'cs-recurring' ),
-				'desc'  => __( 'When "Limit File Downloads" is enabled, would you like users with "Completed" subscriptions to be able to download their files, despite their subscription technically not being "Active"?', 'cs-recurring' ),
+				'name'  => __( 'Allow "Completed" subscriptions to download their files', 'commercestore' ),
+				'desc'  => __( 'When "Limit File Downloads" is enabled, would you like users with "Completed" subscriptions to be able to download their files, despite their subscription technically not being "Active"?', 'commercestore' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_show_terms_notice',
-				'name' => __( 'Display Subscription Terms', 'cs-recurring' ),
-				'desc' => __( 'When selected, the billing times and frequency will be shown below the purchase link.', 'cs-recurring' ),
+				'name' => __( 'Display Subscription Terms', 'commercestore' ),
+				'desc' => __( 'When selected, the billing times and frequency will be shown below the purchase link.', 'commercestore' ),
 				'type' => 'checkbox',
 			),
 			array(
 				'id'   => 'recurring_show_signup_fee_notice',
-				'name' => __( 'Display Signup Fee', 'cs-recurring' ),
-				'desc' => __( 'When selected, signup fee associated with a subscription will be shown below the purchase link.', 'cs-recurring' ),
+				'name' => __( 'Display Signup Fee', 'commercestore' ),
+				'desc' => __( 'When selected, signup fee associated with a subscription will be shown below the purchase link.', 'commercestore' ),
 				'type' => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_signup_fee_label',
-				'name' => __( 'Signup Fee Label', 'cs-recurring' ),
-				'desc' => __( 'The label used for signup fees, if any. This is shown on checkout and on individual purchase options if "Display Signup Fee" above is checked.', 'cs-recurring' ),
+				'name' => __( 'Signup Fee Label', 'commercestore' ),
+				'desc' => __( 'The label used for signup fees, if any. This is shown on checkout and on individual purchase options if "Display Signup Fee" above is checked.', 'commercestore' ),
 				'type' => 'text',
-				'std'  => __( 'Signup Fee', 'cs-recurring' )
+				'std'  => __( 'Signup Fee', 'commercestore' )
 			),
 			array(
 				'id'   => 'recurring_cancel_button_text',
-				'name' => __( 'Cancel Subscription Text', 'cs-recurring' ),
-				'desc' => __( 'The label used for the Cancel action. This text is shown to the customer when managing their subscriptions.', 'cs-recurring' ),
+				'name' => __( 'Cancel Subscription Text', 'commercestore' ),
+				'desc' => __( 'The label used for the Cancel action. This text is shown to the customer when managing their subscriptions.', 'commercestore' ),
 				'type' => 'text',
-				'std'  => __( 'Cancel', 'cs-recurring' )
+				'std'  => __( 'Cancel', 'commercestore' )
 			),
 			array(
 				'id'    => 'recurring_one_time_discounts',
-				'name'  => __( 'One Time Discounts', 'cs-recurring' ),
-				'desc'  => __( 'Check this if you\'d like discount codes to apply only to the initial subscription payment and not all payments. <strong>Note</strong>: one-time discount codes will not apply to free trials.', 'cs-recurring' ),
+				'name'  => __( 'One Time Discounts', 'commercestore' ),
+				'desc'  => __( 'Check this if you\'d like discount codes to apply only to the initial subscription payment and not all payments. <strong>Note</strong>: one-time discount codes will not apply to free trials.', 'commercestore' ),
 				'type'  => 'checkbox',
-				'tooltip_title' => __( 'One Time Discounts', 'cs-recurring' ),
+				'tooltip_title' => __( 'One Time Discounts', 'commercestore' ),
 				'tooltip_desc'  => __( 'When one time discounts are enabled, only the first payment in a subscription will be discounted when a discount code is redeemed on checkout. Free trials and one time discounts, however, cannot be combined. If a customer purchases a free trial, discount codes will always apply to <em>all</em> payments made for the subscription.', 'commercestore' ),
 
 			),
 			array(
 				'id'    => 'recurring_one_time_trials',
-				'name'  => __( 'One Time Trials', 'cs-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be prevented from purchasing a free trial multiple times.', 'cs-recurring' ),
+				'name'  => __( 'One Time Trials', 'commercestore' ),
+				'desc'  => __( 'Check this if you\'d like customers to be prevented from purchasing a free trial multiple times.', 'commercestore' ),
 				'type'  => 'checkbox'
 			),
 		)
@@ -98,108 +98,108 @@ function cs_recurring_email_settings( $settings ) {
 		'recurring' => array(
 			array(
 				'id'    => 'enable_payment_received_email',
-				'name'  => __( 'Payment Received Email', 'cs-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a renewal payment is processed.', 'cs-recurring' ),
+				'name'  => __( 'Payment Received Email', 'commercestore' ),
+				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a renewal payment is processed.', 'commercestore' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'payment_received_subject',
-				'name'  => __( 'Renewal Payment Received Subject', 'cs-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment is processed.', 'cs-recurring' ),
+				'name'  => __( 'Renewal Payment Received Subject', 'commercestore' ),
+				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment is processed.', 'commercestore' ),
 				'type'  => 'text',
-				'std'   => __( 'Renewal Payment Received', 'cs-recurring' )
+				'std'   => __( 'Renewal Payment Received', 'commercestore' )
 			),
 			array(
 				'id'    => 'payment_received_message',
-				'name'  => __( 'Renewal Payment Received Message', 'cs-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent when a renewal payment is processed.', 'cs-recurring' ),
+				'name'  => __( 'Renewal Payment Received Message', 'commercestore' ),
+				'desc'  => __( 'Enter the body text of the email sent when a renewal payment is processed.', 'commercestore' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been successfully processed.", 'cs-recurring' )
+				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been successfully processed.", 'commercestore' )
 			),
 
 			array(
 				'id'    => 'enable_payment_failed_email',
-				'name'  => __( 'Payment Failed Email', 'cs-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a payment fails to be processed.', 'cs-recurring' ),
+				'name'  => __( 'Payment Failed Email', 'commercestore' ),
+				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice each time a payment fails to be processed.', 'commercestore' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'payment_failed_subject',
-				'name'  => __( 'Renewal Payment Failed Subject', 'cs-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment fails to be processed.', 'cs-recurring' ),
+				'name'  => __( 'Renewal Payment Failed Subject', 'commercestore' ),
+				'desc'  => __( 'Enter the subject line of the email sent when a renewal payment fails to be processed.', 'commercestore' ),
 				'type'  => 'text',
-				'std'   => __( 'Renewal Payment Failed', 'cs-recurring' )
+				'std'   => __( 'Renewal Payment Failed', 'commercestore' )
 			),
 			array(
 				'id'    => 'payment_failed_message',
-				'name'  => __( 'Renewal Payment Failed Message', 'cs-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent when a renewal payment fails to be processed.', 'cs-recurring' ),
+				'name'  => __( 'Renewal Payment Failed Message', 'commercestore' ),
+				'desc'  => __( 'Enter the body text of the email sent when a renewal payment fails to be processed.', 'commercestore' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been failed to be processed.", 'cs-recurring' )
+				'std'   => __( "Hello {name}\n\nYour renewal payment in the amount of {amount} for {subscription_name} has been failed to be processed.", 'commercestore' )
 			),
 			array(
 				'id'    => 'enable_subscription_cancelled_email',
-				'name'  => __( 'Subscription Cancelled Email', 'cs-recurring' ),
-				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice when they cancel a subscription.', 'cs-recurring' ),
+				'name'  => __( 'Subscription Cancelled Email', 'commercestore' ),
+				'desc'  => __( 'Check this if you\'d like customers to be sent an email notice when they cancel a subscription.', 'commercestore' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'subscription_cancelled_subject',
-				'name'  => __( 'Subscription Cancelled Subject', 'cs-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent when a subscription is cancelled.', 'cs-recurring' ),
+				'name'  => __( 'Subscription Cancelled Subject', 'commercestore' ),
+				'desc'  => __( 'Enter the subject line of the email sent when a subscription is cancelled.', 'commercestore' ),
 				'type'  => 'text',
-				'std'   => __( 'Subscription Cancelled', 'cs-recurring' )
+				'std'   => __( 'Subscription Cancelled', 'commercestore' )
 			),
 			array(
 				'id'    => 'subscription_cancelled_message',
-				'name'  => __( 'Subscription Cancelled Message', 'cs-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent when a subscription is cancelled.', 'cs-recurring' ),
+				'name'  => __( 'Subscription Cancelled Message', 'commercestore' ),
+				'desc'  => __( 'Enter the body text of the email sent when a subscription is cancelled.', 'commercestore' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Hello {name}\n\nYour subscription for {subscription_name} has been successfully cancelled.", 'cs-recurring' )
+				'std'   => __( "Hello {name}\n\nYour subscription for {subscription_name} has been successfully cancelled.", 'commercestore' )
 			),
 			array(
 				'id'   => 'recurring_send_renewal_reminders',
-				'name' => __( 'Send Renewal Reminders', 'cs-recurring' ),
-				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to renew.', 'cs-recurring' ),
+				'name' => __( 'Send Renewal Reminders', 'commercestore' ),
+				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to renew.', 'commercestore' ),
 				'type' => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_renewal_reminders',
-				'name' => __( 'Subscription Renewal Reminders', 'cs-recurring' ),
-				'desc' => __( 'Configure the subscription renewal notice emails', 'cs-recurring' ),
+				'name' => __( 'Subscription Renewal Reminders', 'commercestore' ),
+				'desc' => __( 'Configure the subscription renewal notice emails', 'commercestore' ),
 				'type' => 'hook'
 			),
 			array(
 				'id'   => 'recurring_send_expiration_reminders',
-				'name' => __( 'Send Expiration Reminders', 'cs-recurring' ),
-				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to expire or complete.', 'cs-recurring' ),
+				'name' => __( 'Send Expiration Reminders', 'commercestore' ),
+				'desc' => __( 'Check this box if you want customers to receive a reminder when their subscription is about to expire or complete.', 'commercestore' ),
 				'type' => 'checkbox'
 			),
 			array(
 				'id'   => 'recurring_expiration_reminders',
-				'name' => __( 'Subscription Expiration Reminders', 'cs-recurring' ),
-				'desc' => __( 'Configure the subscription expiration notice emails', 'cs-recurring' ),
+				'name' => __( 'Subscription Expiration Reminders', 'commercestore' ),
+				'desc' => __( 'Configure the subscription expiration notice emails', 'commercestore' ),
 				'type' => 'hook'
 			),
 			array(
 				'id'    => 'enable_subscription_cancelled_admin_email',
-				'name'  => __( 'Subscription Cancelled Email for Admins', 'cs-recurring' ),
-				'desc'  => __( 'Check this if you\'d like admins to be sent an email notice when a customer cancels a subscription.', 'cs-recurring' ),
+				'name'  => __( 'Subscription Cancelled Email for Admins', 'commercestore' ),
+				'desc'  => __( 'Check this if you\'d like admins to be sent an email notice when a customer cancels a subscription.', 'commercestore' ),
 				'type'  => 'checkbox'
 			),
 			array(
 				'id'    => 'subscription_cancelled_admin_subject',
-				'name'  => __( 'Subscription Cancelled Subject for Admins', 'cs-recurring' ),
-				'desc'  => __( 'Enter the subject line of the email sent to admins when a subscription is cancelled.', 'cs-recurring' ),
+				'name'  => __( 'Subscription Cancelled Subject for Admins', 'commercestore' ),
+				'desc'  => __( 'Enter the subject line of the email sent to admins when a subscription is cancelled.', 'commercestore' ),
 				'type'  => 'text',
-				'std'   => __( 'Subscription {subscription_id} Cancelled', 'cs-recurring' )
+				'std'   => __( 'Subscription {subscription_id} Cancelled', 'commercestore' )
 			),
 			array(
 				'id'    => 'subscription_cancelled_admin_message',
-				'name'  => __( 'Subscription Cancelled Message for Admins', 'cs-recurring' ),
-				'desc'  => __( 'Enter the body text of the email sent to admins when a subscription is cancelled.', 'cs-recurring' ),
+				'name'  => __( 'Subscription Cancelled Message for Admins', 'commercestore' ),
+				'desc'  => __( 'Enter the body text of the email sent to admins when a subscription is cancelled.', 'commercestore' ),
 				'type'  => 'rich_editor',
-				'std'   => __( "Subscription ID: {subscription_id}\n\nCustomer: {name}\n\nSubscription: {subscription_name}\n\nView Subscription: {subscription_link}", 'cs-recurring' )
+				'std'   => __( "Subscription ID: {subscription_id}\n\nCustomer: {name}\n\nSubscription: {subscription_name}\n\nView Subscription: {subscription_link}", 'commercestore' )
 			),
 		),
 	);
@@ -225,9 +225,9 @@ function cs_recurring_renewal_reminders_settings( $args ) {
 	<table id="cs_recurring_renewal_reminders" class="wp-list-table widefat fixed posts">
 		<thead>
 		<tr>
-			<th scope="col" style="padding-left: 10px" class="cs-recurring-reminder-subject-col"><?php _e( 'Subject', 'cs-recurring' ); ?></th>
-			<th scope="col" class="cs-recurring-reminder-period-col"><?php _e( 'Send Period', 'cs-recurring' ); ?></th>
-			<th scope="col" class="cs-recurring-reminder-action-col"><?php _e( 'Actions', 'cs-recurring' ); ?></th>
+			<th scope="col" style="padding-left: 10px" class="cs-recurring-reminder-subject-col"><?php _e( 'Subject', 'commercestore' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-period-col"><?php _e( 'Send Period', 'commercestore' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-action-col"><?php _e( 'Actions', 'commercestore' ); ?></th>
 		</tr>
 		</thead>
 		<?php if ( ! empty( $notices ) ) : $i = 1; ?>
@@ -238,16 +238,16 @@ function cs_recurring_renewal_reminders_settings( $args ) {
 					<td><?php echo esc_html( $notice['subject'] ); ?></td>
 					<td><?php echo esc_html( $reminders->get_notice_period_label( $key ) ); ?></td>
 					<td>
-						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'cs-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'cs-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'cs-recurring' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'commercestore' ); ?></a>
 					</td>
 				</tr>
 				<?php $i ++; endforeach; ?>
 		<?php endif; ?>
 	</table>
 	<p>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=renewal' ) ); ?>" class="button-secondary" id="cs_recurring_add_renewal_notice"><?php _e( 'Add Renewal Reminder', 'cs-recurring' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=renewal' ) ); ?>" class="button-secondary" id="cs_recurring_add_renewal_notice"><?php _e( 'Add Renewal Reminder', 'commercestore' ); ?></a>
 	</p>
 	<?php
 	echo ob_get_clean();
@@ -271,9 +271,9 @@ function cs_recurring_expiration_reminders_settings( $args ) {
 	<table id="cs_recurring_expiration_reminders" class="wp-list-table widefat fixed posts">
 		<thead>
 		<tr>
-			<th scope="col" style="padding-left: 10px" class="cs-recurring-reminder-subject-col"><?php _e( 'Subject', 'cs-recurring' ); ?></th>
-			<th scope="col" class="cs-recurring-reminder-period-col"><?php _e( 'Send Period', 'cs-recurring' ); ?></th>
-			<th scope="col" class="cs-recurring-reminder-action-col"><?php _e( 'Actions', 'cs-recurring' ); ?></th>
+			<th scope="col" style="padding-left: 10px" class="cs-recurring-reminder-subject-col"><?php _e( 'Subject', 'commercestore' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-period-col"><?php _e( 'Send Period', 'commercestore' ); ?></th>
+			<th scope="col" class="cs-recurring-reminder-action-col"><?php _e( 'Actions', 'commercestore' ); ?></th>
 		</tr>
 		</thead>
 		<?php if ( ! empty( $notices ) ) : $i = 1; ?>
@@ -284,16 +284,16 @@ function cs_recurring_expiration_reminders_settings( $args ) {
 					<td><?php echo esc_html( $notice['subject'] ); ?></td>
 					<td><?php echo esc_html( $reminders->get_notice_period_label( $key ) ); ?></td>
 					<td>
-						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'cs-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'cs-recurring' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'cs-recurring' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'commercestore' ); ?></a>
 					</td>
 				</tr>
 				<?php $i ++; endforeach; ?>
 		<?php endif; ?>
 	</table>
 	<p>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=expiration' ) ); ?>" class="button-secondary" id="cs_recurring_add_expiration_notice"><?php _e( 'Add Expiration Reminder', 'cs-recurring' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=expiration' ) ); ?>" class="button-secondary" id="cs_recurring_add_expiration_notice"><?php _e( 'Add Expiration Reminder', 'commercestore' ); ?></a>
 	</p>
 	<?php
 	echo ob_get_clean();
@@ -313,8 +313,8 @@ function cs_recurring_add_notices_page() {
 
 	$cs_recurring_reminders_page = add_submenu_page(
 		'edit.php?post_type=download',
-		__( 'Subscription Reminder', 'cs-recurring' ),
-		__( 'Subscription Reminder', 'cs-recurring' ),
+		__( 'Subscription Reminder', 'commercestore' ),
+		__( 'Subscription Reminder', 'commercestore' ),
 		'manage_shop_settings',
 		'cs-subscription-reminder-notice',
 		'cs_recurring_subscription_reminder_notice_edit'
@@ -371,14 +371,14 @@ function cs_recurring_process_add_reminder_notice( $data ) {
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to add reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to add reminder notices', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! wp_verify_nonce( $data['cs-recurring-reminder-notice-nonce'], 'cs_recurring_reminder_nonce' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
-	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'cs-recurring' );
+	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'commercestore' );
 	$period  = isset( $data['period'] ) ? sanitize_text_field( $data['period'] ) : '+1month';
 	$message = isset( $data['message'] ) ? wp_kses( stripslashes( $data['message'] ), wp_kses_allowed_html( 'post' ) ) : false;
 	$type    = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : 'renewal';
@@ -422,18 +422,18 @@ function cs_recurring_process_update_reminder_notice( $data ) {
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to add reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to add reminder notices', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! wp_verify_nonce( $data['cs-recurring-reminder-notice-nonce'], 'cs_recurring_reminder_nonce' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! isset( $data['notice-id'] ) ) {
-		wp_die( __( 'No reminder notice ID was provided', 'cs-recurring' ) );
+		wp_die( __( 'No reminder notice ID was provided', 'commercestore' ) );
 	}
 
-	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'cs-recurring' );
+	$subject = isset( $data['subject'] ) ? sanitize_text_field( $data['subject'] ) : __( 'Your Subscription is About to Renew', 'commercestore' );
 	$period  = isset( $data['period'] ) ? sanitize_text_field( $data['period'] ) : '+1month';
 	$message = isset( $data['message'] ) ? wp_kses( stripslashes( $data['message'] ), wp_kses_allowed_html( 'post' ) ) : false;
 	$type    = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : 'renewal';
@@ -477,15 +477,15 @@ function cs_recurring_process_delete_reminder_notice( $data ) {
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to delete reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to delete reminder notices', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! wp_verify_nonce( $data['_wpnonce'] ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
 	if ( empty( $data['notice-id'] ) && 0 !== (int) $data['notice-id'] ) {
-		wp_die( __( 'No reminder notice ID was provided', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 409 ) );
+		wp_die( __( 'No reminder notice ID was provided', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 409 ) );
 	}
 
 	$reminders = new CS_Recurring_Reminders();
@@ -516,15 +516,15 @@ function cs_recurring_process_send_test_reminder_notice( $data ) {
 	}
 
 	if ( ! current_user_can( 'manage_shop_settings' ) ) {
-		wp_die( __( 'You do not have permission to send test email reminder notices', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'You do not have permission to send test email reminder notices', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
 	if ( ! wp_verify_nonce( $data['_wpnonce'] ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 	}
 
 	if ( empty( $data['notice-id'] ) && 0 !== (int) $data['notice-id'] ) {
-		wp_die( __( 'No reminder notice ID was provided', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 409 ) );
+		wp_die( __( 'No reminder notice ID was provided', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 409 ) );
 	}
 
 	$reminders = new CS_Recurring_Reminders();
@@ -546,7 +546,7 @@ add_action( 'cs_recurring_send_test_reminder_notice', 'cs_recurring_process_send
  * @return array
  */
 function cs_recurring_item_quantities_description( $settings ) {
-	$settings['main']['item_quantities']['desc'] .= ' <strong>' . __( 'Note: Item Quantities will be disabled for all products in the cart if the cart contains a recurring product.', 'cs-recurring' ) . '</strong>';
+	$settings['main']['item_quantities']['desc'] .= ' <strong>' . __( 'Note: Item Quantities will be disabled for all products in the cart if the cart contains a recurring product.', 'commercestore' ) . '</strong>';
 	return $settings;
 }
 add_filter( 'cs_settings_misc', 'cs_recurring_item_quantities_description', 10 );
@@ -562,7 +562,7 @@ add_filter( 'cs_settings_misc', 'cs_recurring_item_quantities_description', 10 )
  */
 function cs_recurring_guest_checkout_description( $settings ) {
 	if ( ! empty( $settings['checkout']['logged_in_only']['desc'] ) ) {
-		$settings['checkout']['logged_in_only']['desc'] .= '<br /><strong>' . __( 'Guest checkout is not permitted when purchasing subscriptions.', 'cs-recurring' ) . '</strong>';
+		$settings['checkout']['logged_in_only']['desc'] .= '<br /><strong>' . __( 'Guest checkout is not permitted when purchasing subscriptions.', 'commercestore' ) . '</strong>';
 	}
 
 	return $settings;
