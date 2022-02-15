@@ -24,7 +24,7 @@ function csx_stripe_event_listener() {
 		if ( isset( $event->id ) ) {
 			$event = csx_api_request( 'Event', 'retrieve', $event->id );
 		} else {
-			throw new \Exception( esc_html__( 'Unable to find Event', 'csx' ) );
+			throw new \Exception( esc_html__( 'Unable to find Event', 'commercestore' ) );
 		}
 
 		// Handle events.
@@ -70,12 +70,12 @@ function csx_stripe_event_listener() {
 						$payment->status = 'refunded';
 						$payment->save();
 						// Translators: The charge ID from Stripe that is being refunded.
-						$payment->add_note( sprintf( __( 'Charge %s has been fully refunded in Stripe.', 'csx' ), $charge->id ) );
+						$payment->add_note( sprintf( __( 'Charge %s has been fully refunded in Stripe.', 'commercestore' ), $charge->id ) );
 
 						// If this was partially refunded, don't change the status.
 					} else {
 						// Translators: The charge ID from Stripe that is being partially refunded.
-						$payment->add_note( sprintf( __( 'Charge %s partially refunded in Stripe.', 'csx' ), $charge->id ) );
+						$payment->add_note( sprintf( __( 'Charge %s partially refunded in Stripe.', 'commercestore' ), $charge->id ) );
 					}
 				}
 
@@ -109,7 +109,7 @@ function csx_stripe_event_listener() {
 				$payment    = new CS_Payment( $payment_id );
 
 				if ( $payment && $payment->ID > 0 ) {
-					$payment->add_note( sprintf( __( 'Stripe Radar review opened with a reason of %s.', 'csx' ), $review->reason ) );
+					$payment->add_note( sprintf( __( 'Stripe Radar review opened with a reason of %s.', 'commercestore' ), $review->reason ) );
 					$payment->save();
 
 					do_action( 'cs_stripe_review_opened', $review, $payment_id );
@@ -145,7 +145,7 @@ function csx_stripe_event_listener() {
 				$payment    = new CS_Payment( $payment_id );
 
 				if ( $payment && $payment->ID > 0 ) {
-					$payment->add_note( sprintf( __( 'Stripe Radar review closed with a reason of %s.', 'csx' ), $review->reason ) );
+					$payment->add_note( sprintf( __( 'Stripe Radar review closed with a reason of %s.', 'commercestore' ), $review->reason ) );
 					$payment->save();
 
 					do_action( 'cs_stripe_review_closed', $review, $payment_id );

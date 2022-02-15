@@ -87,7 +87,7 @@ class CS_Subscriptions_API extends CS_API {
 		}
 
 		if ( null !== $input_status && '' === $status ) {
-			$error['error'] = sprintf( __( '\'%s\' is not a valid status.', 'cs-recurring' ), $input_status );
+			$error['error'] = sprintf( __( '\'%s\' is not a valid status.', 'commercestore' ), $input_status );
 
 			return $error;
 		} else {
@@ -160,7 +160,7 @@ class CS_Subscriptions_API extends CS_API {
 
 		if( ! empty( $queried_c ) && ( ! $customer || ! $customer->id > 0 ) ) {
 
-			$error['error'] = sprintf( __( 'No customer found for %s!', 'cs-recurring' ), $queried_c );
+			$error['error'] = sprintf( __( 'No customer found for %s!', 'commercestore' ), $queried_c );
 
 			return $error;
 
@@ -221,13 +221,13 @@ class CS_Subscriptions_API extends CS_API {
 
 		} elseif( ! empty( $queried_c ) ) {
 
-			$error['error'] = sprintf( __( 'No subscriptions found for %s!', 'cs-recurring' ), $queried_c );
+			$error['error'] = sprintf( __( 'No subscriptions found for %s!', 'commercestore' ), $queried_c );
 
 			return $error;
 
 		} else {
 
-			$error['error'] = __( 'No subscriptions found!', 'cs-recurring' );
+			$error['error'] = __( 'No subscriptions found!', 'commercestore' );
 
 			return $error;
 

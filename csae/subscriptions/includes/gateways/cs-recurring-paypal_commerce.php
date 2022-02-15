@@ -133,11 +133,11 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 	 */
 	public function validate_fields( $data, $posted ) {
 		if ( count( cs_get_cart_contents() ) > 1 && ! $this->can_purchase_multiple_subs() ) {
-			cs_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased through PayPal per checkout.', 'cs-recurring' ) );
+			cs_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased through PayPal per checkout.', 'commercestore' ) );
 		}
 
 		if ( 'INR' === cs_get_currency() ) {
-			cs_set_error( 'unsupported_currency', __( 'PayPal subscriptions cannot be made with Indian Rupees.', 'cs-recurring' ) );
+			cs_set_error( 'unsupported_currency', __( 'PayPal subscriptions cannot be made with Indian Rupees.', 'commercestore' ) );
 		}
 	}
 
@@ -192,7 +192,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 	protected function handle_errors( $errors = array() ) {
 		if ( ! is_array( $errors ) || empty( $errors ) ) {
 			$errors = array(
-				'paypal-error' => __( 'An unexpected error occurred.', 'cs-recurring' )
+				'paypal-error' => __( 'An unexpected error occurred.', 'commercestore' )
 			);
 		}
 
@@ -209,13 +209,13 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 
 		if ( ! \CS\Gateways\PayPal\has_rest_api_connection() ) {
 			cs_record_gateway_error(
-				__( 'PayPal Gateway Error', 'cs-recurring' ),
-				__( 'Missing PayPal Commerce credentials.', 'cs-recurring' )
+				__( 'PayPal Gateway Error', 'commercestore' ),
+				__( 'Missing PayPal Commerce credentials.', 'commercestore' )
 			);
 
 			$error_message = current_user_can( 'manage_options' )
-				? __( 'Please connect your PayPal account in the gateway settings.', 'cs-recurring' )
-				: __( 'Unexpected authentication error. Please contact a site administrator.', 'cs-recurring' );
+				? __( 'Please connect your PayPal account in the gateway settings.', 'commercestore' )
+				: __( 'Unexpected authentication error. Please contact a site administrator.', 'commercestore' );
 
 			$this->handle_errors( array(
 				'paypal-error' => $error_message
@@ -246,9 +246,9 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 					break;
 				}
 			} catch ( \CS\Gateways\PayPal\Exceptions\Authentication_Exception $e ) {
-				throw new Gateway_Exception( __( 'An authentication error occurred. Please try again.', 'cs-recurring' ), $e->getCode(), $e->getMessage() );
+				throw new Gateway_Exception( __( 'An authentication error occurred. Please try again.', 'commercestore' ), $e->getCode(), $e->getMessage() );
 			} catch ( API_Exception $e ) {
-				throw new Gateway_Exception( __( 'An error occurred while communicating with PayPal. Please try again.', 'cs-recurring' ), $e->getCode(), $e->getMessage() );
+				throw new Gateway_Exception( __( 'An error occurred while communicating with PayPal. Please try again.', 'commercestore' ), $e->getCode(), $e->getMessage() );
 			}
 		} catch ( Gateway_Exception $e ) {
 			$e->record_gateway_error();
@@ -321,7 +321,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 
 		if ( empty( $download->ID ) ) {
 			throw new Gateway_Exception(
-				__( 'An unexpected error has occurred. Please try again.', 'cs-recurring' ),
+				__( 'An unexpected error has occurred. Please try again.', 'commercestore' ),
 				500,
 				sprintf( 'Error while retrieving CS_Download for ID %s', $download_id )
 			);
@@ -797,7 +797,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			$api = new API();
 
 			$api->make_request( sprintf( 'v1/billing/subscriptions/' . urlencode( $subscription->profile_id ) . '/cancel' ), array(
-				'reason' => esc_html__( 'Customer requested cancellation.', 'cs-recurring' )
+				'reason' => esc_html__( 'Customer requested cancellation.', 'commercestore' )
 			) );
 
 			if ( 204 !== $api->last_response_code ) {
@@ -807,7 +807,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			return true;
 		} catch ( \Exception $e ) {
 			$subscription->add_note( sprintf(
-				__( 'Failed to cancel subscription in PayPal. Message: %s', 'cs-recurring' ),
+				__( 'Failed to cancel subscription in PayPal. Message: %s', 'commercestore' ),
 				esc_html( $e->getMessage() )
 			) );
 
@@ -848,7 +848,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 
 		try {
 			if ( empty( $subscription->profile_id ) ) {
-				throw new \Exception( __( 'Missing profile ID.', 'cs-recurring' ) );
+				throw new \Exception( __( 'Missing profile ID.', 'commercestore' ) );
 			}
 
 			$api      = new API();
@@ -857,7 +857,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			if ( 200 !== $api->last_response_code ) {
 				throw new API_Exception( sprintf(
 				/* Translators: %d - the HTTP response code */
-					__( 'Unexpected HTTP response code: %d.', 'cs-recurring' ),
+					__( 'Unexpected HTTP response code: %d.', 'commercestore' ),
 					$api->last_response_code
 				) );
 			}
@@ -865,7 +865,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			if ( empty( $response->id ) ) {
 				throw new API_Exception( sprintf(
 				/* Translators: %s - response from PayPal */
-					__( 'PayPal response missing subscription ID. Response: %s', 'cs-recurring' ),
+					__( 'PayPal response missing subscription ID. Response: %s', 'commercestore' ),
 					json_encode( $response )
 				) );
 			}
@@ -877,18 +877,18 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			$response = (array) json_decode( json_encode( $response ), true );
 			$details  = wp_parse_args( $details, $response );
 		} catch ( \CS\Gateways\PayPal\Exceptions\Authentication_Exception $e ) {
-			$details['error'] = new WP_Error( 'authentication_exception', __( 'An authentication exception occurred.', 'cs-recurring' ) );
+			$details['error'] = new WP_Error( 'authentication_exception', __( 'An authentication exception occurred.', 'commercestore' ) );
 		} catch ( API_Exception $e ) {
 			$details['error'] = new WP_Error( 'api_exception', sprintf(
 			/* Translators: %d - HTTP response code; %s - Error message; %s */
-				__( 'An error occurred in the response from PayPal. HTTP code: %d; Message: %s', 'cs-recurring' ),
+				__( 'An error occurred in the response from PayPal. HTTP code: %d; Message: %s', 'commercestore' ),
 				( isset( $api ) ? $api->last_response_code : 0 ),
 				$e->getMessage()
 			) );
 		} catch ( \Exception $e ) {
 			$details['error'] = new WP_Error( 'exception', sprintf(
 			/* Translators: %s - error message */
-				__( 'An unexpected error occurred. Message: %s', 'cs-recurring' ),
+				__( 'An unexpected error occurred. Message: %s', 'commercestore' ),
 				$e->getMessage()
 			) );
 		}
@@ -947,7 +947,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			if ( ! empty( $timestamp ) && ! empty( $token ) ) {
 				if ( !\CS\Utils\Tokenizer::is_token_valid( $token, $timestamp ) ) {
 					throw new Gateway_Exception(
-						__('A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring'),
+						__('A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore'),
 						403,
 						'Token validation failed - activate_subscription()'
 					);
@@ -955,20 +955,20 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			} elseif ( empty( $token ) && ! empty( $_POST['cs_process_paypal_nonce'] ) ) {
 				if ( ! wp_verify_nonce( $_POST['cs_process_paypal_nonce'], 'cs_process_paypal' ) ) {
 					throw new Gateway_Exception(
-						__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring' ),
+						__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore' ),
 						403,
 						'Nonce validation failed - activate_subscription()'
 					);
 				}
 			} else {
 				throw new Gateway_Exception(
-					__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring' ),
+					__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore' ),
 					400,
 					'Missing validation fields - activate_subscription()'
 				);
 			}
 
-			$default_error_message = __( 'An unexpected error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring' );
+			$default_error_message = __( 'An unexpected error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore' );
 
 			if ( empty( $_POST['paypal_subscription_id'] ) ) {
 				throw new Gateway_Exception(
@@ -1110,7 +1110,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			if ( ! empty( $timestamp ) && ! empty( $token ) ) {
 				if ( !\CS\Utils\Tokenizer::is_token_valid( $token, $timestamp ) ) {
 					throw new Gateway_Exception(
-						__('A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring'),
+						__('A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore'),
 						403,
 						'Token validation failed - confirm_transaction()'
 					);
@@ -1118,20 +1118,20 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 			} elseif ( empty( $token ) && ! empty( $_POST['nonce'] ) ) {
 				if ( ! wp_verify_nonce( $_POST['nonce'], 'cs_recurring_confirm_paypal_transaction' ) ) {
 					throw new Gateway_Exception(
-						__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring' ),
+						__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore' ),
 						403,
 						'Nonce validation failed - confirm_transaction()'
 					);
 				}
 			} else {
 				throw new Gateway_Exception(
-					__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring' ),
+					__( 'A validation error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore' ),
 					400,
 					'Missing validation fields - confirm_transaction()'
 				);
 			}
 
-			$default_error_message = __( 'An unexpected error occurred, but your payment may have gone through. Please contact the site administrator.', 'cs-recurring' );
+			$default_error_message = __( 'An unexpected error occurred, but your payment may have gone through. Please contact the site administrator.', 'commercestore' );
 
 			if ( empty( $_POST['subscription_id'] ) ) {
 				throw new Gateway_Exception(
@@ -1212,7 +1212,7 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 				} else {
 					wp_send_json_error( array_merge( $response, array(
 						'retry'         => false,
-						'error_message' => __( 'Exceeded maximum attempts.', 'cs-recurring' ),
+						'error_message' => __( 'Exceeded maximum attempts.', 'commercestore' ),
 					) ) );
 				}
 			}
@@ -1328,27 +1328,27 @@ class CS_Recurring_PayPal_Commerce extends CS_Recurring_Gateway {
 	public static function capture_status_to_note( $reason ) {
 		switch ( strtoupper( $reason ) ) {
 			case 'BUYER_COMPLAINT' :
-				return __( 'The payer has initiated a dispute for this payment.', 'cs-recurring' );
+				return __( 'The payer has initiated a dispute for this payment.', 'commercestore' );
 			case 'CHARGEBACK' :
-				return __( 'The captured funds were reversed in response to the payer disputing this payment.', 'cs-recurring' );
+				return __( 'The captured funds were reversed in response to the payer disputing this payment.', 'commercestore' );
 			case 'ECHECK' :
-				return __( 'The payment was made using an eCheck that has not yet cleared.', 'cs-recurring' );
+				return __( 'The payment was made using an eCheck that has not yet cleared.', 'commercestore' );
 			case 'INTERNATIONAL_WITHDRAWAL' :
-				return __( 'Visit your PayPal account to accept or deny this payment in your "Account Overview."', 'cs-recurring' );
+				return __( 'Visit your PayPal account to accept or deny this payment in your "Account Overview."', 'commercestore' );
 			case 'PENDING_REVIEW' :
-				return __( 'This payment is pending manual review.', 'cs-recurring' );
+				return __( 'This payment is pending manual review.', 'commercestore' );
 			case 'RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION' :
-				return __( 'You have not yet set up appropriate receiving preferences for your account. Visit your PayPal account for more information.', 'cs-recurring' );
+				return __( 'You have not yet set up appropriate receiving preferences for your account. Visit your PayPal account for more information.', 'commercestore' );
 			case 'REFUNDED' :
-				return __( 'The captured funds were refunded.', 'cs-recurring' );
+				return __( 'The captured funds were refunded.', 'commercestore' );
 			case 'TRANSACTION_APPROVED_AWAITING_FUNDING' :
-				return __( 'Waiting for the payer to send the funds for this payment.', 'cs-recurring' );
+				return __( 'Waiting for the payer to send the funds for this payment.', 'commercestore' );
 			case 'UNILATERAL' :
-				return __( 'You do not appear to have a PayPal account. Please contact PayPal for more information.', 'cs-recurring' );
+				return __( 'You do not appear to have a PayPal account. Please contact PayPal for more information.', 'commercestore' );
 			case 'VERIFICATION_REQUIRED' :
-				return __( 'Your PayPal account has not yet been verified. Check your account or contact PayPal for more information.', 'cs-recurring' );
+				return __( 'Your PayPal account has not yet been verified. Check your account or contact PayPal for more information.', 'commercestore' );
 			default :
-				return __( 'No reason has been provided. For more information about this payment, visit your PayPal account or contact PayPal directly.', 'cs-recurring' );
+				return __( 'No reason has been provided. For more information about this payment, visit your PayPal account or contact PayPal directly.', 'commercestore' );
 		}
 	}
 }

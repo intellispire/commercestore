@@ -439,20 +439,20 @@ final class CS_Recurring {
 	 */
 	public function register_post_statuses() {
 		register_post_status( 'cancelled', array(
-			'label'                     => _x( 'Cancelled', 'Cancelled payment status', 'cs-recurring' ),
+			'label'                     => _x( 'Cancelled', 'Cancelled payment status', 'commercestore' ),
 			'public'                    => true,
 			'exclude_from_search'       => false,
 			'show_in_admin_all_list'    => false,
 			'show_in_admin_status_list' => false,
-			'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'cs-recurring' )
+			'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'commercestore' )
 		) );
 		register_post_status( 'cs_subscription', array(
-			'label'                     => _x( 'Renewal', 'Subscription renewal payment status', 'cs-recurring' ),
+			'label'                     => _x( 'Renewal', 'Subscription renewal payment status', 'commercestore' ),
 			'public'                    => true,
 			'exclude_from_search'       => false,
 			'show_in_admin_all_list'    => true,
 			'show_in_admin_status_list' => true,
-			'label_count'               => _n_noop( 'Renewal <span class="count">(%s)</span>', 'Renewals <span class="count">(%s)</span>', 'cs-recurring' )
+			'label_count'               => _n_noop( 'Renewal <span class="count">(%s)</span>', 'Renewals <span class="count">(%s)</span>', 'commercestore' )
 		) );
 	}
 
@@ -465,8 +465,8 @@ final class CS_Recurring {
 	public function subscriptions_list() {
 		add_submenu_page(
 			'edit.php?post_type=download',
-			__( 'Subscriptions', 'cs-recurring' ),
-			__( 'Subscriptions', 'cs' ),
+			__( 'Subscriptions', 'commercestore' ),
+			__( 'Subscriptions', 'commercestore' ),
 			'view_shop_reports',
 			'cs-subscriptions',
 			'cs_subscriptions_page'
@@ -557,7 +557,7 @@ final class CS_Recurring {
 	 * @return array
 	 */
 	public function register_cs_cancelled_status( $stati ) {
-		$stati['cs_subscription'] = __( 'Renewal', 'cs-recurring' );
+		$stati['cs_subscription'] = __( 'Renewal', 'commercestore' );
 		return $stati;
 	}
 
@@ -581,7 +581,7 @@ final class CS_Recurring {
 			'<a href="%s"%s>%s</a>',
 			esc_url( add_query_arg( 'status', 'cs_subscription', $base ) ),
 			$current === 'cs_subscription' ? ' class="current"' : '',
-			__( 'Renewals', 'cs-recurring' ) . $subscription_count
+			__( 'Renewals', 'commercestore' ) . $subscription_count
 		);
 
 		return $views;
@@ -618,7 +618,7 @@ final class CS_Recurring {
 		if ( $has_recurring && ( $fee_amount > 0 || $fee_amount < 0 ) ) {
 			$args = array(
 				'amount' => $fee_amount,
-				'label'  => cs_get_option( 'recurring_signup_fee_label', __( 'Signup Fee', 'cs-recurring' ) ),
+				'label'  => cs_get_option( 'recurring_signup_fee_label', __( 'Signup Fee', 'commercestore' ) ),
 				'id'     => 'signup_fee',
 				'type'   => 'fee'
 			);
@@ -703,10 +703,10 @@ final class CS_Recurring {
 
 			wp_die(
 				sprintf(
-					__( 'You must have an active subscription to %s in order to download this file.', 'cs-recurring' ),
+					__( 'You must have an active subscription to %s in order to download this file.', 'commercestore' ),
 					get_the_title( $download_id )
 				),
-				__( 'Access Denied', 'cs-recurring' )
+				__( 'Access Denied', 'commercestore' )
 			);
 		}
 
@@ -786,12 +786,12 @@ final class CS_Recurring {
 
 	static function periods() {
 		$periods = array(
-			'day'       => _x( 'Daily', 'Billing period', 'cs-recurring' ),
-			'week'      => _x( 'Weekly', 'Billing period', 'cs-recurring' ),
-			'month'     => _x( 'Monthly', 'Billing period', 'cs-recurring' ),
-			'quarter'   => _x( 'Quarterly', 'Billing period', 'cs-recurring' ),
-			'semi-year' => _x( 'Semi-Yearly', 'Billing period', 'cs-recurring' ),
-			'year'      => _x( 'Yearly', 'Billing period', 'cs-recurring' ),
+			'day'       => _x( 'Daily', 'Billing period', 'commercestore' ),
+			'week'      => _x( 'Weekly', 'Billing period', 'commercestore' ),
+			'month'     => _x( 'Monthly', 'Billing period', 'commercestore' ),
+			'quarter'   => _x( 'Quarterly', 'Billing period', 'commercestore' ),
+			'semi-year' => _x( 'Semi-Yearly', 'Billing period', 'commercestore' ),
+			'year'      => _x( 'Yearly', 'Billing period', 'commercestore' ),
 		);
 
 		$periods = apply_filters( 'cs_recurring_periods', $periods );
@@ -807,12 +807,12 @@ final class CS_Recurring {
 	 */
 	static function singular_periods() {
 		$periods = array(
-			'day'       => _x( 'Day(s)', 'Billing period', 'cs-recurring' ),
-			'week'      => _x( 'Week(s)', 'Billing period', 'cs-recurring' ),
-			'month'     => _x( 'Month(s)', 'Billing period', 'cs-recurring' ),
-			'quarter'   => _x( 'Quarter(s)', 'Billing period', 'cs-recurring' ),
-			'semi-year' => _x( 'Semi-Year(s)', 'Billing period', 'cs-recurring' ),
-			'year'      => _x( 'Year(s)', 'Billing period', 'cs-recurring' ),
+			'day'       => _x( 'Day(s)', 'Billing period', 'commercestore' ),
+			'week'      => _x( 'Week(s)', 'Billing period', 'commercestore' ),
+			'month'     => _x( 'Month(s)', 'Billing period', 'commercestore' ),
+			'quarter'   => _x( 'Quarter(s)', 'Billing period', 'commercestore' ),
+			'semi-year' => _x( 'Semi-Year(s)', 'Billing period', 'commercestore' ),
+			'year'      => _x( 'Year(s)', 'Billing period', 'commercestore' ),
 		);
 
 		$periods = apply_filters( 'cs_recurring_singular_periods', $periods );
@@ -1629,7 +1629,7 @@ final class CS_Recurring {
 		wp_register_script( 'cs-frontend-recurring', CS_RECURRING_PLUGIN_URL . 'assets/js/cs-frontend-recurring.js', array( 'jquery' ), CS_RECURRING_VERSION );
 
 		wp_localize_script( 'cs-frontend-recurring', 'cs_recurring_vars', array(
-			'confirm_cancel' => __( 'Are you sure you want to cancel your subscription?', 'cs-recurring' ),
+			'confirm_cancel' => __( 'Are you sure you want to cancel your subscription?', 'commercestore' ),
 			'has_trial'      => $this->cart_has_free_trial(),
 			'total'          => $this->cart_has_free_trial() ? cs_currency_filter( '0.00' ) : cs_cart_total( false ),
 			'total_plain'    => $this->cart_has_free_trial() ? '0.00' : cs_get_cart_total()
@@ -1780,22 +1780,22 @@ final class CS_Recurring {
 		//Format period details
 		switch ( $period ) {
 			case 'day' :
-				$frequency = __( 'Daily', 'cs-recurring' );
+				$frequency = __( 'Daily', 'commercestore' );
 				break;
 			case 'week' :
-				$frequency = __( 'Weekly', 'cs-recurring' );
+				$frequency = __( 'Weekly', 'commercestore' );
 				break;
 			case 'month' :
-				$frequency = __( 'Monthly', 'cs-recurring' );
+				$frequency = __( 'Monthly', 'commercestore' );
 				break;
 			case 'quarter' :
-				$frequency = __( 'Quarterly', 'cs-recurring' );
+				$frequency = __( 'Quarterly', 'commercestore' );
 				break;
 			case 'semi-year' :
-				$frequency = __( 'Semi-Yearly', 'cs-recurring' );
+				$frequency = __( 'Semi-Yearly', 'commercestore' );
 				break;
 			case 'year' :
-				$frequency = __( 'Yearly', 'cs-recurring' );
+				$frequency = __( 'Yearly', 'commercestore' );
 				break;
 			default :
 				$frequency = apply_filters( 'cs_recurring_subscription_frequency', $frequency, $period );
@@ -1818,22 +1818,22 @@ final class CS_Recurring {
 		//Format period details
 		switch ( $period ) {
 			case 'day' :
-				$frequency = __( 'Day', 'cs-recurring' );
+				$frequency = __( 'Day', 'commercestore' );
 				break;
 			case 'week' :
-				$frequency = __( 'Week', 'cs-recurring' );
+				$frequency = __( 'Week', 'commercestore' );
 				break;
 			case 'month' :
-				$frequency = __( 'Month', 'cs-recurring' );
+				$frequency = __( 'Month', 'commercestore' );
 				break;
 			case 'quarter' :
-				$frequency = __( 'Quarter', 'cs-recurring' );
+				$frequency = __( 'Quarter', 'commercestore' );
 				break;
 			case 'semi-year' :
-				$frequency = __( 'Semi-Year', 'cs-recurring' );
+				$frequency = __( 'Semi-Year', 'commercestore' );
 				break;
 			case 'year' :
-				$frequency = __( 'Year', 'cs-recurring' );
+				$frequency = __( 'Year', 'commercestore' );
 				break;
 			default :
 				$frequency = apply_filters( 'cs_recurring_singular_subscription_frequency', $frequency, $period );
@@ -2046,14 +2046,14 @@ final class CS_Recurring {
 			echo wpautop( wp_kses(
 				sprintf(
 					/* translators: %1$s Opening strong tag, do not translate. %2$s Closing strong tag, do not translate. */
-					__( '%1$sCredit card payments with Authorize.net are currently disabled.%2$s', 'cs-recurring' ),
+					__( '%1$sCredit card payments with Authorize.net are currently disabled.%2$s', 'commercestore' ),
 					'<strong>',
 					'</strong>'
 				)
 				. '<br />' .
 				sprintf(
 					/* translators: %1$s Opening code tag, do not translate. %2$s Closing code tag, do not translate. */
-					__( 'To continue accepting recurring credit card payments with Authorize.net please update the Authorize.net Payment Gateway extension to version %1$s2.0%2$s.', 'cs-recurring' ),
+					__( 'To continue accepting recurring credit card payments with Authorize.net please update the Authorize.net Payment Gateway extension to version %1$s2.0%2$s.', 'commercestore' ),
 					'<code>',
 					'</code>'
 				),
@@ -2135,7 +2135,7 @@ function cs_recurring_install() {
 		$db = new CS_Subscriptions_DB;
 		@$db->create_table();
 
-		add_role( 'cs_subscriber', __( 'CS Subscriber', 'cs-recurring' ), array( 'read' ) );
+		add_role( 'cs_subscriber', __( 'CS Subscriber', 'commercestore' ), array( 'read' ) );
 
 		$version = get_option( 'cs_recurring_version' );
 

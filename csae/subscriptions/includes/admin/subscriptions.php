@@ -25,8 +25,8 @@ function cs_subscriptions_page() {
 	<div class="wrap">
 
 		<h1>
-			<?php _e( 'Subscriptions', 'cs-recurring' ); ?>
-			<a href="<?php echo esc_url( add_query_arg( array( 'cs-action' => 'add_subscription' ) ) ); ?>" class="add-new-h2"><?php _e( 'Add New', 'cs-recurring' ); ?></a>
+			<?php _e( 'Subscriptions', 'commercestore' ); ?>
+			<a href="<?php echo esc_url( add_query_arg( array( 'cs-action' => 'add_subscription' ) ) ); ?>" class="add-new-h2"><?php _e( 'Add New', 'commercestore' ); ?></a>
 		</h1>
 		<?php
 		$subscribers_table = new CS_Subscription_Reports_Table();
@@ -42,7 +42,7 @@ function cs_subscriptions_page() {
 			<?php $subscribers_table->display() ?>
 
 		</form>
-		<?php _e( 'To narrow results, search can be prefixed with the following:', 'cs-recurring' ); ?><code>id:</code>, <code>profile_id:</code>, <code>product_id:</code>, <code>txn:</code>, <code>customer_id:</code>
+		<?php _e( 'To narrow results, search can be prefixed with the following:', 'commercestore' ); ?><code>id:</code>, <code>profile_id:</code>, <code>product_id:</code>, <code>txn:</code>, <code>customer_id:</code>
 	</div>
 	<?php
 }
@@ -56,14 +56,14 @@ function cs_recurring_new_subscription_details() {
 
 	$render = true;
 	if ( ! current_user_can( 'edit_shop_payments' ) ) {
-		cs_set_error( 'cs-no-access', __( 'You are not permitted to create new subscriptions.', 'cs-recurring' ) );
+		cs_set_error( 'cs-no-access', __( 'You are not permitted to create new subscriptions.', 'commercestore' ) );
 		$render = false;
 	}
 
 	$periods = CS_Recurring()->periods();
 	?>
 	<div class="wrap" id="cs-recurring-new-subscription-wrap">
-		<h2><?php _e( 'Subscription Details', 'cs-recurring' ); ?></h2>
+		<h2><?php _e( 'Subscription Details', 'commercestore' ); ?></h2>
 		<?php if ( cs_get_errors() ) : ?>
 			<div class="error settings-error">
 				<?php cs_print_errors(); ?>
@@ -79,7 +79,7 @@ function cs_recurring_new_subscription_details() {
 
 				<div class="info-wrapper item-section">
 
-					<p style="margin-top: 0;"><?php _e( '<strong>Note: </strong> This tool allows you to create a new subscription record. It will not create a payment profile in your merchant processor. Payment profiles in the merchant processor must be created through your merchant portal. Once created in the merchant portal, details such as transaction ID and billing profile id, can be entered here.', 'cs-recurring' ); ?></p>
+					<p style="margin-top: 0;"><?php _e( '<strong>Note: </strong> This tool allows you to create a new subscription record. It will not create a payment profile in your merchant processor. Payment profiles in the merchant processor must be created through your merchant portal. Once created in the merchant portal, details such as transaction ID and billing profile id, can be entered here.', 'commercestore' ); ?></p>
 
 					<form id="edit-item-info" method="post" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-subscriptions' ); ?>">
 
@@ -90,11 +90,11 @@ function cs_recurring_new_subscription_details() {
 								<tbody>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Price and Billing Cycle:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Price and Billing Cycle:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<input type="text" name="initial_amount" placeholder="0.00" value="" style="width: 80px;"/>
-											<?php echo _x( 'then', 'Inital subscription amount then billing cycle and amount', 'cs-recurring' ); ?>
+											<?php echo _x( 'then', 'Inital subscription amount then billing cycle and amount', 'commercestore' ); ?>
 											<input type="text" name="recurring_amount" placeholder="0.00" value="" style="width: 80px;"/>
 											<select name="period">
 												<?php foreach ( $periods as $key => $value ) : ?>
@@ -105,29 +105,29 @@ function cs_recurring_new_subscription_details() {
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Times Billed:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Times Billed:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<input type="number" min="0" step="1" name="bill_times" value="0"/>
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'This refers to the number of times the subscription will be billed before being marked as Completed and payments stopped. Enter 0 if payments continue indefinitely.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'This refers to the number of times the subscription will be billed before being marked as Completed and payments stopped. Enter 0 if payments continue indefinitely.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Customer Email:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Customer Email:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<p class="cs-recurring-customer-wrap-existing">
 												<?php echo CS()->html->customer_dropdown( array( 'name' => 'customer_id', 'class' => 'cs-recurring-customer' ) ); ?>
-												<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Select the customer this subscription belongs to.', 'cs-recurring' ); ?>"></span>
+												<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Select the customer this subscription belongs to.', 'commercestore' ); ?>"></span>
 											</p>
 											<p class="cs-recurring-customer-wrap-new hidden">
-												<input type="text" name="customer_email" value="" class="cs-recurring-customer" placeholder="<?php _e( 'Enter customer email', 'cs-recurring' ); ?>"/>
-												<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Enter the email address of the customer to create a new record.', 'cs-recurring' ); ?>"></span>
+												<input type="text" name="customer_email" value="" class="cs-recurring-customer" placeholder="<?php _e( 'Enter customer email', 'commercestore' ); ?>"/>
+												<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Enter the email address of the customer to create a new record.', 'commercestore' ); ?>"></span>
 											</p>
 											<p>
 												<?php printf(
-													__( '%sSelect existing%s customer or %screate new customer%s', 'cs-recurring' ),
+													__( '%sSelect existing%s customer or %screate new customer%s', 'commercestore' ),
 													'<a href="#" class="cs-recurring-select-customer">',
 													'</a>',
 													'<a href="#" class="cs-recurring-new-customer">',
@@ -137,30 +137,30 @@ function cs_recurring_new_subscription_details() {
 										</td>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Product:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Product:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<?php echo CS()->html->product_dropdown( array( 'name' => 'product_id', 'chosen' => true, 'variations' => true ) ); ?>
 											<span class="cs-recurring-price-option-wrap"></span>
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Select the product this subscription grants access to.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Select the product this subscription grants access to.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Initial Purchase ID:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Initial Purchase ID:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<select class="cs-recurring-select-payment">
-												<option value="0"><?php _e( 'Create new payment record', 'cs-recurring' ); ?></option>
-												<option value="1"><?php _e( 'Enter existing payment ID', 'cs-recurring' ); ?></option>
+												<option value="0"><?php _e( 'Create new payment record', 'commercestore' ); ?></option>
+												<option value="1"><?php _e( 'Enter existing payment ID', 'commercestore' ); ?></option>
 											</select>
 											<input type="number" min="1" name="parent_payment_id" class="cs-recurring-payment-id hidden" value="" style="width: 80px;"/>
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'A payment record will be automatically created unless you choose to enter an existing ID. If using an existing payment record, enter the ID here.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'A payment record will be automatically created unless you choose to enter an existing ID. If using an existing payment record, enter the ID here.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 									<tr class="cs-recurring-gateway-wrap">
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Gateway:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Gateway:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<select name="gateway">
@@ -172,55 +172,55 @@ function cs_recurring_new_subscription_details() {
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Profile ID:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Profile ID:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<input type="text" name="profile_id" class="cs-sub-profile-id" value="" />
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. This is the unique ID of the subscription in the merchant processor, such as PayPal or Stripe.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. This is the unique ID of the subscription in the merchant processor, such as PayPal or Stripe.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Transaction ID:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Transaction ID:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<input type="text" name="transaction_id" class="cs-sub-transaction-id" value="" />
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Optional. This is the unique ID of the initial transaction inside of the merchant processor, such as PayPal or Stripe.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Optional. This is the unique ID of the initial transaction inside of the merchant processor, such as PayPal or Stripe.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Date Created:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Date Created:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<input type="text" name="created" class="cs_datepicker cs-sub-created" value="" />
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Optional. The date this subscription was created.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Optional. The date this subscription was created.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Expiration Date:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Expiration Date:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<input type="text" name="expiration" class="cs_datepicker cs-sub-expiration" value="" />
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. The date the subscription expires or the date of the next automatic renewal payment.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. The date the subscription expires or the date of the next automatic renewal payment.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Subscription Status:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Subscription Status:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<select name="status">
-												<option value="pending"><?php _e( 'Pending', 'cs-recurring' ); ?></option>
-												<option value="active"><?php _e( 'Active', 'cs-recurring' ); ?></option>
-												<option value="cancelled"><?php _e( 'Cancelled', 'cs-recurring' ); ?></option>
-												<option value="expired"><?php _e( 'Expired', 'cs-recurring' ); ?></option>
-												<option value="trialling"><?php _e( 'Trialling', 'cs-recurring' ); ?></option>
-												<option value="failing"><?php _e( 'Failing', 'cs-recurring' ); ?></option>
-												<option value="completed"><?php _e( 'Completed', 'cs-recurring' ); ?></option>
+												<option value="pending"><?php _e( 'Pending', 'commercestore' ); ?></option>
+												<option value="active"><?php _e( 'Active', 'commercestore' ); ?></option>
+												<option value="cancelled"><?php _e( 'Cancelled', 'commercestore' ); ?></option>
+												<option value="expired"><?php _e( 'Expired', 'commercestore' ); ?></option>
+												<option value="trialling"><?php _e( 'Trialling', 'commercestore' ); ?></option>
+												<option value="failing"><?php _e( 'Failing', 'commercestore' ); ?></option>
+												<option value="completed"><?php _e( 'Completed', 'commercestore' ); ?></option>
 											</select>
-											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Select the status of this subscription.', 'cs-recurring' ); ?>"></span>
+											<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Required. Select the status of this subscription.', 'commercestore' ); ?>"></span>
 										</td>
 									</tr>
 								</tbody>
@@ -229,7 +229,7 @@ function cs_recurring_new_subscription_details() {
 						<div id="item-edit-actions" class="edit-item" style="float:right; margin: 10px 0 20px; display: block;">
 							<?php wp_nonce_field( 'cs-recurring-add-subscription', 'cs-recurring-add-subscription-nonce', false, true ); ?>
 							<input type="hidden" name="cs_action" class="button button-primary" value="add_subscription"/>
-							<input type="submit" name="cs_new_subscription" id="cs_add_subscription" class="button button-primary" value="<?php _e( 'Add Subscription', 'cs-recurring' ); ?>"/>
+							<input type="submit" name="cs_new_subscription" id="cs_add_subscription" class="button button-primary" value="<?php _e( 'Add Subscription', 'commercestore' ); ?>"/>
 						</div>
 
 					</form>
@@ -255,12 +255,12 @@ function cs_recurring_subscription_details() {
 	$render = true;
 
 	if ( ! current_user_can( 'view_shop_reports' ) ) {
-		cs_set_error( 'cs-no-access', __( 'You are not permitted to view this data.', 'cs-recurring' ) );
+		cs_set_error( 'cs-no-access', __( 'You are not permitted to view this data.', 'commercestore' ) );
 		$render = false;
 	}
 
 	if ( ! isset( $_GET['id'] ) || ! is_numeric( $_GET['id'] ) ) {
-		cs_set_error( 'cs-invalid_subscription', __( 'Invalid subscription ID Provided.', 'cs-recurring' ) );
+		cs_set_error( 'cs-invalid_subscription', __( 'Invalid subscription ID Provided.', 'commercestore' ) );
 		$render = false;
 	}
 
@@ -268,7 +268,7 @@ function cs_recurring_subscription_details() {
 	$sub     = new CS_Subscription( $sub_id );
 
 	if ( empty( $sub ) ) {
-		cs_set_error( 'cs-invalid_subscription', __( 'Invalid subscription ID Provided.', 'cs-recurring' ) );
+		cs_set_error( 'cs-invalid_subscription', __( 'Invalid subscription ID Provided.', 'commercestore' ) );
 		$render = false;
 	}
 
@@ -287,7 +287,7 @@ function cs_recurring_subscription_details() {
 
 	?>
 	<div class="wrap">
-		<h2><?php _e( 'Subscription Details', 'cs-recurring' ); ?></h2>
+		<h2><?php _e( 'Subscription Details', 'commercestore' ); ?></h2>
 		<?php if ( cs_get_errors() ) : ?>
 			<div class="error settings-error">
 				<?php cs_print_errors(); ?>
@@ -310,18 +310,18 @@ function cs_recurring_subscription_details() {
 								<tbody>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Billing Cycle:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Billing Cycle:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<?php
 											$frequency = CS_Recurring()->get_pretty_subscription_frequency( $sub->period );
 											$billing   = cs_currency_filter( cs_format_amount( $sub->recurring_amount ), $currency_code ) . ' / ' . $frequency;
 											$initial   = cs_currency_filter( cs_format_amount( $sub->initial_amount ), $currency_code );
-											printf( _x( '%s then %s', 'Inital subscription amount then billing cycle and amount', 'cs-recurring' ), $initial, $billing );
+											printf( _x( '%s then %s', 'Inital subscription amount then billing cycle and amount', 'commercestore' ), $initial, $billing );
 											?>
 											<?php if ( $tax_rate || $tax_amount ) { ?>
 												<span>&nbsp;&ndash;&nbsp;</span>
-												<a class="cs-item-toggle-next-hidden-row" href="#"><?php _ex( 'View Details', 'view billing cycle details on single subscription admin page','cs-recurring' ) ?></a>
+												<a class="cs-item-toggle-next-hidden-row" href="#"><?php _ex( 'View Details', 'view billing cycle details on single subscription admin page','commercestore' ) ?></a>
 											<?php } ?>
 										</td>
 									</tr>
@@ -332,7 +332,7 @@ function cs_recurring_subscription_details() {
 												<?php if ( $tax_rate ) { ?>
 
 													<div style="padding-left: 10px; border-left: 1px solid #e5e5e5;">
-														<span><strong><?php _e( 'Tax Rate:', 'cs-recurring' ); ?></strong></span>
+														<span><strong><?php _e( 'Tax Rate:', 'commercestore' ); ?></strong></span>
 														<?php
 														$initial_tax_rate   = ! empty( $sub->initial_tax_rate ) && is_numeric( $sub->initial_tax_rate ) ? ( $sub->initial_tax_rate * 100 ) : 0.00;
 														$recurring_tax_rate = ! empty( $sub->recurring_tax_rate ) && is_numeric( $sub->recurring_tax_rate ) ? ( $sub->recurring_tax_rate * 100 ) : 0.00;
@@ -349,11 +349,11 @@ function cs_recurring_subscription_details() {
 												if ( $tax_amount ) { ?>
 
 													<div style="padding-left: 10px; border-left: 1px solid #e5e5e5;">
-														<span><strong><?php _e( 'Tax Amount:', 'cs-recurring' ); ?></strong></span>
+														<span><strong><?php _e( 'Tax Amount:', 'commercestore' ); ?></strong></span>
 														<?php
 														printf(
 															/* translators: %1$s Initial tax value. %2$s Billing tax value and cycle length */
-															_x( '%1$s then %2$s', 'Initial subscription tax value then recurring tax value and billing cycle.', 'cs-recurring' ),
+															_x( '%1$s then %2$s', 'Initial subscription tax value then recurring tax value and billing cycle.', 'commercestore' ),
 															cs_currency_filter( cs_format_amount( $sub->initial_tax ), $currency_code ),
 															cs_currency_filter( cs_format_amount( $sub->recurring_tax ), $currency_code ) . ' / ' . $frequency
 														);
@@ -366,13 +366,13 @@ function cs_recurring_subscription_details() {
 									<?php } ?>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Times Billed:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Times Billed:', 'commercestore' ); ?></label>
 										</td>
 										<td><?php echo $sub->get_times_billed() . ' / ' . ( ( $sub->bill_times == 0 ) ? 'Until Cancelled' : $sub->bill_times ); ?></td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Customer:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Customer:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<?php $subscriber = new CS_Recurring_Subscriber( $sub->customer_id ); ?>
@@ -381,13 +381,13 @@ function cs_recurring_subscription_details() {
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Initial Purchase ID:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Initial Purchase ID:', 'commercestore' ); ?></label>
 										</td>
 										<td><?php echo '<a href="' . add_query_arg( 'id', $sub->parent_payment_id, admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details' ) ) . '">' . $sub->parent_payment_id . '</a>'; ?></td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Product:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Product:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<?php
@@ -414,19 +414,19 @@ function cs_recurring_subscription_details() {
 											<a href="<?php echo esc_url( add_query_arg( array(
 													'post'   => $sub->product_id,
 													'action' => 'edit'
-												), admin_url( 'post.php' ) ) ); ?>"><?php printf( __( 'View %s', 'cs-recurring' ), cs_get_label_singular() ); ?></a>
+												), admin_url( 'post.php' ) ) ); ?>"><?php printf( __( 'View %s', 'commercestore' ), cs_get_label_singular() ); ?></a>
 											<?php endif; ?>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Payment Method:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Payment Method:', 'commercestore' ); ?></label>
 										</td>
 										<td><?php echo cs_get_gateway_admin_label( cs_get_payment_gateway( $sub->parent_payment_id ) ); ?></td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Profile ID:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Profile ID:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<span class="cs-sub-profile-id">
@@ -434,23 +434,23 @@ function cs_recurring_subscription_details() {
 											</span>
 											<input type="text" name="profile_id" class="hidden cs-sub-profile-id" value="<?php echo esc_attr( $sub->profile_id ); ?>" />
 											<span>&nbsp;&ndash;&nbsp;</span>
-											<a href="#" class="cs-edit-sub-profile-id"><?php _e( 'Edit', 'cs-recurring' ); ?></a>
+											<a href="#" class="cs-edit-sub-profile-id"><?php _e( 'Edit', 'commercestore' ); ?></a>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Transaction ID:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Transaction ID:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<span class="cs-sub-transaction-id"><?php echo esc_html( apply_filters( 'cs_subscription_details_transaction_id_' . $sub->gateway, $sub->get_transaction_id(), $sub ) ); ?></span>
 											<input type="text" name="transaction_id" class="hidden cs-sub-transaction-id" value="<?php echo esc_attr( $sub->get_transaction_id() ); ?>" />
 											<span>&nbsp;&ndash;&nbsp;</span>
-											<a href="#" class="cs-edit-sub-transaction-id"><?php _e( 'Edit', 'cs-recurring' ); ?></a>
+											<a href="#" class="cs-edit-sub-transaction-id"><?php _e( 'Edit', 'commercestore' ); ?></a>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Date Created:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Date Created:', 'commercestore' ); ?></label>
 										</td>
 										<td><?php echo date_i18n( get_option( 'date_format' ), strtotime( $sub->created, current_time( 'timestamp' ) ) ); ?></td>
 									</tr>
@@ -458,9 +458,9 @@ function cs_recurring_subscription_details() {
 										<td class="row-title">
 											<label for="tablecell">
 												<?php if( 'trialling' == $sub->status ) : ?>
-													<?php _e( 'Trialling Until:', 'cs-recurring' ); ?>
+													<?php _e( 'Trialling Until:', 'commercestore' ); ?>
 												<?php else: ?>
-													<?php _e( 'Expiration Date:', 'cs-recurring' ); ?>
+													<?php _e( 'Expiration Date:', 'commercestore' ); ?>
 												<?php endif; ?>
 											</label>
 										</td>
@@ -468,28 +468,28 @@ function cs_recurring_subscription_details() {
 											<span class="cs-sub-expiration"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $sub->expiration, current_time( 'timestamp' ) ) ); ?></span>
 											<input type="text" name="expiration" class="cs_datepicker hidden cs-sub-expiration" value="<?php echo esc_attr( $sub->expiration ); ?>" />
 											<span>&nbsp;&ndash;&nbsp;</span>
-											<a href="#" class="cs-edit-sub-expiration"><?php _e( 'Edit', 'cs-recurring' ); ?></a>
+											<a href="#" class="cs-edit-sub-expiration"><?php _e( 'Edit', 'commercestore' ); ?></a>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
-											<label for="tablecell"><?php _e( 'Subscription Status:', 'cs-recurring' ); ?></label>
+											<label for="tablecell"><?php _e( 'Subscription Status:', 'commercestore' ); ?></label>
 										</td>
 										<td>
 											<select name="status">
-												<option value="pending"<?php selected( 'pending', $sub->status ); ?>><?php _e( 'Pending', 'cs-recurring' ); ?></option>
-												<option value="active"<?php selected( 'active', $sub->status ); ?>><?php _e( 'Active', 'cs-recurring' ); ?></option>
-												<option value="cancelled"<?php selected( 'cancelled', $sub->status ); ?>><?php _e( 'Cancelled', 'cs-recurring' ); ?></option>
-												<option value="expired"<?php selected( 'expired', $sub->status ); ?>><?php _e( 'Expired', 'cs-recurring' ); ?></option>
-												<option value="trialling"<?php selected( 'trialling', $sub->status ); ?>><?php _e( 'Trialling', 'cs-recurring' ); ?></option>
-												<option value="failing"<?php selected( 'failing', $sub->status ); ?>><?php _e( 'Failing', 'cs-recurring' ); ?></option>
-												<option value="completed"<?php selected( 'completed', $sub->status ); ?>><?php _e( 'Completed', 'cs-recurring' ); ?></option>
+												<option value="pending"<?php selected( 'pending', $sub->status ); ?>><?php _e( 'Pending', 'commercestore' ); ?></option>
+												<option value="active"<?php selected( 'active', $sub->status ); ?>><?php _e( 'Active', 'commercestore' ); ?></option>
+												<option value="cancelled"<?php selected( 'cancelled', $sub->status ); ?>><?php _e( 'Cancelled', 'commercestore' ); ?></option>
+												<option value="expired"<?php selected( 'expired', $sub->status ); ?>><?php _e( 'Expired', 'commercestore' ); ?></option>
+												<option value="trialling"<?php selected( 'trialling', $sub->status ); ?>><?php _e( 'Trialling', 'commercestore' ); ?></option>
+												<option value="failing"<?php selected( 'failing', $sub->status ); ?>><?php _e( 'Failing', 'commercestore' ); ?></option>
+												<option value="completed"<?php selected( 'completed', $sub->status ); ?>><?php _e( 'Completed', 'commercestore' ); ?></option>
 											</select>
 											<?php if( $sub->can_reactivate() ) : ?>
-												<a class="button" href="<?php echo $sub->get_reactivation_url(); ?>" ><?php _e( 'Reactivate Subscription', 'cs-recurring' ); ?></a>
+												<a class="button" href="<?php echo $sub->get_reactivation_url(); ?>" ><?php _e( 'Reactivate Subscription', 'commercestore' ); ?></a>
 											<?php endif; ?>
 											<?php if( $sub->can_retry() ) : ?>
-												<a class="button" href="<?php echo $sub->get_retry_url(); ?>" ><?php _e( 'Retry Renewal', 'cs-recurring' ); ?></a>
+												<a class="button" href="<?php echo $sub->get_retry_url(); ?>" ><?php _e( 'Retry Renewal', 'commercestore' ); ?></a>
 											<?php endif; ?>
 										</td>
 									</tr>
@@ -497,18 +497,18 @@ function cs_recurring_subscription_details() {
 							</table>
 						</div>
 						<div id="cs-sub-notices">
-							<div class="notice notice-info inline hidden" id="cs-sub-expiration-update-notice"><p><?php _e( 'Changing the expiration date will not affect when renewal payments are processed.', 'cs-recurring' ); ?></p></div>
-							<div class="notice notice-info inline hidden" id="cs-sub-product-update-notice"><p><?php _e( 'Changing the product assigned will not automatically adjust any pricing.', 'cs-recurring' ); ?></p></div>
-							<div class="notice notice-warning inline hidden" id="cs-sub-profile-id-update-notice"><p><?php _e( 'Changing the profile ID can result in renewals not being processed. Do this with caution.', 'cs-recurring' ); ?></p></div>
+							<div class="notice notice-info inline hidden" id="cs-sub-expiration-update-notice"><p><?php _e( 'Changing the expiration date will not affect when renewal payments are processed.', 'commercestore' ); ?></p></div>
+							<div class="notice notice-info inline hidden" id="cs-sub-product-update-notice"><p><?php _e( 'Changing the product assigned will not automatically adjust any pricing.', 'commercestore' ); ?></p></div>
+							<div class="notice notice-warning inline hidden" id="cs-sub-profile-id-update-notice"><p><?php _e( 'Changing the profile ID can result in renewals not being processed. Do this with caution.', 'commercestore' ); ?></p></div>
 						</div>
 						<div id="item-edit-actions" class="edit-item" style="float:right; margin: 10px 0 0; display: block;">
 							<?php wp_nonce_field( 'cs-recurring-update', 'cs-recurring-update-nonce', false, true ); ?>
-							<input type="submit" name="cs_update_subscription" id="cs_update_subscription" class="button button-primary" value="<?php _e( 'Update Subscription', 'cs-recurring' ); ?>"/>
+							<input type="submit" name="cs_update_subscription" id="cs_update_subscription" class="button button-primary" value="<?php _e( 'Update Subscription', 'commercestore' ); ?>"/>
 							<input type="hidden" name="sub_id" value="<?php echo absint( $sub->id ); ?>" />
 							<?php if( $sub->can_cancel() ) : ?>
-								<a class="button button-primary" href="<?php echo $sub->get_cancel_url(); ?>" ><?php _e( 'Cancel Subscription', 'cs-recurring' ); ?></a>
+								<a class="button button-primary" href="<?php echo $sub->get_cancel_url(); ?>" ><?php _e( 'Cancel Subscription', 'commercestore' ); ?></a>
 							<?php endif; ?>
-							&nbsp;<input type="submit" name="cs_delete_subscription" class="cs-delete-subscription button" value="<?php _e( 'Delete Subscription', 'cs-recurring' ); ?>"/>
+							&nbsp;<input type="submit" name="cs_delete_subscription" class="cs-delete-subscription button" value="<?php _e( 'Delete Subscription', 'commercestore' ); ?>"/>
 						</div>
 
 					</form>
@@ -532,19 +532,19 @@ function cs_recurring_subscription_details() {
 
 					<?php do_action( 'cs_subscription_before_tables', $sub ); ?>
 
-					<h3><?php _e( 'Renewal Payments:', 'cs-recurring' ); ?></h3>
+					<h3><?php _e( 'Renewal Payments:', 'commercestore' ); ?></h3>
 					<?php $payments = $sub->get_child_payments(); ?>
 					<?php if( 'manual' == $sub->gateway ) : ?>
-						<p><strong><?php _e( 'Note:', 'cs-recurring' ); ?></strong> <?php _e( 'subscriptions purchased with the Test Payment gateway will not renew automatically.', 'cs-recurring' ); ?></p>
+						<p><strong><?php _e( 'Note:', 'commercestore' ); ?></strong> <?php _e( 'subscriptions purchased with the Test Payment gateway will not renew automatically.', 'commercestore' ); ?></p>
 					<?php endif; ?>
 					<table class="wp-list-table widefat striped payments">
 						<thead>
 						<tr>
-							<th><?php _e( 'ID', 'cs-recurring' ); ?></th>
-							<th><?php _e( 'Amount', 'cs-recurring' ); ?></th>
-							<th><?php _e( 'Date', 'cs-recurring' ); ?></th>
-							<th><?php _e( 'Status', 'cs-recurring' ); ?></th>
-							<th><?php _e( 'Actions', 'cs-recurring' ); ?></th>
+							<th><?php _e( 'ID', 'commercestore' ); ?></th>
+							<th><?php _e( 'Amount', 'commercestore' ); ?></th>
+							<th><?php _e( 'Date', 'commercestore' ); ?></th>
+							<th><?php _e( 'Status', 'commercestore' ); ?></th>
+							<th><?php _e( 'Actions', 'commercestore' ); ?></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -556,9 +556,9 @@ function cs_recurring_subscription_details() {
 									<td><?php echo date_i18n( get_option( 'date_format' ), strtotime( $payment->date ) ); ?></td>
 									<td><?php echo $payment->status_nicename; ?></td>
 									<td>
-										<a title="<?php _e( 'View Details for Payment', 'cs-recurring' );
+										<a title="<?php _e( 'View Details for Payment', 'commercestore' );
 										echo ' ' . $payment->ID; ?>" href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $payment->ID ); ?>">
-											<?php _e( 'View Details', 'cs-recurring' ); ?>
+											<?php _e( 'View Details', 'commercestore' ); ?>
 										</a>
 										<?php do_action( 'cs_subscription_payments_actions', $sub, $payment ); ?>
 									</td>
@@ -566,7 +566,7 @@ function cs_recurring_subscription_details() {
 							<?php endforeach; ?>
 						<?php else: ?>
 							<tr>
-								<td colspan="5"><?php _e( 'No Payments Found', 'cs-recurring' ); ?></td>
+								<td colspan="5"><?php _e( 'No Payments Found', 'commercestore' ); ?></td>
 							</tr>
 						<?php endif; ?>
 						</tbody>
@@ -574,32 +574,32 @@ function cs_recurring_subscription_details() {
 							<tr class="alternate">
 								<td colspan="5">
 									<form id="cs-sub-add-renewal" method="POST">
-										<p><?php _e( 'Use this form to manually record a renewal payment.', 'cs-recurring' ); ?><span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Note: this does not initiate a charge in your merchant processor. This should only be used for recording a missed payment or one that was manually collected.', 'cs-recurring' ); ?>"></span></p>
+										<p><?php _e( 'Use this form to manually record a renewal payment.', 'commercestore' ); ?><span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php _e( 'Note: this does not initiate a charge in your merchant processor. This should only be used for recording a missed payment or one that was manually collected.', 'commercestore' ); ?>"></span></p>
 										<?php if( cs_use_taxes() ) : ?>
 										<p>
 											<label>
-												<span style="display: inline-block; width: 150px; padding: 3px;"><?php _e( 'Tax:', 'cs-recurring' ); ?></span>
+												<span style="display: inline-block; width: 150px; padding: 3px;"><?php _e( 'Tax:', 'commercestore' ); ?></span>
 												<input type="text" class="regular-text" style="width: 100px; padding: 3px;" name="tax" value="" placeholder="0.00"/>
 											</label>
 										</p>
 										<?php endif; ?>
 										<p>
 											<label>
-												<span style="display: inline-block; width: 150px; padding: 3px;"><?php _e( 'Total:', 'cs-recurring' ); ?></span>
+												<span style="display: inline-block; width: 150px; padding: 3px;"><?php _e( 'Total:', 'commercestore' ); ?></span>
 												<input type="text" class="regular-text" style="width: 100px; padding: 3px;" name="amount" value="" placeholder="0.00"/>
 											</label>
 										</p>
 										<p>
 											<label>
-												<span style="display: inline-block; width: 150px; padding: 3px;"><?php _e( 'Transaction ID:', 'cs-recurring' ); ?></span>
+												<span style="display: inline-block; width: 150px; padding: 3px;"><?php _e( 'Transaction ID:', 'commercestore' ); ?></span>
 												<input type="text" class="regular-text" style="width: 100px; padding: 3px;" name="txn_id" value="" placeholder=""/>
 											</label>
 										</p>
 										<?php wp_nonce_field( 'cs-recurring-add-renewal-payment', '_wpnonce', false, true ); ?>
 										<input type="hidden" name="sub_id" value="<?php echo absint( $sub->id ); ?>" />
 										<input type="hidden" name="cs_action" value="add_renewal_payment" />
-										<input type="submit" name="renew_and_add_payment" class="button alignright" style="margin-left: 8px;" value="<?php esc_attr_e( 'Record Payment and Renew Subscription', 'cs-recurring' ); ?>"/>
-										<input type="submit" name="add_payment_only" class="button alignright" value="<?php esc_attr_e( 'Record Payment Only', 'cs-recurring' ); ?>"/>
+										<input type="submit" name="renew_and_add_payment" class="button alignright" style="margin-left: 8px;" value="<?php esc_attr_e( 'Record Payment and Renew Subscription', 'commercestore' ); ?>"/>
+										<input type="submit" name="add_payment_only" class="button alignright" value="<?php esc_attr_e( 'Record Payment Only', 'commercestore' ); ?>"/>
 									</form>
 								</td>
 							</tr>
@@ -614,7 +614,7 @@ function cs_recurring_subscription_details() {
 
 					<?php do_action( 'cs_subscription_before_notes', $sub ); ?>
 
-					<h3><?php _e( 'Notes:', 'cs-recurring' ); ?></h3>
+					<h3><?php _e( 'Notes:', 'commercestore' ); ?></h3>
 					<?php
 					$notes = $sub->get_notes( 1000 );
 					if( $notes ) {
@@ -630,7 +630,7 @@ function cs_recurring_subscription_details() {
 						<input type="hidden" name="sub_id" value="<?php echo absint( $sub->id ); ?>" />
 						<input type="hidden" name="cs_action" value="add_subscription_note" />
 						<p class="submit">
-							<input type="submit" name="add_note" class="button alignright" value="<?php esc_attr_e( 'Add Note', 'cs-recurring' ); ?>"/>
+							<input type="submit" name="add_note" class="button alignright" value="<?php esc_attr_e( 'Add Note', 'commercestore' ); ?>"/>
 						</p>
 					</form>
 					<?php do_action( 'cs_subscription_after_notes', $sub ); ?>
@@ -668,7 +668,7 @@ function cs_recurring_process_subscription_update() {
 	}
 
 	if( ! wp_verify_nonce( $_POST['cs-recurring-update-nonce'], 'cs-recurring-update' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$expiration      = date( 'Y-m-d 23:59:59', strtotime( $_POST['expiration'] ) );
@@ -683,7 +683,7 @@ function cs_recurring_process_subscription_update() {
 	$has_variations  = cs_has_variable_prices( $product_id );
 	if ( $has_variations ) {
 		if ( ! isset( $product_details[1] ) ) {
-			wp_die( __( 'A variation is required for the selected product', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+			wp_die( __( 'A variation is required for the selected product', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 		}
 
 		$price_id = $product_details[1];
@@ -756,23 +756,23 @@ function cs_recurring_process_subscription_creation() {
 	}
 
 	if( ! wp_verify_nonce( $_POST['cs-recurring-add-subscription-nonce'], 'cs-recurring-add-subscription' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	if( empty( $_POST['expiration'] ) ) {
-		wp_die( __( 'Please enter an expiration date', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Please enter an expiration date', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	if( empty( $_POST['product_id'] ) ) {
-		wp_die( __( 'Please select a product', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Please select a product', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	if( empty( $_POST['initial_amount'] ) ) {
-		wp_die( __( 'Please enter an initial amount', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Please enter an initial amount', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	if( empty( $_POST['recurring_amount'] ) ) {
-		wp_die( __( 'Please enter a recurring amount', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Please enter a recurring amount', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	if( ! empty( $_POST['created'] ) ) {
@@ -806,7 +806,7 @@ function cs_recurring_process_subscription_creation() {
 
 		if ( ! $payment ) {
 			/* translators: the existing payment ID. */
-			wp_die( sprintf( esc_html__( 'Payment %s does not exist.', 'cs-recurring' ), absint( $payment_id ) ), esc_html__( 'Error', 'cs-recurring' ), array( 'response' => 400 ) );
+			wp_die( sprintf( esc_html__( 'Payment %s does not exist.', 'commercestore' ), absint( $payment_id ) ), esc_html__( 'Error', 'commercestore' ), array( 'response' => 400 ) );
 		}
 	} else {
 
@@ -882,7 +882,7 @@ function cs_recurring_process_subscription_cancel() {
 	}
 
 	if( ! wp_verify_nonce( $_POST['_wpnonce'], 'cs-recurring-cancel' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$subscription    = new CS_Subscription( absint( $_POST['sub_id'] ) );
@@ -913,7 +913,7 @@ function cs_recurring_process_add_renewal_payment() {
 	}
 
 	if( ! wp_verify_nonce( $_POST['_wpnonce'], 'cs-recurring-add-renewal-payment' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$amount  = isset( $_POST['amount'] ) ? cs_sanitize_amount( $_POST['amount'] ) : '0.00';
@@ -962,13 +962,13 @@ function cs_recurring_process_renewal_charge_retry() {
 	}
 
 	if( ! wp_verify_nonce( $_GET['_wpnonce'], 'cs-recurring-retry' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$sub = new CS_Subscription( absint( $_GET['sub_id'] ) );
 
 	if( ! $sub->can_retry() ) {
-		wp_die( __( 'This subscription does not support being retried.', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'This subscription does not support being retried.', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$result = $sub->retry();
@@ -1003,7 +1003,7 @@ function cs_recurring_process_add_subscription_note() {
 	}
 
 	if( ! wp_verify_nonce( $_POST['_wpnonce'], 'cs-recurring-add-note' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$note    = trim( sanitize_text_field( $_POST['note'] ) );
@@ -1044,7 +1044,7 @@ function cs_recurring_process_subscription_deletion() {
 	}
 
 	if( ! wp_verify_nonce( $_POST['cs-recurring-update-nonce'], 'cs-recurring-update' ) ) {
-		wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+		wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 	}
 
 	$subscription = new CS_Subscription( absint( $_POST['sub_id'] ) );

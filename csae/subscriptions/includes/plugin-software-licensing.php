@@ -788,9 +788,9 @@ class CS_Recurring_Software_Licensing {
 
 				if ( $gateway->cancel_immediately( $old_sub ) ) {
 
-					$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'cs-recurring' ), $old_sub->id );
+					$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'commercestore' ), $old_sub->id );
 					cs_insert_payment_note( $old_sub->parent_payment_id, $note );
-					$old_sub->add_note( __( 'Subscription cancelled for license upgrade', 'cs-recurring' ) );
+					$old_sub->add_note( __( 'Subscription cancelled for license upgrade', 'commercestore' ) );
 
 					$old_sub->cancel();
 				}
@@ -846,7 +846,7 @@ class CS_Recurring_Software_Licensing {
 
 		if ( $gateway->cancel_immediately( $sub ) ) {
 
-			$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'cs-recurring' ), $sub->id );
+			$note = sprintf( __( 'Subscription #%d cancelled for license upgrade', 'commercestore' ), $sub->id );
 			cs_insert_payment_note( $sub->parent_payment_id, $note );
 
 			$sub->cancel();
@@ -887,7 +887,7 @@ class CS_Recurring_Software_Licensing {
 
 				if ( $gateway->cancel_immediately( $sub ) ) {
 
-					$note = sprintf( __( 'Subscription #%d cancelled for manual license renewal', 'cs-recurring' ), $sub->id );
+					$note = sprintf( __( 'Subscription #%d cancelled for manual license renewal', 'commercestore' ), $sub->id );
 					cs_insert_payment_note( $sub->parent_payment_id, $note );
 
 					$sub->cancel();
@@ -921,7 +921,7 @@ class CS_Recurring_Software_Licensing {
 
 			$log_id = wp_insert_post(
 				array(
-					'post_title'   => sprintf( __( 'LOG - License %d Renewed via Subscription', 'cs_sl' ), $license->ID ),
+					'post_title'   => sprintf( __( 'LOG - License %d Renewed via Subscription', 'commercestore' ), $license->ID ),
 					'post_name'    => 'log-license-renewed-' . $license->ID . '-' . md5( time() ),
 					'post_type'    => 'cs_license_log',
 					'post_content' => $subscription->id,
@@ -970,7 +970,7 @@ class CS_Recurring_Software_Licensing {
 				}
 
 				echo '<br/>';
-				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' ) . $sub->id ) . '">' . __( 'View Subscription', 'cs-recurring' ) . '</a>';
+				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' ) . $sub->id ) . '">' . __( 'View Subscription', 'commercestore' ) . '</a>';
 			}
 		}
 
@@ -986,13 +986,13 @@ class CS_Recurring_Software_Licensing {
 
 		$license = cs_software_licensing()->get_license_by_purchase( $subscription->parent_payment_id, $subscription->product_id );
 		if( $license ) : ?>
-			<h3><?php _e( 'License Key:', 'cs-recurring' ); ?></h3>
+			<h3><?php _e( 'License Key:', 'commercestore' ); ?></h3>
 			<table class="wp-list-table widefat striped payments">
 				<thead>
 				<tr>
-					<th><?php _e( 'License', 'cs-recurring' ); ?></th>
-					<th><?php _e( 'Status', 'cs-recurring' ); ?></th>
-					<th><?php _e( 'Actions', 'cs-recurring' ); ?></th>
+					<th><?php _e( 'License', 'commercestore' ); ?></th>
+					<th><?php _e( 'Status', 'commercestore' ); ?></th>
+					<th><?php _e( 'Actions', 'commercestore' ); ?></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -1001,7 +1001,7 @@ class CS_Recurring_Software_Licensing {
 						<td><?php echo $license_key; ?></td>
 						<td><?php echo cs_software_licensing()->get_license_status( $license->ID ); ?></td>
 						<td>
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-licenses&s=' ) . $license_key ); ?>"><?php _e( 'View License', 'cs-recurring' ); ?></a>
+							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-licenses&s=' ) . $license_key ); ?>"><?php _e( 'View License', 'commercestore' ); ?></a>
 						</td>
 					</tr>
 				</tbody>
@@ -1023,7 +1023,7 @@ class CS_Recurring_Software_Licensing {
 		if( $sub ) {
 
 			echo '<div class="cs-recurring-license-renewal">';
-				printf( __( 'Renews automatically on %s', 'cs-recurring' ), date_i18n( get_option( 'date_format' ), strtotime( $sub->expiration ) ) );
+				printf( __( 'Renews automatically on %s', 'commercestore' ), date_i18n( get_option( 'date_format' ), strtotime( $sub->expiration ) ) );
 			echo '</div>';
 
 		}
@@ -1093,7 +1093,7 @@ class CS_Recurring_Software_Licensing {
 			$cost = cs_currency_filter( cs_sanitize_amount( $cost ) );
 
 			$message  = sprintf(
-				__( '%s will now automatically renew %s for %s', 'cs-recurring' ),
+				__( '%s will now automatically renew %s for %s', 'commercestore' ),
 				get_the_title( $item['id'] ),
 				$period,
 				$cost
@@ -1171,7 +1171,7 @@ class CS_Recurring_Software_Licensing {
 			$cost = cs_currency_filter( cs_sanitize_amount( $cost ) );
 
 			$message  = sprintf(
-				__( 'Your existing subscription to %s will be cancelled and replaced with a new subscription that automatically renews %s for %s.', 'cs-recurring' ),
+				__( 'Your existing subscription to %s will be cancelled and replaced with a new subscription that automatically renews %s for %s.', 'commercestore' ),
 				get_the_title( $item['id'] ),
 				$period,
 				$cost
@@ -1283,7 +1283,7 @@ class CS_Recurring_Software_Licensing {
 
 		$display = cs_recurring()->has_free_trial( $download_id ) ? '' : ' style="display:none;"';
 
-		echo '<p id="cs-sl-free-trial-length-notice"' . $display . '>' . __( 'Note: license keys will remain valid for the duration of the free trial period. Once the free trial is over, the settings defined here determine the license lengths.', 'cs-recurring' ) . '</p>';
+		echo '<p id="cs-sl-free-trial-length-notice"' . $display . '>' . __( 'Note: license keys will remain valid for the duration of the free trial period. Once the free trial is over, the settings defined here determine the license lengths.', 'commercestore' ) . '</p>';
 
 	}
 
@@ -1394,7 +1394,7 @@ class CS_Recurring_Software_Licensing {
 			$old_sub->cancel();
 
 			if ( $gateway->cancel_immediately( $old_sub ) ) {
-				$old_sub->add_note( sprintf( __( 'Subscription cancelled due to new subscription #%d created while renewing.', 'cs_sl' ), $subscription->id ) );
+				$old_sub->add_note( sprintf( __( 'Subscription cancelled due to new subscription #%d created while renewing.', 'commercestore' ), $subscription->id ) );
 			}
 		}
 	}

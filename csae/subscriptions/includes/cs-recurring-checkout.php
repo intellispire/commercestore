@@ -79,10 +79,10 @@ class CS_Recurring_Checkout {
 		if ( isset( $_GET['cs-recurring-login'] ) && '1' === $_GET['cs-recurring-login'] ) {
 			?>
 			<div class="cs-alert cs-alert-info">
-				<p><?php _e( 'An account was detected for your email. Please log in to continue your purchase.', 'cs-recurring' ); ?></p>
+				<p><?php _e( 'An account was detected for your email. Please log in to continue your purchase.', 'commercestore' ); ?></p>
 				<p>
-					<a href="<?php echo wp_lostpassword_url(); ?>" title="<?php _e( 'Lost Password', 'cs-recurring' ); ?>">
-						<?php _e( 'Lost Password?', 'cs-recurring' ); ?>
+					<a href="<?php echo wp_lostpassword_url(); ?>" title="<?php _e( 'Lost Password', 'commercestore' ); ?>">
+						<?php _e( 'Lost Password?', 'commercestore' ); ?>
 					</a>
 				</p>
 			</div>
@@ -135,7 +135,7 @@ class CS_Recurring_Checkout {
 		<div class="eddr-failed-subscription-notice">
 			<div class="cs-alert cs-alert-warn">
 				<p>
-					<strong><?php _e( 'Notice', 'cs-recurring' ); ?>:</strong> <?php _e( 'Your purchase is completed, but we encountered an issue while processing payments for the following items', 'cs-recurring' ); ?>:
+					<strong><?php _e( 'Notice', 'commercestore' ); ?>:</strong> <?php _e( 'Your purchase is completed, but we encountered an issue while processing payments for the following items', 'commercestore' ); ?>:
 				</p>
 				<p class="cs-recurring-failed-list">
 					<?php foreach ( $failed_subscriptions as $key => $subscription ) : ?>
@@ -143,7 +143,7 @@ class CS_Recurring_Checkout {
 					<?php endforeach; ?>
 				</p>
 				<p>
-					<?php _e( 'The above items were removed from the purchase and you were not charged for them. You can attempt to repurchase them at your convenience. All other items were purchased successfully.', 'cs-recurring' ); ?>
+					<?php _e( 'The above items were removed from the purchase and you were not charged for them. You can attempt to repurchase them at your convenience. All other items were purchased successfully.', 'commercestore' ); ?>
 				</p>
 				<p>
 					<form id="cs-recurring-add-failed" class="cs-form" method="post">
@@ -153,7 +153,7 @@ class CS_Recurring_Checkout {
 								<input type="hidden" name="failed-subs[<?php echo $key; ?>][price_id]" value="<?php echo $subscription['subscription']['price_id']; ?>" />
 							<?php endif; ?>
 						<?php endforeach; ?>
-						<input type="submit" class="button" name="cs_recurring_add_failed" value="<?php _e( 'Try Again', 'cs-recurring' ); ?>"/>
+						<input type="submit" class="button" name="cs_recurring_add_failed" value="<?php _e( 'Try Again', 'commercestore' ); ?>"/>
 						<input type="hidden" name="cs_action" value="retry_failed_subs"/>
 						<?php wp_nonce_field( 'cs_retry_failed_subs_nonce', 'cs_retry_failed_subs' ); ?>
 					</form>
@@ -213,10 +213,10 @@ class CS_Recurring_Checkout {
 
 		ob_start();
 		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
-		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'commercestore' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice">
-			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'commercestore' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
@@ -254,10 +254,10 @@ class CS_Recurring_Checkout {
 
 		ob_start();
 		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
-		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'commercestore' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice eddr-custom-signup-fee-notice" style="display:none">
-			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'commercestore' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
@@ -290,10 +290,10 @@ class CS_Recurring_Checkout {
 
 		ob_start();
 		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
-		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'commercestore' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice variable-prices">
-			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'commercestore' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
@@ -327,10 +327,10 @@ class CS_Recurring_Checkout {
 
 		ob_start();
 		$formatted_price = cs_currency_filter( cs_format_amount( $signup_fee, cs_currency_decimal_filter() ) );
-		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'cs-recurring' ) );
+		$text = cs_get_option( 'recurring_signup_fee_label', __( 'signup fee', 'commercestore' ) );
 		?>
 		<p class="eddr-notice eddr-signup-fee-notice variable-prices eddr-custom-signup-fee-notice" style="display:none">
-			<em><?php printf( __( 'With %s %s', 'cs-recurring' ), $formatted_price, $text ); ?></em>
+			<em><?php printf( __( 'With %s %s', 'commercestore' ), $formatted_price, $text ); ?></em>
 		</p>
 		<?php
 
@@ -575,11 +575,11 @@ class CS_Recurring_Checkout {
 
 		if ( empty( $details['times'] ) ) {
 			/* translators: the billing period */
-			$output = sprintf( __( 'Billed once per %1$s until cancelled', 'cs-recurring' ), $this->get_frequency_label( $details['period'] ) );
+			$output = sprintf( __( 'Billed once per %1$s until cancelled', 'commercestore' ), $this->get_frequency_label( $details['period'] ) );
 			if ( $details['trial_period'] && $details['trial_unit'] ) {
 				$output = sprintf(
 					/* translators: 1. the billing period 2. the number of trial units 3. the trial period unit (week, month) */
-					__( 'Billed once per %1$s until cancelled, after a %2$s %3$s free trial', 'cs-recurring' ),
+					__( 'Billed once per %1$s until cancelled, after a %2$s %3$s free trial', 'commercestore' ),
 					$this->get_frequency_label( $details['period'] ),
 					$details['trial_unit'],
 					$this->get_frequency_label( $details['trial_period'] )
@@ -592,7 +592,7 @@ class CS_Recurring_Checkout {
 					'Billed once per %1$s, %2$s time',
 					'Billed once per %1$s, %2$s times',
 					$details['times'],
-					'cs-recurring'
+					'commercestore'
 				),
 				$this->get_frequency_label( $details['period'] ),
 				$details['times']
@@ -604,7 +604,7 @@ class CS_Recurring_Checkout {
 						'Billed once per %1$s, %2$s time, after a %3$s %4$s free trial',
 						'Billed once per %1$s, %2$s times, after a %3$s %4$s free trial',
 						$details['times'],
-						'cs-recurring'
+						'commercestore'
 					),
 					$this->get_frequency_label( $details['period'] ),
 					$details['times'],
@@ -630,22 +630,22 @@ class CS_Recurring_Checkout {
 		// Format period details
 		switch ( $period ) {
 			case 'day':
-				$frequency = _nx( 'day', 'days', $count, 'subscription term', 'cs-recurring' );
+				$frequency = _nx( 'day', 'days', $count, 'subscription term', 'commercestore' );
 				break;
 			case 'week':
-				$frequency = _nx( 'week', 'weeks', $count, 'subscription term', 'cs-recurring' );
+				$frequency = _nx( 'week', 'weeks', $count, 'subscription term', 'commercestore' );
 				break;
 			case 'month':
-				$frequency = _nx( 'month', 'months', $count, 'subscription term', 'cs-recurring' );
+				$frequency = _nx( 'month', 'months', $count, 'subscription term', 'commercestore' );
 				break;
 			case 'quarter':
-				$frequency = _x( 'quarter', 'subscription term', 'cs-recurring' );
+				$frequency = _x( 'quarter', 'subscription term', 'commercestore' );
 				break;
 			case 'semi-year':
-				$frequency = _x( 'six months', 'subscription term', 'cs-recurring' );
+				$frequency = _x( 'six months', 'subscription term', 'commercestore' );
 				break;
 			case 'year':
-				$frequency = _nx( 'year', 'years', $count, 'subscription term', 'cs-recurring' );
+				$frequency = _nx( 'year', 'years', $count, 'subscription term', 'commercestore' );
 				break;
 			default:
 				$frequency = $period;
@@ -682,17 +682,17 @@ class CS_Recurring_Checkout {
 			return;
 		}
 
-		$message = __( 'Your account will be automatically charged when the free trial is completed.', 'cs-recurring' );
+		$message = __( 'Your account will be automatically charged when the free trial is completed.', 'commercestore' );
 		if ( 1 === count( cs_get_cart_contents() ) ) {
 			$message = sprintf(
 				/* Translators: %s the amount charged */
-				__( 'Your account will be automatically charged %s when the free trial is completed.', 'cs-recurring' ),
+				__( 'Your account will be automatically charged %s when the free trial is completed.', 'commercestore' ),
 				'<span class="cs_recurring_total_after_trial">' . cs_currency_filter( cs_sanitize_amount( cs_get_cart_total() ) ) . '</span>'
 			);
 		}
 		?>
 		<p id="cs_final_total_wrap">
-			<strong><?php _e( 'Total Due Today:', 'cs-recurring' ); ?></strong>
+			<strong><?php _e( 'Total Due Today:', 'commercestore' ); ?></strong>
 			<span class="cs_recurring_trial_total"><?php echo cs_currency_filter( cs_format_amount( 0.00 ) ); ?></span>
 			<span class="cs_recurring_trial_total_sep">&ndash;</span>
 			<span class="cs_recurring_trial_total_note"><?php echo wp_kses( $message, array( 'span' => array( 'class' => true ) ) ); ?></span>
@@ -714,7 +714,7 @@ class CS_Recurring_Checkout {
 			return;
 		}
 		if ( ! wp_verify_nonce( $_POST['cs_retry_failed_subs'], 'cs_retry_failed_subs_nonce' ) ) {
-			wp_die( __( 'Nonce verification failed', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 403 ) );
+			wp_die( __( 'Nonce verification failed', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 403 ) );
 		}
 
 		$failed_subs = $_POST['failed-subs'];
@@ -759,7 +759,7 @@ class CS_Recurring_Checkout {
 					}
 
 					$message .= sprintf(
-						__( 'You have already used the free trial for <strong>%s</strong>. Please log into your account to complete the purchase. You will be charged immediately.', 'cs-recurring' ),
+						__( 'You have already used the free trial for <strong>%s</strong>. Please log into your account to complete the purchase. You will be charged immediately.', 'commercestore' ),
 						get_the_title( $download_id )
 					);
 				}

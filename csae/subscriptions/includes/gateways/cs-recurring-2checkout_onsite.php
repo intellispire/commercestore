@@ -21,7 +21,7 @@ class CS_Recurring_2Checkout_Onsite extends CS_Recurring_2Checkout {
 	public function init() {
 
 		$this->id          = '2checkout_onsite';
-		$this->friendly_name = __( '2Checkout OnSite', 'cs-recurring' );
+		$this->friendly_name = __( '2Checkout OnSite', 'commercestore' );
 		$this->credentials = $this->get_api_credentials();
 		$this->offsite     = false;
 
@@ -42,13 +42,13 @@ class CS_Recurring_2Checkout_Onsite extends CS_Recurring_2Checkout {
 
 		if( empty( $this->credentials['tco_secret_word'] ) || empty( $this->credentials['tco_account_number'] ) ) {
 
-			cs_set_error( 'missing_api_keys', __( 'You must enter your account number and secret word in settings', 'cs-recurring' ) );
+			cs_set_error( 'missing_api_keys', __( 'You must enter your account number and secret word in settings', 'commercestore' ) );
 
 		}
 
 		if( empty( $this->credentials['tco_private_key'] ) || empty( $this->credentials['tco_public_key'] ) ) {
 
-			cs_set_error( 'missing_api_keys', __( 'You must enter your Private and Publishable API key in settings', 'cs-recurring' ) );
+			cs_set_error( 'missing_api_keys', __( 'You must enter your Private and Publishable API key in settings', 'commercestore' ) );
 
 		}
 
@@ -64,12 +64,12 @@ class CS_Recurring_2Checkout_Onsite extends CS_Recurring_2Checkout {
 	public function create_payment_profiles() {
 
 		if( empty( $_POST['token'] ) ) {
-			cs_set_error( 'missing_card_token', __( 'Missing 2Checkout token, please try again or contact support if the issue persists.', 'cs-recurring' ) );
+			cs_set_error( 'missing_card_token', __( 'Missing 2Checkout token, please try again or contact support if the issue persists.', 'commercestore' ) );
 			return;
 		}
 
 		if( ! empty( $subscription['has_trial'] ) ) {
-			cs_set_error( 'free_trial_not_supported', __( 'Free trials are not supported by 2Checkout.', 'cs-recurring' ) );
+			cs_set_error( 'free_trial_not_supported', __( 'Free trials are not supported by 2Checkout.', 'commercestore' ) );
 			return;
 		}
 

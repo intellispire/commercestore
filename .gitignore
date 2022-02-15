@@ -24,6 +24,7 @@ rebrand.pl
 
 # vendor
 /vendor/
+/languages/
 
 # Eclipse
 *.pydevproject

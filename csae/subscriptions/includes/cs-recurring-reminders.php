@@ -38,23 +38,23 @@ class CS_Recurring_Reminders {
 	*/
 	public function get_notice_periods() {
 		$periods = array(
-			'today'    => __( 'The day of the renewal/expiration', 'cs-recurring' ),
-			'+1day'    => __( 'One day before renewal/expiration', 'cs-recurring' ),
-			'+2days'   => __( 'Two days before renewal/expiration', 'cs-recurring' ),
-			'+3days'   => __( 'Three days before renewal/expiration', 'cs-recurring' ),
-			'+1week'   => __( 'One week before renewal/expiration', 'cs-recurring' ),
-			'+2weeks'  => __( 'Two weeks before renewal/expiration', 'cs-recurring' ),
-			'+1month'  => __( 'One month before renewal/expiration', 'cs-recurring' ),
-			'+2months' => __( 'Two months before renewal/expiration', 'cs-recurring' ),
-			'+3months' => __( 'Three months before renewal/expiration', 'cs-recurring' ),
-			'-1day'    => __( 'One day after expiration', 'cs-recurring' ),
-			'-2days'   => __( 'Two days after expiration', 'cs-recurring' ),
-			'-3days'   => __( 'Three days after expiration', 'cs-recurring' ),
-			'-1week'   => __( 'One week after expiration', 'cs-recurring' ),
-			'-2weeks'  => __( 'Two weeks after expiration', 'cs-recurring' ),
-			'-1month'  => __( 'One month after expiration', 'cs-recurring' ),
-			'-2months' => __( 'Two months after expiration', 'cs-recurring' ),
-			'-3months' => __( 'Three months after expiration', 'cs-recurring' )
+			'today'    => __( 'The day of the renewal/expiration', 'commercestore' ),
+			'+1day'    => __( 'One day before renewal/expiration', 'commercestore' ),
+			'+2days'   => __( 'Two days before renewal/expiration', 'commercestore' ),
+			'+3days'   => __( 'Three days before renewal/expiration', 'commercestore' ),
+			'+1week'   => __( 'One week before renewal/expiration', 'commercestore' ),
+			'+2weeks'  => __( 'Two weeks before renewal/expiration', 'commercestore' ),
+			'+1month'  => __( 'One month before renewal/expiration', 'commercestore' ),
+			'+2months' => __( 'Two months before renewal/expiration', 'commercestore' ),
+			'+3months' => __( 'Three months before renewal/expiration', 'commercestore' ),
+			'-1day'    => __( 'One day after expiration', 'commercestore' ),
+			'-2days'   => __( 'Two days after expiration', 'commercestore' ),
+			'-3days'   => __( 'Three days after expiration', 'commercestore' ),
+			'-1week'   => __( 'One week after expiration', 'commercestore' ),
+			'-2weeks'  => __( 'Two weeks after expiration', 'commercestore' ),
+			'-1month'  => __( 'One month after expiration', 'commercestore' ),
+			'-2months' => __( 'Two months after expiration', 'commercestore' ),
+			'-3months' => __( 'Three months after expiration', 'commercestore' )
 		);
 		return apply_filters( 'cs_recurring_get_reminder_notice_periods', $periods );
 	}
@@ -82,8 +82,8 @@ class CS_Recurring_Reminders {
 	*/
 	public function get_notice_types() {
 		$types = array(
-			'renewal'    => __( 'Renewal', 'cs-recurring' ),
-			'expiration' => __( 'Expiration', 'cs-recurring' ),
+			'renewal'    => __( 'Renewal', 'commercestore' ),
+			'expiration' => __( 'Expiration', 'commercestore' ),
 		);
 		return apply_filters( 'cs_recurring_get_reminder_notice_types', $types );
 	}
@@ -114,7 +114,7 @@ class CS_Recurring_Reminders {
 		$notices  = $this->get_notices();
 
 		$defaults = array(
-			'subject'      => __( 'Your Subscription is About to Renew', 'cs-recurring' ),
+			'subject'      => __( 'Your Subscription is About to Renew', 'commercestore' ),
 			'send_period'  => '+1month',
 			'message'      => 'Hello {name},
 
@@ -147,7 +147,7 @@ class CS_Recurring_Reminders {
 
 			$notices[0] = array(
 				'send_period' => '+1month',
-				'subject'     => __( 'Your Subscription is About to Renew', 'cs-recurring' ),
+				'subject'     => __( 'Your Subscription is About to Renew', 'commercestore' ),
 				'message'     => $message,
 				'type'        => 'renewal',
 			);
@@ -158,7 +158,7 @@ class CS_Recurring_Reminders {
 
 			$notices[1] = array(
 				'send_period' => '+1month',
-				'subject'     => __( 'Your Subscription is About to Expire', 'cs-recurring' ),
+				'subject'     => __( 'Your Subscription is About to Expire', 'commercestore' ),
 				'message'     => $message,
 				'type'        => 'expiration',
 			);
@@ -349,9 +349,9 @@ class CS_Recurring_Reminders {
 		$notice = $this->get_notice( $notice_id );
 
 		$email_to   = function_exists( 'cs_get_admin_notice_emails' ) ? cs_get_admin_notice_emails() : get_bloginfo( 'admin_email' );
-		$message    = ! empty( $notice['message'] ) ? $notice['message'] : __( "**THIS IS A DEFAULT TEST MESSAGE - Notice message was not retrieved.**\n\nHello {name},\n\nYour subscription for {subscription_name} will renew or expire on {expiration}.", 'cs-recurring' );
+		$message    = ! empty( $notice['message'] ) ? $notice['message'] : __( "**THIS IS A DEFAULT TEST MESSAGE - Notice message was not retrieved.**\n\nHello {name},\n\nYour subscription for {subscription_name} will renew or expire on {expiration}.", 'commercestore' );
 		$message    = $this->filter_test_notice( $message );
-		$subject    = ! empty( $notice['subject'] ) ? $notice['subject'] : __( 'Default Subject Message - Your Subscription is About to Renew or Expire', 'cs-recurring' );
+		$subject    = ! empty( $notice['subject'] ) ? $notice['subject'] : __( 'Default Subject Message - Your Subscription is About to Renew or Expire', 'commercestore' );
 		$subject    = $this->filter_test_notice( $subject );
 
 		if ( class_exists( 'CS_Emails' ) ) {

@@ -53,7 +53,7 @@ function csx_process_preapproved_cancel() {
 		return;
 	}
 
-	cs_insert_payment_note( $payment_id, __( 'Preapproval cancelled', 'csx' ) );
+	cs_insert_payment_note( $payment_id, __( 'Preapproval cancelled', 'commercestore' ) );
 	cs_update_payment_status( $payment_id, 'cancelled' );
 	delete_post_meta( $payment_id, '_csx_stripe_customer_id' );
 
@@ -70,16 +70,16 @@ add_action( 'cs_cancel_stripe_preapproval', 'csx_process_preapproved_cancel' );
 function csx_admin_messages() {
 
 	if ( isset( $_GET['cs-message'] ) && 'preapproval-charged' == $_GET['cs-message'] ) {
-		 add_settings_error( 'csx-notices', 'csx-preapproval-charged', __( 'The preapproved payment was successfully charged.', 'csx' ), 'updated' );
+		 add_settings_error( 'csx-notices', 'csx-preapproval-charged', __( 'The preapproved payment was successfully charged.', 'commercestore' ), 'updated' );
 	}
 	if ( isset( $_GET['cs-message'] ) && 'preapproval-failed' == $_GET['cs-message'] ) {
-		 add_settings_error( 'csx-notices', 'csx-preapproval-charged', __( 'The preapproved payment failed to be charged. View order details for further details.', 'csx' ), 'error' );
+		 add_settings_error( 'csx-notices', 'csx-preapproval-charged', __( 'The preapproved payment failed to be charged. View order details for further details.', 'commercestore' ), 'error' );
 	}
 	if ( isset( $_GET['cs-message'] ) && 'preapproval-cancelled' == $_GET['cs-message'] ) {
-		 add_settings_error( 'csx-notices', 'csx-preapproval-cancelled', __( 'The preapproved payment was successfully cancelled.', 'csx' ), 'updated' );
+		 add_settings_error( 'csx-notices', 'csx-preapproval-cancelled', __( 'The preapproved payment was successfully cancelled.', 'commercestore' ), 'updated' );
 	}
 	if ( isset( $_GET['cs-message'] ) && 'connect-to-stripe' === $_GET['cs-message'] ) {
-		add_settings_error( 'csx-notices', 'csx-connect-to-stripe', __( 'Connect your Stripe account using the "Connect with Stripe" button below.', 'csx' ), 'updated' );
+		add_settings_error( 'csx-notices', 'csx-connect-to-stripe', __( 'Connect your Stripe account using the "Connect with Stripe" button below.', 'commercestore' ), 'updated' );
 		// I feel dirty, but CS does not remove `cs-message` params from settings URLs and the message carries to all links if not removed, and well I wanted this all to work without touching CS core yet.
 		add_filter( 'wp_parse_str', function( $ar ) {
 			if( isset( $ar['cs-message'] ) && 'connect-to-stripe' === $ar['cs-message'] ) {
@@ -90,7 +90,7 @@ function csx_admin_messages() {
 	}
 
 	if( isset( $_GET['cs_gateway_connect_error'], $_GET['cs-message'] ) ) {
-		echo '<div class="notice notice-error"><p>' . sprintf( __( 'There was an error connecting your Stripe account. Message: %s. Please <a href="%s">try again</a>.', 'csx' ), esc_html( urldecode( $_GET['cs-message'] ) ), esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ) ) ) . '</p></div>';
+		echo '<div class="notice notice-error"><p>' . sprintf( __( 'There was an error connecting your Stripe account. Message: %s. Please <a href="%s">try again</a>.', 'commercestore' ), esc_html( urldecode( $_GET['cs-message'] ) ), esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ) ) ) . '</p></div>';
 		add_filter( 'wp_parse_str', function( $ar ) {
 			if( isset( $ar['cs_gateway_connect_error'] ) ) {
 				unset( $ar['cs_gateway_connect_error'] );
@@ -121,8 +121,8 @@ function csx_show_existing_card_meta( $payment_id ) {
 		?>
 		<div class="cs-order-stripe-existing-card cs-admin-box-inside">
 			<p>
-				<span class="label"><?php _e( 'Used Existing Card:', 'csx' ); ?></span>&nbsp;
-				<span><?php _e( 'Yes', 'csx' ); ?></span>
+				<span class="label"><?php _e( 'Used Existing Card:', 'commercestore' ); ?></span>&nbsp;
+				<span><?php _e( 'Yes', 'commercestore' ); ?></span>
 			</p>
 		</div>
 		<?php

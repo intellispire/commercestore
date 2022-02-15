@@ -32,56 +32,56 @@ class CS_Recurring_Admin_Notices {
 
 			case 'updated' :
 
-				$message = __( 'Subscription updated successfully', 'cs-recurring' );
+				$message = __( 'Subscription updated successfully', 'commercestore' );
 
 				break;
 
 			case 'deleted' :
 
-				$message = __( 'Subscription deleted successfully', 'cs-recurring' );
+				$message = __( 'Subscription deleted successfully', 'commercestore' );
 
 				break;
 
 			case 'cancelled' :
 
-				$message = __( 'Subscription cancelled successfully', 'cs-recurring' );
+				$message = __( 'Subscription cancelled successfully', 'commercestore' );
 
 				break;
 
 			case 'subscription-note-added' :
 
-				$message = __( 'Subscription note added successfully', 'cs-recurring' );
+				$message = __( 'Subscription note added successfully', 'commercestore' );
 
 				break;
 
 			case 'subscription-note-not-added' :
 
-				$message = __( 'Subscription note could not be added', 'cs-recurring' );
+				$message = __( 'Subscription note could not be added', 'commercestore' );
 				$type    = 'error';
 				break;
 
 			case 'renewal-added' :
 
-				$message = __( 'Renewal payment recorded successfully', 'cs-recurring' );
+				$message = __( 'Renewal payment recorded successfully', 'commercestore' );
 
 				break;
 
 			case 'renewal-not-added' :
 
-				$message = __( 'Renewal payment could not be recorded', 'cs-recurring' );
+				$message = __( 'Renewal payment could not be recorded', 'commercestore' );
 				$type    = 'error';
 
 				break;
 
 			case 'retry-success' :
 
-				$message = __( 'Retry succeeded! The subscription has been renewed successfully.', 'cs-recurring' );
+				$message = __( 'Retry succeeded! The subscription has been renewed successfully.', 'commercestore' );
 
 				break;
 
 			case 'retry-failed' :
 
-				$message = sprintf( __( 'Retry failed. %s', 'cs-recurring' ), sanitize_text_field( urldecode( $_GET['error-message'] ) ) );
+				$message = sprintf( __( 'Retry failed. %s', 'commercestore' ), sanitize_text_field( urldecode( $_GET['error-message'] ) ) );
 				$type    = 'error';
 
 				break;

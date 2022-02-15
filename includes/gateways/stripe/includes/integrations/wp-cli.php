@@ -46,7 +46,7 @@ class CS_Stripe_CLI extends CS_CLI {
 		$upgrade_completed = cs_has_upgrade_completed( 'stripe_customer_id_migration' );
 
 		if ( ! $force && $upgrade_completed ) {
-			WP_CLI::error( __( 'The Stripe customer ID migration has already been run. To do this anyway, use the --force argument.', 'csx' ) );
+			WP_CLI::error( __( 'The Stripe customer ID migration has already been run. To do this anyway, use the --force argument.', 'commercestore' ) );
 		}
 
 		$sql     = "SELECT user_id, meta_key, meta_value FROM $wpdb->usermeta WHERE meta_key IN ( '_cs_stripe_customer_id', '_cs_stripe_customer_id_test' )";
@@ -83,9 +83,9 @@ class CS_Stripe_CLI extends CS_CLI {
 			}
 
 			$progress->finish();
-			WP_CLI::line( __( 'Migration complete.', 'csx' ) );
+			WP_CLI::line( __( 'Migration complete.', 'commercestore' ) );
 		} else {
-			WP_CLI::line( __( 'No user records were found that needed to be migrated.', 'csx' ) );
+			WP_CLI::line( __( 'No user records were found that needed to be migrated.', 'commercestore' ) );
 		}
 
 		update_option( 'csx_stripe_version', preg_replace( '/[^0-9.].*/', '', CS_STRIPE_VERSION ) );

@@ -19,7 +19,7 @@ function cs_stripe_process_card_update() {
 	// Feature not enabled.
 	if ( ! $enabled ) {
 		return wp_send_json_error( array(
-			'message' => __( 'This feature is not available at this time.', 'csx' ),
+			'message' => __( 'This feature is not available at this time.', 'commercestore' ),
 		) );
 	}
 
@@ -28,14 +28,14 @@ function cs_stripe_process_card_update() {
 
 	if ( empty ( $payment_method ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
 	// Nonce failed.
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], $payment_method . '_update' ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
@@ -44,7 +44,7 @@ function cs_stripe_process_card_update() {
 
 	if ( empty( $stripe_customer_id ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
@@ -94,7 +94,7 @@ function cs_stripe_process_card_update() {
 		}
 
 		return wp_send_json_success( array(
-			'message' => esc_html__( 'Card successfully updated.', 'csx' ),
+			'message' => esc_html__( 'Card successfully updated.', 'commercestore' ),
 		) );
 	} catch( \Exception $e ) {
 		return wp_send_json_error( array(
@@ -117,7 +117,7 @@ function cs_stripe_process_card_default( $data ) {
 	// Feature not enabled.
 	if ( ! $enabled ) {
 		return wp_send_json_error( array(
-			'message' => __( 'This feature is not available at this time.', 'csx' ),
+			'message' => __( 'This feature is not available at this time.', 'commercestore' ),
 		) );
 	}
 
@@ -126,14 +126,14 @@ function cs_stripe_process_card_default( $data ) {
 
 	if ( empty ( $payment_method ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
 	// Nonce failed.
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], $payment_method . '_update' ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
@@ -142,7 +142,7 @@ function cs_stripe_process_card_default( $data ) {
 
 	if ( empty( $stripe_customer_id ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
@@ -155,7 +155,7 @@ function cs_stripe_process_card_default( $data ) {
 		) );
 
 		return wp_send_json_success( array(
-			'message' =>	esc_html__( 'Card successfully set as default.', 'csx' ),
+			'message' =>	esc_html__( 'Card successfully set as default.', 'commercestore' ),
 		) );
 	} catch( \Exception $e ) {
 		return wp_send_json_error( array(
@@ -178,7 +178,7 @@ function cs_stripe_process_card_delete( $data ) {
 	// Feature not enabled.
 	if ( ! $enabled ) {
 		return wp_send_json_error( array(
-			'message' => __( 'This feature is not available at this time.', 'csx' ),
+			'message' => __( 'This feature is not available at this time.', 'commercestore' ),
 		) );
 	}
 
@@ -187,14 +187,14 @@ function cs_stripe_process_card_delete( $data ) {
 
 	if ( empty ( $payment_method ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
 	// Nonce failed.
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], $payment_method . '_update' ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
@@ -203,7 +203,7 @@ function cs_stripe_process_card_delete( $data ) {
 
 	if ( empty( $stripe_customer_id ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error updating card.', 'csx' ),
+			'message' => __( 'Error updating card.', 'commercestore' ),
 		) );
 	}
 
@@ -221,7 +221,7 @@ function cs_stripe_process_card_delete( $data ) {
 
 	if ( ! $should_remove['remove'] ) {
 		return wp_send_json_error( array(
-			'message' => esc_html__( 'This feature is not available at this time.', 'csx' ),
+			'message' => esc_html__( 'This feature is not available at this time.', 'commercestore' ),
 		) );
 	}
 
@@ -237,7 +237,7 @@ function cs_stripe_process_card_delete( $data ) {
 		}
 
 		return wp_send_json_success( array(
-			'message' =>	esc_html__( 'Card successfully removed.', 'csx' ),
+			'message' =>	esc_html__( 'Card successfully removed.', 'commercestore' ),
 		) );
 	} catch( \Exception $e ) {
 		return wp_send_json_error( array(
@@ -260,7 +260,7 @@ function csx_add_payment_method() {
 	// Feature not enabled.
 	if ( ! $enabled ) {
 		return wp_send_json_error( array(
-			'message' => __( 'This feature is not available at this time.', 'csx' ),
+			'message' => __( 'This feature is not available at this time.', 'commercestore' ),
 		) );
 	}
 
@@ -269,7 +269,7 @@ function csx_add_payment_method() {
 		cs_stripe()->rate_limiting->increment_card_error_count();
 
 		return wp_send_json_error( array(
-			'message' => __( 'Unable to update your account at this time, please try again later', 'csx' ),
+			'message' => __( 'Unable to update your account at this time, please try again later', 'commercestore' ),
 		) );
 	}
 
@@ -278,14 +278,14 @@ function csx_add_payment_method() {
 
 	if ( ! $payment_method_id ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Missing card ID.', 'csx' ),
+			'message' => __( 'Missing card ID.', 'commercestore' ),
 		) );
 	}
 
 	// Nonce failed.
 	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'cs-stripe-add-card' ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Error adding card.', 'csx' ),
+			'message' => __( 'Error adding card.', 'commercestore' ),
 		) );
 	}
 
@@ -294,7 +294,7 @@ function csx_add_payment_method() {
 
 	if ( empty( $stripe_customer_id ) ) {
 		return wp_send_json_error( array(
-			'message' => __( 'Unable to find user.', 'csx' ),
+			'message' => __( 'Unable to find user.', 'commercestore' ),
 		) );
 	}
 
@@ -305,7 +305,7 @@ function csx_add_payment_method() {
 		) );
 
 		return wp_send_json_success( array(
-			'message' => esc_html__( 'Card successfully added.', 'csx' ),
+			'message' => esc_html__( 'Card successfully added.', 'commercestore' ),
 		) );
 	} catch( \Exception $e ) {
 		// Increase the card error count.

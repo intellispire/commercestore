@@ -1,1 +1,594 @@
-!function(e){var d={};function t(a){if(d[a])return d[a].exports;var n=d[a]={i:a,l:!1,exports:{}};return e[a].call(n.exports,n,n.exports,t),n.l=!0,n.exports}t.m=e,t.c=d,t.d=function(e,d,a){t.o(e,d)||Object.defineProperty(e,d,{enumerable:!0,get:a})},t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t.t=function(e,d){if(1&d&&(e=t(e)),8&d)return e;if(4&d&&"object"==typeof e&&e&&e.__esModule)return e;var a=Object.create(null);if(t.r(a),Object.defineProperty(a,"default",{enumerable:!0,value:e}),2&d&&"string"!=typeof e)for(var n in e)t.d(a,n,function(d){return e[d]}.bind(null,n));return a},t.n=function(e){var d=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(d,"a",d),d},t.o=function(e,d){return Object.prototype.hasOwnProperty.call(e,d)},t.p="",t(t.s=79)}({0:function(e,d){e.exports=jQuery},2:function(e,d,t){"use strict";(function(e){t.d(d,"a",(function(){return a}));var a=function(d){e(d)}}).call(this,t(0))},79:function(e,d,t){"use strict";t.r(d);t(80);var a=t(8);window.recalculate_taxes=a.b,window.CS_Checkout=function(e){var d,t,n,o;function r(t){t.preventDefault();var n=e("#cs-discount").val(),r=e("#cs-discount-loader"),i=e("#cs_cc_address .cs-input, #cs_cc_address .cs-select").filter("[required]");if(""==n||n==cs_global_vars.enter_discount)return!1;var c={action:"cs_apply_discount",code:n,form:e("#cs_purchase_form").serialize()};return e("#cs-discount-error-wrap").html("").hide(),r.show(),e.ajax({type:"POST",data:c,dataType:"json",url:cs_global_vars.ajaxurl,xhrFields:{withCredentials:!0},success:function(t){t?"valid"==t.msg?(e(".cs_cart_discount").html(t.html),e(".cs_cart_discount_row").show(),e(".cs_cart_amount").each((function(){e(this).text(t.total),e(this).data("total",t.total_plain)})),e("#cs-discount",o).val(""),Object(a.b)(),"0.00"==t.total_plain?(e("#cs_cc_fields,#cs_cc_address,#cs_payment_mode_select").slideUp(),i.prop("required",!1),e('input[name="cs-gateway"]').val("manual")):(i.prop("required",!0),e("#cs_cc_fields,#cs_cc_address").slideDown()),d.trigger("cs_discount_applied",[t])):(e("#cs-discount-error-wrap").html('<span class="cs_error">'+t.msg+"</span>"),e("#cs-discount-error-wrap").show(),d.trigger("cs_discount_invalid",[t])):(window.console&&window.console.log&&console.log(t),d.trigger("cs_discount_failed",[t])),r.hide()}}).fail((function(e){window.console&&window.console.log&&console.log(e)})),!1}function i(t){var n={action:"cs_remove_discount",code:e(this).data("code")};return e.ajax({type:"POST",data:n,dataType:"json",url:cs_global_vars.ajaxurl,xhrFields:{withCredentials:!0},success:function(t){var n="0"+cs_global_vars.decimal_separator+"00";e(".cs_cart_amount").each((function(){cs_global_vars.currency_sign+n!=e(this).text()&&n+cs_global_vars.currency_sign!=e(this).text()||window.location.reload(),e(this).text(t.total),e(this).data("total",t.total_plain)})),e(".cs_cart_discount").html(t.html),t.discounts&&0===t.discounts.length&&e(".cs_cart_discount_row").hide(),Object(a.b)(),e("#cs_cc_fields,#cs_cc_address").slideDown(),d.trigger("cs_discount_removed",[t])}}).fail((function(e){window.console&&window.console.log&&console.log(e)})),!1}function c(t){var a=e(this),n=a.val(),o=a.data("key"),r=a.closest(".cs_cart_item").data("download-id"),i=a.parent().find('input[name="cs-cart-download-'+o+'-options"]').val(),c=e("#cs_cc_address"),l={action:"cs_update_quantity",quantity:n,download_id:r,options:i,billing_country:c.find("#billing_country").val(),card_state:c.find("#card_state").val()};return e.ajax({type:"POST",data:l,dataType:"json",url:cs_global_vars.ajaxurl,xhrFields:{withCredentials:!0},success:function(t){e(".cs_cart_subtotal_amount").each((function(){e(this).text(t.subtotal)})),e(".cs_cart_tax_amount").each((function(){e(this).text(t.taxes)})),e(".cs_cart_amount").each((function(){e(this).text(t.total),d.trigger("cs_quantity_updated",[t])}))}}).fail((function(e){window.console&&window.console.log&&console.log(e)})),!1}return{init:function(){d=e(document.body),t=e("#cs_purchase_form"),n=e(".cs_cart_amount"),n.text(),o=e("#cs_checkout_form_wrap"),d.on("cs_gateway_loaded",(function(e){var d,a,n,o;a=(d=t).find(".card-number"),n=d.find(".card-cvc"),o=d.find(".card-expiry"),a.length&&"function"==typeof a.payment&&(a.payment("formatCardNumber"),n.payment("formatCardCVC"),o.payment("formatCardExpiry"))})),d.on("keyup change",".cs-do-validate .card-number",(function(){var d,t;d=e(this),(t=d).validateCreditCard((function(d){var n=e(".card-type");null==d.card_type?(n.removeClass().addClass("off card-type"),t.removeClass("valid"),t.addClass("error")):(n.removeClass("off"),n.html(Object(a.a)(d.card_type.name)),n.addClass(d.card_type.name),d.length_valid&&d.luhn_valid?(t.addClass("valid"),t.removeClass("error")):(t.removeClass("valid"),t.addClass("error")))}))})),d.on("blur change",".card-name",(function(){var d=e(this);d.validateCreditCard((function(t){null!=t.card_type?(d.removeClass("valid").addClass("error"),e("#cs-purchase-button").attr("disabled","disabled")):(d.removeClass("error").addClass("valid"),e("#cs-purchase-button").removeAttr("disabled"))}))})),d.on("submit","#cs_payment_mode",(function(){if(0==e("#cs-gateway option:selected").val())return alert(cs_global_vars.no_gateway),!1})),d.on("click","#cs_payment_mode_select input",(function(){e("#cs_payment_mode_select label.cs-gateway-option-selected").removeClass("cs-gateway-option-selected"),e("#cs_payment_mode_select input:checked").parent().addClass("cs-gateway-option-selected")})),o.on("click",".cs-apply-discount",r),o.on("keypress","#cs-discount",(function(e){if("13"==e.keyCode)return!1})),o.on("keyup","#cs-discount",(function(e){"13"==e.keyCode&&o.find(".cs-apply-discount").trigger("click")})),d.on("click",".cs_discount_remove",i),d.on("click",".cs_discount_link",(function(d){d.preventDefault(),e(".cs_discount_link").parent().hide(),e("#cs-discount-code-wrap").show().find("#cs-discount").focus()})),d.find("#cs-discount-code-wrap").hide(),d.find("#cs_show_discount").show(),d.on("change",".cs-item-quantity",c),d.on("click",".cs-amazon-logout #Logout",(function(e){e.preventDefault(),amazon.Login.logout(),window.location=cs_amazon.checkoutUri}))},recalculate_taxes:a.b}}(window.jQuery),window.jQuery(document).ready(CS_Checkout.init)},8:function(e,d,t){"use strict";(function(e){t.d(d,"a",(function(){return a})),t.d(d,"b",(function(){return o}));var a=function(e){var d,t=e;switch(e){case"amex":t="americanexpress",d=32;break;default:d=50}return"\n    <svg\n      width=".concat(d,"\n      height=",32,'\n      class="payment-icon icon-').concat(t,'"\n      role="img"\n    >\n      <use\n        href="#icon-').concat(t,'"\n        xlink:href="#icon-').concat(t,'">\n      </use>\n    </svg>')},n=0;function o(d){if("1"==cs_global_vars.taxes_enabled){var t=e("#cs_cc_address"),a=t.find("#billing_country").val(),o=t.find("#card_address").val(),r=t.find("#card_address_2").val(),i=t.find("#card_city").val(),c=t.find("#card_state").val();d||(d=c);var l={action:"cs_recalculate_taxes",card_address:o,card_address_2:r,card_city:i,card_zip:t.find("#card_zip").val(),state:d,billing_country:a,nonce:e("#cs-checkout-address-fields-nonce").val()};e("#cs_purchase_submit [type=submit]").after('<span class="cs-loading-ajax cs-recalculate-taxes-loading cs-loading"></span>');var s=++n;return e.ajax({type:"POST",data:l,dataType:"json",url:cs_global_vars.ajaxurl,xhrFields:{withCredentials:!0},success:function(d){if(s===n){d.html&&e("#cs_checkout_cart_form").replaceWith(d.html),e(".cs_cart_amount").html(d.total);var t=new Object;t.postdata=l,t.response=d,e("body").trigger("cs_taxes_recalculated",[t])}e(".cs-recalculate-taxes-loading").remove()}}).fail((function(d){window.console&&window.console.log&&(console.log(d),s===n&&e("body").trigger("cs_taxes_recalculated",[tax_data]))}))}}}).call(this,t(0))},80:function(e,d,t){"use strict";(function(e){var d=t(2);Object(d.a)((function(){e(document.body).on("click",".cs_terms_links",(function(d){d.preventDefault();var t=e(this).parent();t.prev(".cs-terms").slideToggle(),t.find(".cs_terms_links").toggle()}))}))}).call(this,t(0))}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/frontend/checkout/index.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./assets/js/frontend/checkout/components/agree-to-terms/index.js":
+/*!************************************************************************!*\
+  !*** ./assets/js/frontend/checkout/components/agree-to-terms/index.js ***!
+  \************************************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var utils_jquery_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! utils/jquery.js */ "./assets/js/utils/jquery.js");
+/* global $ */
+
+/**
+ * Internal dependencies.
+ */
+
+/**
+ * DOM ready.
+ *
+ * @since 3.0
+ */
+
+Object(utils_jquery_js__WEBPACK_IMPORTED_MODULE_0__["jQueryReady"])(function () {
+  /**
+   * Toggles term content when clicked.
+   *
+   * @since unknown
+   *
+   * @param {Object} e Click event.
+   */
+  $(document.body).on('click', '.cs_terms_links', function (e) {
+    e.preventDefault();
+    var terms = $(this).parent();
+    terms.prev('.cs-terms').slideToggle();
+    terms.find('.cs_terms_links').toggle();
+  });
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/frontend/checkout/index.js":
+/*!**********************************************!*\
+  !*** ./assets/js/frontend/checkout/index.js ***!
+  \**********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_agree_to_terms__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/agree-to-terms */ "./assets/js/frontend/checkout/components/agree-to-terms/index.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.js */ "./assets/js/frontend/checkout/utils.js");
+/**
+ * Internal dependencies.
+ */
+
+ // Backwards compatibility. Assign function to global namespace.
+
+window.recalculate_taxes = _utils_js__WEBPACK_IMPORTED_MODULE_1__["recalculateTaxes"];
+
+window.CS_Checkout = function ($) {
+  'use strict';
+
+  var $body, $form, $cs_cart_amount, before_discount, $checkout_form_wrap;
+
+  function init() {
+    $body = $(document.body);
+    $form = $('#cs_purchase_form');
+    $cs_cart_amount = $('.cs_cart_amount');
+    before_discount = $cs_cart_amount.text();
+    $checkout_form_wrap = $('#cs_checkout_form_wrap');
+    $body.on('cs_gateway_loaded', function (e) {
+      cs_format_card_number($form);
+    });
+    $body.on('keyup change', '.cs-do-validate .card-number', function () {
+      cs_validate_card($(this));
+    });
+    $body.on('blur change', '.card-name', function () {
+      var name_field = $(this);
+      name_field.validateCreditCard(function (result) {
+        if (result.card_type != null) {
+          name_field.removeClass('valid').addClass('error');
+          $('#cs-purchase-button').attr('disabled', 'disabled');
+        } else {
+          name_field.removeClass('error').addClass('valid');
+          $('#cs-purchase-button').removeAttr('disabled');
+        }
+      });
+    }); // Make sure a gateway is selected
+
+    $body.on('submit', '#cs_payment_mode', function () {
+      var gateway = $('#cs-gateway option:selected').val();
+
+      if (gateway == 0) {
+        alert(cs_global_vars.no_gateway);
+        return false;
+      }
+    }); // Add a class to the currently selected gateway on click
+
+    $body.on('click', '#cs_payment_mode_select input', function () {
+      $('#cs_payment_mode_select label.cs-gateway-option-selected').removeClass('cs-gateway-option-selected');
+      $('#cs_payment_mode_select input:checked').parent().addClass('cs-gateway-option-selected');
+    }); // Validate and apply a discount
+
+    $checkout_form_wrap.on('click', '.cs-apply-discount', apply_discount); // Prevent the checkout form from submitting when hitting Enter in the discount field
+
+    $checkout_form_wrap.on('keypress', '#cs-discount', function (event) {
+      if (event.keyCode == '13') {
+        return false;
+      }
+    }); // Apply the discount when hitting Enter in the discount field instead
+
+    $checkout_form_wrap.on('keyup', '#cs-discount', function (event) {
+      if (event.keyCode == '13') {
+        $checkout_form_wrap.find('.cs-apply-discount').trigger('click');
+      }
+    }); // Remove a discount
+
+    $body.on('click', '.cs_discount_remove', remove_discount); // When discount link is clicked, hide the link, then show the discount input and set focus.
+
+    $body.on('click', '.cs_discount_link', function (e) {
+      e.preventDefault();
+      $('.cs_discount_link').parent().hide();
+      $('#cs-discount-code-wrap').show().find('#cs-discount').focus();
+    }); // Hide / show discount fields for browsers without javascript enabled
+
+    $body.find('#cs-discount-code-wrap').hide();
+    $body.find('#cs_show_discount').show(); // Update the checkout when item quantities are updated
+
+    $body.on('change', '.cs-item-quantity', update_item_quantities);
+    $body.on('click', '.cs-amazon-logout #Logout', function (e) {
+      e.preventDefault();
+      amazon.Login.logout();
+      window.location = cs_amazon.checkoutUri;
+    });
+  }
+
+  function cs_validate_card(field) {
+    var card_field = field;
+    card_field.validateCreditCard(function (result) {
+      var $card_type = $('.card-type');
+
+      if (result.card_type == null) {
+        $card_type.removeClass().addClass('off card-type');
+        card_field.removeClass('valid');
+        card_field.addClass('error');
+      } else {
+        $card_type.removeClass('off');
+        $card_type.html(Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["getCreditCardIcon"])(result.card_type.name));
+        $card_type.addClass(result.card_type.name);
+
+        if (result.length_valid && result.luhn_valid) {
+          card_field.addClass('valid');
+          card_field.removeClass('error');
+        } else {
+          card_field.removeClass('valid');
+          card_field.addClass('error');
+        }
+      }
+    });
+  }
+
+  function cs_format_card_number(form) {
+    var card_number = form.find('.card-number'),
+        card_cvc = form.find('.card-cvc'),
+        card_expiry = form.find('.card-expiry');
+
+    if (card_number.length && 'function' === typeof card_number.payment) {
+      card_number.payment('formatCardNumber');
+      card_cvc.payment('formatCardCVC');
+      card_expiry.payment('formatCardExpiry');
+    }
+  }
+
+  function apply_discount(event) {
+    event.preventDefault();
+    var discount_code = $('#cs-discount').val(),
+        cs_discount_loader = $('#cs-discount-loader'),
+        required_inputs = $('#cs_cc_address .cs-input, #cs_cc_address .cs-select').filter('[required]');
+
+    if (discount_code == '' || discount_code == cs_global_vars.enter_discount) {
+      return false;
+    }
+
+    var postData = {
+      action: 'cs_apply_discount',
+      code: discount_code,
+      form: $('#cs_purchase_form').serialize()
+    };
+    $('#cs-discount-error-wrap').html('').hide();
+    cs_discount_loader.show();
+    $.ajax({
+      type: 'POST',
+      data: postData,
+      dataType: 'json',
+      url: cs_global_vars.ajaxurl,
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function success(discount_response) {
+        if (discount_response) {
+          if (discount_response.msg == 'valid') {
+            $('.cs_cart_discount').html(discount_response.html);
+            $('.cs_cart_discount_row').show();
+            $('.cs_cart_amount').each(function () {
+              // Format discounted amount for display.
+              $(this).text(discount_response.total); // Set data attribute to new (unformatted) discounted amount.'
+
+              $(this).data('total', discount_response.total_plain);
+            });
+            $('#cs-discount', $checkout_form_wrap).val('');
+            Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["recalculateTaxes"])();
+
+            if ('0.00' == discount_response.total_plain) {
+              $('#cs_cc_fields,#cs_cc_address,#cs_payment_mode_select').slideUp();
+              required_inputs.prop('required', false);
+              $('input[name="cs-gateway"]').val('manual');
+            } else {
+              required_inputs.prop('required', true);
+              $('#cs_cc_fields,#cs_cc_address').slideDown();
+            }
+
+            $body.trigger('cs_discount_applied', [discount_response]);
+          } else {
+            $('#cs-discount-error-wrap').html('<span class="cs_error">' + discount_response.msg + '</span>');
+            $('#cs-discount-error-wrap').show();
+            $body.trigger('cs_discount_invalid', [discount_response]);
+          }
+        } else {
+          if (window.console && window.console.log) {
+            console.log(discount_response);
+          }
+
+          $body.trigger('cs_discount_failed', [discount_response]);
+        }
+
+        cs_discount_loader.hide();
+      }
+    }).fail(function (data) {
+      if (window.console && window.console.log) {
+        console.log(data);
+      }
+    });
+    return false;
+  }
+
+  function remove_discount(event) {
+    var $this = $(this),
+        postData = {
+      action: 'cs_remove_discount',
+      code: $this.data('code')
+    };
+    $.ajax({
+      type: 'POST',
+      data: postData,
+      dataType: 'json',
+      url: cs_global_vars.ajaxurl,
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function success(discount_response) {
+        var zero = '0' + cs_global_vars.decimal_separator + '00';
+        $('.cs_cart_amount').each(function () {
+          if (cs_global_vars.currency_sign + zero == $(this).text() || zero + cs_global_vars.currency_sign == $(this).text()) {
+            // We're removing a 100% discount code so we need to force the payment gateway to reload
+            window.location.reload();
+          } // Format discounted amount for display.
+
+
+          $(this).text(discount_response.total); // Set data attribute to new (unformatted) discounted amount.'
+
+          $(this).data('total', discount_response.total_plain);
+        });
+        $('.cs_cart_discount').html(discount_response.html);
+
+        if (discount_response.discounts && 0 === discount_response.discounts.length) {
+          $('.cs_cart_discount_row').hide();
+        }
+
+        Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["recalculateTaxes"])();
+        $('#cs_cc_fields,#cs_cc_address').slideDown();
+        $body.trigger('cs_discount_removed', [discount_response]);
+      }
+    }).fail(function (data) {
+      if (window.console && window.console.log) {
+        console.log(data);
+      }
+    });
+    return false;
+  }
+
+  function update_item_quantities(event) {
+    var $this = $(this),
+        quantity = $this.val(),
+        key = $this.data('key'),
+        download_id = $this.closest('.cs_cart_item').data('download-id'),
+        options = $this.parent().find('input[name="cs-cart-download-' + key + '-options"]').val();
+    var cs_cc_address = $('#cs_cc_address');
+    var billing_country = cs_cc_address.find('#billing_country').val(),
+        card_state = cs_cc_address.find('#card_state').val();
+    var postData = {
+      action: 'cs_update_quantity',
+      quantity: quantity,
+      download_id: download_id,
+      options: options,
+      billing_country: billing_country,
+      card_state: card_state
+    }; //cs_discount_loader.show();
+
+    $.ajax({
+      type: 'POST',
+      data: postData,
+      dataType: 'json',
+      url: cs_global_vars.ajaxurl,
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function success(response) {
+        $('.cs_cart_subtotal_amount').each(function () {
+          $(this).text(response.subtotal);
+        });
+        $('.cs_cart_tax_amount').each(function () {
+          $(this).text(response.taxes);
+        });
+        $('.cs_cart_amount').each(function () {
+          $(this).text(response.total);
+          $body.trigger('cs_quantity_updated', [response]);
+        });
+      }
+    }).fail(function (data) {
+      if (window.console && window.console.log) {
+        console.log(data);
+      }
+    });
+    return false;
+  } // Expose some functions or variables to window.CS_Checkout object
+
+
+  return {
+    init: init,
+    recalculate_taxes: _utils_js__WEBPACK_IMPORTED_MODULE_1__["recalculateTaxes"]
+  };
+}(window.jQuery); // init on document.ready
+
+
+window.jQuery(document).ready(CS_Checkout.init);
+
+/***/ }),
+
+/***/ "./assets/js/frontend/checkout/utils.js":
+/*!**********************************************!*\
+  !*** ./assets/js/frontend/checkout/utils.js ***!
+  \**********************************************/
+/*! exports provided: getCreditCardIcon, recalculateTaxes */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCreditCardIcon", function() { return getCreditCardIcon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recalculateTaxes", function() { return recalculateTaxes; });
+/* global cs_global_vars */
+
+/**
+ * Generate markup for a credit card icon based on a passed type.
+ *
+ * @param {string} type Credit card type.
+ * @return HTML markup.
+ */
+var getCreditCardIcon = function getCreditCardIcon(type) {
+  var width;
+  var name = type;
+
+  switch (type) {
+    case 'amex':
+      name = 'americanexpress';
+      width = 32;
+      break;
+
+    default:
+      width = 50;
+      break;
+  }
+
+  return "\n    <svg\n      width=".concat(width, "\n      height=", 32, "\n      class=\"payment-icon icon-").concat(name, "\"\n      role=\"img\"\n    >\n      <use\n        href=\"#icon-").concat(name, "\"\n        xlink:href=\"#icon-").concat(name, "\">\n      </use>\n    </svg>");
+};
+var ajax_tax_count = 0;
+/**
+ * Recalulate taxes.
+ *
+ * @param {string} state State to calculate taxes for.
+ * @return {Promise}
+ */
+
+function recalculateTaxes(state) {
+  if ('1' != cs_global_vars.taxes_enabled) {
+    return;
+  } // Taxes not enabled
+
+
+  var $cs_cc_address = jQuery('#cs_cc_address');
+  var billing_country = $cs_cc_address.find('#billing_country').val(),
+      card_address = $cs_cc_address.find('#card_address').val(),
+      card_address_2 = $cs_cc_address.find('#card_address_2').val(),
+      card_city = $cs_cc_address.find('#card_city').val(),
+      card_state = $cs_cc_address.find('#card_state').val(),
+      card_zip = $cs_cc_address.find('#card_zip').val();
+
+  if (!state) {
+    state = card_state;
+  }
+
+  var postData = {
+    action: 'cs_recalculate_taxes',
+    card_address: card_address,
+    card_address_2: card_address_2,
+    card_city: card_city,
+    card_zip: card_zip,
+    state: state,
+    billing_country: billing_country,
+    nonce: jQuery('#cs-checkout-address-fields-nonce').val()
+  };
+  jQuery('#cs_purchase_submit [type=submit]').after('<span class="cs-loading-ajax cs-recalculate-taxes-loading cs-loading"></span>');
+  var current_ajax_count = ++ajax_tax_count;
+  return jQuery.ajax({
+    type: 'POST',
+    data: postData,
+    dataType: 'json',
+    url: cs_global_vars.ajaxurl,
+    xhrFields: {
+      withCredentials: true
+    },
+    success: function success(tax_response) {
+      // Only update tax info if this response is the most recent ajax call.
+      // Avoids bug with form autocomplete firing multiple ajax calls at the same time and not
+      // being able to predict the call response order.
+      if (current_ajax_count === ajax_tax_count) {
+        if (tax_response.html) {
+          jQuery('#cs_checkout_cart_form').replaceWith(tax_response.html);
+        }
+
+        jQuery('.cs_cart_amount').html(tax_response.total);
+
+        var _tax_data = new Object();
+
+        _tax_data.postdata = postData;
+        _tax_data.response = tax_response;
+        jQuery('body').trigger('cs_taxes_recalculated', [_tax_data]);
+      }
+
+      jQuery('.cs-recalculate-taxes-loading').remove();
+    }
+  }).fail(function (data) {
+    if (window.console && window.console.log) {
+      console.log(data);
+
+      if (current_ajax_count === ajax_tax_count) {
+        jQuery('body').trigger('cs_taxes_recalculated', [tax_data]);
+      }
+    }
+  });
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/utils/jquery.js":
+/*!***********************************!*\
+  !*** ./assets/js/utils/jquery.js ***!
+  \***********************************/
+/*! exports provided: jQueryReady */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "jQueryReady", function() { return jQueryReady; });
+/* global jQuery */
+
+/**
+ * Safe wrapper for jQuery DOM ready.
+ *
+ * This should be used only when a script requires the use of jQuery.
+ *
+ * @param {Function} callback Function to call when ready.
+ */
+var jQueryReady = function jQueryReady(callback) {
+  (function ($) {
+    $(callback);
+  })(jQuery);
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=cs-checkout-global.js.map

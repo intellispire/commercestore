@@ -13,7 +13,7 @@
 	<p>
 		<?php
 		printf(
-			esc_html__( 'Please wait while your payment is confirmed. This may take up to a minute; the page will reload automatically.', 'cs-recurring' )
+			esc_html__( 'Please wait while your payment is confirmed. This may take up to a minute; the page will reload automatically.', 'commercestore' )
 		)
 		?>
 	</p>

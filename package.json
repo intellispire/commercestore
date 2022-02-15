@@ -31,6 +31,7 @@
 		"moment": "2.22.2"
 	},
 	"devDependencies": {
+    "npm-run-all": "^4.1.5",
 		"@wordpress/base-styles": "3.1.0",
 		"@wordpress/dom": "2.15.0",
 		"@wordpress/postcss-plugins-preset": "^1.6.0",
@@ -45,6 +46,7 @@
 		"grunt-contrib-copy": "^1.0.0",
 		"grunt-force-task": "^2.0.0",
 		"grunt-replace": "^2.0.1",
+		"grunt-shell": "^3.0.1",
 		"grunt-wp-i18n": "^1.0.2",
 		"load-grunt-tasks": "^3.5.2",
 		"locutus": "^2.0.11",
@@ -60,10 +62,11 @@
 		"webpack-rtl-plugin": "^2.0.0"
 	},
 	"scripts": {
-		"build": "wp-scripts build --webpack-no-externals && bash bin/update-stripe.sh && grunt build",
+		"build": "wp-scripts build --webpack-no-externals && grunt build",
 		"dev": "cross-env NODE_ENV=production wp-scripts start --webpack-no-externals",
 		"check-engines": "wp-scripts check-engines",
 		"check-licenses": "wp-scripts check-licenses --production",
+    "lint": "npm-run-all -s lint:*",
 		"lint:css": "wp-scripts lint-style 'assets/css/admin/**/*.scss' --fix",
 		"lint:js": "wp-scripts lint-js ./assets/js/ ",
 		"lint:js--fix": "wp-scripts lint-js ./assets/js --fix",

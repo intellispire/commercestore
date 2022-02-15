@@ -16,23 +16,23 @@ function cs_recurring_customer_subscriptions_list( $customer ) {
 		return;
 	}
 ?>
-	<h3><?php _e( 'Subscriptions', 'cs-recurring' ); ?></h3>
+	<h3><?php _e( 'Subscriptions', 'commercestore' ); ?></h3>
 	<table class="wp-list-table widefat striped downloads">
 		<thead>
 			<tr>
 				<th><?php echo cs_get_label_singular(); ?></th>
-				<th><?php _e( 'Amount', 'cs-recurring' ); ?></th>
-				<th><?php _e( 'Status', 'cs-recurring' ); ?></th>
-				<th><?php _e( 'Actions', 'cs-recurring' ); ?></th>
+				<th><?php _e( 'Amount', 'commercestore' ); ?></th>
+				<th><?php _e( 'Status', 'commercestore' ); ?></th>
+				<th><?php _e( 'Actions', 'commercestore' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php foreach( $subscriptions as $subscription ) : ?>
 				<tr>
 					<td><a href="<?php echo esc_url( admin_url( 'post.php?action=edit&post=' . $subscription->product_id ) ); ?>"><?php echo get_the_title( $subscription->product_id ); ?></a></td>
-					<td><?php printf( _x( '%s every %s', 'Example: $10 every month', 'cs-recurring' ), cs_currency_filter( cs_sanitize_amount( $subscription->recurring_amount ), cs_get_payment_currency_code( $subscription->parent_payment_id ) ), $subscription->period ); ?></td>
+					<td><?php printf( _x( '%s every %s', 'Example: $10 every month', 'commercestore' ), cs_currency_filter( cs_sanitize_amount( $subscription->recurring_amount ), cs_get_payment_currency_code( $subscription->parent_payment_id ) ), $subscription->period ); ?></td>
 					<td><?php echo $subscription->get_status_label(); ?></td>
-					<td><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $subscription->id ) ); ?>"><?php _e( 'View Details', 'cs-recurring' ); ?></a>
+					<td><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $subscription->id ) ); ?>"><?php _e( 'View Details', 'commercestore' ); ?></a>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
@@ -56,12 +56,12 @@ function cs_recurring_customer_profile_ids( $customer ) {
 		return;
 	}
 	?>
-	<h3><?php _e( 'Recurring Profiles', 'cs-recurring' ); ?></h3>
+	<h3><?php _e( 'Recurring Profiles', 'commercestore' ); ?></h3>
 	<table class="wp-list-table widefat striped downloads">
 		<thead>
 			<tr>
-				<th><?php _e( 'Gateway', 'cs-recurring' ); ?></th>
-				<th style="width: 150px;"><?php _e( 'Profile ID', 'cs-recurring' ); ?></th>
+				<th><?php _e( 'Gateway', 'commercestore' ); ?></th>
+				<th style="width: 150px;"><?php _e( 'Profile ID', 'commercestore' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>

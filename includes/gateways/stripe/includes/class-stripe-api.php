@@ -55,7 +55,7 @@ class CS_Stripe_API {
 		$args = array_values( $args );
 
 		if ( ! is_callable( array( $classname, $method ) ) ) {
-			throw new CS_Stripe_Utils_Exceptions_Stripe_Object_Not_Found( sprintf( esc_html__( 'Unable to call %1$s::%2$s', 'csx' ), $classname, $method ) );
+			throw new CS_Stripe_Utils_Exceptions_Stripe_Object_Not_Found( sprintf( esc_html__( 'Unable to call %1$s::%2$s', 'commercestore' ), $classname, $method ) );
 		}
 
 		// @todo Filter arguments and per-request options?

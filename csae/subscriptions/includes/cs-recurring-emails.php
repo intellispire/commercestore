@@ -133,17 +133,17 @@ class CS_Recurring_Emails {
 
 		$email_to   = $this->subscription->customer->email;
 		$notice     = $notices->get_notice( $notice_id );
-		$message    = ! empty( $notice['message'] ) ? $notice['message'] : __( "Hello {name},\n\nYour subscription for {subscription_name} will renew or expire on {expiration}.", 'cs-recurring' );
+		$message    = ! empty( $notice['message'] ) ? $notice['message'] : __( "Hello {name},\n\nYour subscription for {subscription_name} will renew or expire on {expiration}.", 'commercestore' );
 		$message    = $this->filter_reminder_template_tags( $message, $subscription_id );
 
-		$subject    = ! empty( $notice['subject'] ) ? $notice['subject'] : __( 'Your Subscription is About to Renew or Expire', 'cs-recurring' );
+		$subject    = ! empty( $notice['subject'] ) ? $notice['subject'] : __( 'Your Subscription is About to Renew or Expire', 'commercestore' );
 		$subject    = $this->filter_reminder_template_tags( $subject, $subscription_id );
 
 		CS()->emails->send( $email_to, $subject, $message );
 
 		$log_id = wp_insert_post(
 			array(
-				'post_title'   => __( 'LOG - Subscription Reminder Notice Sent', 'cs-recurring' ),
+				'post_title'   => __( 'LOG - Subscription Reminder Notice Sent', 'commercestore' ),
 				'post_name'    => 'log-subscription-reminder-notice-' . $subscription_id . '_sent-' . $this->subscription->customer_id . '-' . md5( time() ),
 				'post_type'    => 'cs_subscription_log',
 				'post_status'  => 'publish',

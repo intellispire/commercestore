@@ -1754,9 +1754,7 @@ class CS_API {
 	 * Process Get Info API Request
 	 *
 	 * @param array $args Arguments provided by API Request
-	 *
-	 * @todo: FIXME NLT: integrations should not be hardcoded here, instead have an API to determine.
-	 * if it's running.
+	 * @todo this needs to be pluggable and nto rely on hard coded filenames.
 	 *
 	 * @return array
 	 */

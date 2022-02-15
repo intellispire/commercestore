@@ -28,7 +28,7 @@ class CS_Stripe_Reports {
 	 * @return mixed
 	 */
 	public function add_stripe_card_reports_view( $views ) {
-		$views['stripe'] = __( 'Stripe Reports', 'csx' );
+		$views['stripe'] = __( 'Stripe Reports', 'commercestore' );
 
 		return $views;
 	}
@@ -115,7 +115,7 @@ class CS_Stripe_Reports {
 	public function display_stripe_report() {
 
 		if ( ! current_user_can( 'view_shop_reports' ) ) {
-			wp_die( __( 'You do not have permission to view this data', 'csx' ), __( 'Error', 'csx' ), array( 'response' => 401 ) );
+			wp_die( __( 'You do not have permission to view this data', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 		}
 
 		// Retrieve the queried dates
@@ -300,10 +300,10 @@ class CS_Stripe_Reports {
 		}
 
 		$data = array(
-			__( 'New Card Earnings', 'csx' )                => $new_cards_earnings,
-			__( 'Existing Card Earnings', 'cs-recurring' )  => $existing_cards_earnings,
-			__( 'New Card Purchases', 'cs-recurring' )      => $new_cards_counts,
-			__( 'Existing Card Purchases', 'cs-recurring' ) => $existing_cards_counts,
+			__( 'New Card Earnings', 'commercestore' )                => $new_cards_earnings,
+			__( 'Existing Card Earnings', 'commercestore' )  => $existing_cards_earnings,
+			__( 'New Card Purchases', 'commercestore' )      => $new_cards_counts,
+			__( 'Existing Card Purchases', 'commercestore' ) => $existing_cards_counts,
 		);
 
 		$new_earnings_max      = max( wp_list_pluck( $new_cards_earnings, 1 ) );
@@ -322,7 +322,7 @@ class CS_Stripe_Reports {
 		<?php do_action( 'cs_subscription_reports_graph_before' ); ?>
 		<div class="metabox-holder">
 			<div class="postbox">
-				<h3><span><?php _e( 'Stripe Card Types Report', 'csx' ); ?></span></h3>
+				<h3><span><?php _e( 'Stripe Card Types Report', 'commercestore' ); ?></span></h3>
 
 				<div class="inside">
 					<?php
@@ -353,7 +353,7 @@ class CS_Stripe_Reports {
 					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'Gross earnings for period shown: ', 'csx' );
+							_e( 'Gross earnings for period shown: ', 'commercestore' );
 							echo cs_currency_filter( cs_format_amount( $new_earnings  + $existing_earnings) );
 							?>
 						</strong>
@@ -362,7 +362,7 @@ class CS_Stripe_Reports {
 					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'New card earnings: ', 'csx' );
+							_e( 'New card earnings: ', 'commercestore' );
 							echo cs_currency_filter( cs_format_amount( $new_earnings ) );
 							?>
 						</strong>
@@ -371,20 +371,20 @@ class CS_Stripe_Reports {
 					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'Existing card earnings: ', 'csx' );
+							_e( 'Existing card earnings: ', 'commercestore' );
 							echo cs_currency_filter( cs_format_amount( $existing_earnings ) );
 							?>
 						</strong>
 					</p>
 
 					<p class="cs_graph_totals">
-						<strong><?php _e( 'Total sales for period shown: ', 'csx' ); echo cs_format_amount( $new_cards + $existing_cards, false ); ?></strong>
+						<strong><?php _e( 'Total sales for period shown: ', 'commercestore' ); echo cs_format_amount( $new_cards + $existing_cards, false ); ?></strong>
 					</p>
 
 					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'Total payments with new cards: ', 'csx' );
+							_e( 'Total payments with new cards: ', 'commercestore' );
 							echo cs_format_amount( $new_cards, false );
 							?>
 						</strong>
@@ -393,7 +393,7 @@ class CS_Stripe_Reports {
 					<p class="cs_graph_totals">
 						<strong>
 							<?php
-							_e( 'Total payments with existing cards: ', 'csx' );
+							_e( 'Total payments with existing cards: ', 'commercestore' );
 							echo cs_format_amount( $existing_cards, false );
 							?>
 						</strong>

@@ -12,7 +12,7 @@ class CS_Recurring_Manual_Payments extends CS_Recurring_Gateway {
 	public function init() {
 
 		$this->id = 'manual';
-		$this->friendly_name = __( 'Manual', 'cs-recurring' );
+		$this->friendly_name = __( 'Manual', 'commercestore' );
 
 	}
 

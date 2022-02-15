@@ -60,15 +60,15 @@ function cs_stripe_js( $force_load_scripts = false ) {
 				'checkout'                       => cs_get_option( 'stripe_checkout' ) ? 'true' : 'false',
 				'store_name'                     => get_bloginfo( 'name' ),
 				'alipay'                         => cs_get_option( 'stripe_alipay' ) ? 'true' : 'false',
-				'submit_text'                    => cs_get_option( 'stripe_checkout_button_text', __( 'Next', 'csx' ) ),
+				'submit_text'                    => cs_get_option( 'stripe_checkout_button_text', __( 'Next', 'commercestore' ) ),
 				'image'                          => cs_get_option( 'stripe_checkout_image' ),
 				'zipcode'                        => cs_get_option( 'stripe_checkout_zip_code', false ) ? 'true' : 'false',
 				'billing_address'                => cs_get_option( 'stripe_checkout_billing', false ) ? 'true' : 'false',
 				'remember_me'                    => cs_get_option( 'stripe_checkout_remember', false ) ? 'true' : 'false',
-				'no_key_error'                   => __( 'Stripe publishable key missing. Please enter your publishable key in Settings.', 'csx' ),
-				'checkout_required_fields_error' => __( 'Please fill out all required fields to continue your purchase.', 'csx' ),
-				'checkout_agree_to_terms'        => __( 'Please agree to the terms to complete your purchase.', 'csx' ),
-				'generic_error'                  => __( 'Unable to complete your request. Please try again.', 'csx' ),
+				'no_key_error'                   => __( 'Stripe publishable key missing. Please enter your publishable key in Settings.', 'commercestore' ),
+				'checkout_required_fields_error' => __( 'Please fill out all required fields to continue your purchase.', 'commercestore' ),
+				'checkout_agree_to_terms'        => __( 'Please agree to the terms to complete your purchase.', 'commercestore' ),
+				'generic_error'                  => __( 'Unable to complete your request. Please try again.', 'commercestore' ),
 				'successPageUri'                 => cs_get_success_page_uri(),
 				'failurePageUri'                 => cs_get_failed_transaction_uri(),
 				'elementsOptions'                => csx_get_stripe_elements_options(),
@@ -119,7 +119,7 @@ function cs_stripe_admin_js( $payment_id  = 0 ) {
 				if( 'refunded' == $(this).val() ) {
 
 					// Localize refund label
-					var cs_stripe_refund_charge_label = "<?php echo esc_js( __( 'Refund Charge in Stripe', 'csx' ) ); ?>";
+					var cs_stripe_refund_charge_label = "<?php echo esc_js( __( 'Refund Charge in Stripe', 'commercestore' ) ); ?>";
 
 					$(this).parent().parent().append( '<input type="checkbox" id="cs_refund_in_stripe" name="cs_refund_in_stripe" value="1" style="margin-top: 0;" />' );
 					$(this).parent().parent().append( '<label for="cs_refund_in_stripe">' + cs_stripe_refund_charge_label + '</label>' );

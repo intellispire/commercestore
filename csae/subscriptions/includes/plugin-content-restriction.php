@@ -64,9 +64,9 @@ class CS_Recurring_Content_Restriction {
 			$active_only = get_post_meta( $post_id, '_cs_cr_active_only', true );
 
 			echo '<p>';
-				echo '<label for="cs_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'cs-recurring' ) . '">';
+				echo '<label for="cs_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'commercestore' ) . '">';
 					echo '<input type="checkbox" name="cs_cr_active_only" id="cs_cr_active_only" value="1"' . checked( '1', $active_only, false ) . '/>&nbsp;';
-					echo __( 'Active Subscribers Only?', 'cs-recurring' );
+					echo __( 'Active Subscribers Only?', 'commercestore' );
 				echo '</label>';
 			echo '</p>';
 
@@ -95,9 +95,9 @@ class CS_Recurring_Content_Restriction {
 
 			$active_only = get_post_meta( $post_id, '_cs_cr_active_only', true );
 			echo '<p>';
-				echo '<label for="cs_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'cs-recurring' ) . '">';
+				echo '<label for="cs_cr_active_only" title="' . __( 'Only customers with an active recurring subscription will be able to view the content.', 'commercestore' ) . '">';
 					echo '<input type="checkbox" name="cs_cr_active_only" id="cs_cr_active_only" value="1"' . checked( '1', $active_only, false ) . '/>&nbsp;';
-					echo __( 'Active Subscribers Only?', 'cs-recurring' );
+					echo __( 'Active Subscribers Only?', 'commercestore' );
 				echo '</label>';
 			echo '</p>';
 

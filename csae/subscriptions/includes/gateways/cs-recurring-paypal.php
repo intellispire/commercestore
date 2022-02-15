@@ -72,13 +72,13 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 		if( ! cs_get_option( 'paypal_email', false ) ) {
 
-			cs_set_error( 'cs_recurring_paypal_email_missing', __( 'Please enter your PayPal email address.', 'cs-recurring' ) );
+			cs_set_error( 'cs_recurring_paypal_email_missing', __( 'Please enter your PayPal email address.', 'commercestore' ) );
 
 		}
 
 		if( count( cs_get_cart_contents() ) > 1 && ! $this->can_purchase_multiple_subs() ) {
 
-			cs_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased through PayPal per checkout.', 'cs-recurring') );
+			cs_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased through PayPal per checkout.', 'commercestore') );
 
 		}
 
@@ -294,7 +294,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 		}
 
 		// Record transaction ID
-		cs_insert_payment_note( $parent_payment_id, sprintf( __( 'PayPal Subscription ID: %s', 'cs-recurring' ) , $ipn_data['subscr_id'] ) );
+		cs_insert_payment_note( $parent_payment_id, sprintf( __( 'PayPal Subscription ID: %s', 'commercestore' ) , $ipn_data['subscr_id'] ) );
 
 		$subscription = $this->get_subscription( $ipn_data );
 
@@ -312,10 +312,10 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 			$payment         = cs_get_payment( $subscription->parent_payment_id );
 			$payment->status = 'failed';
-			$payment->add_note( __( 'Payment failed due to invalid initial amount in PayPal Recurring IPN.', 'cs-recurring' ) );
+			$payment->add_note( __( 'Payment failed due to invalid initial amount in PayPal Recurring IPN.', 'commercestore' ) );
 			$payment->save();
 
-			cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid initial payment amount in IPN subscr_signup response. IPN data: %s', 'cs-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
+			cs_record_gateway_error( __( 'IPN Error', 'commercestore' ), sprintf( __( 'Invalid initial payment amount in IPN subscr_signup response. IPN data: %s', 'commercestore' ), json_encode( $ipn_data ) ), $payment->ID );
 
 			return;
 
@@ -328,10 +328,10 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 			$payment         = cs_get_payment( $subscription->parent_payment_id );
 			$payment->status = 'failed';
-			$payment->add_note( __( 'Payment failed due to invalid recurring amount in PayPal Recurring IPN.', 'cs-recurring' ) );
+			$payment->add_note( __( 'Payment failed due to invalid recurring amount in PayPal Recurring IPN.', 'commercestore' ) );
 			$payment->save();
 
-			cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid recurring payment amount in IPN subscr_signup response. IPN data: %s', 'cs-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
+			cs_record_gateway_error( __( 'IPN Error', 'commercestore' ), sprintf( __( 'Invalid recurring payment amount in IPN subscr_signup response. IPN data: %s', 'commercestore' ), json_encode( $ipn_data ) ), $payment->ID );
 
 			return;
 
@@ -389,8 +389,8 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 			// Check if the payment status is failed in the IPN.
 			if ( 'failed' === strtolower( $ipn_data['payment_status'] ) ) {
 				$payment->status = 'failed';
-				$payment->add_note( __( 'Payment failed at PayPal.', 'cs-recurring' ) );
-				$subscription->add_note( __( 'Payment processing failed at PayPal.', 'cs-recurring' ) );
+				$payment->add_note( __( 'Payment failed at PayPal.', 'commercestore' ) );
+				$subscription->add_note( __( 'Payment processing failed at PayPal.', 'commercestore' ) );
 				$payment->save();
 				$subscription->update( array( 'status' => 'failing' ) );
 
@@ -404,10 +404,10 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 			if( $paid_amount < $initial_amount ) {
 
 				$payment->status = 'failed';
-				$payment->add_note( __( 'Payment failed due to invalid amount in PayPal Recurring IPN.', 'cs-recurring' ) );
+				$payment->add_note( __( 'Payment failed due to invalid amount in PayPal Recurring IPN.', 'commercestore' ) );
 				$payment->save();
 
-				cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid payment amount in IPN subscr_payment response. IPN data: %s', 'cs-recurring' ), json_encode( $ipn_data ) ), $payment->ID );
+				cs_record_gateway_error( __( 'IPN Error', 'commercestore' ), sprintf( __( 'Invalid payment amount in IPN subscr_payment response. IPN data: %s', 'commercestore' ), json_encode( $ipn_data ) ), $payment->ID );
 
 				return;
 
@@ -430,62 +430,62 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 					case 'echeck' :
 
-						$note = __( 'Payment made via eCheck and will clear automatically in 5-8 days.', 'cs-recurring' );
+						$note = __( 'Payment made via eCheck and will clear automatically in 5-8 days.', 'commercestore' );
 						break;
 
 					case 'address' :
 
-						$note = __( 'Payment requires a confirmed customer address and must be accepted manually through PayPal.', 'cs-recurring' );
+						$note = __( 'Payment requires a confirmed customer address and must be accepted manually through PayPal.', 'commercestore' );
 
 						break;
 
 					case 'intl' :
 
-						$note = __( 'Payment must be accepted manually through PayPal due to international account regulations.', 'cs-recurring' );
+						$note = __( 'Payment must be accepted manually through PayPal due to international account regulations.', 'commercestore' );
 
 						break;
 
 					case 'multi_currency' :
 
-						$note = __( 'Payment received in non-shop currency and must be accepted manually through PayPal.', 'cs-recurring' );
+						$note = __( 'Payment received in non-shop currency and must be accepted manually through PayPal.', 'commercestore' );
 
 						break;
 
 					case 'paymentreview' :
 					case 'regulatory_review' :
 
-						$note = __( 'Payment is being reviewed by PayPal staff as high-risk or in possible violation of government regulations.', 'cs-recurring' );
+						$note = __( 'Payment is being reviewed by PayPal staff as high-risk or in possible violation of government regulations.', 'commercestore' );
 
 						break;
 
 					case 'delayed_disbursement' :
 
-						$note = __( 'The transaction has been approved and is currently awaiting funding from the bank. This typically takes less than 48 hrs.', 'cs-recurring' );
+						$note = __( 'The transaction has been approved and is currently awaiting funding from the bank. This typically takes less than 48 hrs.', 'commercestore' );
 
 						break;
 
 					case 'unilateral' :
 
-						$note = __( 'Payment was sent to non-confirmed or non-registered email address.', 'cs-recurring' );
+						$note = __( 'Payment was sent to non-confirmed or non-registered email address.', 'commercestore' );
 
 						break;
 
 					case 'upgrade' :
 
-						$note = __( 'PayPal account must be upgraded before this payment can be accepted.', 'cs-recurring' );
+						$note = __( 'PayPal account must be upgraded before this payment can be accepted.', 'commercestore' );
 
 						break;
 
 					case 'verify' :
 
-						$note = __( 'PayPal account is not verified. Verify account in order to accept this payment.', 'cs-recurring' );
+						$note = __( 'PayPal account is not verified. Verify account in order to accept this payment.', 'commercestore' );
 
 						break;
 
 					case 'other' :
 					default :
 
-						$note = __( 'Payment is pending for unknown reasons. Contact PayPal support for assistance.', 'cs-recurring' );
+						$note = __( 'Payment is pending for unknown reasons. Contact PayPal support for assistance.', 'commercestore' );
 
 						break;
 
@@ -510,7 +510,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 		if ( 'failed' === strtolower( $ipn_data['payment_status'] ) ) {
 			// The payment failed at PayPal.
 			$subscription->update( array( 'status' => 'failing' ) );
-			$subscription->add_note( __( 'Renewal payment processing failed at PayPal.', 'cs-recurring' ) );
+			$subscription->add_note( __( 'Renewal payment processing failed at PayPal.', 'commercestore' ) );
 			return;
 		}
 
@@ -524,8 +524,8 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 		// verify details
 		if( ! empty( $sub_currency ) && $currency_code != strtolower( $sub_currency ) ) {
 			// the currency code is invalid
-			$subscription->add_note( sprintf( __( 'Renewal payment processing failed due to invalid currency. Currency detected in renewal payment: %s', 'cs-recurring' ), $currency_code ) );
-			cs_record_gateway_error( __( 'IPN Error', 'cs-recurring' ), sprintf( __( 'Invalid currency in IPN response. IPN data: ', 'cs-recurring' ), json_encode( $ipn_data ) ) );
+			$subscription->add_note( sprintf( __( 'Renewal payment processing failed due to invalid currency. Currency detected in renewal payment: %s', 'commercestore' ), $currency_code ) );
+			cs_record_gateway_error( __( 'IPN Error', 'commercestore' ), sprintf( __( 'Invalid currency in IPN response. IPN data: ', 'commercestore' ), json_encode( $ipn_data ) ) );
 			return;
 		}
 
@@ -687,7 +687,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 			return $post_id;
 		}
 
-		$message = __( 'PayPal Standard requires recurring times to be set to 0 for indefinite subscriptions or a minimum value of 2 and a maximum value of 52 for limited subscriptions.', 'cs-recurring' );
+		$message = __( 'PayPal Standard requires recurring times to be set to 0 for indefinite subscriptions or a minimum value of 2 and a maximum value of 52 for limited subscriptions.', 'commercestore' );
 
 		if ( cs_has_variable_prices( $post_id ) ) {
 			$prices = cs_get_variable_prices( $post_id );
@@ -697,7 +697,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 					//PayPal download allow times of "1" or above "52"
 					//https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
 					if ( $time == 1  || $time >= 53 ) {
-						wp_die( $message, __( 'Error', 'cs-recurring' ), array( 'response' => 400 ) );
+						wp_die( $message, __( 'Error', 'commercestore' ), array( 'response' => 400 ) );
 					}
 				}
 			}
@@ -705,7 +705,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 			if ( CS_Recurring()->is_recurring( $post_id ) ) {
 				$time = CS_Recurring()->get_times_single( $post_id );
 				if ( $time == 1  || $time >= 53 ) {
-					wp_die( $message, __( 'Error', 'cs-recurring' ), array( 'response' => 400 ) );
+					wp_die( $message, __( 'Error', 'commercestore' ), array( 'response' => 400 ) );
 				}
 			}
 		}
@@ -758,7 +758,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 						// Cancel subscription
 						$this->cancel( $subscription, true );
 						$subscription->cancel();
-						$payment->add_note( sprintf( __( 'Subscription %d cancelled.', 'cs-recurring' ), $subscription->id ) );
+						$payment->add_note( sprintf( __( 'Subscription %d cancelled.', 'commercestore' ), $subscription->id ) );
 
 					}
 
@@ -981,7 +981,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 			'VERSION'   => '124',
 			'METHOD'    => 'BillOutstandingAmount',
 			'PROFILEID' => $subscription->profile_id,
-			'NOTE'      => __( 'Retry initiated from CommerceStore Recurring', 'cs-recurring' )
+			'NOTE'      => __( 'Retry initiated from CommerceStore Recurring', 'commercestore' )
 		);
 
 		$error_msg = '';
@@ -1089,12 +1089,12 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 		$creds = cs_recurring_get_paypal_api_credentials();
 		if( empty( $creds['username'] ) || empty( $creds['password'] ) || empty( $creds['password'] ) ) {
-			$ret['error'] = new WP_Error( 'missing_api_credentials', __( 'Missing PayPal API credentials', 'cs-recurring' ) );
+			$ret['error'] = new WP_Error( 'missing_api_credentials', __( 'Missing PayPal API credentials', 'commercestore' ) );
 		}
 
 		if( ! $subscription->id > 0 ) {
 
-			$ret['error'] = new WP_Error( 'invalid_subscription', __( 'Invalid subscription object supplied', 'cs-recurring' ) );
+			$ret['error'] = new WP_Error( 'invalid_subscription', __( 'Invalid subscription object supplied', 'commercestore' ) );
 
 		} else {
 
@@ -1126,11 +1126,11 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 					}
 
 					if( empty( $code ) || 200 !== (int) $code ) {
-						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Non 200 response code. Response code was: %s', 'cs-recurring' ), $code ) );
+						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Non 200 response code. Response code was: %s', 'commercestore' ), $code ) );
 					}
 
 					if( empty( $message ) || 'OK' !== $message ) {
-						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Response message not okay. Response message was: %s', 'cs-recurring' ), $message ) );
+						$ret['error'] = new WP_Error( 'paypal_api_error', sprintf( __( 'Response message not okay. Response message was: %s', 'commercestore' ), $message ) );
 					}
 
 					if( isset( $body['ACK'] ) && 'failure' === strtolower( $body['ACK'] ) ) {
@@ -1149,7 +1149,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 
 			} else {
 
-				$ret['error'] = new WP_Error( 'missing_profile_id', __( 'No profile_id set on subscription object', 'cs-recurring' ) );
+				$ret['error'] = new WP_Error( 'missing_profile_id', __( 'No profile_id set on subscription object', 'commercestore' ) );
 
 			}
 

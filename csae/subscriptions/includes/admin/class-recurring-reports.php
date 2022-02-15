@@ -43,7 +43,7 @@ class CS_Recurring_Reports {
 			$label   = $options[ $dates['range'] ];
 
 			$reports->add_report( 'recurring_subscription_renewals', array(
-				'label'     => __( 'Subscription Renewals', 'cs-recurring' ),
+				'label'     => __( 'Subscription Renewals', 'commercestore' ),
 				'icon'      => 'chart-area', // @todo is there a better one?
 				'priority'  => 60,
 				'endpoints' => array(
@@ -61,7 +61,7 @@ class CS_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_number', array(
-				'label' => __( 'Number of Renewals', 'cs-recurring' ),
+				'label' => __( 'Number of Renewals', 'commercestore' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => 'cs_recurring_renewals_number_callback',
@@ -73,7 +73,7 @@ class CS_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_refunded_number', array(
-				'label' => __( 'Number of Refunded Renewals', 'cs-recurring' ),
+				'label' => __( 'Number of Refunded Renewals', 'commercestore' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => 'cs_recurring_renewals_refunded_number_callback',
@@ -85,7 +85,7 @@ class CS_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_gross_earnings', array(
-				'label' => __( 'Gross Renewal Earnings', 'cs-recurring' ),
+				'label' => __( 'Gross Renewal Earnings', 'commercestore' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => function() {
@@ -99,7 +99,7 @@ class CS_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_refunded_amount', array(
-				'label' => __( 'Refunded Renewals', 'cs-recurring' ),
+				'label' => __( 'Refunded Renewals', 'commercestore' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => function() {
@@ -113,7 +113,7 @@ class CS_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_net_earnings', array(
-				'label' => __( 'Net Renewal Earnings', 'cs-recurring' ),
+				'label' => __( 'Net Renewal Earnings', 'commercestore' ),
 				'views' => array(
 					'tile' => array(
 						'data_callback' => function() {
@@ -129,7 +129,7 @@ class CS_Recurring_Reports {
 			) );
 
 			$reports->register_endpoint( 'recurring_subscription_renewals_chart', array(
-				'label' => __( 'Subscription Renewals', 'cs-recurring' ),
+				'label' => __( 'Subscription Renewals', 'commercestore' ),
 				'views' => array(
 					'chart' => array(
 						'data_callback' => 'CS_Recurring_Reports_Chart::get_chart_data',
@@ -137,7 +137,7 @@ class CS_Recurring_Reports {
 						'options'       => array(
 							'datasets' => array(
 								'renewals' => array(
-									'label'                => __( 'Renewals', 'cs-recurring' ),
+									'label'                => __( 'Renewals', 'commercestore' ),
 									'borderColor'          => 'rgb(237,194,64)',
 									'backgroundColor'      => 'rgba(237,194,64,0.2)',
 									'fill'                 => true,
@@ -149,7 +149,7 @@ class CS_Recurring_Reports {
 									'pointBackgroundColor' => 'rgb(255,255,255)',
 								),
 								'refunds' => array(
-									'label'                => __( 'Refunds', 'cs-recurring' ),
+									'label'                => __( 'Refunds', 'commercestore' ),
 									'borderColor'          => 'rgb(175,216,248)',
 									'backgroundColor'      => 'rgba(175,216,248,0.05)',
 									'fill'                 => true,
@@ -161,7 +161,7 @@ class CS_Recurring_Reports {
 									'pointBackgroundColor' => 'rgb(255,255,255)',
 								),
 								'earnings' => array(
-									'label'                => __( 'Earnings', 'cs-recurring' ),
+									'label'                => __( 'Earnings', 'commercestore' ),
 									'borderColor'          => 'rgb(203,75,75)',
 									'backgroundColor'      => 'rgba(203,75,75,0.05)',
 									'fill'                 => true,
@@ -172,7 +172,7 @@ class CS_Recurring_Reports {
 									'pointBackgroundColor' => 'rgb(255,255,255)',
 								),
 								'refunded_earnings' => array(
-									'label'                => __( 'Refunded Earnings', 'cs-recurring' ),
+									'label'                => __( 'Refunded Earnings', 'commercestore' ),
 									'borderColor'          => 'rgb(77,167,77)',
 									'backgroundColor'      => 'rgba(77,167,77,0.05)',
 									'fill'                 => true,
@@ -201,7 +201,7 @@ class CS_Recurring_Reports {
 	 * @return mixed
 	 */
 	public function add_subscriptions_reports_view( $views ) {
-		$views['subscriptions'] = __( 'Subscription Renewals', 'cs-recurring' );
+		$views['subscriptions'] = __( 'Subscription Renewals', 'commercestore' );
 
 		return $views;
 	}
@@ -295,7 +295,7 @@ class CS_Recurring_Reports {
 	public function display_subscriptions_report() {
 
 		if ( ! current_user_can( 'view_shop_reports' ) ) {
-			wp_die( __( 'You do not have permission to view this data', 'cs-recurring' ), __( 'Error', 'cs-recurring' ), array( 'response' => 401 ) );
+			wp_die( __( 'You do not have permission to view this data', 'commercestore' ), __( 'Error', 'commercestore' ), array( 'response' => 401 ) );
 		}
 
 		// Retrieve the queried dates
@@ -481,10 +481,10 @@ class CS_Recurring_Reports {
 		}
 
 		$data = array(
-			__( 'Renewals', 'cs-recurring' )          => $subscription_count,
-			__( 'Refunds', 'cs-recurring' )           => $refunded_counter,
-			__( 'Earnings', 'cs-recurring' )          => $earnings_data,
-			__( 'Refunded Earnings', 'cs-recurring' ) => $refunds_data,
+			__( 'Renewals', 'commercestore' )          => $subscription_count,
+			__( 'Refunds', 'commercestore' )           => $refunded_counter,
+			__( 'Earnings', 'commercestore' )          => $earnings_data,
+			__( 'Refunded Earnings', 'commercestore' ) => $refunds_data,
 		);
 
 		$renewals_earnings_max = max( wp_list_pluck( $earnings_data, 1 ) );
@@ -503,7 +503,7 @@ class CS_Recurring_Reports {
 		<?php do_action( 'cs_subscription_reports_graph_before' ); ?>
 		<div class="metabox-holder">
 			<div class="postbox">
-				<h3><span><?php _e( 'Subscription Renewals', 'cs-recurring' ); ?></span></h3>
+				<h3><span><?php _e( 'Subscription Renewals', 'commercestore' ); ?></span></h3>
 
 				<div class="inside">
 					<?php
@@ -559,7 +559,7 @@ class CS_Recurring_Reports {
 					</p>
 
 					<p class="cs_graph_totals">
-						<strong><?php _e( 'Total renewals for period shown: ', 'cs-recurring' ); echo cs_format_amount( $subscriptions_totals, false ); ?></strong>
+						<strong><?php _e( 'Total renewals for period shown: ', 'commercestore' ); echo cs_format_amount( $subscriptions_totals, false ); ?></strong>
 					</p>
 
 					<p class="cs_graph_totals">
@@ -609,7 +609,7 @@ class CS_Recurring_Reports {
 		}
 
 		if ( 'cs_subscription' === cs_get_payment_status( $payment_id ) ) {
-			return __( 'Renewal', 'cs-recurring' );
+			return __( 'Renewal', 'commercestore' );
 		}
 
 		return $value;

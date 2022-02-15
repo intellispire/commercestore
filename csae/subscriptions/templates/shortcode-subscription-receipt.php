@@ -25,7 +25,7 @@ if ( empty( $subscriptions ) ) {
 }
 ?>
 
-<h3><?php esc_html_e( 'Subscription Details', 'cs-recurring' ); ?></h3>
+<h3><?php esc_html_e( 'Subscription Details', 'commercestore' ); ?></h3>
 
 <?php do_action( 'cs_subscription_receipt_before_table', $payment ); ?>
 
@@ -33,11 +33,11 @@ if ( empty( $subscriptions ) ) {
 	<thead>
 	<tr>
 		<?php do_action( 'cs_subscription_receipt_header_before' ); ?>
-		<th><?php _e( 'Subscription', 'cs-recurring' ); ?></th>
-		<th><?php _e( 'Renewal Date', 'cs-recurring' ); ?></th>
-		<th><?php _e( 'Initial Amount', 'cs-recurring' ); ?></th>
-		<th><?php _e( 'Times Billed', 'cs-recurring' ); ?></th>
-		<th><?php _e( 'Status', 'cs-recurring' ); ?></th>
+		<th><?php _e( 'Subscription', 'commercestore' ); ?></th>
+		<th><?php _e( 'Renewal Date', 'commercestore' ); ?></th>
+		<th><?php _e( 'Initial Amount', 'commercestore' ); ?></th>
+		<th><?php _e( 'Times Billed', 'commercestore' ); ?></th>
+		<th><?php _e( 'Status', 'commercestore' ); ?></th>
 		<?php do_action( 'cs_subscription_receipt_header_after' ); ?>
 	</tr>
 	</thead>
@@ -45,7 +45,7 @@ if ( empty( $subscriptions ) ) {
 	<?php foreach ( $subscriptions as $subscription ) :
 		//Set vars
 		$title        = get_the_title( $subscription->product_id );
-		$renewal_date = ! empty( $subscription->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $subscription->expiration ) ) : __( 'N/A', 'cs-recurring' );
+		$renewal_date = ! empty( $subscription->expiration ) ? date_i18n( get_option( 'date_format' ), strtotime( $subscription->expiration ) ) : __( 'N/A', 'commercestore' );
 		$frequency    = CS_Recurring()->get_pretty_subscription_frequency( $subscription->period );
 		?>
 		<tr>
@@ -55,7 +55,7 @@ if ( empty( $subscriptions ) ) {
 			</td>
 			<td>
 				<?php if( 'trialling' == $subscription->status ) : ?>
-					<?php _e( 'Trialling Until:', 'cs-recurring' ); ?>
+					<?php _e( 'Trialling Until:', 'commercestore' ); ?>
 				<?php endif; ?>
 				<span class="cs_subscription_renewal_date"><?php echo $renewal_date; ?></span>
 			</td>
@@ -63,7 +63,7 @@ if ( empty( $subscriptions ) ) {
 				<span class="cs_subscription_initial_amount"><?php echo cs_currency_filter( cs_format_amount( $subscription->initial_amount ), cs_get_payment_currency_code( $payment->ID ) ); ?></span>
 			</td>
 			<td>
-				<span class="cs_subscription_times_billed"><?php echo $subscription->get_times_billed() . ' / ' . ( ( $subscription->bill_times == 0 ) ? __( 'Until cancelled', 'cs-recurring' ) : $subscription->bill_times ); ?></span>
+				<span class="cs_subscription_times_billed"><?php echo $subscription->get_times_billed() . ' / ' . ( ( $subscription->bill_times == 0 ) ? __( 'Until cancelled', 'commercestore' ) : $subscription->bill_times ); ?></span>
 			</td>
 			<td>
 				<span class="cs_subscription_status"><?php echo $subscription->get_status_label(); ?></span>

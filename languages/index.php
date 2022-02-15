@@ -1,6 +1,6 @@
 <?php
 /**
- * Do not put custom translations here. They will be deleted on Easy Digital Downloads updates.
+ * Do not put custom translations here. They will be deleted on updates
  *
- * Keep custom EDD translations in /wp-content/languages/edd/
+ * Keep custom EDD translations in /wp-content/languages/cs/
  */

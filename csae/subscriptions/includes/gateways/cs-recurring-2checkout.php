@@ -21,7 +21,7 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 	public function init() {
 
 		$this->id            = '2checkout';
-		$this->friendly_name = __( '2Checkout', 'cs-recurring' );
+		$this->friendly_name = __( '2Checkout', 'commercestore' );
 		$this->credentials   = $this->get_api_credentials();
 		$this->offsite       = true;
 
@@ -42,13 +42,13 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 
 		if( empty( $this->credentials['tco_secret_word'] ) || empty( $this->credentials['tco_account_number'] ) ) {
 
-			cs_set_error( 'missing_account_number', __( 'You must enter your account number and secret word in settings', 'cs-recurring' ) );
+			cs_set_error( 'missing_account_number', __( 'You must enter your account number and secret word in settings', 'commercestore' ) );
 
 		}
 
 		if( count( cs_get_cart_contents() ) > 1 && ! $this->can_purchase_multiple_subs() ) {
 
-			cs_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased at a time through 2Checkout.', 'cs-recurring') );
+			cs_set_error( 'subscription_invalid', __( 'Only one subscription may be purchased at a time through 2Checkout.', 'commercestore') );
 
 		}
 
@@ -66,7 +66,7 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 		foreach( $this->subscriptions as $key => $subscription ) {
 
 			if( ! empty( $subscription['has_trial'] ) ) {
-				cs_set_error( 'free_trial_not_supported', __( 'Free trials are not supported by 2Checkout.', 'cs-recurring' ) );
+				cs_set_error( 'free_trial_not_supported', __( 'Free trials are not supported by 2Checkout.', 'commercestore' ) );
 				return;
 			}
 
@@ -311,7 +311,7 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 							$initial_payment = cs_get_payment( $payment_id );
 
 							$initial_payment->update_status( 'revoked' );
-							$initial_payment->add_note( __( '2Checkout fraud review failed.', 'cs-recurring' ) );
+							$initial_payment->add_note( __( '2Checkout fraud review failed.', 'commercestore' ) );
 
 							break;
 
@@ -326,7 +326,7 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 							$initial_payment = cs_get_payment( $payment_id );
 
 							$initial_payment->update_status( 'pending' );
-							$initial_payment->add_note( __( '2Checkout fraud review in progress.', 'cs-recurring' ) );
+							$initial_payment->add_note( __( '2Checkout fraud review in progress.', 'commercestore' ) );
 							break;
 
 						case 'pass':
@@ -340,7 +340,7 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 							$initial_payment = cs_get_payment( $payment_id );
 
 							$initial_payment->update_status( 'complete' );
-							$initial_payment->add_note( __( '2Checkout fraud review passed.', 'cs-recurring' ) );
+							$initial_payment->add_note( __( '2Checkout fraud review passed.', 'commercestore' ) );
 							break;
 
 					}
@@ -367,7 +367,7 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 							$initial_payment = cs_get_payment( $payment_id );
 
 							$initial_payment->update_status( 'complete' );
-							$initial_payment->add_note( __( '2Checkout Invoice status set to deposited.', 'cs-recurring' ) );
+							$initial_payment->add_note( __( '2Checkout Invoice status set to deposited.', 'commercestore' ) );
 							break;
 
 					}
@@ -434,7 +434,7 @@ class CS_Recurring_2Checkout extends CS_Recurring_Gateway {
 						$sub->cancel();
 
 						$initial_payment->update_status( 'refunded' );
-						$initial_payment->add_note( __( 'Payment refunded in 2Checkout.', 'cs-recurring' ) );
+						$initial_payment->add_note( __( 'Payment refunded in 2Checkout.', 'commercestore' ) );
 
 					}
 

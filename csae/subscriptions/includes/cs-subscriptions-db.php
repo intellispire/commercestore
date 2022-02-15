@@ -121,7 +121,7 @@ class CS_Subscriptions_DB extends CS_DB {
 		if( isset( $args['bill_times'] ) ) {
 
 			if ( ! is_numeric( $args['bill_times'] ) ) {
-				trigger_error( __( 'The bill_times argument should be a number but was not.', 'cs-recurring' ) );
+				trigger_error( __( 'The bill_times argument should be a number but was not.', 'commercestore' ) );
 			} else {
 				$where .= " AND t1.bill_times {$args['bill_times_operator']} '{$args['bill_times']}'";
 			}
@@ -439,7 +439,7 @@ class CS_Subscriptions_DB extends CS_DB {
 		if( isset( $args['bill_times'] ) ) {
 
 			if ( ! is_numeric( $args['bill_times'] ) ) {
-				trigger_error( __( 'The bill_times argument should be a number but was not.', 'cs-recurring' ) );
+				trigger_error( __( 'The bill_times argument should be a number but was not.', 'commercestore' ) );
 			} else {
 				$where .= " AND t1.bill_times {$args['bill_times_operator']} '{$args['bill_times']}'";
 			}
