@@ -12,7 +12,8 @@
         "disable-tls": true,
         "secure-http": false,
         "allow-plugins": {
-            "composer/installers": true
+            "composer/installers": true,
+            "composer/package-versions-deprecated": true
         }
     },
     "require": {
