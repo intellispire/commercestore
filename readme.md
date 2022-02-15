@@ -36,4 +36,4 @@ There are various ways you can contribute:
 4. Provide feedback and suggestions on [enhancements](https://github.com/intellispire/commercestore/issues?direction=desc&labels=Enhancement&page=1&sort=created&state=open)
 
 ## Kudos ##
-This plugin was created from a pre-release version of [CommerceStore](https://commercestore.com) Thank you to Pippin and everyone who has contributed to the ongoing development of CS.
+This plugin was created from a pre-release version of [Easy Digital Downloads](https://easydigitaldownloads.com) Thank you to Pippin and everyone who has contributed to the ongoing development of the software.
