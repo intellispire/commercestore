@@ -13,11 +13,15 @@ More information can be found at [commercestore.com](https://commercestore.com/)
 For detailed setup instructions, visit the official [Documentation](https://commercestore.com/documentation/) page.
 
 1. You can clone the GitHub repository: `https://github.com/commercestore/commercestore.git`
-2. Or download it directly as a ZIP file: `https://github.com/commercestore/commercestore/archive/min.zip`
+2. Or download it directly as a ZIP file: `https://github.com/commercestore/commercestore/archive/main.zip`
 
 This will download the latest developer copy of CommerceStore.
 
 Once downloaded, you must cd into the commercestore directory and run `composer install` in order to install the dependencies.
+
+To create a stand-alone plugin, build with npm: `npm install && npm run build`;
+
+The commercestore.zip is then created in the build/ directory.
 
 ## Bugs ##
 If you find an issue, let us know [here](https://github.com/intellispire/commercestore/issues?state=open)!
