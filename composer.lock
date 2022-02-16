@@ -279,7 +279,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "dev-main",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -300,7 +300,6 @@
             "suggest": {
                 "ext-ctype": "For best performance"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -342,7 +341,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/main"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.24.0"
             },
             "funding": [
                 {
@@ -3419,12 +3418,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast/PHPUnit-Polyfills.git",
-                "reference": "8a5d6e4a692aa04d1ccccc537dcfd7ebe0877e3c"
+                "reference": "5cd00434959285ac65b90071d88345d514c6b06a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/8a5d6e4a692aa04d1ccccc537dcfd7ebe0877e3c",
-                "reference": "8a5d6e4a692aa04d1ccccc537dcfd7ebe0877e3c",
+                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/5cd00434959285ac65b90071d88345d514c6b06a",
+                "reference": "5cd00434959285ac65b90071d88345d514c6b06a",
                 "shasum": ""
             },
             "require": {
@@ -3473,7 +3472,7 @@
                 "issues": "https://github.com/Yoast/PHPUnit-Polyfills/issues",
                 "source": "https://github.com/Yoast/PHPUnit-Polyfills"
             },
-            "time": "2021-11-11T23:58:02+00:00"
+            "time": "2021-12-25T00:24:50+00:00"
         }
     ],
     "aliases": [],
@@ -3489,5 +3488,5 @@
         "php": ">=7.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }
