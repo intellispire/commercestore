@@ -565,7 +565,7 @@ function cs_get_payment_status( $order, $return_label = false ) {
 		$keys      = cs_get_payment_status_keys();
 		$found_key = array_search( strtolower( $status ), $keys );
 
-		if ($found_key == false) {
+		if ($found_key === false) {
 			return false;
 		}
 
