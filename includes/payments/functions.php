@@ -530,6 +530,9 @@ function cs_check_for_existing_payment( $order_id ) {
  * @todo: FIXME - the tests for this are broken. Is it the test or the function?
  */
 function cs_get_payment_status( $order, $return_label = false ) {
+
+	\Debug::trace();
+
 	if ( is_numeric( $order ) ) {
 		$order = cs_get_order( $order );
 
@@ -540,7 +543,7 @@ function cs_get_payment_status( $order, $return_label = false ) {
 
 	if ( $order instanceof CS_Payment ) {
 		/** @var CS_Payment $order */
-		$order = cs_get_order( $order->id );
+		$order = cs_get_order( $order->ID );
 	}
 
 	if ( $order instanceof WP_Post ) {
@@ -566,7 +569,9 @@ function cs_get_payment_status( $order, $return_label = false ) {
 		$status    = $found_key && array_key_exists( $found_key, $keys ) ? $keys[ $found_key ] : false;
 	}
 
-	return ! empty( $status ) ? $status : false;
+	$retval = (! empty( $status ) ? $status : false);
+	\Debug::trend($retval);
+	return $retval;
 }
 
 /**
