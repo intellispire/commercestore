@@ -530,6 +530,7 @@ function cs_check_for_existing_payment( $order_id ) {
  * @todo: FIXME - the tests for this are broken. Is it the test or the function?
  */
 function cs_get_payment_status( $order, $return_label = false ) {
+
 	if ( is_numeric( $order ) ) {
 		$order = cs_get_order( $order );
 
@@ -563,10 +564,16 @@ function cs_get_payment_status( $order, $return_label = false ) {
 	} else {
 		$keys      = cs_get_payment_status_keys();
 		$found_key = array_search( strtolower( $status ), $keys );
-		$status    = $found_key && array_key_exists( $found_key, $keys ) ? $keys[ $found_key ] : false;
+
+		if ($found_key === false) {
+			return false;
+		}
+
+		$status    = array_key_exists( $found_key, $keys ) ? $keys[ $found_key ] : false;
 	}
 
-	return ! empty( $status ) ? $status : false;
+	return $status;
+
 }
 
 /**
