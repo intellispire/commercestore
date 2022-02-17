@@ -541,7 +541,7 @@ function cs_get_payment_status( $order, $return_label = false ) {
 
 	if ( $order instanceof CS_Payment ) {
 		/** @var CS_Payment $order */
-		$order = cs_get_order( $order->ID );
+		$order = cs_get_order( $order->id );
 	}
 
 	if ( $order instanceof WP_Post ) {
