@@ -530,7 +530,8 @@ class CS_Recurring_Gateway {
 
 		do_action( 'cs_recurring_pre_create_payment_profiles', $this );
 
-		if ( ! is_user_logged_in() ) {
+		// VERIFY: Will this work with all gateways
+		if ( ! is_user_logged_in() && ! class_exists( 'CS_Auto_Register' )) {
 			cs_set_error( 'cs_recurring_login', __( 'You must be logged in to purchase a subscription', 'commercestore' ) );
 
 			$this->handle_errors( cs_get_errors() );
