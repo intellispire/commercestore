@@ -50,7 +50,7 @@ add_filter( 'manage_edit-download_columns', 'cs_download_columns' );
 function cs_render_download_columns( $column_name, $post_id ) {
 
 	// Bail if not a download
-	if ( get_post_type( $post_id ) !== 'download' ) {
+	if ( get_post_type( $post_id ) !== CS_POST_TYPE ) {
 		return;
 	}
 
@@ -127,7 +127,7 @@ add_filter( 'manage_edit-download_sortable_columns', 'cs_sortable_download_colum
  */
 function cs_sort_downloads( $vars ) {
 	// Check if we're viewing the "download" post type
-	if ( isset( $vars['post_type'] ) && 'download' == $vars['post_type'] ) {
+	if ( isset( $vars['post_type'] ) && CS_POST_TYPE == $vars['post_type'] ) {
 		// Check if 'orderby' is set to "sales"
 		if ( isset( $vars['orderby'] ) && 'sales' == $vars['orderby'] ) {
 			$vars = array_merge(
@@ -173,7 +173,7 @@ function cs_sort_downloads( $vars ) {
  * @return array       Array of all sort variables
  */
 function cs_filter_downloads( $vars ) {
-	if ( isset( $vars['post_type'] ) && 'download' == $vars['post_type'] ) {
+	if ( isset( $vars['post_type'] ) && CS_POST_TYPE == $vars['post_type'] ) {
 
 		// If an author ID was passed, use it
 		if ( isset( $_REQUEST['author'] ) && ! current_user_can( 'view_shop_reports' ) ) {
@@ -220,8 +220,8 @@ add_action( 'load-edit.php', 'cs_download_load', 9999 );
 function cs_add_download_filters() {
 	global $typenow;
 
-	// Checks if the current post type is 'download'
-	if ( $typenow !== 'download') {
+	// Checks if the current post type is CS_POST_TYPE
+	if ( $typenow !== CS_POST_TYPE) {
 		return;
 	}
 
@@ -272,7 +272,7 @@ add_action( 'restrict_manage_posts', 'cs_add_download_filters', 100 );
 function cs_remove_month_filter( $dates ) {
 	global $typenow;
 
-	if ( 'download' === $typenow ) {
+	if ( CS_POST_TYPE === $typenow ) {
 		$dates = array();
 	}
 
@@ -291,7 +291,7 @@ add_filter( 'months_dropdown_results', 'cs_remove_month_filter', 99 );
 function cs_price_field_quick_edit( $column_name, $post_type ) {
 
 	// Bail if not price or download
-	if ( $column_name !== 'price' || $post_type !== 'download' ) {
+	if ( $column_name !== 'price' || $post_type !== CS_POST_TYPE ) {
 		return;
 	} ?>
 
@@ -321,7 +321,7 @@ add_action( 'bulk_edit_custom_box',  'cs_price_field_quick_edit', 10, 2 );
  * @return void
  */
 function cs_price_save_quick_edit( $post_id ) {
-	if ( ! isset( $_POST['post_type']) || 'download' !== $_POST['post_type'] ) {
+	if ( ! isset( $_POST['post_type']) || CS_POST_TYPE !== $_POST['post_type'] ) {
 		return;
 	}
 

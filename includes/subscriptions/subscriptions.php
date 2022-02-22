@@ -1556,9 +1556,9 @@ final class CS_Recurring {
 
 		$query_has_recurring = true;
 
-		if( ! empty( $query->initial_args['download'] ) ) {
+		if( ! empty( $query->initial_args[CS_POST_TYPE] ) ) {
 			$query_has_recurring = false;
-			$download            = $query->initial_args['download'];
+			$download            = $query->initial_args[CS_POST_TYPE];
 
 			if ( ! is_array( $download ) && strpos( $download, ',' ) ) {
 				$download = explode( ',', $download );
@@ -1623,7 +1623,7 @@ final class CS_Recurring {
 		     ( 'page' === $post->post_type && has_shortcode( $post->post_content, 'cs_downloads' ) ) ||
 		     ( 'page' === $post->post_type && has_shortcode( $post->post_content, 'downloads' ) ) ||
 		     ( 'page' === $post->post_type && has_shortcode( $post->post_content, 'cs_subscriptions' ) ) ||
-		       'download' === $post->post_type )
+		       CS_POST_TYPE === $post->post_type )
 		   ) ) {
 			$load_js = true;
 		}

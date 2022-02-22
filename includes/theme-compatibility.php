@@ -27,14 +27,14 @@ defined( 'ABSPATH' ) || exit;
  */
 function cs_responsive_download_post_class( $classes = array(), $class = '', $post_id = 0 ) {
 	if (
-		! is_singular( 'download' ) &&
-		! is_post_type_archive( 'download' ) &&
+		! is_singular( CS_POST_TYPE ) &&
+		! is_post_type_archive( CS_POST_TYPE ) &&
 		! is_tax( 'download_category' ) &&
 		! is_tax( 'download_tag' )
 	)
 		return $classes;
 
-	if ( ( $key = array_search( 'download', $classes ) ) )
+	if ( ( $key = array_search( CS_POST_TYPE, $classes ) ) )
 		unset( $classes[ $key ] );
 
 	return $classes;

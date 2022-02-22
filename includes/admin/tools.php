@@ -1659,7 +1659,7 @@ function cs_redirect_sales_log() {
 		);
 
 		$args_to_remap = array(
-			'download'   => 'product-id',
+			CS_POST_TYPE   => 'product-id',
 			'start-date' => 'start-date',
 			'end-date'   => 'end-date'
 		);

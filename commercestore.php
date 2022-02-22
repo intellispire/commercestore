@@ -38,10 +38,10 @@ defined( 'ABSPATH' ) || exit;
 
 const CS_FEATURE_VARIABLE_PRICE = true;
 const CS_FEATURE_MARKETING = false;
-const CS_DEFAULT_SLUG = 'products'; // Override with the CS_SLUG constant
+const CS_DEFAULT_SLUG = 'store'; // Override with the CS_SLUG constant
 
 // @todo replace hardcoding of post_type and taxonomies with the following constants all throughout the codebase
-const CS_POST_TYPE = 'download';
+const CS_POST_TYPE = 'csproduct';
 const CS_TAG_TYPE = CS_POST_TYPE . '_tag';
 const CS_CAT_TYPE = CS_POST_TYPE . '_category';
 

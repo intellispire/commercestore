@@ -94,7 +94,7 @@ class Structured_Data {
 	 * @return string
 	 */
 	public function generate_structured_data( $context = false, $args = null ) {
-		if ( is_singular( 'download' ) || 'download' === $context ) {
+		if ( is_singular( CS_POST_TYPE ) || CS_POST_TYPE === $context ) {
 			$this->generate_download_data( $args );
 		}
 

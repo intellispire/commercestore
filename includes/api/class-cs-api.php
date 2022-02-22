@@ -1100,7 +1100,7 @@ class CS_API {
 			$products['products'] = array();
 
 			$parameters = array(
-				'post_type'        => 'download',
+				'post_type'        => CS_POST_TYPE,
 				'posts_per_page'   => $this->per_page(),
 				'suppress_filters' => true,
 				'paged'            => $this->get_paged(),
@@ -1120,7 +1120,7 @@ class CS_API {
 				}
 			}
 		} else {
-			if ( get_post_type( $args['product'] ) == 'download' ) {
+			if ( get_post_type( $args['product'] ) == CS_POST_TYPE ) {
 				$product_info = get_post( $args['product'] );
 
 				$products['products'][0] = $this->get_product_data( $product_info );
@@ -1301,14 +1301,14 @@ class CS_API {
 					}
 				}
 			} elseif ( $args['product'] == 'all' ) {
-				$products = get_posts( array( 'post_type' => 'download', 'nopaging' => true ) );
+				$products = get_posts( array( 'post_type' => CS_POST_TYPE, 'nopaging' => true ) );
 				$i        = 0;
 				foreach ( $products as $product_info ) {
 					$sales['sales'][ $i ] = array( $product_info->post_name => cs_get_download_sales_stats( $product_info->ID ) );
 					$i ++;
 				}
 			} else {
-				if ( get_post_type( $args['product'] ) == 'download' ) {
+				if ( get_post_type( $args['product'] ) == CS_POST_TYPE ) {
 					$product_info      = get_post( $args['product'] );
 					$sales['sales'][0] = array( $product_info->post_name => cs_get_download_sales_stats( $args['product'] ) );
 				} else {
@@ -1417,7 +1417,7 @@ class CS_API {
 					}
 				}
 			} elseif ( $args['product'] == 'all' ) {
-				$products = get_posts( array( 'post_type' => 'download', 'nopaging' => true ) );
+				$products = get_posts( array( 'post_type' => CS_POST_TYPE, 'nopaging' => true ) );
 
 				$i = 0;
 				foreach ( $products as $product_info ) {
@@ -1425,7 +1425,7 @@ class CS_API {
 					$i ++;
 				}
 			} else {
-				if ( get_post_type( $args['product'] ) == 'download' ) {
+				if ( get_post_type( $args['product'] ) == CS_POST_TYPE ) {
 					$product_info            = get_post( $args['product'] );
 					$earnings['earnings'][0] = array( $product_info->post_name => cs_get_download_earnings_stats( $args['product'] ) );
 				} else {

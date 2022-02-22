@@ -23,7 +23,7 @@ if( !defined( 'ABSPATH' ) ) exit;
 function cs_admin_rate_us( $footer_text ) {
 	global $typenow;
 
-	if ( $typenow == 'download' ) {
+	if ( $typenow == CS_POST_TYPE ) { // VERIFY
 		$rate_text = sprintf( __( 'Thank you for using <a href="%1$s" target="_blank">CommerceStore</a>! Please <a href="%2$s" target="_blank">rate us on WordPress.org</a>', 'commercestore' ),
 			'https://commercestore.com',
 			'https://wordpress.org/support/plugin/commercestore/reviews/?rate=5#new-post'

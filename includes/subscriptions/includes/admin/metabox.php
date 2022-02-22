@@ -651,7 +651,7 @@ function cs_recurring_display_parent_payment( $payment_id = 0 ) {
 	}
 	$parent_url = add_query_arg(
 		array(
-			'post_type' => 'download',
+			'post_type' => CS_POST_TYPE,
 			'page'      => 'cs-payment-history',
 			'view'      => 'view-order-details',
 			'id'        => urlencode( $payment->parent_payment ),
@@ -660,7 +660,7 @@ function cs_recurring_display_parent_payment( $payment_id = 0 ) {
 	);
 	$sub_url    = add_query_arg(
 		array(
-			'post_type' => 'download',
+			'post_type' => CS_POST_TYPE,
 			'page'      => 'cs-subscriptions',
 			'id'        => urlencode( $sub->id ),
 		),

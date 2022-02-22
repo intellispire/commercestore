@@ -1290,7 +1290,7 @@ function filter_items( $report = false ) {
 
 	// Get form actions
 	$action = admin_url( add_query_arg( array(
-		'post_type' => 'download',
+		'post_type' => CS_POST_TYPE,
 		'page'      => 'cs-reports',
 		'view'      => get_current_report(),
 	), 'edit.php' ) );

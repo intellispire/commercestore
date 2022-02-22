@@ -154,7 +154,7 @@ function cs_get_users_purchased_products( $user = 0, $status = 'complete' ) {
 
 	$args = apply_filters( 'cs_get_users_purchased_products_args', array(
 		'include'        => $product_ids,
-		'post_type'      => 'download',
+		'post_type'      => CS_POST_TYPE,
 		'posts_per_page' => -1,
 	) );
 

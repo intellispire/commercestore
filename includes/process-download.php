@@ -22,12 +22,12 @@ defined( 'ABSPATH' ) || exit;
  * @return      void
  */
 function cs_process_download() {
-	if ( ! isset( $_GET['download_id'] ) && isset( $_GET['download'] ) ) {
-		$_GET['download_id'] = $_GET['download'];
+	if ( ! isset( $_GET['download_id'] ) && isset( $_GET[CS_POST_TYPE] ) ) {
+		$_GET['download_id'] = $_GET[CS_POST_TYPE];
 	}
 
 	$args = apply_filters( 'cs_process_download_args', array(
-		'download' => ( isset( $_GET['download_id'] ) )  ? (int) $_GET['download_id']                       : '',
+		CS_POST_TYPE => ( isset( $_GET['download_id'] ) )  ? (int) $_GET['download_id']                       : '',
 		'email'    => ( isset( $_GET['email'] ) )        ? rawurldecode( $_GET['email'] )                   : '',
 		'expire'   => ( isset( $_GET['expire'] ) )       ? rawurldecode( $_GET['expire'] )                  : '',
 		'file_key' => ( isset( $_GET['file'] ) )         ? (int) $_GET['file']                              : '',
@@ -44,12 +44,12 @@ function cs_process_download() {
 		$args = cs_process_signed_download_url( $args );
 
 		// Backfill some legacy super globals for backwards compatibility
-		$_GET['download_id']  = $args['download'];
+		$_GET['download_id']  = $args[CS_POST_TYPE];
 		$_GET['email']        = $args['email'];
 		$_GET['expire']       = $args['expire'];
 		$_GET['download_key'] = $args['key'];
 		$_GET['price_id']     = $args['price_id'];
-	} elseif ( ! empty( $args['download'] ) && ! empty( $args['key'] ) && ! empty( $args['email'] ) && ! empty( $args['expire'] ) && isset( $args['file_key'] ) ) {
+	} elseif ( ! empty( $args[CS_POST_TYPE] ) && ! empty( $args['key'] ) && ! empty( $args['email'] ) && ! empty( $args['expire'] ) && isset( $args['file_key'] ) ) {
 
 		// Validate a legacy URL without a token
 		$args = cs_process_legacy_download_url( $args );
@@ -60,13 +60,13 @@ function cs_process_download() {
 	$args['has_access'] = apply_filters( 'cs_file_download_has_access', $args['has_access'], $args['payment'], $args );
 
 	if ( $args['payment'] && $args['has_access'] ) {
-		do_action( 'cs_process_verified_download', $args['download'], $args['email'], $args['payment'], $args );
+		do_action( 'cs_process_verified_download', $args[CS_POST_TYPE], $args['email'], $args['payment'], $args );
 
 		// Determine the download method set in settings
 		$method  = cs_get_file_download_method();
 
 		// Payment has been verified, setup the download
-		$download_files = cs_get_download_files( $args['download'] );
+		$download_files = cs_get_download_files( $args[CS_POST_TYPE] );
 		$attachment_id  = ! empty( $download_files[ $args['file_key'] ]['attachment_id'] ) ? absint( $download_files[ $args['file_key'] ]['attachment_id'] ) : false;
 		$thumbnail_size = ! empty( $download_files[ $args['file_key'] ]['thumbnail_size'] ) ? sanitize_text_field( $download_files[ $args['file_key'] ]['thumbnail_size'] ) : false;
 		$requested_file = isset( $download_files[ $args['file_key'] ]['file'] ) ? $download_files[ $args['file_key'] ]['file'] : '';
@@ -157,7 +157,7 @@ function cs_process_download() {
 			$user_info['name'] = $user_data->display_name;
 		}
 
-		cs_record_download_in_log( $args['download'], $args['file_key'], $user_info, cs_get_ip(), $args['payment'], $args['price_id'] );
+		cs_record_download_in_log( $args[CS_POST_TYPE], $args['file_key'], $user_info, cs_get_ip(), $args['payment'], $args['price_id'] );
 
 		$file_extension = cs_get_file_extension( $requested_file );
 		$ctype          = cs_get_file_ctype( $file_extension );
@@ -182,7 +182,7 @@ function cs_process_download() {
 		}
 		@ini_set( 'zlib.output_compression', 'Off' );
 
-		do_action( 'cs_process_download_headers', $requested_file, $args['download'], $args['email'], $args['payment'] );
+		do_action( 'cs_process_download_headers', $requested_file, $args[CS_POST_TYPE], $args['email'], $args['payment'] );
 
 		nocache_headers();
 		header( 'Robots: none' );
@@ -831,7 +831,7 @@ function cs_readfile_chunked( $file, $retbytes = true ) {
 function cs_process_legacy_download_url( $args ) {
 
 	// Verify the payment
-	$args['payment'] = cs_verify_download_link( $args['download'], $args['key'], $args['email'], $args['expire'], $args['file_key'] );
+	$args['payment'] = cs_verify_download_link( $args[CS_POST_TYPE], $args['key'], $args['email'], $args['expire'], $args['file_key'] );
 
 	// Defaulting this to true for now because the method below doesn't work well
 	$args['has_access'] = true;
@@ -874,7 +874,7 @@ function cs_process_signed_download_url( $args ) {
 	}
 
 	$args['expire']      = $_GET['ttl'];
-	$args['download']    = $order_parts[1];
+	$args[CS_POST_TYPE]    = $order_parts[1];
 	$args['payment']     = $order_parts[0];
 	$args['file_key']    = $order_parts[2];
 	$args['price_id']    = $order_parts[3];
@@ -884,7 +884,7 @@ function cs_process_signed_download_url( $args ) {
 	// Access is granted if there's at least one `complete` order item that matches the order + download + price ID.
 	$args['has_access'] = cs_order_grants_access_to_download_files( array(
 		'order_id'   => $args['payment'],
-		'product_id' => $args['download'],
+		'product_id' => $args[CS_POST_TYPE],
 		'price_id'   => ! empty( $args['price_id'] ) ? $args['price_id'] : ''
 	) );
 

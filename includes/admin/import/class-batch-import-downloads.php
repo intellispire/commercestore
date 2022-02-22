@@ -93,7 +93,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 
 				// Import Download
 				$args = array(
-					'post_type'    => 'download',
+					'post_type'    => CS_POST_TYPE,
 					'post_title'   => '',
 					'post_name'    => '',
 					'post_status'  => '',

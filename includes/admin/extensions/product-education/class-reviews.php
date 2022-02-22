@@ -127,7 +127,7 @@ class Reviews extends Extension {
 			'cs-reviews-status',
 			__( 'Product Reviews', 'commercestore' ),
 			array( $this, 'settings_field' ),
-			'download',
+			CS_POST_TYPE,
 			'side',
 			'low'
 		);

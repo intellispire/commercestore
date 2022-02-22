@@ -173,7 +173,7 @@ class CS_Categories_Reports_Table extends List_Table {
 				}
 
 				$downloads = get_posts( array(
-					'post_type'      => 'download',
+					'post_type'      => CS_POST_TYPE,
 					'posts_per_page' => -1,
 					'fields'         => 'ids',
 					'tax_query'      => array(
@@ -223,7 +223,7 @@ class CS_Categories_Reports_Table extends List_Table {
 				if ( ! empty( $child_terms ) ) {
 					foreach ( $child_terms as $child_term ) {
 						$child_downloads = get_posts( array(
-							'post_type'      => 'download',
+							'post_type'      => CS_POST_TYPE,
 							'posts_per_page' => -1,
 							'fields'         => 'ids',
 							'tax_query'      => array(

@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  * @return void
  */
 function cs_add_download_meta_box() {
-	$post_types = apply_filters( 'cs_download_metabox_post_types', array( 'download' ) );
+	$post_types = apply_filters( 'cs_download_metabox_post_types', array( CS_POST_TYPE ) );
 
 	foreach ( $post_types as $post_type ) {
 
@@ -923,11 +923,11 @@ add_action( 'cs_render_file_row', 'cs_render_file_row', 10, 4 );
 function cs_download_media_strings( $strings ) {
 	global $post;
 
-	if ( empty( $post ) || ( $post->post_type !== 'download' ) ) {
+	if ( empty( $post ) || ( $post->post_type !== CS_POST_TYPE ) ) {
 		return $strings;
 	}
 
-	$downloads_object = get_post_type_object( 'download' );
+	$downloads_object = get_post_type_object( CS_POST_TYPE );
 	$labels           = $downloads_object->labels;
 
 	$strings['insertIntoPost'] = sprintf( __( 'Insert into %s', 'commercestore' ), strtolower( $labels->singular_name ) );
@@ -1139,7 +1139,7 @@ add_action( 'cs_meta_box_settings_fields', 'cs_render_download_quantity_option',
  */
 function cs_render_meta_box_shortcode() {
 
-	if ( get_post_type() !== 'download' ) {
+	if ( get_post_type() !== CS_POST_TYPE ) {
 		return;
 	}
 

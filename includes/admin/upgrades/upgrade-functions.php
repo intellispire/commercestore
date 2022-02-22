@@ -422,7 +422,7 @@ function cs_v131_upgrades() {
 	cs_set_time_limit();
 
 	$query = new WP_Query( array(
-		'post_type' 		=> 'download',
+		'post_type' 		=> CS_POST_TYPE,
 		'posts_per_page' 	=> -1,
 		'post_status' 		=> 'publish'
 	) );

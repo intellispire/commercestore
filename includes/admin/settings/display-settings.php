@@ -78,7 +78,7 @@ function cs_options_page_primary_nav( $tabs, $active_tab = '' ) {
 			$tab_url = add_query_arg(
 				array(
 					'settings-updated' => false,
-					'post_type'        => 'download',
+					'post_type'        => CS_POST_TYPE,
 					'page'             => 'cs-settings',
 					'tab'              => $tab_id,
 				),
@@ -129,7 +129,7 @@ function cs_options_page_secondary_nav( $active_tab = '', $section = '', $sectio
 		// Tab & Section
 		$tab_url = add_query_arg(
 			array(
-				'post_type' => 'download',
+				'post_type' => CS_POST_TYPE,
 				'page'      => 'cs-settings',
 				'tab'       => $active_tab,
 				'section'   => $section_id,

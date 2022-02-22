@@ -193,20 +193,20 @@ class CS_Recurring_Content_Restriction {
 
 			foreach ( $restricted_to as $item ) {
 
-				if ( 'any' === $item['download'] ) {
+				if ( 'any' === $item[CS_POST_TYPE] ) {
 					$return['status'] = $subscriber->has_active_subscription() ? true : false;
 
 					return $return;
 				}
 
 				// Get the Download object so we can use it in variable price checks.
-				$download = new CS_Download( $item['download'] );
+				$download = new CS_Download( $item[CS_POST_TYPE] );
 
 				if ( isset( $item['price_id'] ) && $download->has_variable_prices() ) {
 					if ( is_numeric( $item['price_id'] ) ) {
 
 						// Check if the variably-riced product is Recurring-enabled or not.
-						$recurring_enabled = CS_Recurring()->is_price_recurring( $item['download'], $item['price_id'] );
+						$recurring_enabled = CS_Recurring()->is_price_recurring( $item[CS_POST_TYPE], $item['price_id'] );
 
 					} elseif ( 'all' === $item['price_id'] ) {
 
@@ -224,14 +224,14 @@ class CS_Recurring_Content_Restriction {
 				} else {
 
 					// Check if the product is Recurring-enabled or not.
-					$recurring_enabled = CS_Recurring()->is_recurring( $item['download'] );
+					$recurring_enabled = CS_Recurring()->is_recurring( $item[CS_POST_TYPE] );
 
 				}
 
 				if ( $recurring_enabled ) {
 
 					// If this subscriber has an active subscription to the variably-product in question.
-					if ( $subscriber->has_active_product_subscription( $item['download'] ) ) {
+					if ( $subscriber->has_active_product_subscription( $item[CS_POST_TYPE] ) ) {
 						$has_access = true;
 						break;
 					}
@@ -317,19 +317,19 @@ class CS_Recurring_Content_Restriction {
 		$custom_message = isset( $atts['message'] ) ? $atts['message'] : false;
 		$products       = array();
 		foreach ( $restricted_to as $item ) {
-			if ( cs_recurring()->is_recurring( $item['download'] ) ) {
-				$has_access = $subscriber->has_active_product_subscription( $item['download'] );
+			if ( cs_recurring()->is_recurring( $item[CS_POST_TYPE] ) ) {
+				$has_access = $subscriber->has_active_product_subscription( $item[CS_POST_TYPE] );
 			} else {
-				if ( ! empty( $item['download']['price_id'] ) && is_numeric( $item['download']['price_id'] ) && cs_has_variable_prices( $item['download'] ) ) {
-					$has_access = cs_has_user_purchased( $user_id, $item['download'], $item['download']['price_id'] );
+				if ( ! empty( $item[CS_POST_TYPE]['price_id'] ) && is_numeric( $item[CS_POST_TYPE]['price_id'] ) && cs_has_variable_prices( $item[CS_POST_TYPE] ) ) {
+					$has_access = cs_has_user_purchased( $user_id, $item[CS_POST_TYPE], $item[CS_POST_TYPE]['price_id'] );
 				} else {
-					$has_access = cs_has_user_purchased( $user_id, $item['download'] );
+					$has_access = cs_has_user_purchased( $user_id, $item[CS_POST_TYPE] );
 				}
 			}
 			if ( $has_access ) {
 				return $content;
 			}
-			$products[] = get_the_title( $item['download'] );
+			$products[] = get_the_title( $item[CS_POST_TYPE] );
 		}
 
 		// At this point, $has_access is false and we just need to get the correct message.

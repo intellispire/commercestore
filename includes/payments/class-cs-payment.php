@@ -1134,7 +1134,7 @@ class CS_Payment {
 		$download = new CS_Download( $download_id );
 
 		// Bail if this post isn't a download.
-		if ( ! $download || 'download' !== $download->post_type ) {
+		if ( ! $download || CS_POST_TYPE !== $download->post_type ) {
 			return false;
 		}
 
@@ -1282,7 +1282,7 @@ class CS_Payment {
 		 *
 		 * We need to allow this to process though for a missing post ID, in case it's a download that was deleted.
 		 */
-		if ( ! empty( $download->ID ) && 'download' !== $download->post_type ) {
+		if ( ! empty( $download->ID ) && CS_POST_TYPE !== $download->post_type ) {
 			return false;
 		}
 

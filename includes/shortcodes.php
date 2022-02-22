@@ -334,7 +334,7 @@ function cs_downloads_query( $atts, $content = null ) {
 	), $atts, 'downloads' );
 
 	$query = array(
-		'post_type' => 'download',
+		'post_type' => CS_POST_TYPE,
 		'orderby'   => $atts['orderby'],
 		'order'     => $atts['order']
 	);

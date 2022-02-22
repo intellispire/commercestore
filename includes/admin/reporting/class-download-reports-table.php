@@ -133,7 +133,7 @@ class CS_Download_Reports_Table extends List_Table {
 	 */
 	public function get_total_downloads() {
 		$total  = 0;
-		$counts = wp_count_posts( 'download', 'readable' );
+		$counts = wp_count_posts( CS_POST_TYPE, 'readable' );
 
 		foreach( $counts as $count ) {
 			$total += $count;
@@ -180,7 +180,7 @@ class CS_Download_Reports_Table extends List_Table {
 		$category = $this->get_category();
 
 		$args = array(
-			'post_type'        => 'download',
+			'post_type'        => CS_POST_TYPE,
 			'post_status'      => 'publish',
 			'order'            => $order,
 			'fields'           => 'ids',

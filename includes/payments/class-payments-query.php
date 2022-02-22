@@ -91,7 +91,7 @@ class CS_Payments_Query extends CS_Stats {
 			'search_in_notes' => false,
 			'children'        => false,
 			'fields'          => null,
-			'download'        => null,
+			CS_POST_TYPE        => null,
 			'gateway'         => null,
 			'post__in'        => null,
 			'post__not_in'    => null,
@@ -520,15 +520,15 @@ class CS_Payments_Query extends CS_Stats {
 	 * @since 1.8
 	 */
 	public function download() {
-		if ( empty( $this->args['download'] ) ) {
+		if ( empty( $this->args[CS_POST_TYPE] ) ) {
 			return;
 		}
 
 		$order_ids = array();
 
-		if ( is_array( $this->args['download'] ) ) {
+		if ( is_array( $this->args[CS_POST_TYPE] ) ) {
 			$orders = cs_get_order_items( array(
-				'product_id__in' => (array) $this->args['download'],
+				'product_id__in' => (array) $this->args[CS_POST_TYPE],
 			) );
 
 			foreach ( $orders as $order ) {
@@ -537,7 +537,7 @@ class CS_Payments_Query extends CS_Stats {
 			}
 		} else {
 			$orders = cs_get_order_items( array(
-				'product_id' => $this->args['download'],
+				'product_id' => $this->args[CS_POST_TYPE],
 			) );
 
 			foreach ( $orders as $order ) {
@@ -548,7 +548,7 @@ class CS_Payments_Query extends CS_Stats {
 
 		$this->args['id__in'] = $order_ids;
 
-		$this->__unset( 'download' );
+		$this->__unset( CS_POST_TYPE );
 	}
 
 	/**

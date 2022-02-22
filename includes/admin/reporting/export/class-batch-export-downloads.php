@@ -83,7 +83,7 @@ class CS_Batch_Downloads_Export extends CS_Batch_Export {
 		);
 
 		$args = array(
-			'post_type'      => 'download',
+			'post_type'      => CS_POST_TYPE,
 			'posts_per_page' => 30,
 			'paged'          => $this->step,
 			'orderby'        => 'ID',
@@ -196,7 +196,7 @@ class CS_Batch_Downloads_Export extends CS_Batch_Export {
 	 */
 	public function get_percentage_complete() {
 		$args = array(
-			'post_type'      => 'download',
+			'post_type'      => CS_POST_TYPE,
 			'posts_per_page' => - 1,
 			'post_status'    => 'any',
 			'fields'         => 'ids',
