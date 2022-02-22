@@ -1,14 +1,4 @@
 <?php
-/**
- * Plugin Name: Easy Digital Downloads - Recurring Payments
- * Plugin URI: https://commercestore.com/downloads/cs-recurring/
- * Description: Sell subscriptions with Easy Digital Downloads
- * Author: Easy Digital Downloads
- * Author URI: https://commercestore.com
- * Version: 2.11.6
- * Text Domain: cs-recurring
- * Domain Path: languages
- */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -335,15 +325,6 @@ final class CS_Recurring {
 	 * @return void
 	 */
 	private function actions() {
-
-		// @todo The `elseif` can be removed once CommerceStore minimum is 2.11.4.
-		if ( class_exists( '\\CS\\Extensions\\ExtensionRegistry' ) ) {
-			add_action( 'cs_extension_license_init', function( \CS\Extensions\ExtensionRegistry $registry ) {
-				$registry->addExtension( __FILE__, CS_RECURRING_PRODUCT_NAME, 28530, CS_RECURRING_VERSION, 'recurring_license_key' );
-			} );
-		} elseif ( class_exists( 'CS_License' ) ) {
-			$recurring_license = new CS_License( __FILE__, CS_RECURRING_PRODUCT_NAME, CS_RECURRING_VERSION, 'Easy Digital Downloads', 'recurring_license_key', null, 28530 );
-		}
 
 		// Register our custom post status
 		$this->register_post_statuses();
