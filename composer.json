@@ -31,7 +31,7 @@
     "minimum-stability": "dev",
     "autoload": {
       "psr-4": {
-        "": "lib/"
+        "": ["csae/src", "csae-dev/src","src", "lib/" ]
       }
     }
 }
