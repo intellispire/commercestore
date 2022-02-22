@@ -38,7 +38,7 @@ class CS_Stripe {
 				self::$instance->setup_classes();
 				self::$instance->actions();
 				self::$instance->filters();
-				
+
 			}
 		}
 
