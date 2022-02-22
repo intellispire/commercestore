@@ -228,7 +228,7 @@ class CS_Payment_Stats extends CS_Stats {
 		} else {
 			$args = array(
 				'object_id'          => $download_id,
-				'object_type'        => 'download',
+				'object_type'        => CS_POST_TYPE,
 				'type'               => 'sale',
 				'log_type'           => false,
 				'date_created_query' => array(

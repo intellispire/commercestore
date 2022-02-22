@@ -165,7 +165,7 @@ class CS_Download {
 			return false;
 		}
 
-		if ( 'download' !== $download->post_type ) {
+		if ( CS_POST_TYPE !== $download->post_type ) {
 			return false;
 		}
 
@@ -203,7 +203,7 @@ class CS_Download {
 		}
 
 		$defaults = array(
-			'post_type'   => 'download',
+			'post_type'   => CS_POST_TYPE,
 			'post_status' => 'draft',
 			'post_title'  => __( 'New Download Product', 'commercestore' )
 		);

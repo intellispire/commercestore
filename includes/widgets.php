@@ -260,12 +260,12 @@ class CS_Product_Details_Widget extends WP_Widget {
 			}
 		}
 
-		if ( ! isset( $instance['display_type'] ) || ( 'specific' === $instance['display_type'] && ! isset( $instance['download_id'] ) ) || ( 'current' == $instance['display_type'] && ! is_singular( 'download' ) ) ) {
+		if ( ! isset( $instance['display_type'] ) || ( 'specific' === $instance['display_type'] && ! isset( $instance['download_id'] ) ) || ( 'current' == $instance['display_type'] && ! is_singular( CS_POST_TYPE ) ) ) {
 			return;
 		}
 
 		// set correct download ID.
-		if ( 'current' == $instance['display_type'] && is_singular( 'download' ) ) {
+		if ( 'current' == $instance['display_type'] && is_singular( CS_POST_TYPE ) ) {
 			$download_id = get_the_ID();
 		} else {
 			$download_id = absint( $instance['download_id'] );
@@ -273,7 +273,7 @@ class CS_Product_Details_Widget extends WP_Widget {
 
 		// Since we can take a typed in value, make sure it's a download we're looking for
 		$download = get_post( $download_id );
-		if ( ! is_object( $download ) || 'download' !== $download->post_type ) {
+		if ( ! is_object( $download ) || CS_POST_TYPE !== $download->post_type ) {
 			return;
 		}
 
@@ -398,11 +398,11 @@ class CS_Product_Details_Widget extends WP_Widget {
 		<?php $display = 'current' === $instance['display_type'] ? ' style="display: none;"' : ''; ?>
 		<p class="download-details-selector" <?php echo $display; ?>>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'download_id' ) ); ?>"><?php printf( __( '%s:', 'commercestore' ), cs_get_label_singular() ); ?></label>
-		<?php $download_count = wp_count_posts( 'download' ); ?>
+		<?php $download_count = wp_count_posts( CS_POST_TYPE ); ?>
 		<?php if ( $download_count->publish < 1000 ) : ?>
 			<?php
 			$args = array(
-				'post_type'      => 'download',
+				'post_type'      => CS_POST_TYPE,
 				'posts_per_page' => -1,
 				'post_status'    => 'publish',
 			);

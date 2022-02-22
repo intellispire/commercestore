@@ -333,7 +333,7 @@ class CS_Subscriptions_DB extends CS_DB {
 			} else {
 
 				// See if search matches a product name
-				$download = get_page_by_title( trim( $args['search'] ), OBJECT, 'download' );
+				$download = get_page_by_title( trim( $args['search'] ), OBJECT, CS_POST_TYPE );
 
 				if( $download ) {
 
@@ -653,7 +653,7 @@ class CS_Subscriptions_DB extends CS_DB {
 			} else {
 
 				// See if search matches a product name
-				$download = get_page_by_title( trim( $args['search'] ), OBJECT, 'download' );
+				$download = get_page_by_title( trim( $args['search'] ), OBJECT, CS_POST_TYPE );
 
 				if( $download ) {
 

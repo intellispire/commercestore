@@ -677,7 +677,7 @@ class CS_Recurring_PayPal extends CS_Recurring_Gateway {
 		if ( isset( $post->post_type ) && $post->post_type == 'revision' ) {
 			return $post_id;
 		}
-		if ( ! isset( $post->post_type ) || $post->post_type != 'download' ) {
+		if ( ! isset( $post->post_type ) || $post->post_type != CS_POST_TYPE ) {
 			return $post_id;
 		}
 		if ( ! current_user_can( 'edit_products', $post_id ) ) {

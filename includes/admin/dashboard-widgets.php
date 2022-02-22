@@ -265,7 +265,7 @@ add_action( 'wp_ajax_cs_load_dashboard_widget', 'cs_load_dashboard_sales_widget'
  * @return void
  */
 function cs_dashboard_at_a_glance_widget( $items ) {
-	$num_posts = wp_count_posts( 'download' );
+	$num_posts = wp_count_posts( CS_POST_TYPE );
 
 	if ( $num_posts && $num_posts->publish ) {
 		$text = _n( '%s ' . cs_get_label_singular(), '%s ' . cs_get_label_plural(), $num_posts->publish, 'commercestore' );

@@ -29,7 +29,7 @@ function cs_change_downloads_upload_dir() {
 	global $pagenow;
 
 	if ( ! empty( $_REQUEST['post_id'] ) && ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) ) {
-		if ( 'download' == get_post_type( $_REQUEST['post_id'] ) ) {
+		if ( CS_POST_TYPE == get_post_type( $_REQUEST['post_id'] ) ) {
 			cs_create_protection_files( true );
 			add_filter( 'upload_dir', 'cs_set_upload_dir' );
 		}

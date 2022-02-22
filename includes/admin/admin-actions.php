@@ -63,7 +63,7 @@ function cs_taxonomies_tabs() {
 
 	// Get taxonomies
 	$taxonomy   = sanitize_key( $_GET['taxonomy'] );
-	$taxonomies = get_object_taxonomies( 'download' );
+	$taxonomies = get_object_taxonomies( CS_POST_TYPE );
 
 	// Bail if current taxonomy is not a download taxonomy
 	if ( ! in_array( $taxonomy, $taxonomies, true ) ) {
@@ -85,7 +85,7 @@ add_action( 'admin_notices', 'cs_taxonomies_tabs', 10, 1 );
 function cs_admin_adjust_submenus() {
 
 	// Get taxonomies
-	$taxonomies = get_object_taxonomies( 'download' );
+	$taxonomies = get_object_taxonomies( CS_POST_TYPE );
 
 	// Bail if no taxonomies
 	if ( empty( $taxonomies ) ) {
@@ -123,7 +123,7 @@ function cs_taxonomies_modify_menu_highlight() {
 
 	// Get taxonomies
 	$taxonomy   = sanitize_key( $_GET['taxonomy'] );
-	$taxonomies = get_object_taxonomies( 'download' );
+	$taxonomies = get_object_taxonomies( CS_POST_TYPE );
 
 	// Bail if current taxonomy is not a download taxonomy
 	if ( ! in_array( $taxonomy, $taxonomies, true ) ) {
@@ -154,8 +154,8 @@ function cs_add_new_modify_menu_highlight() {
 	// Get post_type
 	$post_type = sanitize_key( $_GET['post_type'] );
 
-	// Bail if current post type is not download
-	if ( 'download' !== $post_type ) {
+	// Bail if current post type is not ours
+	if ( CS_POST_TYPE !== $post_type ) {
 		return;
 	}
 
@@ -180,13 +180,13 @@ function cs_display_product_tabs() {
 	);
 
 	// Get taxonomies
-	$taxonomies = get_object_taxonomies( 'download', 'objects' );
+	$taxonomies = get_object_taxonomies( CS_POST_TYPE, 'objects' );
 	foreach ( $taxonomies as $tax => $details ) {
 		$tabs[ $tax ] = array(
 			'name' => $details->labels->menu_name,
 			'url'  => add_query_arg( array(
 				'taxonomy'  => $tax,
-				'post_type' => 'download'
+				'post_type' => CS_POST_TYPE
 			), admin_url( 'edit-tags.php' ) )
 		);
 	}

@@ -564,7 +564,7 @@ class CS_CLI extends WP_CLI_Command {
 			// No specified product
 			if ( ! $id ) {
 				$products = get_posts( array(
-					'post_type'      => 'download',
+					'post_type'      => CS_POST_TYPE,
 					'orderby'        => 'rand',
 					'order'          => 'ASC',
 					'posts_per_page' => rand( 1, 3 ),
@@ -572,7 +572,7 @@ class CS_CLI extends WP_CLI_Command {
 			} else {
 				$product = get_post( $id );
 
-				if ( 'download' !== $product->post_type ) {
+				if ( CS_POST_TYPE !== $product->post_type ) {
 					WP_CLI::error( __( 'Specified ID is not a product', 'commercestore' ) );
 
 					return;
@@ -741,7 +741,7 @@ class CS_CLI extends WP_CLI_Command {
 				) );
 
 				$download_ids = get_posts( array(
-					'post_type'      => 'download',
+					'post_type'      => CS_POST_TYPE,
 					'posts_per_page' => 2,
 					'fields'         => 'ids',
 					'orderby'        => 'rand',

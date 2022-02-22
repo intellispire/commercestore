@@ -38,7 +38,7 @@ add_action( 'admin_notices', function () {
 	) ), 'cs_notice_nonce' );
 
 	$setup_url = add_query_arg( array(
-		'post_type' => 'download',
+		'post_type' => CS_POST_TYPE,
 		'page'      => 'cs-settings',
 		'tab'       => 'gateways',
 		'section'   => 'paypal_commerce'

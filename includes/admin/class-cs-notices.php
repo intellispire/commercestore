@@ -381,7 +381,7 @@ class CS_Notices {
 
 				// URL to fix this
 				$url = add_query_arg( array(
-					'post_type' => 'download',
+					'post_type' => CS_POST_TYPE,
 					'page'      => 'cs-settings',
 					'tab'       => 'gateways'
 				) );
@@ -730,7 +730,7 @@ class CS_Notices {
 		wp_enqueue_script( 'cs-admin-notices', CS_PLUGIN_URL . 'assets/js/cs-admin-notices.js', array( 'jquery' ), CS_VERSION, true );
 		$view_url = add_query_arg(
 			array(
-				'post_type' => 'download',
+				'post_type' => CS_POST_TYPE,
 				'page'      => 'cs-tools',
 				'tab'       => 'debug_log',
 			),

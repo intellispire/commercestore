@@ -47,7 +47,7 @@ class CS_Sales_Log_Table extends CS_Base_Log_List_Table {
 		$currency = $item['currency'];
 
 		switch ( $column_name ) {
-			case 'download':
+			case CS_POST_TYPE:
 				$download_id = $item[ $column_name ];
 				$download    = cs_get_download( $download_id );
 				$price_id    = ! empty( $item['price_id'] )
@@ -55,7 +55,7 @@ class CS_Sales_Log_Table extends CS_Base_Log_List_Table {
 					: 0;
 
 				$title  = $download->get_name( $price_id );
-				$return = '<a href="' . add_query_arg( 'download', $item[ $column_name ] ) . '" >' . $title . '</a>';
+				$return = '<a href="' . add_query_arg( CS_POST_TYPE, $item[ $column_name ] ) . '" >' . $title . '</a>';
 				break;
 
 			case 'customer':
@@ -96,7 +96,7 @@ class CS_Sales_Log_Table extends CS_Base_Log_List_Table {
 		return array(
 			'ID'         => __( 'Order Number', 'commercestore' ),
 			'customer'   => __( 'Customer', 'commercestore' ),
-			'download'   => cs_get_label_singular(),
+			CS_POST_TYPE   => cs_get_label_singular(),
 			'amount'     => __( 'Item Amount', 'commercestore' ),
 			'date'       => __( 'Date', 'commercestore' ),
 		);
@@ -235,7 +235,7 @@ class CS_Sales_Log_Table extends CS_Base_Log_List_Table {
 				'ID'         => $order->get_number(),
 				'order_id'   => $order->id,
 				'customer'   => cs_get_customer( $order->customer_id ),
-				'download'   => $order_item->product_id,
+				CS_POST_TYPE   => $order_item->product_id,
 				'price_id'   => $order_item->price_id,
 				'item_price' => $order_item->amount,
 				'amount'     => $order_item->total,

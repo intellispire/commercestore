@@ -38,7 +38,7 @@ class CS_API_V2 extends CS_API_V1 {
 			$products['products'] = array();
 
 			$query_args = array(
-				'post_type'        => 'download',
+				'post_type'        => CS_POST_TYPE,
 				'posts_per_page'   => $this->per_page(),
 				'suppress_filters' => true,
 				'paged'            => $this->get_paged(),
@@ -157,7 +157,7 @@ class CS_API_V2 extends CS_API_V1 {
 
 		} else {
 
-			if ( get_post_type( $args['product'] ) == 'download' ) {
+			if ( get_post_type( $args['product'] ) == CS_POST_TYPE ) {
 				$product_info = get_post( $args['product'] );
 
 				$products['products'][0] = $this->get_product_data( $product_info );

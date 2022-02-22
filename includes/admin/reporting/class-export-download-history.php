@@ -59,7 +59,7 @@ class CS_Download_History_Export extends CS_Export {
 			'date'     => __( 'Date',   'commercestore' ),
 			'user'     => __( 'Downloaded by', 'commercestore' ),
 			'ip'       => __( 'IP Address', 'commercestore' ),
-			'download' => __( 'Product', 'commercestore' ),
+			CS_POST_TYPE => __( 'Product', 'commercestore' ),
 			'file'     => __( 'File', 'commercestore' )
 		);
 		return $cols;
@@ -99,7 +99,7 @@ class CS_Download_History_Export extends CS_Export {
 					'date'     => $log->post_date,
 					'user'     => $user,
 					'ip'       => get_post_meta( $log->ID, '_cs_log_ip', true ),
-					'download' => get_the_title( $log->post_parent ),
+					CS_POST_TYPE => get_the_title( $log->post_parent ),
 					'file'     => $file_name
 				);
 			}

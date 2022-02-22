@@ -44,7 +44,7 @@ class CS_HTML_Elements {
 			'show_variations_only' => false,
 			'placeholder'          => sprintf( __( 'Choose a %s', 'commercestore' ), cs_get_label_singular() ),
 			'data'                 => array(
-				'search-type'        => 'download',
+				'search-type'        => CS_POST_TYPE,
 				'search-placeholder' => sprintf( __( 'Search %s', 'commercestore' ), cs_get_label_plural() ),
 			),
 			'required'             => false,
@@ -53,7 +53,7 @@ class CS_HTML_Elements {
 		$args = wp_parse_args( $args, $defaults );
 
 		$product_args = array(
-			'post_type'      => 'download',
+			'post_type'      => CS_POST_TYPE,
 			'orderby'        => 'title',
 			'order'          => 'ASC',
 			'posts_per_page' => $args['number'],

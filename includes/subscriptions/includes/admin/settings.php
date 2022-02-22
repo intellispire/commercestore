@@ -579,7 +579,7 @@ add_filter( "cs_settings_{$settings_tab}", 'cs_recurring_guest_checkout_descript
 function cs_recurring_get_email_settings_url() {
 	return add_query_arg(
 		array(
-			'post_type' => 'download',
+			'post_type' => CS_POST_TYPE,
 			'page'      => 'cs-settings',
 			'tab'       => 'emails',
 			'section'   => 'recurring',

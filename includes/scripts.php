@@ -181,7 +181,7 @@ function cs_localize_scripts() {
 			? cs_get_item_position_in_cart( $post->ID )
 			: -1;
 
-		if ( ( ! empty( $post->post_content ) && ( has_shortcode( $post->post_content, 'purchase_link' ) || has_shortcode( $post->post_content, 'downloads' ) ) ) || is_post_type_archive( 'download' ) ) {
+		if ( ( ! empty( $post->post_content ) && ( has_shortcode( $post->post_content, 'purchase_link' ) || has_shortcode( $post->post_content, 'downloads' ) ) ) || is_post_type_archive( CS_POST_TYPE ) ) {
 			$has_purchase_links = true;
 		} else {
 			$has_purchase_links = false;
@@ -398,7 +398,7 @@ function cs_enqueue_admin_scripts( $hook = '' ) {
 	}
 
 	// Downloads page.
-	if ( cs_is_admin_page( 'download' ) ) {
+	if ( cs_is_admin_page( CS_POST_TYPE ) ) {
 		wp_enqueue_script( 'cs-admin-downloads' );
 	}
 

@@ -14,7 +14,7 @@ function cs_recurring_admin_scripts( $hook ) {
 		return;
 	}
 
-	if ( is_object( $post ) && 'download' != $post->post_type ) {
+	if ( is_object( $post ) && CS_POST_TYPE != $post->post_type ) {
 		return;
 	}
 

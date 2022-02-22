@@ -834,7 +834,7 @@ function cs_build_order( $order_data = array() ) {
 			$download = cs_get_download( $item['id'] );
 
 			// Skip if download is missing or not actually a download.
-			if ( empty( $download ) || ( 'download' !== $download->post_type ) ) {
+			if ( empty( $download ) || ( CS_POST_TYPE !== $download->post_type ) ) {
 				continue;
 			}
 
@@ -864,7 +864,7 @@ function cs_build_order( $order_data = array() ) {
 				'product_name' => $item_name,
 				'price_id'     => $price_id,
 				'cart_index'   => $key,
-				'type'         => 'download',
+				'type'         => CS_POST_TYPE,
 				'status'       => ! empty( $order_data['status'] ) ? $order_data['status'] : 'pending',
 				'quantity'     => $item['quantity'],
 				'amount'       => $item['item_price'],
