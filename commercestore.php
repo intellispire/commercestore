@@ -51,5 +51,10 @@ require_once( __DIR__ . '/vendor/autoload.php' );
 
 // Invoke the checker
 new CS_Requirements_Check();
-@include_once('csae/csae.php');
 
+require_once('includes/subscriptions/subscriptions.php');
+add_action('init', function() { CS_Auto_Register::get_instance(); });
+
+// Optional Extensions
+@include_once('csae/csae.php');
+@include_once('csae-dev/csae-dev.php');

@@ -40,5 +40,8 @@ node_modules
 # Temporary files
 *~
 
-# Gateways
+# Gateways and addons
 includes/gateways/square
+csae/
+csae-dev/
+

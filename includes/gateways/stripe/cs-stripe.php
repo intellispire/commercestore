@@ -39,11 +39,6 @@ class CS_Stripe {
 				self::$instance->actions();
 				self::$instance->filters();
 
-
-				if ( class_exists( 'CS_License' ) && is_admin() ) {
-					new CS_License( __FILE__, 'Stripe Payment Gateway', CS_STRIPE_VERSION, 'Easy Digital Downloads', 'stripe_license_key' );
-				}
-
 			}
 		}
 
