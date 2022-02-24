@@ -40,8 +40,6 @@ const CS_FEATURE_VARIABLE_PRICE = true;
 const CS_FEATURE_MARKETING = false;
 const CS_DEFAULT_SLUG = 'download'; // Override with the CS_SLUG constant
 
-// @todo replace hardcoding of post_type and taxonomies with the following constants all throughout the codebase
-
 const CS_ICON = 'download'; // Change the icon here
 
 const CS_POST_TYPE = 'csproduct';
@@ -59,7 +57,13 @@ const CS_EX_DOWNLOAD_ITEM = 'download';
 const CS_EX_DOWNLOAD_ARGS = 'download';
 const CS_EX_DOWNLOAD_MESSAGES = 'download';
 
+class CSFilter {
+	const DOWNLOAD_CATEGORY_ARGS = 'cs_' . CS_CAT_TYPE . '_args';
+	const DOWNLOAD_CATEGORY_LABEL = 'cs_' . CS_CAT_TYPE . '_labels';
 
+	const DOWNLOAD_TAG_ARGS = 'cs_' . CS_TAG_TYPE . '_args';
+	const DOWNLOAD_TAG_LABEL = 'cs_' . CS_TAG_TYPE . '_labels';
+}
 
 
 const CS_BASE_PLUGIN = __FILE__;

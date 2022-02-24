@@ -850,7 +850,7 @@ function cs_add_download_post_classes( $classes, $class = '', $post_id = false )
 		$classes[] = 'cs-download';
 
 		// Add category slugs
-		$categories = get_the_terms( $post_id, 'download_category' );
+		$categories = get_the_terms( $post_id, CS_CAT_TYPE );
 		if( ! empty( $categories ) ) {
 			foreach( $categories as $key => $value ) {
 				$classes[] = 'cs-download-cat-' . $value->slug;

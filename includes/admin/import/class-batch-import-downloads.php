@@ -170,7 +170,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 
 					$categories = $this->str_to_array( $row[ $this->field_mapping['categories'] ] );
 
-					$this->set_taxonomy_terms( $download_id, $categories, 'download_category' );
+					$this->set_taxonomy_terms( $download_id, $categories, CS_CAT_TYPE );
 
 				}
 
@@ -481,7 +481,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 	 * @since 2.6
 	 * @return void
 	 */
-	private function set_taxonomy_terms( $download_id = 0, $terms = array(), $taxonomy = 'download_category' ) {
+	private function set_taxonomy_terms( $download_id = 0, $terms = array(), $taxonomy = CS_CAT_TYPE ) {
 
 		$terms = $this->maybe_create_terms( $terms, $taxonomy );
 
@@ -499,7 +499,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 	 * @since 2.6
 	 * @return array
 	 */
-	private function maybe_create_terms( $terms = array(), $taxonomy = 'download_category' ) {
+	private function maybe_create_terms( $terms = array(), $taxonomy = CS_CAT_TYPE ) {
 
 		// Return of term IDs
 		$term_ids = array();

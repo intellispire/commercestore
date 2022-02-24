@@ -80,7 +80,7 @@ class CS_API_V2 extends CS_API_V1 {
 				if ( is_numeric( $args['category'] ) ) {
 					$query_args['tax_query'] = array(
 						array(
-							'taxonomy' => 'download_category',
+							'taxonomy' => CS_CAT_TYPE,
 							'field'    => 'ID',
 							'terms'    => (int) $args['category']
 						),
@@ -93,7 +93,7 @@ class CS_API_V2 extends CS_API_V1 {
 						$field = is_numeric( $category ) ? 'ID': 'slug';
 
 						$query_args['tax_query'][] = array(
-							'taxonomy' => 'download_category',
+							'taxonomy' => CS_CAT_TYPE,
 							'field'    => $field,
 							'terms'    => $category,
 						);
@@ -101,7 +101,7 @@ class CS_API_V2 extends CS_API_V1 {
 					}
 
 				} else {
-					$query_args['download_category'] = $args['category'];
+					$query_args[CS_CAT_TYPE] = $args['category'];
 				}
 			}
 

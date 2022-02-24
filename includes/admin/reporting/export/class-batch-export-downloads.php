@@ -166,7 +166,7 @@ class CS_Batch_Downloads_Export extends CS_Batch_Export {
 							$row[ $key ] = implode( ' | ', $terms );
 						}
 					} elseif ( 'categories' == $key ) {
-						$terms = get_the_terms( $download->ID, 'download_category' );
+						$terms = get_the_terms( $download->ID, CS_CAT_TYPE );
 
 						if ( $terms ) {
 							$terms       = wp_list_pluck( $terms, 'name' );

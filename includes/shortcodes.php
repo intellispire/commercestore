@@ -448,7 +448,7 @@ function cs_downloads_query( $atts, $content = null ) {
 
 				} else {
 
-					$term = get_term_by( 'slug', $category, 'download_category' );
+					$term = get_term_by( 'slug', $category, CS_CAT_TYPE );
 
 					if( ! $term ) {
 						continue;
@@ -459,7 +459,7 @@ function cs_downloads_query( $atts, $content = null ) {
 				}
 
 				$query['tax_query'][] = array(
-					'taxonomy' => 'download_category',
+					'taxonomy' => CS_CAT_TYPE,
 					'field'    => 'term_id',
 					'terms'    => $term_id,
 				);
@@ -483,7 +483,7 @@ function cs_downloads_query( $atts, $content = null ) {
 
 				} else {
 
-					$term = get_term_by( 'slug', $category, 'download_category' );
+					$term = get_term_by( 'slug', $category, CS_CAT_TYPE );
 
 					if( ! $term ) {
 						continue;
@@ -493,7 +493,7 @@ function cs_downloads_query( $atts, $content = null ) {
 				}
 
 				$query['tax_query'][] = array(
-					'taxonomy' => 'download_category',
+					'taxonomy' => CS_CAT_TYPE,
 					'field'    => 'term_id',
 					'terms'    => $term_id,
 					'operator' => 'NOT IN'

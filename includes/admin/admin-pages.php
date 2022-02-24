@@ -202,17 +202,17 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 			switch ( $passed_view ) {
 				case 'list-table':
 				case 'new':
-					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' !== $action && 'download_category' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' !== $action && CS_CAT_TYPE === $taxonomy ) {
 						$found = true;
 					}
 					break;
 				case 'edit':
-					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' === $action && 'download_category' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' === $action && CS_CAT_TYPE === $taxonomy ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'download_category' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && CS_CAT_TYPE === $taxonomy ) {
 						$found = true;
 					}
 					break;

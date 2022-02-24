@@ -29,7 +29,7 @@ function cs_responsive_download_post_class( $classes = array(), $class = '', $po
 	if (
 		! is_singular( CS_POST_TYPE ) &&
 		! is_post_type_archive( CS_POST_TYPE ) &&
-		! is_tax( 'download_category' ) &&
+		! is_tax( CS_CAT_TYPE ) &&
 		! is_tax( 'download_tag' )
 	)
 		return $classes;

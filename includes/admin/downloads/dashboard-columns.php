@@ -23,13 +23,13 @@ defined( 'ABSPATH' ) || exit;
  *  Post Type List Table
  */
 function cs_download_columns( $download_columns ) {
-	$category_labels = cs_get_taxonomy_labels( 'download_category' );
+	$category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE );
 	$tag_labels      = cs_get_taxonomy_labels( 'download_tag'      );
 
 	return apply_filters( 'cs_download_columns', array(
 		'cb'                => '<input type="checkbox"/>',
 		'title'             => __( 'Name', 'commercestore' ),
-		'download_category' => $category_labels['menu_name'],
+		CS_CAT_TYPE => $category_labels['menu_name'],
 		'download_tag'      => $tag_labels['menu_name'],
 		'price'             => __( 'Price', 'commercestore' ),
 		'sales'             => __( 'Sales', 'commercestore' ),
@@ -55,8 +55,8 @@ function cs_render_download_columns( $column_name, $post_id ) {
 	}
 
 	switch ( $column_name ) {
-		case 'download_category':
-			$terms = get_the_term_list( $post_id, 'download_category', '', ', ', '');
+		case CS_CAT_TYPE:
+			$terms = get_the_term_list( $post_id, CS_CAT_TYPE, '', ', ', '');
 			echo ! empty( $terms )
 				? $terms
 				: '&mdash;';
@@ -225,13 +225,13 @@ function cs_add_download_filters() {
 		return;
 	}
 
-	$terms = get_terms( 'download_category' );
+	$terms = get_terms( CS_CAT_TYPE );
 	if ( count( $terms ) > 0 ) {
-		echo "<select name='download_category' id='download_category' class='postform'>";
-			$category_labels = cs_get_taxonomy_labels( 'download_category' );
+		echo "<select name=CS_CAT_TYPE id=CS_CAT_TYPE class='postform'>";
+			$category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE );
 			echo "<option value=''>" . sprintf( __( 'All %s', 'commercestore' ), strtolower( $category_labels['name'] ) ) . "</option>";
 			foreach ( $terms as $term ) {
-				$selected = isset( $_GET['download_category'] ) && $_GET['download_category'] === $term->slug ? ' selected="selected"' : '';
+				$selected = isset( $_GET[CS_CAT_TYPE] ) && $_GET[CS_CAT_TYPE] === $term->slug ? ' selected="selected"' : '';
 				echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
 			}
 		echo "</select>";

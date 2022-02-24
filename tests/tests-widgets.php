@@ -198,7 +198,7 @@ class Tests_Widgets extends CS_UnitTestCase {
 		$widgets = $GLOBALS['wp_widget_factory']->widgets;
 		$categories_widget = $widgets['cs_categories_tags_widget'];
 		$download = CS_Helper_Download::create_simple_download();
-		$terms = wp_set_object_terms( $download->ID, array( 'test1', 'test2' ), 'download_category', false );
+		$terms = wp_set_object_terms( $download->ID, array( 'test1', 'test2' ), CS_CAT_TYPE, false );
 
 		$this->go_to( $download->ID );
 
@@ -211,7 +211,7 @@ class Tests_Widgets extends CS_UnitTestCase {
 				'after_widget'  => '',
 			), array(
 				'title'      => 'Cart',
-				'taxonomy'   => 'download_category',
+				'taxonomy'   => CS_CAT_TYPE,
 				'count'      => true,
 				'hide_empty' => true,
 			) );
@@ -236,11 +236,11 @@ class Tests_Widgets extends CS_UnitTestCase {
 		$categories_widget = $widgets['cs_categories_tags_widget'];
 
 		$updated = $categories_widget->update(
-			array( 'title' => 'Categories', 'taxonomy' => 'download_category', 'count' => true, 'hide_empty' => true ),
+			array( 'title' => 'Categories', 'taxonomy' => CS_CAT_TYPE, 'count' => true, 'hide_empty' => true ),
 			array( 'title' => 'Tags', 'taxonomy' => 'download_tag', 'count' => true, 'hide_empty' => true )
 		);
 
-		$this->assertEquals( $updated, array( 'title' => 'Categories', 'taxonomy' => 'download_category', 'count' => true, 'hide_empty' => true ) );
+		$this->assertEquals( $updated, array( 'title' => 'Categories', 'taxonomy' => CS_CAT_TYPE, 'count' => true, 'hide_empty' => true ) );
 
 	}
 
@@ -261,8 +261,8 @@ class Tests_Widgets extends CS_UnitTestCase {
 		$this->assertRegExp( '/<label for="(.*)">Title:<\/label>/', $output );
 		$this->assertRegExp( '/<input class="widefat" id="(.*)" name="(.*)" type="text" value="(.*)"\/>/', $output );
 		$this->assertRegExp( '/<label for="(.*)">Taxonomy:<\/label>/', $output );
-		$this->assertRegExp( '/<option value="download_category" (.*)>(.*)<\/option>/', $output );
-		$this->assertRegExp( '/<option value="download_tag" (.*)>(.*)<\/option>/', $output );
+		$this->assertRegExp( '/<option value="' . CS_CAT_TYPE .'" (.*)>(.*)<\/option>/', $output );
+		$this->assertRegExp( '/<option value="' . CS_TAG_TYPE .'" (.*)>(.*)<\/option>/', $output );
 		$this->assertRegExp( '/<label for="(.*)">Show Count:<\/label>/', $output );
 		$this->assertRegExp( '/<label for="(.*)">Hide Empty Categories:<\/label>/', $output );
 
@@ -322,7 +322,7 @@ class Tests_Widgets extends CS_UnitTestCase {
 			), array(
 				'title'           => 'Cart',
 				'download_id'     => 'current',
-				'download_title'  => 'download_category',
+				'download_title'  => CS_CAT_TYPE,
 				'purchase_button' => true,
 				'categories'      => true,
 				'tags'            => true,
@@ -345,7 +345,7 @@ class Tests_Widgets extends CS_UnitTestCase {
 		$widgets = $GLOBALS['wp_widget_factory']->widgets;
 		$details_widget = $widgets['cs_product_details_widget'];
 		$download = CS_Helper_Download::create_simple_download();
-		$terms = wp_set_object_terms( $download->ID, array( 'test1' ), 'download_category', false );
+		$terms = wp_set_object_terms( $download->ID, array( 'test1' ), CS_CAT_TYPE, false );
 
 		$this->go_to( $download->ID );
 
@@ -358,7 +358,7 @@ class Tests_Widgets extends CS_UnitTestCase {
 			), array(
 				'title'           => 'Cart',
 				'download_id'     => $download->ID,
-				'download_title'  => 'download_category',
+				'download_title'  => CS_CAT_TYPE,
 				'purchase_button' => true,
 				'categories'      => true,
 				'tags'            => true,

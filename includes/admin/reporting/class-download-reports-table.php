@@ -162,7 +162,7 @@ class CS_Download_Reports_Table extends List_Table {
 	 * @return void
 	 */
 	public function category_filter() {
-		if ( get_terms( 'download_category' ) ) {
+		if ( get_terms( CS_CAT_TYPE ) ) {
 			echo CS()->html->category_dropdown( 'category', $this->get_category() );
 		}
 	}
@@ -192,7 +192,7 @@ class CS_Download_Reports_Table extends List_Table {
 		if ( ! empty( $category ) ) {
 			$args['tax_query'] = array(
 				array(
-					'taxonomy' => 'download_category',
+					'taxonomy' => CS_CAT_TYPE,
 					'terms'    => $category
 				)
 			);

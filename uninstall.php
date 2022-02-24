@@ -33,7 +33,7 @@ global $wpdb, $wp_roles;
 if( cs_get_option( 'uninstall_on_delete' ) ) {
 
 	/** Delete All the Custom Post Types */
-	$cs_taxonomies = array( 'download_category', 'download_tag', 'cs_log_type', );
+	$cs_taxonomies = array( CS_CAT_TYPE, 'download_tag', 'cs_log_type', );
 	$cs_post_types = array( 'download', 'cs_payment', 'cs_discount', 'cs_log' );
 	foreach ( $cs_post_types as $post_type ) {
 

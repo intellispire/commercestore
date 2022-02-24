@@ -255,11 +255,11 @@ function cs_setup_download_taxonomies() {
 		'menu_name'         => __( 'Categories', 'commercestore' ),
 	);
 
-	$category_args = apply_filters( 'cs_download_category_args', array(
+	$category_args = apply_filters( CSFilter::DOWNLOAD_CATEGORY_ARGS, array(
 			'hierarchical' => true,
-			'labels'       => apply_filters( 'cs_download_category_labels', $category_labels ),
+			'labels'       => apply_filters( CSFilter::DOWNLOAD_CATEGORY_LABEL, $category_labels ),
 			'show_ui'      => true,
-			'query_var'    => 'download_category',
+			'query_var'    => CS_CAT_TYPE,
 			'rewrite'      => array( 'slug' => $slug . '/category', 'with_front' => false, 'hierarchical' => true ),
 			'capabilities' => array(
 				'manage_terms' => 'manage_product_terms',
@@ -269,8 +269,8 @@ function cs_setup_download_taxonomies() {
 			),
 		)
 	);
-	register_taxonomy( 'download_category', array( CS_POST_TYPE ), $category_args );
-	register_taxonomy_for_object_type( 'download_category', CS_POST_TYPE );
+	register_taxonomy( CS_CAT_TYPE, array( CS_POST_TYPE ), $category_args );
+	register_taxonomy_for_object_type( CS_CAT_TYPE, CS_POST_TYPE );
 
 	/** Tags */
 	$tag_labels = array(
@@ -315,9 +315,9 @@ add_action( 'init', 'cs_setup_download_taxonomies', 0 );
  * @param  string $taxonomy The Taxonomy to get labels for
  * @return array            Associative array of labels (name = plural)
  */
-function cs_get_taxonomy_labels( $taxonomy = 'download_category' ) {
+function cs_get_taxonomy_labels( $taxonomy = CS_CAT_TYPE ) {
 	$allowed_taxonomies = apply_filters( 'cs_allowed_download_taxonomies', array(
-		'download_category',
+		CS_CAT_TYPE,
 		'download_tag',
 	) );
 

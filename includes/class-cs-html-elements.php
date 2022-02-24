@@ -479,14 +479,14 @@ class CS_HTML_Elements {
 	 * @return string $output Category dropdown
 	 */
 	public function category_dropdown( $name = 'cs_categories', $selected = 0 ) {
-		$categories = get_terms( 'download_category', apply_filters( 'cs_category_dropdown', array() ) );
+		$categories = get_terms( CS_CAT_TYPE, apply_filters( 'cs_category_dropdown', array() ) );
 		$options    = array();
 
 		foreach ( $categories as $category ) {
 			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
 		}
 
-		$category_labels = cs_get_taxonomy_labels( 'download_category' );
+		$category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE );
 		$output          = $this->select( array(
 			'name'             => $name,
 			'selected'         => $selected,
