@@ -42,7 +42,7 @@ const CS_DEFAULT_SLUG = 'download'; // Override with the CS_SLUG constant
 
 const CS_ICON = 'download'; // Change the icon here
 
-const CS_POST_TYPE = 'csproduct';
+const CS_POST_TYPE = 'download';
 const CS_TAG_TYPE = CS_POST_TYPE . '_tag';
 const CS_CAT_TYPE = CS_POST_TYPE . '_category';
 
