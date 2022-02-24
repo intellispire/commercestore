@@ -445,7 +445,7 @@ final class CS_Recurring {
 	 */
 	public function subscriptions_list() {
 		add_submenu_page(
-			'edit.php?post_type=download',
+			'edit.php?post_type=' . CS_POST_TYPE,
 			__( 'Subscriptions', 'commercestore' ),
 			__( 'Subscriptions', 'commercestore' ),
 			'view_shop_reports',
@@ -1556,9 +1556,9 @@ final class CS_Recurring {
 
 		$query_has_recurring = true;
 
-		if( ! empty( $query->initial_args[CS_POST_TYPE] ) ) {
+		if( ! empty( $query->initial_args[CS_EX_DOWNLOAD_ARGS] ) ) {
 			$query_has_recurring = false;
-			$download            = $query->initial_args[CS_POST_TYPE];
+			$download            = $query->initial_args[CS_EX_DOWNLOAD_ARGS];
 
 			if ( ! is_array( $download ) && strpos( $download, ',' ) ) {
 				$download = explode( ',', $download );

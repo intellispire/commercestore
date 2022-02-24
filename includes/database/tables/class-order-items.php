@@ -71,7 +71,7 @@ final class Order_Items extends Table {
 			product_name text NOT NULL default '',
 			price_id bigint(20) unsigned default null,
 			cart_index bigint(20) unsigned NOT NULL default '0',
-			type varchar(20) NOT NULL default CS_POST_TYPE,
+			type varchar(20) NOT NULL default 'download',
 			status varchar(20) NOT NULL default 'pending',
 			quantity int signed NOT NULL default '0',
 			amount decimal(18,9) NOT NULL default '0',

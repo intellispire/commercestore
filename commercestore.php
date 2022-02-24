@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 
 const CS_FEATURE_VARIABLE_PRICE = true;
 const CS_FEATURE_MARKETING = false;
-const CS_DEFAULT_SLUG = 'store'; // Override with the CS_SLUG constant
+const CS_DEFAULT_SLUG = 'download'; // Override with the CS_SLUG constant
 
 // @todo replace hardcoding of post_type and taxonomies with the following constants all throughout the codebase
 
@@ -50,6 +50,9 @@ const CS_CAT_TYPE = CS_POST_TYPE . '_category';
 
 // Tease out the word 'download' that is used in different contexts.
 // search and replace back during build?
+const CS_EX_ADMIN_PAGE = 'download';
+const CS_EX_DOWNLOAD_ADMIN_PAGE = 'download';
+
 const CS_EX_DOWNLOAD_CSS_CLASS = 'download';
 const CS_EX_DOWNLOAD_SHORTCODE = 'download';
 const CS_EX_DOWNLOAD_ITEM = 'download';

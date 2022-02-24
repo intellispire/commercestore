@@ -27,7 +27,7 @@ function cs_process_download() {
 	}
 
 	$args = apply_filters( 'cs_process_download_args', array(
-		CS_POST_TYPE => ( isset( $_GET['download_id'] ) )  ? (int) $_GET['download_id']                       : '',
+		'download' => ( isset( $_GET['download_id'] ) )  ? (int) $_GET['download_id']                       : '',
 		'email'    => ( isset( $_GET['email'] ) )        ? rawurldecode( $_GET['email'] )                   : '',
 		'expire'   => ( isset( $_GET['expire'] ) )       ? rawurldecode( $_GET['expire'] )                  : '',
 		'file_key' => ( isset( $_GET['file'] ) )         ? (int) $_GET['file']                              : '',

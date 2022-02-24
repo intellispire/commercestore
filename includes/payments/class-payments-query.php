@@ -520,15 +520,15 @@ class CS_Payments_Query extends CS_Stats {
 	 * @since 1.8
 	 */
 	public function download() {
-		if ( empty( $this->args[CS_POST_TYPE] ) ) {
+		if ( empty( $this->args[CS_EX_DOWNLOAD_ARGS] ) ) {
 			return;
 		}
 
 		$order_ids = array();
 
-		if ( is_array( $this->args[CS_POST_TYPE] ) ) {
+		if ( is_array( $this->args[CS_EX_DOWNLOAD_ARGS] ) ) {
 			$orders = cs_get_order_items( array(
-				'product_id__in' => (array) $this->args[CS_POST_TYPE],
+				'product_id__in' => (array) $this->args[CS_EX_DOWNLOAD_ARGS],
 			) );
 
 			foreach ( $orders as $order ) {
@@ -537,7 +537,7 @@ class CS_Payments_Query extends CS_Stats {
 			}
 		} else {
 			$orders = cs_get_order_items( array(
-				'product_id' => $this->args[CS_POST_TYPE],
+				'product_id' => $this->args[CS_EX_DOWNLOAD_ARGS],
 			) );
 
 			foreach ( $orders as $order ) {

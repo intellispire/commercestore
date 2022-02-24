@@ -156,7 +156,7 @@ abstract class Extension {
 	 * @return bool
 	 */
 	protected function is_download_edit_screen() {
-		return cs_is_admin_page( CS_POST_TYPE, 'edit' ) || cs_is_admin_page( CS_POST_TYPE, 'new' );
+		return cs_is_admin_page( CS_EX_DOWNLOAD_ADMIN_PAGE, 'edit' ) || cs_is_admin_page( CS_EX_DOWNLOAD_ADMIN_PAGE, 'new' );
 	}
 
 	/**

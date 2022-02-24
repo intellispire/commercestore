@@ -398,7 +398,7 @@ function cs_enqueue_admin_scripts( $hook = '' ) {
 	}
 
 	// Downloads page.
-	if ( cs_is_admin_page( CS_POST_TYPE ) ) {
+	if ( cs_is_admin_page( CS_EX_DOWNLOAD_ADMIN_PAGE ) ) {
 		wp_enqueue_script( 'cs-admin-downloads' );
 	}
 
