@@ -697,7 +697,7 @@ class CS_Recurring_Stripe extends CS_Recurring_Gateway {
 					),
 					'metadata'               => array(
 						'payment_key' => $this->purchase_data['purchase_key'],
-						'download'    => $subscription['name'],
+						CS_POST_TYPE    => $subscription['name'],
 						'download_id' => $subscription['id'],
 						'price_id'    => $subscription['price_id'],
 						'caller'      => __CLASS__ . '|' . __METHOD__ . '|' . __LINE__ . '|' . CS_RECURRING_VERSION,

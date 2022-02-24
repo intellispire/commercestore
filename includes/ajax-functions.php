@@ -953,8 +953,8 @@ function cs_ajax_add_order_item() {
 		? sanitize_text_field( $_POST['nonce'] )
 		: '';
 
-	$download = isset( $_POST['download'] )
-		? cs_parse_product_dropdown_value( sanitize_text_field( $_POST['download'] ) )
+	$download = isset( $_POST[CS_POST_TYPE] )
+		? cs_parse_product_dropdown_value( sanitize_text_field( $_POST[CS_POST_TYPE] ) )
 		: array();
 
 	$country = isset( $_POST['country'] )

@@ -2884,7 +2884,7 @@ function display_export_report() {
 								<?php
 								echo CS()->html->product_dropdown(
 									array(
-										'name'        => 'download',
+										'name'        => CS_POST_TYPE,
 										'id'          => 'cs_customer_export_download',
 										'chosen'      => true,
 										/* translators: the plural post type label */

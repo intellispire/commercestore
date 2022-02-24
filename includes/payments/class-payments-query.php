@@ -91,7 +91,7 @@ class CS_Payments_Query extends CS_Stats {
 			'search_in_notes' => false,
 			'children'        => false,
 			'fields'          => null,
-			'download'        => null,
+			CS_POST_TYPE        => null,
 			'gateway'         => null,
 			'post__in'        => null,
 			'post__not_in'    => null,

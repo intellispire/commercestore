@@ -343,7 +343,7 @@ function cs_count_payments( $args = array() ) {
 		's'          => null,
 		'start-date' => null,
 		'end-date'   => null,
-		'download'   => null,
+		CS_POST_TYPE   => null,
 		'gateway'    => null,
 		'type'       => 'sale',
 	) );

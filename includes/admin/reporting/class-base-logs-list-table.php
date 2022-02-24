@@ -162,7 +162,7 @@ class CS_Base_Log_List_Table extends List_Table {
 	 * @return int Download ID.
 	 */
 	public function get_filtered_download() {
-		return absint( $this->get_request_var( 'download', false ) );
+		return absint( $this->get_request_var( CS_POST_TYPE, false ) );
 	}
 
 	/**
