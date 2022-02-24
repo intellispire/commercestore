@@ -255,9 +255,9 @@ function cs_setup_download_taxonomies() {
 		'menu_name'         => __( 'Categories', 'commercestore' ),
 	);
 
-	$category_args = apply_filters( CSFilter::DOWNLOAD_CATEGORY_ARGS, array(
+	$category_args = apply_filters( CSFilter::CATEGORY_ARGS, array(
 			'hierarchical' => true,
-			'labels'       => apply_filters( CSFilter::DOWNLOAD_CATEGORY_LABEL, $category_labels ),
+			'labels'       => apply_filters( CSFilter::CATEGORY_LABELS, $category_labels ),
 			'show_ui'      => true,
 			'query_var'    => CS_CAT_TYPE,
 			'rewrite'      => array( 'slug' => $slug . '/category', 'with_front' => false, 'hierarchical' => true ),
@@ -288,9 +288,9 @@ function cs_setup_download_taxonomies() {
 		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'commercestore' ), cs_get_label_singular() ),
 	);
 
-	$tag_args = apply_filters( CSFilter::DOWNLOAD_TAG_ARGS, array(
+	$tag_args = apply_filters( CSFilter::TAG_ARGS, array(
 			'hierarchical' => false,
-			'labels'       => apply_filters( CSFilter::DOWNLOAD_TAG_LABEL, $tag_labels ),
+			'labels'       => apply_filters( CSFilter::TAG_LABELS, $tag_labels ),
 			'show_ui'      => true,
 			'query_var'    => CS_TAG_TYPE,
 			'rewrite'      => array( 'slug' => $slug . '/tag', 'with_front' => false, 'hierarchical' => true ),

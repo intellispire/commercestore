@@ -58,11 +58,11 @@ const CS_EX_DOWNLOAD_ARGS = 'download';
 const CS_EX_DOWNLOAD_MESSAGES = 'download';
 
 class CSFilter {
-	const DOWNLOAD_CATEGORY_ARGS = 'cs_' . CS_CAT_TYPE . '_args';
-	const DOWNLOAD_CATEGORY_LABEL = 'cs_' . CS_CAT_TYPE . '_labels';
+	const CATEGORY_ARGS = 'cs_' . CS_CAT_TYPE . '_args';
+	const CATEGORY_LABELS = 'cs_' . CS_CAT_TYPE . '_labels';
 
-	const DOWNLOAD_TAG_ARGS = 'cs_' . CS_TAG_TYPE . '_args';
-	const DOWNLOAD_TAG_LABEL = 'cs_' . CS_TAG_TYPE . '_labels';
+	const TAG_ARGS = 'cs_' . CS_TAG_TYPE . '_args';
+	const TAG_LABELS = 'cs_' . CS_TAG_TYPE . '_labels';
 }
 
 
