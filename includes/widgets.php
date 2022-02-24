@@ -207,10 +207,10 @@ class cs_categories_tags_widget extends WP_Widget {
 			<select name="<?php echo esc_attr( $this->get_field_name( 'taxonomy' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>">
 				<?php
 				$category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE );
-				$tag_labels      = cs_get_taxonomy_labels( 'download_tag' );
+				$tag_labels      = cs_get_taxonomy_labels( CS_TAG_TYPE );
 				?>
 				<option value="<?php echo CS_CAT_TYPE ?>" <?php selected( CS_CAT_TYPE, $instance['taxonomy'] ); ?>><?php echo $category_labels['name']; ?></option>
-				<option value="<?php echo CS_TAG_TYPE ?>" <?php selected( 'download_tag', $instance['taxonomy'] ); ?>><?php echo $tag_labels['name']; ?></option>
+				<option value="<?php echo CS_TAG_TYPE ?>" <?php selected( CS_TAG_TYPE, $instance['taxonomy'] ); ?>><?php echo $tag_labels['name']; ?></option>
 			</select>
 		</p>
 		<p>
@@ -321,12 +321,12 @@ class CS_Product_Details_Widget extends WP_Widget {
 		$tag_label = '';
 
 		if ( $tags ) {
-			$tag_terms = (array) get_the_terms( $download_id, 'download_tag' );
+			$tag_terms = (array) get_the_terms( $download_id, CS_TAG_TYPE );
 
 			if ( $tag_terms && ! is_wp_error( $tag_terms ) ) {
-				$tag_list     = get_the_term_list( $download_id, 'download_tag', '', ', ' );
+				$tag_list     = get_the_term_list( $download_id, CS_TAG_TYPE, '', ', ' );
 				$tag_count    = count( $tag_terms );
-				$tag_taxonomy = cs_get_taxonomy_labels( 'download_tag' );
+				$tag_taxonomy = cs_get_taxonomy_labels( CS_TAG_TYPE );
 				$tag_label    = $tag_count > 1 ? $tag_taxonomy['name'] : $tag_taxonomy['singular_name'];
 			}
 		}
@@ -440,7 +440,7 @@ class CS_Product_Details_Widget extends WP_Widget {
 
 		<!-- Show download tags -->
 		<p>
-			<?php $tag_labels = cs_get_taxonomy_labels( 'download_tag' ); ?>
+			<?php $tag_labels = cs_get_taxonomy_labels( CS_TAG_TYPE ); ?>
 			<input <?php checked( $instance['tags'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'tags' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'tags' ) ); ?>" type="checkbox" />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'tags' ) ); ?>"><?php printf( __( 'Show %s', 'commercestore' ), $tag_labels['name'] ); ?></label>
 		</p>

@@ -1158,7 +1158,7 @@ class CS_API {
 		$product['info']['excerpt']       = $product_info->post_excerpt;
 		$product['info']['thumbnail']     = wp_get_attachment_url( get_post_thumbnail_id( $product_info->ID ) );
 		$product['info']['category']      = get_the_terms( $product_info, CS_CAT_TYPE );
-		$product['info']['tags']          = get_the_terms( $product_info, 'download_tag' );
+		$product['info']['tags']          = get_the_terms( $product_info, CS_TAG_TYPE );
 
 		if ( user_can( $this->user_id, 'view_shop_reports' ) || $this->override ) {
 			$product['stats']['total']['sales']              = cs_get_download_sales_stats( $product_info->ID );

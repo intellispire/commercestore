@@ -237,7 +237,7 @@ class Tests_Widgets extends CS_UnitTestCase {
 
 		$updated = $categories_widget->update(
 			array( 'title' => 'Categories', 'taxonomy' => CS_CAT_TYPE, 'count' => true, 'hide_empty' => true ),
-			array( 'title' => 'Tags', 'taxonomy' => 'download_tag', 'count' => true, 'hide_empty' => true )
+			array( 'title' => 'Tags', 'taxonomy' => CS_TAG_TYPE, 'count' => true, 'hide_empty' => true )
 		);
 
 		$this->assertEquals( $updated, array( 'title' => 'Categories', 'taxonomy' => CS_CAT_TYPE, 'count' => true, 'hide_empty' => true ) );

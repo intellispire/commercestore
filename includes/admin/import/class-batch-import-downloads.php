@@ -179,7 +179,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 
 					$tags = $this->str_to_array( $row[ $this->field_mapping['tags'] ] );
 
-					$this->set_taxonomy_terms( $download_id, $tags, 'download_tag' );
+					$this->set_taxonomy_terms( $download_id, $tags, CS_TAG_TYPE );
 
 				}
 

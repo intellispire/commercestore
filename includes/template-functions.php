@@ -858,7 +858,7 @@ function cs_add_download_post_classes( $classes, $class = '', $post_id = false )
 		}
 
 		// Add tag slugs
-		$tags = get_the_terms( $post_id, 'download_tag' );
+		$tags = get_the_terms( $post_id, CS_TAG_TYPE );
 		if( ! empty( $tags ) ) {
 			foreach( $tags as $key => $value ) {
 				$classes[] = 'cs-download-tag-' . $value->slug;

@@ -288,11 +288,11 @@ function cs_setup_download_taxonomies() {
 		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'commercestore' ), cs_get_label_singular() ),
 	);
 
-	$tag_args = apply_filters( 'cs_download_tag_args', array(
+	$tag_args = apply_filters( CSFilter::DOWNLOAD_TAG_ARGS, array(
 			'hierarchical' => false,
-			'labels'       => apply_filters( 'cs_download_tag_labels', $tag_labels ),
+			'labels'       => apply_filters( CSFilter::DOWNLOAD_TAG_LABEL, $tag_labels ),
 			'show_ui'      => true,
-			'query_var'    => 'download_tag',
+			'query_var'    => CS_TAG_TYPE,
 			'rewrite'      => array( 'slug' => $slug . '/tag', 'with_front' => false, 'hierarchical' => true ),
 			'capabilities' => array(
 				'manage_terms' => 'manage_product_terms',
@@ -303,8 +303,8 @@ function cs_setup_download_taxonomies() {
 		)
 	);
 
-	register_taxonomy( 'download_tag', array( CS_POST_TYPE ), $tag_args );
-	register_taxonomy_for_object_type( 'download_tag', CS_POST_TYPE );
+	register_taxonomy( CS_TAG_TYPE, array( CS_POST_TYPE ), $tag_args );
+	register_taxonomy_for_object_type( CS_TAG_TYPE, CS_POST_TYPE );
 }
 add_action( 'init', 'cs_setup_download_taxonomies', 0 );
 
@@ -318,7 +318,7 @@ add_action( 'init', 'cs_setup_download_taxonomies', 0 );
 function cs_get_taxonomy_labels( $taxonomy = CS_CAT_TYPE ) {
 	$allowed_taxonomies = apply_filters( 'cs_allowed_download_taxonomies', array(
 		CS_CAT_TYPE,
-		'download_tag',
+		CS_TAG_TYPE,
 	) );
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies, true ) ) {

@@ -159,7 +159,7 @@ class CS_Batch_Downloads_Export extends CS_Batch_Export {
 								break;
 						}
 					} elseif ( 'tags' == $key ) {
-						$terms = get_the_terms( $download->ID, 'download_tag' );
+						$terms = get_the_terms( $download->ID, CS_TAG_TYPE );
 
 						if ( $terms ) {
 							$terms       = wp_list_pluck( $terms, 'name' );
