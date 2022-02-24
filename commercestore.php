@@ -41,9 +41,23 @@ const CS_FEATURE_MARKETING = false;
 const CS_DEFAULT_SLUG = 'store'; // Override with the CS_SLUG constant
 
 // @todo replace hardcoding of post_type and taxonomies with the following constants all throughout the codebase
+
+const CS_ICON = 'download'; // Change the icon here
+
 const CS_POST_TYPE = 'csproduct';
 const CS_TAG_TYPE = CS_POST_TYPE . '_tag';
 const CS_CAT_TYPE = CS_POST_TYPE . '_category';
+
+// Tease out the word 'download' that is used in different contexts.
+// search and replace back during build?
+const CS_EX_DOWNLOAD_CSS_CLASS = 'download';
+const CS_EX_DOWNLOAD_SHORTCODE = 'download';
+const CS_EX_DOWNLOAD_ITEM = 'download';
+const CS_EX_DOWNLOAD_ARGS = 'download';
+const CS_EX_DOWNLOAD_MESSAGES = 'download';
+
+
+
 
 const CS_BASE_PLUGIN = __FILE__;
 

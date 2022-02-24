@@ -428,7 +428,7 @@ function cs_updated_messages( $messages ) {
 	$url2 = cs_get_label_singular();
 	$url3 = '</a>';
 
-	$messages[CS_POST_TYPE] = array(
+	$messages[CS_EX_DOWNLOAD_MESSAGES] = array(
 		1 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'commercestore' ), $url1, $url2, $url3 ),
 		4 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'commercestore' ), $url1, $url2, $url3 ),
 		6 => sprintf( __( '%2$s published. %1$sView %2$s%3$s.', 'commercestore' ), $url1, $url2, $url3 ),
@@ -455,7 +455,7 @@ function cs_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 	$singular = cs_get_label_singular();
 	$plural   = cs_get_label_plural();
 
-	$bulk_messages[CS_POST_TYPE] = array(
+	$bulk_messages[CS_EX_DOWNLOAD_MESSAGES_TYPE] = array(
 		'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'commercestore' ), $bulk_counts['updated'], $singular, $plural ),
 		'locked'    => sprintf( _n( '%1$s %2$s not updated, somebody is editing it.', '%1$s %3$s not updated, somebody is editing them.', $bulk_counts['locked'], 'commercestore' ), $bulk_counts['locked'], $singular, $plural ),
 		'deleted'   => sprintf( _n( '%1$s %2$s permanently deleted.', '%1$s %3$s permanently deleted.', $bulk_counts['deleted'], 'commercestore' ), $bulk_counts['deleted'], $singular, $plural ),

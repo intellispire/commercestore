@@ -562,7 +562,7 @@ function cs_register_downloads_report( $reports ) {
 		$reports->add_report( 'downloads', array(
 			'label'     => cs_get_label_plural(),
 			'priority'  => 10,
-			'icon'      => CS_POST_TYPE,
+			'icon'      => CS_ICON,
 			'endpoints' => array(
 				'tiles'  => $tiles,
 				'charts' => $charts,
@@ -1798,7 +1798,7 @@ function cs_register_file_downloads_report( $reports ) {
 
 		$reports->add_report( 'file_downloads', array(
 			'label'     => __( 'File Downloads', 'commercestore' ),
-			'icon'      => CS_POST_TYPE,
+			'icon'      => CS_ICON,
 			'priority'  => 30,
 			'endpoints' => array(
 				'tiles'  => $tiles,
@@ -2884,7 +2884,7 @@ function display_export_report() {
 								<?php
 								echo CS()->html->product_dropdown(
 									array(
-										'name'        => CS_POST_TYPE,
+										'name'        => 'download',
 										'id'          => 'cs_customer_export_download',
 										'chosen'      => true,
 										/* translators: the plural post type label */

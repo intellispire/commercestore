@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 function cs_downloads_contextual_help() {
 	$screen = get_current_screen();
 
-	if ( $screen->id != CS_POST_TYPE )
+	if ( $screen->id != 'download' )
 		return;
 
 	$screen->set_help_sidebar(

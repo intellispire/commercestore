@@ -310,7 +310,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 				foreach( $downloads as $download ) {
 
 					if( is_array( $download ) ) {
-						$download_name = $download[CS_POST_TYPE];
+						$download_name = $download['download'];
 						$price         = $download['price'];
 						$tax           = $download['tax'];
 						$price_id      = $download['price_id'];
@@ -579,7 +579,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 				$price_id = isset( $matches[1][1] ) ? trim( $matches[1][1] ) : false;
 
 				$d_array[] = array(
-					CS_POST_TYPE => trim( $d[0] ),
+					'download' => trim( $d[0] ),
 					'price'    => $price - $tax,
 					'tax'      => $tax,
 					'price_id' => $price_id,

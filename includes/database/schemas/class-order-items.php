@@ -108,7 +108,7 @@ class Order_Items extends Schema {
 			'name'       => 'type',
 			'type'       => 'varchar',
 			'length'     => '20',
-			'default'    => CS_POST_TYPE, // VERIFY
+			'default'    => 'download',
 			'sortable'   => true,
 			'transition' => true
 		),

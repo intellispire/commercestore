@@ -91,7 +91,7 @@ class CS_Payments_Query extends CS_Stats {
 			'search_in_notes' => false,
 			'children'        => false,
 			'fields'          => null,
-			CS_POST_TYPE        => null,
+			'download'        => null,
 			'gateway'         => null,
 			'post__in'        => null,
 			'post__not_in'    => null,
@@ -548,7 +548,7 @@ class CS_Payments_Query extends CS_Stats {
 
 		$this->args['id__in'] = $order_ids;
 
-		$this->__unset( CS_POST_TYPE );
+		$this->__unset( CS_EX_DOWNLOAD_ARGS );
 	}
 
 	/**

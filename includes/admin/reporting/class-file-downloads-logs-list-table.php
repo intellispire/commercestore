@@ -69,13 +69,13 @@ class CS_File_Downloads_Log_Table extends CS_Base_Log_List_Table {
 	public function column_default( $item, $column_name ) {
 		$base_url = remove_query_arg( 'paged' );
 		switch ( $column_name ) {
-			case CS_POST_TYPE :
+			case 'download' :
 				$download     = new CS_Download( $item[ $column_name ] );
 				$column_value = ! empty( $item['price_id'] )
 					? cs_get_download_name( $download->ID, $item['price_id'] )
 					: cs_get_download_name( $download->ID );
 
-				return '<a href="' . esc_url( add_query_arg( CS_POST_TYPE, $download->ID, $base_url ) ) . '" >' . $column_value . '</a>';
+				return '<a href="' . esc_url( add_query_arg( 'download', $download->ID, $base_url ) ) . '" >' . $column_value . '</a>';
 			case 'customer' :
 				return ! empty( $item[ 'customer' ]->id )
 					? '<a href="' . esc_url( add_query_arg( 'customer', $item[ 'customer' ]->id, $base_url ) ) . '">' . $item['customer']->name . '</a>'
@@ -103,7 +103,7 @@ class CS_File_Downloads_Log_Table extends CS_Base_Log_List_Table {
 	public function get_columns() {
 		return array(
 			'ID'         => __( 'Log ID',       'commercestore' ),
-			CS_POST_TYPE   => cs_get_label_singular(),
+			'download'   => cs_get_label_singular(),
 			'customer'   => __( 'Customer',     'commercestore' ),
 			'payment_id' => __( 'Order Number', 'commercestore' ),
 			'file'       => __( 'File',         'commercestore' ),
@@ -152,7 +152,7 @@ class CS_File_Downloads_Log_Table extends CS_Base_Log_List_Table {
 				if ( empty( $this->file_search ) || ( ! empty( $this->file_search ) && strpos( strtolower( $file_name ), strtolower( $this->get_search() ) ) !== false ) ) {
 					$logs_data[] = array(
 						'ID'         => $log->id,
-						CS_POST_TYPE   => $log->product_id,
+						'download'   => $log->product_id,
 						'customer'   => new CS_Customer( $customer_id ),
 						'payment_id' => $log->order_id,
 						'price_id'   => $log->price_id,

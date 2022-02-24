@@ -34,7 +34,7 @@ function cs_responsive_download_post_class( $classes = array(), $class = '', $po
 	)
 		return $classes;
 
-	if ( ( $key = array_search( CS_POST_TYPE, $classes ) ) )
+	if ( ( $key = array_search( CS_EX_DOWNLOAD_CSS_CLASS, $classes ) ) )
 		unset( $classes[ $key ] );
 
 	return $classes;

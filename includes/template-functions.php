@@ -994,7 +994,7 @@ function cs_download_shortcode_item( $atts, $i ) {
 	$cs_download_shortcode_item_atts = $atts;
 	$cs_download_shortcode_item_i = $i;
 
-	cs_get_template_part( 'shortcode', CS_POST_TYPE );
+	cs_get_template_part( 'shortcode', CS_EX_DOWNLOAD_SHORTCODE );
 }
 add_action( 'cs_download_shortcode_item', 'cs_download_shortcode_item', 10, 2 );
 

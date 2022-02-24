@@ -174,7 +174,7 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 	$tab        = isset( $_GET['tab'] )        ? strtolower( $_GET['tab'] )        : false;
 
 	switch ( $passed_page ) {
-		case CS_POST_TYPE:
+		case 'download':
 			switch ( $passed_view ) {
 				case 'list-table':
 					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' ) {

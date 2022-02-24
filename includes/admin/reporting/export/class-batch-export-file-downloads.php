@@ -44,7 +44,7 @@ class CS_Batch_File_Downloads_Export extends CS_Batch_Export {
 			'user'       => __( 'Downloaded by', 'commercestore' ),
 			'ip'         => __( 'IP Address', 'commercestore' ),
 			'user_agent' => __( 'User Agent', 'commercestore' ),
-			CS_POST_TYPE   => __( 'Product', 'commercestore' ),
+			'download'   => __( 'Product', 'commercestore' ),
 			'file'       => __( 'File', 'commercestore' ),
 		);
 
@@ -102,7 +102,7 @@ class CS_Batch_File_Downloads_Export extends CS_Batch_Export {
 				'user'       => $customer,
 				'ip'         => $log->ip,
 				'user_agent' => $log->user_agent,
-				CS_POST_TYPE   => get_the_title( $log->product_id ),
+				'download'   => get_the_title( $log->product_id ),
 				'file'       => $file_name,
 			);
 		}
