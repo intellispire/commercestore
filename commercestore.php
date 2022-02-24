@@ -38,13 +38,15 @@ defined( 'ABSPATH' ) || exit;
 
 const CS_FEATURE_VARIABLE_PRICE = true;
 const CS_FEATURE_MARKETING = false;
-const CS_DEFAULT_SLUG = 'download'; // Override with the CS_SLUG constant
+const CS_DEFAULT_SLUG = 'store'; // Override with the CS_SLUG constant
 
 const CS_ICON = 'download'; // Change the icon here
 
 const CS_POST_TYPE = 'download';
 const CS_TAG_TYPE = CS_POST_TYPE . '_tag';
 const CS_CAT_TYPE = CS_POST_TYPE . '_category';
+
+const CS_QUERY_VAR = 'download';
 
 // Tease out the word 'download' that is used in different contexts.
 // search and replace back during build?
