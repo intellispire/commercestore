@@ -23,7 +23,7 @@ class Log_Meta_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$log = parent::cs()->log->create_and_get();
 	}
 

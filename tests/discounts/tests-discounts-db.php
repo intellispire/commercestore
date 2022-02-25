@@ -20,7 +20,7 @@ class Tests_Discounts_DB extends \CS_UnitTestCase {
 	 */
 	protected static $discounts;
 
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		$args = array(
 			array(
 				'name'              => '$10 Off',

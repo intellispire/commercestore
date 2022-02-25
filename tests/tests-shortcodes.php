@@ -13,7 +13,7 @@ class Tests_Shortcode extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( self::$user_id );
 

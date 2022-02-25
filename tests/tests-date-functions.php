@@ -10,7 +10,7 @@ class Date_Functions_Tests extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		// All tests will take the -5 (Central Time Zone) into account.
 		update_option( 'gmt_offset', -5 );
 

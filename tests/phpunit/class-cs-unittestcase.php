@@ -20,8 +20,8 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public static $original_gmt_offset;
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		cs_install();
 

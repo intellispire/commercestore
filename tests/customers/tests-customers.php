@@ -35,7 +35,7 @@ class Tests_Customers extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		$customers = parent::cs()->customer->create_many( 5 );
 
 		foreach ( $customers as $customer ) {

@@ -22,7 +22,7 @@ class Tests_Customers_DB extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$customers = parent::cs()->customer->create_many( 5 );
 	}
 

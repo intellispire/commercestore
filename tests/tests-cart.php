@@ -31,7 +31,7 @@ class Test_Cart extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		global $wp_rewrite, $current_user;
 
 		wp_set_current_user( static::factory()->user->create( array( 'role' => 'administrator' ) ) );

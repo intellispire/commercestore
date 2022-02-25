@@ -23,7 +23,7 @@ class File_Download_Log_Meta_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$log = parent::cs()->file_download_log->create_and_get();
 	}
 

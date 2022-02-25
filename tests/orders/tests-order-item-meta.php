@@ -19,7 +19,7 @@ class Order_Item_Meta_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$order_item = parent::cs()->order_item->create_and_get();
 	}
 

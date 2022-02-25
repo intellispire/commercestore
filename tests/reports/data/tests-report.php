@@ -37,7 +37,7 @@ class Report_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up static fixtures.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		Reports\register_endpoint( 'foo', array(
 			'label' => 'Foo',
 			'views' => array(

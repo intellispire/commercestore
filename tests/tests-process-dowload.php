@@ -18,8 +18,8 @@ class Tests_Process_Download extends CS_UnitTestCase {
 	/**
 	 * Sets up fixtures once
 	 */
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		$order_id = cs_add_order( array(
 			'status'          => 'complete',

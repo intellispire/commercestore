@@ -21,7 +21,7 @@ class Date_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		update_option( 'gmt_offset', -5 );
 
 		CS()->utils->get_gmt_offset( true );

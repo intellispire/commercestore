@@ -15,7 +15,7 @@ class Test_Misc extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$download = CS_Helper_Download::create_simple_download();
 	}
 

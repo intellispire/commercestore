@@ -32,8 +32,8 @@ class NotificationApiTests extends \CS_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		// Set up the REST API.
 		global $wp_rest_server;

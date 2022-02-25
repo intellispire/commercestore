@@ -18,8 +18,8 @@ class Tests_License_Upgrade_Notice extends \CS_UnitTestCase {
 	/**
 	 * Runs once before any tests are executed.
 	 */
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		// These are admin files, so we need to include them manually.
 		require_once CS_PLUGIN_DIR . 'includes/admin/class-pass-manager.php';

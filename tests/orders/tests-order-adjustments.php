@@ -23,7 +23,7 @@ class Order_Adjustment_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$order_adjustments = parent::cs()->order_adjustment->create_many( 5 );
 	}
 

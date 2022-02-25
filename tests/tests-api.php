@@ -23,7 +23,7 @@ class Tests_API extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		global $wp_rewrite, $wp_query;
 		$GLOBALS['wp_rewrite']->init();
 		flush_rewrite_rules( false );

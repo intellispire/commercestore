@@ -22,7 +22,7 @@ class Order_Item_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$order_items = parent::cs()->order_item->create_many( 5 );
 	}
 

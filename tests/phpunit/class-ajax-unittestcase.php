@@ -12,8 +12,8 @@ require_once dirname( __FILE__ ) . '/factory.php';
  */
 class Ajax_UnitTestCase extends \WP_Ajax_UnitTestCase {
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		cs_install();
 

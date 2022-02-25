@@ -27,7 +27,7 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$date = CS()->utils->date();
 	}
 
