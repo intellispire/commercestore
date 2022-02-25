@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Util\Test;
+
 require_once dirname( __FILE__ ) . '/factory.php';
 
 /**
@@ -51,7 +53,7 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 
 		$this->expectDeprecatedCS();
 	}
-	
+
 	/**
 	 * Sets up logic for the @expectCSDeprecated annotation for deprecated elements in CS.
 	 */
@@ -122,6 +124,14 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 				\PHPUnit_Framework_Assert::assertThat( $item, $constraint );
 			}
 		}
+	}
+
+	public function getAnnotations() : array {
+		 $annotations = Test::parseTestMethodAnnotations(
+			 static::class,
+		   ''
+		 );
+		 return $annotations;
 	}
 
 }
