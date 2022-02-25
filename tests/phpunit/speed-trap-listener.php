@@ -52,10 +52,10 @@ class SpeedTrapListener implements \PHPUnit\Framework\TestListener
      * An error occurred.
      *
      * @param \PHPUnit\Framework\Test $test
-     * @param Exception              $e
+     * @param Throwable               $t
      * @param float                   $time
      */
-    public function addError(\PHPUnit\Framework\Test $test, Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, Throwable $t, float $time)
     {
     }
 
