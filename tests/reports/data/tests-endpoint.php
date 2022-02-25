@@ -185,7 +185,7 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 
 		$errors = $endpoint->get_errors();
 
-		$this->assertStringContainsString( 'invalid_view_arg_type', $errors->get_error_codes() );
+		$this->assertContains( 'invalid_view_arg_type', $errors->get_error_codes() );
 	}
 
 	/**
@@ -227,7 +227,7 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 
 		$errors = $endpoint->get_errors();
 
-		$this->assertStringContainsString( 'missing_display_callback', $errors->get_error_codes() );
+		$this->assertContains( 'missing_display_callback', $errors->get_error_codes() );
 	}
 
 	/**
@@ -250,7 +250,7 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 
 		$errors = $endpoint->get_errors();
 
-		$this->assertStringContainsString( 'invalid_view_arg_type', $errors->get_error_codes() );
+		$this->assertContains( 'invalid_view_arg_type', $errors->get_error_codes() );
 	}
 
 	/**
@@ -292,7 +292,7 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 
 		$errors = $endpoint->get_errors();
 
-		$this->assertStringContainsString( 'missing_data_callback', $errors->get_error_codes() );
+		$this->assertContains( 'missing_data_callback', $errors->get_error_codes() );
 	}
 
 	/**
@@ -315,7 +315,7 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 
 		$errors = $endpoint->get_errors();
 
-		$this->assertStringContainsString( 'invalid_view_arg_type', $errors->get_error_codes() );
+		$this->assertContains( 'invalid_view_arg_type', $errors->get_error_codes() );
 	}
 
 	/**

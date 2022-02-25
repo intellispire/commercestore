@@ -132,7 +132,7 @@ class Dataset_Tests extends \CS_UnitTestCase {
 			),
 		) );
 
-		$this->assertStringContainsString( 'missing_chart_data', $dataset->get_errors()->get_error_codes() );
+		$this->assertContains( 'missing_chart_data', $dataset->get_errors()->get_error_codes() );
 	}
 
 	/**
