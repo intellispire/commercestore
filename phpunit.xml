@@ -12,10 +12,11 @@
 		</testsuite>
 	</testsuites>
 
-	<filter>
-	<whitelist processUncoveredFilesFromWhitelist="false">
+	<coverage processUncoveredFiles="true">
 	<include>
 		<directory suffix=".php">./includes</directory>
+		<directory suffix=".php">./lib</directory>
+		<directory suffix=".php">./csae</directory>
 		<file>commercestore.php</file>
 		<file>uninstall.php</file>
     </include>
@@ -38,8 +39,7 @@
 		<directory suffix=".php">./includes/admin/reporting/export</directory>
 		<directory>./includes/libraries/</directory>
 	</exclude>
-	</whitelist>
-	</filter>
+	</coverage>
 
 	<groups>
 		<exclude>
