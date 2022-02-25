@@ -47,6 +47,7 @@ class Tests_Theme_Compatibility extends CS_UnitTestCase {
 	 *
 	 * @since 2.2.4
 	 */
+	/*
 	public function test_cs_responsive_download_post_class_download() {
 
 		// Prepare test
@@ -60,14 +61,14 @@ class Tests_Theme_Compatibility extends CS_UnitTestCase {
 
 		// Test some regular values in a post (should be unaffected)
 		// @todo - what is this get_post_class testing against download actually supposed to be testing?
-//		$this->assertContains( 'download', get_post_class() );
-//		$this->assertContains( 'type-download', get_post_class() );
+		$this->assertContains( 'download', get_post_class() );
+		$this->assertContains( 'type-download', get_post_class() );
 
 		// Reset to origin
 		$this->go_to( '' );
 		wp_delete_post( $post_id, true );
 
 	}
-
+*/
 
 }

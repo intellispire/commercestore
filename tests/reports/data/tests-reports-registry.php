@@ -117,7 +117,7 @@ class Report_Registry_Tests extends \CS_UnitTestCase {
 	 * @expectedException \CS_Exception
 	 */
 	public function test_add_report_with_empty_attributes_should_return_false() {
-		$this->expectException();
+		$this->expectException(\CS_Exception::class);
 		$this->registry->add_report( 'foo', array() );
 	}
 
