@@ -12,6 +12,8 @@
 		</testsuite>
 	</testsuites>
 
+	<filter>
+	<whitelist processUncoveredFilesFromWhitelist="false">
 	<include>
 		<directory suffix=".php">./includes</directory>
 		<file>commercestore.php</file>
@@ -36,6 +38,8 @@
 		<directory suffix=".php">./includes/admin/reporting/export</directory>
 		<directory>./includes/libraries/</directory>
 	</exclude>
+	</whitelist>
+	</filter>
 
 	<groups>
 		<exclude>
