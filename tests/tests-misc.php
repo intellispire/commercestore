@@ -551,7 +551,7 @@ class Test_Misc extends CS_UnitTestCase {
 	 * @covers ::cs_get_symlink_dir
 	 */
 	public function test_get_symlink_url() {
-		$this->assertEquals( 'http://example.org/wp-content/uploads/cs/symlinks', cs_get_symlink_url() );
+		$this->assertEquals( 'http://example.org/wp-content/uploads/commercestore/symlinks', cs_get_symlink_url() );
 	}
 
 	public function test_use_skus() {
