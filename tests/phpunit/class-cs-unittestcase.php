@@ -47,9 +47,13 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 * Runs before each test method.
 	 */
 	public function setUp() {
-		parent::setUp();
+		parent::set_up();
 
 		$this->expectDeprecatedCS();
+	}
+
+	public function set_up() {
+		$this->setUp();
 	}
 
 	/**
