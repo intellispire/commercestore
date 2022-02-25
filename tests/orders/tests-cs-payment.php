@@ -504,7 +504,7 @@ class CS_Payment_Tests extends \CS_UnitTestCase {
 	 * @expectCSDeprecated cs_undo_purchase_on_refund
 	 */
 	public function test_refund_payment_legacy() {
-		$this->expectDeprecated();
+		$this->expectDeprecation();
 
 		$this->payment->status = 'complete';
 		$this->payment->save();
