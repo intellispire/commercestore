@@ -33,7 +33,7 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 		add_filter( 'cs_log_email_errors', '__return_false' );
 	}
 
-	public static function tearDownAfterClass() {
+	public static function tearDownAfterClass() : void {
 		self::_delete_all_cs_data();
 
 		delete_option( 'gmt_offset' );

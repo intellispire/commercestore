@@ -1,0 +1,16 @@
+steps:
+
+  - label: "Pull PHP 7.4"
+    command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:7.4"
+    retry:
+      automatic: true
+
+  - label: "Pull MariaDB"
+    command: "docker pull mariadb:10.2"
+    retry:
+      automatic: true
+
+  - wait
+
+  - command: .buildkite/pipeline.sh | buildkite-agent pipeline upload
+    label: ":pipeline: Upload"
