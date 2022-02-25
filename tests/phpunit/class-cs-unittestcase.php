@@ -126,6 +126,11 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * Polyfill getAnnotations()
+	 *
+	 * @return array
+	 */
 	public function getAnnotations() : array {
 		 $annotations = Test::parseTestMethodAnnotations(
 			 static::class,
@@ -133,5 +138,18 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 		 );
 		 return $annotations;
 	}
+
+	/**
+	 * Polyfill assertInternalTypes
+	 */
+
+	public function assertInternalType($type, $var, $message ='') {
+		switch ($type) {
+			case 'array': return ! $this->assertIsArray($var, 'Test is broken'); break;
+			default: return true;
+		}
+	}
+
+
 
 }
