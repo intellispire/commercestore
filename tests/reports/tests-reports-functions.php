@@ -695,7 +695,7 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 	 * @covers \CS\Reports\get_filter_key
 	 */
 	public function test_get_filter_key_should_begin_with_reports() {
-		$this->assertRegExp( '/^reports/', get_filter_key( 'dates' ) );
+		$this->assertMatchesRegularExpression( '/^reports/', get_filter_key( 'dates' ) );
 	}
 
 	/**
@@ -704,7 +704,7 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 	public function test_get_filter_key_should_contain_the_filter_name() {
 		$filter = 'dates';
 
-		$this->assertRegExp( "/filter-{$filter}/", get_filter_key( $filter ) );
+		$this->assertMatchesRegularExpression( "/filter-{$filter}/", get_filter_key( $filter ) );
 	}
 
 	/**
@@ -713,7 +713,7 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 	public function test_get_filter_key_should_contain_the_current_site_id() {
 		$site = get_current_blog_id();
 
-		$this->assertRegExp( "/site-{$site}/", get_filter_key( 'dates' ) );
+		$this->assertMatchesRegularExpression( "/site-{$site}/", get_filter_key( 'dates' ) );
 	}
 
 	/**
@@ -722,7 +722,7 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 	public function test_get_filter_key_should_contain_the_current_user_id() {
 		$user = get_current_user_id();
 
-		$this->assertRegExp( "/user-{$user}/", get_filter_key( 'dates' ) );
+		$this->assertMatchesRegularExpression( "/user-{$user}/", get_filter_key( 'dates' ) );
 	}
 
 	/**

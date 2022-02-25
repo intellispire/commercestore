@@ -159,7 +159,7 @@ class Report_Tests extends \CS_UnitTestCase {
 			'filters'    => array( 'products' ),
 		) );
 
-		$this->assertNotContains( 'dates', $report->get_filters() );
+		$this->assertStringNotContainsString( 'dates', $report->get_filters() );
 	}
 
 	/**

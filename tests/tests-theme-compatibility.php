@@ -59,7 +59,7 @@ class Tests_Theme_Compatibility extends CS_UnitTestCase {
 		$this->go_to( get_permalink( $post_id ) );
 
 		// Test some regular values in a post (should be unaffected)
-		$this->assertNotContains( 'download', get_post_class() );
+		$this->assertStringNotContainsString( 'download', get_post_class() );
 		$this->assertContains( 'type-download', get_post_class() );
 
 		// Reset to origin

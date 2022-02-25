@@ -145,9 +145,13 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 
 	public function assertInternalType($type, $var, $message = '') {
 		switch ($type) {
-			case 'array':  return $this->assertIsArray($var, $message);
-			case 'string': return $this->assertIsString($var, $message);
 			case 'int': return $this->assertIsInt($var, $message);
+			case 'bool': return $this->assertIsBool($var, $message);
+			case 'array': return $this->assertIsArray($var, $message);
+			case 'float': return $this->assertIsFloat($var, $message);
+			case 'object': return $this->assertIsObject($var, $message);
+			case 'string': return $this->assertIsString($var, $message);
+			case 'numeric': return $this->assertIsNumeric($var, $message);
 			default:
 				$this->assertFalse(true, 'Missing assertInternalTypeTest for: '. $type);
 				return false;

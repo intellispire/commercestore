@@ -318,7 +318,7 @@ class Tests_Customers extends \CS_UnitTestCase {
 	public function test_get_user_verification_request_url_should_return_true() {
 		$url = cs_get_user_verification_request_url( 1 );
 
-		$this->assertStrinContainsString( 'cs_action=send_verification_email', $url );
+		$this->assertStringContainsString( 'cs_action=send_verification_email', $url );
 	}
 
 	public function test_validate_user_verification_token_with_valid_url_should_true() {

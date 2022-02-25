@@ -230,7 +230,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 			)
 		);
 
-		$this->assertNotContains( 'required', $select );
+		$this->assertStringNotContainsString( 'required', $select );
 	}
 
 	/**
@@ -244,6 +244,6 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	 * @covers CS_HTML_Elements::text
 	 */
 	public function test_text_is_not_required() {
-		$this->assertNotContains( 'required', CS()->html->text() );
+		$this->assertStringNotContainsString( 'required', CS()->html->text() );
 	}
 }

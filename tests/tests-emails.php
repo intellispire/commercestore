@@ -225,7 +225,7 @@ class Tests_Emails extends CS_UnitTestCase {
 
 	public function test_email_tag_download_list_with_names_disabled_via_filter() {
 		add_filter( 'cs_email_show_names', '__return_false' );
-		$this->assertNotContains( '<strong>' . get_the_title( self::$post->ID ) . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringNotContainsString( '<strong>' . get_the_title( self::$post->ID ) . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
 		remove_filter( 'cs_email_show_names', '__return_false' );
 	}
 
