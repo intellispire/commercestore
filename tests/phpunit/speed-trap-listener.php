@@ -55,7 +55,7 @@ class SpeedTrapListener implements \PHPUnit\Framework\TestListener
      * @param Throwable               $t
      * @param float                   $time
      */
-    public function addError(\PHPUnit\Framework\Test $test, Throwable $t, float $time)
+    public function addError(\PHPUnit\Framework\Test $test, Throwable $t, float $time) : void
     {
     }
 
