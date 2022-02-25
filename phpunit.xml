@@ -7,7 +7,7 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite>
+		<testsuite name="cstore-core">
 			<directory prefix="tests-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
