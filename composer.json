@@ -14,6 +14,9 @@
         "allow-plugins": {
             "composer/installers": true,
             "composer/package-versions-deprecated": true
+        },
+        "platform": {
+          "php": "7.4.28"
         }
     },
     "require": {
@@ -23,7 +26,7 @@
         "stripe/stripe-php": "^7.113"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^8",
         "yoast/phpunit-polyfills": "1.x-dev",
         "humbug/php-scoper": "1.0.x-dev",
         "phpunit/php-invoker": "^3.1"
