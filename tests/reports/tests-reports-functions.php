@@ -34,7 +34,7 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 	/**
 	 * Runs after every test method.
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		unset( $_REQUEST['filter_from'] );
 		unset( $_REQUEST['filter_to'] );
 		unset( $_REQUEST['range'] );
@@ -50,7 +50,7 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 			clear_filter( $filter );
 		}
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

@@ -27,8 +27,8 @@ class CS_Payment_Tests extends \CS_UnitTestCase {
 		$this->payment = cs_get_payment( $payment_id );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		\CS_Helper_Payment::delete_payment( $this->payment->ID );
 

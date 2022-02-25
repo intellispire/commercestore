@@ -9,8 +9,8 @@ class Tests_URL extends CS_UnitTestCase {
 		parent::setUp();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_ajax_url() {

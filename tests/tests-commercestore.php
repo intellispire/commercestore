@@ -13,8 +13,8 @@ class Tests_CS extends CS_UnitTestCase {
 		$this->object = CS();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_cs_instance() {

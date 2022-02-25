@@ -10,8 +10,8 @@ class Tests_Post_Type_Labels extends CS_UnitTestCase {
 		parent::setUp();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_get_default_labels() {

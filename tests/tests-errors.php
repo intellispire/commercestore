@@ -15,8 +15,8 @@ class Tests_Errors extends CS_UnitTestCase {
 		cs_set_error( 'password_incorrect', 'The password you entered is incorrect' );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_set_errors() {

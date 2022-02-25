@@ -18,9 +18,9 @@ class Tests_Downloads extends CS_UnitTestCase {
 		$this->_post = CS_Helper_Download::create_variable_download();
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 
-		parent::tearDown();
+		parent::tear_down();
 
 		CS_Helper_Download::delete_download( $this->_post->ID );
 

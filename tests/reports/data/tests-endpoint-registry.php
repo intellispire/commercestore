@@ -42,10 +42,10 @@ class Endpoint_Registry_Tests extends \CS_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		$this->registry->exchangeArray( array() );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

@@ -186,8 +186,8 @@ class Tests_API extends CS_UnitTestCase {
 		self::$api->flush_api_output();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		// Revoke key to ensure `update_key()` will generate a new one.
 		CS()->api->revoke_api_key( self::$user_id );

@@ -11,8 +11,8 @@ class Tests_Tools extends CS_UnitTestCase {
 		require_once CS_PLUGIN_DIR . 'includes/admin/tools.php';
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_system_info() {

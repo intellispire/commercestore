@@ -27,8 +27,8 @@ class File_Download_Log_Meta_Tests extends \CS_UnitTestCase {
 		self::$log = parent::cs()->file_download_log->create_and_get();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		cs_get_component_interface( 'log_file_download', 'meta' )->truncate();
 	}

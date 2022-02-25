@@ -17,10 +17,10 @@ class Date_Functions_Tests extends CS_UnitTestCase {
 		CS()->utils->get_gmt_offset( true );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		$_REQUEST['range'] = '';
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	//

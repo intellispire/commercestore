@@ -11,8 +11,8 @@ class Tests_Upgrades extends CS_UnitTestCase {
 		require_once CS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_upgrade_completion() {

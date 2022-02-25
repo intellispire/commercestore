@@ -18,8 +18,8 @@ class Tests_Register_Meta extends CS_UnitTestCase {
 		$this->download_id = $variable_download->ID;
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 		CS_Helper_Payment::delete_payment( $this->payment_id );
 		CS_Helper_Download::delete_download( $this->download_id );
 	}

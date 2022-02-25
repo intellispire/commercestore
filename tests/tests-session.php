@@ -11,8 +11,8 @@ class Tests_Session extends CS_UnitTestCase {
 		new \CS_Session;
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_set() {

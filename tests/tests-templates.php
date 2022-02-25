@@ -61,8 +61,8 @@ class Tests_Templates extends CS_UnitTestCase {
 
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_get_purchase_link() {

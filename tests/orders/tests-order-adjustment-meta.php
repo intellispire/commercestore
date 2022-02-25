@@ -23,8 +23,8 @@ class Order_Adjustment_Meta_Tests extends \CS_UnitTestCase {
 		self::$order_adjustment = parent::cs()->order_adjustment->create_and_get();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		cs_get_component_interface( 'order_adjustment', 'meta' )->truncate();
 	}

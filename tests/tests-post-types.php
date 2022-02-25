@@ -10,8 +10,8 @@ class Tests_Post_Types extends CS_UnitTestCase {
 		parent::setUp();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	/**

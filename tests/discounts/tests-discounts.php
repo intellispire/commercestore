@@ -73,10 +73,10 @@ class Tests_Discounts extends \CS_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		cs_empty_cart();
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

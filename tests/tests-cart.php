@@ -186,8 +186,8 @@ class Test_Cart extends CS_UnitTestCase {
 		$current_user->set_role( 'administrator' );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		cs_empty_cart();
 	}
