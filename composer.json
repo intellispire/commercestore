@@ -26,7 +26,7 @@
         "stripe/stripe-php": "^7.113"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8",
+        "phpunit/phpunit": "^9",
         "yoast/phpunit-polyfills": "1.x-dev",
         "humbug/php-scoper": "1.0.x-dev",
         "phpunit/php-invoker": "^3.1"
