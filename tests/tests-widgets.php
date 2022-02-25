@@ -365,12 +365,12 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( '<h3>' . $download->post_title . '</h3>', $output );
+		$this->assertStringContainsString( '<h3>' . $download->post_title . '</h3>', $output );
 		$this->assertRegExp( '/<form id="cs_purchase_[0-9]+" class="cs_download_purchase_form cs_purchase_[0-9]+" method="post">/', $output );
-		$this->assertContains( '<input type="hidden" name="cs_action" class="cs_action_input" value="add_to_cart">', $output );
-		$this->assertContains( '<input type="hidden" name="download_id" value="' . $download->ID . '">', $output );
-		$this->assertContains( '<p class="cs-meta">', $output );
-		$this->assertContains( '<span class="categories">Product Category: ', $output );
+		$this->assertStringContainsString( '<input type="hidden" name="cs_action" class="cs_action_input" value="add_to_cart">', $output );
+		$this->assertStringContainsString( '<input type="hidden" name="download_id" value="' . $download->ID . '">', $output );
+		$this->assertStringContainsString( '<p class="cs-meta">', $output );
+		$this->assertStringContainsString( '<span class="categories">Product Category: ', $output );
 
 		CS_Helper_Download::delete_download( $download->ID );
 

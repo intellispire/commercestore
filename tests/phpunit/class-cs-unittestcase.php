@@ -143,10 +143,14 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 * Polyfill assertInternalTypes
 	 */
 
-	public function assertInternalType($type, $var, $message ='') {
+	public function assertInternalType($type, $var, $message = '') {
 		switch ($type) {
-			case 'array': return ! $this->assertIsArray($var, 'Test is broken'); break;
-			default: return true;
+			case 'array':  return $this->assertIsArray($var, $message);
+			case 'string': return $this->assertIsString($var, $message);
+			case 'int': return $this->assertIsInt($var, $message);
+			default:
+				$this->assertFalse(true, 'Missing assertInternalTypeTest for: '. $type);
+				return false;
 		}
 	}
 

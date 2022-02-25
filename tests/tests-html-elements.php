@@ -183,19 +183,19 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	public function test_month_dropdown() {
 		$out = CS()->html->month_dropdown();
 
-		$this->assertContains( '<select name="month" id="cs_month_select_month" class="cs-select "', $out );
-		$this->assertContains( '<option value="1"', $out );
-		$this->assertContains( '<option value="2"', $out );
-		$this->assertContains( '<option value="3"', $out );
-		$this->assertContains( '<option value="4"', $out );
-		$this->assertContains( '<option value="5"', $out );
-		$this->assertContains( '<option value="6"', $out );
-		$this->assertContains( '<option value="7"', $out );
-		$this->assertContains( '<option value="8"', $out );
-		$this->assertContains( '<option value="9"', $out );
-		$this->assertContains( '<option value="10"', $out );
-		$this->assertContains( '<option value="11"', $out );
-		$this->assertContains( '<option value="12"', $out );
+		$this->assertStringContainsString( '<select name="month" id="cs_month_select_month" class="cs-select "', $out );
+		$this->assertStringContainsString( '<option value="1"', $out );
+		$this->assertStringContainsString( '<option value="2"', $out );
+		$this->assertStringContainsString( '<option value="3"', $out );
+		$this->assertStringContainsString( '<option value="4"', $out );
+		$this->assertStringContainsString( '<option value="5"', $out );
+		$this->assertStringContainsString( '<option value="6"', $out );
+		$this->assertStringContainsString( '<option value="7"', $out );
+		$this->assertStringContainsString( '<option value="8"', $out );
+		$this->assertStringContainsString( '<option value="9"', $out );
+		$this->assertStringContainsString( '<option value="10"', $out );
+		$this->assertStringContainsString( '<option value="11"', $out );
+		$this->assertStringContainsString( '<option value="12"', $out );
 	}
 
 	/**

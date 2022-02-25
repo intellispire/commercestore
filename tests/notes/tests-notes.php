@@ -133,7 +133,7 @@ class Tests_Notes extends Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		$this->assertContains( 'cs_note_html', $this->_last_response );
+		$this->assertStringContainsString( 'cs_note_html', $this->_last_response );
 	}
 
 	/**

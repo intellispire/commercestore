@@ -178,11 +178,11 @@ class Tests_Emails extends CS_UnitTestCase {
 	public function test_cs_get_default_sale_notification_email() {
 		$email = cs_get_default_sale_notification_email();
 
-		$this->assertContains( 'Hello', $email );
-		$this->assertContains( 'A Products purchase has been made', $email );
-		$this->assertContains( 'Products sold:', $email );
-		$this->assertContains( '{download_list}', $email );
-		$this->assertContains( 'Amount:  {price}', $email );
+		$this->assertStringContainsString( 'Hello', $email );
+		$this->assertStringContainsString( 'A Products purchase has been made', $email );
+		$this->assertStringContainsString( 'Products sold:', $email );
+		$this->assertStringContainsString( '{download_list}', $email );
+		$this->assertStringContainsString( 'Amount:  {price}', $email );
 	}
 
 	public function test_email_tags_get_tags() {

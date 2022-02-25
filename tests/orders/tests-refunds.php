@@ -151,7 +151,7 @@ class Refunds_Tests extends \CS_UnitTestCase {
 		$this->assertInstanceOf( 'WP_Error', $refund_id );
 
 		$this->assertEquals( 'refund_validation_error', $refund_id->get_error_code() );
-		$this->assertContains( 'The maximum refund subtotal', $refund_id->get_error_message() );
+		$this->assertStringContainsString( 'The maximum refund subtotal', $refund_id->get_error_message() );
 	}
 
 	/**
@@ -312,7 +312,7 @@ class Refunds_Tests extends \CS_UnitTestCase {
 		), 'all' );
 
 		$exception = $this->getExpectedException();
-		$this->assertContains( 'order_item_id', $exception->getMessage() );
+		$this->assertStringContainsString( 'order_item_id', $exception->getMessage() );
 	}
 
 	/**
@@ -335,6 +335,6 @@ class Refunds_Tests extends \CS_UnitTestCase {
 		), 'all' );
 
 		$exception = $this->getExpectedException();
-		$this->assertContains( 'subtotal', $exception->getMessage() );
+		$this->assertStringContainsString( 'subtotal', $exception->getMessage() );
 	}
 }

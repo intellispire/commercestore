@@ -309,16 +309,16 @@ class Tests_Customers extends \CS_UnitTestCase {
 	public function test_get_user_verification_url_should_return_true() {
 		$url = cs_get_user_verification_url( 1 );
 
-		$this->assertContains( 'cs_action=verify_user', $url );
-		$this->assertContains( 'user_id=1', $url );
-		$this->assertContains( 'ttl', $url );
-		$this->assertContains( 'token', $url );
+		$this->assertStringContainsString( 'cs_action=verify_user', $url );
+		$this->assertStringContainsString( 'user_id=1', $url );
+		$this->assertStringContainsString( 'ttl', $url );
+		$this->assertStringContainsString( 'token', $url );
 	}
 
 	public function test_get_user_verification_request_url_should_return_true() {
 		$url = cs_get_user_verification_request_url( 1 );
 
-		$this->assertContains( 'cs_action=send_verification_email', $url );
+		$this->assertStrinContainsString( 'cs_action=send_verification_email', $url );
 	}
 
 	public function test_validate_user_verification_token_with_valid_url_should_true() {
