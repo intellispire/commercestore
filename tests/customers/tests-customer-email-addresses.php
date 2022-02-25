@@ -22,7 +22,7 @@ class Customer_Email_Address_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$customer_email_addresses = parent::cs()->customer_email_address->create_many( 5 );
 	}
 

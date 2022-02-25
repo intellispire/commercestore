@@ -21,12 +21,12 @@ class Tests_Customer_Meta extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$customer = parent::cs()->customer->create_and_get();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		cs_get_component_interface( 'customer', 'meta' )->truncate();
 	}

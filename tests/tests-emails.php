@@ -22,7 +22,7 @@ class Tests_Emails extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		$post_id = self::factory()->post->create( array( 'post_title' => 'Test Download', 'post_type' => 'download', 'post_status' => 'publish' ) );
 
 		$_variable_pricing = array(
@@ -178,11 +178,11 @@ class Tests_Emails extends CS_UnitTestCase {
 	public function test_cs_get_default_sale_notification_email() {
 		$email = cs_get_default_sale_notification_email();
 
-		$this->assertContains( 'Hello', $email );
-		$this->assertContains( 'A Products purchase has been made', $email );
-		$this->assertContains( 'Products sold:', $email );
-		$this->assertContains( '{download_list}', $email );
-		$this->assertContains( 'Amount:  {price}', $email );
+		$this->assertStringContainsString( 'Hello', $email );
+		$this->assertStringContainsString( 'A Products purchase has been made', $email );
+		$this->assertStringContainsString( 'Products sold:', $email );
+		$this->assertStringContainsString( '{download_list}', $email );
+		$this->assertStringContainsString( 'Amount:  {price}', $email );
 	}
 
 	public function test_email_tags_get_tags() {
@@ -219,19 +219,19 @@ class Tests_Emails extends CS_UnitTestCase {
 
 	public function test_email_tags_download_list() {
 		$order_items = cs_get_order_items( array( 'order_id' => self::$payment_id ) );
-		$this->assertContains( '<strong>' . $order_items[0]->get_order_item_name() . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
-		$this->assertContains( '<div><a href="', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringContainsString( '<strong>' . $order_items[0]->get_order_item_name() . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringContainsString( '<div><a href="', cs_email_tag_download_list( self::$payment_id ) );
 	}
 
 	public function test_email_tag_download_list_with_names_disabled_via_filter() {
 		add_filter( 'cs_email_show_names', '__return_false' );
-		$this->assertNotContains( '<strong>' . get_the_title( self::$post->ID ) . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringNotContainsString( '<strong>' . get_the_title( self::$post->ID ) . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
 		remove_filter( 'cs_email_show_names', '__return_false' );
 	}
 
 	public function test_email_tag_download_list_with_links_disabled_via_filer() {
 		add_filter( 'cs_email_show_links', '__return_false' );
-		$this->assertContains( '<div>File 2</div>', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringContainsString( '<div>File 2</div>', cs_email_tag_download_list( self::$payment_id ) );
 		remove_filter( 'cs_email_show_links', '__return_false' );
 	}
 
@@ -286,7 +286,7 @@ class Tests_Emails extends CS_UnitTestCase {
 	}
 
 	public function test_email_tags_receipt_link() {
-		$this->assertContains( 'View it in your browser &raquo;', cs_email_tag_receipt_link( self::$payment_id ) );
+		$this->assertStringContainsString( 'View it in your browser &raquo;', cs_email_tag_receipt_link( self::$payment_id ) );
 	}
 
 	public function test_get_from_name() {
@@ -316,7 +316,7 @@ class Tests_Emails extends CS_UnitTestCase {
 		$from_name = CS()->emails->get_from_name();
 		$from_address = CS()->emails->get_from_address();
 
-		$this->assertContains( "From: {$from_name} <{$from_address}>", CS()->emails->get_headers() );
+		$this->assertStringContainsString( "From: {$from_name} <{$from_address}>", CS()->emails->get_headers() );
 	}
 
 	public function test_get_heading() {

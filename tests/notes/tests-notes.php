@@ -34,8 +34,8 @@ class Tests_Notes extends Ajax_UnitTestCase {
 	/**
 	 * Setup the parent
 	 */
-	public function setUp() {
-		parent::setup();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Tests_Notes extends Ajax_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		wp_set_current_user( 1 );
 
 		self::$discount = self::cs()->discount->create_and_get( array(
@@ -133,7 +133,7 @@ class Tests_Notes extends Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		$this->assertContains( 'cs_note_html', $this->_last_response );
+		$this->assertStringContainsString( 'cs_note_html', $this->_last_response );
 	}
 
 	/**

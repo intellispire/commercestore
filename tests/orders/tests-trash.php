@@ -27,7 +27,7 @@ class Trash_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$order_queries = new \CS\Database\Queries\Order();
 		self::$orders = parent::cs()->order->create_many( 5 );
 

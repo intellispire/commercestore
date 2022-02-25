@@ -54,7 +54,7 @@ class Tests_Discounts extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$download = \CS_Helper_Download::create_simple_download();
 
 		self::$discount_id         = \CS_Helper_Discount::create_simple_percent_discount();
@@ -64,8 +64,8 @@ class Tests_Discounts extends \CS_UnitTestCase {
 		self::$discount = cs_get_discount( self::$discount_id );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	/**
@@ -73,10 +73,10 @@ class Tests_Discounts extends \CS_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		cs_empty_cart();
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -397,7 +397,7 @@ class Tests_Discounts extends \CS_UnitTestCase {
 	 * @covers ::edit_url()
 	 */
 	public function test_discount_edit_url() {
-		$this->assertContains( 'edit.php?post_type=download&#038;page=cs-discounts', self::$discount->edit_url() );
+		$this->assertStringContainsString( 'edit.php?post_type=download&#038;page=cs-discounts', self::$discount->edit_url() );
 	}
 
 	/**

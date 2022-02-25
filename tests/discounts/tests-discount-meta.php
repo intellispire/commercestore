@@ -24,7 +24,7 @@ class Tests_Meta extends \CS_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$discount_id = self::cs()->discount->create_object( array(
 			'name'              => '20 Percent Off',
 			'code'              => '20OFF',

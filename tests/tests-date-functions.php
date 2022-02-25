@@ -10,17 +10,17 @@ class Date_Functions_Tests extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		// All tests will take the -5 (Central Time Zone) into account.
 		update_option( 'gmt_offset', -5 );
 
 		CS()->utils->get_gmt_offset( true );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		$_REQUEST['range'] = '';
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	//
@@ -143,6 +143,8 @@ class Date_Functions_Tests extends CS_UnitTestCase {
 	 * @expectCSDeprecated cs_get_report_dates
 	 */
 	public function test_get_report_dates_correct_this_month_at_the_end_of_the_month_nz() {
+		// $this->expectDeprecation();
+
 		$_REQUEST['range'] = 'this_month';
 
 		$dates = cs_get_report_dates( 'Pacific/Auckland' );
@@ -172,6 +174,8 @@ class Date_Functions_Tests extends CS_UnitTestCase {
 	 * @expectCSDeprecated cs_get_report_dates
 	 */
 	public function test_get_report_dates_correct_this_month_at_the_beginning_of_the_month_utc() {
+		// $this->expectDeprecation();
+
 		$_REQUEST['range'] = 'this_month';
 
 		$dates = cs_get_report_dates( 'UTC' );
@@ -189,6 +193,8 @@ class Date_Functions_Tests extends CS_UnitTestCase {
 	 * @expectCSDeprecated cs_get_report_dates
 	 */
 	public function test_get_report_dates_correct_this_month_at_the_beginning_of_the_month_pdt() {
+		// $this->expectDeprecation();
+
 		$_REQUEST['range'] = 'this_month';
 
 		$dates = cs_get_report_dates( 'America/Los_Angeles' );
@@ -206,6 +212,8 @@ class Date_Functions_Tests extends CS_UnitTestCase {
 	 * @expectCSDeprecated cs_get_report_dates
 	 */
 	public function test_get_report_dates_correct_this_moment_utc() {
+		// $this->expectDeprecation();
+
 		$_REQUEST['range'] = 'this_month';
 
 		$current_time = current_time( 'timestamp' );

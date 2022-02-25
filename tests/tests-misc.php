@@ -15,12 +15,12 @@ class Test_Misc extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$download = CS_Helper_Download::create_simple_download();
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	public function test_test_mode() {
@@ -675,19 +675,19 @@ class Test_Misc extends CS_UnitTestCase {
 
 		$remove_url = cs_remove_item_url( $item_position );
 
-		$this->assertContains( 'page_id=' . $cs_options['purchase_page'], $remove_url );
-		$this->assertContains( 'cs_action=remove', $remove_url );
-		$this->assertContains( 'nocache=true', $remove_url );
-		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
+		$this->assertStringContainsString( 'page_id=' . $cs_options['purchase_page'], $remove_url );
+		$this->assertStringContainsString( 'cs_action=remove', $remove_url );
+		$this->assertStringContainsString( 'nocache=true', $remove_url );
+		$this->assertStringContainsString( 'cart_item=' . $item_position, $remove_url );
 
 		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
 		unset( $cs_options['no_cache_checkout'] );
 		$remove_url = cs_remove_item_url( $item_position );
 
-		$this->assertContains( 'page_id=' . $cs_options['purchase_page'], $remove_url );
-		$this->assertContains( 'cs_action=remove', $remove_url );
-		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
-		$this->assertNotContains( 'nocache=true', $remove_url );
+		$this->assertStringContainsString( 'page_id=' . $cs_options['purchase_page'], $remove_url );
+		$this->assertStringContainsString( 'cs_action=remove', $remove_url );
+		$this->assertStringContainsString( 'cart_item=' . $item_position, $remove_url );
+		$this->assertStringNotContainsString( 'nocache=true', $remove_url );
 
 		// Go home and test again
 		$this->go_to( home_url( '/' ) );
@@ -697,19 +697,19 @@ class Test_Misc extends CS_UnitTestCase {
 		$expected_url = 'http://example.org/?cart_item=' . $item_position . '&cs_action=remove&nocache=true';
 		$remove_url   = cs_remove_item_url( $item_position );
 
-		$this->assertNotContains( 'page_id=', $remove_url );
-		$this->assertContains( 'cs_action=remove', $remove_url );
-		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
-		$this->assertContains( 'nocache=true', $remove_url );
+		$this->assertStringNotContainsString( 'page_id=', $remove_url );
+		$this->assertStringContainsString( 'cs_action=remove', $remove_url );
+		$this->assertStringContainsString( 'cart_item=' . $item_position, $remove_url );
+		$this->assertStringContainsString( 'nocache=true', $remove_url );
 
 		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
 
 		$remove_url = cs_remove_item_url( $item_position );
 
-		$this->assertNotContains( 'page_id=', $remove_url );
-		$this->assertContains( 'cs_action=remove', $remove_url );
-		$this->assertContains( 'cart_item=' . $item_position, $remove_url );
-		$this->assertNotContains( 'nocache=true', $remove_url );
+		$this->assertStringNotContainsString( 'page_id=', $remove_url );
+		$this->assertStringContainsString( 'cs_action=remove', $remove_url );
+		$this->assertStringContainsString( 'cart_item=' . $item_position, $remove_url );
+		$this->assertStringNotContainsString( 'nocache=true', $remove_url );
 
 		// Go home and test again
 		$this->go_to( home_url( '/' ) );

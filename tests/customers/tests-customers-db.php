@@ -22,7 +22,7 @@ class Tests_Customers_DB extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$customers = parent::cs()->customer->create_many( 5 );
 	}
 
@@ -223,6 +223,9 @@ class Tests_Customers_DB extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::increase_value
 	 */
 	public function test_legacy_increment_stats_purchase_value_should_return_10() {
+
+		// $this->expectDeprecation();
+
 		CS()->customers->increment_stats( self::$customers[0], 10 );
 
 		/** @var $customer \CS_Customer */
@@ -236,6 +239,8 @@ class Tests_Customers_DB extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::increase_value
 	 */
 	public function test_legacy_increment_stats_purchase_count_should_return_1() {
+		// $this->expectDeprecation();
+
 		CS()->customers->increment_stats( self::$customers[0], 10 );
 
 		/** @var $customer \CS_Customer */
@@ -251,6 +256,8 @@ class Tests_Customers_DB extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::decrease_value
 	 */
 	public function test_legacy_decrement_stats_purchase_value_should_return_90() {
+		// $this->expectDeprecation();
+
 		CS()->customers->increment_stats( self::$customers[0], 100 );
 		CS()->customers->decrement_stats( self::$customers[0], 10 );
 
@@ -267,6 +274,9 @@ class Tests_Customers_DB extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::decrease_value
 	 */
 	public function test_legacy_decrement_stats_purchase_count_should_return_0() {
+
+		// $this->expectDeprecation();
+
 		CS()->customers->increment_stats( self::$customers[0], 10 );
 		CS()->customers->decrement_stats( self::$customers[0], 10 );
 

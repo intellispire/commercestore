@@ -35,7 +35,7 @@ class Tests_Customers extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		$customers = parent::cs()->customer->create_many( 5 );
 
 		foreach ( $customers as $customer ) {
@@ -119,6 +119,9 @@ class Tests_Customers extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::increase_value
 	 */
 	public function test_increase_value_should_return_10() {
+
+		// $this->expectDeprecation();
+
 		self::$customers[3]->increase_value( 10 );
 
 		$this->assertSame( 10.0, self::$customers[3]->purchase_value );
@@ -128,6 +131,8 @@ class Tests_Customers extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::increase_purchase_count
 	 */
 	public function test_increase_purchase_count_should_return_1() {
+		// $this->expectDeprecation();
+
 		self::$customers[3]->increase_purchase_count();
 
 		$this->assertSame( 1, self::$customers[3]->purchase_count );
@@ -138,6 +143,8 @@ class Tests_Customers extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::decrease_value
 	 */
 	public function test_decrease_value_should_return_90() {
+		// $this->expectDeprecation();
+
 		self::$customers[4]->increase_value( 100 );
 		self::$customers[4]->decrease_value( 10 );
 
@@ -149,6 +156,8 @@ class Tests_Customers extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::decrease_purchase_count
 	 */
 	public function test_decrease_purchase_count_should_return_0() {
+		// $this->expectDeprecation();
+
 		self::$customers[3]->increase_purchase_count();
 		self::$customers[3]->decrease_purchase_count();
 
@@ -309,16 +318,16 @@ class Tests_Customers extends \CS_UnitTestCase {
 	public function test_get_user_verification_url_should_return_true() {
 		$url = cs_get_user_verification_url( 1 );
 
-		$this->assertContains( 'cs_action=verify_user', $url );
-		$this->assertContains( 'user_id=1', $url );
-		$this->assertContains( 'ttl', $url );
-		$this->assertContains( 'token', $url );
+		$this->assertStringContainsString( 'cs_action=verify_user', $url );
+		$this->assertStringContainsString( 'user_id=1', $url );
+		$this->assertStringContainsString( 'ttl', $url );
+		$this->assertStringContainsString( 'token', $url );
 	}
 
 	public function test_get_user_verification_request_url_should_return_true() {
 		$url = cs_get_user_verification_request_url( 1 );
 
-		$this->assertContains( 'cs_action=send_verification_email', $url );
+		$this->assertStringContainsString( 'cs_action=send_verification_email', $url );
 	}
 
 	public function test_validate_user_verification_token_with_valid_url_should_true() {

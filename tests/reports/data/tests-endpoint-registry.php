@@ -31,8 +31,8 @@ class Endpoint_Registry_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->registry = new \CS\Reports\Data\Endpoint_Registry();
 	}
@@ -42,10 +42,10 @@ class Endpoint_Registry_Tests extends \CS_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		$this->registry->exchangeArray( array() );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -200,10 +200,15 @@ class Endpoint_Registry_Tests extends \CS_UnitTestCase {
 
 	/**
 	 * @covers ::register_endpoint()
-	 * @expectedException \CS_Exception
 	 */
 	public function test_register_endpoint_with_empty_attributes_should_return_false() {
-		$this->assertFalse( $this->registry->register_endpoint( 'foo', array() ) );
+
+		$this->setExpectedException(
+			'CS\Reports\Exceptions\Invalid_Parameter',
+			"The 'label' parameter for the 'foo' item is missing or invalid in 'CS\Reports\Registry::validate_attributes'."
+		);
+
+		$this->registry->register_endpoint( 'foo', array());
 	}
 
 	/**

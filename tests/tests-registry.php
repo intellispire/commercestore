@@ -22,8 +22,8 @@ class Registry_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->mockRegistry = $this->getMockForAbstractClass( '\CS\Utils\Registry' );
 	}
@@ -33,10 +33,10 @@ class Registry_Tests extends \CS_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		$this->mockRegistry->exchangeArray( array() );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -44,7 +44,8 @@ class Registry_Tests extends \CS_UnitTestCase {
 	 * @expectedException \CS_Exception
 	 */
 	public function test_add_item_with_empty_attributes_should_return_false() {
-		$this->assertFalse( $this->mockRegistry->add_item( 'foo', array() ) );
+		$this->expectException(\CS_Exception::class);
+		$this->mockRegistry->add_item( 'foo', array() );
 	}
 
 	/**

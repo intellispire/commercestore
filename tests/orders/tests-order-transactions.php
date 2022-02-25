@@ -22,7 +22,7 @@ class Order_Transaction_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$order_transactions = parent::cs()->order_transaction->create_many( 5 );
 	}
 

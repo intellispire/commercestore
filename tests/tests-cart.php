@@ -31,7 +31,7 @@ class Test_Cart extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		global $wp_rewrite, $current_user;
 
 		wp_set_current_user( static::factory()->user->create( array( 'role' => 'administrator' ) ) );
@@ -177,17 +177,17 @@ class Test_Cart extends CS_UnitTestCase {
 		) );
 	}
 
-	public function setUp() {
+	public function set_up() {
 		global $current_user;
 
-		parent::setUp();
+		parent::set_up();
 
 		$current_user = new WP_User( 1 );
 		$current_user->set_role( 'administrator' );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		cs_empty_cart();
 	}

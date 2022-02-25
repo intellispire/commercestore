@@ -24,8 +24,8 @@ class EnvironmentCheckerTests extends \CS_UnitTestCase {
 	/**
 	 * Runs once before any tests are executed.
 	 */
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		// This is an admin file, so we need to include it manually.
 		require_once CS_PLUGIN_DIR . 'includes/admin/class-pass-manager.php';
@@ -34,7 +34,7 @@ class EnvironmentCheckerTests extends \CS_UnitTestCase {
 	/**
 	 * Runs once before each test.
 	 */
-	public function setUp() {
+	public function set_up() {
 		$this->environmentChecker = new EnvironmentChecker();
 
 		// Reset pass data so it can be set explicitly for each test.

@@ -28,8 +28,8 @@ class Dataset_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up before each test.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->mock_Dataset = $this->get_Dataset_mock( 'test' );
 	}

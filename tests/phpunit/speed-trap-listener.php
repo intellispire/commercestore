@@ -4,7 +4,7 @@
  * A PHPUnit TestListener that exposes your slowest running tests by outputting
  * results directly to the console.
  */
-class SpeedTrapListener implements PHPUnit_Framework_TestListener
+class SpeedTrapListener implements \PHPUnit\Framework\TestListener
 {
     /**
      * Internal tracking for test suites.
@@ -51,89 +51,92 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
     /**
      * An error occurred.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
+     * @param \PHPUnit\Framework\Test $test
+     * @param Throwable               $t
      * @param float                   $time
      */
-    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, Throwable $t, float $time) : void
     {
     }
+
 
     /**
      * A warning occurred.
      *
-     * @param PHPUnit_Framework_Test    $test
-     * @param PHPUnit_Framework_Warning $e
+     * @param \PHPUnit\Framework\Test    $test
+     * @param \PHPUnit\Framework\Warning $e
      * @param float                     $time
      * @since Method available since Release 5.1.0
      */
-    public function addWarning(PHPUnit_Framework_Test $test, PHPUnit_Framework_Warning $e, $time)
+    public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, float $time) : void
     {
     }
 
     /**
      * A failure occurred.
      *
-     * @param PHPUnit_Framework_Test                 $test
+     * @param \PHPUnit\Framework\Test                 $test
      * @param PHPUnit_Framework_AssertionFailedError $e
      * @param float                                   $time
      */
-    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(\PHPUnit\Framework\Test $test, PHPUnit_Framework_AssertionFailedError $e, float $time) : void
     {
     }
+
+
 
     /**
      * Incomplete test.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
+     * @param \PHPUnit\Framework\Test $test
+     * @param \Throwable              $t
      * @param float                   $time
      */
-    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $t, float $time) : void
     {
     }
 
     /**
      * Risky test.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
+     * @param \PHPUnit\Framework\Test $test
+     * @param Throwable              $t
      * @param float                   $time
      * @since  Method available since Release 4.0.0
      */
-    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, Throwable $t, float $time) : void
     {
     }
 
     /**
      * Skipped test.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
+     * @param \PHPUnit\Framework\Test $test
+     * @param Throwable              $t
      * @param float                   $time
      */
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addSkippedTest(\PHPUnit\Framework\Test $test, Throwable $t, $time) : void
     {
     }
 
     /**
      * A test started.
      *
-     * @param PHPUnit_Framework_Test $test
+     * @param \PHPUnit\Framework\Test $test
      */
-    public function startTest(PHPUnit_Framework_Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test) : void
     {
     }
 
     /**
      * A test ended.
      *
-     * @param PHPUnit_Framework_Test $test
+     * @param \PHPUnit\Framework\Test $test
      * @param float                   $time
      */
-    public function endTest(PHPUnit_Framework_Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, float $time) : void
     {
-        if (!$test instanceof PHPUnit_Framework_TestCase) return;
+        if (!$test instanceof \PHPUnit\Framework\TestCase) return;
 
         $time = $this->toMilliseconds($time);
         $threshold = $this->getSlowThreshold($test);
@@ -146,9 +149,9 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
     /**
      * A test suite started.
      *
-     * @param PHPUnit_Framework_TestSuite $suite
+     * @param \PHPUnit\Framework\TestSuite $suite
      */
-    public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite) : void
     {
         $this->suites++;
     }
@@ -156,9 +159,9 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
     /**
      * A test suite ended.
      *
-     * @param PHPUnit_Framework_TestSuite $suite
+     * @param \PHPUnit\Framework\TestSuite $suite
      */
-    public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite) : void
     {
         $this->suites--;
 
@@ -178,7 +181,7 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
      * @param int $slowThreshold Test execution time at which a test should be considered slow (milliseconds)
      * @return bool
      */
-    protected function isSlow($time, $slowThreshold)
+    protected function isSlow($time, $slowThreshold) : bool
     {
         return $time >= $slowThreshold;
     }
@@ -186,10 +189,10 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
     /**
      * Stores a test as slow.
      *
-     * @param PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param int                         $time Test execution time in milliseconds
      */
-    protected function addSlowTest(PHPUnit_Framework_TestCase $test, $time)
+    protected function addSlowTest(\PHPUnit\Framework\TestCase $test, $time)
     {
         $label = $this->makeLabel($test);
 
@@ -201,7 +204,7 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
      *
      * @return bool
      */
-    protected function hasSlowTests()
+    protected function hasSlowTests() : bool
     {
         return !empty($this->slow);
     }
@@ -212,7 +215,7 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
      * @param float $time
      * @return int
      */
-    protected function toMilliseconds($time)
+    protected function toMilliseconds($time) : int
     {
         return (int) round($time * 1000);
     }
@@ -220,10 +223,10 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
     /**
      * Label for describing a test.
      *
-     * @param PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return string
      */
-    protected function makeLabel(PHPUnit_Framework_TestCase $test)
+    protected function makeLabel(\PHPUnit\Framework\TestCase $test) : string
     {
         return sprintf('%s:%s', get_class($test), $test->getName());
     }
@@ -233,7 +236,7 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
      *
      * @return int
      */
-    protected function getReportLength()
+    protected function getReportLength() : int
     {
         return min(count($this->slow), $this->reportLength);
     }
@@ -243,7 +246,7 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
      *
      * @return int Number of hidden slow tests
      */
-    protected function getHiddenCount()
+    protected function getHiddenCount() : int
     {
         $total = count($this->slow);
         $showing = $this->getReportLength($this->slow);
@@ -260,7 +263,7 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
      * Renders slow test report header.
      */
     protected function renderHeader()
-    {
+		{
         echo sprintf("\n\nYou should really fix these slow tests (>%sms)...\n", $this->slowThreshold);
     }
 
@@ -314,10 +317,10 @@ class SpeedTrapListener implements PHPUnit_Framework_TestListener
      * public function testLongRunningProcess() {}
      * </code>
      *
-     * @param PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return int
      */
-    protected function getSlowThreshold(PHPUnit_Framework_TestCase $test)
+    protected function getSlowThreshold(\PHPUnit\Framework\TestCase $test)
     {
         $ann = $test->getAnnotations();
 
