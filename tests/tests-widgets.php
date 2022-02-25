@@ -25,9 +25,9 @@ class Tests_Widgets extends CS_UnitTestCase {
 		cs_register_widgets();
 
 		$widgets = array_keys( $GLOBALS['wp_widget_factory']->widgets );
-		$this->assertStringContainsString( 'cs_cart_widget', $widgets );
-		$this->assertStringContainsString( 'cs_categories_tags_widget', $widgets );
-		$this->assertStringContainsString( 'cs_product_details_widget', $widgets );
+		$this->assertContains( 'cs_cart_widget', $widgets );
+		$this->assertContains( 'cs_categories_tags_widget', $widgets );
+		$this->assertContains( 'cs_product_details_widget', $widgets );
 
 	}
 
