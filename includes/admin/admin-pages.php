@@ -83,12 +83,12 @@ function cs_add_options_link() {
 	$customer_view_role  = apply_filters( 'cs_view_customers_role', 'view_shop_reports' );
 
 	// Setup pages
-	$cs_payments_page   = add_submenu_page( 'edit.php?post_type=download', __( 'Orders',       'commercestore' ), __( 'Orders',    'commercestore' ), 'edit_shop_payments',    'cs-payment-history', 'cs_payment_history_page' );
-	$cs_customers_page  = add_submenu_page( 'edit.php?post_type=download', __( 'Customers',    'commercestore' ), __( 'Customers', 'commercestore' ), $customer_view_role,     'cs-customers',       'cs_customers_page'       );
-	$cs_discounts_page  = add_submenu_page( 'edit.php?post_type=download', __( 'Discounts',    'commercestore' ), __( 'Discounts', 'commercestore' ), 'manage_shop_discounts', 'cs-discounts',       'cs_discounts_page'       );
-	$cs_reports_page    = add_submenu_page( 'edit.php?post_type=download', __( 'Reports',      'commercestore' ), __( 'Reports',   'commercestore' ), 'view_shop_reports',     'cs-reports',         'cs_reports_page'         );
-	$cs_settings_page   = add_submenu_page( 'edit.php?post_type=download', __( 'CS Settings', 'commercestore' ), __( 'Settings',  'commercestore' ), 'manage_shop_settings',  'cs-settings',        'cs_options_page'         );
-	$cs_tools_page      = add_submenu_page( 'edit.php?post_type=download', __( 'CS Tools',    'commercestore' ), __( 'Tools',     'commercestore' ), 'manage_shop_settings',  'cs-tools',           'cs_tools_page'           );
+	$cs_payments_page   = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Orders',       'commercestore' ), __( 'Orders',    'commercestore' ), 'edit_shop_payments',    'cs-payment-history', 'cs_payment_history_page' );
+	$cs_customers_page  = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Customers',    'commercestore' ), __( 'Customers', 'commercestore' ), $customer_view_role,     'cs-customers',       'cs_customers_page'       );
+	$cs_discounts_page  = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Discounts',    'commercestore' ), __( 'Discounts', 'commercestore' ), 'manage_shop_discounts', 'cs-discounts',       'cs_discounts_page'       );
+	$cs_reports_page    = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Reports',      'commercestore' ), __( 'Reports',   'commercestore' ), 'view_shop_reports',     'cs-reports',         'cs_reports_page'         );
+	$cs_settings_page   = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'CS Settings', 'commercestore' ), __( 'Settings',  'commercestore' ), 'manage_shop_settings',  'cs-settings',        'cs_options_page'         );
+	$cs_tools_page      = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'CS Tools',    'commercestore' ), __( 'Tools',     'commercestore' ), 'manage_shop_settings',  'cs-tools',           'cs_tools_page'           );
 
 	// Setup hidden upgrades page
 	$cs_upgrades_screen = add_submenu_page( null, __( 'CS Upgrades', 'commercestore' ), __( 'CS Upgrades', 'commercestore' ), 'manage_shop_settings', 'cs-upgrades', 'cs_upgrades_screen' );
@@ -97,7 +97,7 @@ function cs_add_options_link() {
 	$submenu['index.php'][] = array(
 		__( 'Store Reports', 'commercestore' ),
 		'view_shop_reports',
-		'edit.php?post_type=download&page=cs-reports',
+		'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports',
 	);
 }
 add_action( 'admin_menu', 'cs_add_options_link', 10 );
@@ -112,7 +112,7 @@ add_action( 'admin_menu', 'cs_add_options_link', 10 );
 function cs_add_extentions_link() {
 	global $cs_add_ons_page;
 
-	$cs_add_ons_page = add_submenu_page( 'edit.php?post_type=download', __( 'CS Extensions', 'commercestore' ), __( 'Extensions', 'commercestore' ), 'manage_shop_settings', 'cs-addons', 'cs_add_ons_page' );
+	$cs_add_ons_page = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'CS Extensions', 'commercestore' ), __( 'Extensions', 'commercestore' ), 'manage_shop_settings', 'cs-addons', 'cs_add_ons_page' );
 }
 add_action( 'admin_menu', 'cs_add_extentions_link', 99999 );
 

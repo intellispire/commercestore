@@ -209,7 +209,7 @@ function cs_tools_clear_doing_upgrade_display() {
             <p><?php _e( 'Sometimes a database upgrade notice may not be cleared after an upgrade is completed due to conflicts with other extensions or other minor issues.', 'commercestore' ); ?></p>
             <p><?php _e( 'If you\'re certain these upgrades have been completed, you can clear these upgrade notices by clicking the button below. If you have any questions about this, please contact the CommerceStore support team and we\'ll be happy to help.', 'commercestore' ); ?></p>
             <form method="post"
-                  action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=general' ); ?>">
+                  action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=general' ); ?>">
                 <p>
                     <input type="hidden" name="cs_action" value="clear_doing_upgrade"/>
 					<?php wp_nonce_field( 'cs_clear_upgrades_nonce', 'cs_clear_upgrades_nonce' ); ?>
@@ -277,7 +277,7 @@ function cs_tools_betas_display() {
         <div class="inside">
             <p><?php _e( 'Checking any of the below checkboxes will opt you in to receive pre-release update notifications. You can opt-out at any time. Pre-release updates do not install automatically, you will still have the opportunity to ignore update notifications.', 'commercestore' ); ?></p>
             <form method="post"
-                  action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=betas' ); ?>">
+                  action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=betas' ); ?>">
                 <table class="form-table cs-beta-support">
                     <tbody>
 					<?php foreach ( $has_beta as $slug => $product ) : ?>
@@ -975,9 +975,9 @@ function cs_tools_import_export_display() {
         <h3><span><?php _e( 'Export Settings', 'commercestore' ); ?></span></h3>
         <div class="inside">
             <p><?php _e( 'Export the CommerceStore settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'commercestore' ); ?></p>
-            <p><?php printf( __( 'To export shop data (purchases, customers, etc), visit the <a href="%s">Reports</a> page.', 'commercestore' ), admin_url( 'edit.php?post_type=download&page=cs-reports&tab=export' ) ); ?></p>
+            <p><?php printf( __( 'To export shop data (purchases, customers, etc), visit the <a href="%s">Reports</a> page.', 'commercestore' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports&tab=export' ) ); ?></p>
             <form method="post"
-                  action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=import_export' ); ?>">
+                  action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=import_export' ); ?>">
                 <p><input type="hidden" name="cs_action" value="export_settings"/></p>
                 <p>
 					<?php wp_nonce_field( 'cs_export_nonce', 'cs_export_nonce' ); ?>
@@ -992,7 +992,7 @@ function cs_tools_import_export_display() {
         <div class="inside">
             <p><?php _e( 'Import the CommerceStore settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'commercestore' ); ?></p>
             <form method="post" enctype="multipart/form-data"
-                  action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=import_export' ); ?>">
+                  action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=import_export' ); ?>">
                 <p>
                     <input type="file" name="import_file"/>
                 </p>
@@ -1223,7 +1223,7 @@ function cs_tools_sysinfo_display() {
 				<?php esc_html_e( 'Use the system information below to help troubleshoot problems.', 'commercestore' ); ?>
 			</p>
 
-			<form id="cs-system-info" action="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-tools&tab=system_info' ) ); ?>" method="post" dir="ltr">
+			<form id="cs-system-info" action="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=system_info' ) ); ?>" method="post" dir="ltr">
 				<textarea readonly="readonly" onclick="this.focus(); this.select()" id="system-info-textarea" class="cs-tools-textarea" name="cs-sysinfo"
 					><?php echo cs_tools_sysinfo_get(); ?></textarea>
 

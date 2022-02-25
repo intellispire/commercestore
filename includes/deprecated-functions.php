@@ -1647,7 +1647,7 @@ function cs_sendwp_remote_install_handler () {
 		'register_url'    => sendwp_get_server_url() . '_/signup',
 		'client_name'     => sendwp_get_client_name(),
 		'client_secret'   => sendwp_get_client_secret(),
-		'client_redirect' => admin_url( '/edit.php?post_type=download&page=cs-settings&tab=emails&cs-message=sendwp-connected' ),
+		'client_redirect' => admin_url( '/edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=emails&cs-message=sendwp-connected' ),
 	) );
 }
 add_action( 'wp_ajax_cs_sendwp_remote_install', 'cs_sendwp_remote_install_handler' );

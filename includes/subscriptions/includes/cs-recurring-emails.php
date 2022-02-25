@@ -106,7 +106,7 @@ class CS_Recurring_Emails {
 
 		$message  = apply_filters( 'cs_recurring_subscription_cancelled_message', cs_get_option( 'subscription_cancelled_admin_message' ) );
 		$message  = $this->filter_reminder_template_tags( $message, $subscription_id );
-		$message = str_replace( '{subscription_link}', admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $subscription_id ), $message );
+		$message = str_replace( '{subscription_link}', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&id=' . $subscription_id ), $message );
 
 		CS()->emails->send( $email_to, $subject, $message );
 

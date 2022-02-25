@@ -1327,13 +1327,13 @@ function cs_render_stats_meta_box() {
 
 	<p class="product-earnings-stats">
 		<span class="label"><?php esc_html_e( 'Gross Revenue:', 'commercestore' ); ?></span>
-		<span><a href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-reports&view=downloads&download-id=' . $post_id ); ?>"><?php echo cs_currency_filter( cs_format_amount( $earnings ) ); ?></a></span>
+		<span><a href="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports&view=downloads&download-id=' . $post_id ); ?>"><?php echo cs_currency_filter( cs_format_amount( $earnings ) ); ?></a></span>
 	</p>
 
 	<hr />
 
 	<p class="file-download-log">
-		<span><a href="<?php echo admin_url( 'edit.php?page=cs-tools&view=file_downloads&post_type=download&tab=logs&download=' . $post_id ); ?>"><?php _e( 'View File Download Log', 'commercestore' ); ?></a></span><br/>
+		<span><a href="<?php echo admin_url( 'edit.php?page=cs-tools&view=file_downloads&post_type=' . CS_POST_TYPE . '&tab=logs&download=' . $post_id ); ?>"><?php _e( 'View File Download Log', 'commercestore' ); ?></a></span><br/>
 	</p>
 <?php
 	do_action('cs_stats_meta_box');

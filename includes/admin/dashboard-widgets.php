@@ -273,7 +273,7 @@ function cs_dashboard_at_a_glance_widget( $items ) {
 		$text = sprintf( $text, number_format_i18n( $num_posts->publish ) );
 
 		if ( current_user_can( 'edit_products' ) ) {
-			$text = sprintf( '<a class="download-count" href="edit.php?post_type=download">%1$s</a>', $text );
+			$text = sprintf( '<a class="download-count" href="edit.php?post_type=' . CS_POST_TYPE . '">%1$s</a>', $text );
 		} else {
 			$text = sprintf( '<span class="download-count">%1$s</span>', $text );
 		}

@@ -2037,23 +2037,23 @@ class CS_API {
 			case 'generate':
 				if ( $this->generate_api_key( $user_id ) ) {
 					delete_transient( 'cs-total-api-keys' );
-					cs_redirect( add_query_arg( 'cs-message', 'api-key-generated', 'edit.php?post_type=download&page=cs-tools&tab=api_keys' ) );
+					cs_redirect( add_query_arg( 'cs-message', 'api-key-generated', 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=api_keys' ) );
 					exit();
 				} else {
-					cs_redirect( add_query_arg( 'cs-message', 'api-key-failed', 'edit.php?post_type=download&page=cs-tools&tab=api_keys' ) );
+					cs_redirect( add_query_arg( 'cs-message', 'api-key-failed', 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=api_keys' ) );
 					exit();
 				}
 				break;
 			case 'regenerate':
 				$this->generate_api_key( $user_id, true );
 				delete_transient( 'cs-total-api-keys' );
-				cs_redirect( add_query_arg( 'cs-message', 'api-key-regenerated', 'edit.php?post_type=download&page=cs-tools&tab=api_keys' ) );
+				cs_redirect( add_query_arg( 'cs-message', 'api-key-regenerated', 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=api_keys' ) );
 				exit();
 				break;
 			case 'revoke':
 				$this->revoke_api_key( $user_id );
 				delete_transient( 'cs-total-api-keys' );
-				cs_redirect( add_query_arg( 'cs-message', 'api-key-revoked', 'edit.php?post_type=download&page=cs-tools&tab=api_keys' ) );
+				cs_redirect( add_query_arg( 'cs-message', 'api-key-revoked', 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=api_keys' ) );
 				exit();
 				break;
 			default;

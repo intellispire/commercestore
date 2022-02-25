@@ -115,11 +115,11 @@ class CS_Customer_Reports_Table extends List_Table {
 		$state    = '';
 		$status   = $this->get_status();
 		$name     = ! empty( $item['name'] ) ? $item['name'] : '&mdash;';
-		$view_url = admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $item['id'] );
+		$view_url = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $item['id'] );
 		$actions  = array(
 			'view'   => '<a href="' . $view_url . '">' . __( 'Edit', 'commercestore' ) . '</a>',
-			'logs'   => '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-tools&tab=logs&customer=' . $item['id'] ) . '">' . __( 'Logs', 'commercestore' ) . '</a>',
-			'delete' => '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-customers&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'commercestore' ) . '</a>',
+			'logs'   => '<a href="' . admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=logs&customer=' . $item['id'] ) . '">' . __( 'Logs', 'commercestore' ) . '</a>',
+			'delete' => '<a href="' . admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'commercestore' ) . '</a>',
 		);
 
 		$item_status = ! empty( $item['status'] )

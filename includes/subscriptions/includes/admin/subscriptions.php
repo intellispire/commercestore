@@ -81,7 +81,7 @@ function cs_recurring_new_subscription_details() {
 
 					<p style="margin-top: 0;"><?php _e( '<strong>Note: </strong> This tool allows you to create a new subscription record. It will not create a payment profile in your merchant processor. Payment profiles in the merchant processor must be created through your merchant portal. Once created in the merchant portal, details such as transaction ID and billing profile id, can be entered here.', 'commercestore' ); ?></p>
 
-					<form id="edit-item-info" method="post" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-subscriptions' ); ?>">
+					<form id="edit-item-info" method="post" action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions' ); ?>">
 
 						<div class="item-info">
 
@@ -302,7 +302,7 @@ function cs_recurring_subscription_details() {
 
 				<div class="info-wrapper item-section">
 
-					<form id="edit-item-info" method="post" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $sub->id ); ?>">
+					<form id="edit-item-info" method="post" action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&id=' . $sub->id ); ?>">
 
 						<div class="item-info">
 
@@ -376,14 +376,14 @@ function cs_recurring_subscription_details() {
 										</td>
 										<td>
 											<?php $subscriber = new CS_Recurring_Subscriber( $sub->customer_id ); ?>
-											<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $subscriber->id ) ); ?>"><?php echo ! empty( $subscriber->name ) ? $subscriber->name : $subscriber->email; ?></a>
+											<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $subscriber->id ) ); ?>"><?php echo ! empty( $subscriber->name ) ? $subscriber->name : $subscriber->email; ?></a>
 										</td>
 									</tr>
 									<tr>
 										<td class="row-title">
 											<label for="tablecell"><?php _e( 'Initial Purchase ID:', 'commercestore' ); ?></label>
 										</td>
-										<td><?php echo '<a href="' . add_query_arg( 'id', $sub->parent_payment_id, admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details' ) ) . '">' . $sub->parent_payment_id . '</a>'; ?></td>
+										<td><?php echo '<a href="' . add_query_arg( 'id', $sub->parent_payment_id, admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&view=view-order-details' ) ) . '">' . $sub->parent_payment_id . '</a>'; ?></td>
 									</tr>
 									<tr>
 										<td class="row-title">
@@ -557,7 +557,7 @@ function cs_recurring_subscription_details() {
 									<td><?php echo $payment->status_nicename; ?></td>
 									<td>
 										<a title="<?php _e( 'View Details for Payment', 'commercestore' );
-										echo ' ' . $payment->ID; ?>" href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $payment->ID ); ?>">
+										echo ' ' . $payment->ID; ?>" href="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&view=view-order-details&id=' . $payment->ID ); ?>">
 											<?php _e( 'View Details', 'commercestore' ); ?>
 										</a>
 										<?php do_action( 'cs_subscription_payments_actions', $sub, $payment ); ?>
@@ -732,7 +732,7 @@ function cs_recurring_process_subscription_update() {
 
 	}
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=updated&id=' . $subscription->id ) );
+	wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=updated&id=' . $subscription->id ) );
 	exit;
 
 }
@@ -854,7 +854,7 @@ function cs_recurring_process_subscription_creation() {
 
 	$payment->update_meta( '_cs_subscription_payment', true );
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=updated&id=' . $subscription->id ) );
+	wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=updated&id=' . $subscription->id ) );
 	exit;
 
 }
@@ -888,7 +888,7 @@ function cs_recurring_process_subscription_cancel() {
 	$subscription    = new CS_Subscription( absint( $_POST['sub_id'] ) );
 	$subscription->cancel();
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=cancelled&id=' . $subscription->id ) );
+	wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=cancelled&id=' . $subscription->id ) );
 	exit;
 
 }
@@ -937,7 +937,7 @@ function cs_recurring_process_add_renewal_payment() {
 		$message = 'renewal-not-added';
 	}
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=' . $message . '&id=' . $sub->id ) );
+	wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=' . $message . '&id=' . $sub->id ) );
 	exit;
 
 }
@@ -979,7 +979,7 @@ function cs_recurring_process_renewal_charge_retry() {
 		$message = 'retry-failed&error-message=' . urlencode( $result->get_error_message() );
 	}
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=' . $message . '&id=' . $sub->id ) );
+	wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=' . $message . '&id=' . $sub->id ) );
 	exit;
 
 }
@@ -1016,7 +1016,7 @@ function cs_recurring_process_add_subscription_note() {
 		$message = 'subscription-note-not-added';
 	}
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=' . $message . '&id=' . $sub->id ) );
+	wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=' . $message . '&id=' . $sub->id ) );
 	exit;
 
 }
@@ -1059,7 +1059,7 @@ function cs_recurring_process_subscription_deletion() {
 
 	$subscription->delete();
 
-	wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=deleted' ) );
+	wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=deleted' ) );
 	exit;
 
 }

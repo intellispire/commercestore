@@ -550,7 +550,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 	 * @return string
 	 */
 	public function get_list_table_url() {
-		return admin_url( 'edit.php?post_type=download' );
+		return admin_url( 'edit.php?post_type=' . CS_POST_TYPE );
 	}
 
 	/**

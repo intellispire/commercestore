@@ -31,7 +31,7 @@ function cs_tools_banned_emails_display() {
 		<div class="inside">
 			<p><?php _e( 'Emails placed in the box below will not be allowed to make purchases.', 'commercestore' ); ?></p>
 			<form method="post"
-					action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=general' ); ?>">
+					action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=general' ); ?>">
 				<p>
 					<textarea name="banned_emails" rows="10"
 								class="large-text"><?php echo implode( "\n", cs_get_banned_emails() ); ?></textarea>
@@ -69,7 +69,7 @@ function cs_trigger_purchase_delete( $data ) {
 
 		cs_delete_purchase( $payment_id );
 
-		cs_redirect( admin_url( '/edit.php?post_type=download&page=cs-payment-history&cs-message=payment_deleted' ) );
+		cs_redirect( admin_url( '/edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&cs-message=payment_deleted' ) );
 	}
 }
 add_action( 'cs_delete_payment', 'cs_trigger_purchase_delete' );

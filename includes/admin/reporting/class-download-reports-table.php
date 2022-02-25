@@ -78,7 +78,7 @@ class CS_Download_Reports_Table extends List_Table {
 			case 'average_earnings' :
 				return cs_currency_filter( cs_format_amount( $item[ $column_name ] ) );
 			case 'details' :
-				return '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-reports&view=downloads&download-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'commercestore' ) . '</a>';
+				return '<a href="' . admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports&view=downloads&download-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'commercestore' ) . '</a>';
 			default:
 				return $item[ $column_name ];
 		}

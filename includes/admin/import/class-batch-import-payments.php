@@ -621,7 +621,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 	 * @return string
 	 */
 	public function get_list_table_url() {
-		return admin_url( 'edit.php?post_type=download&page=cs-payment-history' );
+		return admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' );
 	}
 
 	/**

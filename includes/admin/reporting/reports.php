@@ -2588,7 +2588,7 @@ function cs_register_export_report( $reports ) {
 			'icon'             => 'migrate',
 			'priority'         => 1000,
 			'capability'       => 'export_shop_reports',
-			'display_callback' => 'display_export_report',
+			'display_callback' => 'cs_display_export_report',
 			'filters'          => false,
 		) );
 	} catch ( \CS_Exception $exception ) {
@@ -2601,7 +2601,7 @@ add_action( 'cs_reports_init', 'cs_register_export_report' );
  *
  * @since 3.0
  */
-function display_export_report() {
+function cs_display_export_report() {
 	global $wpdb;
 
 	wp_enqueue_script( 'cs-admin-tools-export' );

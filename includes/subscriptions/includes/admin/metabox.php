@@ -590,7 +590,7 @@ function cs_display_subscription_payment_meta( $payment_id ) {
 			<div class="inside">
 
 				<?php foreach( $subs as $sub ) : ?>
-					<?php $sub_url = admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $sub->id ); ?>
+					<?php $sub_url = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&id=' . $sub->id ); ?>
 					<p>
 						<span class="label"><span class="dashicons dashicons-update"></span> <?php printf( __( 'Subscription ID: <a href="%s">#%d</a>', 'commercestore' ), $sub_url, $sub->id ); ?></span> (<?php echo esc_html( $sub->get_status_label() ); ?>)
 					</p>
@@ -601,7 +601,7 @@ function cs_display_subscription_payment_meta( $payment_id ) {
 						<?php foreach( $payments as $payment ) : ?>
 							<li>
 								<span class="howto"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $payment->date ) ); ?></span>
-								<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $payment->ID ) ); ?>">
+								<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&view=view-order-details&id=' . $payment->ID ) ); ?>">
 									<?php if( function_exists( 'cs_get_payment_number' ) ) : ?>
 										<?php echo '#' . $payment->number ?>
 									<?php else : ?>

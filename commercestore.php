@@ -40,9 +40,10 @@ const CS_FEATURE_VARIABLE_PRICE = true;
 const CS_FEATURE_MARKETING = false;
 const CS_DEFAULT_SLUG = 'store'; // Override with the CS_SLUG constant
 
-const CS_ICON = 'download'; // Change the icon here
+const CS_ICON = 'download'; // Change the reports icon here
 
-const CS_POST_TYPE = 'download';
+const CS_POST_TYPE = 'infoproduct';
+# const CS_POST_TYPE = 'download';
 const CS_TAG_TYPE = CS_POST_TYPE . '_tag';
 const CS_CAT_TYPE = CS_POST_TYPE . '_category';
 
@@ -58,6 +59,7 @@ const CS_EX_DOWNLOAD_SHORTCODE = 'download';
 const CS_EX_DOWNLOAD_ITEM = 'download';
 const CS_EX_DOWNLOAD_ARGS = 'download';
 const CS_EX_DOWNLOAD_MESSAGES = 'download';
+const CS_EX_DOWNLOAD_MESSAGES_TYPE = 'download';
 
 class CSFilter {
 	const CATEGORY_ARGS = 'cs_' . CS_CAT_TYPE . '_args';

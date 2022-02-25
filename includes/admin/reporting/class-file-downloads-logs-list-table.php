@@ -84,7 +84,7 @@ class CS_File_Downloads_Log_Table extends CS_Base_Log_List_Table {
 			case 'payment_id' :
 				$number = cs_get_payment_number( $item['payment_id'] );
 				return ! empty( $number )
-					? '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . esc_attr( $item['payment_id'] ) ) ) . '">' . esc_html( $number ) . '</a>'
+					? '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&view=view-order-details&id=' . esc_attr( $item['payment_id'] ) ) ) . '">' . esc_html( $number ) . '</a>'
 					: '&mdash;';
 			case 'ip' :
 				return '<a href="' . esc_url( 'https://ipinfo.io/' . esc_attr( $item['ip'] ) )  . '" target="_blank" rel="noopener noreferrer">' . esc_html( $item['ip'] )  . '</a>';

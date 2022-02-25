@@ -91,7 +91,7 @@ function cs_render_download_columns( $column_name, $post_id ) {
 			break;
 		case 'earnings':
 			if ( current_user_can( 'view_product_stats', $post_id ) ) {
-				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-reports&view=downloads&download-id=' . $post_id ) ) . '">';
+				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports&view=downloads&download-id=' . $post_id ) ) . '">';
 					echo cs_currency_filter( cs_format_amount( cs_get_download_earnings_stats( $post_id ) ) );
 				echo '</a>';
 			} else {

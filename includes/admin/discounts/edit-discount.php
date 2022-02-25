@@ -289,7 +289,7 @@ $minutes              = cs_get_minute_values();
 			<input type="hidden" name="type" value="discount" />
 			<input type="hidden" name="cs-action" value="edit_discount" />
 			<input type="hidden" name="discount-id" value="<?php echo esc_attr( $discount->id ); ?>" />
-			<input type="hidden" name="cs-redirect" value="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-discounts&cs-action=edit_discount&discount=' . $discount->id ) ); ?>" />
+			<input type="hidden" name="cs-redirect" value="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-discounts&cs-action=edit_discount&discount=' . $discount->id ) ); ?>" />
 			<input type="hidden" name="cs-discount-nonce" value="<?php echo wp_create_nonce( 'cs_discount_nonce' ); ?>" />
 			<input type="submit" value="<?php _e( 'Update Discount Code', 'commercestore' ); ?>" class="button-primary" />
 		</p>

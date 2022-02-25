@@ -57,7 +57,7 @@ function cs_logs_view_page( $logs_table, $tag = '' ) {
 		 */
 		do_action( "cs_logs_{$tag}_top" ); ?>
 
-		<form id="cs-logs-filter" method="get" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=' . $tag ); ?>">
+		<form id="cs-logs-filter" method="get" action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=' . $tag ); ?>">
 			<input type="hidden" name="post_type" value="download" />
 			<input type="hidden" name="page" value="cs-tools" />
 			<input type="hidden" name="tab" value="<?php echo esc_attr( $tag ); ?>" />
@@ -219,7 +219,7 @@ function cs_log_views() {
 
 	<!-- CommerceStore 3.0 Hack -->
 	</div></div>
-	<form method="get" class="cs-old-log-filters" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-payment-history' ); ?>">
+	<form method="get" class="cs-old-log-filters" action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ); ?>">
 		<?php cs_admin_filter_bar( 'old_logs' ); ?>
 	</form>
 	<div class="tablenav top"><div>

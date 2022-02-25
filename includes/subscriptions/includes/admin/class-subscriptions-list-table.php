@@ -152,7 +152,7 @@ class CS_Subscription_Reports_Table extends WP_List_Table {
 		$subscriber = new CS_Recurring_Subscriber( $item->customer_id );
 		$customer   = ! empty( $subscriber->name ) ? $subscriber->name : $subscriber->email;
 
-		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $subscriber->id ) ) . '">' . $customer . '</a>';
+		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $subscriber->id ) ) . '">' . $customer . '</a>';
 	}
 
 
@@ -211,7 +211,7 @@ class CS_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_parent_payment_id( $item ) {
-		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $item->parent_payment_id ) ) . '">' . cs_get_payment_number( $item->parent_payment_id ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&view=view-order-details&id=' . $item->parent_payment_id ) ) . '">' . cs_get_payment_number( $item->parent_payment_id ) . '</a>';
 	}
 
 	/**
@@ -248,7 +248,7 @@ class CS_Subscription_Reports_Table extends WP_List_Table {
 	 * @return      string
 	 */
 	function column_actions( $item ) {
-		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $item->id ) ) . '" title="' . esc_attr( __( 'View View or edit subscription', 'commercestore' ) ) . '">' . __( 'View', 'commercestore' ) . '</a>';
+		return '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&id=' . $item->id ) ) . '" title="' . esc_attr( __( 'View View or edit subscription', 'commercestore' ) ) . '">' . __( 'View', 'commercestore' ) . '</a>';
 	}
 
 

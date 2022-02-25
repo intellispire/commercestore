@@ -58,7 +58,7 @@ function cs_get_purchase_link( $args = array() ) {
 		}
 
 
-		cs_set_error( 'set_checkout', sprintf( __( 'No checkout page has been configured. Visit <a href="%s">Settings</a> to set one.', 'commercestore' ), admin_url( 'edit.php?post_type=download&page=cs-settings&tab=general&section=pages' ) ) );
+		cs_set_error( 'set_checkout', sprintf( __( 'No checkout page has been configured. Visit <a href="%s">Settings</a> to set one.', 'commercestore' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=general&section=pages' ) ) );
 		cs_print_errors();
 
 		$no_checkout_error_displayed = true;

@@ -18,7 +18,7 @@ namespace CS\Gateways\PayPal\Admin;
  * @return string
  */
 function get_settings_url() {
-	return admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=paypal_commerce' );
+	return admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=gateways&section=paypal_commerce' );
 }
 
 /**

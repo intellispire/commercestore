@@ -1305,7 +1305,7 @@ function cs_ajax_customer_details() {
 		'date_created'      => esc_html( $customer->date_created ),
 		'date_created_i18n' => esc_html( cs_date_i18n( $customer->date_created ) ),
 		'_links'            => array(
-			'self' => esc_url_raw( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) ),
+			'self' => esc_url_raw( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ) ),
 		),
 	);
 

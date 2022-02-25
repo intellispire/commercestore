@@ -553,7 +553,7 @@ final class CS_Recurring {
 		if ( function_exists( 'cs_count_orders' ) ) {
 			return $views;
 		}
-		$base          = admin_url( 'edit.php?post_type=download&page=cs-payment-history' );
+		$base          = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' );
 		$payment_count = wp_count_posts( 'cs_payment' );
 		$current       = isset( $_GET['status'] ) ? $_GET['status'] : '';
 

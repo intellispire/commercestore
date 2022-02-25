@@ -32,7 +32,7 @@ function cs_recurring_customer_subscriptions_list( $customer ) {
 					<td><a href="<?php echo esc_url( admin_url( 'post.php?action=edit&post=' . $subscription->product_id ) ); ?>"><?php echo get_the_title( $subscription->product_id ); ?></a></td>
 					<td><?php printf( _x( '%s every %s', 'Example: $10 every month', 'commercestore' ), cs_currency_filter( cs_sanitize_amount( $subscription->recurring_amount ), cs_get_payment_currency_code( $subscription->parent_payment_id ) ), $subscription->period ); ?></td>
 					<td><?php echo $subscription->get_status_label(); ?></td>
-					<td><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' . $subscription->id ) ); ?>"><?php _e( 'View Details', 'commercestore' ); ?></a>
+					<td><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&id=' . $subscription->id ) ); ?>"><?php _e( 'View Details', 'commercestore' ); ?></a>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

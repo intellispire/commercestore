@@ -63,7 +63,7 @@ class CS_Sales_Log_Table extends CS_Base_Log_List_Table {
 					? $item['customer']->name
 					: '<em>' . __( 'Unnamed Customer', 'commercestore' ) . '</em>';
 
-				$return = '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $item['customer']->id ) ) . '">#' . $item['customer']->id . ' ' . $name . '</a>';
+				$return = '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $item['customer']->id ) ) . '">#' . $item['customer']->id . ' ' . $name . '</a>';
 				break;
 
 			case 'item_price':
@@ -75,7 +75,7 @@ class CS_Sales_Log_Table extends CS_Base_Log_List_Table {
 				break;
 
 			case 'ID':
-				$return = '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-payment-history&view=view-order-details&id=' . $item['order_id'] ) . '">' . $item['ID'] . '</a>';
+				$return = '<a href="' . admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&view=view-order-details&id=' . $item['order_id'] ) . '">' . $item['ID'] . '</a>';
 				break;
 
 			default:

@@ -131,7 +131,7 @@ class Gateway_Stats extends List_Table {
 
 			$reports_data[] = array(
 				'ID'             => $gateway_id,
-				'label'          => '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-payment-history&gateway=' . $gateway_id ) . '">' . esc_html( $gateway['admin_label'] ) . '</a>',
+				'label'          => '<a href="' . admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&gateway=' . $gateway_id ) . '">' . esc_html( $gateway['admin_label'] ) . '</a>',
 				'complete_sales' => cs_format_amount( $complete_count, false ),
 				'pending_sales'  => cs_format_amount( $pending_count, false ),
 				'refunded_sales' => cs_format_amount( $refunded_count, false ),

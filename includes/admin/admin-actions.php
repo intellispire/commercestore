@@ -94,11 +94,11 @@ function cs_admin_adjust_submenus() {
 
 	// Loop through each taxonomy and remove the menu
 	foreach ( $taxonomies as $taxonomy ) {
-		remove_submenu_page( 'edit.php?post_type=download', 'edit-tags.php?taxonomy=' . $taxonomy . '&amp;post_type=download' );
+		remove_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, 'edit-tags.php?taxonomy=' . $taxonomy . '&amp;post_type=' . CS_POST_TYPE );
 	}
 
 	// Remove the "Add New" link for downloads
-	remove_submenu_page( 'edit.php?post_type=download', 'post-new.php?post_type=download' );
+	remove_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, 'post-new.php?post_type=' . CS_POST_TYPE);
 }
 add_action( 'admin_menu', 'cs_admin_adjust_submenus', 999 );
 
@@ -131,7 +131,7 @@ function cs_taxonomies_modify_menu_highlight() {
 	}
 
 	// Force the submenu file
-	$submenu_file = 'edit.php?post_type=download';
+	$submenu_file = 'edit.php?post_type=' . CS_POST_TYPE;
 }
 add_filter( 'admin_head', 'cs_taxonomies_modify_menu_highlight', 9999 );
 
@@ -160,7 +160,7 @@ function cs_add_new_modify_menu_highlight() {
 	}
 
 	// Force the submenu file
-	$submenu_file = 'edit.php?post_type=download';
+	$submenu_file = 'edit.php?post_type=' . CS_POST_TYPE;
 }
 add_filter( 'admin_head', 'cs_add_new_modify_menu_highlight', 9999 );
 

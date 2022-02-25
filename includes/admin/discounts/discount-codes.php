@@ -52,7 +52,7 @@ function cs_discounts_page_content() {
 
 	do_action( 'cs_discounts_page_top' ); ?>
 
-	<form id="cs-discounts-filter" method="get" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-discounts' ); ?>">
+	<form id="cs-discounts-filter" method="get" action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-discounts' ); ?>">
 		<?php $discount_codes_table->search_box( __( 'Search Discounts', 'commercestore' ), 'cs-discounts' ); ?>
 
 		<input type="hidden" name="post_type" value="download" />
