@@ -23,10 +23,10 @@
         "stripe/stripe-php": "^7.113"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5.14",
-        "phpunit/php-invoker": "1.1.3",
+        "phpunit/phpunit": "^7.0",
         "yoast/phpunit-polyfills": "1.x-dev",
-        "humbug/php-scoper": "1.0.x-dev"
+        "humbug/php-scoper": "1.0.x-dev",
+        "phpunit/php-invoker": "^3.1"
     },
     "minimum-stability": "dev",
     "autoload": {
