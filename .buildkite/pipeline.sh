@@ -7,7 +7,7 @@ set -eu
 echo "steps:"
 
 phpVersions=('7.4')
-wpVersions=('5.8.3' 'latest')
+wpVersions=('5.9' 'latest')
 
 # Exclude combinations with <php version>-<wp version>
 exclusions=('7.3-4.9.15' '7.4-4.9.15' '7.4-5.0.10' '7.4-5.1.6' '7.4-5.2.7')

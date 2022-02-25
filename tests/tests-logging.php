@@ -28,7 +28,7 @@ class Tests_Logging extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$object = new CS_Logging();
 
 		self::$log_id = self::$object->insert_log( array(

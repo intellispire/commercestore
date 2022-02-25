@@ -8,13 +8,13 @@
 class Tests_CS extends CS_UnitTestCase {
 	protected $object;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$this->object = CS();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	public function test_cs_instance() {

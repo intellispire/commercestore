@@ -30,8 +30,8 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->registry = new \CS\Reports\Data\Endpoint_Registry();
 	}
@@ -41,10 +41,10 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 	 *
 	 * @access public
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		$this->registry->exchangeArray( array() );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -80,7 +80,7 @@ class Endpoint_Tests extends \CS_UnitTestCase {
 
 		$errors = $endpoint->get_errors();
 
-		$this->assertContains( 'invalid_view', $errors->get_error_code() );
+		$this->assertStringContainsString( 'invalid_view', $errors->get_error_code() );
 	}
 
 	/**

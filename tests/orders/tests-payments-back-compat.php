@@ -21,7 +21,7 @@ class Payment_Back_Compat_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$orders = parent::cs()->order->create_many( 5 );
 	}
 

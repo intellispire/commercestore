@@ -21,8 +21,8 @@ class Pass_Manager extends \CS_UnitTestCase {
 	/**
 	 * Runs once before any tests are executed.
 	 */
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		// This is an admin file, so we need to include it manually.
 		require_once CS_PLUGIN_DIR . 'includes/admin/class-pass-manager.php';
@@ -31,8 +31,8 @@ class Pass_Manager extends \CS_UnitTestCase {
 	/**
 	 * Runs before each test is executed.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		global $cs_licensed_products;
 		$cs_licensed_products = array();

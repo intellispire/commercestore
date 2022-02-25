@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Util\Test;
+
 require_once dirname( __FILE__ ) . '/factory.php';
 
 /**
@@ -20,8 +22,8 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public static $original_gmt_offset;
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		cs_install();
 
@@ -33,7 +35,7 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 		add_filter( 'cs_log_email_errors', '__return_false' );
 	}
 
-	public static function tearDownAfterClass() {
+	public static function tearDownAfterClass() : void {
 		self::_delete_all_cs_data();
 
 		delete_option( 'gmt_offset' );
@@ -46,8 +48,8 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Runs before each test method.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->expectDeprecatedCS();
 	}
@@ -56,6 +58,9 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 * Sets up logic for the @expectCSDeprecated annotation for deprecated elements in CS.
 	 */
 	function expectDeprecatedCS() {
+
+		return;
+
 		$annotations = $this->getAnnotations();
 		foreach ( array( 'class', 'method' ) as $depth ) {
 			if ( ! empty( $annotations[ $depth ]['expectCSDeprecated'] ) ) {
@@ -102,7 +107,7 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 * @param string $type   Type to check against.
 	 * @param array  $actual Supplied array to check.
 	 */
-	public function assertContainsOnlyType( $type, $actual ) {
+	public function assertStringContainsStringOnlyType( $type, $actual ) {
 		$standard_types = array(
 			'numeric', 'integer', 'int', 'float', 'string', 'boolean', 'bool',
 			'null', 'array', 'object', 'resource', 'scalar'
@@ -110,17 +115,9 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 
 
 		if ( in_array( $type, $standard_types, true ) ) {
-			if ( class_exists( 'PHPUnit\Framework\Constraint\isType' ) ) {
 				$constraint = new \PHPUnit\Framework\Constraint\isType( $type );
-			} else {
-				$constraint = new \PHPUnit_Framework_Constraint_IsType( $type );
-			}
 		} else {
-			if ( class_exists( 'PHPUnit\Framework\Constraint\IsInstanceOf' ) ) {
 				$constraint = new \PHPUnit\Framework\Constraint\IsInstanceOf( $type );
-			} else {
-				$constraint = new \PHPUnit_Framework_Constraint_IsInstanceOf( $type );
-			}
 		}
 
 		foreach ( $actual as $item ) {
@@ -131,5 +128,39 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 			}
 		}
 	}
+
+	/**
+	 * Polyfill getAnnotations()
+	 *
+	 * @return array
+	 */
+	public function getAnnotations() : array {
+		 $annotations = Test::parseTestMethodAnnotations(
+			 static::class,
+		   ''
+		 );
+		 return $annotations;
+	}
+
+	/**
+	 * Polyfill assertInternalTypes
+	 */
+
+	public function assertInternalType($type, $var, $message = '') {
+		switch ($type) {
+			case 'int': return $this->assertIsInt($var, $message);
+			case 'bool': return $this->assertIsBool($var, $message);
+			case 'array': return $this->assertIsArray($var, $message);
+			case 'float': return $this->assertIsFloat($var, $message);
+			case 'object': return $this->assertIsObject($var, $message);
+			case 'string': return $this->assertIsString($var, $message);
+			case 'numeric': return $this->assertIsNumeric($var, $message);
+			default:
+				$this->assertFalse(true, 'Missing assertInternalTypeTest for: '. $type);
+				return false;
+		}
+	}
+
+
 
 }

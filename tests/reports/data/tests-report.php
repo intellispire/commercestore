@@ -37,7 +37,7 @@ class Report_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up static fixtures.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		Reports\register_endpoint( 'foo', array(
 			'label' => 'Foo',
 			'views' => array(
@@ -63,11 +63,11 @@ class Report_Tests extends \CS_UnitTestCase {
 	/**
 	 * Runs after every test.
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		// Reset $report after every test.
 		self::$report = self::$_original_report;
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

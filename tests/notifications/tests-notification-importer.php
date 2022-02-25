@@ -20,8 +20,8 @@ class NotificationImporterTests extends \CS_UnitTestCase {
 	/**
 	 * Truncates the notification table before each test.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		global $wpdb;
 		$tableName = CS()->notifications->table_name;

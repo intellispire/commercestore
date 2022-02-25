@@ -7,8 +7,8 @@ class Tests_Roles extends CS_UnitTestCase {
 
 	protected $_roles;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->_roles = new CS_Roles;
 		$this->_roles->add_roles();

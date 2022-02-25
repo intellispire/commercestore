@@ -23,7 +23,7 @@ class File_Downloads_Logs_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$logs = parent::cs()->file_download_log->create_many( 5 );
 	}
 

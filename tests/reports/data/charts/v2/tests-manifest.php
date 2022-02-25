@@ -28,8 +28,8 @@ class Manifest_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up before each test.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->mock_Manifest = $this->get_Manifest_mock( 'test' );
 	}
@@ -72,7 +72,7 @@ class Manifest_Tests extends \CS_UnitTestCase {
 	 * @covers ::get_datasets()
 	 */
 	public function test_get_datasets_should_retrieve_an_array_with_Dataset_values() {
-		$this->assertContainsOnlyType( 'CS\\Reports\\Data\\Charts\\v2\\Dataset', $this->mock_Manifest->get_datasets() );
+		$this->assertStringContainsStringOnlyType( 'CS\\Reports\\Data\\Charts\\v2\\Dataset', $this->mock_Manifest->get_datasets() );
 	}
 
 	/**
@@ -81,7 +81,7 @@ class Manifest_Tests extends \CS_UnitTestCase {
 	public function test_get_datasets_should_be_keyed_with_strings() {
 		$keys = array_keys( $this->mock_Manifest->get_datasets() );
 
-		$this->assertContainsOnlyType( 'string', $keys );
+		$this->assertStringContainsStringOnlyType( 'string', $keys );
 	}
 
 	/**

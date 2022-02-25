@@ -26,8 +26,8 @@ class Tests_PayPal extends CS_UnitTestCase {
 	 */
 	protected $order;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$order_id = \CS_Helper_Payment::create_simple_payment();
 		cs_set_payment_transaction_id( $order_id, self::TRANSACTION_ID );

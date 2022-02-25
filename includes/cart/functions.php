@@ -385,6 +385,17 @@ function cs_get_cart_fee_tax() {
 }
 
 /**
+ * Is the cart empty?
+ *
+ * @since 3.0
+ * @uses CS()->cart->is_empty()
+ * @return bool Is the cart empty?
+ */
+function cs_is_cart_empty() {
+	return CS()->cart->is_empty();
+}
+
+/**
  * Get Purchase Summary
  *
  * Retrieves the purchase summary.

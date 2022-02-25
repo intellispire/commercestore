@@ -9,7 +9,7 @@ class Tests_Checkout extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		global $wp_rewrite;
 		$GLOBALS['wp_rewrite']->init();
 		flush_rewrite_rules( false );
@@ -106,9 +106,9 @@ class Tests_Checkout extends CS_UnitTestCase {
 	public function test_checkout_form() {
 		$this->assertInternalType( 'string', cs_checkout_form() );
 
-		$this->assertContains( '<div id="cs_checkout_wrap">', cs_checkout_form() );
+		$this->assertStringContainsString( '<div id="cs_checkout_wrap">', cs_checkout_form() );
 
-		$this->assertContains( '<div id="cs_checkout_form_wrap" class="cs_clearfix">', cs_checkout_form() );
+		$this->assertStringContainsString( '<div id="cs_checkout_form_wrap" class="cs_clearfix">', cs_checkout_form() );
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Tests_Checkout extends CS_UnitTestCase {
 	 */
 	public function test_checkout_button_next() {
 		$this->assertInternalType( 'string', cs_checkout_button_next() );
-		$this->assertContains( '<input type="hidden" name="cs_action" value="gateway_select" />', cs_checkout_button_next() );
+		$this->assertStringContainsString( '<input type="hidden" name="cs_action" value="gateway_select" />', cs_checkout_button_next() );
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Tests_Checkout extends CS_UnitTestCase {
 		add_filter( 'cs_enabled_payment_gateways', array( $this, 'modify_gateaways' ) );
 
 		$this->assertInternalType( 'string', cs_checkout_button_purchase() );
-		$this->assertContains( '<input type="submit" class="cs-submit blue button" id="cs-purchase-button" name="cs-purchase" value="Purchase"/>', cs_checkout_button_purchase() );
+		$this->assertStringContainsString( '<input type="submit" class="cs-submit blue button" id="cs-purchase-button" name="cs-purchase" value="Purchase"/>', cs_checkout_button_purchase() );
 
 		remove_filter( 'cs_enabled_payment_gateways', array( $this, 'modify_gateaways' ) );
 	}

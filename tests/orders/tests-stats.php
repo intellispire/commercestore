@@ -35,7 +35,7 @@ class Stats_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$stats  = new Stats();
 		self::$orders = parent::cs()->order->create_many( 5 );
 

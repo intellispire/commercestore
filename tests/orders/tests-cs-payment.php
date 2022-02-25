@@ -19,16 +19,16 @@ class CS_Payment_Tests extends \CS_UnitTestCase {
 	 */
 	protected $payment;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$payment_id = \CS_Helper_Payment::create_simple_payment();
 
 		$this->payment = cs_get_payment( $payment_id );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		\CS_Helper_Payment::delete_payment( $this->payment->ID );
 
@@ -504,6 +504,8 @@ class CS_Payment_Tests extends \CS_UnitTestCase {
 	 * @expectCSDeprecated cs_undo_purchase_on_refund
 	 */
 	public function test_refund_payment_legacy() {
+		// $this->expectDeprecation();
+
 		$this->payment->status = 'complete';
 		$this->payment->save();
 

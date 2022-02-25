@@ -12,15 +12,15 @@ class Tests_Downloads extends CS_UnitTestCase {
 
 	protected $_download_files = null;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->_post = CS_Helper_Download::create_variable_download();
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 
-		parent::tearDown();
+		parent::tear_down();
 
 		CS_Helper_Download::delete_download( $this->_post->ID );
 
@@ -204,7 +204,7 @@ class Tests_Downloads extends CS_UnitTestCase {
 	public function test_variable_pricing_cs_price() {
 		$out = cs_get_variable_prices( $this->_post->ID );
 		$price_text = cs_price( $this->_post->ID, false, 0);
-		$this->assertContains( '&#36;20.00', $price_text, 'Variable Price cs_price incorrect' );
+		$this->assertStringContainsString( '&#36;20.00', $price_text, 'Variable Price cs_price incorrect' );
 	}
 
 	public function test_has_variable_prices() {

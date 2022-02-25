@@ -99,10 +99,10 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( 'Number of items in cart:', $output );
-		$this->assertContains( '<li class="cart_item empty">', $output );
-		$this->assertContains( '<li class="cart_item cs-cart-meta cs_total"', $output );
-		$this->assertContains( '<li class="cart_item cs_checkout"', $output );
+		$this->assertStringContainsString( 'Number of items in cart:', $output );
+		$this->assertStringContainsString( '<li class="cart_item empty">', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs-cart-meta cs_total"', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs_checkout"', $output );
 
 	}
 
@@ -124,10 +124,10 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( 'Number of items in cart:', $output );
-		$this->assertContains( '<li class="cart_item empty">', $output );
-		$this->assertContains( '<li class="cart_item cs-cart-meta cs_total"', $output );
-		$this->assertContains( '<li class="cart_item cs_checkout"', $output );
+		$this->assertStringContainsString( 'Number of items in cart:', $output );
+		$this->assertStringContainsString( '<li class="cart_item empty">', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs-cart-meta cs_total"', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs_checkout"', $output );
 
 	}
 
@@ -163,10 +163,10 @@ class Tests_Widgets extends CS_UnitTestCase {
 			$cart_widget->form( array() );
 		$output = ob_get_clean();
 
-		$this->assertRegExp( '/<label for="(.*)">(.*)<\/label>/', $output );
-		$this->assertRegExp( '/<input class="widefat" id="(.*)" name="(.*)" type="text" value="(.*)"\/>/', $output );
-		$this->assertRegExp( '/<input (.*) id="(.*)" name="(.*)" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="(.*)">(.*)<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="(.*)">(.*)<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<input class="widefat" id="(.*)" name="(.*)" type="text" value="(.*)"\/>/', $output );
+		$this->assertMatchesRegularExpression( '/<input (.*) id="(.*)" name="(.*)" type="checkbox" \/>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="(.*)">(.*)<\/label>/', $output );
 
 	}
 
@@ -217,9 +217,9 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( '<ul class="cs-taxonomy-widget">', $output );
-		$this->assertContains( '<li class="cat-item cat-item-' . reset( $terms ), $output );
-		$this->assertContains( '<li class="cat-item cat-item-' . end( $terms ), $output );
+		$this->assertStringContainsString( '<ul class="cs-taxonomy-widget">', $output );
+		$this->assertStringContainsString( '<li class="cat-item cat-item-' . reset( $terms ), $output );
+		$this->assertStringContainsString( '<li class="cat-item cat-item-' . end( $terms ), $output );
 
 		CS_Helper_Download::delete_download( $download->ID );
 
@@ -258,13 +258,13 @@ class Tests_Widgets extends CS_UnitTestCase {
 			$categories_widget->form( array() );
 		$output = ob_get_clean();
 
-		$this->assertRegExp( '/<label for="(.*)">Title:<\/label>/', $output );
-		$this->assertRegExp( '/<input class="widefat" id="(.*)" name="(.*)" type="text" value="(.*)"\/>/', $output );
-		$this->assertRegExp( '/<label for="(.*)">Taxonomy:<\/label>/', $output );
-		$this->assertRegExp( '/<option value="' . CS_CAT_TYPE .'" (.*)>(.*)<\/option>/', $output );
-		$this->assertRegExp( '/<option value="' . CS_TAG_TYPE .'" (.*)>(.*)<\/option>/', $output );
-		$this->assertRegExp( '/<label for="(.*)">Show Count:<\/label>/', $output );
-		$this->assertRegExp( '/<label for="(.*)">Hide Empty Categories:<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="(.*)">Title:<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<input class="widefat" id="(.*)" name="(.*)" type="text" value="(.*)"\/>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="(.*)">Taxonomy:<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<option value="download_category" (.*)>(.*)<\/option>/', $output );
+		$this->assertMatchesRegularExpression( '/<option value="download_tag" (.*)>(.*)<\/option>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="(.*)">Show Count:<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="(.*)">Hide Empty Categories:<\/label>/', $output );
 
 	}
 
@@ -365,12 +365,12 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( '<h3>' . $download->post_title . '</h3>', $output );
-		$this->assertRegExp( '/<form id="cs_purchase_[0-9]+" class="cs_download_purchase_form cs_purchase_[0-9]+" method="post">/', $output );
-		$this->assertContains( '<input type="hidden" name="cs_action" class="cs_action_input" value="add_to_cart">', $output );
-		$this->assertContains( '<input type="hidden" name="download_id" value="' . $download->ID . '">', $output );
-		$this->assertContains( '<p class="cs-meta">', $output );
-		$this->assertContains( '<span class="categories">Product Category: ', $output );
+		$this->assertStringContainsString( '<h3>' . $download->post_title . '</h3>', $output );
+		$this->assertMatchesRegularExpression( '/<form id="cs_purchase_[0-9]+" class="cs_download_purchase_form cs_purchase_[0-9]+" method="post">/', $output );
+		$this->assertStringContainsString( '<input type="hidden" name="cs_action" class="cs_action_input" value="add_to_cart">', $output );
+		$this->assertStringContainsString( '<input type="hidden" name="download_id" value="' . $download->ID . '">', $output );
+		$this->assertStringContainsString( '<p class="cs-meta">', $output );
+		$this->assertStringContainsString( '<span class="categories">Product Category: ', $output );
 
 		CS_Helper_Download::delete_download( $download->ID );
 
@@ -390,19 +390,19 @@ class Tests_Widgets extends CS_UnitTestCase {
 			$categories_widget->form( array() );
 		$output = ob_get_clean();
 
-		$this->assertRegExp( '/<label for="widget-cs_product_details--title">Title:<\/label>/', $output );
-		$this->assertRegExp( '/<input class="widefat" id="widget-cs_product_details--title" name="widget-cs_product_details\[\]\[title\]" type="text" value="(.*)" \/>/', $output );
-		$this->assertRegExp( '/Display Type:/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--download_id">Product:<\/label>/', $output );
-		$this->assertRegExp( '/<select class="widefat" name="widget-cs_product_details\[\]\[download_id\]" id="widget-cs_product_details--download_id">/', $output );
-		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--download_title" name="widget-cs_product_details\[\]\[download_title\]" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--download_title">Show Product Title<\/label>/', $output );
-		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--purchase_button" name="widget-cs_product_details\[\]\[purchase_button\]" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--purchase_button">Show Purchase Button<\/label>/', $output );
-		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--categories" name="widget-cs_product_details\[\]\[categories\]" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--categories">Show Product Categories<\/label>/', $output );
-		$this->assertRegExp( '/<input  checked=\'checked\' id="widget-cs_product_details--tags" name="widget-cs_product_details\[\]\[tags\]" type="checkbox" \/>/', $output );
-		$this->assertRegExp( '/<label for="widget-cs_product_details--tags">Show Product Tags<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="widget-cs_product_details--title">Title:<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<input class="widefat" id="widget-cs_product_details--title" name="widget-cs_product_details\[\]\[title\]" type="text" value="(.*)" \/>/', $output );
+		$this->assertMatchesRegularExpression( '/Display Type:/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="widget-cs_product_details--download_id">Product:<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<select class="widefat" name="widget-cs_product_details\[\]\[download_id\]" id="widget-cs_product_details--download_id">/', $output );
+		$this->assertMatchesRegularExpression( '/<input  checked=\'checked\' id="widget-cs_product_details--download_title" name="widget-cs_product_details\[\]\[download_title\]" type="checkbox" \/>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="widget-cs_product_details--download_title">Show Product Title<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<input  checked=\'checked\' id="widget-cs_product_details--purchase_button" name="widget-cs_product_details\[\]\[purchase_button\]" type="checkbox" \/>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="widget-cs_product_details--purchase_button">Show Purchase Button<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<input  checked=\'checked\' id="widget-cs_product_details--categories" name="widget-cs_product_details\[\]\[categories\]" type="checkbox" \/>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="widget-cs_product_details--categories">Show Product Categories<\/label>/', $output );
+		$this->assertMatchesRegularExpression( '/<input  checked=\'checked\' id="widget-cs_product_details--tags" name="widget-cs_product_details\[\]\[tags\]" type="checkbox" \/>/', $output );
+		$this->assertMatchesRegularExpression( '/<label for="widget-cs_product_details--tags">Show Product Tags<\/label>/', $output );
 
 	}
 

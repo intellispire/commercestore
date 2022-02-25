@@ -23,7 +23,7 @@ class Tests_API extends CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		global $wp_rewrite, $wp_query;
 		$GLOBALS['wp_rewrite']->init();
 		flush_rewrite_rules( false );
@@ -166,8 +166,8 @@ class Tests_API extends CS_UnitTestCase {
 		CS()->api->update_key( self::$user_id );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		wp_set_current_user( self::$user_id );
 
@@ -186,8 +186,8 @@ class Tests_API extends CS_UnitTestCase {
 		self::$api->flush_api_output();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		// Revoke key to ensure `update_key()` will generate a new one.
 		CS()->api->revoke_api_key( self::$user_id );

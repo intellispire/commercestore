@@ -11,8 +11,8 @@ class Tests_Activation extends CS_UnitTestCase {
 	 *
 	 * @since 2.1.0
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	/**

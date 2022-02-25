@@ -7,9 +7,9 @@
 class Tests_Fee extends CS_UnitTestCase {
 	protected $_post = null;
 
-	public function setUp() {
+	public function set_up() {
 
-		parent::setUp();
+		parent::set_up();
 		$post_id = $this->factory->post->create( array( 'post_title' => 'Test Download', 'post_type' => 'download', 'post_status' => 'publish' ) );
 		$this->_post = get_post( $post_id );
 

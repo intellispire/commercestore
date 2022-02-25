@@ -26,7 +26,7 @@ class Refunds_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$orders = parent::cs()->order->create_many( 5 );
 
 		foreach ( self::$orders as $order ) {
@@ -151,7 +151,7 @@ class Refunds_Tests extends \CS_UnitTestCase {
 		$this->assertInstanceOf( 'WP_Error', $refund_id );
 
 		$this->assertEquals( 'refund_validation_error', $refund_id->get_error_code() );
-		$this->assertContains( 'The maximum refund subtotal', $refund_id->get_error_message() );
+		$this->assertStringContainsString( 'The maximum refund subtotal', $refund_id->get_error_message() );
 	}
 
 	/**
@@ -209,6 +209,42 @@ class Refunds_Tests extends \CS_UnitTestCase {
 
 		// Verify total.
 		$this->assertEquals( -60.0, floatval( $r->total ) );
+	}
+
+	public function test_partial_refund_with_free_download_remaining() {
+		$order_id = self::$orders[2];
+		$oid      = cs_add_order_item( array(
+			'order_id'     => $order_id,
+			'product_id'   => 17,
+			'product_name' => 'Free Download',
+			'status'       => 'inherit',
+			'amount'       => 0,
+			'subtotal'     => 0,
+			'discount'     => 0,
+			'tax'          => 0,
+			'total'        => 0,
+			'quantity'     => 1,
+		) );
+
+		$to_refund = array();
+		$order     = cs_get_order( $order_id );
+		foreach ( $order->items as $order_item ) {
+			if ( $order_item->total > 0 ) {
+				$to_refund[] = array(
+					'order_item_id' => $order_item->id,
+					'subtotal'      => ( $order_item->subtotal - $order_item->discount ),
+					'tax'           => $order_item->tax,
+					'total'         => $order_item->total,
+				);
+			}
+		}
+
+		$refund_id = cs_refund_order( $order->id, $to_refund );
+
+		// Fetch original order.
+		$o = cs_get_order( $order->id );
+
+		$this->assertSame( 'partially_refunded', $o->status );
 	}
 
 	/**
@@ -276,7 +312,7 @@ class Refunds_Tests extends \CS_UnitTestCase {
 		), 'all' );
 
 		$exception = $this->getExpectedException();
-		$this->assertContains( 'order_item_id', $exception->getMessage() );
+		$this->assertStringContainsString( 'order_item_id', $exception->getMessage() );
 	}
 
 	/**
@@ -299,6 +335,6 @@ class Refunds_Tests extends \CS_UnitTestCase {
 		), 'all' );
 
 		$exception = $this->getExpectedException();
-		$this->assertContains( 'subtotal', $exception->getMessage() );
+		$this->assertStringContainsString( 'subtotal', $exception->getMessage() );
 	}
 }

@@ -12,8 +12,8 @@ require_once dirname( __FILE__ ) . '/factory.php';
  */
 class Ajax_UnitTestCase extends \WP_Ajax_UnitTestCase {
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function setUpBeforeClass() : void  {
+		parent::setUpBeforeClass() ;
 
 		cs_install();
 
@@ -25,7 +25,7 @@ class Ajax_UnitTestCase extends \WP_Ajax_UnitTestCase {
 		add_filter( 'cs_log_email_errors', '__return_false' );
 	}
 
-	public static function tearDownAfterClass() {
+	public static function tearDownAfterClass() : void {
 		self::_delete_all_cs_data();
 
 		parent::tearDownAfterClass();

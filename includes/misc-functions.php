@@ -813,7 +813,7 @@ function cs_let_to_num( $v ) {
  * @return string
  */
 function cs_get_uploads_base_dir() {
-	return 'cs'; // No filter, for now
+	return 'commercestore'; // No filter, for now
 }
 
 /**

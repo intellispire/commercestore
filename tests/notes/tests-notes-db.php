@@ -23,7 +23,7 @@ class Tests_Notes_DB extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public static function wpSetUpBeforeClass() {
+	public static function wpsetUpBeforeClass() : void  {
 		self::$notes = parent::cs()->note->create_many( 5 );
 	}
 

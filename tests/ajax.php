@@ -10,8 +10,8 @@ class Tests_AJAX extends WP_UnitTestCase {
 
 	protected $_last_response;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$_actions = array(
 			'cs_remove_from_cart', 'cs_add_to_cart', 'cs_apply_discount', 'checkout_login',
@@ -37,8 +37,8 @@ class Tests_AJAX extends WP_UnitTestCase {
 		error_reporting( 0 & ~E_WARNING );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 		$_POST = array();
 		remove_filter( 'wp_die_ajax_handler', array( $this, 'getDieHandler' ), 1, 1 );
 		remove_action( 'clear_auth_cookie', array( $this, 'logout' ) );
