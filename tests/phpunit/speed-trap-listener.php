@@ -262,10 +262,9 @@ class SpeedTrapListener implements \PHPUnit\Framework\TestListener
     /**
      * Renders slow test report header.
      */
-    protected function renderHeader(): string
+    protected function renderHeader()
 		{
         echo sprintf("\n\nYou should really fix these slow tests (>%sms)...\n", $this->slowThreshold);
-				return '';
     }
 
     /**
