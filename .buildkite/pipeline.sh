@@ -6,8 +6,8 @@ set -eu
 # begin the pipeline.yml file
 echo "steps:"
 
-phpVersions=('7.4')
-wpVersions=('latest')
+phpVersions=('7.4' '8.0')
+wpVersions=('5.9' 'latest')
 
 # Exclude combinations with <php version>-<wp version>
 exclusions=('7.3-4.9.15' '7.4-4.9.15' '7.4-5.0.10' '7.4-5.1.6' '7.4-5.2.7')
@@ -37,3 +37,19 @@ for phpVersion in ${phpVersions[@]}; do
     echo "          run: wordpress"
   done
 done
+
+echo "  - env:"
+echo "      TEST_INPLACE: \"0\""
+echo "      TEST_PHP_VERSION: \""$phpVersion"\""
+echo "      TEST_WP_VERSION: "$wpVersion""
+echo "      WP_MULTISITE: \"1\""
+echo "    label: 'PHP: "$phpVersion" | WP: "$wpVersion" | Multisite: Yes'"
+echo "    plugins:"
+echo "      - docker-compose#v3.7.0:"
+echo "          config: docker-compose-phpunit.yml"
+echo "          env:"
+echo "            - WP_MULTISITE"
+echo "            - TEST_INPLACE"
+echo "          propagate-uid-gid: true"
+echo "          pull-retries: 3"
+echo "          run: wordpress"
