@@ -12,8 +12,8 @@ class Tests_Downloads extends CS_UnitTestCase {
 
 	protected $_download_files = null;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->_post = CS_Helper_Download::create_variable_download();
 	}

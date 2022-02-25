@@ -31,8 +31,8 @@ class Pass_Manager extends \CS_UnitTestCase {
 	/**
 	 * Runs before each test is executed.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		global $cs_licensed_products;
 		$cs_licensed_products = array();

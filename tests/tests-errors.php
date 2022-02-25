@@ -6,8 +6,8 @@
  */
 class Tests_Errors extends CS_UnitTestCase {
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		cs_set_error( 'invalid_email', 'Please enter a valid email address.' );
 		cs_set_error( 'invalid_user', 'The user information is invalid.' );

@@ -6,8 +6,8 @@
  */
 class Tests_Formatting extends CS_UnitTestCase {
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	public function tear_down() {

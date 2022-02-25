@@ -9,8 +9,8 @@ class Tests_Templates extends CS_UnitTestCase {
 
 	protected $_post;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$post_id = $this->factory->post->create( array( 'post_title' => 'A Test Download', 'post_type' => 'download', 'post_status' => 'publish' ) );
 

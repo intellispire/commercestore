@@ -45,8 +45,8 @@ class NotificationApiTests extends \CS_UnitTestCase {
 	/**
 	 * Runs before each test.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		// Truncate notifications table.
 		global $wpdb;

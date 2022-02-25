@@ -31,8 +31,8 @@ class Endpoint_Registry_Tests extends \CS_UnitTestCase {
 	/**
 	 * Set up fixtures once.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->registry = new \CS\Reports\Data\Endpoint_Registry();
 	}

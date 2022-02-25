@@ -34,8 +34,8 @@ class Tests_License_Upgrade_Notice extends \CS_UnitTestCase {
 	 *
 	 * Deletes the pass licenses option so we can customize this per test.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		// Always start with no option.
 		delete_option( 'cs_pass_licenses' );

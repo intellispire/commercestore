@@ -10,8 +10,8 @@ class Tests_AJAX extends WP_UnitTestCase {
 
 	protected $_last_response;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$_actions = array(
 			'cs_remove_from_cart', 'cs_add_to_cart', 'cs_apply_discount', 'checkout_login',

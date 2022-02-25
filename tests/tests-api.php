@@ -166,8 +166,8 @@ class Tests_API extends CS_UnitTestCase {
 		CS()->api->update_key( self::$user_id );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		wp_set_current_user( self::$user_id );
 

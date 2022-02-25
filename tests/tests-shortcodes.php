@@ -140,8 +140,8 @@ class Tests_Shortcode extends CS_UnitTestCase {
 		remove_filter( 'cs_allow_template_part_account_pending', 'cs_load_verification_template_once', 10, 1 );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		wp_set_current_user( self::$user_id );
 

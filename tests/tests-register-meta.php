@@ -10,8 +10,8 @@ class Tests_Register_Meta extends CS_UnitTestCase {
 
 	protected $download_id;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$this->payment_id  = CS_Helper_Payment::create_simple_payment();
 		$variable_download = CS_Helper_Download::create_variable_download();
 

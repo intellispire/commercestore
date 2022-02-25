@@ -19,8 +19,8 @@ class Test_Misc extends CS_UnitTestCase {
 		self::$download = CS_Helper_Download::create_simple_download();
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	public function test_test_mode() {

@@ -64,8 +64,8 @@ class Tests_Discounts extends \CS_UnitTestCase {
 		self::$discount = cs_get_discount( self::$discount_id );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	/**

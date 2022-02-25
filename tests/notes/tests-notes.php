@@ -34,8 +34,8 @@ class Tests_Notes extends Ajax_UnitTestCase {
 	/**
 	 * Setup the parent
 	 */
-	public function setUp() {
-		parent::setup();
+	public function set_up() {
+		parent::set_up();
 	}
 
 	/**

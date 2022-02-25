@@ -15,7 +15,7 @@ class Payment_Tests extends \CS_UnitTestCase {
 	 */
 	protected static $payment;
 
-	public function setUp() {
+	public function set_up() {
 		self::$payment = cs_get_payment( \CS_Helper_Payment::create_simple_payment() );
 	}
 

@@ -6,8 +6,8 @@
  */
 class Tests_Login_Register extends CS_UnitTestCase {
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		wp_set_current_user(0);
 	}
 

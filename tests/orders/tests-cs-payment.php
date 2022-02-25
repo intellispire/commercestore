@@ -19,8 +19,8 @@ class CS_Payment_Tests extends \CS_UnitTestCase {
 	 */
 	protected $payment;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$payment_id = \CS_Helper_Payment::create_simple_payment();
 
