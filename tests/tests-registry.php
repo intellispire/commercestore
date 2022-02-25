@@ -44,7 +44,8 @@ class Registry_Tests extends \CS_UnitTestCase {
 	 * @expectedException \CS_Exception
 	 */
 	public function test_add_item_with_empty_attributes_should_return_false() {
-		$this->assertFalse( $this->mockRegistry->add_item( 'foo', array() ) );
+		$this->expectException();
+		$this->mockRegistry->add_item( 'foo', array() );
 	}
 
 	/**

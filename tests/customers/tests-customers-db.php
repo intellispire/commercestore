@@ -267,6 +267,9 @@ class Tests_Customers_DB extends \CS_UnitTestCase {
 	 * @expectCSDeprecated CS_Customer::decrease_value
 	 */
 	public function test_legacy_decrement_stats_purchase_count_should_return_0() {
+
+		$this->expectDeprecatedCS();
+
 		CS()->customers->increment_stats( self::$customers[0], 10 );
 		CS()->customers->decrement_stats( self::$customers[0], 10 );
 
