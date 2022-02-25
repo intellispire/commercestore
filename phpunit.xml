@@ -11,32 +11,32 @@
 			<directory prefix="tests-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
-	<filter>
-		<whitelist addUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">./includes</directory>
-			<file>commercestore.php</file>
-			<file>uninstall.php</file>
-			<exclude>
-				<file>./includes/admin/payments/view-order-details.php</file>
-				<file>./includes/admin/discounts/edit-discount.php</file>
-				<file>./includes/admin/discounts/add-discount.php</file>
-				<file>./includes/admin/reporting/class-export-customers.php</file>
-				<file>./includes/admin/reporting/class-export-download-history.php</file>
-				<file>./includes/admin/reporting/class-export-payments.php</file>
-				<file>./includes/admin/tools/class-cs-tools-recount-all-stats.php</file>
-				<file>./includes/admin/tools/class-cs-tools-recount-customer-stats.php</file>
-				<file>./includes/admin/tools/class-cs-tools-recount-download-stats.php</file>
-				<file>./includes/admin/tools/class-cs-tools-recount-single-customer-stats.php</file>
-				<file>./includes/admin/tools/class-cs-tools-recount-store-earnings.php</file>
-				<file>./includes/admin/tools/class-cs-tools-reset-stats.php</file>
-				<file>./includes/admin/import/class-batch-import-downloads.php</file>
-				<file>./includes/admin/import/class-batch-import-payments.php</file>
-				<file>./includes/class-cs-cli.php</file>
-				<directory suffix=".php">./includes/admin/reporting/export</directory>
-				<directory>./includes/libraries/</directory>
-			</exclude>
-		</whitelist>
-	</filter>
+
+	<include>
+		<directory suffix=".php">./includes</directory>
+		<file>commercestore.php</file>
+		<file>uninstall.php</file>
+    </include>
+	<exclude>
+		<file>./includes/admin/payments/view-order-details.php</file>
+		<file>./includes/admin/discounts/edit-discount.php</file>
+		<file>./includes/admin/discounts/add-discount.php</file>
+		<file>./includes/admin/reporting/class-export-customers.php</file>
+		<file>./includes/admin/reporting/class-export-download-history.php</file>
+		<file>./includes/admin/reporting/class-export-payments.php</file>
+		<file>./includes/admin/tools/class-cs-tools-recount-all-stats.php</file>
+		<file>./includes/admin/tools/class-cs-tools-recount-customer-stats.php</file>
+		<file>./includes/admin/tools/class-cs-tools-recount-download-stats.php</file>
+		<file>./includes/admin/tools/class-cs-tools-recount-single-customer-stats.php</file>
+		<file>./includes/admin/tools/class-cs-tools-recount-store-earnings.php</file>
+		<file>./includes/admin/tools/class-cs-tools-reset-stats.php</file>
+		<file>./includes/admin/import/class-batch-import-downloads.php</file>
+		<file>./includes/admin/import/class-batch-import-payments.php</file>
+		<file>./includes/class-cs-cli.php</file>
+		<directory suffix=".php">./includes/admin/reporting/export</directory>
+		<directory>./includes/libraries/</directory>
+	</exclude>
+
 	<groups>
 		<exclude>
 			<group>cs_ajax</group>
