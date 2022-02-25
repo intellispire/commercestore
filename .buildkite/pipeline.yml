@@ -1,8 +1,4 @@
 steps:
-  - label: "Pull PHP 8.0"
-    command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:8.0"
-    retry:
-      automatic: true
 
   - label: "Pull PHP 7.4"
     command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:7.4"

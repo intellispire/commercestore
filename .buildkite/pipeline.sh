@@ -6,7 +6,7 @@ set -eu
 # begin the pipeline.yml file
 echo "steps:"
 
-phpVersions=('7.4' '8.0')
+phpVersions=('7.4')
 wpVersions=('5.9' 'latest')
 
 # Exclude combinations with <php version>-<wp version>
