@@ -85,7 +85,7 @@ class Utilities_Tests extends \CS_UnitTestCase {
 	public function test_get_registry_with_invalid_registry_should_return_a_WP_Error_including_code_invalid_registry() {
 		$result = self::$utils->get_registry( 'fake' );
 
-		$this->assertContains( 'invalid_registry', $result->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_registry', $result->get_error_codes() );
 	}
 
 	/**

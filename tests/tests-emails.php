@@ -219,8 +219,8 @@ class Tests_Emails extends CS_UnitTestCase {
 
 	public function test_email_tags_download_list() {
 		$order_items = cs_get_order_items( array( 'order_id' => self::$payment_id ) );
-		$this->assertContains( '<strong>' . $order_items[0]->get_order_item_name() . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
-		$this->assertContains( '<div><a href="', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringContainsString( '<strong>' . $order_items[0]->get_order_item_name() . '</strong>', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringContainsString( '<div><a href="', cs_email_tag_download_list( self::$payment_id ) );
 	}
 
 	public function test_email_tag_download_list_with_names_disabled_via_filter() {
@@ -231,7 +231,7 @@ class Tests_Emails extends CS_UnitTestCase {
 
 	public function test_email_tag_download_list_with_links_disabled_via_filer() {
 		add_filter( 'cs_email_show_links', '__return_false' );
-		$this->assertContains( '<div>File 2</div>', cs_email_tag_download_list( self::$payment_id ) );
+		$this->assertStringContainsString( '<div>File 2</div>', cs_email_tag_download_list( self::$payment_id ) );
 		remove_filter( 'cs_email_show_links', '__return_false' );
 	}
 
@@ -286,7 +286,7 @@ class Tests_Emails extends CS_UnitTestCase {
 	}
 
 	public function test_email_tags_receipt_link() {
-		$this->assertContains( 'View it in your browser &raquo;', cs_email_tag_receipt_link( self::$payment_id ) );
+		$this->assertStringContainsString( 'View it in your browser &raquo;', cs_email_tag_receipt_link( self::$payment_id ) );
 	}
 
 	public function test_get_from_name() {
@@ -316,7 +316,7 @@ class Tests_Emails extends CS_UnitTestCase {
 		$from_name = CS()->emails->get_from_name();
 		$from_address = CS()->emails->get_from_address();
 
-		$this->assertContains( "From: {$from_name} <{$from_address}>", CS()->emails->get_headers() );
+		$this->assertStringContainsString( "From: {$from_name} <{$from_address}>", CS()->emails->get_headers() );
 	}
 
 	public function test_get_heading() {

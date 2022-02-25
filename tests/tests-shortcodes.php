@@ -170,36 +170,36 @@ class Tests_Shortcode extends CS_UnitTestCase {
 		$actual = cs_download_history();
 
 		$this->assertInternalType( 'string', $actual );
-		$this->assertContains( '<p class="cs-no-downloads">', $actual );
+		$this->assertStringContainsString( '<p class="cs-no-downloads">', $actual );
 
 		cs_set_user_to_pending( self::$user_id );
 
-		$this->assertContains( '<p class="cs-account-pending">', cs_download_history() );
+		$this->assertStringContainsString( '<p class="cs-account-pending">', cs_download_history() );
 	}
 
 	public function test_purchase_history() {
 		$actual = cs_purchase_history();
 
 		$this->assertInternalType( 'string', $actual );
-		$this->assertContains( '<p class="cs-no-purchases">', $actual );
+		$this->assertStringContainsString( '<p class="cs-no-purchases">', $actual );
 
 		cs_set_user_to_pending( self::$user_id );
 
-		$this->assertContains( '<p class="cs-account-pending">', cs_purchase_history() );
+		$this->assertStringContainsString( '<p class="cs-account-pending">', cs_purchase_history() );
 	}
 
 	public function test_checkout_form_shortcode() {
 		$actual = cs_checkout_form_shortcode( array() );
 
 		$this->assertInternalType( 'string', $actual );
-		$this->assertContains( '<div id="cs_checkout_wrap">', $actual );
+		$this->assertStringContainsString( '<div id="cs_checkout_wrap">', $actual );
 	}
 
 	public function test_cart_shortcode() {
 		$actual = cs_cart_shortcode( array() );
 
 		$this->assertInternalType( 'string', $actual );
-		$this->assertContains( '<ul class="cs-cart">', $actual );
+		$this->assertStringContainsString( '<ul class="cs-cart">', $actual );
 	}
 
 	public function test_login_form() {
@@ -208,7 +208,7 @@ class Tests_Shortcode extends CS_UnitTestCase {
 		$actual = cs_login_form_shortcode( array() );
 
 		$this->assertInternalType( 'string', $actual );
-		$this->assertContains( '<p class="cs-logged-in">You are already logged in</p>', $actual );
+		$this->assertStringContainsString( '<p class="cs-logged-in">You are already logged in</p>', $actual );
 
 		// Log out the user so we can see the login form
 		wp_set_current_user( 0 );
@@ -219,13 +219,13 @@ class Tests_Shortcode extends CS_UnitTestCase {
 
 		$login_form = cs_login_form_shortcode( $args );
 		$this->assertInternalType( 'string', $login_form );
-		$this->assertContains( '"' . get_option( 'site_url' ) . '"', $login_form );
+		$this->assertStringContainsString( '"' . get_option( 'site_url' ) . '"', $login_form );
 
 		cs_update_option( 'login_redirect_page', $purchase_history_page );
 
 		$login_form = cs_login_form_shortcode( array() );
 		$this->assertInternalType( 'string', $login_form );
-		$this->assertContains( '"' . get_permalink( $purchase_history_page ) . '"', $login_form );
+		$this->assertStringContainsString( '"' . get_permalink( $purchase_history_page ) . '"', $login_form );
 	}
 
 	public function test_discounts_shortcode() {
@@ -271,18 +271,18 @@ class Tests_Shortcode extends CS_UnitTestCase {
 //		$actual = cs_receipt_shortcode( array( 'payment_key' => self::$payment_key ) );
 //
 //		$this->assertInternalType( 'string', $actual );
-//		$this->assertContains( '<table id="cs_purchase_receipt" class="cs-table">', $actual  );
+//		$this->assertStringContainsString( '<table id="cs_purchase_receipt" class="cs-table">', $actual  );
 	}
 
 	public function test_profile_shortcode() {
 		$actual = cs_profile_editor_shortcode( array() );
 
 		$this->assertInternalType( 'string', $actual );
-		$this->assertContains( '<form id="cs_profile_editor_form" class="cs_form" action="', $actual );
+		$this->assertStringContainsString( '<form id="cs_profile_editor_form" class="cs_form" action="', $actual );
 
 		cs_set_user_to_pending( self::$user_id );
 
-		$this->assertContains( '<p class="cs-account-pending">', cs_profile_editor_shortcode( array() ) );
+		$this->assertStringContainsString( '<p class="cs-account-pending">', cs_profile_editor_shortcode( array() ) );
 	}
 
 	public function test_profile_pending_single_load() {
@@ -291,7 +291,7 @@ class Tests_Shortcode extends CS_UnitTestCase {
 
 		$actual = cs_profile_editor_shortcode( array() );
 
-		$this->assertContains( '<p class="cs-account-pending">', $actual );
+		$this->assertStringContainsString( '<p class="cs-account-pending">', $actual );
 
 		remove_filter( 'cs_allow_template_part_account_pending', 'cs_load_verification_template_once', 10, 1 );
 	}
@@ -304,11 +304,11 @@ class Tests_Shortcode extends CS_UnitTestCase {
 		self::factory()->post->create( array( 'post_title' => 'Test Download #2', 'post_type' => 'download', 'post_status' => 'publish' ) );
 
 		$output2 = cs_downloads_query( array( 'number' => 1 ) );
-		$this->assertContains( 'id="cs_download_pagination"', $output2 );
+		$this->assertStringContainsString( 'id="cs_download_pagination"', $output2 );
 
 		cs_set_user_to_pending( self::$user_id );
 
-		$this->assertContains( '<p class="cs-account-pending">', cs_download_history( array() ) );
+		$this->assertStringContainsString( '<p class="cs-account-pending">', cs_download_history( array() ) );
 	}
 
 	public function test_downloads_shortcode_nopaging() {

@@ -347,7 +347,7 @@ class Endpoint_Registry_Tests extends \CS_UnitTestCase {
 
 		$result = $this->registry->build_endpoint( 'foo', 'fake' );
 
-		$this->assertContains( 'invalid_view', $result->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_view', $result->get_error_codes() );
 	}
 
 	/**

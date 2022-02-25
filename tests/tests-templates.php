@@ -68,14 +68,14 @@ class Tests_Templates extends CS_UnitTestCase {
 	public function test_get_purchase_link() {
 		$link = cs_get_purchase_link( array( 'download_id' => $this->_post->ID ) );
 		$this->assertInternalType( 'string', $link );
-		$this->assertContains( '<form id="cs_purchase_', $link );
-		$this->assertContains( 'class="cs_download_purchase_form', $link );
-		$this->assertContains( 'method="post">', $link );
-		$this->assertContains( '<input type="hidden" name="download_id" value="' . $this->_post->ID . '">', $link );
+		$this->assertStringContainsString( '<form id="cs_purchase_', $link );
+		$this->assertStringContainsString( 'class="cs_download_purchase_form', $link );
+		$this->assertStringContainsString( 'method="post">', $link );
+		$this->assertStringContainsString( '<input type="hidden" name="download_id" value="' . $this->_post->ID . '">', $link );
 
 		// The product we created has variable pricing, so ensure the price options render
-		$this->assertContains( '<div class="cs_price_options', $link );
-		$this->assertContains( '<span class="cs_price_option_name">', $link );
+		$this->assertStringContainsString( '<div class="cs_price_options', $link );
+		$this->assertStringContainsString( '<span class="cs_price_option_name">', $link );
 
 		add_filter( 'cs_item_quantities_enabled', '__return_true' );
 		$link = cs_get_purchase_link( array( 'download_id' => $this->_post->ID ) );
@@ -97,15 +97,15 @@ class Tests_Templates extends CS_UnitTestCase {
 		}
 
 		$single_link_default = cs_get_purchase_link( array( 'download_id' => $single_id ) );
-		$this->assertContains( 'data-price="10.00"', $single_link_default );
-		$this->assertContains( '<span class="cs-add-to-cart-label">&#36;10.00&nbsp;&ndash;&nbsp;Purchase</span>', $single_link_default );
+		$this->assertStringContainsString( 'data-price="10.00"', $single_link_default );
+		$this->assertStringContainsString( '<span class="cs-add-to-cart-label">&#36;10.00&nbsp;&ndash;&nbsp;Purchase</span>', $single_link_default );
 
 		// Verify the purchase link works with price = 0
 		$single_link_no_price = cs_get_purchase_link( array( 'download_id' => $single_id, 'price' => 0 ) );
 		// Price should NOT show on button
-		$this->assertContains( '<span class="cs-add-to-cart-label">Purchase</span>', $single_link_no_price );
+		$this->assertStringContainsString( '<span class="cs-add-to-cart-label">Purchase</span>', $single_link_no_price );
 		// data-price should still contain the price
-		$this->assertContains( 'data-price="10.00"', $single_link_no_price );
+		$this->assertStringContainsString( 'data-price="10.00"', $single_link_no_price );
 	}
 
 	// For issue #4755

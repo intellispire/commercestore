@@ -99,7 +99,7 @@ class Report_Tests extends \CS_UnitTestCase {
 			'filters'    => array( 'dates' ),
 		) );
 
-		$this->assertContains( 'missing_endpoints', $report->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'missing_endpoints', $report->get_errors()->get_error_codes() );
 	}
 
 	/**
@@ -115,7 +115,7 @@ class Report_Tests extends \CS_UnitTestCase {
 			'filters'    => array( 'dates' ),
 		) );
 
-		$this->assertContains( 'missing_capability', $report->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'missing_capability', $report->get_errors()->get_error_codes() );
 	}
 
 	/**
@@ -205,7 +205,7 @@ class Report_Tests extends \CS_UnitTestCase {
 			'filters'    => array( 'fake' ),
 		) );
 
-		$this->assertContains( 'invalid_report_filter', $report->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_report_filter', $report->get_errors()->get_error_codes() );
 	}
 
 	/**
@@ -252,7 +252,7 @@ class Report_Tests extends \CS_UnitTestCase {
 			'display_callback' => 'fake',
 		) );
 
-		$this->assertContains( 'invalid_report_arg_type', $report->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_report_arg_type', $report->get_errors()->get_error_codes() );
 	}
 
 	/**
@@ -296,7 +296,7 @@ class Report_Tests extends \CS_UnitTestCase {
 	public function test_validate_endpoint_passed_a_WP_Error_object_should_add_a_new_error_to_errors() {
 		self::$report->validate_endpoint( 'tiles', new \WP_Error( 'foo' ) );
 
-		$this->assertContains( 'foo', self::$report->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'foo', self::$report->get_errors()->get_error_codes() );
 	}
 
 	/**
@@ -311,7 +311,7 @@ class Report_Tests extends \CS_UnitTestCase {
 
 		self::$report->validate_endpoint( 'tiles', $endpoint );
 
-		$this->assertContains( 'invalid_endpoint', self::$report->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_endpoint', self::$report->get_errors()->get_error_codes() );
 	}
 
 	/**
@@ -518,7 +518,7 @@ class Report_Tests extends \CS_UnitTestCase {
 	public function test_get_endpoint_with_valid_endpoint_invalid_view_group_should_return_WP_Error_including_code_invalid_report_endpoint() {
 		$endpoint_or_error = self::$report->get_endpoint( 'foo', 'fake' );
 
-		$this->assertContains( 'invalid_report_endpoint', $endpoint_or_error->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_report_endpoint', $endpoint_or_error->get_error_codes() );
 	}
 
 	/**
@@ -538,7 +538,7 @@ class Report_Tests extends \CS_UnitTestCase {
 	public function test_get_endpoint_with_invalid_endpoint_valid_view_group_should_return_WP_Error_including_code_invalid_report_endpoint() {
 		$endpoint_or_error = self::$report->get_endpoint( 'fake', 'tiles' );
 
-		$this->assertContains( 'invalid_report_endpoint', $endpoint_or_error->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_report_endpoint', $endpoint_or_error->get_error_codes() );
 	}
 
 	/**
@@ -558,7 +558,7 @@ class Report_Tests extends \CS_UnitTestCase {
 	public function test_get_endpoint_with_invalid_endpoint_invalid_view_group_should_return_WP_Error_including_code_invalid_report_endpoint() {
 		$endpoint_or_error = self::$report->get_endpoint( 'fake', 'fake' );
 
-		$this->assertContains( 'invalid_report_endpoint', $endpoint_or_error->get_error_codes() );
+		$this->assertStringContainsString( 'invalid_report_endpoint', $endpoint_or_error->get_error_codes() );
 	}
 
 }

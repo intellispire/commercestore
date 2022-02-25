@@ -15,14 +15,14 @@ class Tests_Login_Register extends CS_UnitTestCase {
 	 * Test that the login form returns the expected string.
 	 */
 	public function test_login_form() {
-		$this->assertContains( '<legend>Log into Your Account</legend>', cs_login_form() );
+		$this->assertStringContainsString( '<legend>Log into Your Account</legend>', cs_login_form() );
 	}
 
 	/**
 	 * Test that the registration form return the expected output.
 	 */
 	public function test_register_form() {
-		$this->assertContains( '<legend>Register New Account</legend>', cs_register_form() );
+		$this->assertStringContainsString( '<legend>Register New Account</legend>', cs_register_form() );
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Tests_Login_Register extends CS_UnitTestCase {
 
 		$errors = cs_get_errors();
 		$this->assertArrayHasKey( 'cs_invalid_login', $errors );
-		$this->assertContains( 'Invalid username or password', $errors['cs_invalid_login'] );
+		$this->assertStringContainsString( 'Invalid username or password', $errors['cs_invalid_login'] );
 
 		// Clear errors for other test
 		cs_clear_errors();
@@ -60,7 +60,7 @@ class Tests_Login_Register extends CS_UnitTestCase {
 
 		$errors = cs_get_errors();
 		$this->assertArrayHasKey( 'cs_invalid_login', $errors );
-		$this->assertContains( 'Invalid username or password', $errors['cs_invalid_login'] );
+		$this->assertStringContainsString( 'Invalid username or password', $errors['cs_invalid_login'] );
 
 		// Clear errors for other test
 		cs_clear_errors();

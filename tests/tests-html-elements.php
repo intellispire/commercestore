@@ -14,7 +14,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	 */
 	public function test_product_dropdown() {
 		$expected = '<select name="products" id="products" class="cs-select " data-placeholder="Choose a Product" data-search-type="download" data-search-placeholder="Search Products">';
-		$this->assertContains( $expected, CS()->html->product_dropdown() );
+		$this->assertStringContainsString( $expected, CS()->html->product_dropdown() );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	public function test_customer_dropdown() {
 		$expected = '<select name="customers" id="customers" class="cs-select  cs-customer-select cs-select-chosen" data-placeholder="Choose a Customer" data-search-type="customer" data-search-placeholder="Search Customers"><option value="0" selected=\'selected\'>No customers found</option></select>';
 
-		$this->assertContains( $expected, CS()->html->customer_dropdown() );
+		$this->assertStringContainsString( $expected, CS()->html->customer_dropdown() );
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'required', $select );
+		$this->assertStringContainsString( 'required', $select );
 	}
 
 	/**
@@ -237,7 +237,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	 * @covers CS_HTML_Elements::text
 	 */
 	public function test_text_is_required() {
-		$this->assertContains( 'required', CS()->html->text( array( 'required' => true ) ) );
+		$this->assertStringContainsString( 'required', CS()->html->text( array( 'required' => true ) ) );
 	}
 
 	/**

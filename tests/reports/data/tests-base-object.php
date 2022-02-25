@@ -106,7 +106,7 @@ class Base_Object_Tests extends \CS_UnitTestCase {
 			'label' => 'Foo',
 		) );
 
-		$this->assertContains( 'missing_object_id', $object->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'missing_object_id', $object->get_errors()->get_error_codes() );
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Base_Object_Tests extends \CS_UnitTestCase {
 			'id'    => 'foo',
 		) );
 
-		$this->assertContains( 'missing_object_label', $object->get_errors()->get_error_codes() );
+		$this->assertStringContainsString( 'missing_object_label', $object->get_errors()->get_error_codes() );
 	}
 
 	/**

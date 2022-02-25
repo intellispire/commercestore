@@ -25,9 +25,9 @@ class Tests_Widgets extends CS_UnitTestCase {
 		cs_register_widgets();
 
 		$widgets = array_keys( $GLOBALS['wp_widget_factory']->widgets );
-		$this->assertContains( 'cs_cart_widget', $widgets );
-		$this->assertContains( 'cs_categories_tags_widget', $widgets );
-		$this->assertContains( 'cs_product_details_widget', $widgets );
+		$this->assertStringContainsString( 'cs_cart_widget', $widgets );
+		$this->assertStringContainsString( 'cs_categories_tags_widget', $widgets );
+		$this->assertStringContainsString( 'cs_product_details_widget', $widgets );
 
 	}
 
@@ -99,10 +99,10 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( 'Number of items in cart:', $output );
-		$this->assertContains( '<li class="cart_item empty">', $output );
-		$this->assertContains( '<li class="cart_item cs-cart-meta cs_total"', $output );
-		$this->assertContains( '<li class="cart_item cs_checkout"', $output );
+		$this->assertStringContainsString( 'Number of items in cart:', $output );
+		$this->assertStringContainsString( '<li class="cart_item empty">', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs-cart-meta cs_total"', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs_checkout"', $output );
 
 	}
 
@@ -124,10 +124,10 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( 'Number of items in cart:', $output );
-		$this->assertContains( '<li class="cart_item empty">', $output );
-		$this->assertContains( '<li class="cart_item cs-cart-meta cs_total"', $output );
-		$this->assertContains( '<li class="cart_item cs_checkout"', $output );
+		$this->assertStringContainsString( 'Number of items in cart:', $output );
+		$this->assertStringContainsString( '<li class="cart_item empty">', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs-cart-meta cs_total"', $output );
+		$this->assertStringContainsString( '<li class="cart_item cs_checkout"', $output );
 
 	}
 
@@ -217,9 +217,9 @@ class Tests_Widgets extends CS_UnitTestCase {
 			) );
 		$output = ob_get_clean();
 
-		$this->assertContains( '<ul class="cs-taxonomy-widget">', $output );
-		$this->assertContains( '<li class="cat-item cat-item-' . reset( $terms ), $output );
-		$this->assertContains( '<li class="cat-item cat-item-' . end( $terms ), $output );
+		$this->assertStringContainsString( '<ul class="cs-taxonomy-widget">', $output );
+		$this->assertStringContainsString( '<li class="cat-item cat-item-' . reset( $terms ), $output );
+		$this->assertStringContainsString( '<li class="cat-item cat-item-' . end( $terms ), $output );
 
 		CS_Helper_Download::delete_download( $download->ID );
 

@@ -104,7 +104,7 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 * @param string $type   Type to check against.
 	 * @param array  $actual Supplied array to check.
 	 */
-	public function assertContainsOnlyType( $type, $actual ) {
+	public function assertStringContainsStringOnlyType( $type, $actual ) {
 		$standard_types = array(
 			'numeric', 'integer', 'int', 'float', 'string', 'boolean', 'bool',
 			'null', 'array', 'object', 'resource', 'scalar'
