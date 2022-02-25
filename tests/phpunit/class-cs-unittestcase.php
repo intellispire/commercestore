@@ -58,6 +58,9 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 	 * Sets up logic for the @expectCSDeprecated annotation for deprecated elements in CS.
 	 */
 	function expectDeprecatedCS() {
+
+		return;
+
 		$annotations = $this->getAnnotations();
 		foreach ( array( 'class', 'method' ) as $depth ) {
 			if ( ! empty( $annotations[ $depth ]['expectCSDeprecated'] ) ) {
