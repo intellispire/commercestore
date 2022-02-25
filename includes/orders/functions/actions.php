@@ -349,10 +349,6 @@ function cs_add_manual_order( $args = array() ) {
 						) );
 					}
 				}
-
-				// Increase the earnings for this download.
-				cs_increase_earnings( absint( $download['id'] ), $total );
-				cs_increase_purchase_count( absint( $download['id'] ), $quantity );
 			}
 		}
 	}
@@ -413,9 +409,6 @@ function cs_add_manual_order( $args = array() ) {
 				'subtotal'    => $discount_subtotal,
 				'total'       => $discount_total,
 			) );
-
-			// Increase discount usage.
-			$d->increase_usage();
 		}
 	}
 
@@ -435,12 +428,6 @@ function cs_add_manual_order( $args = array() ) {
 	if ( isset( $data['cs-unlimited-downloads'] ) && 1 === (int) $data['cs-unlimited-downloads'] ) {
 		cs_update_order_meta( $order_id, 'unlimited_downloads', 1 );
 	}
-
-	if ( ! empty( $customer ) ) {
-		$customer->recalculate_stats();
-	}
-
-	cs_increase_total_earnings( $order_total );
 
 	// Setup order number.
 	$order_number = '';

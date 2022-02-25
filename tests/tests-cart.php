@@ -721,4 +721,14 @@ class Test_Cart extends CS_UnitTestCase {
 
 		cs_update_option( 'enable_taxes', false );
 	}
+
+	public function test_cart_is_empty() {
+		cs_empty_cart();
+		$this->assertTrue( cs_is_cart_empty() );
+	}
+
+	public function test_cart_is_not_empty() {
+		cs_add_to_cart( self::$download->ID, array( 'price_id' => 0 ) );
+		$this->assertFalse( cs_is_cart_empty() );
+	}
 }

@@ -277,7 +277,7 @@ class CS_Payment_Stats extends CS_Stats {
 				$statuses = "'" . implode( "', '", $statuses ) . "'";
 
 				$result = $wpdb->get_row( $wpdb->prepare(
-					"SELECT cs_oi.tax, cs_oi.total
+					"SELECT SUM(cs_oi.tax) as tax, SUM(cs_oi.total) as total
 					 FROM {$wpdb->cs_order_items} cs_oi
 					 INNER JOIN {$wpdb->cs_orders} cs_o ON cs_oi.order_id = cs_o.id
 					 WHERE cs_o.status IN ($statuses) AND cs_oi.product_id = %d {$date_query_sql}",
