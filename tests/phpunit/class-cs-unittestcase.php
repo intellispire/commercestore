@@ -53,17 +53,7 @@ class CS_UnitTestCase extends WP_UnitTestCase {
 
 		$this->expectDeprecatedCS();
 	}
-
-	/**
-	 * Setup a function to use deprecated calls.
-	 * Remove this to find them when we remove deprecations.
-	 * 
-	 * @return void
-	 */
-	function expectDeprecated() {
-		parent::expectDeprecated();
-	}
-
+	
 	/**
 	 * Sets up logic for the @expectCSDeprecated annotation for deprecated elements in CS.
 	 */
