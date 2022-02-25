@@ -45,7 +45,7 @@ function cs_products_tabs( $views ) {
 
 	return $views;
 }
-add_filter( 'views_edit-download', 'cs_products_tabs', 10, 1 );
+add_filter( 'views_edit-' . CS_POST_TYPE, 'cs_products_tabs', 10, 1 );
 
 /**
  * When the Download list table loads, call the function to view our tabs.
