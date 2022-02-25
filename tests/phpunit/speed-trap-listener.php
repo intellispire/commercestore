@@ -89,10 +89,10 @@ class SpeedTrapListener implements \PHPUnit\Framework\TestListener
      * Incomplete test.
      *
      * @param \PHPUnit\Framework\Test $test
-     * @param Exception              $e
+     * @param \Throwable              $t
      * @param float                   $time
      */
-    public function addIncompleteTest(\PHPUnit\Framework\Test $test, Exception $e, float $time) : void
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $t, float $time) : void
     {
     }
 
