@@ -117,7 +117,7 @@ class Tests_Query_Filters extends CS_UnitTestCase {
 		$parent_post_id = $this->factory->post->create( array(
 			'post_title'	=> 'Test Download Product',
 			'post_name'		=> 'test-download-product',
-			'post_type'		=> 'download',
+			'post_type'		=> CS_POST_TYPE,
 			'post_status'	=> 'publish'
 		) );
 
@@ -179,7 +179,7 @@ class Tests_Query_Filters extends CS_UnitTestCase {
 		$parent_post_id = $this->factory->post->create( array(
 			'post_title'  => 'Test Download Product',
 			'post_name'   => 'test-download-product',
-			'post_type'   => 'download',
+			'post_type'   => CS_POST_TYPE,
 			'post_status' => 'publish'
 		) );
 

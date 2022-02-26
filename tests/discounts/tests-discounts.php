@@ -397,7 +397,7 @@ class Tests_Discounts extends \CS_UnitTestCase {
 	 * @covers ::edit_url()
 	 */
 	public function test_discount_edit_url() {
-		$this->assertStringContainsString( 'edit.php?post_type=download&#038;page=cs-discounts', self::$discount->edit_url() );
+		$this->assertStringContainsString( 'edit.php?post_type=' . CS_POST_TYPE . '&#038;page=cs-discounts', self::$discount->edit_url() );
 	}
 
 	/**

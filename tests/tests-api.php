@@ -49,7 +49,7 @@ class Tests_API extends CS_UnitTestCase {
 
 		$post_id = self::factory()->post->create( array(
 			'post_title' => 'Test Download',
-			'post_type' => 'download',
+			'post_type' => CS_POST_TYPE,
 			'post_status' => 'publish',
 		) );
 

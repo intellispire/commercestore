@@ -12,7 +12,7 @@ class Tests_Templates extends CS_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 
-		$post_id = $this->factory->post->create( array( 'post_title' => 'A Test Download', 'post_type' => 'download', 'post_status' => 'publish' ) );
+		$post_id = $this->factory->post->create( array( 'post_title' => 'A Test Download', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );
 
 		$_variable_pricing = array(
 			array(
@@ -83,7 +83,7 @@ class Tests_Templates extends CS_UnitTestCase {
 		remove_filter( 'cs_item_quantities_enabled', '__return_true' );
 
 		// Test a single price point as well
-		$single_id = $this->factory->post->create( array( 'post_title' => 'A Test Single Price Download', 'post_type' => 'download', 'post_status' => 'publish' ) );
+		$single_id = $this->factory->post->create( array( 'post_title' => 'A Test Single Price Download', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );
 		$meta = array(
 			'cs_price' => '10.00',
 			'_cs_download_limit' => 20,
