@@ -43,7 +43,7 @@ abstract class CS_DB {
 	public function __construct() {}
 
 	/**
-	 * Whitelist of columns
+	 * Includelist of columns
 	 *
 	 * @since   2.1
 	 * @return  array

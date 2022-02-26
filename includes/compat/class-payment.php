@@ -136,7 +136,7 @@ class Payment extends Base {
 		}
 
 		// Bail early of not a back-compat key
-		if ( ! in_array( $meta_key, $this->get_meta_key_whitelist(), true ) ) {
+		if ( ! in_array( $meta_key, $this->get_meta_key_includelist(), true ) ) {
 			return $value;
 		}
 
@@ -230,7 +230,7 @@ class Payment extends Base {
 	public function update_post_metadata( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 
 		// Bail early of not a back-compat key
-		if ( ! in_array( $meta_key, $this->get_meta_key_whitelist(), true ) ) {
+		if ( ! in_array( $meta_key, $this->get_meta_key_includelist(), true ) ) {
 			return $check;
 		}
 
@@ -255,12 +255,12 @@ class Payment extends Base {
 	}
 
 	/**
-	 * Retrieves a list of whitelisted meta keys that we want to catch in get/update post meta calls.
+	 * Retrieves a list of includelisted meta keys that we want to catch in get/update post meta calls.
 	 *
 	 * @since 3.0
 	 * @return array
 	 */
-	private function get_meta_key_whitelist() {
+	private function get_meta_key_includelist() {
 		$meta_keys = array(
 			'_cs_payment_purchase_key',
 			'_cs_payment_transaction_id',
@@ -282,14 +282,14 @@ class Payment extends Base {
 		);
 
 		/**
-		 * Allows the whitelisted post meta keys to be filtered. Extensions should add their meta key(s) to this
+		 * Allows the includelisted post meta keys to be filtered. Extensions should add their meta key(s) to this
 		 * list if they want add/update/get post meta calls to be routed to order meta.
 		 *
 		 * @param array $meta_keys
 		 *
 		 * @since 3.0
 		 */
-		$meta_keys = apply_filters( 'cs_30_post_meta_key_whitelist', $meta_keys );
+		$meta_keys = apply_filters( 'cs_30_post_meta_key_includelist', $meta_keys );
 
 		return (array) $meta_keys;
 	}

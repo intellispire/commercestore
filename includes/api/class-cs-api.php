@@ -664,7 +664,7 @@ class CS_API {
 
 		global $wp_query;
 
-		// Whitelist our query options
+		// includelist our query options
 		$accepted = apply_filters( 'cs_api_valid_query_modes', array(
 			'stats',
 			'products',

@@ -74,7 +74,7 @@ function csx_process_purchase_form( $purchase_data ) {
 		}
 
 		/**
-		 * Allows processing before an Intent is created, but 
+		 * Allows processing before an Intent is created, but
 		 * after a \Stripe\Customer is available.
 		 *
 		 * @since 2.7.0
@@ -300,7 +300,7 @@ function csx_process_purchase_form( $purchase_data ) {
 		cs_record_gateway_error(
 			esc_html__( 'Stripe Error', 'commercestore' ),
 			sprintf(
-				esc_html__( 'There was an error while processing a Stripe payment. Payment data: %s', 'commercestore' ), 
+				esc_html__( 'There was an error while processing a Stripe payment. Payment data: %s', 'commercestore' ),
 				wp_json_encode( $e->getJsonBody()['error'] )
 			),
 			0
@@ -462,11 +462,11 @@ function csx_update_intent() {
 		do_action( 'csx_update_payment_intent', $intent_id );
 
 		$intent_args           = array();
-		$intent_args_whitelist = array(
+		$intent_args_includelist = array(
 			'payment_method',
 		);
 
-		foreach ( $intent_args_whitelist as $intent_arg ) {
+		foreach ( $intent_args_includelist as $intent_arg ) {
 			if ( isset( $_POST[ $intent_arg ] ) ) {
 				$intent_args[ $intent_arg ] = sanitize_text_field( $_POST[ $intent_arg ] );
 			}
@@ -705,7 +705,7 @@ function csx_complete_payment_authorization() {
 		$payment->add_note( 'Stripe Charge ID: ' . $charge_id );
 		$payment->transaction_id = $charge_id;
 		$payment->status = 'publish';
-		
+
 		if ( $payment->save() ) {
 
 			/**
@@ -805,8 +805,8 @@ function csx_get_payment_description( $cart_details ) {
 	if( is_array( $cart_details ) && ! empty( $cart_details ) ) {
 		foreach( $cart_details as $item ) {
 			$purchase_summary .= $item['name'];
-			$price_id          = isset( $item['item_number']['options']['price_id'] ) 
-				? absint( $item['item_number']['options']['price_id'] ) 
+			$price_id          = isset( $item['item_number']['options']['price_id'] )
+				? absint( $item['item_number']['options']['price_id'] )
 				: false;
 
 			if ( false !== $price_id ) {
