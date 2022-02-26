@@ -322,7 +322,7 @@ class CS_Customer extends \CS\Database\Rows\Customer {
 	 *
 	 * @since 2.3
 	 *
-	 * @param array $data Array of data attributes for a customer (checked via whitelist)
+	 * @param array $data Array of data attributes for a customer (checked via includelist)
 	 * @return bool True if update was successful, false otherwise.
 	 */
 	public function update( $data = array() ) {

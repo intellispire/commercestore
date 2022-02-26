@@ -281,7 +281,7 @@ function cs_get_registered_settings() {
 	static $cs_settings = null;
 
 	/**
-	 * 'Whitelisted' CommerceStore settings, filters are provided for each settings
+	 * 'includelisted' CommerceStore settings, filters are provided for each settings
 	 * section to allow extensions and other plugins to add their own settings
 	 */
 

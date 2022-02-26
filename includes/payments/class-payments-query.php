@@ -743,7 +743,7 @@ class CS_Payments_Query extends CS_Stats {
 			$arguments['status'] = $this->args['post_status'];
 		}
 
-		// If the status includes `any`, we should set the status to our whitelisted keys.
+		// If the status includes `any`, we should set the status to our includelisted keys.
 		if ( isset( $arguments['status'] ) && ( 'any' === $arguments['status'] || ( is_array( $arguments['status'] ) && in_array( 'any', $arguments['status'], true ) ) ) ) {
 			$arguments['status'] = cs_get_payment_status_keys();
 		}
