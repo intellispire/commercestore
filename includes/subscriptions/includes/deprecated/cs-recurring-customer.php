@@ -5,7 +5,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 
 /**
- * The Cecurring Customer Class
+ * The Recurring Customer Class
  *
  * DEPRECATED in 2.4. Use CS_Recurring_Subscriber instead
  *
