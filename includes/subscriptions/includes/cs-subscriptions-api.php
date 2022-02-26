@@ -108,7 +108,7 @@ class CS_Subscriptions_API extends CS_API {
 	}
 
 	/**
-	 * Whitelist 'subscriptions' api endpoint
+	 * Includelist 'subscriptions' api endpoint
 	 *
 	 * @since 2.4
 	 *

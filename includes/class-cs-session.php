@@ -334,11 +334,11 @@ class CS_Session {
 		$start_session = true;
 
 		if ( ! empty( $_SERVER['REQUEST_URI'] ) ) {
-			$blacklist = $this->get_blacklist();
+			$excludelist = $this->get_excludelist();
 			$uri       = ltrim( $_SERVER['REQUEST_URI'], '/' );
 			$uri       = untrailingslashit( $uri );
 
-			if ( in_array( $uri, $blacklist, true ) ) {
+			if ( in_array( $uri, $excludelist, true ) ) {
 				$start_session = false;
 			}
 
@@ -362,16 +362,16 @@ class CS_Session {
 	}
 
 	/**
-	 * Retrieve the URI blacklist.
+	 * Retrieve the URI excludelist.
 	 *
 	 * These are the URIs where we never start sessions.
 	 *
 	 * @since 2.5.11
 	 *
-	 * @return array URI blacklist.
+	 * @return array URI excludelist.
 	 */
-	public function get_blacklist() {
-		$blacklist = apply_filters( 'cs_session_start_uri_blacklist', array(
+	public function get_excludelist() {
+		$excludelist = apply_filters( 'cs_session_start_uri_excludelist', array(
 			'feed',
 			'feed/rss',
 			'feed/rss2',
@@ -384,12 +384,12 @@ class CS_Session {
 		$folder = str_replace( network_home_url(), '', get_site_url() );
 
 		if ( ! empty( $folder ) ) {
-			foreach ( $blacklist as $path ) {
-				$blacklist[] = $folder . '/' . $path;
+			foreach ( $excludelist as $path ) {
+				$excludelist[] = $folder . '/' . $path;
 			}
 		}
 
-		return $blacklist;
+		return $excludelist;
 	}
 
 	/**

@@ -168,7 +168,7 @@ final class Report extends Base_Object {
 	}
 
 	/**
-	 * Parses the views whitelist to retrieve corresponding view groups.
+	 * Parses the views includelist to retrieve corresponding view groups.
 	 *
 	 * @since 3.0
 	 *
