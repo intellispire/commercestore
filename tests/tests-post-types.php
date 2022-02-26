@@ -19,7 +19,7 @@ class Tests_Post_Types extends CS_UnitTestCase {
 	 */
 	public function test_downloads_post_type() {
 		global $wp_post_types;
-		$this->assertArrayHasKey( 'download', $wp_post_types );
+		$this->assertArrayHasKey( CS_POST_TYPE, $wp_post_types );
 	}
 
 	public function test_downloads_post_type_labels() {

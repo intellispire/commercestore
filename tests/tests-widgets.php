@@ -261,8 +261,8 @@ class Tests_Widgets extends CS_UnitTestCase {
 		$this->assertMatchesRegularExpression( '/<label for="(.*)">Title:<\/label>/', $output );
 		$this->assertMatchesRegularExpression( '/<input class="widefat" id="(.*)" name="(.*)" type="text" value="(.*)"\/>/', $output );
 		$this->assertMatchesRegularExpression( '/<label for="(.*)">Taxonomy:<\/label>/', $output );
-		$this->assertMatchesRegularExpression( '/<option value="download_category" (.*)>(.*)<\/option>/', $output );
-		$this->assertMatchesRegularExpression( '/<option value="download_tag" (.*)>(.*)<\/option>/', $output );
+		$this->assertMatchesRegularExpression( '/<option value="'.CS_CAT_TYPE.'" (.*)>(.*)<\/option>/', $output );
+		$this->assertMatchesRegularExpression( '/<option value="'.CS_TAG_TYPE.'" (.*)>(.*)<\/option>/', $output );
 		$this->assertMatchesRegularExpression( '/<label for="(.*)">Show Count:<\/label>/', $output );
 		$this->assertMatchesRegularExpression( '/<label for="(.*)">Hide Empty Categories:<\/label>/', $output );
 

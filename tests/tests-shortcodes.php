@@ -298,7 +298,7 @@ class Tests_Shortcode extends CS_UnitTestCase {
 
 	public function test_downloads_shortcode_pagination() {
 		$output = cs_downloads_query( array() );
-		$this->assertStringNotContainsString( 'id="cs_download_pagination"', $output );
+		$this->assertStringNotContainsString( 'id="cs_'.CS_POST_TYPE.'_pagination"', $output );
 
 		// Create a second post so we can see pagination
 		self::factory()->post->create( array( 'post_title' => 'Test Download #2', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );

@@ -90,7 +90,7 @@ class Tests_Downloads extends CS_UnitTestCase {
 		$download2->create( $args );
 
 		$this->assertNotEmpty( $download2->ID );
-		$this->assertEquals( 'download', $download2->post_type );
+		$this->assertEquals( CS_POST_TYPE, $download2->post_type );
 		$this->assertEquals( 'draft', $download2->post_status );
 		$this->assertEquals( 0, $download2->sales );
 		$this->assertEquals( 0.00, $download2->earnings );

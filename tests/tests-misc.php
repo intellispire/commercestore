@@ -625,7 +625,7 @@ class Test_Misc extends CS_UnitTestCase {
 	 */
 	public function test_get_current_page_url_if_a_download_page_should_return_that_url() {
 		$this->go_to( get_permalink( self::$download->ID ) );
-		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?download=test-download-product', cs_get_current_page_url() );
+		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?'. CS_POST_TYPE.'=test-download-product', cs_get_current_page_url() );
 	}
 
 	/**
@@ -636,7 +636,7 @@ class Test_Misc extends CS_UnitTestCase {
 
 			$this->go_to( get_permalink( self::$download->ID ) );
 
-			$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?download=test-download-product&nocache=true', cs_get_current_page_url( true ) );
+			$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/?'.CS_POST_TYPE.'=test-download-product&nocache=true', cs_get_current_page_url( true ) );
 
 		remove_filter( 'cs_is_caching_plugin_active', '__return_true' );
 	}
