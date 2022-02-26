@@ -124,7 +124,7 @@ class Tests_Downloads extends CS_UnitTestCase {
 		$download3->increase_earnings( '0.50' );
 		$this->assertNotEmpty( $download3->ID );
 		$this->assertEquals( $this->_post->ID, $download3->ID );
-		$this->assertEquals( 'download', $download3->post_type );
+		$this->assertEquals( CS_POST_TYPE, $download3->post_type );
 		$this->assertEquals( 'publish', $download3->post_status );
 		$this->assertEquals( 0.00, $download3->price );
 		$this->assertEquals( 0.00, $download3->get_price() );
