@@ -42,12 +42,19 @@ const CS_DEFAULT_SLUG = 'store'; // Override with the CS_SLUG constant
 
 const CS_ICON = 'download'; // Change the reports icon here
 
-const CS_POST_TYPE = 'infoproduct';
-# const CS_POST_TYPE = 'download';
+const CS_POST_TYPE = 'infoproduct'; // 'download'
 const CS_TAG_TYPE = CS_POST_TYPE . '_tag';
 const CS_CAT_TYPE = CS_POST_TYPE . '_category';
+const CS_LOG_TYPE = 'cs_log_type';
 
-const CS_QUERY_VAR = 'download';
+// Custom Post Types - Not fully implemented across the board
+const CS_PRODUCT_CPT = CS_POST_TYPE;
+const CS_PAYMENT_CPT = 'cs_payment';
+const CS_DISCOUNT_CPT = 'cs_discount';
+const CS_LOG_CPT = 'cs_log';
+
+
+const CS_QUERY_VAR = CS_POST_TYPE; // 'download';
 
 // Tease out the word 'download' that is used in different contexts.
 // search and replace back during build?
