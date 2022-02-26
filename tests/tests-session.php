@@ -31,9 +31,9 @@ class Tests_Session extends CS_UnitTestCase {
 
 	public function test_should_start_session() {
 
-		$blacklist = CS()->session->get_blacklist();
+		$excludelist = CS()->session->get_excludelist();
 
-		foreach( $blacklist as $uri ) {
+		foreach( $excludelist as $uri ) {
 
 			$this->go_to( '/' . $uri );
 			$this->assertFalse( CS()->session->should_start_session() );
