@@ -18,9 +18,9 @@ function csx_process_preapproved_charge() {
 	$charge      = csx_charge_preapproved( $payment_id );
 
 	if ( $charge ) {
-		wp_redirect( esc_url_raw( add_query_arg( array( 'cs-message' => 'preapproval-charged' ), admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ) ); exit;
+		wp_redirect( esc_url_raw( add_query_arg( array( 'cs-message' => 'preapproval-charged' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ) ); exit;
 	} else {
-		wp_redirect( esc_url_raw( add_query_arg( array( 'cs-message' => 'preapproval-failed' ), admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ) ); exit;
+		wp_redirect( esc_url_raw( add_query_arg( array( 'cs-message' => 'preapproval-failed' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ) ); exit;
 	}
 
 }
@@ -57,7 +57,7 @@ function csx_process_preapproved_cancel() {
 	cs_update_payment_status( $payment_id, 'cancelled' );
 	delete_post_meta( $payment_id, '_csx_stripe_customer_id' );
 
-	wp_redirect( esc_url_raw( add_query_arg( array( 'cs-message' => 'preapproval-cancelled' ), admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ) ); exit;
+	wp_redirect( esc_url_raw( add_query_arg( array( 'cs-message' => 'preapproval-cancelled' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ) ); exit;
 }
 add_action( 'cs_cancel_stripe_preapproval', 'csx_process_preapproved_cancel' );
 
@@ -90,7 +90,7 @@ function csx_admin_messages() {
 	}
 
 	if( isset( $_GET['cs_gateway_connect_error'], $_GET['cs-message'] ) ) {
-		echo '<div class="notice notice-error"><p>' . sprintf( __( 'There was an error connecting your Stripe account. Message: %s. Please <a href="%s">try again</a>.', 'commercestore' ), esc_html( urldecode( $_GET['cs-message'] ) ), esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ) ) ) . '</p></div>';
+		echo '<div class="notice notice-error"><p>' . sprintf( __( 'There was an error connecting your Stripe account. Message: %s. Please <a href="%s">try again</a>.', 'commercestore' ), esc_html( urldecode( $_GET['cs-message'] ) ), esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=gateways&section=cs-stripe' ) ) ) . '</p></div>';
 		add_filter( 'wp_parse_str', function( $ar ) {
 			if( isset( $ar['cs_gateway_connect_error'] ) ) {
 				unset( $ar['cs_gateway_connect_error'] );

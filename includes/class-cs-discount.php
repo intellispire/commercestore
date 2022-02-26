@@ -1822,7 +1822,7 @@ class CS_Discount extends Adjustment {
 		return esc_url( add_query_arg( array(
 			'cs-action' => 'edit_discount',
 			'discount'   => $this->id,
-		), admin_url( 'edit.php?post_type=download&page=cs-discounts' ) ) );
+		), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-discounts' ) ) );
 	}
 
 	/**

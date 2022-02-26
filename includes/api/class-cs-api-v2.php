@@ -38,7 +38,7 @@ class CS_API_V2 extends CS_API_V1 {
 			$products['products'] = array();
 
 			$query_args = array(
-				'post_type'        => 'download',
+				'post_type'        => CS_POST_TYPE,
 				'posts_per_page'   => $this->per_page(),
 				'suppress_filters' => true,
 				'paged'            => $this->get_paged(),
@@ -80,7 +80,7 @@ class CS_API_V2 extends CS_API_V1 {
 				if ( is_numeric( $args['category'] ) ) {
 					$query_args['tax_query'] = array(
 						array(
-							'taxonomy' => 'download_category',
+							'taxonomy' => CS_CAT_TYPE,
 							'field'    => 'ID',
 							'terms'    => (int) $args['category']
 						),
@@ -93,7 +93,7 @@ class CS_API_V2 extends CS_API_V1 {
 						$field = is_numeric( $category ) ? 'ID': 'slug';
 
 						$query_args['tax_query'][] = array(
-							'taxonomy' => 'download_category',
+							'taxonomy' => CS_CAT_TYPE,
 							'field'    => $field,
 							'terms'    => $category,
 						);
@@ -101,7 +101,7 @@ class CS_API_V2 extends CS_API_V1 {
 					}
 
 				} else {
-					$query_args['download_category'] = $args['category'];
+					$query_args[CS_CAT_TYPE] = $args['category'];
 				}
 			}
 
@@ -113,7 +113,7 @@ class CS_API_V2 extends CS_API_V1 {
 				if ( is_numeric( $args['tag'] ) ) {
 					$query_args['tax_query'] = array(
 						array(
-							'taxonomy' => 'download_tag',
+							'taxonomy' => CS_TAG_TYPE,
 							'field'    => 'ID',
 							'terms'    => (int) $args['tag']
 						),
@@ -126,7 +126,7 @@ class CS_API_V2 extends CS_API_V1 {
 						$field = is_numeric( $tag ) ? 'ID': 'slug';
 
 						$query_args['tax_query'][] = array(
-							'taxonomy' => 'download_tag',
+							'taxonomy' => CS_TAG_TYPE,
 							'field'    => $field,
 							'terms'    => $tag,
 						);
@@ -134,7 +134,7 @@ class CS_API_V2 extends CS_API_V1 {
 					}
 
 				} else {
-					$query_args['download_tag'] = $args['tag'];
+					$query_args[CS_TAG_TYPE] = $args['tag'];
 				}
 			}
 
@@ -157,7 +157,7 @@ class CS_API_V2 extends CS_API_V1 {
 
 		} else {
 
-			if ( get_post_type( $args['product'] ) == 'download' ) {
+			if ( get_post_type( $args['product'] ) == CS_POST_TYPE ) {
 				$product_info = get_post( $args['product'] );
 
 				$products['products'][0] = $this->get_product_data( $product_info );

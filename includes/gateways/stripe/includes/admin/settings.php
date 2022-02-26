@@ -26,7 +26,7 @@ function csx_add_settings( $settings ) {
 	$stripe_connect_url = add_query_arg( array(
 		'live_mode' => (int) ! cs_is_test_mode(),
 		'state' => str_pad( wp_rand( wp_rand(), PHP_INT_MAX ), 100, wp_rand(), STR_PAD_BOTH ),
-		'customer_site_url' => admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ),
+		'customer_site_url' => admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=gateways&section=cs-stripe' ),
 	), 'https://commercestore.com/?cs_gateway_connect_init=stripe_connect' );
 
 	$test_mode = cs_is_test_mode();
@@ -289,13 +289,13 @@ function csx_process_gateway_connect_completion() {
 	$cs_credentials_url = add_query_arg( array(
 		'live_mode' => (int) ! cs_is_test_mode(),
 		'state' => sanitize_text_field( $_GET['state'] ),
-		'customer_site_url' => admin_url( 'edit.php?post_type=download' ),
+		'customer_site_url' => admin_url( 'edit.php?post_type=' . CS_POST_TYPE ),
 	), 'https://commercestore.com/?cs_gateway_connect_credentials=stripe_connect' );
 
 	$response = wp_remote_get( esc_url_raw( $cs_credentials_url ) );
 
 	if( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-		$message = '<p>' . sprintf( __( 'There was an error getting your Stripe credentials. Please <a href="%s">try again</a>. If you continue to have this problem, please contact support.', 'commercestore' ), esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ) ) ) . '</p>';
+		$message = '<p>' . sprintf( __( 'There was an error getting your Stripe credentials. Please <a href="%s">try again</a>. If you continue to have this problem, please contact support.', 'commercestore' ), esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=gateways&section=cs-stripe' ) ) ) . '</p>';
 		wp_die( $message );
 	}
 
@@ -311,7 +311,7 @@ function csx_process_gateway_connect_completion() {
 	}
 
 	cs_update_option( 'stripe_connect_account_id', sanitize_text_field( $data['stripe_user_id'] ) );
-	wp_redirect( esc_url_raw( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ) ) );
+	wp_redirect( esc_url_raw( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=gateways&section=cs-stripe' ) ) );
 	exit;
 
 }

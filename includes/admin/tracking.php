@@ -107,7 +107,7 @@ class CS_Tracking {
 		$data['active_plugins']   = $active_plugins;
 		$data['inactive_plugins'] = $plugins;
 		$data['active_gateways']  = array_keys( cs_get_enabled_payment_gateways() );
-		$data['products']         = wp_count_posts( 'download' )->publish;
+		$data['products']         = wp_count_posts( CS_POST_TYPE )->publish;
 		$data['download_label']   = cs_get_label_singular( true );
 		$data['locale']           = get_locale();
 

@@ -343,7 +343,7 @@ function cs_count_payments( $args = array() ) {
 		's'          => null,
 		'start-date' => null,
 		'end-date'   => null,
-		'download'   => null,
+		CS_POST_TYPE   => null,
 		'gateway'    => null,
 		'type'       => 'sale',
 	) );
@@ -403,9 +403,9 @@ function cs_count_payments( $args = array() ) {
 		}
 	}
 
-	if ( ! empty( $args['download'] ) && is_numeric( $args['download'] ) ) {
+	if ( ! empty( $item[CS_EX_DOWNLOAD_ARGS] ) && is_numeric( $item[CS_EX_DOWNLOAD_ARGS] ) ) {
 		$join   = "INNER JOIN {$wpdb->cs_order_items} cs_oi ON cs_o.id = cs_oi.order_id";
-		$where .= $wpdb->prepare( ' AND cs_oi.product_id = %d', absint( $args['download'] ) );
+		$where .= $wpdb->prepare( ' AND cs_oi.product_id = %d', absint( $item[CS_EX_DOWNLOAD_ARGS] ) );
 	}
 
 	if ( ! empty( $args['gateway'] ) ) {

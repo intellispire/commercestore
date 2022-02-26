@@ -31,7 +31,7 @@ class CS_Helper_Download extends WP_UnitTestCase {
 		$post_id = wp_insert_post( array(
 			'post_title'    => 'Test Download Product',
 			'post_name'     => 'test-download-product',
-			'post_type'     => 'download',
+			'post_type'     => CS_POST_TYPE,
 			'post_status'   => 'publish'
 		) );
 
@@ -76,7 +76,7 @@ class CS_Helper_Download extends WP_UnitTestCase {
 		$post_id = wp_insert_post( array(
 			'post_title'    => 'Variable Test Download Product',
 			'post_name'     => 'variable-test-download-product',
-			'post_type'     => 'download',
+			'post_type'     => CS_POST_TYPE,
 			'post_status'   => 'publish'
 		) );
 
@@ -137,7 +137,7 @@ class CS_Helper_Download extends WP_UnitTestCase {
 		$post_id = wp_insert_post( array(
 			'post_title'    => 'Variable Multi Test Download Product',
 			'post_name'     => 'variable-multi-test-download-product',
-			'post_type'     => 'download',
+			'post_type'     => CS_POST_TYPE,
 			'post_status'   => 'publish'
 		) );
 
@@ -206,7 +206,7 @@ class CS_Helper_Download extends WP_UnitTestCase {
 		$post_id = wp_insert_post( array(
 			'post_title'    => 'Bundled Test Download Product',
 			'post_name'     => 'bundled-test-download-product',
-			'post_type'     => 'download',
+			'post_type'     => CS_POST_TYPE,
 			'post_status'   => 'publish'
 		) );
 

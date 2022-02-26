@@ -33,7 +33,7 @@ function cs_get_download_by( $field = '', $value = '' ) {
 		case 'id':
 			$download = get_post( $value );
 
-			if ( 'download' !== get_post_type( $download ) ) {
+			if ( CS_POST_TYPE !== get_post_type( $download ) ) {
 				return false;
 			}
 
@@ -42,7 +42,7 @@ function cs_get_download_by( $field = '', $value = '' ) {
 		case 'slug':
 		case 'name':
 			$download = get_posts( array(
-				'post_type'      => 'download',
+				'post_type'      => CS_POST_TYPE,
 				'name'           => $value,
 				'posts_per_page' => 1,
 				'post_status'    => 'any',
@@ -56,7 +56,7 @@ function cs_get_download_by( $field = '', $value = '' ) {
 
 		case 'sku':
 			$download = get_posts( array(
-				'post_type'      => 'download',
+				'post_type'      => CS_POST_TYPE,
 				'meta_key'       => 'cs_sku',
 				'meta_value'     => $value,
 				'posts_per_page' => 1,
@@ -98,7 +98,7 @@ function cs_get_download( $download_id = 0 ) {
 	// Fetch download by name.
 	} else {
 		$args = array(
-			'post_type'     => 'download',
+			'post_type'     => CS_POST_TYPE,
 			'name'          => $download_id,
 			'post_per_page' => 1,
 			'fields'        => 'ids',
@@ -823,7 +823,7 @@ function cs_remove_download_logs_on_delete( $download_id = 0 ) {
 	$download_id = absint( $download_id );
 
 	// Bail if the post type is not `download`.
-	if ( 'download' !== get_post_type( $download_id ) ) {
+	if ( CS_POST_TYPE !== get_post_type( $download_id ) ) {
 		return;
 	}
 
@@ -835,7 +835,7 @@ function cs_remove_download_logs_on_delete( $download_id = 0 ) {
 	// Delete logs.
 	$wpdb->delete( $wpdb->cs_logs, array(
 		'object_id'   => $download_id,
-		'object_type' => 'download',
+		'object_type' => CS_POST_TYPE,
 	), array( '%d', '%s' ) );
 }
 add_action( 'delete_post', 'cs_remove_download_logs_on_delete' );
@@ -1528,7 +1528,7 @@ function cs_get_random_download( $post_ids = true ) {
  */
 function cs_get_random_downloads( $num = 3, $post_ids = true ) {
 	$args = array(
-		'post_type'   => 'download',
+		'post_type'   => CS_POST_TYPE,
 		'orderby'     => 'rand',
 		'numberposts' => $num,
 	);

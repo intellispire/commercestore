@@ -37,7 +37,7 @@ function cs_block_attachments() {
 		return;
 	}
 
-	if ( 'download' !== get_post_type( $parent ) && false === $cs_file ) {
+	if ( CS_POST_TYPE !== get_post_type( $parent ) && false === $cs_file ) {
 		return;
 	}
 

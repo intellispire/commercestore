@@ -37,7 +37,7 @@ class CS_Tools_Recount_All_Stats extends CS_Tools_Recount_Download_Stats {
 	 */
 	public function get_percentage_complete() {
 		$percentage = 100;
-		$total      = array_sum( (array) wp_count_posts( 'download' ) );
+		$total      = array_sum( (array) wp_count_posts( CS_POST_TYPE ) );
 
 		if ( $total > 0 ) {
 			$percentage = ( ( $this->per_step * $this->step ) / $total ) * 100;
@@ -96,7 +96,7 @@ class CS_Tools_Recount_All_Stats extends CS_Tools_Recount_Download_Stats {
 		if ( null === $this->download_ids ) {
 			$this->download_ids = get_posts( array(
 				'post_status'    => 'any',
-				'post_type'      => 'download',
+				'post_type'      => CS_POST_TYPE,
 				'posts_per_page' => $this->per_step,
 				'offset'         => ( $this->step - 1 ) * $this->per_step,
 				'fields'         => 'ids',

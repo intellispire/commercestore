@@ -153,7 +153,7 @@ class cs_categories_tags_widget extends WP_Widget {
 		// Set defaults.
 		$args['id']           = ( isset( $args['id'] ) ) ? $args['id'] : 'cs_categories_tags_widget';
 		$instance['title']    = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
-		$instance['taxonomy'] = ( isset( $instance['taxonomy'] ) ) ? $instance['taxonomy'] : 'download_category';
+		$instance['taxonomy'] = ( isset( $instance['taxonomy'] ) ) ? $instance['taxonomy'] : CS_CAT_TYPE;
 
 		$title      = apply_filters( 'widget_title', $instance['title'], $instance, $args['id'] );
 		$tax        = $instance['taxonomy'];
@@ -192,7 +192,7 @@ class cs_categories_tags_widget extends WP_Widget {
 		// Set up some default widget settings.
 		$defaults = array(
 			'title'         => '',
-			'taxonomy'      => 'download_category',
+			'taxonomy'      => CS_CAT_TYPE,
 			'count'         => 'off',
 			'hide_empty'    => 'off',
 		);
@@ -206,11 +206,11 @@ class cs_categories_tags_widget extends WP_Widget {
 			<label for="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>"><?php _e( 'Taxonomy:', 'commercestore' ); ?></label>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'taxonomy' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>">
 				<?php
-				$category_labels = cs_get_taxonomy_labels( 'download_category' );
-				$tag_labels      = cs_get_taxonomy_labels( 'download_tag' );
+				$category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE );
+				$tag_labels      = cs_get_taxonomy_labels( CS_TAG_TYPE );
 				?>
-				<option value="download_category" <?php selected( 'download_category', $instance['taxonomy'] ); ?>><?php echo $category_labels['name']; ?></option>
-				<option value="download_tag" <?php selected( 'download_tag', $instance['taxonomy'] ); ?>><?php echo $tag_labels['name']; ?></option>
+				<option value="<?php echo CS_CAT_TYPE ?>" <?php selected( CS_CAT_TYPE, $instance['taxonomy'] ); ?>><?php echo $category_labels['name']; ?></option>
+				<option value="<?php echo CS_TAG_TYPE ?>" <?php selected( CS_TAG_TYPE, $instance['taxonomy'] ); ?>><?php echo $tag_labels['name']; ?></option>
 			</select>
 		</p>
 		<p>
@@ -260,12 +260,12 @@ class CS_Product_Details_Widget extends WP_Widget {
 			}
 		}
 
-		if ( ! isset( $instance['display_type'] ) || ( 'specific' === $instance['display_type'] && ! isset( $instance['download_id'] ) ) || ( 'current' == $instance['display_type'] && ! is_singular( 'download' ) ) ) {
+		if ( ! isset( $instance['display_type'] ) || ( 'specific' === $instance['display_type'] && ! isset( $instance['download_id'] ) ) || ( 'current' == $instance['display_type'] && ! is_singular( CS_POST_TYPE ) ) ) {
 			return;
 		}
 
 		// set correct download ID.
-		if ( 'current' == $instance['display_type'] && is_singular( 'download' ) ) {
+		if ( 'current' == $instance['display_type'] && is_singular( CS_POST_TYPE ) ) {
 			$download_id = get_the_ID();
 		} else {
 			$download_id = absint( $instance['download_id'] );
@@ -273,7 +273,7 @@ class CS_Product_Details_Widget extends WP_Widget {
 
 		// Since we can take a typed in value, make sure it's a download we're looking for
 		$download = get_post( $download_id );
-		if ( ! is_object( $download ) || 'download' !== $download->post_type ) {
+		if ( ! is_object( $download ) || CS_POST_TYPE !== $download->post_type ) {
 			return;
 		}
 
@@ -306,12 +306,12 @@ class CS_Product_Details_Widget extends WP_Widget {
 		$category_list  = false;
 		$category_label = '';
 		if ( $categories ) {
-			$category_terms = (array) get_the_terms( $download_id, 'download_category' );
+			$category_terms = (array) get_the_terms( $download_id, CS_CAT_TYPE );
 
 			if ( $category_terms && ! is_wp_error( $category_terms ) ) {
-				$category_list     = get_the_term_list( $download_id, 'download_category', '', ', ' );
+				$category_list     = get_the_term_list( $download_id, CS_CAT_TYPE, '', ', ' );
 				$category_count    = count( $category_terms );
-				$category_labels   = cs_get_taxonomy_labels( 'download_category' );
+				$category_labels   = cs_get_taxonomy_labels( CS_CAT_TYPE );
 				$category_label    = $category_count > 1 ? $category_labels['name'] : $category_labels['singular_name'];
 			}
 		}
@@ -321,12 +321,12 @@ class CS_Product_Details_Widget extends WP_Widget {
 		$tag_label = '';
 
 		if ( $tags ) {
-			$tag_terms = (array) get_the_terms( $download_id, 'download_tag' );
+			$tag_terms = (array) get_the_terms( $download_id, CS_TAG_TYPE );
 
 			if ( $tag_terms && ! is_wp_error( $tag_terms ) ) {
-				$tag_list     = get_the_term_list( $download_id, 'download_tag', '', ', ' );
+				$tag_list     = get_the_term_list( $download_id, CS_TAG_TYPE, '', ', ' );
 				$tag_count    = count( $tag_terms );
-				$tag_taxonomy = cs_get_taxonomy_labels( 'download_tag' );
+				$tag_taxonomy = cs_get_taxonomy_labels( CS_TAG_TYPE );
 				$tag_label    = $tag_count > 1 ? $tag_taxonomy['name'] : $tag_taxonomy['singular_name'];
 			}
 		}
@@ -398,11 +398,11 @@ class CS_Product_Details_Widget extends WP_Widget {
 		<?php $display = 'current' === $instance['display_type'] ? ' style="display: none;"' : ''; ?>
 		<p class="download-details-selector" <?php echo $display; ?>>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'download_id' ) ); ?>"><?php printf( __( '%s:', 'commercestore' ), cs_get_label_singular() ); ?></label>
-		<?php $download_count = wp_count_posts( 'download' ); ?>
+		<?php $download_count = wp_count_posts( CS_POST_TYPE ); ?>
 		<?php if ( $download_count->publish < 1000 ) : ?>
 			<?php
 			$args = array(
-				'post_type'      => 'download',
+				'post_type'      => CS_POST_TYPE,
 				'posts_per_page' => -1,
 				'post_status'    => 'publish',
 			);
@@ -433,14 +433,14 @@ class CS_Product_Details_Widget extends WP_Widget {
 
 		<!-- Show download categories -->
 		<p>
-			<?php $category_labels = cs_get_taxonomy_labels( 'download_category' ); ?>
+			<?php $category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE ); ?>
 			<input <?php checked( $instance['categories'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'categories' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'categories' ) ); ?>" type="checkbox" />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'categories' ) ); ?>"><?php printf( __( 'Show %s', 'commercestore' ), $category_labels['name'] ); ?></label>
 		</p>
 
 		<!-- Show download tags -->
 		<p>
-			<?php $tag_labels = cs_get_taxonomy_labels( 'download_tag' ); ?>
+			<?php $tag_labels = cs_get_taxonomy_labels( CS_TAG_TYPE ); ?>
 			<input <?php checked( $instance['tags'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'tags' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'tags' ) ); ?>" type="checkbox" />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'tags' ) ); ?>"><?php printf( __( 'Show %s', 'commercestore' ), $tag_labels['name'] ); ?></label>
 		</p>

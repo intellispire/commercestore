@@ -22,7 +22,7 @@ $recent_downloads = get_posts( array(
 	'fields'         => 'ids',
 	'orderby'        => 'date',
 	'order'          => 'ASC',
-	'post_type'      => 'download',
+	'post_type'      => CS_POST_TYPE,
 	'posts_per_page' => 25,
 	'post_status'    => array(
 		'publish',

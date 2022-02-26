@@ -17,7 +17,7 @@ class Tests_Shortcode extends CS_UnitTestCase {
 		self::$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( self::$user_id );
 
-		$post_id = self::factory()->post->create( array( 'post_title' => 'Test Download', 'post_type' => 'download', 'post_status' => 'publish' ) );
+		$post_id = self::factory()->post->create( array( 'post_title' => 'Test Download', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );
 
 		$_variable_pricing = array(
 			array(
@@ -247,7 +247,7 @@ class Tests_Shortcode extends CS_UnitTestCase {
 	}
 
 	public function test_download_price_shortcode() {
-		$post_id = self::factory()->post->create( array( 'post_type' => 'download' ) );
+		$post_id = self::factory()->post->create( array( 'post_type' => CS_POST_TYPE ) );
 
 		$meta = array(
 			'cs_price' => '54.43',
@@ -298,13 +298,13 @@ class Tests_Shortcode extends CS_UnitTestCase {
 
 	public function test_downloads_shortcode_pagination() {
 		$output = cs_downloads_query( array() );
-		$this->assertStringNotContainsString( 'id="cs_download_pagination"', $output );
+		$this->assertStringNotContainsString( 'id="cs_'.CS_POST_TYPE.'_pagination"', $output );
 
 		// Create a second post so we can see pagination
-		self::factory()->post->create( array( 'post_title' => 'Test Download #2', 'post_type' => 'download', 'post_status' => 'publish' ) );
+		self::factory()->post->create( array( 'post_title' => 'Test Download #2', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );
 
 		$output2 = cs_downloads_query( array( 'number' => 1 ) );
-		$this->assertStringContainsString( 'id="cs_download_pagination"', $output2 );
+		$this->assertStringContainsString( 'id="cs_' . CS_POST_TYPE . '_pagination"', $output2 );
 
 		cs_set_user_to_pending( self::$user_id );
 
@@ -313,9 +313,9 @@ class Tests_Shortcode extends CS_UnitTestCase {
 
 	public function test_downloads_shortcode_nopaging() {
 		// Create a posts so we can see pagination
-		self::factory()->post->create( array( 'post_title' => 'Test Download #2', 'post_type' => 'download', 'post_status' => 'publish' ) );
-		self::factory()->post->create( array( 'post_title' => 'Test Download #3', 'post_type' => 'download', 'post_status' => 'publish' ) );
-		self::factory()->post->create( array( 'post_title' => 'Test Download #4', 'post_type' => 'download', 'post_status' => 'publish' ) );
+		self::factory()->post->create( array( 'post_title' => 'Test Download #2', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );
+		self::factory()->post->create( array( 'post_title' => 'Test Download #3', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );
+		self::factory()->post->create( array( 'post_title' => 'Test Download #4', 'post_type' => CS_POST_TYPE, 'post_status' => 'publish' ) );
 
 		$output2 = cs_downloads_query( array( 'number' => 1, 'pagination' => 'false' ) );
 		$this->assertStringNotContainsString( 'id="cs_download_pagination"', $output2 );

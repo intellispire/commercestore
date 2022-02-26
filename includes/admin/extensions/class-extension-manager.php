@@ -282,7 +282,7 @@ class Extension_Manager {
 		$url = esc_url_raw(
 			add_query_arg(
 				array(
-					'post_type' => 'download',
+					'post_type' => CS_POST_TYPE,
 					'page'      => 'cs-addons',
 				),
 				admin_url( 'edit.php' )

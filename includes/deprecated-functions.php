@@ -747,7 +747,7 @@ function cs_microdata_title( $title, $id = 0 ) {
 		return $title;
 	}
 
-	if ( $post->ID == $id && is_singular( 'download' ) && 'download' == get_post_type( intval( $id ) ) ) {
+	if ( $post->ID == $id && is_singular( CS_POST_TYPE ) && CS_POST_TYPE == get_post_type( intval( $id ) ) ) {
 		$title = '<span itemprop="name">' . $title . '</span>';
 	}
 
@@ -774,7 +774,7 @@ function cs_microdata_wrapper_open( $query ) {
 		return;
 	}
 
-	if ( $query && ! empty( $query->query['post_type'] ) && $query->query['post_type'] == 'download' && is_singular( 'download' ) && $query->is_main_query() ) {
+	if ( $query && ! empty( $query->query['post_type'] ) && $query->query['post_type'] == CS_POST_TYPE && is_singular( CS_POST_TYPE ) && $query->is_main_query() ) {
 		$microdata_open = true;
 		echo '<div itemscope itemtype="http://schema.org/Product">';
 	}
@@ -802,7 +802,7 @@ function cs_microdata_wrapper_close() {
 		return;
 	}
 
-	if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() ) {
+	if ( $post && $post->post_type == CS_POST_TYPE && is_singular( CS_POST_TYPE ) && is_main_query() ) {
 		$microdata_close = true;
 		echo '</div>';
 	}
@@ -831,7 +831,7 @@ function cs_microdata_description( $content ) {
 		return $content;
 	}
 
-	if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() ) {
+	if ( $post && $post->post_type == CS_POST_TYPE && is_singular( CS_POST_TYPE ) && is_main_query() ) {
 		$microdata_description = true;
 		$content = apply_filters( 'cs_microdata_wrapper', '<div itemprop="description">' . $content . '</div>' );
 	}
@@ -1647,7 +1647,7 @@ function cs_sendwp_remote_install_handler () {
 		'register_url'    => sendwp_get_server_url() . '_/signup',
 		'client_name'     => sendwp_get_client_name(),
 		'client_secret'   => sendwp_get_client_secret(),
-		'client_redirect' => admin_url( '/edit.php?post_type=download&page=cs-settings&tab=emails&cs-message=sendwp-connected' ),
+		'client_redirect' => admin_url( '/edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=emails&cs-message=sendwp-connected' ),
 	) );
 }
 add_action( 'wp_ajax_cs_sendwp_remote_install', 'cs_sendwp_remote_install_handler' );

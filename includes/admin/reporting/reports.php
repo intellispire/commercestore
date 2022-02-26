@@ -562,7 +562,7 @@ function cs_register_downloads_report( $reports ) {
 		$reports->add_report( 'downloads', array(
 			'label'     => cs_get_label_plural(),
 			'priority'  => 10,
-			'icon'      => 'download',
+			'icon'      => CS_ICON,
 			'endpoints' => array(
 				'tiles'  => $tiles,
 				'charts' => $charts,
@@ -1798,7 +1798,7 @@ function cs_register_file_downloads_report( $reports ) {
 
 		$reports->add_report( 'file_downloads', array(
 			'label'     => __( 'File Downloads', 'commercestore' ),
-			'icon'      => 'download',
+			'icon'      => CS_ICON,
 			'priority'  => 30,
 			'endpoints' => array(
 				'tiles'  => $tiles,
@@ -2588,7 +2588,7 @@ function cs_register_export_report( $reports ) {
 			'icon'             => 'migrate',
 			'priority'         => 1000,
 			'capability'       => 'export_shop_reports',
-			'display_callback' => 'display_export_report',
+			'display_callback' => 'cs_display_export_report',
 			'filters'          => false,
 		) );
 	} catch ( \CS_Exception $exception ) {
@@ -2601,7 +2601,7 @@ add_action( 'cs_reports_init', 'cs_register_export_report' );
  *
  * @since 3.0
  */
-function display_export_report() {
+function cs_display_export_report() {
 	global $wpdb;
 
 	wp_enqueue_script( 'cs-admin-tools-export' );
@@ -2843,7 +2843,7 @@ function display_export_report() {
 						<p><?php printf( esc_html__( 'Download a CSV of customers. Select a taxonomy to see all the customers who purchased %s in that taxonomy.', 'commercestore' ), cs_get_label_plural( true ) ); ?></p>
 						<form id="cs-export-customers" class="cs-export-form cs-import-export-form" method="post">
 							<?php
-							$taxonomies = get_object_taxonomies( 'download', 'names' );
+							$taxonomies = get_object_taxonomies( CS_POST_TYPE, 'names' );
 							$taxonomies = array_map( 'sanitize_text_field', $taxonomies );
 
 							$placeholders = implode( ', ', array_fill( 0, count( $taxonomies ), '%s' ) );
@@ -2884,7 +2884,7 @@ function display_export_report() {
 								<?php
 								echo CS()->html->product_dropdown(
 									array(
-										'name'        => 'download',
+										'name'        => CS_POST_TYPE,
 										'id'          => 'cs_customer_export_download',
 										'chosen'      => true,
 										/* translators: the plural post type label */

@@ -26,7 +26,7 @@ class Tests_Taxes extends CS_UnitTestCase {
 	public static function wpsetUpBeforeClass() : void  {
 		$post_id = self::factory()->post->create( array(
 			'post_title'  => 'Test Download',
-			'post_type'   => 'download',
+			'post_type'   => CS_POST_TYPE,
 			'post_status' => 'publish',
 		) );
 

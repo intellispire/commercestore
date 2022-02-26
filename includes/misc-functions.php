@@ -25,7 +25,7 @@ function cs_get_admin_base_url() {
 
 	// Default args
 	$args = array(
-		'post_type' => 'download'
+		'post_type' => CS_POST_TYPE
 	);
 
 	// Default URL

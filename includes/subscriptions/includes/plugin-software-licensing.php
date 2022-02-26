@@ -970,7 +970,7 @@ class CS_Recurring_Software_Licensing {
 				}
 
 				echo '<br/>';
-				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&id=' ) . $sub->id ) . '">' . __( 'View Subscription', 'commercestore' ) . '</a>';
+				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&id=' ) . $sub->id ) . '">' . __( 'View Subscription', 'commercestore' ) . '</a>';
 			}
 		}
 
@@ -1001,7 +1001,7 @@ class CS_Recurring_Software_Licensing {
 						<td><?php echo $license_key; ?></td>
 						<td><?php echo cs_software_licensing()->get_license_status( $license->ID ); ?></td>
 						<td>
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-licenses&s=' ) . $license_key ); ?>"><?php _e( 'View License', 'commercestore' ); ?></a>
+							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-licenses&s=' ) . $license_key ); ?>"><?php _e( 'View License', 'commercestore' ); ?></a>
 						</td>
 					</tr>
 				</tbody>

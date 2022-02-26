@@ -34,7 +34,7 @@ class Tests_Structured_Data extends CS_UnitTestCase {
 	 * @covers CS_Structured_Data::get_data()
 	 */
 	public function test_generate_structured_data_for_download() {
-		CS()->structured_data->generate_structured_data( 'download', self::$download->ID );
+		CS()->structured_data->generate_structured_data( CS_POST_TYPE, self::$download->ID );
 
 		$data = CS()->structured_data->get_data();
 

@@ -23,14 +23,14 @@ defined( 'ABSPATH' ) || exit;
  *  Post Type List Table
  */
 function cs_download_columns( $download_columns ) {
-	$category_labels = cs_get_taxonomy_labels( 'download_category' );
-	$tag_labels      = cs_get_taxonomy_labels( 'download_tag'      );
+	$category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE );
+	$tag_labels      = cs_get_taxonomy_labels( CS_TAG_TYPE      );
 
 	return apply_filters( 'cs_download_columns', array(
 		'cb'                => '<input type="checkbox"/>',
 		'title'             => __( 'Name', 'commercestore' ),
-		'download_category' => $category_labels['menu_name'],
-		'download_tag'      => $tag_labels['menu_name'],
+		CS_CAT_TYPE => $category_labels['menu_name'],
+		CS_TAG_TYPE      => $tag_labels['menu_name'],
 		'price'             => __( 'Price', 'commercestore' ),
 		'sales'             => __( 'Sales', 'commercestore' ),
 		'earnings'          => __( 'Gross Revenue', 'commercestore' ),
@@ -50,19 +50,19 @@ add_filter( 'manage_edit-download_columns', 'cs_download_columns' );
 function cs_render_download_columns( $column_name, $post_id ) {
 
 	// Bail if not a download
-	if ( get_post_type( $post_id ) !== 'download' ) {
+	if ( get_post_type( $post_id ) !== CS_POST_TYPE ) {
 		return;
 	}
 
 	switch ( $column_name ) {
-		case 'download_category':
-			$terms = get_the_term_list( $post_id, 'download_category', '', ', ', '');
+		case CS_CAT_TYPE:
+			$terms = get_the_term_list( $post_id, CS_CAT_TYPE, '', ', ', '');
 			echo ! empty( $terms )
 				? $terms
 				: '&mdash;';
 			break;
-		case 'download_tag':
-			$terms = get_the_term_list( $post_id, 'download_tag', '', ', ', '');
+		case CS_TAG_TYPE:
+			$terms = get_the_term_list( $post_id, CS_TAG_TYPE, '', ', ', '');
 			echo ! empty( $terms )
 				? $terms
 				: '&mdash;';
@@ -91,7 +91,7 @@ function cs_render_download_columns( $column_name, $post_id ) {
 			break;
 		case 'earnings':
 			if ( current_user_can( 'view_product_stats', $post_id ) ) {
-				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-reports&view=downloads&download-id=' . $post_id ) ) . '">';
+				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports&view=downloads&download-id=' . $post_id ) ) . '">';
 					echo cs_currency_filter( cs_format_amount( cs_get_download_earnings_stats( $post_id ) ) );
 				echo '</a>';
 			} else {
@@ -127,7 +127,7 @@ add_filter( 'manage_edit-download_sortable_columns', 'cs_sortable_download_colum
  */
 function cs_sort_downloads( $vars ) {
 	// Check if we're viewing the "download" post type
-	if ( isset( $vars['post_type'] ) && 'download' == $vars['post_type'] ) {
+	if ( isset( $vars['post_type'] ) && CS_POST_TYPE == $vars['post_type'] ) {
 		// Check if 'orderby' is set to "sales"
 		if ( isset( $vars['orderby'] ) && 'sales' == $vars['orderby'] ) {
 			$vars = array_merge(
@@ -173,7 +173,7 @@ function cs_sort_downloads( $vars ) {
  * @return array       Array of all sort variables
  */
 function cs_filter_downloads( $vars ) {
-	if ( isset( $vars['post_type'] ) && 'download' == $vars['post_type'] ) {
+	if ( isset( $vars['post_type'] ) && CS_POST_TYPE == $vars['post_type'] ) {
 
 		// If an author ID was passed, use it
 		if ( isset( $_REQUEST['author'] ) && ! current_user_can( 'view_shop_reports' ) ) {
@@ -220,30 +220,30 @@ add_action( 'load-edit.php', 'cs_download_load', 9999 );
 function cs_add_download_filters() {
 	global $typenow;
 
-	// Checks if the current post type is 'download'
-	if ( $typenow !== 'download') {
+	// Checks if the current post type is CS_POST_TYPE
+	if ( $typenow !== CS_POST_TYPE) {
 		return;
 	}
 
-	$terms = get_terms( 'download_category' );
+	$terms = get_terms( CS_CAT_TYPE );
 	if ( count( $terms ) > 0 ) {
-		echo "<select name='download_category' id='download_category' class='postform'>";
-			$category_labels = cs_get_taxonomy_labels( 'download_category' );
+		echo "<select name=CS_CAT_TYPE id=CS_CAT_TYPE class='postform'>";
+			$category_labels = cs_get_taxonomy_labels( CS_CAT_TYPE );
 			echo "<option value=''>" . sprintf( __( 'All %s', 'commercestore' ), strtolower( $category_labels['name'] ) ) . "</option>";
 			foreach ( $terms as $term ) {
-				$selected = isset( $_GET['download_category'] ) && $_GET['download_category'] === $term->slug ? ' selected="selected"' : '';
+				$selected = isset( $_GET[CS_CAT_TYPE] ) && $_GET[CS_CAT_TYPE] === $term->slug ? ' selected="selected"' : '';
 				echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
 			}
 		echo "</select>";
 	}
 
-	$terms = get_terms( 'download_tag' );
+	$terms = get_terms( CS_TAG_TYPE );
 	if ( count( $terms ) > 0 ) {
-		echo "<select name='download_tag' id='download_tag' class='postform'>";
-			$tag_labels = cs_get_taxonomy_labels( 'download_tag' );
+		echo "<select name=CS_TAG_TYPE id=CS_TAG_TYPE class='postform'>";
+			$tag_labels = cs_get_taxonomy_labels( CS_TAG_TYPE );
 			echo "<option value=''>" . sprintf( __( 'All %s', 'commercestore' ), strtolower( $tag_labels['name'] ) ) . "</option>";
 			foreach ( $terms as $term ) {
-				$selected = isset( $_GET['download_tag']) && $_GET['download_tag'] === $term->slug ? ' selected="selected"' : '';
+				$selected = isset( $_GET[CS_TAG_TYPE]) && $_GET[CS_TAG_TYPE] === $term->slug ? ' selected="selected"' : '';
 				echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
 			}
 		echo "</select>";
@@ -272,7 +272,7 @@ add_action( 'restrict_manage_posts', 'cs_add_download_filters', 100 );
 function cs_remove_month_filter( $dates ) {
 	global $typenow;
 
-	if ( 'download' === $typenow ) {
+	if ( CS_POST_TYPE === $typenow ) {
 		$dates = array();
 	}
 
@@ -291,7 +291,7 @@ add_filter( 'months_dropdown_results', 'cs_remove_month_filter', 99 );
 function cs_price_field_quick_edit( $column_name, $post_type ) {
 
 	// Bail if not price or download
-	if ( $column_name !== 'price' || $post_type !== 'download' ) {
+	if ( $column_name !== 'price' || $post_type !== CS_POST_TYPE ) {
 		return;
 	} ?>
 
@@ -321,7 +321,7 @@ add_action( 'bulk_edit_custom_box',  'cs_price_field_quick_edit', 10, 2 );
  * @return void
  */
 function cs_price_save_quick_edit( $post_id ) {
-	if ( ! isset( $_POST['post_type']) || 'download' !== $_POST['post_type'] ) {
+	if ( ! isset( $_POST['post_type']) || CS_POST_TYPE !== $_POST['post_type'] ) {
 		return;
 	}
 

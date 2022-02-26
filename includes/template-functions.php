@@ -58,7 +58,7 @@ function cs_get_purchase_link( $args = array() ) {
 		}
 
 
-		cs_set_error( 'set_checkout', sprintf( __( 'No checkout page has been configured. Visit <a href="%s">Settings</a> to set one.', 'commercestore' ), admin_url( 'edit.php?post_type=download&page=cs-settings&tab=general&section=pages' ) ) );
+		cs_set_error( 'set_checkout', sprintf( __( 'No checkout page has been configured. Visit <a href="%s">Settings</a> to set one.', 'commercestore' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=general&section=pages' ) ) );
 		cs_print_errors();
 
 		$no_checkout_error_displayed = true;
@@ -414,7 +414,7 @@ add_action( 'cs_after_price_option', 'cs_variable_price_quantity_field', 10, 3 )
 function cs_before_download_content( $content ) {
 	global $post;
 
-	if ( $post && $post instanceof WP_Post && 'download' === $post->post_type && is_singular( 'download' ) && is_main_query() && ! post_password_required() ) {
+	if ( $post && $post instanceof WP_Post && CS_POST_TYPE === $post->post_type && is_singular( CS_POST_TYPE ) && is_main_query() && ! post_password_required() ) {
 		ob_start();
 		do_action( 'cs_before_download_content', $post->ID );
 		$content = ob_get_clean() . $content;
@@ -439,7 +439,7 @@ add_filter( 'the_content', 'cs_before_download_content' );
 function cs_after_download_content( $content ) {
 	global $post;
 
-	if ( $post && $post->post_type == 'download' && is_singular( 'download' ) && is_main_query() && !post_password_required() ) {
+	if ( $post && $post->post_type == CS_POST_TYPE && is_singular( CS_POST_TYPE ) && is_main_query() && !post_password_required() ) {
 		ob_start();
 		do_action( 'cs_after_download_content', $post->ID );
 		$content .= ob_get_clean();
@@ -840,7 +840,7 @@ add_filter( 'body_class', 'cs_add_body_classes' );
  * @return array Modified array of classes
  */
 function cs_add_download_post_classes( $classes, $class = '', $post_id = false ) {
-	if( ! $post_id || get_post_type( $post_id ) !== 'download' || is_admin() ) {
+	if( ! $post_id || get_post_type( $post_id ) !== CS_POST_TYPE || is_admin() ) {
 		return $classes;
 	}
 
@@ -850,7 +850,7 @@ function cs_add_download_post_classes( $classes, $class = '', $post_id = false )
 		$classes[] = 'cs-download';
 
 		// Add category slugs
-		$categories = get_the_terms( $post_id, 'download_category' );
+		$categories = get_the_terms( $post_id, CS_CAT_TYPE );
 		if( ! empty( $categories ) ) {
 			foreach( $categories as $key => $value ) {
 				$classes[] = 'cs-download-cat-' . $value->slug;
@@ -858,7 +858,7 @@ function cs_add_download_post_classes( $classes, $class = '', $post_id = false )
 		}
 
 		// Add tag slugs
-		$tags = get_the_terms( $post_id, 'download_tag' );
+		$tags = get_the_terms( $post_id, CS_TAG_TYPE );
 		if( ! empty( $tags ) ) {
 			foreach( $tags as $key => $value ) {
 				$classes[] = 'cs-download-tag-' . $value->slug;
@@ -866,7 +866,7 @@ function cs_add_download_post_classes( $classes, $class = '', $post_id = false )
 		}
 
 		// Add cs-download
-		if( is_singular( 'download' ) ) {
+		if( is_singular( CS_POST_TYPE ) ) {
 			$classes[] = 'cs-download';
 		}
 	}
@@ -883,7 +883,7 @@ add_filter( 'post_class', 'cs_add_download_post_classes', 20, 3 );
  */
 function cs_add_oembed_price() {
 
-	if( 'download' !== get_post_type( get_the_ID() ) ) {
+	if( CS_POST_TYPE !== get_post_type( get_the_ID() ) ) {
 		return;
 	}
 
@@ -914,7 +914,7 @@ function cs_remove_embed_comments_button() {
 
 	$hide_comments = apply_filters( 'cs_embed_hide_comments', true, $post );
 
-	if ( ! empty( $post ) && $post->post_type == 'download' && true === $hide_comments ) {
+	if ( ! empty( $post ) && $post->post_type == CS_POST_TYPE && true === $hide_comments ) {
 		remove_action( 'embed_content_meta', 'print_embed_comments_button' );
 	}
 }
@@ -994,7 +994,7 @@ function cs_download_shortcode_item( $atts, $i ) {
 	$cs_download_shortcode_item_atts = $atts;
 	$cs_download_shortcode_item_i = $i;
 
-	cs_get_template_part( 'shortcode', 'download' );
+	cs_get_template_part( 'shortcode', CS_EX_DOWNLOAD_SHORTCODE );
 }
 add_action( 'cs_download_shortcode_item', 'cs_download_shortcode_item', 10, 2 );
 
@@ -1086,7 +1086,7 @@ function cs_download_shortcode_excerpt_length() {
 function cs_downloads_pagination( $atts, $downloads, $query ) {
 	if ( filter_var( $atts['pagination'], FILTER_VALIDATE_BOOLEAN ) ) {
 		$args = array(
-			'type'    => 'download',
+			'type'    => CS_POST_TYPE,
 			'format'  => '?paged=%#%',
 			'current' => max( 1, $query['paged'] ),
 			'total'   => $downloads->max_num_pages
@@ -1128,7 +1128,7 @@ function cs_pagination( $args = array() ) {
 	);
 
 	$args = wp_parse_args( $args, $defaults );
-	
+
 	/**
 	 * Filter pagination args.
 	 *

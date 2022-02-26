@@ -83,7 +83,7 @@ class CS_Batch_Downloads_Export extends CS_Batch_Export {
 		);
 
 		$args = array(
-			'post_type'      => 'download',
+			'post_type'      => CS_POST_TYPE,
 			'posts_per_page' => 30,
 			'paged'          => $this->step,
 			'orderby'        => 'ID',
@@ -159,14 +159,14 @@ class CS_Batch_Downloads_Export extends CS_Batch_Export {
 								break;
 						}
 					} elseif ( 'tags' == $key ) {
-						$terms = get_the_terms( $download->ID, 'download_tag' );
+						$terms = get_the_terms( $download->ID, CS_TAG_TYPE );
 
 						if ( $terms ) {
 							$terms       = wp_list_pluck( $terms, 'name' );
 							$row[ $key ] = implode( ' | ', $terms );
 						}
 					} elseif ( 'categories' == $key ) {
-						$terms = get_the_terms( $download->ID, 'download_category' );
+						$terms = get_the_terms( $download->ID, CS_CAT_TYPE );
 
 						if ( $terms ) {
 							$terms       = wp_list_pluck( $terms, 'name' );
@@ -196,7 +196,7 @@ class CS_Batch_Downloads_Export extends CS_Batch_Export {
 	 */
 	public function get_percentage_complete() {
 		$args = array(
-			'post_type'      => 'download',
+			'post_type'      => CS_POST_TYPE,
 			'posts_per_page' => - 1,
 			'post_status'    => 'any',
 			'fields'         => 'ids',

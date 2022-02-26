@@ -75,7 +75,7 @@ function cs_setup_cs_post_types() {
 		'hierarchical'       => false,
 		'supports'           => apply_filters( 'cs_download_supports', array( 'title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'author' ) ),
 	);
-	register_post_type( 'download', apply_filters( 'cs_download_post_type_args', $download_args ) );
+	register_post_type( CS_POST_TYPE, apply_filters( 'cs_download_post_type_args', $download_args ) );
 
 
 	/** Payment Post Type */
@@ -222,7 +222,7 @@ function cs_change_default_title( $title ) {
 
 	$screen = get_current_screen();
 
-	if ( 'download' === $screen->post_type ) {
+	if ( CS_POST_TYPE === $screen->post_type ) {
 		$label = cs_get_label_singular();
 		$title = sprintf( __( 'Enter %s name here', 'commercestore' ), $label );
 	}
@@ -255,11 +255,11 @@ function cs_setup_download_taxonomies() {
 		'menu_name'         => __( 'Categories', 'commercestore' ),
 	);
 
-	$category_args = apply_filters( 'cs_download_category_args', array(
+	$category_args = apply_filters( CSFilter::CATEGORY_ARGS, array(
 			'hierarchical' => true,
-			'labels'       => apply_filters( 'cs_download_category_labels', $category_labels ),
+			'labels'       => apply_filters( CSFilter::CATEGORY_LABELS, $category_labels ),
 			'show_ui'      => true,
-			'query_var'    => 'download_category',
+			'query_var'    => CS_CAT_TYPE,
 			'rewrite'      => array( 'slug' => $slug . '/category', 'with_front' => false, 'hierarchical' => true ),
 			'capabilities' => array(
 				'manage_terms' => 'manage_product_terms',
@@ -269,8 +269,8 @@ function cs_setup_download_taxonomies() {
 			),
 		)
 	);
-	register_taxonomy( 'download_category', array( 'download' ), $category_args );
-	register_taxonomy_for_object_type( 'download_category', 'download' );
+	register_taxonomy( CS_CAT_TYPE, array( CS_POST_TYPE ), $category_args );
+	register_taxonomy_for_object_type( CS_CAT_TYPE, CS_POST_TYPE );
 
 	/** Tags */
 	$tag_labels = array(
@@ -288,11 +288,11 @@ function cs_setup_download_taxonomies() {
 		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'commercestore' ), cs_get_label_singular() ),
 	);
 
-	$tag_args = apply_filters( 'cs_download_tag_args', array(
+	$tag_args = apply_filters( CSFilter::TAG_ARGS, array(
 			'hierarchical' => false,
-			'labels'       => apply_filters( 'cs_download_tag_labels', $tag_labels ),
+			'labels'       => apply_filters( CSFilter::TAG_LABELS, $tag_labels ),
 			'show_ui'      => true,
-			'query_var'    => 'download_tag',
+			'query_var'    => CS_TAG_TYPE,
 			'rewrite'      => array( 'slug' => $slug . '/tag', 'with_front' => false, 'hierarchical' => true ),
 			'capabilities' => array(
 				'manage_terms' => 'manage_product_terms',
@@ -303,8 +303,8 @@ function cs_setup_download_taxonomies() {
 		)
 	);
 
-	register_taxonomy( 'download_tag', array( 'download' ), $tag_args );
-	register_taxonomy_for_object_type( 'download_tag', 'download' );
+	register_taxonomy( CS_TAG_TYPE, array( CS_POST_TYPE ), $tag_args );
+	register_taxonomy_for_object_type( CS_TAG_TYPE, CS_POST_TYPE );
 }
 add_action( 'init', 'cs_setup_download_taxonomies', 0 );
 
@@ -315,10 +315,10 @@ add_action( 'init', 'cs_setup_download_taxonomies', 0 );
  * @param  string $taxonomy The Taxonomy to get labels for
  * @return array            Associative array of labels (name = plural)
  */
-function cs_get_taxonomy_labels( $taxonomy = 'download_category' ) {
+function cs_get_taxonomy_labels( $taxonomy = CS_CAT_TYPE ) {
 	$allowed_taxonomies = apply_filters( 'cs_allowed_download_taxonomies', array(
-		'download_category',
-		'download_tag',
+		CS_CAT_TYPE,
+		CS_TAG_TYPE,
 	) );
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies, true ) ) {
@@ -428,7 +428,7 @@ function cs_updated_messages( $messages ) {
 	$url2 = cs_get_label_singular();
 	$url3 = '</a>';
 
-	$messages['download'] = array(
+	$messages[CS_EX_DOWNLOAD_MESSAGES] = array(
 		1 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'commercestore' ), $url1, $url2, $url3 ),
 		4 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'commercestore' ), $url1, $url2, $url3 ),
 		6 => sprintf( __( '%2$s published. %1$sView %2$s%3$s.', 'commercestore' ), $url1, $url2, $url3 ),
@@ -455,7 +455,7 @@ function cs_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 	$singular = cs_get_label_singular();
 	$plural   = cs_get_label_plural();
 
-	$bulk_messages['download'] = array(
+	$bulk_messages[CS_EX_DOWNLOAD_MESSAGES_TYPE] = array(
 		'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'commercestore' ), $bulk_counts['updated'], $singular, $plural ),
 		'locked'    => sprintf( _n( '%1$s %2$s not updated, somebody is editing it.', '%1$s %3$s not updated, somebody is editing them.', $bulk_counts['locked'], 'commercestore' ), $bulk_counts['locked'], $singular, $plural ),
 		'deleted'   => sprintf( _n( '%1$s %2$s permanently deleted.', '%1$s %3$s permanently deleted.', $bulk_counts['deleted'], 'commercestore' ), $bulk_counts['deleted'], $singular, $plural ),
@@ -480,7 +480,7 @@ add_filter( 'bulk_post_updated_messages', 'cs_bulk_updated_messages', 10, 2 );
  * @return array
  */
 function cs_download_row_actions( $actions, $post ) {
-	if ( 'download' === $post->post_type ) {
+	if ( CS_POST_TYPE === $post->post_type ) {
 		return array_merge( array( 'id' => '#' . $post->ID ), $actions );
 	}
 

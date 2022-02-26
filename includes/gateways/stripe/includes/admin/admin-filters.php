@@ -54,9 +54,9 @@ function csx_payment_status_filters( $views ) {
 	$cancelled_count           = '&nbsp;<span class="count">(' . $payment_count->cancelled . ')</span>';
 	$current                   = isset( $_GET['status'] ) ? $_GET['status'] : '';
 
-	$views['preapproval']         = sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( 'status', 'preapproval', admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ), $current === 'preapproval' ? ' class="current"' : '', __( 'Preapproved', 'commercestore' ) . $preapproval_count );
-	$views['pending_preapproval'] = sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( 'status', 'preapproval_pending', admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ), $current === 'preapproval_pending' ? ' class="current"' : '', __( 'Preapproval Pending', 'commercestore' ) . $preapproval_pending_count );
-	$views['cancelled']           = sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( 'status', 'cancelled', admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ), $current === 'cancelled' ? ' class="current"' : '', __( 'Cancelled', 'commercestore' ) . $cancelled_count );
+	$views['preapproval']         = sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( 'status', 'preapproval', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ), $current === 'preapproval' ? ' class="current"' : '', __( 'Preapproved', 'commercestore' ) . $preapproval_count );
+	$views['pending_preapproval'] = sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( 'status', 'preapproval_pending', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ), $current === 'preapproval_pending' ? ' class="current"' : '', __( 'Preapproval Pending', 'commercestore' ) . $preapproval_pending_count );
+	$views['cancelled']           = sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( 'status', 'cancelled', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ), $current === 'cancelled' ? ' class="current"' : '', __( 'Cancelled', 'commercestore' ) . $cancelled_count );
 
 	return $views;
 }
@@ -96,10 +96,10 @@ function csx_payments_column_data( $value, $payment_id, $column_name ) {
 		$value .= '<p class="row-actions">';
 
 		if ( in_array( $status, array( 'preapproval', 'preapproval_pending' ), true ) ) {
-			$actions[] = '<a href="' . esc_url( add_query_arg( $preapproval_args, admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ) . '">' . __( 'Process', 'commercestore' ) . '</a>';
+			$actions[] = '<a href="' . esc_url( add_query_arg( $preapproval_args, admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ) . '">' . __( 'Process', 'commercestore' ) . '</a>';
 
 			if ( 'cancelled' !== $status ) {
-				$actions[] = '<span class="delete"><a href="' . esc_url( add_query_arg( $cancel_args, admin_url( 'edit.php?post_type=download&page=cs-payment-history' ) ) ) . '">' . __( 'Cancel', 'commercestore' ) . '</a></span>';
+				$actions[] = '<span class="delete"><a href="' . esc_url( add_query_arg( $cancel_args, admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' ) ) ) . '">' . __( 'Cancel', 'commercestore' ) . '</a></span>';
 			}
 		}
 

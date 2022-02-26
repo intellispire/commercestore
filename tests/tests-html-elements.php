@@ -13,7 +13,7 @@ class Test_HTML_Elements extends CS_UnitTestCase {
 	 * @covers ::product_dropdown
 	 */
 	public function test_product_dropdown() {
-		$expected = '<select name="products" id="products" class="cs-select " data-placeholder="Choose a Product" data-search-type="download" data-search-placeholder="Search Products">';
+		$expected = '<select name="products" id="products" class="cs-select " data-placeholder="Choose a Product" data-search-type="'. CS_POST_TYPE .'" data-search-placeholder="Search Products">';
 		$this->assertStringContainsString( $expected, CS()->html->product_dropdown() );
 	}
 

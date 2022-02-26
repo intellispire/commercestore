@@ -17,7 +17,7 @@ class Tests_Checkout extends CS_UnitTestCase {
 
 		$post_id = static::factory()->post->create( array(
 			'post_title'  => 'Test Download',
-			'post_type'   => 'download',
+			'post_type'   => CS_POST_TYPE,
 			'post_status' => 'publish',
 		) );
 

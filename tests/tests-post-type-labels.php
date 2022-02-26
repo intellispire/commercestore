@@ -52,7 +52,7 @@ class Tests_Post_Type_Labels extends CS_UnitTestCase {
 		// Negative test for our change to exclude singular post type label in #3212
 		$this->assertTrue( in_array( 'Categories', $category_labels ) );
 
-		$tag_labels = cs_get_taxonomy_labels( 'download_tag' );
+		$tag_labels = cs_get_taxonomy_labels( CS_TAG_TYPE );
 		$this->assertInternalType( 'array', $tag_labels );
 		$this->assertArrayHasKey( 'name', $tag_labels );
 		$this->assertArrayHasKey( 'singular_name', $tag_labels );

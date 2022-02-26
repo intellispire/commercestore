@@ -490,7 +490,7 @@ function cs_add_collection_to_cart( $taxonomy, $terms ) {
 	$cart_item_ids = array();
 
 	$items = get_posts( array(
-		'post_type'      => 'download',
+		'post_type'      => CS_POST_TYPE,
 		'posts_per_page' => -1,
 		$taxonomy        => $terms
 	) );

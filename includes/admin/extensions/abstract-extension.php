@@ -156,7 +156,7 @@ abstract class Extension {
 	 * @return bool
 	 */
 	protected function is_download_edit_screen() {
-		return cs_is_admin_page( 'download', 'edit' ) || cs_is_admin_page( 'download', 'new' );
+		return cs_is_admin_page( CS_EX_DOWNLOAD_ADMIN_PAGE, 'edit' ) || cs_is_admin_page( CS_EX_DOWNLOAD_ADMIN_PAGE, 'new' );
 	}
 
 	/**
@@ -315,7 +315,7 @@ abstract class Extension {
 				'button_text' => sprintf( __( 'View %s', 'commercestore' ), cs_get_label_plural() ),
 				'href'        => add_query_arg(
 					array(
-						'post_type' => 'download',
+						'post_type' => CS_POST_TYPE,
 					),
 					admin_url( 'edit.php' )
 				),
@@ -327,7 +327,7 @@ abstract class Extension {
 			'button_text' => sprintf( __( 'Configure %s', 'commercestore' ), $product_data->title ),
 			'href'        => add_query_arg(
 				array(
-					'post_type' => 'download',
+					'post_type' => CS_POST_TYPE,
 					'page'      => 'cs-settings',
 					'tab'       => urlencode( $tab ),
 					'section'   => urlencode( $section ),

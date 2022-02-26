@@ -45,7 +45,7 @@ function csx_admin_notices_register() {
 					sprintf(
 						/* translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
 						__( 'The Stripe extension for Easy Digital Downloads supports Stripe Connect for easier setup and improved security. %1$sClick here%2$s to learn more about connecting your Stripe account.', 'commercestore' ),
-						'<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=cs-stripe' ) ) . '">',
+						'<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=gateways&section=cs-stripe' ) ) . '">',
 						'</a>'
 					),
 					array(
@@ -83,7 +83,7 @@ function csx_admin_notices_register() {
 						__( '%1$sCredit card payments with Stripe are currently disabled.%2$s', 'commercestore' ),
 						'<strong>',
 						'</strong>'
-					) 
+					)
 					. '<br />' .
 					sprintf(
 						/* translators: %1$s Opening code tag, do not translate. %2$s Closing code tag, do not translate. */

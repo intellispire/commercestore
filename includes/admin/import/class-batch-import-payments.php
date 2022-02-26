@@ -310,7 +310,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 				foreach( $downloads as $download ) {
 
 					if( is_array( $download ) ) {
-						$download_name = $download['download'];
+						$download_name = $download[CS_POST_TYPE];
 						$price         = $download['price'];
 						$tax           = $download['tax'];
 						$price_id      = $download['price_id'];
@@ -521,7 +521,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 			return false;
 		}
 
-		$download = get_page_by_title( $title, OBJECT, 'download' );
+		$download = get_page_by_title( $title, OBJECT, CS_POST_TYPE );
 
 		if( $download ) {
 
@@ -530,7 +530,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 		} else {
 
 			$args = array(
-				'post_type'   => 'download',
+				'post_type'   => CS_POST_TYPE,
 				'post_title'  => $title,
 				'post_author' => get_current_user_id()
 			);
@@ -579,7 +579,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 				$price_id = isset( $matches[1][1] ) ? trim( $matches[1][1] ) : false;
 
 				$d_array[] = array(
-					'download' => trim( $d[0] ),
+					CS_POST_TYPE => trim( $d[0] ),
 					'price'    => $price - $tax,
 					'tax'      => $tax,
 					'price_id' => $price_id,
@@ -621,7 +621,7 @@ class CS_Batch_Payments_Import extends CS_Batch_Import {
 	 * @return string
 	 */
 	public function get_list_table_url() {
-		return admin_url( 'edit.php?post_type=download&page=cs-payment-history' );
+		return admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' );
 	}
 
 	/**

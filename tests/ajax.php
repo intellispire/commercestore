@@ -220,7 +220,8 @@ class Tests_AJAX extends WP_UnitTestCase {
 		$expected = '<select class="cs_price_options_select cs-select cs-select"><option value="0">Simple</option><option value="1">Advanced</option></select>';
 		//$this->assertEquals( $expected, $this->_last_response );
 	}
-
+/* @todo: can't have a class defined inside a function
+ *
 	public function test_cs_test_ajax_works() {
 		$this->markTestIncomplete( 'Needs to be reworked per #3475' );
 		$this->assertTrue( cs_test_ajax_works() );
@@ -243,4 +244,6 @@ class Tests_AJAX extends WP_UnitTestCase {
 		$this->assertTrue( cs_test_ajax_works() );
 		$this->assertEmpty( get_transient( '_cs_ajax_works' ) );
 	}
+*/
+
 }

@@ -243,7 +243,7 @@ function cs_add_customer_email( $args = array() ) {
 			}
 
 		} else {
-			$redirect = admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer_id . '&cs-message=email-added' );
+			$redirect = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer_id . '&cs-message=email-added' );
 			$output = array(
 				'success'  => true,
 				'message'  => __( 'Email successfully added to customer.', 'commercestore' ),
@@ -303,14 +303,14 @@ function cs_remove_customer_email() {
 
 	$customer = new CS_Customer( $_GET['id'] );
 	if ( $customer->remove_email( $_GET['email'] ) ) {
-		$url           = add_query_arg( 'cs-message', 'email-removed', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url           = add_query_arg( 'cs-message', 'email-removed', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ) );
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : cs_get_bot_name();
 		$customer_note = sprintf( __( 'Email address %s removed by %s', 'commercestore' ), sanitize_email( $_GET['email'] ), $user_login );
 		$customer->add_note( $customer_note );
 
 	} else {
-		$url = add_query_arg( 'cs-message', 'email-remove-failed', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url = add_query_arg( 'cs-message', 'email-remove-failed', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ) );
 	}
 
 	cs_redirect( $url );
@@ -344,14 +344,14 @@ function cs_set_customer_primary_email() {
 
 	$customer = new CS_Customer( $_GET['id'] );
 	if ( $customer->set_primary_email( $_GET['email'] ) ) {
-		$url           = add_query_arg( 'cs-message', 'primary-email-updated', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url           = add_query_arg( 'cs-message', 'primary-email-updated', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ) );
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : cs_get_bot_name();
 		$customer_note = sprintf( __( 'Email address %s set as primary by %s', 'commercestore' ), sanitize_email( $_GET['email'] ), $user_login );
 		$customer->add_note( $customer_note );
 
 	} else {
-		$url = add_query_arg( 'cs-message', 'primary-email-failed', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url = add_query_arg( 'cs-message', 'primary-email-failed', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ) );
 	}
 
 	cs_redirect( $url );
@@ -390,7 +390,7 @@ function cs_customer_delete( $args = array() ) {
 	}
 
 	if ( cs_get_errors() ) {
-		cs_redirect( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer_id ) );
+		cs_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer_id ) );
 	}
 
 	$customer = new CS_Customer( $customer_id );
@@ -421,16 +421,16 @@ function cs_customer_delete( $args = array() ) {
 				}
 			}
 
-			$redirect = admin_url( 'edit.php?post_type=download&page=cs-customers&cs-message=customer-deleted' );
+			$redirect = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&cs-message=customer-deleted' );
 
 		} else {
 			cs_set_error( 'cs-customer-delete-failed', __( 'Error deleting customer', 'commercestore' ) );
-			$redirect = admin_url( 'edit.php?post_type=download&page=cs-customers&view=delete&id=' . $customer_id );
+			$redirect = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=delete&id=' . $customer_id );
 		}
 
 	} else {
 		cs_set_error( 'cs-customer-delete-invalid-id', __( 'Invalid Customer ID', 'commercestore' ) );
-		$redirect = admin_url( 'edit.php?post_type=download&page=cs-customers' );
+		$redirect = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers' );
 	}
 
 	cs_redirect( $redirect );
@@ -515,7 +515,7 @@ function cs_process_admin_user_verification() {
 	$customer = new CS_Customer( $_GET['id'] );
 	cs_set_user_to_verified( $customer->user_id );
 
-	$url = add_query_arg( 'cs-message', 'user-verified', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+	$url = add_query_arg( 'cs-message', 'user-verified', admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ) );
 
 	cs_redirect( $url );
 }

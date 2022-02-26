@@ -500,7 +500,7 @@ class CS_License {
 
 				$messages[] = sprintf(
 					__( 'You have invalid or expired license keys for CommerceStore. <a href="%s">Fix this</a>', 'commercestore' ),
-					admin_url( 'edit.php?post_type=download&page=cs-settings&tab=licenses' )
+					admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=licenses' )
 				);
 
 				$showed_invalid_message = true;
@@ -528,7 +528,7 @@ class CS_License {
 		$license = get_option( $this->item_shortname . '_license_active' );
 
 		if ( ( ! is_object( $license ) || empty( $license->license ) || 'valid' !== $license->license ) && empty( $showed_imissing_key_message[ $this->item_shortname ] ) ) {
-			echo '&nbsp;<strong><a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=licenses' ) ) . '">' . __( 'Enter valid license key for automatic updates.', 'commercestore' ) . '</a></strong>';
+			echo '&nbsp;<strong><a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=licenses' ) ) . '">' . __( 'Enter valid license key for automatic updates.', 'commercestore' ) . '</a></strong>';
 			$showed_imissing_key_message[ $this->item_shortname ] = true;
 		}
 

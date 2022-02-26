@@ -956,7 +956,7 @@ class CS_Recurring_Gateway {
 
 			if( is_admin() ) {
 
-				wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=cancelled&id=' . $subscription->id ) );
+				wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=cancelled&id=' . $subscription->id ) );
 				exit;
 
 			} else {
@@ -1013,7 +1013,7 @@ class CS_Recurring_Gateway {
 
 			if( is_admin() ) {
 
-				wp_redirect( admin_url( 'edit.php?post_type=download&page=cs-subscriptions&cs-message=reactivated&id=' . $subscription->id ) );
+				wp_redirect( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscriptions&cs-message=reactivated&id=' . $subscription->id ) );
 				exit;
 
 			} else {

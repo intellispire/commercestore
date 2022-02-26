@@ -386,7 +386,7 @@ function cs_ajax_remove_discount() {
 
 		/**
 		 * Allow for custom remove discount code handling.
-		 * 
+		 *
 		 * @since 2.11.4
 		 */
 		$return = apply_filters( 'cs_ajax_remove_discount_response', $return );
@@ -451,7 +451,7 @@ function cs_ajax_get_download_title() {
 		$post_type = get_post_type( $post_id );
 		$title     = 'fail';
 
-		if ( 'download' === $post_type ) {
+		if ( CS_POST_TYPE === $post_type ) {
 			$post_title = get_the_title( $_POST['download_id'] );
 			if ( $post_title ) {
 				echo $title = $post_title;
@@ -643,7 +643,7 @@ function cs_ajax_download_search() {
 	$args = array(
 		'orderby'        => 'title',
 		'order'          => 'ASC',
-		'post_type'      => 'download',
+		'post_type'      => CS_POST_TYPE,
 		'posts_per_page' => 50,
 		'post_status'    => implode( ',', $status ), // String
 		'post__not_in'   => $excludes,               // Array
@@ -844,7 +844,7 @@ function cs_check_for_download_price_variations() {
 	$download_id = intval( $_POST['download_id'] );
 	$download    = get_post( $download_id );
 
-	if ( 'download' != $download->post_type ) {
+	if ( CS_POST_TYPE != $download->post_type ) {
 		die( '-2' );
 	}
 
@@ -953,8 +953,8 @@ function cs_ajax_add_order_item() {
 		? sanitize_text_field( $_POST['nonce'] )
 		: '';
 
-	$download = isset( $_POST['download'] )
-		? cs_parse_product_dropdown_value( sanitize_text_field( $_POST['download'] ) )
+	$download = isset( $_POST[CS_POST_TYPE] )
+		? cs_parse_product_dropdown_value( sanitize_text_field( $_POST[CS_POST_TYPE] ) )
 		: array();
 
 	$country = isset( $_POST['country'] )
@@ -1305,7 +1305,7 @@ function cs_ajax_customer_details() {
 		'date_created'      => esc_html( $customer->date_created ),
 		'date_created_i18n' => esc_html( cs_date_i18n( $customer->date_created ) ),
 		'_links'            => array(
-			'self' => esc_url_raw( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) ),
+			'self' => esc_url_raw( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ) ),
 		),
 	);
 

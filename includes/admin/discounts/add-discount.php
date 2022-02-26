@@ -210,7 +210,7 @@ defined( 'ABSPATH' ) || exit;
 						<span class="description"><?php esc_html_e( 'Prevent customers from using this discount more than once.', 'commercestore' ); ?></span>
 					</td>
 				</tr>
-				
+
 				<?php
 				/**
 				 * Action after "Use Once Per Customer" checkbox.
@@ -219,7 +219,7 @@ defined( 'ABSPATH' ) || exit;
 				 */
 				?>
 				<?php do_action( 'cs_add_discount_form_after_use_once' ); ?>
-				
+
 			</tbody>
 		</table>
 
@@ -228,7 +228,7 @@ defined( 'ABSPATH' ) || exit;
 		<p class="submit">
 			<input type="hidden" name="type" value="discount" />
 			<input type="hidden" name="cs-action" value="add_discount"/>
-			<input type="hidden" name="cs-redirect" value="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-discounts' ) ); ?>"/>
+			<input type="hidden" name="cs-redirect" value="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-discounts' ) ); ?>"/>
 			<input type="hidden" name="cs-discount-nonce" value="<?php echo wp_create_nonce( 'cs_discount_nonce' ); // WPCS: XSS ok. ?>"/>
 			<input type="submit" value="<?php esc_html_e( 'Add Discount Code', 'commercestore' ); ?>" class="button-primary"/>
 		</p>

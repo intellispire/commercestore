@@ -93,7 +93,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 
 				// Import Download
 				$args = array(
-					'post_type'    => 'download',
+					'post_type'    => CS_POST_TYPE,
 					'post_title'   => '',
 					'post_name'    => '',
 					'post_status'  => '',
@@ -170,7 +170,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 
 					$categories = $this->str_to_array( $row[ $this->field_mapping['categories'] ] );
 
-					$this->set_taxonomy_terms( $download_id, $categories, 'download_category' );
+					$this->set_taxonomy_terms( $download_id, $categories, CS_CAT_TYPE );
 
 				}
 
@@ -179,7 +179,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 
 					$tags = $this->str_to_array( $row[ $this->field_mapping['tags'] ] );
 
-					$this->set_taxonomy_terms( $download_id, $tags, 'download_tag' );
+					$this->set_taxonomy_terms( $download_id, $tags, CS_TAG_TYPE );
 
 				}
 
@@ -481,7 +481,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 	 * @since 2.6
 	 * @return void
 	 */
-	private function set_taxonomy_terms( $download_id = 0, $terms = array(), $taxonomy = 'download_category' ) {
+	private function set_taxonomy_terms( $download_id = 0, $terms = array(), $taxonomy = CS_CAT_TYPE ) {
 
 		$terms = $this->maybe_create_terms( $terms, $taxonomy );
 
@@ -499,7 +499,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 	 * @since 2.6
 	 * @return array
 	 */
-	private function maybe_create_terms( $terms = array(), $taxonomy = 'download_category' ) {
+	private function maybe_create_terms( $terms = array(), $taxonomy = CS_CAT_TYPE ) {
 
 		// Return of term IDs
 		$term_ids = array();
@@ -550,7 +550,7 @@ class CS_Batch_Downloads_Import extends CS_Batch_Import {
 	 * @return string
 	 */
 	public function get_list_table_url() {
-		return admin_url( 'edit.php?post_type=download' );
+		return admin_url( 'edit.php?post_type=' . CS_POST_TYPE );
 	}
 
 	/**

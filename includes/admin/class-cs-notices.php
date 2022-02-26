@@ -221,7 +221,7 @@ class CS_Notices {
 		if ( empty( $purchase_page ) || ( 'trash' === get_post_status( $purchase_page ) ) ) {
 			$this->add_notice( array(
 				'id'             => 'cs-no-purchase-page',
-				'message'        => sprintf( __( 'No checkout page is configured. Set one in <a href="%s">Settings</a>.', 'commercestore' ), admin_url( 'edit.php?post_type=download&page=cs-settings&tab=general&section=pages' ) ),
+				'message'        => sprintf( __( 'No checkout page is configured. Set one in <a href="%s">Settings</a>.', 'commercestore' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=general&section=pages' ) ),
 				'class'          => 'error',
 				'is_dismissible' => false
 			) );
@@ -316,7 +316,7 @@ class CS_Notices {
 				'id'             => 'cs-recount-earnings',
 				'class'          => 'error',
 				'is_dismissible' => false,
-				'message'        => sprintf( __( 'CommerceStore 2.5 contains a <a href="%s">built in recount tool</a>. Please <a href="%s">deactivate the CommerceStore - Recount Earnings plugin</a>', 'commercestore' ), admin_url( 'edit.php?post_type=download&page=cs-tools&tab=general' ), admin_url( 'plugins.php' ) )
+				'message'        => sprintf( __( 'CommerceStore 2.5 contains a <a href="%s">built in recount tool</a>. Please <a href="%s">deactivate the CommerceStore - Recount Earnings plugin</a>', 'commercestore' ), admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=general' ), admin_url( 'plugins.php' ) )
 			) );
 		}
 	}
@@ -381,7 +381,7 @@ class CS_Notices {
 
 				// URL to fix this
 				$url = add_query_arg( array(
-					'post_type' => 'download',
+					'post_type' => CS_POST_TYPE,
 					'page'      => 'cs-settings',
 					'tab'       => 'gateways'
 				) );
@@ -730,7 +730,7 @@ class CS_Notices {
 		wp_enqueue_script( 'cs-admin-notices', CS_PLUGIN_URL . 'assets/js/cs-admin-notices.js', array( 'jquery' ), CS_VERSION, true );
 		$view_url = add_query_arg(
 			array(
-				'post_type' => 'download',
+				'post_type' => CS_POST_TYPE,
 				'page'      => 'cs-tools',
 				'tab'       => 'debug_log',
 			),

@@ -152,7 +152,7 @@ class CS_Categories_Reports_Table extends List_Table {
 
 		} else {
 			$reports_data = array();
-			$categories   = get_terms( 'download_category', array(
+			$categories   = get_terms( CS_CAT_TYPE, array(
 				'parent'       => 0,
 				'hierarchical' => 0,
 				'hide_empty'   => false
@@ -161,7 +161,7 @@ class CS_Categories_Reports_Table extends List_Table {
 			foreach ( $categories as $category ) {
 
 				$category_slugs = array( $category->slug );
-				$child_terms    = get_terms( 'download_category', array(
+				$child_terms    = get_terms( CS_CAT_TYPE, array(
 					'parent'       => $category->term_id,
 					'hierarchical' => 0
 				) );
@@ -173,12 +173,12 @@ class CS_Categories_Reports_Table extends List_Table {
 				}
 
 				$downloads = get_posts( array(
-					'post_type'      => 'download',
+					'post_type'      => CS_POST_TYPE,
 					'posts_per_page' => -1,
 					'fields'         => 'ids',
 					'tax_query'      => array(
 						array(
-							'taxonomy' => 'download_category',
+							'taxonomy' => CS_CAT_TYPE,
 							'field'    => 'slug',
 							'terms'    => $category_slugs
 						)
@@ -223,12 +223,12 @@ class CS_Categories_Reports_Table extends List_Table {
 				if ( ! empty( $child_terms ) ) {
 					foreach ( $child_terms as $child_term ) {
 						$child_downloads = get_posts( array(
-							'post_type'      => 'download',
+							'post_type'      => CS_POST_TYPE,
 							'posts_per_page' => -1,
 							'fields'         => 'ids',
 							'tax_query'      => array(
 								array(
-									'taxonomy' => 'download_category',
+									'taxonomy' => CS_CAT_TYPE,
 									'field'    => 'slug',
 									'terms'    => $child_term->slug
 								)

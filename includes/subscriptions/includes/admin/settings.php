@@ -238,16 +238,16 @@ function cs_recurring_renewal_reminders_settings( $args ) {
 					<td><?php echo esc_html( $notice['subject'] ); ?></td>
 					<td><?php echo esc_html( $reminders->get_notice_period_label( $key ) ); ?></td>
 					<td>
-						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'commercestore' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'commercestore' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'commercestore' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'commercestore' ); ?></a>
 					</td>
 				</tr>
 				<?php $i ++; endforeach; ?>
 		<?php endif; ?>
 	</table>
 	<p>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=renewal' ) ); ?>" class="button-secondary" id="cs_recurring_add_renewal_notice"><?php _e( 'Add Renewal Reminder', 'commercestore' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=renewal' ) ); ?>" class="button-secondary" id="cs_recurring_add_renewal_notice"><?php _e( 'Add Renewal Reminder', 'commercestore' ); ?></a>
 	</p>
 	<?php
 	echo ob_get_clean();
@@ -284,16 +284,16 @@ function cs_recurring_expiration_reminders_settings( $args ) {
 					<td><?php echo esc_html( $notice['subject'] ); ?></td>
 					<td><?php echo esc_html( $reminders->get_notice_period_label( $key ) ); ?></td>
 					<td>
-						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'commercestore' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'commercestore' ); ?></a>&nbsp;|
-						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'commercestore' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_recurring_action=edit-recurring-reminder-notice&notice=' . $key ) ); ?>" class="cs-recurring-edit-reminder-notice" data-key="<?php echo esc_attr( $key ); ?>"><?php _e( 'Edit', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_action=recurring_send_test_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-recurring-send-test-reminder-notice"><?php _e( 'Send Test Email', 'commercestore' ); ?></a>&nbsp;|
+						<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_action=recurring_delete_reminder_notice&notice-id=' . $key ) ) ); ?>" class="cs-delete"><?php _e( 'Delete', 'commercestore' ); ?></a>
 					</td>
 				</tr>
 				<?php $i ++; endforeach; ?>
 		<?php endif; ?>
 	</table>
 	<p>
-		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=expiration' ) ); ?>" class="button-secondary" id="cs_recurring_add_expiration_notice"><?php _e( 'Add Expiration Reminder', 'commercestore' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-subscription-reminder-notice&cs_recurring_action=add-recurring-reminder-notice&cs_recurring_reminder_type=expiration' ) ); ?>" class="button-secondary" id="cs_recurring_add_expiration_notice"><?php _e( 'Add Expiration Reminder', 'commercestore' ); ?></a>
 	</p>
 	<?php
 	echo ob_get_clean();
@@ -312,7 +312,7 @@ function cs_recurring_add_notices_page() {
 	global $cs_recurring_reminders_page;
 
 	$cs_recurring_reminders_page = add_submenu_page(
-		'edit.php?post_type=download',
+		'edit.php?post_type=' . CS_POST_TYPE,
 		__( 'Subscription Reminder', 'commercestore' ),
 		__( 'Subscription Reminder', 'commercestore' ),
 		'manage_shop_settings',
@@ -331,7 +331,7 @@ add_action( 'admin_menu', 'cs_recurring_add_notices_page', 10 );
  * @return      void
  */
 function cs_recurring_hide_reminder_notice_page() {
-	remove_submenu_page( 'edit.php?post_type=download', 'cs-subscription-reminder-notice' );
+	remove_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, 'cs-subscription-reminder-notice' );
 }
 
 /**
@@ -579,7 +579,7 @@ add_filter( "cs_settings_{$settings_tab}", 'cs_recurring_guest_checkout_descript
 function cs_recurring_get_email_settings_url() {
 	return add_query_arg(
 		array(
-			'post_type' => 'download',
+			'post_type' => CS_POST_TYPE,
 			'page'      => 'cs-settings',
 			'tab'       => 'emails',
 			'section'   => 'recurring',

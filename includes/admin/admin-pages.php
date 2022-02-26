@@ -83,12 +83,12 @@ function cs_add_options_link() {
 	$customer_view_role  = apply_filters( 'cs_view_customers_role', 'view_shop_reports' );
 
 	// Setup pages
-	$cs_payments_page   = add_submenu_page( 'edit.php?post_type=download', __( 'Orders',       'commercestore' ), __( 'Orders',    'commercestore' ), 'edit_shop_payments',    'cs-payment-history', 'cs_payment_history_page' );
-	$cs_customers_page  = add_submenu_page( 'edit.php?post_type=download', __( 'Customers',    'commercestore' ), __( 'Customers', 'commercestore' ), $customer_view_role,     'cs-customers',       'cs_customers_page'       );
-	$cs_discounts_page  = add_submenu_page( 'edit.php?post_type=download', __( 'Discounts',    'commercestore' ), __( 'Discounts', 'commercestore' ), 'manage_shop_discounts', 'cs-discounts',       'cs_discounts_page'       );
-	$cs_reports_page    = add_submenu_page( 'edit.php?post_type=download', __( 'Reports',      'commercestore' ), __( 'Reports',   'commercestore' ), 'view_shop_reports',     'cs-reports',         'cs_reports_page'         );
-	$cs_settings_page   = add_submenu_page( 'edit.php?post_type=download', __( 'CS Settings', 'commercestore' ), __( 'Settings',  'commercestore' ), 'manage_shop_settings',  'cs-settings',        'cs_options_page'         );
-	$cs_tools_page      = add_submenu_page( 'edit.php?post_type=download', __( 'CS Tools',    'commercestore' ), __( 'Tools',     'commercestore' ), 'manage_shop_settings',  'cs-tools',           'cs_tools_page'           );
+	$cs_payments_page   = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Orders',       'commercestore' ), __( 'Orders',    'commercestore' ), 'edit_shop_payments',    'cs-payment-history', 'cs_payment_history_page' );
+	$cs_customers_page  = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Customers',    'commercestore' ), __( 'Customers', 'commercestore' ), $customer_view_role,     'cs-customers',       'cs_customers_page'       );
+	$cs_discounts_page  = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Discounts',    'commercestore' ), __( 'Discounts', 'commercestore' ), 'manage_shop_discounts', 'cs-discounts',       'cs_discounts_page'       );
+	$cs_reports_page    = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'Reports',      'commercestore' ), __( 'Reports',   'commercestore' ), 'view_shop_reports',     'cs-reports',         'cs_reports_page'         );
+	$cs_settings_page   = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'CS Settings', 'commercestore' ), __( 'Settings',  'commercestore' ), 'manage_shop_settings',  'cs-settings',        'cs_options_page'         );
+	$cs_tools_page      = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'CS Tools',    'commercestore' ), __( 'Tools',     'commercestore' ), 'manage_shop_settings',  'cs-tools',           'cs_tools_page'           );
 
 	// Setup hidden upgrades page
 	$cs_upgrades_screen = add_submenu_page( null, __( 'CS Upgrades', 'commercestore' ), __( 'CS Upgrades', 'commercestore' ), 'manage_shop_settings', 'cs-upgrades', 'cs_upgrades_screen' );
@@ -97,7 +97,7 @@ function cs_add_options_link() {
 	$submenu['index.php'][] = array(
 		__( 'Store Reports', 'commercestore' ),
 		'view_shop_reports',
-		'edit.php?post_type=download&page=cs-reports',
+		'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports',
 	);
 }
 add_action( 'admin_menu', 'cs_add_options_link', 10 );
@@ -112,7 +112,7 @@ add_action( 'admin_menu', 'cs_add_options_link', 10 );
 function cs_add_extentions_link() {
 	global $cs_add_ons_page;
 
-	$cs_add_ons_page = add_submenu_page( 'edit.php?post_type=download', __( 'CS Extensions', 'commercestore' ), __( 'Extensions', 'commercestore' ), 'manage_shop_settings', 'cs-addons', 'cs_add_ons_page' );
+	$cs_add_ons_page = add_submenu_page( 'edit.php?post_type=' . CS_POST_TYPE, __( 'CS Extensions', 'commercestore' ), __( 'Extensions', 'commercestore' ), 'manage_shop_settings', 'cs-addons', 'cs_add_ons_page' );
 }
 add_action( 'admin_menu', 'cs_add_extentions_link', 99999 );
 
@@ -174,25 +174,25 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 	$tab        = isset( $_GET['tab'] )        ? strtolower( $_GET['tab'] )        : false;
 
 	switch ( $passed_page ) {
-		case 'download':
+		case CS_POST_TYPE:
 			switch ( $passed_view ) {
 				case 'list-table':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' ) {
 						$found = true;
 					}
 					break;
 				case 'edit':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'post.php' ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'post.php' ) {
 						$found = true;
 					}
 					break;
 				case 'new':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'post-new.php' ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'post-new.php' ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) || 'download' === $post_type || ( 'post-new.php' === $pagenow && 'download' === $post_type ) ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) || CS_POST_TYPE === $post_type || ( 'post-new.php' === $pagenow && CS_POST_TYPE === $post_type ) ) {
 						$found = true;
 					}
 					break;
@@ -202,17 +202,17 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 			switch ( $passed_view ) {
 				case 'list-table':
 				case 'new':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' !== $action && 'download_category' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' !== $action && CS_CAT_TYPE === $taxonomy ) {
 						$found = true;
 					}
 					break;
 				case 'edit':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' === $action && 'download_category' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' === $action && CS_CAT_TYPE === $taxonomy ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit-tags.php' && 'download_category' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && CS_CAT_TYPE === $taxonomy ) {
 						$found = true;
 					}
 					break;
@@ -222,17 +222,17 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 			switch ( $passed_view ) {
 				case 'list-table':
 				case 'new':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' !== $action && 'download_tax' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' !== $action && 'download_tax' === $taxonomy ) {
 						$found = true;
 					}
 					break;
 				case 'edit':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' === $action && 'download_tax' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'edit' === $action && 'download_tax' === $taxonomy ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit-tags.php' && 'download_tax' === $taxonomy ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit-tags.php' && 'download_tax' === $taxonomy ) {
 						$found = true;
 					}
 					break;
@@ -241,17 +241,17 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 		case 'payments':
 			switch ( $passed_view ) {
 				case 'list-table':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-payment-history' === $page && false === $view  ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-payment-history' === $page && false === $view  ) {
 						$found = true;
 					}
 					break;
 				case 'edit':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-payment-history' === $page && 'view-order-details' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-payment-history' === $page && 'view-order-details' === $view ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-payment-history' === $page ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-payment-history' === $page ) {
 						$found = true;
 					}
 					break;
@@ -260,22 +260,22 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 		case 'discounts':
 			switch ( $passed_view ) {
 				case 'list-table':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page && false === $cs_action ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page && false === $cs_action ) {
 						$found = true;
 					}
 					break;
 				case 'edit':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page && 'edit_discount' === $cs_action ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page && 'edit_discount' === $cs_action ) {
 						$found = true;
 					}
 					break;
 				case 'new':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page && 'add_discount' === $cs_action ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page && 'add_discount' === $cs_action ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-discounts' === $page ) {
 						$found = true;
 					}
 					break;
@@ -285,37 +285,37 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 			switch ( $passed_view ) {
 				// If you want to do something like enqueue a script on a particular report's duration, look at $_GET[ 'range' ]
 				case 'earnings':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && ( 'earnings' === $view || '-1' === $view || false === $view ) ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && ( 'earnings' === $view || '-1' === $view || false === $view ) ) {
 						$found = true;
 					}
 					break;
 				case 'downloads':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'downloads' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'downloads' === $view ) {
 						$found = true;
 					}
 					break;
 				case 'customers':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'customers' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'customers' === $view ) {
 						$found = true;
 					}
 					break;
 				case 'gateways':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'gateways' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'gateways' === $view ) {
 						$found = true;
 					}
 					break;
 				case 'taxes':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'taxes' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'taxes' === $view ) {
 						$found = true;
 					}
 					break;
 				case 'export':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'export' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page && 'export' === $view ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page ) {
 						$found = true;
 					}
 					break;
@@ -324,52 +324,52 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 		case 'settings':
 			switch ( $passed_view ) {
 				case 'general':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && ( 'general' === $tab || false === $tab ) ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && ( 'general' === $tab || false === $tab ) ) {
 						$found = true;
 					}
 					break;
 				case 'gateways':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'gateways' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'gateways' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'emails':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'emails' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'emails' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'styles':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'styles' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'styles' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'taxes':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'taxes' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'taxes' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'extensions':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'extensions' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'extensions' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'licenses':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'licenses' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'licenses' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'misc':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'misc' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page && 'misc' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'marketing':
-					if ( ( 'download' == $typenow || 'download' === $post_type ) && $pagenow == 'edit.php' && 'cs-settings' === $page && 'marketing' === $tab ) {
+					if ( ( CS_POST_TYPE == $typenow || CS_POST_TYPE === $post_type ) && $pagenow == 'edit.php' && 'cs-settings' === $page && 'marketing' === $tab ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-settings' === $page ) {
 						$found = true;
 					}
 					break;
@@ -378,68 +378,68 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 		case 'tools':
 			switch ( $passed_view ) {
 				case 'general':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && ( 'general' === $tab || false === $tab ) ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && ( 'general' === $tab || false === $tab ) ) {
 						$found = true;
 					}
 					break;
 				case 'api_keys':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'api_keys' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'api_keys' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'system_info':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'system_info' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'system_info' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'logs':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'logs' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'logs' === $tab ) {
 						$found = true;
 					}
 					break;
 				case 'import_export':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'import_export' === $tab ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page && 'import_export' === $tab ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-tools' === $page ) {
 						$found = true;
 					}
 					break;
 			}
 			break;
 		case 'addons':
-			if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-addons' === $page ) {
+			if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-addons' === $page ) {
 				$found = true;
 			}
 			break;
 		case 'customers':
 			switch ( $passed_view ) {
 				case 'list-table':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page && false === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page && false === $view ) {
 						$found = true;
 					}
 					break;
 				case 'overview':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page && 'overview' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page && 'overview' === $view ) {
 						$found = true;
 					}
 					break;
 				case 'notes':
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page && 'notes' === $view ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page && 'notes' === $view ) {
 						$found = true;
 					}
 					break;
 				default:
-					if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page ) {
+					if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-customers' === $page ) {
 						$found = true;
 					}
 					break;
 			}
 			break;
 		case 'reports':
-			if ( ( 'download' === $typenow || 'download' === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page ) {
+			if ( ( CS_POST_TYPE === $typenow || CS_POST_TYPE === $post_type ) && $pagenow === 'edit.php' && 'cs-reports' === $page ) {
 				$found = true;
 			}
 			break;
@@ -453,7 +453,7 @@ function cs_is_admin_page( $passed_page = '', $passed_view = '', $include_non_ex
 			$admin_pages = cs_get_admin_pages();
 
 			// Downloads sub-page or Dashboard page
-			if ( ( 'download' === $typenow ) || ( $include_non_exclusive && 'index.php' === $pagenow ) ) {
+			if ( ( CS_POST_TYPE === $typenow ) || ( $include_non_exclusive && 'index.php' === $pagenow ) ) {
 				$found = true;
 
 			// Registered global pages

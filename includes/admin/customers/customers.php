@@ -460,7 +460,7 @@ function cs_customers_view( $customer = null ) {
 	?>
 
 	<div class="info-wrapper customer-section">
-		<form id="edit-customer-info" method="post" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ); ?>">
+		<form id="edit-customer-info" method="post" action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id ); ?>">
 			<input type="hidden" data-key="id" name="customerinfo[id]" value="<?php echo esc_html( $customer->id ); ?>" />
 			<input type="hidden" name="cs_action" value="edit-customer" />
 			<?php wp_nonce_field( 'edit-customer', '_wpnonce', false, true ); ?>
@@ -600,7 +600,7 @@ function cs_customers_view( $customer = null ) {
 	<div id="cs-item-stats-wrapper" class="customer-stats-wrapper customer-section">
 		<ul>
 			<li>
-				<a href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-payment-history&customer=' . $customer->id ); ?>">
+				<a href="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&customer=' . $customer->id ); ?>">
 					<span class="dashicons dashicons-cart"></span>
 					<?php
 					printf(
@@ -1062,7 +1062,7 @@ function cs_customers_delete_view( $customer ) {
 
 	<div class="info-wrapper customer-section">
 
-		<form id="delete-customer" method="post" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-customers&view=delete&id=' . $customer->id ); ?>">
+		<form id="delete-customer" method="post" action="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=delete&id=' . $customer->id ); ?>">
 
 			<div class="cs-item-header-small">
 				<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
@@ -1150,7 +1150,7 @@ function cs_verify_customer_notice( $customer ) {
 		return;
 	}
 
-	$url = wp_nonce_url( admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&cs_action=verify_user_admin&id=' . $customer->id ), 'cs-verify-user' );
+	$url = wp_nonce_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&cs_action=verify_user_admin&id=' . $customer->id ), 'cs-verify-user' );
 
 	echo '<div class="update error"><p>';
 	_e( 'This customer\'s user account is pending verification.', 'commercestore' );

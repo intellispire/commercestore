@@ -207,8 +207,8 @@ class CS_Batch_Customers_Export extends CS_Batch_Export {
 			? absint( $request['taxonomy'] )
 			: null;
 
-		$this->download = isset( $request['download'] )
-			? absint( $request['download'] )
+		$this->download = isset( $request[CS_POST_TYPE] )
+			? absint( $request[CS_POST_TYPE] )
 			: null;
 
 		$this->price_id = ! empty( $request['cs_price_option'] ) && 0 !== $request['cs_price_option']

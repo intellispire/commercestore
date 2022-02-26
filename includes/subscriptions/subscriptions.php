@@ -445,7 +445,7 @@ final class CS_Recurring {
 	 */
 	public function subscriptions_list() {
 		add_submenu_page(
-			'edit.php?post_type=download',
+			'edit.php?post_type=' . CS_POST_TYPE,
 			__( 'Subscriptions', 'commercestore' ),
 			__( 'Subscriptions', 'commercestore' ),
 			'view_shop_reports',
@@ -553,7 +553,7 @@ final class CS_Recurring {
 		if ( function_exists( 'cs_count_orders' ) ) {
 			return $views;
 		}
-		$base          = admin_url( 'edit.php?post_type=download&page=cs-payment-history' );
+		$base          = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history' );
 		$payment_count = wp_count_posts( 'cs_payment' );
 		$current       = isset( $_GET['status'] ) ? $_GET['status'] : '';
 
@@ -1556,9 +1556,9 @@ final class CS_Recurring {
 
 		$query_has_recurring = true;
 
-		if( ! empty( $query->initial_args['download'] ) ) {
+		if( ! empty( $query->initial_args[CS_EX_DOWNLOAD_ARGS] ) ) {
 			$query_has_recurring = false;
-			$download            = $query->initial_args['download'];
+			$download            = $query->initial_args[CS_EX_DOWNLOAD_ARGS];
 
 			if ( ! is_array( $download ) && strpos( $download, ',' ) ) {
 				$download = explode( ',', $download );
@@ -1623,7 +1623,7 @@ final class CS_Recurring {
 		     ( 'page' === $post->post_type && has_shortcode( $post->post_content, 'cs_downloads' ) ) ||
 		     ( 'page' === $post->post_type && has_shortcode( $post->post_content, 'downloads' ) ) ||
 		     ( 'page' === $post->post_type && has_shortcode( $post->post_content, 'cs_subscriptions' ) ) ||
-		       'download' === $post->post_type )
+		       CS_POST_TYPE === $post->post_type )
 		   ) ) {
 			$load_js = true;
 		}

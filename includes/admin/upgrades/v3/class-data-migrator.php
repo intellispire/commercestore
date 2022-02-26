@@ -331,7 +331,7 @@ class Data_Migrator {
 
 			$log_data = array(
 				'object_id'     => $data->post_parent,
-				'object_type'   => 'download',
+				'object_type'   => CS_POST_TYPE,
 				'user_id'       => ! empty( $meta_to_migrate['_cs_log_user'] ) ? $meta_to_migrate['_cs_log_user'] : $data->post_author,
 				'type'          => $data->slug,
 				'title'         => $data->post_title,
@@ -899,7 +899,7 @@ class Data_Migrator {
 					'product_name'  => $product_name,
 					'price_id'      => $price_id,
 					'cart_index'    => $key,
-					'type'          => 'download',
+					'type'          => CS_POST_TYPE,
 					'status'        => $order_status,
 					'quantity'      => $cart_item['quantity'],
 					'amount'        => (float) $cart_item['item_price'],
@@ -1046,7 +1046,7 @@ class Data_Migrator {
 					'product_name'  => $download->post_name,
 					'price_id'      => null,
 					'cart_index'    => $cart_index,
-					'type'          => 'download',
+					'type'          => CS_POST_TYPE,
 					'quantity'      => 1,
 					'amount'        => (float) $payment_meta['amount'],
 					'subtotal'      => (float) $payment_meta['amount'],

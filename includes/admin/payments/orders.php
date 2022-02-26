@@ -239,7 +239,7 @@ function cs_order_details_customer( $order ) {
 					</em>
 
 					<span class="customer-record">
-						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=download&page=cs-customers' ) ); ?>"><?php esc_html_e( 'View customer record', 'commercestore' ); ?></a>
+						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers' ) ); ?>"><?php esc_html_e( 'View customer record', 'commercestore' ); ?></a>
 					</span>
 				</div>
 			</div>
@@ -538,9 +538,9 @@ function cs_order_details_logs( $order ) {
 		do_action( 'cs_view_order_details_logs_before', $order->id );
 		?>
 
-		<p><a href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=logs&payment=' . $order->id ); ?>"><?php esc_html_e( 'File Download Log for Order', 'commercestore' ); ?></a></p>
-		<p><a href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-tools&tab=logs&customer=' . $order->customer_id ); ?>"><?php esc_html_e( 'Customer Download Log', 'commercestore' ); ?></a></p>
-		<p><a href="<?php echo admin_url( 'edit.php?post_type=download&page=cs-payment-history&user=' . esc_attr( cs_get_payment_user_email( $order->id ) ) ); ?>"><?php esc_html_e( 'Customer Orders', 'commercestore' ); ?></a></p>
+		<p><a href="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=logs&payment=' . $order->id ); ?>"><?php esc_html_e( 'File Download Log for Order', 'commercestore' ); ?></a></p>
+		<p><a href="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-tools&tab=logs&customer=' . $order->customer_id ); ?>"><?php esc_html_e( 'Customer Download Log', 'commercestore' ); ?></a></p>
+		<p><a href="<?php echo admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-payment-history&user=' . esc_attr( cs_get_payment_user_email( $order->id ) ) ); ?>"><?php esc_html_e( 'Customer Orders', 'commercestore' ); ?></a></p>
 
 		<?php
 		/**

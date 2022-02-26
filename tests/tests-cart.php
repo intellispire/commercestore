@@ -47,7 +47,7 @@ class Test_Cart extends CS_UnitTestCase {
 
 		$post_id = static::factory()->post->create( array(
 			'post_title'  => 'Test Download',
-			'post_type'   => 'download',
+			'post_type'   => CS_POST_TYPE,
 			'post_status' => 'publish',
 		) );
 
@@ -99,7 +99,7 @@ class Test_Cart extends CS_UnitTestCase {
 		// Create a second Download.
 		$post_id = static::factory()->post->create( array(
 			'post_title'  => 'Test Download 2',
-			'post_type'   => 'download',
+			'post_type'   => CS_POST_TYPE,
 			'post_status' => 'publish',
 		) );
 

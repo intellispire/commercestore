@@ -149,7 +149,7 @@ function cs_render_customer_column( $value, $column_name, $user_id ) {
 		if ( $customer->id > 0 ) {
 			$name     = '#' . $customer->id . ' ';
 			$name     .= ! empty( $customer->name ) ? $customer->name : '<em>' . __( 'Unnamed Customer', 'commercestore' ) . '</em>';
-			$view_url = admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id );
+			$view_url = admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-customers&view=overview&id=' . $customer->id );
 
 			return '<a href="' . esc_url( $view_url ) . '">' . $name . '</a>';
 		}

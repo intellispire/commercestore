@@ -38,12 +38,44 @@ defined( 'ABSPATH' ) || exit;
 
 const CS_FEATURE_VARIABLE_PRICE = true;
 const CS_FEATURE_MARKETING = false;
-const CS_DEFAULT_SLUG = 'products'; // Override with the CS_SLUG constant
+const CS_DEFAULT_SLUG = 'store'; // Override with the CS_SLUG constant
 
-// @todo replace hardcoding of post_type and taxonomies with the following constants all throughout the codebase
-const CS_POST_TYPE = 'download';
+const CS_ICON = 'download'; // Change the reports icon here
+
+const CS_POST_TYPE = 'infoproduct'; // 'download'
 const CS_TAG_TYPE = CS_POST_TYPE . '_tag';
 const CS_CAT_TYPE = CS_POST_TYPE . '_category';
+const CS_LOG_TYPE = 'cs_log_type';
+
+// Custom Post Types - Not fully implemented across the board
+const CS_PRODUCT_CPT = CS_POST_TYPE;
+const CS_PAYMENT_CPT = 'cs_payment';
+const CS_DISCOUNT_CPT = 'cs_discount';
+const CS_LOG_CPT = 'cs_log';
+
+
+const CS_QUERY_VAR = CS_POST_TYPE; // 'download';
+
+// Tease out the word 'download' that is used in different contexts.
+// search and replace back during build?
+const CS_EX_ADMIN_PAGE = 'download';
+const CS_EX_DOWNLOAD_ADMIN_PAGE = 'download';
+
+const CS_EX_DOWNLOAD_CSS_CLASS = 'download';
+const CS_EX_DOWNLOAD_SHORTCODE = 'download';
+const CS_EX_DOWNLOAD_ITEM = 'download';
+const CS_EX_DOWNLOAD_ARGS = 'download';
+const CS_EX_DOWNLOAD_MESSAGES = 'download';
+const CS_EX_DOWNLOAD_MESSAGES_TYPE = 'download';
+
+class CSFilter {
+	const CATEGORY_ARGS = 'cs_' . CS_CAT_TYPE . '_args';
+	const CATEGORY_LABELS = 'cs_' . CS_CAT_TYPE . '_labels';
+
+	const TAG_ARGS = 'cs_' . CS_TAG_TYPE . '_args';
+	const TAG_LABELS = 'cs_' . CS_TAG_TYPE . '_labels';
+}
+
 
 const CS_BASE_PLUGIN = __FILE__;
 

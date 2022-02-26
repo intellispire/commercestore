@@ -402,7 +402,7 @@ function get_account_info() {
 			$account_status .= sprintf(
 				/* Translators: %1$s opening anchor tag; %2$s closing anchor tag; %3$s: opening line item/status/strong tags; %4$s closing strong tag; %5$s: closing list item tag */
 				__( '%3$sGateway Status: %4$s PayPal is not currently active. %1$sEnable PayPal%2$s in the general gateway settings to start using it.%5$s', 'commercestore' ),
-				'<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-settings&tab=gateways&section=main' ) ) . '">',
+				'<a href="' . esc_url( admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-settings&tab=gateways&section=main' ) ) . '">',
 				'</a>',
 				'<li><span class="dashicons dashicons-no"></span><strong>',
 				'</strong>',

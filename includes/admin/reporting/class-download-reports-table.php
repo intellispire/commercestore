@@ -78,7 +78,7 @@ class CS_Download_Reports_Table extends List_Table {
 			case 'average_earnings' :
 				return cs_currency_filter( cs_format_amount( $item[ $column_name ] ) );
 			case 'details' :
-				return '<a href="' . admin_url( 'edit.php?post_type=download&page=cs-reports&view=downloads&download-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'commercestore' ) . '</a>';
+				return '<a href="' . admin_url( 'edit.php?post_type=' . CS_POST_TYPE . '&page=cs-reports&view=downloads&download-id=' . $item['ID'] ) . '">' . __( 'View Detailed Report', 'commercestore' ) . '</a>';
 			default:
 				return $item[ $column_name ];
 		}
@@ -133,7 +133,7 @@ class CS_Download_Reports_Table extends List_Table {
 	 */
 	public function get_total_downloads() {
 		$total  = 0;
-		$counts = wp_count_posts( 'download', 'readable' );
+		$counts = wp_count_posts( CS_POST_TYPE, 'readable' );
 
 		foreach( $counts as $count ) {
 			$total += $count;
@@ -162,7 +162,7 @@ class CS_Download_Reports_Table extends List_Table {
 	 * @return void
 	 */
 	public function category_filter() {
-		if ( get_terms( 'download_category' ) ) {
+		if ( get_terms( CS_CAT_TYPE ) ) {
 			echo CS()->html->category_dropdown( 'category', $this->get_category() );
 		}
 	}
@@ -180,7 +180,7 @@ class CS_Download_Reports_Table extends List_Table {
 		$category = $this->get_category();
 
 		$args = array(
-			'post_type'        => 'download',
+			'post_type'        => CS_POST_TYPE,
 			'post_status'      => 'publish',
 			'order'            => $order,
 			'fields'           => 'ids',
@@ -192,7 +192,7 @@ class CS_Download_Reports_Table extends List_Table {
 		if ( ! empty( $category ) ) {
 			$args['tax_query'] = array(
 				array(
-					'taxonomy' => 'download_category',
+					'taxonomy' => CS_CAT_TYPE,
 					'terms'    => $category
 				)
 			);

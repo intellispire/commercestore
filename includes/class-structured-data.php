@@ -94,7 +94,7 @@ class Structured_Data {
 	 * @return string
 	 */
 	public function generate_structured_data( $context = false, $args = null ) {
-		if ( is_singular( 'download' ) || 'download' === $context ) {
+		if ( is_singular( CS_POST_TYPE ) || CS_POST_TYPE === $context ) {
 			$this->generate_download_data( $args );
 		}
 
@@ -191,7 +191,7 @@ class Structured_Data {
 			);
 		}
 
-		$download_categories = wp_get_post_terms( $download->ID, 'download_category' );
+		$download_categories = wp_get_post_terms( $download->ID, CS_CAT_TYPE );
 		if ( is_array( $download_categories ) && ! empty( $download_categories ) ) {
 			$download_categories = wp_list_pluck( $download_categories, 'name' );
 			$data['category']    = implode( ', ', $download_categories );
