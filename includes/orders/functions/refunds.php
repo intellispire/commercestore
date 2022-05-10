@@ -15,25 +15,6 @@ use CS\Orders\Refund_Validator;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Returns an array of order statuses that support refunds.
- *
- * @since 3.0
- * @return array
- */
-function cs_get_refundable_order_statuses() {
-	$refundable_order_statuses = array( 'complete', 'publish', 'partially_refunded' );
-
-	/**
-	 * Filters the order statuses that are allowed to be refunded.
-	 *
-	 * @param array $refundable_order_statuses
-	 *
-	 * @since 3.0
-	 */
-	return (array) apply_filters( 'cs_refundable_order_statuses', $refundable_order_statuses );
-}
-
-/**
  * Check order can be refunded.
  *
  * @since 3.0
@@ -399,6 +380,7 @@ function cs_refund_order( $order_id, $order_items = 'all', $adjustments = 'all' 
 
 	cs_update_order( $order_id, array( 'status' => $order_status ) );
 
+	cs_update_order( $refund_id, array( 'date_completed' => date( 'Y-m-d H:i:s' ) ) );
 	/**
 	 * Fires when an order has been refunded.
 	 * This hook will trigger the legacy `cs_pre_refund_payment` and `cs_post_refund_payment`

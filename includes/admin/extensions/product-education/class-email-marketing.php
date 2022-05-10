@@ -72,9 +72,6 @@ class EmailMarketing extends Extension {
 			/* translators: the product name */
 			$configuration['title'] = sprintf( __( 'Get %s Today!', 'commercestore' ), $product_data->title );
 		}
-		if ( 'mailchimp' === $product_data->slug && ! ( defined( 'CS_MAILCHIMP_VERSION' ) && version_compare( CS_MAILCHIMP_VERSION, '3.0.16', '>=' ) ) ) {
-			$configuration['tab'] = 'extensions';
-		}
 
 		return $configuration;
 	}

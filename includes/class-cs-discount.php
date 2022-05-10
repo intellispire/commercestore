@@ -1429,11 +1429,7 @@ class CS_Discount extends Adjustment {
 		$excluded_ps  = $this->get_excluded_products();
 		$cart_items   = cs_get_cart_contents();
 		$cart_ids     = $cart_items ? wp_list_pluck( $cart_items, 'id' ) : null;
-		$return       = false;
-
-		if ( empty( $product_reqs ) && empty( $excluded_ps ) ) {
-			$return = true;
-		}
+		$is_met       = true;
 
 		/**
 		 * Normalize our data for product requirements, exclusions and cart data.
@@ -1444,81 +1440,46 @@ class CS_Discount extends Adjustment {
 		asort( $product_reqs );
 		$product_reqs = array_filter( array_values( $product_reqs ) );
 
-
-		$excluded_ps = array_map( 'absint', $excluded_ps );
-		asort( $excluded_ps );
-		$excluded_ps = array_filter( array_values( $excluded_ps ) );
-
 		$cart_ids = array_map( 'absint', $cart_ids );
 		asort( $cart_ids );
 		$cart_ids = array_values( $cart_ids );
 
 		// Ensure we have requirements before proceeding
-		if ( ! $return && ! empty( $product_reqs ) ) {
-			switch ( $this->product_condition ) {
+		if ( ! $is_met && ! empty( $product_reqs ) ) {
+			$matches = array_intersect( $product_reqs, $cart_ids );
+
+			switch ( $this->get_product_condition() ) {
 				case 'all':
-					// Default back to true
-					$return = true;
-
-					foreach ( $product_reqs as $download_id ) {
-						if ( empty( $download_id ) ) {
-							continue;
-						}
-
-						if ( ! cs_item_in_cart( $download_id ) ) {
-							if ( $set_error ) {
-								cs_set_error( 'cs-discount-error', __( 'The product requirements for this discount are not met.', 'commercestore' ) );
-							}
-
-							$return = false;
-
-							break;
-						}
-					}
+					$is_met = count( $matches ) === count( $product_reqs );
 					break;
-
 				default:
-					foreach ( $product_reqs as $download_id ) {
-						if ( empty( $download_id ) ) {
-							continue;
-						}
-
-						if ( cs_item_in_cart( $download_id ) ) {
-							$return = true;
-							break;
+					$is_met = 0 < count( $matches );
 						}
 					}
 
-					if ( ! $return && $set_error ) {
-						cs_set_error( 'cs-discount-error', __( 'The product requirements for this discount are not met.', 'commercestore' ) );
-					}
-					break;
-			}
-		} else {
-			$return = true;
-		}
+		$excluded_ps = array_map( 'absint', $excluded_ps );
+		asort( $excluded_ps );
+		$excluded_ps = array_filter( array_values( $excluded_ps ) );
 
 		if ( ! empty( $excluded_ps ) ) {
-			if ( count( array_intersect( $cart_ids, $excluded_ps ) ) === count( $cart_ids ) ) {
-				$return = false;
+			$is_met = false === (bool) array_intersect( $cart_ids, $excluded_ps );
 
-				if ( $set_error ) {
+			if ( ! $is_met && $set_error ) {
 					cs_set_error( 'cs-discount-error', __( 'This discount is not valid for the cart contents.', 'commercestore' ) );
 				}
 			}
-		}
 
 		/**
 		 * Filters whether the product requirements are met for the discount to hold.
 		 *
 		 * @since 2.7
 		 *
-		 * @param bool   $return            Are the product requirements met or not.
+		 * @param bool   $is_met            Are the product requirements met or not.
 		 * @param int    $ID                Discount ID.
 		 * @param string $product_condition Product condition.
 		 * @param bool $set_error Whether an error message be set in session.
 		 */
-		return (bool) apply_filters( 'cs_is_discount_products_req_met', $return, $this->id, $this->product_condition, $set_error );
+		return (bool) apply_filters( 'cs_is_discount_products_req_met', $is_met, $this->id, $this->product_condition, $set_error );
 	}
 
 	/**
@@ -1586,7 +1547,7 @@ class CS_Discount extends Adjustment {
 						continue;
 					}
 
-					if ( in_array( $payment->status, array( 'abandoned', 'failed', 'pending' ), true ) ) {
+					if ( in_array( $payment->status, cs_get_incomplete_order_statuses(), true ) ) {
 						continue;
 					}
 

@@ -210,7 +210,7 @@ function cs_run_install( $site_id = false ) {
 	// Set the activation date.
 	cs_get_activation_date();
 
-	// Create wp-content/uploads/commercestore/ folder and the .htaccess file
+	// Create wp-content/uploads/cs/ folder and the .htaccess file
 	if ( ! function_exists( 'cs_create_protection_files' ) ) {
 		require_once CS_PLUGIN_DIR . 'includes/admin/upload-functions.php';
 	}

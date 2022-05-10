@@ -81,7 +81,7 @@ class CS_Batch_Sales_And_Earnings_Export extends CS_Batch_Export {
 			'offset' => ( $this->step * 30 ) - 30,
 		);
 
-		$status         = "AND {$wpdb->cs_orders}.status IN ( '" . implode( "', '", $wpdb->_escape( array( 'complete', 'revoked' ) ) ) . "' )";
+		$status         = "AND {$wpdb->cs_orders}.status IN ( '" . implode( "', '", $wpdb->_escape( cs_get_complete_order_statuses() ) ) . "' )";
 		$date_query_sql = '';
 
 		// Customer ID.

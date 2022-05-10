@@ -55,7 +55,7 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 			'name'           => __( 'Name', 'commercestore' ),
 			'price'          => __( 'Price', 'commercestore' ),
 			'sales'          => __( 'Sales', 'commercestore' ),
-			'earnings'       => __( 'Earnings', 'commercestore' ),
+			'earnings'       => __( 'Net Earnings', 'commercestore' ),
 		);
 	}
 
@@ -73,7 +73,7 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 		}
 
 		// Check for variable pricing
-		$retval = ! empty( $download->price_id )
+		$retval = ! is_null( $download->price_id ) && is_numeric( $download->price_id )
 			? cs_get_download_name( $download->object->ID, $download->price_id )
 			: cs_get_download_name( $download->object->ID );
 
@@ -94,7 +94,7 @@ class Top_Selling_Downloads_List_Table extends List_Table {
 		}
 
 		// Check for variable pricing
-		$retval = ! empty( $download->price_id )
+		$retval = ! is_null( $download->price_id ) && is_numeric( $download->price_id )
 			? cs_price( $download->object->ID, false, $download->price_id )
 			: cs_price( $download->object->ID, false );
 

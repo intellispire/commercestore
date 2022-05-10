@@ -388,73 +388,86 @@ function get_filter_value( $filter ) {
 		return $value;
 	}
 
-	// Look for filter in transients
-	$filter_key   = get_filter_key( $filter );
-	$filter_value = get_transient( $filter_key );
-
-	// Maybe use transient value
-	if ( false !== $filter_value ) {
-		$value = $filter_value;
-
-		// Maybe use dates defaults
-	} elseif ( 'dates' === $filter ) {
-
-		// Default to last 30 days for filter value.
+	switch ( $filter ) {
+		// Handle dates.
+		case 'dates':
+			if ( ! isset( $_GET['range'] ) ) {
 		$default = 'last_30_days';
 		$dates   = parse_dates_for_range( $default );
 		$value   = array(
+					'range' => $default,
 			'from'  => $dates['start']->format( 'Y-m-d' ),
 			'to'    => $dates['end']->format( 'Y-m-d' ),
-			'range' => $default,
+				);
+			} else {
+				$value = array(
+					'range' => sanitize_text_field( $_GET[ 'range' ] ),
+					'from'  => isset( $_GET['filter_from'] )
+						? sanitize_text_field( $_GET[ 'filter_from'] )
+						: '',
+					'to'    => isset( $_GET['filter_to'] )
+						? sanitize_text_field( $_GET[ 'filter_to'] )
+						: ''
 		);
+	}
+
+			break;
+
+		// Handle taxes.
+		case 'taxes':
+			$value = array();
+
+			if ( isset( $_GET['exclude_taxes'] ) ) {
+				$value['exclude_taxes'] = true;
+}
+
+			break;
+
+		// Handle default (direct from URL).
+		default:
+			$value = isset( $_GET[ $filter ] )
+				? sanitize_text_field( $_GET[ $filter ] )
+				: '';
+
+/**
+			 * Filters the value of a report filter.
+ *
+ * @since 3.0
+ *
+			 * @param string $value Report filter value.
+			 * @param string $filter Report filter.
+ */
+			$value = apply_filters( 'cs_reports_get_filter_value', $value, $filter );
 	}
 
 	return $value;
 }
 
 /**
- * Sets the value of a given report filter.
- *
- * The filter will only be set if the filter is valid.
+ * Returns a list of registered report filters that should be persisted across views.
  *
  * @since 3.0
  *
- * @param string $filter Filter name.
- * @param mixed  $value  Filter value.
+ * @return array
  */
-function set_filter_value( $filter, $value ) {
-	if ( validate_filter( $filter ) ) {
-		$filter_key = get_filter_key( $filter );
-
-		set_transient( $filter_key, $value );
-	}
-}
+function get_persisted_filters() {
+	$filters = array(
+		'range',
+		'filter_from',
+		'filter_to',
+		'exclude_taxes',
+	);
 
 /**
- * Builds the transient key used for a given reports filter.
+	 * Filters registered report filters that should be persisted across views.
  *
  * @since 3.0
  *
- * @param string $filter Filter key to retrieve the value for.
- * @return string Transient key for the filter.
+	 * @param array $filters List of registered filters to persist.
  */
-function get_filter_key( $filter ) {
-	$site = get_current_blog_id();
-	$user = get_current_user_id();
+	$filters = apply_filters( 'cs_reports_get_persisted_filters', $filters );
 
-	return "reports:filter-{$filter}:site-{$site}:user-{$user}";
-}
-
-/**
- * Clears the value of a filter.
- *
- * @since 3.0
- *
- * @param string $filter Filter key to clear.
- * @return bool true if successful, false otherwise.
- */
-function clear_filter( $filter ) {
-	return delete_transient( get_filter_key( $filter ) );
+	return $filters;
 }
 
 /**
@@ -1263,12 +1276,16 @@ function display_currency_filter() {
  * @param Data\Report $report Report object.
  */
 function display_filters( $report ) {
+	$action = cs_get_admin_url( array(
+		'page' => 'cs-reports',
+	) );
+	?>
 
-	// Output the filter bar
-	?><form method="get"><?php
-		cs_admin_filter_bar( 'reports', $report );
-	?></form><?php
+	<form action="<?php echo esc_url( $action ); ?>" method="GET">
+		<?php cs_admin_filter_bar( 'reports', $report ); ?>
+	</form>
 
+	<?php
 }
 
 /**
@@ -1288,12 +1305,10 @@ function filter_items( $report = false ) {
 		return;
 	}
 
-	// Get form actions
-	$action = admin_url( add_query_arg( array(
-		'post_type' => 'download',
+	$redirect_url = cs_get_admin_url( array(
 		'page'      => 'cs-reports',
-		'view'      => get_current_report(),
-	), 'edit.php' ) );
+		'view' => $report_id,
+	) );
 
 	// Bail if no filters
 	$filters  = $report->get_filters();
@@ -1343,9 +1358,8 @@ function filter_items( $report = false ) {
 
 	<span class="cs-graph-filter-submit graph-option-section">
 		<input type="submit" class="button button-secondary" value="<?php esc_html_e( 'Filter', 'commercestore' ); ?>"/>
-		<input type="hidden" name="cs_action" value="filter_reports" />
-		<input type="hidden" name="cs_redirect" value="<?php echo esc_url( $action ); ?>">
-		<input type="hidden" name="report_id" value="<?php echo esc_attr( $report_id ); ?>">
+		<input type="hidden" name="cs_action" value="filter_reports">
+		<input type="hidden" name="cs_redirect" value="<?php echo esc_attr( $redirect_url ); ?>">
 	</span>
 
 	<?php

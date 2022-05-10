@@ -1,0 +1,17 @@
+***************
+*** 18,24 ****
+   * Hooks the cs_set_upload_dir filter when appropriate. This function works by
+   * hooking on the WordPress Media Uploader and moving the uploading files that
+   * are used for CS to an cs directory under wp-content/uploads/ therefore,
+-  * the new directory is wp-content/uploads/commercestore/{year}/{month}. This directory is
+   * provides protection to anything uploaded to it.
+   *
+   * @since 1.0
+--- 18,24 ----
+   * Hooks the cs_set_upload_dir filter when appropriate. This function works by
+   * hooking on the WordPress Media Uploader and moving the uploading files that
+   * are used for CS to an cs directory under wp-content/uploads/ therefore,
++  * the new directory is wp-content/uploads/cs/{year}/{month}. This directory is
+   * provides protection to anything uploaded to it.
+   *
+   * @since 1.0

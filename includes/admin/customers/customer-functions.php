@@ -22,9 +22,11 @@ defined( 'ABSPATH' ) || exit;
 function cs_register_default_customer_views( $views ) {
 	return array_merge( $views, array(
 		'overview' => 'cs_customers_view',
+		'emails'    => 'cs_customers_emails_view',
+		'addresses' => 'cs_customers_addresses_view',
 		'delete'   => 'cs_customers_delete_view',
 		'notes'    => 'cs_customer_notes_view',
-		'tools'    => 'cs_customer_tools_view'
+		'tools'     => 'cs_customer_tools_view',
 	) );
 }
 add_filter( 'cs_customer_views', 'cs_register_default_customer_views', 1, 1 );
@@ -39,6 +41,8 @@ add_filter( 'cs_customer_views', 'cs_register_default_customer_views', 1, 1 );
 function cs_register_default_customer_tabs( $tabs ) {
 	return array_merge( $tabs, array(
 		'overview' => array( 'dashicon' => 'dashicons-admin-users',    'title' => _x( 'Profile', 'Customer Details tab title', 'commercestore' ) ),
+		'emails'    => array( 'dashicon' => 'dashicons-email', 'title' => _x( 'Emails', 'Customer Emails tab title', 'commercestore' ) ),
+		'addresses' => array( 'dashicon' => 'dashicons-admin-home', 'title' => _x( 'Addresses', 'Customer Addresses tab title', 'commercestore' ) ),
 		'notes'    => array( 'dashicon' => 'dashicons-admin-comments', 'title' => _x( 'Notes',   'Customer Notes tab title',   'commercestore' ) ),
 		'tools'    => array( 'dashicon' => 'dashicons-admin-tools',    'title' => _x( 'Tools',   'Customer Tools tab title',   'commercestore' ) )
 	) );
@@ -158,3 +162,18 @@ function cs_render_customer_column( $value, $column_name, $user_id ) {
 	return $value;
 }
 add_action( 'manage_users_custom_column',  'cs_render_customer_column', 10, 3 );
+
+/**
+ * Renders the customer details header (gravatar/name).
+ *
+ * @since 3.0
+ * @param \CS_Customer $customer
+ * @return void
+ */
+function cs_render_customer_details_header( \CS_Customer $customer ) {
+	?>
+	<div class="cs-item-header-small">
+		<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo esc_html( $customer->name ); ?></span>
+	</div>
+	<?php
+}

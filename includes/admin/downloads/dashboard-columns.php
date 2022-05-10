@@ -32,8 +32,8 @@ function cs_download_columns( $download_columns ) {
 		'download_category' => $category_labels['menu_name'],
 		'download_tag'      => $tag_labels['menu_name'],
 		'price'             => __( 'Price', 'commercestore' ),
-		'sales'             => __( 'Sales', 'commercestore' ),
-		'earnings'          => __( 'Gross Revenue', 'commercestore' ),
+		'sales'             => __( 'Net Sales', 'commercestore' ),
+		'earnings'          => __( 'Net Revenue', 'commercestore' ),
 		'date'              => __( 'Date', 'commercestore' )
 	) );
 }
@@ -91,7 +91,13 @@ function cs_render_download_columns( $column_name, $post_id ) {
 			break;
 		case 'earnings':
 			if ( current_user_can( 'view_product_stats', $post_id ) ) {
-				echo '<a href="' . esc_url( admin_url( 'edit.php?post_type=download&page=cs-reports&view=downloads&download-id=' . $post_id ) ) . '">';
+				$report_url = cs_get_admin_url( array(
+					'page'     => 'cs-reports',
+					'view'     => 'downloads',
+					'products' => $post_id,
+				) );
+
+				echo '<a href="' . esc_url( $report_url ) . '">';
 					echo cs_currency_filter( cs_format_amount( cs_get_download_earnings_stats( $post_id ) ) );
 				echo '</a>';
 			} else {

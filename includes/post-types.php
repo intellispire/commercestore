@@ -73,6 +73,8 @@ function cs_setup_cs_post_types() {
 		'map_meta_cap'       => true,
 		'has_archive'        => $archives,
 		'hierarchical'       => false,
+		'show_in_rest'       => true,
+		'rest_base'          => 'cs-downloads',
 		'supports'           => apply_filters( 'cs_download_supports', array( 'title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'author' ) ),
 	);
 	register_post_type( 'download', apply_filters( 'cs_download_post_type_args', $download_args ) );
@@ -261,6 +263,9 @@ function cs_setup_download_taxonomies() {
 			'show_ui'      => true,
 			'query_var'    => 'download_category',
 			'rewrite'      => array( 'slug' => $slug . '/category', 'with_front' => false, 'hierarchical' => true ),
+			'show_in_rest'          => true,
+			'rest_base'             => 'cs-categories',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
 			'capabilities' => array(
 				'manage_terms' => 'manage_product_terms',
 				'edit_terms'   => 'edit_product_terms',
@@ -294,6 +299,9 @@ function cs_setup_download_taxonomies() {
 			'show_ui'      => true,
 			'query_var'    => 'download_tag',
 			'rewrite'      => array( 'slug' => $slug . '/tag', 'with_front' => false, 'hierarchical' => true ),
+			'show_in_rest'          => true,
+			'rest_base'             => 'cs-tags',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
 			'capabilities' => array(
 				'manage_terms' => 'manage_product_terms',
 				'edit_terms'   => 'edit_product_terms',
@@ -307,6 +315,22 @@ function cs_setup_download_taxonomies() {
 	register_taxonomy_for_object_type( 'download_tag', 'download' );
 }
 add_action( 'init', 'cs_setup_download_taxonomies', 0 );
+
+/**
+ * Gets the names for the default download taxonomies.
+ *
+ * @since 3.0
+ * @return array
+ */
+function cs_get_download_taxonomies() {
+	return apply_filters(
+		'cs_download_taxonomies',
+		array(
+			'download_category',
+			'download_tag',
+		)
+	);
+}
 
 /**
  * Get the singular and plural labels for a download taxonomy

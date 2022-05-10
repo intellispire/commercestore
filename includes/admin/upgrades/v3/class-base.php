@@ -133,6 +133,7 @@ class Base extends \CS_Batch_Export {
 			$this->message = $this->completed_message;
 			cs_set_upgrade_complete( $this->upgrade );
 			delete_option( sprintf( 'cs_v3_migration_%s_step', sanitize_key( $this->upgrade ) ) );
+			cs_v30_is_migration_complete();
 			return false;
 		}
 	}

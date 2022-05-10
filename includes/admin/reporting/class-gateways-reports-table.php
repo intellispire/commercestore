@@ -118,8 +118,8 @@ class CS_Gateway_Reports_Table extends List_Table {
 
 		foreach ( $gateways as $gateway_id => $gateway ) {
 
-			$complete_count = cs_count_sales_by_gateway( $gateway_id, 'complete' );
-			$pending_count  = cs_count_sales_by_gateway( $gateway_id, array( 'pending', 'failed' ) );
+			$complete_count = cs_count_sales_by_gateway( $gateway_id, cs_get_gross_order_statuses() );
+			$pending_count  = cs_count_sales_by_gateway( $gateway_id, cs_get_incomplete_order_statuses() );
 
 			$reports_data[] = array(
 				'ID'             => $gateway_id,

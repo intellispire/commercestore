@@ -42,7 +42,7 @@ function cs_add_manual_order( $args = array() ) {
 	$now = CS()->utils->date( 'now', null, true )->timestamp;
 
 	// Parse args.
-	$data = wp_parse_args( $args, array(
+	$order_data = wp_parse_args( $args, array(
 		'downloads'               => array(),
 		'adjustments'             => array(),
 		'subtotal'                => 0.00,
@@ -69,24 +69,24 @@ function cs_add_manual_order( $args = array() ) {
 	$name        = '';
 
 	// Create a new customer record.
-	if ( isset( $data['cs-new-customer'] ) && 1 === absint( $data['cs-new-customer'] ) ) {
+	if ( isset( $order_data['cs-new-customer'] ) && 1 === absint( $order_data['cs-new-customer'] ) ) {
 
 		// Sanitize first name
-		$first_name = isset( $data['cs-new-customer-first-name'] )
-			? sanitize_text_field( $data['cs-new-customer-first-name'] )
+		$first_name = isset( $order_data['cs-new-customer-first-name'] )
+			? sanitize_text_field( $order_data['cs-new-customer-first-name'] )
 			: '';
 
 		// Sanitize last name
-		$last_name = isset( $data['cs-new-customer-last-name'] )
-			? sanitize_text_field( $data['cs-new-customer-last-name'] )
+		$last_name = isset( $order_data['cs-new-customer-last-name'] )
+			? sanitize_text_field( $order_data['cs-new-customer-last-name'] )
 			: '';
 
 		// Combine
 		$name = trim( $first_name . ' ' . $last_name );
 
 		// Sanitize the email address
-		$email = isset( $data['cs-new-customer-email'] )
-			? sanitize_email( $data['cs-new-customer-email'] )
+		$email = isset( $order_data['cs-new-customer-email'] )
+			? sanitize_email( $order_data['cs-new-customer-email'] )
 			: '';
 
 		// Save to database.
@@ -98,8 +98,8 @@ function cs_add_manual_order( $args = array() ) {
 		$customer = cs_get_customer( $customer_id );
 
 	// Existing customer.
-	} elseif ( isset( $data['cs-new-customer'] ) && 0 === absint( $data['cs-new-customer'] ) && isset( $data['customer-id'] ) ) {
-		$customer_id = absint( $data['customer-id'] );
+	} elseif ( isset( $order_data['cs-new-customer'] ) && 0 === absint( $order_data['cs-new-customer'] ) && isset( $order_data['customer-id'] ) ) {
+		$customer_id = absint( $order_data['customer-id'] );
 
 		$customer = cs_get_customer( $customer_id );
 
@@ -113,34 +113,21 @@ function cs_add_manual_order( $args = array() ) {
 	/** Insert order **********************************************************/
 
 	// Parse order status.
-	$status = sanitize_text_field( $data['cs-payment-status'] );
+	$status = sanitize_text_field( $order_data['cs-payment-status'] );
 
 	if ( empty( $status ) || ! in_array( $status, array_keys( cs_get_payment_statuses() ), true ) ) {
 		$status = 'complete';
 	}
 
-	// Parse date.
-	$date = sanitize_text_field( $data['cs-payment-date'] );
-	$hour = sanitize_text_field( $data['cs-payment-time-hour'] );
-
-	// Restrict to our high and low.
-	if ( $hour > 23 ) {
-		$hour = 23;
-	} elseif ( $hour < 0 ) {
-		$hour = 00;
-	}
-
-	$minute = sanitize_text_field( $data['cs-payment-time-min'] );
-
-	// Restrict to our high and low.
-	if ( $minute > 59 ) {
-		$minute = 59;
-	} elseif ( $minute < 0 ) {
-		$minute = 00;
-	}
+	// Get the date string.
+	$date_string = CS()->utils->get_date_string(
+		sanitize_text_field( $order_data['cs-payment-date'] ),
+		sanitize_text_field( $order_data['cs-payment-time-hour'] ),
+		sanitize_text_field( $order_data['cs-payment-time-min'] )
+	);
 
 	// The date is entered in the WP timezone. We need to convert it to UTC prior to saving now.
-	$date = cs_get_utc_equivalent_date( CS()->utils->date( $date . ' ' . $hour . ':' . $minute . ':00', cs_get_timezone_id(), false ) );
+	$date = cs_get_utc_equivalent_date( CS()->utils->date( $date_string, cs_get_timezone_id(), false ) );
 	$date = $date->format( 'Y-m-d H:i:s' );
 
 	// Get mode
@@ -149,20 +136,20 @@ function cs_add_manual_order( $args = array() ) {
 		: 'live';
 
 	// Amounts
-	$order_subtotal = floatval( $data['subtotal'] );
-	$order_tax      = floatval( $data['tax'] );
-	$order_discount = floatval( $data['discount'] );
-	$order_total    = floatval( $data['total'] );
+	$order_subtotal = floatval( $order_data['subtotal'] );
+	$order_tax      = floatval( $order_data['tax'] );
+	$order_discount = floatval( $order_data['discount'] );
+	$order_total    = floatval( $order_data['total'] );
 
 	$tax_rate  = false;
 	// If taxes are enabled, get the tax rate for the order location.
 	if ( cs_use_taxes() ) {
-		$country = ! empty( $data['cs_order_address']['country'] )
-			? $data['cs_order_address']['country']
+		$country = ! empty( $order_data['cs_order_address']['country'] )
+			? $order_data['cs_order_address']['country']
 			: false;
 
-		$region = ! empty( $data['cs_order_address']['region'] )
-			? $data['cs_order_address']['region']
+		$region = ! empty( $order_data['cs_order_address']['region'] )
+			? $order_data['cs_order_address']['region']
 			: false;
 
 		$tax_rate = cs_get_tax_rate_by_location(
@@ -180,11 +167,11 @@ function cs_add_manual_order( $args = array() ) {
 			'user_id'      => $user_id,
 			'customer_id'  => $customer_id,
 			'email'        => $email,
-			'ip'           => sanitize_text_field( $data['ip'] ),
-			'gateway'      => sanitize_text_field( $data['gateway'] ),
+			'ip'           => sanitize_text_field( $order_data['ip'] ),
+			'gateway'      => sanitize_text_field( $order_data['gateway'] ),
 			'mode'         => $mode,
 			'currency'     => cs_get_currency(),
-			'payment_key'  => $data['payment_key'] ? sanitize_text_field( $data['payment_key'] ) : cs_generate_order_payment_key( $email ),
+			'payment_key'  => $order_data['payment_key'] ? sanitize_text_field( $order_data['payment_key'] ) : cs_generate_order_payment_key( $email ),
 			'tax_rate_id'  => ! empty( $tax_rate->id ) ? $tax_rate->id : null,
 			'subtotal'     => $order_subtotal,
 			'tax'          => $order_tax,
@@ -201,7 +188,7 @@ function cs_add_manual_order( $args = array() ) {
 
 	// If we have tax, but no tax rate, manually save the percentage.
 	if ( empty( $tax_rate->id ) && $order_tax > 0 ) {
-		$tax_rate_percentage = $data['tax_rate'];
+		$tax_rate_percentage = $order_data['tax_rate'];
 		if ( ! empty( $tax_rate_percentage ) ) {
 			if ( $tax_rate_percentage > 0 && $tax_rate_percentage < 1 ) {
 				$tax_rate_percentage = $tax_rate_percentage * 100;
@@ -213,10 +200,10 @@ function cs_add_manual_order( $args = array() ) {
 
 	/** Insert order address **************************************************/
 
-	if ( isset( $data['cs_order_address'] ) ) {
+	if ( isset( $order_data['cs_order_address'] ) ) {
 
 		// Parse args
-		$address = wp_parse_args( $data['cs_order_address'], array(
+		$address = wp_parse_args( $order_data['cs_order_address'], array(
 			'name'        => $name,
 			'address'     => '',
 			'address2'    => '',
@@ -247,20 +234,20 @@ function cs_add_manual_order( $args = array() ) {
 	/** Insert order items ****************************************************/
 
 	// Any adjustments specific to an order item need to be added to the item.
-	foreach ( $data['adjustments'] as $key => $adjustment ) {
+	foreach ( $order_data['adjustments'] as $key => $adjustment ) {
 		if ( 'order_item' === $adjustment['object_type'] ) {
-			$data['downloads'][ $adjustment['object_id'] ]['adjustments'][] = $adjustment;
+			$order_data['downloads'][ $adjustment['object_id'] ]['adjustments'][] = $adjustment;
 
-			unset( $data['adjustments'][ $key ] );
+			unset( $order_data['adjustments'][ $key ] );
 		}
 	}
 
-	if ( ! empty( $data['downloads'] ) ) {
+	if ( ! empty( $order_data['downloads'] ) ) {
 
 		// Re-index downloads.
-		$data['downloads'] = array_values( $data['downloads'] );
+		$order_data['downloads'] = array_values( $order_data['downloads'] );
 
-		$downloads = array_reverse( $data['downloads'] );
+		$downloads = array_reverse( $order_data['downloads'] );
 
 		foreach ( $downloads as $cart_key => $download ) {
 			$d = cs_get_download( absint( $download['id'] ) );
@@ -356,8 +343,8 @@ function cs_add_manual_order( $args = array() ) {
 	/** Insert adjustments ****************************************************/
 
 	// Adjustments.
-	if ( isset( $data['adjustments'] ) ) {
-		$adjustments = array_reverse( $data['adjustments'] );
+	if ( isset( $order_data['adjustments'] ) ) {
+		$adjustments = array_reverse( $order_data['adjustments'] );
 
 		foreach ( $adjustments as $index => $adjustment ) {
 			if ( 'order_item' === $adjustment['object_type'] ) {
@@ -386,8 +373,8 @@ function cs_add_manual_order( $args = array() ) {
 	}
 
 	// Discounts.
-	if ( isset( $data['discounts'] ) ) {
-		$discounts = array_reverse( $data['discounts'] );
+	if ( isset( $order_data['discounts'] ) ) {
+		$discounts = array_reverse( $order_data['discounts'] );
 
 		foreach ( $discounts as $discount ) {
 			$d = cs_get_discount( absint( $discount['type_id'] ) );
@@ -413,19 +400,19 @@ function cs_add_manual_order( $args = array() ) {
 	}
 
 	// Insert transaction ID.
-	if ( ! empty( $data['transaction_id'] ) ) {
+	if ( ! empty( $order_data['transaction_id'] ) ) {
 		cs_add_order_transaction( array(
 			'object_id'      => $order_id,
 			'object_type'    => 'order',
-			'transaction_id' => sanitize_text_field( $data['transaction_id'] ),
-			'gateway'        => sanitize_text_field( $data['gateway'] ),
+			'transaction_id' => sanitize_text_field( $order_data['transaction_id'] ),
+			'gateway'        => sanitize_text_field( $order_data['gateway'] ),
 			'status'         => 'complete',
 			'total'          => $order_total,
 		) );
 	}
 
 	// Unlimited downloads.
-	if ( isset( $data['cs-unlimited-downloads'] ) && 1 === (int) $data['cs-unlimited-downloads'] ) {
+	if ( isset( $order_data['cs-unlimited-downloads'] ) && 1 === (int) $order_data['cs-unlimited-downloads'] ) {
 		cs_update_order_meta( $order_id, 'unlimited_downloads', 1 );
 	}
 
@@ -446,7 +433,7 @@ function cs_add_manual_order( $args = array() ) {
 	}
 
 	// Stop purchase receipt from being sent.
-	if ( ! isset( $data['cs_order_send_receipt'] ) ) {
+	if ( ! isset( $order_data['cs_order_send_receipt'] ) ) {
 		remove_action( 'cs_complete_purchase', 'cs_trigger_purchase_receipt', 999 );
 	}
 
@@ -454,6 +441,16 @@ function cs_add_manual_order( $args = array() ) {
 	if ( 'complete' === $status ) {
 		cs_update_order_status( $order_id, $status );
 	}
+
+	/**
+	 * Action hook which runs after a manual order has been added to the database.
+	 *
+	 * @since 3.0
+	 * @param int   $order_id   The new order ID.
+	 * @param array $order_data The array of order data.
+	 * @param array $args       The original form data.
+	 */
+	do_action( 'cs_post_add_manual_order', $order_id, $order_data, $args );
 
 	// Redirect to `Edit Order` page.
 	cs_redirect( cs_get_admin_url( array(

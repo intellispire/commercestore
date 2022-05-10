@@ -635,6 +635,15 @@ function cs_parse_report_dates( $form_data ) {
 
 	$filters = Reports\get_filters();
 
+	$redirect = ! empty( $form_data['cs_redirect'] )
+		? $form_data['cs_redirect']
+		: cs_get_admin_url( array(
+			'page' => 'cs-reports',
+		) );
+
+	$filter_args = array();
+
+	// Parse and validate filters.
 	foreach ( $filters as $filter => $attributes ) {
 
 		switch ( $filter ) {
@@ -662,66 +671,63 @@ function cs_parse_report_dates( $form_data ) {
 						);
 					}
 
-					$session_data = array(
-						'from'  => empty( $form_data['filter_from'] ) ? '' : sanitize_text_field( $form_data['filter_from'] ),
-						'to'    => empty( $form_data['filter_to'] ) ? '' : sanitize_text_field( $form_data['filter_to'] ),
+					$filter_args = array_merge(
+						array(
+							'filter_from' => ! empty( $form_data['filter_from'] )
+								? sanitize_text_field( $form_data['filter_from'] )
+								: '',
+							'filter_to'   => ! empty( $form_data['filter_to'] )
+								? sanitize_text_field( $form_data['filter_to'] )
+								: '',
 						'range' => 'other',
+						),
+						$filter_args
 					);
 
 				} else {
 
 					$dates = Reports\parse_dates_for_range( $range );
-					$session_data = array(
-						'from'  => $dates['start']->format( 'date-mysql' ),
-						'to'    => $dates['end']->format( 'date-mysql' ),
+
+					$filter_args = array_merge(
+						array(
+							'filter_from' => $dates['start']->format( 'date-mysql' ),
+							'filter_to'   => $dates['end']->format( 'date-mysql' ),
 						'range' => $range,
+						),
+						$filter_args
 					);
 
 				}
 				break;
 
 			case 'taxes':
-				$session_data = array(
+				$filter_args = array_merge(
+					array(
 					'exclude_taxes' => isset( $form_data['exclude_taxes'] ),
+					),
+					$filter_args
 				);
 
 				break;
 
 			default:
-				$session_data = isset( $form_data[ $filter ] ) ? $form_data[ $filter ] : array();
+				$filter_arg = isset( $form_data[ $filter ] )
+					? $form_data[ $filter ]
+					: array();
+
+				if ( ! empty( $filter_arg ) ) {
+					$filter_args[ $filter ] = $filter_arg;
+		}
 
 				break;
-		}
-
-		Reports\set_filter_value( $filter, $session_data );
-
 	}
-
-	if ( ! empty( $form_data['cs_redirect'] ) ) {
-		$redirect = $form_data['cs_redirect'];
-
-		// Ensure data is available in the URL for legacy reports.
-		if ( ! empty( $form_data['range'] ) ) {
-			$redirect = add_query_arg(
-				array(
-					'range' => $form_data['range'],
-				),
-				$redirect
-			);
 		}
 
-		if ( ! empty( $form_data['exclude_taxes'] ) ) {
-			$redirect = add_query_arg(
-				array(
-					'exclude_taxes' => true,
-				),
-				$redirect
-			);
-		}
+	// Redirect back to report.
+	$redirect = add_query_arg( $filter_args, $redirect );
 
 		cs_redirect( $redirect );
 	}
-}
 add_action( 'cs_filter_reports', 'cs_parse_report_dates' );
 
 /**

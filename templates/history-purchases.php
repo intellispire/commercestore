@@ -21,14 +21,25 @@ if ( ! is_user_logged_in() ) {
 	return;
 }
 $page   = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+$user_id = get_current_user_id();
 $orders = cs_get_orders(
 	array(
-		'user_id' => get_current_user_id(),
+		'user_id' => $user_id,
 		'number'  => 20,
 		'offset'  => 20 * ( intval( $page ) - 1 ),
 		'type'    => 'sale',
 	)
 );
+
+/**
+ * Fires before the order history, whether or not orders have been found.
+ *
+ * @since 3.0
+ * @param array $orders  The array of order objects for the current user.
+ * @param int   $user_id The current user ID.
+ */
+do_action( 'cs_pre_order_history', $orders, $user_id );
+
 if ( $orders ) :
 	do_action( 'cs_before_order_history', $orders );
 	?>

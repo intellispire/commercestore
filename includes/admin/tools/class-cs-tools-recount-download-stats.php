@@ -77,45 +77,13 @@ class CS_Tools_Recount_Download_Stats extends CS_Batch_Export {
 			)
 		), '3.0' );
 
-		global $wpdb;
-
-		/*
-		 * Build up our WHERE clauses.
-		 */
-		$conditions = array();
-
-		if ( ! empty( $accepted_statuses ) && is_array( $accepted_statuses ) ) {
-			$placeholder_string = implode( ', ', array_fill( 0, count( $accepted_statuses ), '%s' ) );
-			$conditions[]       = $wpdb->prepare(
-				"oi.status IN({$placeholder_string})",
-				$accepted_statuses
-			);
-		}
-
 		if ( ! empty( $this->download_id ) && is_numeric( $this->download_id ) ) {
-			$conditions[] = $wpdb->prepare(
-				"oi.product_id = %d",
-				$this->download_id
-			);
-		}
-		$conditions = ! empty( $conditions ) ? ' AND ' . implode( ' AND ', $conditions ) : '';
-
-		$results = $wpdb->get_row(
-			"SELECT SUM(oi.total / oi.rate) AS revenue, COUNT(oi.id) AS sales
-				FROM {$wpdb->cs_order_items} oi
-				INNER JOIN {$wpdb->cs_orders} o ON(o.id = oi.order_id)
-				WHERE o.type = 'sale'
-				{$conditions}"
-		);
-
-		$sales    = ! empty( $results->sales ) ? intval( $results->sales ) : 0;
-		$earnings = ! empty( $results->revenue ) ? cs_sanitize_amount( $results->revenue ) : 0.00;
-
-		update_post_meta( $this->download_id, '_cs_download_sales', $sales );
-		update_post_meta( $this->download_id, '_cs_download_earnings', sanitize_text_field( $earnings ) );
+			cs_recalculate_download_sales_earnings( $this->download_id );
 
 		return false;
+		}
 
+		return false;
 	}
 
 	/**

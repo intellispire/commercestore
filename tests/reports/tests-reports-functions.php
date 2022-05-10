@@ -311,11 +311,14 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 	 */
 	public function test_get_filter_value_with_a_valid_filter_should_retrieve_that_filters_value() {
 		$expected = array(
-			'from' => date( 'Y-m-d H:i:s' ),
-			'to'   => date( 'Y-m-d H:i:s' ),
+			'from'  => date( 'Y-m-d 00:00:00' ),
+			'to'    => date( 'Y-m-d 23:59:59' ),
+			'range' => 'today',
 		);
 
-		set_filter_value( 'dates', $expected );
+		$_GET['range']       = 'today';
+		$_GET['filter_from'] = $expected['from'];
+		$_GET['filter_to']   = $expected['to'];
 
 		$this->assertEqualSetsWithIndex( $expected, get_filter_value( 'dates' ) );
 	}
@@ -629,10 +632,11 @@ class Reports_Functions_Tests extends \CS_UnitTestCase {
 		$dates = array(
 			'from'  => self::$date->copy()->subCentury( 2 )->startOfDay()->toDateTimeString(),
 			'to'    => self::$date->copy()->addCentury( 2 )->endOfDay()->toDateTimeString(),
-			'range' => 'other',
 		);
 
-		set_filter_value( 'dates', $dates );
+		$_GET['range']       = 'other';
+		$_GET['filter_from'] = $dates['from'];
+		$_GET['filter_to']   = $dates['to'];
 
 		$expected = array(
 			'start' => $dates['from'],

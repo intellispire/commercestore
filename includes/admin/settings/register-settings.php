@@ -489,52 +489,6 @@ function cs_get_registered_settings() {
 						'placeholder' => '.'
 					),
 				),
-				'moderation' => array(
-					'moderation_settings' => array(
-						'id'   => 'moderation_settings',
-						'name' => '<h3>' . __( 'Moderation', 'commercestore' ) . '</h3>',
-						'desc' => '',
-						'type' => 'header',
-						'tooltip_title' => __( 'Moderation', 'commercestore' ),
-						'tooltip_desc'  => __( 'It is sometimes necessary to temporarily prevent certain potential customers from checking out. Use these settings to control who can make purchases.', 'commercestore' ),
-					),
-					'banned_emails' => array(
-						'id'    => 'banned_emails',
-						'name'  => __( 'Banned Emails', 'commercestore' ),
-						'desc'  => __( 'Emails placed in the box above will not be allowed to make purchases.', 'commercestore' ) . '<br>' . __( 'One per line, enter: email addresses, domains (<code>@example.com</code>), or TLDs (<code>.gov</code>).', 'commercestore' ),
-						'type'  => 'textarea',
-						'placeholder' => __( '@example.com', 'commercestore' )
-					)
-				),
-				'refunds' => array(
-					'refunds_settings' => array(
-						'id'   => 'refunds_settings',
-						'name' => '<h3>' . __( 'Refunds', 'commercestore' ) . '</h3>',
-						'desc' => '',
-						'type' => 'header',
-						'tooltip_title' => __( 'Refunds', 'commercestore' ),
-						'tooltip_desc'  => __( 'As a shop owner, sometimes refunds are necessary. Use these settings to decide how refunds will work in your shop.', 'commercestore' ),
-					),
-					'refundability' => array(
-						'id'      => 'refundability',
-						'name'    => __( 'Default Status', 'commercestore' ),
-						'desc'    => __( 'Products without an explicit setting will default to this.', 'commercestore' ),
-						'type'    => 'select',
-						'std'     => 'refundable',
-						'options' => cs_get_refundability_types(),
-					),
-					'refund_window' => array(
-						'id'   => 'refund_window',
-						'name' => __( 'Refund Window', 'commercestore' ),
-						'desc' => __( 'Number of days (after a sale) when refunds can be processed.<br>Default is <code>30</code> days. Set to <code>0</code> for infinity. Overridden on a per-product basis.', 'commercestore' ),
-						'std'  => 30,
-						'type' => 'number',
-						'size' => 'small',
-						'max'  => 3650, // Ten year maximum, because why explicitly support longer
-						'min'  => 0,
-						'step' => 1,
-					),
-				),
 				'api' => array(
 					'api_settings' => array(
 						'id'            => 'api_settings',
@@ -663,6 +617,50 @@ function cs_get_registered_settings() {
 						'tooltip_title' => __( 'Cart Saving', 'commercestore' ),
 						'tooltip_desc'  => __( 'Cart saving allows shoppers to create a temporary link to their current shopping cart so they can come back to it later, or share it with someone.', 'commercestore' ),
 					),
+					'moderation_settings' => array(
+							'id'   => 'moderation_settings',
+							'name' => '<h3>' . __( 'Moderation', 'commercestore' ) . '</h3>',
+							'desc' => '',
+							'type' => 'header',
+							'tooltip_title' => __( 'Moderation', 'commercestore' ),
+							'tooltip_desc'  => __( 'It is sometimes necessary to temporarily prevent certain potential customers from checking out. Use these settings to control who can make purchases.', 'commercestore' ),
+					),
+					'banned_emails' => array(
+							'id'    => 'banned_emails',
+							'name'  => __( 'Banned Emails', 'commercestore' ),
+							'desc'  => __( 'Emails placed in the box above will not be allowed to make purchases.', 'commercestore' ) . '<br>' . __( 'One per line, enter: email addresses, domains (<code>@example.com</code>), or TLDs (<code>.gov</code>).', 'commercestore' ),
+							'type'  => 'textarea',
+							'placeholder' => __( '@example.com', 'commercestore' )
+					),
+				),
+				'refunds' => array(
+						'refunds_settings' => array(
+								'id'   => 'refunds_settings',
+								'name' => '<h3>' . __( 'Refunds', 'commercestore' ) . '</h3>',
+								'desc' => '',
+								'type' => 'header',
+								'tooltip_title' => __( 'Refunds', 'commercestore' ),
+								'tooltip_desc'  => __( 'As a shop owner, sometimes refunds are necessary. Use these settings to decide how refunds will work in your shop.', 'commercestore' ),
+						),
+						'refundability' => array(
+								'id'      => 'refundability',
+								'name'    => __( 'Default Status', 'commercestore' ),
+								'desc'    => __( 'This will be the store default. It can be changed at a per-product level.', 'commercestore' ),
+								'type'    => 'select',
+								'std'     => 'refundable',
+								'options' => cs_get_refundability_types(),
+						),
+						'refund_window' => array(
+								'id'   => 'refund_window',
+								'name' => __( 'Refund Window', 'commercestore' ),
+								'desc' => __( 'Number of days (after a sale) when refunds can be processed.<br>Default is <code>30</code> days. Set to <code>0</code> for infinity. It can be changed at a per-product level.', 'commercestore' ),
+								'std'  => 30,
+								'type' => 'number',
+								'size' => 'small',
+								'max'  => 3650, // Ten year maximum, because why explicitly support longer
+								'min'  => 0,
+								'step' => 1,
+						),
 				),
 				'accounting' => array(
 					'enable_skus' => array(
@@ -1596,14 +1594,12 @@ function cs_sanitize_html_class( $class = '' ) {
  *
  * @since 3.0
  */
-function cs_sanitize_banned_emails( $value, $key ) {
-	if ( 'banned_emails' !== $key ) {
-		return $value;
-	}
+function cs_sanitize_banned_emails( $input ) {
 
-	if ( ! empty( $value ) ) {
+	$emails = '';
+	if ( ! empty( $input['banned_emails'] ) ) {
 		// Sanitize the input
-		$emails = array_map( 'trim', explode( "\n", $value ) );
+		$emails = array_map( 'trim', explode( "\n", $input['banned_emails'] ) );
 		$emails = array_unique( $emails );
 		$emails = array_map( 'sanitize_text_field', $emails );
 
@@ -1612,13 +1608,12 @@ function cs_sanitize_banned_emails( $value, $key ) {
 				unset( $emails[ $id ] );
 			}
 		}
-	} else {
-		$emails = '';
 	}
+	$input['banned_emails'] = $emails;
 
-	return $emails;
+	return $input;
 }
-add_filter( 'cs_settings_sanitize', 'cs_sanitize_banned_emails', 10, 2 );
+add_filter( 'cs_settings_gateways-checkout_sanitize', 'cs_sanitize_banned_emails' );
 
 /**
  * Retrieve settings tabs
@@ -1636,7 +1631,7 @@ function cs_get_settings_tabs() {
 		'marketing'  => __( 'Marketing', 'commercestore' ),
 		'styles'     => __( 'Styles', 'commercestore' ),
 		'taxes'      => __( 'Taxes', 'commercestore' ),
-		'privacy'    => __( 'Privacy', 'commercestore' ),
+		'privacy'    => __( 'Policies', 'commercestore' ),
 		'extensions' => __( 'Extensions', 'commercestore' ),
 		'licenses'   => __( 'Licenses', 'commercestore' ),
 		'misc'       => __( 'Misc', 'commercestore' ),
@@ -1678,14 +1673,13 @@ function cs_get_registered_settings_sections() {
 				'main'               => __( 'Store',    'commercestore' ),
 				'currency'           => __( 'Currency',   'commercestore' ),
 				'pages'              => __( 'Pages',      'commercestore' ),
-				'moderation'         => __( 'Moderation', 'commercestore' ),
-				'refunds'            => __( 'Refunds',    'commercestore' ),
 				'api'                => __( 'API',        'commercestore' ),
 				'tracking'           => __( 'Tracking',   'commercestore' )
 			) ),
 			'gateways'   => apply_filters( 'cs_settings_sections_gateways', array(
 				'main'               => __( 'General',         'commercestore' ),
 				'checkout'           => __( 'Checkout',           'commercestore' ),
+				'refunds'            => __( 'Refunds',         'commercestore' ),
 				'accounting'         => __( 'Accounting',         'commercestore' ),
 			) ),
 			'emails'     => apply_filters( 'cs_settings_sections_emails', array(
@@ -1796,6 +1790,7 @@ function cs_checkbox_callback( $args ) {
 		? $cs_option
 		: '';
 	$args['label']   = wp_kses_post( $args['desc'] );
+	$args['value']   = 1;
 
 	$html    = '<input type="hidden" name="' . $name . '" value="-1" />';
 	$html   .= '<div class="cs-check-wrapper">';
@@ -1822,17 +1817,23 @@ function cs_checkbox_description_callback( $args ) {
 	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
 		$name = '';
 	} else {
-		$name = 'name="cs_settings[' . cs_sanitize_key( $args['id'] ) . ']"';
+		$name = 'cs_settings[' . cs_sanitize_key( $args['id'] ) . ']';
 	}
 
-	$class   = cs_sanitize_html_class( $args['field_class'] );
-	$checked = ! empty( $cs_option ) ? checked( 1, $cs_option, false ) : '';
-	$html    = '<input type="hidden"' . $name . ' value="-1" />';
+	$args['name']    = $name;
+	$args['class']   = cs_sanitize_html_class( $args['field_class'] );
+	$args['current'] = ! empty( $cs_option ) ? $cs_option : '';
+	$args['label']   = false;
+	$args['value']   = 1;
+
+	$html  = '<input type="hidden" name="' . esc_attr( $name ) . '" value="-1" />';
 	$html   .= '<div class="cs-check-wrapper">';
-	$html   .= '<input type="checkbox" id="cs_settings[' . cs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . ' class="' . $class . '"/>';
+	$html .= CS()->html->checkbox( $args );
 	$html   .= '<label for="cs_settings[' . cs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['check'] ) . '</label>';
 	$html   .= '</div>';
+	if ( ! empty( $args['desc'] ) ) {
 	$html   .= '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
+	}
 
 	echo apply_filters( 'cs_after_setting_output', $html, $args );
 }

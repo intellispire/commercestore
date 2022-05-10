@@ -141,7 +141,7 @@ class Payment extends Base {
 		}
 
 		// Bail if order does not exist
-		$order = cs_get_order( $object_id );
+		$order = $this->_shim_cs_get_order( $object_id );
 		if ( empty( $order ) ) {
 			return $value;
 		}
@@ -292,5 +292,22 @@ class Payment extends Base {
 		$meta_keys = apply_filters( 'cs_30_post_meta_key_includelist', $meta_keys );
 
 		return (array) $meta_keys;
+	}
+
+	/**
+	 * Gets the order from the database.
+	 * This is a duplicate of cs_get_order, but is defined separately here
+	 * for pending migration purposes.
+	 *
+	 * @todo deprecate in 3.1
+	 *
+	 * @param int $order_id
+	 * @return false|CS\Orders\Order
+	 */
+	private function _shim_cs_get_order( $order_id ) {
+		$orders = new \CS\Database\Queries\Order();
+
+		// Return order
+		return $orders->get_item( $order_id );
 	}
 }

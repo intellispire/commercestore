@@ -178,7 +178,6 @@ final class CS_Amazon_Payments {
 		add_action( 'wp_ajax_nopriv_cs_amazon_get_address',   array( $this, 'ajax_get_address' ) );
 		add_action( 'cs_pre_process_purchase',                array( $this, 'disable_address_requirement' ), 99999 );
 		add_action( 'init',                                    array( $this, 'process_ipn' ) );
-		add_action( 'cs_update_payment_status',               array( $this, 'process_refund' ), 200, 3 );
 
 		if ( empty( $this->reference_id ) ) {
 			return;
@@ -1068,6 +1067,7 @@ final class CS_Amazon_Payments {
 	/**
 	 * Detect a refund action from CS
 	 *
+	 * @deprecated 3.0 Due to issues with Amazon, refunds must be processed at the gateway.
 	 * @since  2.4
 	 * @param  $payment_id int The ID number of the payment being refunded
 	 * @param  $new_status string The new status assigned to the payment
@@ -1075,6 +1075,7 @@ final class CS_Amazon_Payments {
 	 * @return void
 	 */
 	public function process_refund( $payment_id, $new_status, $old_status ) {
+		_cs_deprecated_function( __METHOD__, '3.0' );
 
 		if ( 'complete' !== $old_status && 'revoked' !== $old_status ) {
 			return;

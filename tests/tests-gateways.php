@@ -95,7 +95,9 @@ class Test_Gateways extends CS_UnitTestCase {
 		$cs_options['gateways'] = array();
 		$cs_options['gateways']['manual'] = '1';
 
-		$this->assertEquals( 'manual', cs_get_default_gateway() );
+		// If we have Stripe in this install, 'stripe' is the default';
+		$expected_result = class_exists( 'CS_Stripe' ) ? 'stripe' : 'manual';
+		$this->assertEquals( $expected_result, cs_get_default_gateway() );
 	}
 
 	public function test_get_gateway_admin_label() {

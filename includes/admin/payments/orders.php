@@ -706,6 +706,11 @@ function cs_order_details_overview( $order ) {
 		}
 	}
 
+	$has_quantity = true;
+	if ( cs_is_add_order_page() && ! cs_item_quantities_enabled() ) {
+		$has_quantity = false;
+	}
+
 	wp_localize_script(
 		'cs-admin-orders',
 		'csAdminOrderOverview',
@@ -714,7 +719,7 @@ function cs_order_details_overview( $order ) {
 			'adjustments'  => $_adjustments,
 			'refunds'      => $_refunds,
 			'isAdding'     => true === cs_is_add_order_page(),
-			'hasQuantity'  => true === cs_item_quantities_enabled(),
+			'hasQuantity'  => $has_quantity,
 			'hasTax'       => $has_tax,
 			'hasDiscounts' => true === cs_has_active_discounts(),
 			'order'        => array(
@@ -764,7 +769,7 @@ function cs_order_details_overview( $order ) {
 			<tr>
 				<th class="column-name column-primary"><?php echo esc_html( cs_get_label_singular() ); ?></th>
 				<th class="column-amount"><?php esc_html_e( 'Unit Price', 'commercestore' ); ?></th>
-				<?php if ( true === cs_item_quantities_enabled() ) : ?>
+				<?php if ( $has_quantity ) : ?>
 				<th class="column-quantity"><?php esc_html_e( 'Quantity', 'commercestore' ); ?></th>
 				<?php endif; ?>
 				<th class="column-subtotal column-right"><?php esc_html_e( 'Amount', 'commercestore' ); ?></th>
