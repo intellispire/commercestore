@@ -212,7 +212,7 @@ class CS_Batch_Earnings_Report_Export extends CS_Batch_Export {
 			}
 
 			// Allows extensions with other 'completed' statuses to alter net earnings, like recurring.
-			$completed_statuses = apply_filters( 'cs_export_earnings_completed_statuses', array( 'complete', 'revoked' ) );
+			$completed_statuses = apply_filters( 'cs_export_earnings_completed_statuses', cs_get_complete_order_statuses() );
 
 			$net_count  = 0;
 			$net_amount = 0;

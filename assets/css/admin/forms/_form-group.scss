@@ -1,7 +1,86 @@
+/**
+ * Form Group
+ *
+ * <div class="cs-form-group">
+ *   <label class="cs-form-group__label">Label</label>
+ *   <div class="cs-form-group__control">
+ *   	<input type="text" class="cs-form-group__input" />
+ *   </div>
+ *   <p class="cs-form-group__help">Help</p>
+ * </div>
+ *
+ *
+ * <fieldset class="cs-form-group">
+ *   <legend class="cs-form-group__label">Label</label>
+ *
+ *   <div class="cs-form-group__control">
+ *   	<input type="radio" class="cs-form-group__input" />
+ *   	<label>Radio 1</label>
+ *   </div>
+ *
+ *   <div class="cs-form-group__control">
+ *   	<input type="radio" class="cs-form-group__input" />
+ *   	<label>Radio 2</label>
+ *   </div>
+ * </fieldset>
+ *
+ */
+.cs-form-group {
+	margin-bottom: 16px;
+
+	&:last-of-type {
+		margin-bottom: 0;
+	}
+}
+
+.cs-form-group__label,
+.cs-form-group>label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 8px;
+	padding: 0;
+}
+
 .cs-form-group__control {
+	margin-bottom: 12px;
+	max-width: 100%;
+
+	&.is-radio,
+	&.is-check {
+		margin-top: 4px;
+	}
+
+	&:last-of-type {
+		margin-bottom: 0;
+	}
 
 	&--is-inline {
 		display: inline-flex;
 		align-items: flex-end;
 	}
+}
+
+.cs-form-group__input {
+	max-width: 100%;
+
+	&[type="checkbox"],
+	&[type="radio"] {
+		margin-top: 0;
+
+		+label {
+			display: unset;
+		}
+	}
+}
+
+select.cs-form-group__input {
+	max-width: 100%;
+}
+
+.cs-form-group__help {
+	color: $wp-gray-50;
+	font-size: 13px;
+	font-style: italic;
+	line-height: initial;
+	margin: 8px 0 0;
 }

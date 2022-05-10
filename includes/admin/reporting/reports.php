@@ -70,10 +70,26 @@ function cs_reports_sections() {
 	$sections->use_js          = false;
 	$sections->current_section = Reports\get_current_report();
 	$sections->item            = null;
-	$sections->base_url = cs_get_admin_url( array(
+
+	// Find persisted filters to append to the base URL.
+	$persisted_filters     = Reports\get_persisted_filters();
+	$persisted_filter_args = array();
+
+	foreach ( $persisted_filters as $filter ) {
+		if ( isset( $_GET[ $filter ] ) ) {
+			$persisted_filter_args[ $filter ] = sanitize_text_field( $_GET[ $filter ] );
+		}
+	}
+
+	// Build the section base URL.
+	$sections->base_url = cs_get_admin_url(
+		array_merge(
+			array(
 		'page'             => 'cs-reports',
-		'settings-updated' => false
-	) );
+			),
+			$persisted_filter_args
+		)
+	);
 
 	// Get all registered tabs & views
 	$tabs = Reports\get_reports();
@@ -231,7 +247,7 @@ function cs_register_overview_report( $reports ) {
 						return $stats->get_order_count() . ' / ' . $stats->get_order_earnings();
 					},
 					'display_args'  => array(
-						'comparison_label' => $label,
+						'comparison_label' => $label . ' &mdash; ' . __( 'Gross', 'commercestore' ),
 					),
 				),
 			),
@@ -252,7 +268,7 @@ function cs_register_overview_report( $reports ) {
 						return $stats->get_order_count() . ' / ' . $stats->get_order_earnings();
 					},
 					'display_args'  => array(
-						'comparison_label' => __( 'All Time', 'commercestore' ),
+						'comparison_label' => __( 'All Time', 'commercestore' ) . ' &mdash; ' . __( 'Gross', 'commercestore' ),
 					),
 				),
 			),
@@ -274,7 +290,7 @@ function cs_register_overview_report( $reports ) {
 						) );
 					},
 					'display_args'  => array(
-						'comparison_label' => $label,
+						'comparison_label' => $label . ' &mdash; ' . __( 'Gross', 'commercestore' ),
 					),
 				),
 			),
@@ -293,7 +309,7 @@ function cs_register_overview_report( $reports ) {
 						) );
 					},
 					'display_args'  => array(
-						'comparison_label' => $label,
+						'comparison_label' => $label . ' &mdash; ' . __( 'Gross', 'commercestore' ),
 					),
 				),
 			),
@@ -435,7 +451,7 @@ function cs_register_overview_report( $reports ) {
 		) );
 
 		$reports->register_endpoint( 'overview_sales_earnings_chart', array(
-			'label' => __( 'Sales and Earnings', 'commercestore' ) . ' &mdash; ' . $label,
+			'label' => __( 'Sales and Earnings', 'commercestore' ) . ' &mdash; ' . $label . ' &mdash; ' . __( 'Net', 'commercestore' ),
 			'views' => array(
 				'chart' => array(
 					'data_callback' => 'cs_overview_sales_earnings_chart',
@@ -624,7 +640,7 @@ function cs_register_downloads_report( $reports ) {
 						return $stats->get_order_item_count() . ' / ' . $stats->get_order_item_earnings();
 					},
 					'display_args'  => array(
-						'comparison_label' => $label,
+						'comparison_label' => $label . ' &mdash; ' . __( 'Net	', 'commercestore' ),
 					),
 				),
 			),
@@ -2843,7 +2859,7 @@ function display_export_report() {
 						<p><?php printf( esc_html__( 'Download a CSV of customers. Select a taxonomy to see all the customers who purchased %s in that taxonomy.', 'commercestore' ), cs_get_label_plural( true ) ); ?></p>
 						<form id="cs-export-customers" class="cs-export-form cs-import-export-form" method="post">
 							<?php
-							$taxonomies = get_object_taxonomies( 'download', 'names' );
+							$taxonomies = cs_get_download_taxonomies();
 							$taxonomies = array_map( 'sanitize_text_field', $taxonomies );
 
 							$placeholders = implode( ', ', array_fill( 0, count( $taxonomies ), '%s' ) );

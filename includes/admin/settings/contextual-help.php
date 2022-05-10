@@ -91,7 +91,7 @@ function cs_settings_contextual_help() {
 
 	$screen->add_help_tab( array(
 		'id'		=> 'cs-settings-privacy',
-		'title'		=> __( 'Privacy', 'commercestore' ),
+		'title'   => __( 'Policies', 'commercestore' ),
 		'content'	=>
 			'<p>' . __( 'This screen provides access to customer privacy policies, terms & agreements, and how to display them on the front of your site.', 'commercestore' ) . '</p>' .
 			'<p>' . __( 'You may also override what happens to order records when a customer exercises their right to be forgotten from your site.',        'commercestore' ) . '</p>'

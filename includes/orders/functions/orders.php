@@ -242,6 +242,14 @@ function cs_delete_order( $order_id = 0 ) {
  */
 function cs_destroy_order( $order_id = 0 ) {
 
+	/**
+	 * Action hook for developers to do extra work when an order is destroyed.
+	 *
+	 * @since 3.0
+	 * @param int  $order_id  The original order ID.
+	 */
+	do_action( 'cs_pre_destroy_order', $order_id );
+
 	// Delete the order
 	$destroyed = cs_delete_order( $order_id );
 
@@ -294,7 +302,14 @@ function cs_destroy_order( $order_id = 0 ) {
 		}
 	}
 
-
+	/**
+	 * Action hook for developers to do extra work when an order is destroyed.
+	 *
+	 * @since 3.0
+	 * @param int  $order_id  The original order ID.
+	 * @param bool $destroyed Whether the order was destroyed.
+	 */
+	do_action( 'cs_order_destroyed', $order_id, $destroyed );
 
 	return $destroyed;
 }
@@ -364,8 +379,23 @@ function cs_update_order( $order_id = 0, $data = array() ) {
 function cs_get_order( $order_id = 0 ) {
 	$orders = new CS\Database\Queries\Order();
 
-	// Return order
-	return $orders->get_item( $order_id );
+	$order = $orders->get_item( $order_id );
+
+	/**
+	 * If the order is not retrieved but migration is pending, check for an old payment.
+	 * @todo remove in 3.1
+	*/
+	if ( ! $order instanceof CS\Orders\Order && _cs_get_final_payment_id() ) {
+		$post = get_post( $order_id );
+		if ( $post instanceof WP_Post ) {
+			include_once CS_PLUGIN_DIR . 'includes/compat/class-cs-payment-compat.php';
+			$payment_compat = new CS_Payment_Compat( $order_id );
+
+			return $payment_compat->order;
+		}
+	}
+
+	return $order;
 }
 
 /**
@@ -1313,84 +1343,6 @@ function cs_clone_order( $order_id = 0, $clone_relationships = false, $args = ar
 	}
 
 	return $new_order_id;
-}
-
-/**
- * Get the order status array keys that can be used to run reporting related to gross reporting.
- *
- * @since 3.0
- *
- * @return array An array of order status array keys that can be related to gross reporting.
- */
-function cs_get_gross_order_statuses() {
-	$statuses = array(
-		'complete',
-		'refunded',
-		'partially_refunded',
-		'revoked',
-	);
-
-	/**
-	 * Statuses that affect gross order statistics.
-	 *
-	 * This filter allows extensions and developers to alter the statuses that can affect the reporting of gross
-	 * sales statistics.
-	 *
-	 * @since 3.0
-	 *
-	 * @param array $statuses {
-	 *     An array of order status array keys.
-	 *
-	 */
-	return apply_filters( 'cs_gross_order_statuses', $statuses );
-}
-
-/**
- * Get the order status array keys that can be used to run reporting related to net reporting.
- *
- * @since 3.0
- *
- * @return array An array of order status array keys that can be related to net reporting.
- */
-function cs_get_net_order_statuses() {
-	$statuses = array(
-		'complete',
-		'partially_refunded',
-		'revoked',
-	);
-
-	/**
-	 * Statuses that affect net order statistics.
-	 *
-	 * This filter allows extensions and developers to alter the statuses that can affect the reporting of net
-	 * sales statistics.
-	 *
-	 * @since 3.0
-	 *
-	 * @param array $statuses {
-	 *     An array of order status array keys.
-	 *
-	 */
-	return apply_filters( 'cs_net_order_statuses', $statuses );
-}
-
-/**
- * Get the order status array keys which are considered recoverable.
- *
- * @since 3.0
- * @return array An array of order status keys which are considered recoverable.
- */
-function cs_recoverable_order_statuses() {
-	$statuses = array( 'pending', 'abandoned', 'failed' );
-
-	/**
-	 * Order statuses which are considered recoverable.
-	 *
-	 * @param $statuses {
-	 *        An array of order status array keys.
-	 * }
-	 */
-	return apply_filters( 'cs_recoverable_payment_statuses', $statuses );
 }
 
 /**

@@ -243,11 +243,18 @@ function cs_add_customer_email( $args = array() ) {
 			}
 
 		} else {
-			$redirect = admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer_id . '&cs-message=email-added' );
+			$redirect = cs_get_admin_url(
+				array(
+					'page'        => 'cs-customers',
+					'view'        => 'overview',
+					'id'          => urlencode( $customer_id ),
+					'cs-message' => 'email-added',
+				)
+			);
 			$output = array(
 				'success'  => true,
 				'message'  => __( 'Email successfully added to customer.', 'commercestore' ),
-				'redirect' => $redirect,
+				'redirect' => $redirect . '#cs_general_emails',
 			);
 
 			$user          = wp_get_current_user();
@@ -303,17 +310,31 @@ function cs_remove_customer_email() {
 
 	$customer = new CS_Customer( $_GET['id'] );
 	if ( $customer->remove_email( $_GET['email'] ) ) {
-		$url           = add_query_arg( 'cs-message', 'email-removed', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url           = cs_get_admin_url(
+			array(
+				'page'        => 'cs-customers',
+				'view'        => 'overview',
+				'id'          => urlencode( $customer->id ),
+				'cs-message' => 'email-removed',
+			)
+		);
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : cs_get_bot_name();
 		$customer_note = sprintf( __( 'Email address %s removed by %s', 'commercestore' ), sanitize_email( $_GET['email'] ), $user_login );
 		$customer->add_note( $customer_note );
 
 	} else {
-		$url = add_query_arg( 'cs-message', 'email-remove-failed', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url = cs_get_admin_url(
+			array(
+				'page'        => 'cs-customers',
+				'view'        => 'overview',
+				'id'          => urlencode( $customer->id ),
+				'cs-message' => 'email-remove-failed',
+			)
+		);
 	}
 
-	cs_redirect( $url );
+	cs_redirect( $url . '#cs_general_emails' );
 }
 add_action( 'cs_customer-remove-email', 'cs_remove_customer_email', 10 );
 
@@ -344,17 +365,31 @@ function cs_set_customer_primary_email() {
 
 	$customer = new CS_Customer( $_GET['id'] );
 	if ( $customer->set_primary_email( $_GET['email'] ) ) {
-		$url           = add_query_arg( 'cs-message', 'primary-email-updated', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url           = cs_get_admin_url(
+			array(
+				'page'        => 'cs-customers',
+				'view'        => 'overview',
+				'id'          => urlencode( $customer->id ),
+				'cs-message' => 'primary-email-updated',
+			)
+		);
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : cs_get_bot_name();
 		$customer_note = sprintf( __( 'Email address %s set as primary by %s', 'commercestore' ), sanitize_email( $_GET['email'] ), $user_login );
 		$customer->add_note( $customer_note );
 
 	} else {
-		$url = add_query_arg( 'cs-message', 'primary-email-failed', admin_url( 'edit.php?post_type=download&page=cs-customers&view=overview&id=' . $customer->id ) );
+		$url = cs_get_admin_url(
+			array(
+				'page'        => 'cs-customers',
+				'view'        => 'overview',
+				'id'          => urlencode( $customer->id ),
+				'cs-message' => 'primary-email-failed',
+			)
+		);
 	}
 
-	cs_redirect( $url );
+	cs_redirect( $url . '#cs_general_emails' );
 }
 add_action( 'cs_customer-primary-email', 'cs_set_customer_primary_email', 10 );
 
@@ -578,6 +613,6 @@ function cs_remove_customer_address() {
 		$url = add_query_arg( 'cs-message', 'address-remove-failed', $url );
 	}
 
-	cs_redirect( $url );
+	cs_redirect( $url . '#cs_general_addresses' );
 }
 add_action( 'cs_customer-remove-address', 'cs_remove_customer_address', 10 );

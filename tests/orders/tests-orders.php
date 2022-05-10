@@ -73,6 +73,33 @@ class Orders_Tests extends \CS_UnitTestCase {
 	/**
 	 * @covers ::cs_delete_order
 	 */
+	public function test_delete_should_delete_metadata() {
+		cs_add_order_meta( self::$orders[1], 'test_meta_key', 'test_meta_value', true );
+
+		// This assertion is added to ensure that metadata was, in fact, added to the order.
+		$this->assertEquals( 'test_meta_value', cs_get_order_meta( self::$orders[1], 'test_meta_key', true ) );
+
+		cs_delete_order( self::$orders[1] );
+		$this->assertEmpty( cs_get_order_meta( self::$orders[1], 'test_meta_key', true ) );
+	}
+
+	/**
+	 * @covers ::cs_delete_order
+	 */
+	public function test_delete_should_delete_metadata_non_unique() {
+		cs_add_order_meta( self::$orders[1], 'test_meta_key', '2', false );
+		cs_add_order_meta( self::$orders[1], 'test_meta_key', '1', false );
+
+		// This assertion is added to ensure that metadata was, in fact, added to the order.
+		$this->assertEquals( array( 2, 1 ), cs_get_order_meta( self::$orders[1], 'test_meta_key', false ) );
+
+		cs_delete_order( self::$orders[1] );
+		$this->assertEmpty( cs_get_order_meta( self::$orders[1], 'test_meta_key', false ) );
+	}
+
+	/**
+	 * @covers ::cs_delete_order
+	 */
 	public function test_delete_without_id_should_fail() {
 		$success = cs_delete_order( '' );
 

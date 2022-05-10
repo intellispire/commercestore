@@ -95,7 +95,7 @@ class CS_Payment_Stats extends CS_Stats {
 
 			remove_filter( 'date_query_valid_columns', array( $this, '__filter_valid_date_columns' ), 2 );
 
-			$statuses = array( 'complete', 'publish', 'revoked', 'refunded', 'partially_refunded' );
+			$statuses = cs_get_gross_order_statuses();
 
 			/**
 			 * Filters Order statuses that should be included when calculating stats.
@@ -264,7 +264,7 @@ class CS_Payment_Stats extends CS_Stats {
 
 				remove_filter( 'date_query_valid_columns', array( $this, '__filter_valid_date_columns' ), 2 );
 
-				$statuses = array( 'complete', 'publish', 'revoked', 'refunded', 'partially_refunded' );
+				$statuses = cs_get_gross_order_statuses();
 
 				/**
 				 * Filters Order statuses that should be included when calculating stats.
@@ -383,7 +383,7 @@ class CS_Payment_Stats extends CS_Stats {
 				$grouping = 'YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created), HOUR(cs_o.date_created)';
 			}
 
-			$statuses = array( 'complete', 'publish', 'revoked', 'refunded', 'partially_refunded' );
+			$statuses = cs_get_gross_order_statuses();
 
 			/**
 			 * Filters Order statuses that should be included when calculating stats.
@@ -464,7 +464,7 @@ class CS_Payment_Stats extends CS_Stats {
 				$grouping = 'YEAR(cs_o.date_created), MONTH(cs_o.date_created), DAY(cs_o.date_created), HOUR(cs_o.date_created)';
 			}
 
-			$statuses = array( 'complete', 'publish', 'revoked', 'refunded', 'partially_refunded' );
+			$statuses = cs_get_gross_order_statuses();
 
 			/**
 			 * Filters Order statuses that should be included when calculating stats.

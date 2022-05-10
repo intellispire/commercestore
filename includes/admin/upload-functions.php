@@ -140,7 +140,7 @@ function cs_scan_folders( $path = '', $return = array() ) {
 }
 
 /**
- * Retrieve the .htaccess rules to wp-content/uploads/commercestore/
+ * Retrieve the .htaccess rules to wp-content/uploads/cs/
  *
  * @since 1.6
  *

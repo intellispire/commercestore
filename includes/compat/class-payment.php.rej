@@ -1,0 +1,17 @@
+***************
+*** 278,284 ****
+  			'_cs_payment_number',
+  			'_cs_sl_upgraded_payment_id', // CS SL
+  			'_cs_sl_is_renewal', // CS SL
+- 			'_css_stripe_customer_id', // CS Stripe
+  		);
+  
+  		/**
+--- 278,284 ----
+  			'_cs_payment_number',
+  			'_cs_sl_upgraded_payment_id', // CS SL
+  			'_cs_sl_is_renewal', // CS SL
++ 			'_csx_stripe_customer_id', // CS Stripe
+  		);
+  
+  		/**

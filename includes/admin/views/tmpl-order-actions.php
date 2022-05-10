@@ -45,7 +45,9 @@ if ( true === cs_is_add_order_page() ) :
 	</div>
 
 	<div class="cs-order-overview-actions__refund">
-		<?php if ( true === $is_refundable && true === $is_override && true === $is_window_passed ) : ?>
+		<?php if ( 'amazon' === $order->gateway ) : ?>
+			<span class="dashicons dashicons-lock" title="<?php esc_attr_e( 'Amazon orders must be refunded at the gateway.', 'commercestore' ); ?>"></span>
+		<?php elseif ( true === $is_refundable && true === $is_override && true === $is_window_passed ) : ?>
 			<span class="cs-help-tip dashicons dashicons-unlock" title="<?php esc_attr_e( 'The refund window for this Order has passed; however, you have the ability to override this.', 'commercestore' ); ?>"></span>
 		<?php elseif ( false === $is_refundable && true === $is_window_passed ) : ?>
 			<span class="cs-help-tip dashicons dashicons-lock" title="<?php esc_attr_e( 'The refund window for this Order has passed.', 'commercestore' ); ?>"></span>
@@ -61,4 +63,9 @@ if ( true === cs_is_add_order_page() ) :
 			<?php esc_html_e( 'Initialize Refund', 'commercestore' ); ?>
 		</button>
 	</div>
+	<?php if ( 'amazon' === $order->gateway ) : ?>
+		<div class="cs-order-overview-actions__notice notice notice-warning">
+			<p><?php esc_attr_e( 'Orders placed through the Amazon gateway must be refunded through Amazon. The order status can then be updated manually.', 'commercestore' ); ?></p>
+		</div>
+	<?php endif; ?>
 <?php endif; ?>

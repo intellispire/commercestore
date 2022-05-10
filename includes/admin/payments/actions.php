@@ -87,27 +87,14 @@ function cs_update_payment_details( $data = array() ) {
 
 	$unlimited  = isset( $data['cs-unlimited-downloads'] ) ? '1' : null;
 	$new_status = sanitize_key( $data['cs-payment-status'] );
-	$date       = sanitize_text_field( $data['cs-payment-date'] );
-	$hour       = sanitize_text_field( $data['cs-payment-time-hour'] );
-
-	// Restrict to our high and low
-	if ( $hour > 23 ) {
-		$hour = 23;
-	} elseif ( $hour < 0 ) {
-		$hour = 00;
-	}
-
-	$minute = sanitize_text_field( $data['cs-payment-time-min'] );
-
-	// Restrict to our high and low
-	if ( $minute > 59 ) {
-		$minute = 59;
-	} elseif ( $minute < 0 ) {
-		$minute = 00;
-	}
+	$date_string = CS()->utils->get_date_string(
+		sanitize_text_field( $data['cs-payment-date'] ),
+		sanitize_text_field( $data['cs-payment-time-hour'] ),
+		sanitize_text_field( $data['cs-payment-time-min'] )
+	);
 
 	// The date is entered in the WP timezone. We need to convert it to UTC prior to saving now.
-	$date = cs_get_utc_equivalent_date( CS()->utils->date( $date . ' ' . $hour . ':' . $minute . ':00', cs_get_timezone_id(), false ) );
+	$date = cs_get_utc_equivalent_date( CS()->utils->date( $date_string, cs_get_timezone_id(), false ) );
 	$date = $date->format( 'Y-m-d H:i:s' );
 
 	$order_update_args['date_created'] = $date;

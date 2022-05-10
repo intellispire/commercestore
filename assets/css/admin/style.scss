@@ -31,6 +31,8 @@
 
 @import "notifications/style";
 
+@import "general/style";
+
 /**
  * Notes:
  *
@@ -40,11 +42,13 @@
 .cs-hidden {
 	display: none;
 }
+
 .cs-clearfix:after {
 	content: "";
 	display: table;
 	clear: both;
 }
+
 .cs-wrap a,
 .cs-notice .notice-dismiss {
 	text-decoration: none;
@@ -116,10 +120,13 @@ body.post-type-download #screen-meta {
 button.cs-round {
 	border: none;
 }
+
 #cs-header button.cs-round:hover {
 	background-color: #e5e5e5;
 }
-button.cs-round:focus, button.cs-round:active {
+
+button.cs-round:focus,
+button.cs-round:active {
 	outline: 2px solid #0c5d95;
 }
 
@@ -247,11 +254,6 @@ button.cs-round:focus, button.cs-round:active {
 
 .download_page_cs-settings .cs-check-wrapper {
 	clear: both;
-}
-.download_page_cs-settings .cs-check-wrapper label {
-	margin: -2px 0 3px 0;
-	display: inline-block;
-	vertical-align: initial;
 }
 
 .download_page_cs-settings .form-table tr > th > strong,
@@ -382,9 +384,11 @@ button.cs-round:focus, button.cs-round:active {
 .cs-add-ons-footer {
 	padding-top: 10px;
 }
+
 #cs-add-ons .subsubsub .dashicons {
 	margin-top: 3px;
 }
+
 #cs-add-ons .cs-add-ons-container {
 	clear: both;
 	padding-top: 10px;
@@ -409,37 +413,45 @@ button.cs-round:focus, button.cs-round:active {
 	transition: all .2s ease-in-out;
 	cursor: default;
 }
+
 #cs-add-ons .cs-extension:hover {
 	border: 1px solid #bbb;
 	opacity: 1;
 	transform: scale(1.05);
 	z-index: 5;
 }
+
 #cs-add-ons .cs-extension h3 {
 	font-size: 13px;
 	margin: 0 0 8px;
 }
+
 #cs-add-ons .cs-extension .button-secondary {
 	position: absolute;
 	bottom: 14px;
 	left: 14px;
 }
+
 #cs-add-ons .cs-browse-all {
 	clear: both;
 	width:100%;
 }
+
 #cs-add-ons .cs-extension .third-party {
 	display: none;
 }
+
 #cs-add-ons .cs-add-ons-container .cs-extension:first-child {
 	background-color: #85c0e5;
 	border-color: #62a9d7;
 	color: #fff;
 	box-shadow: 0 3px 5px rgba(0,0,0,0.2);
 }
+
 #cs-add-ons .cs-add-ons-container .cs-extension:first-child h3 {
 	color: #fff;
 }
+
 /* Mock blue "Primary" styling on Starter Package */
 #cs-add-ons .cs-add-ons-container .cs-extension:first-child .button-secondary {
 	background: #0085ba;
@@ -449,6 +461,7 @@ button.cs-round:focus, button.cs-round:active {
 	text-decoration: none;
 	text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
 }
+
 #cs-add-ons .cs-extension .wp-post-image {
 	width: 100%;
 	height: auto;
@@ -461,15 +474,18 @@ button.cs-round:focus, button.cs-round:active {
 #TB_window {
 	overflow: hidden;
 }
+
 #TB_title {
 	padding: 5px;
 }
+
 #TB_ajaxContent {
 	width: calc(100% - 30px) !important;
 	padding: 15px;
 	margin: 0;
 	height: calc(100% - 118px) !important;
 }
+
 #TB_ajaxWindowTitle {
 	font-size: 18px;
 	font-weight: 600;
@@ -843,6 +859,11 @@ table.cs-order-overview-summary--refund {
 	align-items: center;
 }
 
+#cs-order-overview-actions .cs-order-overview-actions__notice {
+	flex-basis: 100%;
+	margin-top: 15px;
+}
+
 .cs-order-overview-actions .button {
 	width: 100%;
 	margin-bottom: 12px;
@@ -976,16 +997,14 @@ table.cs-order-overview-summary--refund {
 	align-items: center;
 }
 
-.cs-admin-order-status-badge__text {
-}
+.cs-admin-order-status-badge__text {}
 
 .cs-admin-order-status-badge__icon {
 	opacity: 0.80;
 	margin: 0 -2px 0 2px;
 }
 
-.cs-admin-order-status-badge--refunded {
-}
+.cs-admin-order-status-badge--refunded {}
 
 	.cs-admin-order-status-badge--refunded .cs-admin-order-status-badge__icon {
 		font-size: 16px;
@@ -1131,6 +1150,7 @@ textarea[name="cs-note"] {
 	height: 100px;
 	min-width: 200px;
 }
+
 #cs-add-discount input[type="text"],
 #cs-edit-discount input[type="text"] {
 	width: 300px;
@@ -1202,12 +1222,15 @@ textarea[name="cs-note"] {
 .wp-list-table .row-actions span.activate a {
 	color: green;
 }
+
 .wp-list-table .row-actions span.refund a {
 	color: #836fff;
 }
+
 .wp-list-table .row-actions span.cancel a {
 	color: #cc8c00;
 }
+
 .wp-list-table .row-actions span.cancel a:hover,
 .wp-list-table .row-actions span.refund a:hover {
 	opacity: 0.8;
@@ -1241,35 +1264,6 @@ textarea[name="cs-note"] {
 	margin-left: 10px;
 	line-height: 24px;
 }
-
-#cs_product_settings .cs-product-options__title,
-#cs_product_settings .inside strong {
-	border-top: 1px solid #eee;
-	border-bottom: 1px solid #eee;
-	background-color: #f9f9f9;
-	display: block;
-	font-weight: 600;
-	margin: 12px -12px;
-	padding: 8px 12px;
-}
-
-#cs_product_settings .cs-product-settings-wrapper:first-of-type .cs-product-options__title,
-#cs_product_settings .inside div:first-child strong {
-	margin-top: -8px;
-}
-
-#cs_product_settings .cs-product-options__title .cs-help-tip,
-#cs_product_settings .inside strong .cs-help-tip {
-	float: right;
-	font-size: 20px;
-	line-height: 1.3;
-}
-
-#cs_product_settings .label--block {
-	display: block;
-	margin: 0 0 4px;
-}
-
 /* Payment History Styles
 -------------------------------------------------------------- */
 
@@ -1287,7 +1281,8 @@ marquee {
 	margin: 0;
 }
 
-@media handheld, only screen and (max-width: 640px) {
+@media handheld,
+only screen and (max-width: 640px) {
 
 	.wp-list-table.downloads th {
 		width: auto!important;
@@ -1306,254 +1301,64 @@ marquee {
 	width: 225px;
 	float: left;
 }
+
 .cs_files_url_label {
 	width: 220px;
 	float: left;
 }
+
 #postbox-container-1 .cs_files_name_label {
 	width: 80px;
 }
+
 #postbox-container-1 .cs_files_url_label {
 	width: 80px;
 }
+
 #cs_product_prices .inside,
 #cs_product_files .inside {
 	margin-bottom: 0;
-}
-.cs_repeatable_row.ui-sortable-placeholder {
-	line-height: 0;
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
-	border: 1px dashed #ddd;
-	visibility: visible !important;
-}
-
-.cs-add-repeatable-row {
-	border-top: 1px solid #ddd;
-	background: #fafafa;
-	padding: 12px;
-	margin: 15px -12px -12px -12px;
-	text-align: right;
-}
-.cs_repeatable_row input[type="text"].large-text {
-	width: 100%;
-}
-.cs_repeatable_row input[type="text"] {
-	height: 28px;
-}
-
-.cs-add-repeatable-row button {
-	text-align: left;
-}
-.cs_variable_prices_wrapper:not(:first-child),
-.cs_repeatable_upload_wrapper:not(:first-child) {
-	margin-top: 12px;
-}
-
-.cs_repeatable_row.ui-sortable-helper .cs-repeatable-row-actions .cs-remove-row {
-	display: none;
-}
-
-.cs-repeatable-row-actions {
-	color: #777;
-	font-size: 12px;
-}
-.cs-repeatable-row-actions a {
-	text-decoration: none;
-	font-size: 11px;
-	line-height: 11px;
-	width: auto;
-	cursor: pointer;
-	vertical-align: middle;
-}
-
-.cs-repeatable-row-header,
-.cs-bundle-products-header {
-	clear: both;
-	background: #f1f1f1;
-	border: 1px solid #e5e5e5;
-}
-.cs-repeatable-row-header {
-	cursor: move;
-}
-.cs_repeatable_row:hover .cs-repeatable-row-header,
-.cs_repeatable_row:hover .cs-repeatable-row-standard-fields {
-	border-color: #ccc;
-}
-.cs-repeatable-row-header:before,
-.cs-repeatable-row-header:after,
-.cs-bundled-product-row:before,
-.cs-bundled-product-row:after {
-	content: '';
-	display: table;
-}
-.cs-repeatable-row-header:after,
-.cs-bundled-product-row:after {
-	clear: both;
-}
-.cs-repeatable-row-title {
-	float: left;
-	font-weight: 600;
-}
-.cs-bundled-product-item-reorder .cs-product-file-reorder {
-	color: #e5e5e5;
-	font-family: "dashicons";
-	content: "\f545";
-	font-size: 18px;
-	font-weight: 300;
-	margin-left: 4px;
-	vertical-align: top;
-	transition: .2s color;
-}
-.cs-bundled-product-item-reorder .cs-product-file-reorder:hover {
-	color: #bbb;
-}
-.cs-repeatable-row-title,
-.cs-repeatable-row-actions {
-	padding: 8px;
-	box-sizing: border-box;
-}
-.cs-repeatable-row-actions {
-	float: right;
-	text-align: right;
-	padding: 8px;
-}
-.cs-repeatable-row-actions .cs-remove-row,
-.cs-bundled-product-row .cs-remove-row {
-	font-size: 12px;
-	width: auto;
-	cursor: pointer;
-}
-.cs-repeatable-row-standard-fields,
-.cs-bundled-product-row {
-	background: #f9f9f9;
-	padding: 8px;
-	border-width: 0 1px 1px;
-	border-style: solid;
-	border-color: #e5e5e5;
-	display: flex;
-	justify-content: space-between;
-	gap: 18px;
-}
-
-/* @todo: remove these when .cs-form-row has been fully implemented */
-.cs-repeatable-row-standard-fields .cs-form-group,
-.cs-bundled-product-row .cs-form-group {
-	margin-bottom: 0;
-	display: inline-flex;
-	flex-direction: column;
-	flex-grow: 1;
-	justify-content: space-between;
-}
-
-.cs-repeatable-row-setting-label {
-	display: block;
-	margin-bottom: 4px;
-}
-.cs-repeatable-row-setting-label .cs-help-tip {
-	display: inline-block;
-	margin-left: 4px;
-}
-
-.cs-bundle-products-header {
-	font-weight: 600;
-	padding: 8px;
-}
-.cs-bundled-product-row .cs-bundled-product-item-reorder {
-	min-width: 30px;
-}
-.cs-bundled-product-row .cs-bundled-product-item-reorder .cs-product-file-reorder {
-	font-size: 20px;
-	font-weight: 300;
-	padding: 16px 4px 0;
-	cursor: move;
-}
-.cs-bundled-product-row .cs-bundled-product-actions {
-	margin-left: 24px;
-	align-self: center;
-}
-.cs_repeatable_upload_wrapper .cs_repeatable_upload_field_container {
-	position: relative;
-	width: 100%;
-}
-.cs_repeatable_upload_wrapper .cs_repeatable_upload_field_container + span:first-child {
-	width: 100%;
-}
-.cs_repeatable_upload_field {
-	padding-right: 32px;
-}
-.cs_upload_file button {
-	background: #f9f9f9;
-	border: none;
-	border-left: 1px solid #e5e5e5;
-	display: block;
-	padding: 0;
-	position: absolute;
-	height: calc(100% - 4px);
-	width: 26px;
-	overflow: hidden;
-	top: 2px;
-	right: 2px;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
 }
 textarea#cs-payment-note {
 	width: 100%;
 	height: 4em;
 	margin: 0;
 }
+
 #cs-order-items .row .cs-purchased-files-list-wrapper .download {
 	line-height: 1.4;
 }
+
 #cs-order-items .cs-purchased-files-list-wrapper .cs-purchased-option {
 	color: #666;
 }
+
 input[class*="cs-price-field"] {
 	max-width: 125px;
 }
+
 [class*="item_"] [class*="cs-payment-details-download-"][type="number"].small-text,
 #cs-order-download-quantity[type="number"].small-text,
 #cs-order-download-tax[type="text"].small-text {
 	height: 25px;
 }
+
 .item_price .cs-payment-details-download-quantity[type="number"].small-text,
 #cs-order-download-quantity[type="number"].small-text {
 	width: 55px;
 }
+
 .item_tax .cs-payment-details-download-item-tax[type="number"].small-text,
 #cs-order-download-tax[type="text"].small-text {
 	width: 80%;
 	max-width: 125px;
 }
-.cs_repeatable_upload_wrapper .pricing select,
-.cs_repeatable_product_wrapper .cs-select {
-	min-width: 100%;
-}
+
 #cs_product_notes_field {
 	display: block;
 	margin: 12px 0 0;
 	height: 4em;
 	width: 100%;
-}
-
-/* still used by extensions - Software Licensing upgrade paths, Custom Prices */
-.cs_remove_repeatable {
-	border: none;
-	cursor: pointer;
-	display: inline-block;
-	padding: 0;
-	overflow: hidden;
-	margin: 8px 0 0 0;
-	text-indent: -9999px;
-	width: 10px;
-	height: 10px;
-}
-.cs_remove_repeatable:active,
-.cs_remove_repeatable:hover,
-.cs_remove_repeatable:focus  {
-	background-position: -10px 0 !important;
 }
 
 /* Payment Details
@@ -1578,6 +1383,7 @@ input[class*="cs-price-field"] {
 	cursor: pointer;
 	outline: 0;
 }
+
 .cs-metabox-title-action:hover {
 	border-color: #008EC2;
 	background: #00a0d2;
@@ -1596,6 +1402,7 @@ input[class*="cs-price-field"] {
 	border-top: none;
 	border-bottom: none;
 }
+
 .cs-edit-purchase-element .cs-order-children-wrapper.child-count-0 .tablenav {
 	display: none;
 }
@@ -1603,26 +1410,33 @@ input[class*="cs-price-field"] {
 .cs-edit-purchase-element[class*="columns-"] ul li {
 	padding-right: 1%;
 }
+
 #cs-edit-order-form .columns-4 .column:nth-child(2n+1),
 #cs-edit-order-form .columns-5 .column:nth-child(3n+1),
 #cs-edit-order-form .column:nth-child(2n+1) {
 	margin-right: 0;
 }
+
 #cs-edit-order-form input.large-text {
 	width: 90%;
 }
+
 .cs-edit-purchase-element ul li.item_price {
 	width: 15%;
 }
+
 .cs-edit-purchase-element ul li.item_price.item_quantity {
 	width: 25%;
 }
+
 .cs-edit-purchase-element ul li.item_tax {
 	width: 15%;
 }
+
 .cs-edit-purchase-element ul li.price {
 	width: 20%;
 }
+
 .cs-admin-box-inside {
 	border-bottom: 1px solid #f1f1f1;
 	clear: both;
@@ -1630,6 +1444,7 @@ input[class*="cs-price-field"] {
 	margin: 0;
 	word-wrap: break-word;
 }
+
 .cs-admin-box-inside--row {
 	display: flex;
 	flex-wrap: wrap;
@@ -1637,35 +1452,44 @@ input[class*="cs-price-field"] {
 	justify-content: space-between;
 	align-items: center;
 }
+
 .cs-admin-box-inside > p {
 	margin: 8px 3px;
 }
+
 .cs-admin-box-inside .strong {
 	font-weight: 600;
 }
+
 .cs-admin-box div:not(.cs-admin-box-inside--row) .label {
 	display: block;
 	margin-bottom: 4px;
 	margin-right: 0;
 }
+
 .cs-admin-box .label--has-tip {
 	display: flex;
 	align-items: center;
 }
+
 .cs-admin-box .label--has-tip .cs-help-tip {
 	margin-top: 0;
 	font-size: 20px;
 }
+
 .cs-admin-box div:not(.cs-admin-box-inside--row) .label--has-checkbox {
 	margin-bottom: 0;
 }
+
 .cs-payment-fees .fee-label {
 	color: #666;
 	font-weight: normal;
 }
+
 .cs-admin-box .right {
 	float: right;
 }
+
 #cs-order-refunds-list {
 	padding-left: 25px;
 }
@@ -1674,16 +1498,20 @@ input[class*="cs-price-field"] {
 	margin: 0;
 	padding: 0;
 }
+
 .cs-order-data .cs-select-chosen {
 	width: 130px !important;
 }
+
 .cs-order-data input.cs_datepicker {
 	width: 180px;
 }
+
 .cs-order-data input[type="number"].cs-payment-time-hour,
 .cs-order-data input[type="number"].cs-payment-time-min {
 	width: 50px;
 }
+
 .cs-order-data .cs-tax-rate {
 	color: #9c9c9c;
 	font-style: italic;
@@ -1694,45 +1522,58 @@ input[class*="cs-price-field"] {
 	margin: 0;
 	padding: 0;
 }
+
 .cs-admin-box-inside span.label {
 	margin-right: 10px;
 }
+
 #cs-order-resend-receipt .inside {
 	margin-top: 11px;
 }
+
 #cs-order-resend-receipt .cs-order-resend-receipt-addresses {
 	margin-top: 10px;
 }
+
 .cs-order-resend-receipt-header {
 	font-size: 14px;
 	line-height: 1.4;
 }
+
 .cs-order-resend-receipt-addresses label {
 	display: block;
 	line-height: 1.75em;
 }
+
 .cs-order-resend-receipt-addresses label:last-child {
 	margin-bottom: 10px;
 }
+
 .cs-admin-box-inside:last-child {
 	border-bottom: 0;
 }
+
 #cs-edit-order-form .data-payment-key {
 	word-break: break-all;
 }
+
 .cs-order-update-box #major-publishing-actions .button-secondary {
 	margin-right: 10px;
 }
+
 .cs-order-update-box .button-primary {
 	margin-right: 0;
 }
+
 .cs-edit-purchase-element .cs-select-chosen {
 	width: 196px;
 }
+
 .cs-edit-purchase-element ul {
 	clear: both;
 	display: block;
 }
+
 #cs-customer-details .actions {
 	float: right;
 }
@@ -1751,10 +1592,12 @@ input[class*="cs-price-field"] {
 .cs-order-data input.small-text {
 	margin: 0;
 }
+
 .cs-order-data input.med-text {
 	margin: 0;
 	width: 100px;
 }
+
 .cs-edit-purchase-element ul li {
 	display: block;
 	line-height: 1.4;
@@ -1763,75 +1606,84 @@ input[class*="cs-price-field"] {
 	vertical-align: middle;
 	font-size: 13px;
 }
+
 .cs-edit-purchase-element .row {
 	padding: 12px;
 }
+
 .cs-edit-purchase-element .row:not(:last-child) {
 	border-bottom: 1px solid #eee;
 }
+
 .cs-edit-purchase-element .row:nth-child(odd):not(.header) {
 	background-color: #f9f9f9;
 }
+
 .cs-edit-purchase-element .row.header {
 	padding: 6px 12px;
 	font-weight: 600;
 	vertical-align: top;
 }
+
 .cs-edit-purchase-element ul {
 	margin: 0 0 15px;
 }
+
 .cs-edit-purchase-element ul:last-of-type {
 	margin-bottom: 0;
 }
+
 #cs-order-data .data span {
 	color: #666;
 	font-weight: 600;
 }
+
 .cs-edit-purchase-element .inside {
 	padding: 12px;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-title {
 	font-size: 14px;
 	font-weight: 500;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-title .deleted {
 	color: #777;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-actions {
 	color: #777;
 	line-height: 1.4;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-actions .cs-purchased-download-actions-label {
 	font-weight: 500;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-actions a {
 	color: #777;
 	font-size: 12px;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-actions a:hover {
 	color: #444;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-actions .cs-order-remove-download {
 	color: #a00;
 }
+
 .cs-edit-purchase-element .cs-purchased-download-actions .cs-order-remove-download:hover {
 	color: #f00;
 }
-.cs_repeatable_upload_wrapper .pricing select,
-.cs_repeatable_product_wrapper .cs-select,
-#cs_products .cs-select {
-	min-width: 100%;
-	max-width: 200px;
-}
-.cs_repeatable_product_wrapper td {
-	overflow: visible;
-}
+
 .cs-add-download-to-purchase,
 .cs-add-adjustment-to-purchase {
 	padding: 15px;
 	border-top: 1px solid #e5e5e5;
 	background-color: #f5f5f5;
 }
+
 .cs-add-download-to-purchase .chosen-container,
 .cs-add-adjustment-to-purchase .chosen-container{
 	width: 90% !important;
@@ -1861,18 +1713,23 @@ input[class*="cs-price-field"] {
 	.cs-edit-purchase-element .cs-purchased-download-title {
 		font-size: 16px;
 	}
+
 	.cs-edit-purchase-element ul li.item_price {
 		width: 22%;
 	}
+
 	.cs-edit-purchase-element ul li.item_price.item_quantity {
 		width: 35%;
 	}
+
 	.cs-edit-purchase-element ul li.item_tax {
 		width: 25%;
 	}
+
 	.cs-edit-purchase-element ul li.price {
 		width: 20%;
 	}
+
 	.cs-edit-purchase-element .cs-purchased-download-actions {
 		padding-top: 10px;
 	}
@@ -1883,12 +1740,15 @@ input[class*="cs-price-field"] {
 	.cs-edit-purchase-element ul li.item_price.item_quantity {
 		width: 40%;
 	}
+
 	.cs-edit-purchase-element ul li.price {
 		width: 24%;
 	}
+
 	.cs-edit-purchase-element .cs-purchased-download-actions {
 		padding-top: 15px;
 	}
+
 	.cs-edit-purchase-element .cs-purchased-download-actions,
 	.cs-edit-purchase-element .cs-purchased-download-actions a {
 		font-size: 14px;
@@ -1902,18 +1762,22 @@ input[class*="cs-price-field"] {
 	.cs-edit-purchase-element ul li.item_price.item_quantity {
 		padding-bottom: 10px;
 	}
+
 	.cs-edit-purchase-element ul li.item_price.item_quantity {
 		width: 35%;
 	}
+
 	.cs-edit-purchase-element ul li.item_tax,
 	.cs-edit-purchase-element ul li.price {
 		width: 20%;
 		padding-bottom: 10px;
 	}
+
 	.cs-price-currency,
 	.cs-payment-details-download-amount {
 		font-size: 16px;
 	}
+
 	.order-data-column input[type="email"] {
 		padding: 6px 10px;
 	}
@@ -1925,6 +1789,7 @@ input[class*="cs-price-field"] {
 	#cs-item-tables-wrapper .addresses tbody tr {
 		display: grid;
 	}
+
 	#cs-item-tables-wrapper .addresses tbody td:not(.no-items) {
 		padding-left: 35%;
 	}
@@ -1938,11 +1803,13 @@ input[class*="cs-price-field"] {
 		width: 100%;
 		padding-bottom: 20px;
 	}
+
 	.cs-edit-purchase-element ul li.price,
 	.cs-edit-purchase-element .cs-add-download-to-purchase ul li.item_tax {
 		width: 100%;
 		padding-bottom: 0;
 	}
+
 	.cs-edit-purchase-element .cs-add-download-to-purchase-actions {
 		padding-top: 15px;
 	}
@@ -1952,6 +1819,7 @@ input[class*="cs-price-field"] {
 #cs_product_stats .label {
 	display: inline-block;
 }
+
 #cs_product_stats .product-sales-stats:before,
 #cs_product_stats .product-earnings-stats:before {
 	color: #82878c;
@@ -1967,9 +1835,11 @@ input[class*="cs-price-field"] {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
+
 #cs_product_stats .product-sales-stats:before {
 	content: '\f174';
 }
+
 #cs_product_stats .product-earnings-stats:before {
 	content: '\f239';
 }
@@ -1988,35 +1858,43 @@ body.dashboard_page_cs-upgrades.js .postbox .hndle {
 	border-bottom: 1px solid #ececec;
 	color: #777;
 }
+
 .cs_dashboard_widget .table_left {
 	float: left;
 	width: 45%;
 }
+
 .cs_dashboard_widget .table_right {
 	float: right;
 	width: 45%;
 }
+
 .cs_dashboard_widget .inside {
 	font-size: 12px;
 }
+
 .cs_dashboard_widget td {
 	padding: 3px 0;
 }
+
 .cs_dashboard_widget .b,
 .cs_dashboard_widget .t {
 	line-height: 1.5;
 	vertical-align: middle;
 }
+
 .cs_dashboard_widget .b {
 	padding-right: 6px;
 	width: auto;
 }
+
 .cs_dashboard_widget .t {
 	font-size: 12px;
 	padding-right: 12px;
 	color: #777;
 	width: 100%;
 }
+
 .cs_dashboard_widget .label_heading {
 	border-top: 1px solid #ececec;
 	color: #8f8f8f;
@@ -2027,6 +1905,7 @@ body.dashboard_page_cs-upgrades.js .postbox .hndle {
 	padding-top: 10px;
 	margin: 0 0 8px 12px;
 }
+
 .cs_dashboard_widget .cs_dashboard_widget_subheading {
 	border-top: 1px solid #ececec;
 	color: #8f8f8f;
@@ -2034,9 +1913,11 @@ body.dashboard_page_cs-upgrades.js .postbox .hndle {
 	padding-top: 10px;
 	margin: 1em 0 0 0;
 }
+
 .cs_dashboard_widget .cs_dashboard_widget_subheading + .table {
 	margin: 8px 0 0 0;
 }
+
 .cs_dashboard_widget .cs_price_label {
 	background: rgb(0, 118, 156);
 	border-radius: 3px;
@@ -2045,19 +1926,23 @@ body.dashboard_page_cs-upgrades.js .postbox .hndle {
 	padding: 2px 4px;
 	margin-right: 2px;
 }
+
 .cs_dashboard_widget table {
 	width: 100%;
 	margin-left: 0;
 	margin-bottom: 1em;
 }
+
 td.cs_order_label {
 	width: 80%;
 }
+
 td.cs_order_price {
 	text-align: right;
 }
 
-@media handheld, only screen and (max-width: 1000px) {
+@media handheld,
+only screen and (max-width: 1000px) {
 
 	.cs_dashboard_widget .cs-recent-email {
 		display: none;
@@ -2227,21 +2112,27 @@ span.cs-to-and-from--separator {
 .admin-color-fresh .cs-import-export-form .cs-progress div {
 	background: #0073aa;
 }
+
 .admin-color-light .cs-import-export-form .cs-progress div {
 	background: #888;
 }
+
 .admin-color-blue .cs-import-export-form .cs-progress div {
 	background: #096484;
 }
+
 .admin-color-coffee .cs-import-export-form .cs-progress div {
 	background: #c7a589;
 }
+
 .admin-color-ectoplasm .cs-import-export-form .cs-progress div {
 	background: #a3b745;
 }
+
 .admin-color-midnight .cs-import-export-form .cs-progress div {
 	background: #e14d43;
 }
+
 .admin-color-sunrise .cs-import-export-form .cs-progress div {
 	background: #dd823b;
 }
@@ -2249,52 +2140,65 @@ span.cs-to-and-from--separator {
 .graph-option-section {
 	float: left;
 }
+
 .cs-report-filters-title span {
 	display: block;
 	padding: 20px;
 }
+
 #cs-graphs-filter form {
 	padding: 20px;
 }
+
 #cs-graphs-filter label {
 	vertical-align: inherit;
 }
+
 #cs-graphs-filter .graph-option-section {
 	display: inline-block;
 	line-height: 2em;
 	margin: 0 5px 0 0;
 	padding: 0;
 }
+
 .download_page_cs-reports .section-content #post-body-content {
 	float: none;
 }
+
 .download_page_cs-reports .section-content select[name="range"] {
 	display: none;
 }
+
 .cs-mix-totals {
 	background-color: #fff;
 	border: 1px solid #e5e5e5;
 	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 	padding: 10px;
 }
+
 .cs-mix-chart {
 	display: inline-block;
 	width: 49%;
 	vertical-align: top;
 }
+
 .cs-graph-notes {
 	color: #9c9c9c;
 }
+
 .cs-graph-notes span {
 	display: block;
 }
+
 .cs-pie-graph .legend {
 	display: none;
 }
+
 .cs-pie-legend {
 	overflow: auto;
 	margin-top: 10px;
 }
+
 .cs-legend-item-wrapper {
 	color: #333;
 	display: inline-block;
@@ -2303,6 +2207,7 @@ span.cs-to-and-from--separator {
 	width: 48%;
 	height: 20px;
 }
+
 .cs-legend-color {
 	border: 1px solid #cfcfcf;
 	display: inline-block;
@@ -2310,6 +2215,7 @@ span.cs-to-and-from--separator {
 	width: 20px;
 	height: 15px;
 }
+
 .cs-pie-legend-item {
 	display: inline-block;
 	vertical-align: top;
@@ -2384,24 +2290,29 @@ span.cs-to-and-from--separator {
 	border-left-color: #666;
 	box-shadow: none;
 }
+
 .recapture-notice {
 	position: relative;
 }
+
 @-webkit-keyframes cs-spinning {
 	0% {
 		-webkit-transform: rotate(0deg);
 		transform: rotate(0deg);
 	}
+
 	100% {
 		-webkit-transform: rotate(360deg);
 		transform: rotate(360deg);
 	}
 }
+
 @keyframes cs-spinning {
 	0% {
 		-webkit-transform: rotate(0deg);
 		transform: rotate(0deg);
 	}
+
 	100% {
 		-webkit-transform: rotate(360deg);
 		transform: rotate(360deg);
@@ -2526,23 +2437,6 @@ span.cs-to-and-from--separator {
 	color: #777;
 }
 
-@media screen and ( min-width: 600px ) {
-	#cs-reports-charts-wrap {
-		display: -ms-grid;
-		display: grid;
-		grid-template-columns: repeat(2, minmax(200px, 50%));
-		grid-gap: 20px;
-	}
-
-	.cs-reports-chart {
-		margin-bottom: 0;
-	}
-
-	.cs-reports-chart-line {
-		grid-column: 1 / span 2;
-	}
-}
-
 #cs-chartjs-tooltip {
 	position: absolute;
 	background-color: #fff;
@@ -2583,6 +2477,7 @@ span.cs-to-and-from--separator {
 .wrap-licenses caption {
 	display: block;
 }
+
 .wrap-licenses .form-table tr {
 	float: left;
 	margin: 0 15px 15px 0;
@@ -2595,6 +2490,7 @@ span.cs-to-and-from--separator {
 	position: relative;
 	box-sizing: border-box;
 }
+
 .wrap-licenses .form-table th {
 	background: #f9f9f9;
 	padding: 14px;
@@ -2602,13 +2498,16 @@ span.cs-to-and-from--separator {
 	margin: -14px -14px 20px;
 	width: 100%;
 }
+
 .wrap-licenses .form-table td {
 	padding: 0;
 }
+
 .wrap-licenses td input.regular-text {
 	margin: 0 0 8px;
 	width: 100%;
 }
+
 .wrap-licenses .cs-license-data[class*="cs-license-"] {
 	position: absolute;
 	background: #fafafa;
@@ -2620,22 +2519,27 @@ span.cs-to-and-from--separator {
 	bottom: 14px;
 	box-sizing: border-box;
 }
+
 .wrap-licenses .cs-license-data[class*="cs-license-"] a {
 	color: #444;
 }
+
 .wrap-licenses .cs-license-data[class*="cs-license-"] a:hover {
 	text-decoration: none;
 }
+
 .wrap-licenses .cs-license-data.license-expires-soon-notice {
 	background-color: #00a0d2;
 	color: #fff;
 	border-color: #00a0d2;
 }
+
 .wrap-licenses .cs-license-data.cs-license-expired {
 	background-color: #e24e4e;
 	color: #fff;
 	border-color: #e24e4e;
 }
+
 .wrap-licenses .cs-license-data.cs-license-error,
 .wrap-licenses .cs-license-data.cs-license-missing,
 .wrap-licenses .cs-license-data.cs-license-invalid,
@@ -2644,18 +2548,22 @@ span.cs-to-and-from--separator {
 	background-color: #ffebcd;
 	border-color: #ffebcd;
 }
+
 .wrap-licenses .cs-license-data p {
 	font-size: 13px;
 	margin-top: 0;
 }
+
 .wrap-licenses .cs-license-data.license-expires-soon-notice a,
 .wrap-licenses .cs-license-data.cs-license-expired a {
 	color: #fff;
 }
+
 .wrap-licenses .cs-license-data.license-expires-soon-notice a:hover,
 .wrap-licenses .cs-license-data.cs-license-expired a:hover {
 	text-decoration: none;
 }
+
 .wrap-licenses p.submit {
 	clear: both;
 }
@@ -2666,6 +2574,7 @@ span.cs-to-and-from--separator {
 .cs-graph .y1Axis {
 	color: rgb( 237, 194, 64 )!important;
 }
+
 .cs-graph .y2Axis {
 	color: rgb( 175, 216, 248 )!important;
 }
@@ -2760,10 +2669,12 @@ span.cs-to-and-from--separator {
 .download_page_cs-tools .tablenav .actions {
 	overflow: visible;
 }
+
 .cs_user_search_wrap {
 	position: relative;
 	overflow: visible;
 }
+
 .cs_user_search_wrap .spinner {
 	position: absolute;
 	margin: 0;
@@ -2771,6 +2682,7 @@ span.cs-to-and-from--separator {
 	right: 4px;
 	top: -2px;
 }
+
 .cs_user_search_wrap.loading .spinner {
 	visibility: visible;
 }
@@ -2780,11 +2692,13 @@ span.cs-to-and-from--separator {
 	left: 0;
 	top: 20px;
 }
+
 .cs_user_search_results a.cs-ajax-user-cancel {
 	position: absolute;
 	right: 6px;
 	top: 2px;
 }
+
 .cs_user_search_results ul {
 	background: #fafafa;
 	border: 1px solid #dfdfdf;
@@ -2795,17 +2709,21 @@ span.cs-to-and-from--separator {
 	width: 185px;
 	box-shadow: 0 3px 5px rgba(0,0,0,0.1);
 }
+
 .cs_user_search_results li {
 	margin: 0;
 }
+
 .cs_user_search_results li a {
 	display: block;
 	text-decoration: none;
 	padding: 6px 10px;
 }
+
 .cs_user_search_results li a:hover {
 	background: #f5f5f5;
 }
+
 .cs_user_search_results li.no-users {
 	text-align: center;
 	vertical-align: middle;
@@ -2831,11 +2749,13 @@ span.cs-to-and-from--separator {
 }
 
 @media screen and ( max-width: 782px ) {
+
 	.license-lifetime-notice,
 	.license-expiration-date-notice,
 	.license-null {
 		padding-left: 0;
 	}
+
 	[class^="license-"] input[type="text"] {
 		margin-bottom: 3px;
 	}
@@ -2864,6 +2784,7 @@ span.cs-to-and-from--separator {
 	margin-top: 15px;
 	display: flex;
 }
+
 #cs-item-wrapper.full-width {
 	max-width: 100%;
 }
@@ -2876,25 +2797,31 @@ span.cs-to-and-from--separator {
 	font-size: 0;
 	height: 0;
 }
+
 .cs-sections-wrap {
 	clear: both;
 	width: 100%;
 }
+
 .cs-sections-wrap .section-wrap {
 	background-color: #fff;
 	display: inline-block;
 	z-index: 2;
 }
+
 .js .cs-sections-wrap .cs-vertical-sections:not(.meta-box) .section-wrap > div {
 	min-height: 500px;
 	height: 100%;
 }
+
 .cs-sections-wrap .section-wrap .customer-section:not(:last-child) {
 	border-bottom: 1px solid #eee;
 }
+
 .cs-sections-wrap .section-wrap .customer-section table {
 	margin-bottom: 20px;
 }
+
 .cs-sections-wrap .section-wrap {
 	border-left: 1px solid #e5e5e5;
 }
@@ -2908,9 +2835,11 @@ span.cs-to-and-from--separator {
 	padding-right: 10px;
 	text-align: center;
 }
+
 .cs-sections-wrap .section-wrap img.avatar {
 	border-radius: 5px;
 }
+
 .cs-sections-wrap .section-wrap .customer-id {
 	position: absolute;
 	right: 0;
@@ -2925,6 +2854,7 @@ span.cs-to-and-from--separator {
 	font-size: 18px;
 	font-weight: 600;
 }
+
 .cs-item-info.customer-info input[type="text"],
 .cs-item-info.customer-info input[type="password"],
 .cs-item-info.customer-info select {
@@ -2937,32 +2867,39 @@ span.cs-to-and-from--separator {
 	font-size: 13px;
 	padding: 2px 4px;
 }
+
 .cs-sections-wrap .section-wrap .customer-main-wrapper {
 	float: left;
 }
+
 .cs-sections-wrap .section-wrap .customer-main-wrapper input[name="customerinfo[name]"] {
 	font-size: 24px;
 }
+
 .cs-sections-wrap .section-wrap .customer-address-wrapper {
 	float: right;
 	margin-top: -3px;
 	margin-right: 50px;
 	width: 202px;
 }
+
 .cs-sections-wrap .section-wrap .info-wrapper {
 	min-height: 125px;
 	overflow: visible;
 }
+
 .cs-sections-wrap .section-wrap .customer-address span[data-key="address"],
 .cs-sections-wrap .section-wrap .customer-address span[data-key="address2"],
 .cs-sections-wrap .section-wrap .customer-address span[data-key="country"] {
 	display: block;
 }
+
 .cs-sections-wrap .section-wrap a.delete {
 	color: #ff0000;
 	margin-right: 5px;
 	text-decoration: none;
 }
+
 .customer-info {
 	min-height: 185px;
 }
@@ -2971,35 +2908,44 @@ span.cs-to-and-from--separator {
 	font-size: 24px;
 	font-weight: 600;
 }
+
 .customer-info .customer-name.editable {
 	margin-bottom: 6px;
 }
+
 .customer-edit-link a {
 	font-weight: normal;
 	text-decoration: none;
 }
+
 .disconnect-user a {
 	color: #aaa;
 	font-size: 20px;
 }
+
 #customer-edit-actions {
 	padding: 3px;
 	line-height: 28px;
 	text-align: center;
 }
+
 #customer-edit-actions .button-secondary {
 	margin-right: 5px;
 }
+
 #customer-edit-actions .cancel {
 	padding: 5px;
 }
+
 .cs-sections-wrap .section-wrap .row-title {
 	width: 30%;
 }
+
 .cs-sections-wrap .section-wrap .editable {
 	display: block;
 	padding: 3px;
 }
+
 .cs-sections-wrap .section-wrap div.edit-item {
 	margin-left: -4px;
 	margin-top: -20px;
@@ -3008,38 +2954,48 @@ span.cs-to-and-from--separator {
 .cs-sections-wrap .section-wrap .customer-address.edit-item {
 	margin-top: 3px;
 }
+
 .cs-sections-wrap .section-wrap span.edit-item {
 	display: none;
 }
+
 .cs-sections-wrap .section-wrap .edit-item input {
 	font-size: 13px;
 }
+
 .cs-sections-wrap .section-wrap .customer-name.edit-item input {
 	margin-top: -5px;
 }
+
 .cs-sections-wrap .section-wrap .cs_user_search_results {
 	left: -2px;
 	top: 18px;
 }
+
 .cs-sections-wrap .section-wrap .cs_user_search_results ul {
 	width: 198px;
 }
+
 #cs-item-stats-wrapper {
 	margin: 0 auto;
 	text-align: center;
 }
+
 #cs-item-stats-wrapper ul {
 	display: flex;
 	margin: 0;
 }
+
 #cs-item-stats-wrapper li {
 	font-size: 14px;
 	margin-bottom: 0;
 	width: 50%;
 }
+
 #cs-item-stats-wrapper a {
 	text-decoration: none;
 }
+
 #cs-item-stats-wrapper .dashicons {
 	color: #888;
 	margin-top: -2px;
@@ -3048,71 +3004,65 @@ span.cs-to-and-from--separator {
 #cs-item-tables-wrapper table {
 	width: 100%;
 }
+
 #cs-item-tables-wrapper .no-items {
 	text-align: left;
 }
+
 #cs-item-tables-wrapper .emails .add-customer-email-row {
 	background-color: #f4f4f4;
 	border-top: 1px solid #e5e5e5;
 }
+
 #cs-item-tables-wrapper .add-customer-email-wrapper {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	margin: 12px 0;
 }
+
 #cs-item-tables-wrapper .cs-form-group {
 	margin-bottom: 0;
 }
+
 #cs-item-tables-wrapper .cs-make-email-primary {
 	flex-grow: 1;
 	margin-left: 12px;
 }
+
 #cs-item-tables-wrapper .emails .spinner {
 	float: none;
 	margin: 0 10px;
 	align-self: center;
 }
+
 #cs-item-tables-wrapper .notice-error {
 	background-color: #fff5f5;
 }
+
 #cs-item-notes-wrapper {
 	min-height: 50px;
 }
-.cs-item-header-small {
-	height: 30px;
-	padding-bottom: 20px;
-	border-bottom: 1px solid #e5e5e5;
-}
-.cs-item-header-small span {
-	font-weight: 600;
-	line-height: 15px;
-	font-size: 15px;
-	display: inline-block;
-	margin-bottom: 10px;
-}
-.cs-item-header-small span,
-.cs-item-header-small img {
-	vertical-align: middle;
-}
-.cs-item-header-small img.avatar {
-	margin-right: 5px;
-}
+
 .customer-note-input {
 	margin-bottom: 5px;
 	width: 100%;
 }
+
 .customer-note-wrapper {
 	border-bottom: 1px solid #f9f9f9;
 	min-height: 38px;
 	padding: 7px 0 7px 7px;
 }
+
 .customer-note-wrapper span {
 	display: block;
 }
+
 .note-content-wrap {
 	padding-top: 7px;
 }
+
 .cs-sections-wrap .section-wrap .notice-container {
 	padding-left: 20px;
 	padding-right: 20px;
@@ -3124,30 +3074,40 @@ span.cs-to-and-from--separator {
 	.customer-info .customer-name {
 		font-size: 16px;
 	}
-	.cs-sections-wrap .section-wrap .widefat td, .widefat th {
+
+	.cs-sections-wrap .section-wrap .widefat td,
+	.widefat th {
 		max-width: 100% !important;
 		display: table-cell;
 	}
 }
+
 @media screen and ( max-width: 781px ) {
-	#cs-item-tab-wrapper, /** [1] */
+
+	#cs-item-tab-wrapper,
+	/** [1] */
 	.cs-sections-wrap .section-wrap {
 		margin: 0;
 		width: 100%;
 	}
-	#cs-item-tab-wrapper-list .dashicons { /** [1] */
+
+	#cs-item-tab-wrapper-list .dashicons {
+		/** [1] */
 		font-size: 18px;
 	}
+
 	.cs-item-has-tabs  .cs-sections-wrap .section-wrap {
 		border-top: 1px solid #e5e5e5;
 		border-left: 0;
 		margin-top: -1px;
 	}
 }
+
 @media screen and ( max-width: 656px ) {
 	.cs-item-info.customer-info {
 		position: relative;
 	}
+
 	.cs-sections-wrap .section-wrap .customer-address-wrapper {
 		float: none;
 		position: absolute;
@@ -3155,21 +3115,26 @@ span.cs-to-and-from--separator {
 		left: 165px;
 		max-width: 200px;
 	}
+
 	.cs-sections-wrap .section-wrap .customer-main-wrapper {
 		float: none;
 		position: absolute;
 		left: 165px;
 	}
+
 	.customer-info .customer-name {
 		font-size: 16px;
 	}
+
 	.cs-sections-wrap .section-wrap #cs-item-stats-wrapper {
 		padding-left: 0;
 		padding-right: 0;
 	}
+
 	.cs-sections-wrap .section-wrap .customer-section {
 		margin-bottom: 0;
 	}
+
 	.cs-sections-wrap .section-wrap .widefat td.no-items,
 	.cs-sections-wrap .section-wrap .widefat td.column-primary,
 	.cs-sections-wrap .section-wrap .widefat th.column-primary {
@@ -3178,46 +3143,32 @@ span.cs-to-and-from--separator {
 		overflow: hidden;
 		text-align: left;
 	}
+
 	.cs-sections-wrap .section-wrap .customer-id {
 		display: none;
 	}
+
 	#cs-item-tables-wrapper .emails td.column-primary {
 		padding-right: 10px;
 		width: 100% !important;
 	}
+
 	#cs-item-tables-wrapper .cs-form-group {
 		margin: 0 0 16px 0;
 	}
 }
+
 @media screen and ( max-width: 480px ) {
 	#cs-item-tab-wrapper-list li {
 		width: 50%;
 	}
+
 	#cs-item-tab-wrapper-list li:nth-child(3n+3) {
 		border-width: 0 1px 1px 0;
 	}
+
 	#cs-item-tab-wrapper-list li:nth-child(even) {
 		border-width: 0 0 1px 0;
-	}
-	.cs-repeatable-row-title,
-	.cs-repeatable-row-actions {
-		text-align: left;
-		width: 100%;
-	}
-	.cs-repeatable-row-title {
-		padding-bottom: 0;
-	}
-	.cs-repeatable-row-standard-fields,
-	.cs-bundled-product-row {
-		flex-wrap: wrap;
-	}
-	.cs-repeatable-row-standard-fields .cs-form-group,
-	.cs-bundled-product-row .cs-form-group {
-		margin-left: 0 !important;
-		margin-bottom: 24px;
-	}
-	.cs-bundled-product-row .cs-bundled-product-item-reorder .cs-product-file-reorder {
-		padding: 0;
 	}
 
 	.download_page_cs-reports .button {
@@ -3227,6 +3178,7 @@ span.cs-to-and-from--separator {
 	#cs-payment-date-filters span {
 		display: block;
 	}
+
 	#cs-payment-date-filters span > input {
 		float: right;
 	}
@@ -3295,6 +3247,7 @@ span.cs-to-and-from--separator {
 .recount-stats-controls form {
 	display: inline;
 }
+
 .cs-recount-stats-descriptions span {
 	display: none;
 	line-height: 24px;
@@ -3313,7 +3266,8 @@ span.cs-to-and-from--separator {
 	display: flex;
 }
 
-#cs-item-tab-wrapper, /** [1] */
+#cs-item-tab-wrapper,
+/** [1] */
 .cs-vertical-sections .section-nav {
 	position: relative;
 	width: 20%;
@@ -3326,11 +3280,13 @@ span.cs-to-and-from--separator {
 	max-width: 200px;
 }
 
-#cs-item-tab-wrapper-list { /** [1] */
+#cs-item-tab-wrapper-list {
+	/** [1] */
 	margin: 0;
 }
 
-#cs-item-tab-wrapper li, /** [1] */
+#cs-item-tab-wrapper li,
+/** [1] */
 .cs-vertical-sections .section-nav li {
 	display: block;
 	position: relative;
@@ -3343,8 +3299,10 @@ span.cs-to-and-from--separator {
 	margin-bottom: 24px;
 }
 
-#cs-item-tab-wrapper li a, /** [1] */
-#cs-item-tab-wrapper li > .cs-item-tab-label-wrap, /** [1] */
+#cs-item-tab-wrapper li a,
+/** [1] */
+#cs-item-tab-wrapper li>.cs-item-tab-label-wrap,
+/** [1] */
 .cs-vertical-sections .section-nav li a {
 	display: flex;
 	margin: 0;
@@ -3377,7 +3335,8 @@ span.cs-to-and-from--separator {
 	z-index: 3;
 }
 
-#cs-item-tab-wrapper li > .cs-item-tab-label-wrap { /** [1] */
+#cs-item-tab-wrapper li>.cs-item-tab-label-wrap {
+	/** [1] */
 	background-color: #fff;
 }
 
@@ -3492,7 +3451,8 @@ span.cs-to-and-from--separator {
 
 @media only screen and ( max-width: 782px ) {
 
-	#cs-item-tab-wrapper, /** [1] */
+	#cs-item-tab-wrapper,
+	/** [1] */
 	.cs-vertical-sections .section-nav {
 		width: 48px;
 	}
@@ -3500,6 +3460,7 @@ span.cs-to-and-from--separator {
 	.cs-vertical-sections .section-nav li a {
 		justify-content: center;
 	}
+
 	.cs-vertical-sections .section-nav li a .dashicons {
 		width: 24px;
 		height: 24px;
@@ -3513,7 +3474,8 @@ span.cs-to-and-from--separator {
 		height: 24px;
 	}
 
-	#cs-item-tab-wrapper .cs-item-tab-label, /** [1] */
+	#cs-item-tab-wrapper .cs-item-tab-label,
+	/** [1] */
 	.section-nav li .label {
 		overflow: hidden;
 		position: absolute;
@@ -3526,32 +3488,38 @@ span.cs-to-and-from--separator {
 
 /* Content wrapper */
 
-#cs-item-card-wrapper, /** [1] */
+#cs-item-card-wrapper,
+/** [1] */
 .cs-vertical-sections .section-wrap {
 	width: 80%;
 }
 
-#cs-item-card-wrapper .item-section { /** [1] */
+#cs-item-card-wrapper .item-section {
+	/** [1] */
 	background: #fff;
 	overflow: hidden;
 	box-sizing: border-box;
 }
 
-*:not(#cs-item-tab-wrapper) + #cs-item-card-wrapper .item-section { /** [1] */
+*:not(#cs-item-tab-wrapper)+#cs-item-card-wrapper .item-section {
+	/** [1] */
 	margin: 25px 0;
 	padding: 20px;
 	border: 1px solid #e5e5e5;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
-#cs-item-tab-wrapper + #cs-item-card-wrapper { /** [1] */
+#cs-item-tab-wrapper+#cs-item-card-wrapper {
+	/** [1] */
 	padding: 20px;
 	border-left: 1px solid #e5e5e5;
 	box-sizing: border-box;
 }
 
 @media only screen and ( min-width: 1200px ) {
-	#cs-item-card-wrapper, /** [1] */
+
+	#cs-item-card-wrapper,
+	/** [1] */
 	#cs-graphs-filter,
 	.cs-vertical-sections:not(.meta-box) .section-wrap {
 		width: calc( 100% - 200px );
@@ -3559,7 +3527,9 @@ span.cs-to-and-from--separator {
 }
 
 @media only screen and ( max-width: 782px ) {
-	#cs-item-card-wrapper, /** [1] */
+
+	#cs-item-card-wrapper,
+	/** [1] */
 	#cs-graphs-filter,
 	.cs-vertical-sections .section-wrap {
 		width: calc( 100% - 48px );
@@ -3743,88 +3713,4 @@ span.cs-to-and-from--separator {
 	text-align: right;
 	font-style: italic;
 	width: 150px;
-}
-
-/**
- * Forms
- * ---------------------------------------------------------- */
-
-/**
- * Form Group
- *
- * <div class="cs-form-group">
- *   <label class="cs-form-group__label">Label</label>
- *   <div class="cs-form-group__control">
- *   	<input type="text" class="cs-form-group__input" />
- *   </div>
- *   <p class="cs-form-group__help">Help</p>
- * </div>
- *
- *
- * <fieldset class="cs-form-group">
- *   <legend class="cs-form-group__label">Label</label>
- *
- *   <div class="cs-form-group__control">
- *   	<input type="radio" class="cs-form-group__input" />
- *   	<label>Radio 1</label>
- *   </div>
- *
- *   <div class="cs-form-group__control">
- *   	<input type="radio" class="cs-form-group__input" />
- *   	<label>Radio 2</label>
- *   </div>
- * </fieldset>
- *
- */
-.cs-form-group {
-	margin-bottom: 16px;
-}
-
-.cs-form-group:last-of-type {
-	margin-bottom: 0;
-}
-
-.cs-form-group__label {
-	display: block;
-	margin-bottom: 8px;
-	padding: 0;
-}
-
-.cs-form-group__control {
-	margin-bottom: 8px;
-}
-
-.cs-form-group__control.is-radio,
-.cs-form-group__control.is-check {
-	margin-top: 4px;
-}
-
-.cs-form-group__control:last-of-type {
-	margin-bottom: 0;
-}
-
-.cs-form-group__input {
-	max-width: 100%;
-}
-
-.cs-form-group__input[type="checkbox"],
-.cs-form-group__input[type="radio"] {
-	margin-top: 0;
-}
-
-.cs-form-group__input[type="checkbox"] + label,
-.cs-form-group__input[type="radio"] + label {
-	display: unset;
-}
-
-select.cs-form-group__input {
-	max-width: 100%;
-}
-
-.cs-form-group__help {
-	color: #666;
-	font-size: 13px;
-	font-style: italic;
-	line-height: initial;
-	margin: 8px 0 0;
 }

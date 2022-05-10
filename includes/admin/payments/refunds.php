@@ -185,7 +185,7 @@ function cs_refund_details_items( $refund ) {
 			'refunds'      => array(),
 			'isAdding'     => false,
 			'isRefund'     => true,
-			'hasQuantity'  => true === cs_item_quantities_enabled(),
+			'hasQuantity'  => true,
 			'hasTax'       => $has_tax,
 			'order'        => array(
 				'currency'       => $refund->currency,
@@ -221,9 +221,7 @@ function cs_refund_details_items( $refund ) {
 			<tr>
 				<th class="column-name column-primary"><?php echo esc_html( cs_get_label_singular() ); ?></th>
 				<th class="column-amount"><?php esc_html_e( 'Unit Price', 'commercestore' ); ?></th>
-				<?php if ( true === cs_item_quantities_enabled() ) : ?>
 				<th class="column-quantity"><?php esc_html_e( 'Quantity', 'commercestore' ); ?></th>
-				<?php endif; ?>
 				<th class="column-subtotal column-right"><?php esc_html_e( 'Amount', 'commercestore' ); ?></th>
 			</tr>
 		</thead>

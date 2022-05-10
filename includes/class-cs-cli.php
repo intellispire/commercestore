@@ -833,8 +833,8 @@ class CS_CLI extends WP_CLI_Command {
 		$this->migrate_logs( $args, $assoc_args );
 		$this->migrate_order_notes( $args, $assoc_args );
 		$this->migrate_customer_notes( $args, $assoc_args );
+		cs_v30_is_migration_complete();
 		$this->remove_legacy_data( $args, $assoc_args );
-
 	}
 
 	/**
@@ -1320,11 +1320,11 @@ class CS_CLI extends WP_CLI_Command {
 
 		if ( ! empty( $total ) ) {
 			$progress = new \cli\progress\Bar( 'Migrating Payments', $total );
-
+			$orders   = new \CS\Database\Queries\Order();
 			foreach ( $results as $result ) {
 
 				// Check if order has already been migrated.
-				$migrated = cs_get_order( $result->ID );
+				$migrated = $orders->get_item( $result->ID );
 				if ( $migrated ) {
 					continue;
 				}
@@ -1347,11 +1347,43 @@ class CS_CLI extends WP_CLI_Command {
 
 			cs_update_db_version();
 			cs_set_upgrade_complete( 'migrate_orders' );
+
+			$this->recalculate_download_sales_earnings();
 		} else {
 			WP_CLI::line( __( 'No payment records found.', 'commercestore' ) );
 			cs_set_upgrade_complete( 'migrate_orders' );
 			cs_set_upgrade_complete( 'remove_legacy_payments' );
 		}
+	}
+
+	/**
+	 * Recalculates the sales and earnings for all downloads.
+	 *
+	 * @since 3.0
+	 * @return void
+	 *
+	 * wp cs recalculate_download_sales_earnings
+	 */
+	public function recalculate_download_sales_earnings() {
+		global $wpdb;
+
+		$downloads = $wpdb->get_results(
+			"SELECT ID
+			FROM {$wpdb->posts}
+			WHERE post_type = 'download'
+			ORDER BY ID ASC"
+		);
+		$total     = count( $downloads );
+		if ( ! empty( $total ) ) {
+			$progress = new \cli\progress\Bar( 'Recalculating Download Sales and Earnings', $total );
+			foreach ( $downloads as $download ) {
+				cs_recalculate_download_sales_earnings( $download->ID );
+				$progress->tick();
+			}
+			$progress->finish();
+		}
+		WP_CLI::line( __( 'Sales and Earnings successfully recalculated for all downloads.', 'commercestore' ) );
+		WP_CLI::line( __( 'Downloads Updated: ', 'commercestore' ) . $total );
 	}
 
 	/**

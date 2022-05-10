@@ -691,6 +691,8 @@ final class CommerceStore {
 		require_once CS_PLUGIN_DIR . 'includes/orders/functions/adjustments.php';
 		require_once CS_PLUGIN_DIR . 'includes/orders/functions/transactions.php';
 		require_once CS_PLUGIN_DIR . 'includes/orders/functions/ui.php';
+		require_once CS_PLUGIN_DIR . 'includes/orders/functions/transitions.php';
+		require_once CS_PLUGIN_DIR . 'includes/orders/functions/statuses.php';
 
 		// Payments
 		require_once CS_PLUGIN_DIR . 'includes/payments/functions.php';
@@ -713,6 +715,9 @@ final class CommerceStore {
 
 		// Stats
 		require_once CS_PLUGIN_DIR . 'includes/class-stats.php';
+
+		// Downloads
+		require_once CS_PLUGIN_DIR . 'includes/models/Download.php';
 	}
 
 	/**

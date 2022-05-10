@@ -119,6 +119,7 @@ wp_enqueue_script( 'cs-admin-payments' );
 
 		wp_nonce_field( 'cs_update_payment_details_nonce' ); ?>
 		<input type="hidden" name="cs_payment_id" value="<?php echo esc_attr( $order->id ); ?>"/>
+
 		<input type="hidden" name="cs_action" value="update_payment_details"/>
 
 		<?php do_action( 'cs_view_order_details_after', $order->id ); ?>

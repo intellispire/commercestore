@@ -580,8 +580,8 @@ class Data_Migrator {
 		}
 
 		// Maybe convert the date completed to UTC or backfill the date_completed.
-		$non_completed_statuses = apply_filters( 'cs_30_noncomplete_statuses', array ( 'pending', 'cancelled', 'abandoned', 'processing' ) );
-		if ( ! in_array( $order_status, $non_completed_statuses ) ) {
+		$non_completed_statuses = apply_filters( 'cs_30_noncomplete_statuses', cs_get_incomplete_order_statuses() );
+		if ( ! in_array( $order_status, $non_completed_statuses, true ) ) {
 
 			if ( ! empty( $date_completed ) ) {  // Update the data_completed to the UTC.
 				try {
@@ -715,6 +715,8 @@ class Data_Migrator {
 
 		// Remove all order status transition actions.
 		remove_all_actions( 'cs_transition_order_status' );
+		remove_all_actions( 'cs_transition_order_item_status' );
+		remove_all_actions( 'cs_transition_order_adjustment_type' );
 
 		$order_id = cs_add_order( $order_data );
 

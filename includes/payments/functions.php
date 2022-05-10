@@ -253,73 +253,8 @@ function cs_undo_purchase( $download_id = 0, $order_id = 0 ) {
 		return false;
 	}
 
-	$payment = cs_get_payment( $order_id );
-
-	$cart_details = $payment->cart_details;
-	$user_info    = $payment->user_info;
-
 	// Refund the order.
-	$new_order_id = cs_refund_order( $order_id );
-
-	if ( is_array( $cart_details ) ) {
-
-		// Loop through each cart item.
-		foreach ( $cart_details as $item ) {
-
-			// Get the item's price.
-			$amount = isset( $item['price'] )
-				? $item['price']
-				: false;
-
-			// Decrease earnings/sales and fire action once per quantity number.
-			for ( $i = 0; $i < $item['quantity']; $i++ ) {
-
-				// Handle variable priced downloads.
-				if ( false === $amount && cs_has_variable_prices( $item['id'] ) ) {
-					$price_id = isset( $item['item_number']['options']['price_id'] )
-						? $item['item_number']['options']['price_id']
-						: null;
-
-					$amount = ! isset( $item['price'] ) && 0 !== $item['price']
-						? cs_get_price_option_amount( $item['id'], $price_id )
-						: $item['price'];
-				}
-
-				if ( ! $amount ) {
-					// This function is only used on payments with near 1.0 cart data structure.
-					$amount = cs_get_download_final_price( $item['id'], $user_info, $amount );
-				}
-			}
-
-			if ( ! empty( $item['fees'] ) ) {
-				foreach ( $item['fees'] as $fee ) {
-
-					// Only let negative fees affect the earnings.
-					if ( $fee['amount'] > 0 ) {
-						continue;
-					}
-
-					$amount += $fee['amount'];
-				}
-			}
-
-			$maybe_decrease_earnings = apply_filters( 'cs_decrease_earnings_on_undo', true, $payment, $item['id'] );
-			if ( true === $maybe_decrease_earnings ) {
-
-				// Decrease earnings.
-				cs_decrease_earnings( $item['id'], $amount );
-			}
-
-			$maybe_decrease_sales = apply_filters( 'cs_decrease_sales_on_undo', true, $payment, $item['id'] );
-			if ( true === $maybe_decrease_sales ) {
-
-				// Decrease purchase count.
-				cs_decrease_purchase_count( $item['id'], $item['quantity'] );
-			}
-		}
-	}
-
-	return $new_order_id;
+	return cs_refund_order( $order_id );
 }
 
 /**
@@ -1907,3 +1842,35 @@ function cs_filter_where_older_than_week( $where = '' ) {
 
 	return $where;
 }
+
+/**
+ * Gets the payment ID from the final cs_payment post.
+ * This was set as an option when the custom orders table was created.
+ * For internal use only.
+ *
+ * @todo deprecate in 3.1
+ *
+ * @since 3.0
+ * @return false|int
+ */
+function _cs_get_final_payment_id() {
+	return get_option( 'cs_v3_migration_pending', false );
+}
+
+/**
+ * Maybe adds a migration in progress notice to the order history.
+ *
+ * @todo remove in 3.1
+ * @since 3.0
+ * @return void
+ */
+add_action( 'cs_pre_order_history', function( $orders, $user_id ) {
+	if ( ! _cs_get_final_payment_id() ) {
+		return;
+	}
+	?>
+	<p class="cs-notice">
+		<?php esc_html_e( 'A store migration is in progress. Past orders will not appear in your purchase history until they have been updated.', 'commercestore' ); ?>
+	</p>
+	<?php
+}, 10, 2 );

@@ -1,0 +1,28 @@
+***************
+*** 164,182 ****
+  		$this->assertFalse( cs_get_payment_status( 1212121212121 ) );
+  	}
+  
+- 	public function test_get_payment_status_translated() {
+- 		add_filter( 'locale', function() { return 'fr_FR'; }, 10 );
+- 		$lang_file = CS_PLUGIN_DIR . 'languages/commercestore-fr_FR.mo';
+- 		load_textdomain( 'commercestore', $lang_file );
+- 		$this->assertEquals( 'pending', cs_get_payment_status( self::$payment->ID ) );
+- 		$payment = new \CS_Payment( self::$payment->ID );
+- 		$this->assertEquals( 'En attente', cs_get_payment_status_label( $payment->post_status ) );
+- 		$this->assertEquals( 'pending', cs_get_payment_status( $payment ) );
+- 		$this->assertFalse( cs_get_payment_status( 1212121212121 ) );
+- 		remove_filter( 'locale', function() { return 'fr_FR'; }, 10 );
+- 		unload_textdomain( 'commercestore' );
+- 	}
+- 
+  	public function test_get_payment_status_label() {
+  		$this->assertEquals( 'Pending', cs_get_payment_status( self::$payment->ID, true ) );
+  
+--- 164,169 ----
+  		$this->assertFalse( cs_get_payment_status( 1212121212121 ) );
+  	}
+  
+  	public function test_get_payment_status_label() {
+  		$this->assertEquals( 'Pending', cs_get_payment_status( self::$payment->ID, true ) );
+  

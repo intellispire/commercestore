@@ -909,6 +909,16 @@ class CS_Payment_History_Table extends List_Table {
 			$args['region'] = $region;
 		}
 
+		/**
+		 * Filters array of arguments for getting orders for the list table, counts, and pagination.
+		 *
+		 * @since 3.0
+		 *
+		 * @param array  $args Array of arguments to use for querying orders.
+		 * @param bool   $paginate $paginate Whether to add pagination arguments
+		 */
+		$args = apply_filters( 'cs_payments_table_parse_args', $args, $paginate );
+
 		// Return args, possibly with pagination
 		return ( true === $paginate )
 			? $this->parse_pagination_args( $args )

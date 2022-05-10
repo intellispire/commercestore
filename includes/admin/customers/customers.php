@@ -117,6 +117,11 @@ function cs_customers_sections( $customer ) {
 	$tabs  = cs_customer_tabs();
 	$views = cs_customer_views();
 
+	// Do not display the addresses tab if there are none.
+	if ( empty( $customer->get_addresses() ) ) {
+		unset( $tabs['addresses'] );
+	}
+
 	// Loop through tabs & setup sections
 	if ( ! empty( $tabs ) ) {
 		foreach ( $tabs as $id => $tab ) {
@@ -430,16 +435,6 @@ function cs_customers_view( $customer = null ) {
 		? $address['region']
 		: $selected_state;
 
-	// Email addresses
-	$all_emails = cs_get_customer_email_addresses( array(
-		'customer_id' => $customer->id,
-		'orderby'     => 'type', // to put `primary` email first
-		'order'       => 'ASC'
-	) );
-
-	// Physical addresses
-	$addresses = $customer->get_addresses();
-
 	// Orders
 	// Orders and refunds.
 	$orders = cs_get_orders( array(
@@ -709,96 +704,137 @@ function cs_customers_view( $customer = null ) {
 
 		<?php do_action( 'cs_customer_before_tables', $customer ); ?>
 
-		<h3><?php esc_html_e( 'Customer Addresses', 'commercestore' ); ?></h3>
+		<h3><?php _e( 'Recent Orders', 'commercestore' ); ?></h3>
+		<table class="wp-list-table widefat striped customer-payments">
+			<thead>
+			<tr>
+				<th class="column-primary"><?php _e( 'Number', 'commercestore' ); ?></th>
+				<th><?php _e( 'Gateway', 'commercestore' ); ?></th>
+				<th><?php _e( 'Total', 'commercestore' ); ?></th>
+				<th><?php _e( 'Date', 'commercestore' ); ?></th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php if ( ! empty( $orders ) ) :
+				foreach ( $orders as $order ) :
+					$state  = '';
 
-		<div class="notice-wrap"></div>
+					// State
+					if ( 'complete' !== $order->status ) {
+						$state = ' &mdash; ' . cs_get_payment_status_label( $order->status );
+					}
 
-		<table class="wp-list-table widefat striped addresses">
+					// View URL
+					$view_url = cs_get_admin_url( array(
+						'page' => 'cs-payment-history',
+						'view' => 'view-order-details',
+						'id'   => $order->id,
+					) );
+
+					$link = '<strong><a class="row-title" href="' . esc_url( $view_url ) . '">' . esc_html( $order->get_number() ) . '</a>' . esc_html( $state ) . '</strong>'; ?>
+
+					<tr>
+						<td class="column-primary"><strong><?php echo $link; ?></strong></td>
+						<td><?php echo cs_get_gateway_admin_label( $order->gateway ); ?></td>
+						<td><?php echo cs_currency_filter( cs_format_amount( $order->total ), $order->currency ); ?></td>
+						<td><time datetime="<?php echo esc_attr( CS()->utils->date( $order->date_created, null, true )->toDateTimeString() ); ?>"><?php echo cs_date_i18n( CS()->utils->date( $order->date_created, null, true )->toDateTimeString(), 'M. d, Y' ) . '<br>' . cs_date_i18n( strtotime( $order->date_created ), 'H:i' ) . ' ' . cs_get_timezone_abbr(); ?></time></td>
+					</tr>
+
+				<?php endforeach;
+			else: ?>
+				<tr><td colspan="5" class="no-items"><?php esc_html_e( 'No orders found', 'commercestore' ); ?></td></tr>
+			<?php endif; ?>
+			</tbody>
+		</table>
+
+		<h3><?php _e( 'Recent Refunds', 'commercestore' ); ?></h3>
+		<table class="wp-list-table widefat striped customer-payments">
 			<thead>
 				<tr>
-					<th class="column-primary"><?php esc_html_e( 'Address',     'commercestore' ); ?></th>
-					<th><?php esc_html_e( 'City',        'commercestore' ); ?></th>
-					<th><?php esc_html_e( 'Region',      'commercestore' ); ?></th>
-					<th><?php esc_html_e( 'Postal Code', 'commercestore' ); ?></th>
-					<th><?php esc_html_e( 'Country',     'commercestore' ); ?></th>
-					<th><?php esc_html_e( 'First Used',  'commercestore' ); ?></th>
+				<th class="column-primary"><?php _e( 'Number', 'commercestore' ); ?></th>
+				<th><?php _e( 'Gateway', 'commercestore' ); ?></th>
+				<th><?php _e( 'Total', 'commercestore' ); ?></th>
+				<th><?php _e( 'Date', 'commercestore' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
-			<?php if ( ! empty( $addresses ) ) :
+			<?php if ( ! empty( $refunds ) ) :
+				foreach ( $refunds as $refund ) :
+					// View URL
+					$view_url = cs_get_admin_url( array(
+						'page' => 'cs-payment-history',
+						'view' => 'view-refund-details',
+						'id'   => $refund->id,
+					) );
 
-				foreach ( $addresses as $address ) :
-					$delete_url = wp_nonce_url( cs_get_admin_url( array(
-							'page'       => 'cs-customers',
-							'view'       => 'overview',
-							'id'         => urlencode( $address->id ),
-							'cs_action' => 'customer-remove-address'
-					) ), 'cs-remove-customer-address' );
-					?>
+					$link = '<a class="row-title" href="' . esc_url( $view_url ) . '">' . esc_html( $refund->order_number ) . '</a>'; ?>
 
-					<tr data-id="<?php echo esc_attr( $address->id ); ?>">
-						<td data-colname="<?php esc_attr_e( 'Address', 'commercestore' ); ?>">
-							<?php
-							echo ! empty( $address->address )
-								? esc_html( $address->address )
-								: '&mdash;';
+					<tr>
+						<td class="column-primary"><strong><?php echo $link; ?></strong></td>
+						<td><?php echo cs_get_gateway_admin_label( $refund->gateway ); ?></td>
+						<td><?php echo cs_currency_filter( cs_format_amount( $refund->total ), $refund->currency ); ?></td>
+						<td><time datetime="<?php echo esc_attr( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString() ); ?>"><?php echo cs_date_i18n( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString(), 'M. d, Y' ) . '<br>' . cs_date_i18n( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString(), 'H:i' ); ?> <?php echo esc_html( cs_get_timezone_abbr() ); ?></time></td>
+					</tr>
 
-							echo ! empty( $address->address2 )
-								? esc_html( $address->address2 )
-								: '';
-							?>
-						</td>
-						<td data-colname="<?php esc_attr_e( 'City', 'commercestore' ); ?>">
-							<?php
-							echo ! empty( $address->city )
-								? esc_html( $address->city )
-								: '&mdash;';
-							?>
-						</td>
-						<td data-colname="<?php esc_attr_e( 'Region', 'commercestore' ); ?>">
-							<?php
-							echo ! empty( $address->region )
-								? esc_html( cs_get_state_name( $address->country, $address->region ) )
-								: '&mdash;';
-							?>
-						</td>
-						<td data-colname="<?php esc_attr_e( 'Postal Code', 'commercestore' ); ?>">
-							<?php
-							echo ! empty( $address->postal_code )
-								? esc_html( $address->postal_code )
-								: '&mdash;';
-							?>
-						</td>
-						<td data-colname="<?php esc_attr_e( 'Country', 'commercestore' ); ?>">
-							<?php
-							echo ! empty( $address->country )
-								? esc_html( cs_get_country_name( $address->country ) )
-								: '&mdash;';
-							?>
-						</td>
-						<td class="has-row-actions" data-colname="<?php esc_attr_e( 'First Used', 'commercestore' ); ?>">
-							<time datetime="<?php echo esc_attr( CS()->utils->date( $address->date_created, null, true )->toDateTimeString() ); ?>"><?php echo cs_date_i18n( CS()->utils->date( $address->date_created, null, true )->toDateTimeString(), 'M. d, Y' ) . '<br>' . cs_date_i18n( strtotime( $address->date_created ), 'H:i' ) . ' ' . cs_get_timezone_abbr(); ?></time>
-							<?php if ( ! empty( $address->is_primary ) ) : ?>
-								<span class="cs-chip"><?php esc_html_e( 'Primary', 'commercestore' ); ?></span>
+				<?php endforeach;
+			else: ?>
+				<tr><td colspan="5" class="no-items"><?php esc_html_e( 'No refunds found', 'commercestore' ); ?></td></tr>
 							<?php endif; ?>
-							<div class="row-actions">
-								<span class="delete"><a href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete', 'commercestore' ); ?></a></span>
-							</div>
-						</td>
+			</tbody>
+		</table>
+
+		<h3><?php printf( __( 'Purchased %s', 'commercestore' ), cs_get_label_plural() ); ?></h3>
+		<table class="wp-list-table widefat striped customer-downloads">
+			<thead>
+				<tr>
+					<th class="column-primary"><?php echo cs_get_label_singular(); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if ( ! empty( $downloads ) ) : ?>
+
+					<?php foreach ( $downloads as $download ) : ?>
+
+						<tr>
+							<td class="column-primary"><strong><a href="<?php echo esc_url( admin_url( 'post.php?action=edit&post=' . $download->ID ) ); ?>"><?php echo esc_html( $download->post_title ); ?></a></strong></td>
 					</tr>
 
 				<?php endforeach; ?>
 
 			<?php else : ?>
 
-				<tr>
-					<td class="no-items" colspan="6"><?php esc_html_e( 'No addresses found.', 'commercestore' ); ?></td>
-				</tr>
+					<tr><td class="no-items"><?php printf( __( 'No %s Found', 'commercestore' ), cs_get_label_plural() ); ?></td></tr>
 
 			<?php endif; ?>
 			</tbody>
 		</table>
 
+		<?php do_action( 'cs_customer_after_tables', $customer ); ?>
+
+	</div>
+
+	<?php do_action( 'cs_customer_card_bottom', $customer ); ?>
+
+	<?php
+}
+
+/**
+ * Displays the customer's email addresses.
+ *
+ * @since 3.0
+ * @param \CS_Customer $customer The customer object.
+ * @return void
+ */
+function cs_customers_emails_view( $customer ) {
+	// Email addresses
+	$all_emails = cs_get_customer_email_addresses( array(
+		'customer_id' => $customer->id,
+		'orderby'     => 'type', // to put `primary` email first
+		'order'       => 'ASC'
+	) );
+	?>
+	<div class="info-wrapper customer-section">
+		<?php cs_render_customer_details_header( $customer ); ?>
 		<h3>
 			<?php esc_html_e( 'Customer Emails', 'commercestore' ); ?>
 			<span alt="f223" class="cs-help-tip dashicons dashicons-editor-help" title="<?php esc_html_e( 'This customer can use any of the emails listed here when making new purchases.', 'commercestore' ); ?>"></span>
@@ -864,7 +900,11 @@ function cs_customers_view( $customer = null ) {
 					</tr>
 
 				<?php endforeach; ?>
+			<?php else : ?>
 
+				<tr><td colspan="2"><?php esc_html_e( 'No emails found.', 'commercestore' ); ?></td></tr>
+
+			<?php endif; ?>
 				<tr class="add-customer-email-row">
 					<td colspan="2">
 						<div class="add-customer-email-wrapper">
@@ -887,126 +927,110 @@ function cs_customers_view( $customer = null ) {
 						</div>
 					</td>
 				</tr>
-
-			<?php else : ?>
-
-				<tr><td colspan="2"><?php esc_html_e( 'No emails found.', 'commercestore' ); ?></td></tr>
-
-			<?php endif; ?>
 			</tbody>
 		</table>
-
-		<h3><?php _e( 'Recent Orders', 'commercestore' ); ?></h3>
-		<table class="wp-list-table widefat striped customer-payments">
-			<thead>
-			<tr>
-				<th class="column-primary"><?php _e( 'Number', 'commercestore' ); ?></th>
-				<th><?php _e( 'Gateway', 'commercestore' ); ?></th>
-				<th><?php _e( 'Total', 'commercestore' ); ?></th>
-				<th><?php _e( 'Date', 'commercestore' ); ?></th>
-			</tr>
-			</thead>
-			<tbody>
-			<?php if ( ! empty( $orders ) ) :
-				foreach ( $orders as $order ) :
-					$state  = '';
-
-					// State
-					if ( 'complete' !== $order->status ) {
-						$state = ' &mdash; ' . cs_get_payment_status_label( $order->status );
+	</div>
+	<?php
 					}
 
-					// View URL
-					$view_url = cs_get_admin_url( array(
-						'page' => 'cs-payment-history',
-						'view' => 'view-order-details',
-						'id'   => $order->id,
-					) );
+/**
+ * Displays the customer's physical addresses.
+ *
+ * @since 3.0
+ * @param \CS_Customer $customer The customer object.
+ * @return void
+ */
+function cs_customers_addresses_view( $customer ) {
 
-					$link = '<strong><a class="row-title" href="' . esc_url( $view_url ) . '">' . esc_html( $order->get_number() ) . '</a>' . esc_html( $state ) . '</strong>'; ?>
+	$addresses = $customer->get_addresses();
+	// This has already been checked when setting the tabs.
+	if ( empty( $addresses ) ) {
+		return;
+	}
+	?>
+	<div class="info-wrapper customer-section">
+		<?php cs_render_customer_details_header( $customer ); ?>
+		<h3><?php esc_html_e( 'Customer Addresses', 'commercestore' ); ?></h3>
 
-					<tr>
-						<td class="column-primary"><strong><?php echo $link; ?></strong></td>
-						<td><?php echo cs_get_gateway_admin_label( $order->gateway ); ?></td>
-						<td><?php echo cs_currency_filter( cs_format_amount( $order->total ), $order->currency ); ?></td>
-						<td><time datetime="<?php echo esc_attr( CS()->utils->date( $order->date_created, null, true )->toDateTimeString() ); ?>"><?php echo cs_date_i18n( CS()->utils->date( $order->date_created, null, true )->toDateTimeString(), 'M. d, Y' ) . '<br>' . cs_date_i18n( strtotime( $order->date_created ), 'H:i' ) . ' ' . cs_get_timezone_abbr(); ?></time></td>
-					</tr>
+		<div class="notice-wrap"></div>
 
-				<?php endforeach;
-			else: ?>
-				<tr><td colspan="5" class="no-items"><?php esc_html_e( 'No orders found', 'commercestore' ); ?></td></tr>
-			<?php endif; ?>
-			</tbody>
-		</table>
-
-		<h3><?php _e( 'Recent Refunds', 'commercestore' ); ?></h3>
-		<table class="wp-list-table widefat striped customer-payments">
+		<table class="wp-list-table widefat striped addresses">
 			<thead>
 			<tr>
-				<th class="column-primary"><?php _e( 'Number', 'commercestore' ); ?></th>
-				<th><?php _e( 'Gateway', 'commercestore' ); ?></th>
-				<th><?php _e( 'Total', 'commercestore' ); ?></th>
-				<th><?php _e( 'Date', 'commercestore' ); ?></th>
+					<th class="column-primary"><?php esc_html_e( 'Address', 'commercestore' ); ?></th>
+					<th><?php esc_html_e( 'City', 'commercestore' ); ?></th>
+					<th><?php esc_html_e( 'Region', 'commercestore' ); ?></th>
+					<th><?php esc_html_e( 'Postal Code', 'commercestore' ); ?></th>
+					<th><?php esc_html_e( 'Country', 'commercestore' ); ?></th>
+					<th><?php esc_html_e( 'First Used', 'commercestore' ); ?></th>
 			</tr>
 			</thead>
 			<tbody>
-			<?php if ( ! empty( $refunds ) ) :
-				foreach ( $refunds as $refund ) :
-					// View URL
-					$view_url = cs_get_admin_url( array(
-						'page' => 'cs-payment-history',
-						'view' => 'view-refund-details',
-						'id'   => $refund->id,
-					) );
+				<?php
+				foreach ( $addresses as $address ) :
+					$delete_url = wp_nonce_url( cs_get_admin_url( array(
+						'page'       => 'cs-customers',
+						'view'       => 'overview',
+						'id'         => urlencode( $address->id ),
+						'cs_action' => 'customer-remove-address',
+					) ), 'cs-remove-customer-address' );
+					?>
 
-					$link = '<a class="row-title" href="' . esc_url( $view_url ) . '">' . esc_html( $refund->order_number ) . '</a>'; ?>
+					<tr data-id="<?php echo esc_attr( $address->id ); ?>">
+						<td data-colname="<?php esc_attr_e( 'Address', 'commercestore' ); ?>">
+							<?php
+							echo ! empty( $address->address )
+								? esc_html( $address->address )
+								: '&mdash;';
 
-					<tr>
-						<td class="column-primary"><strong><?php echo $link; ?></strong></td>
-						<td><?php echo cs_get_gateway_admin_label( $refund->gateway ); ?></td>
-						<td><?php echo cs_currency_filter( cs_format_amount( $refund->total ), $refund->currency ); ?></td>
-						<td><time datetime="<?php echo esc_attr( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString() ); ?>"><?php echo cs_date_i18n( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString(), 'M. d, Y' ) . '<br>' . cs_date_i18n( CS()->utils->date( $refund->date_created, null, true )->toDateTimeString(), 'H:i' ); ?> <?php echo esc_html( cs_get_timezone_abbr() ); ?></time></td>
-					</tr>
-
-				<?php endforeach;
-			else: ?>
-				<tr><td colspan="5" class="no-items"><?php esc_html_e( 'No refunds found', 'commercestore' ); ?></td></tr>
+							echo ! empty( $address->address2 )
+								? esc_html( $address->address2 )
+								: '';
+							?>
+						</td>
+						<td data-colname="<?php esc_attr_e( 'City', 'commercestore' ); ?>">
+							<?php
+							echo ! empty( $address->city )
+								? esc_html( $address->city )
+								: '&mdash;';
+							?>
+						</td>
+						<td data-colname="<?php esc_attr_e( 'Region', 'commercestore' ); ?>">
+							<?php
+							echo ! empty( $address->region )
+								? esc_html( cs_get_state_name( $address->country, $address->region ) )
+								: '&mdash;';
+							?>
+						</td>
+						<td data-colname="<?php esc_attr_e( 'Postal Code', 'commercestore' ); ?>">
+							<?php
+							echo ! empty( $address->postal_code )
+								? esc_html( $address->postal_code )
+								: '&mdash;';
+							?>
+						</td>
+						<td data-colname="<?php esc_attr_e( 'Country', 'commercestore' ); ?>">
+							<?php
+							echo ! empty( $address->country )
+								? esc_html( cs_get_country_name( $address->country ) )
+								: '&mdash;';
+							?>
+						</td>
+						<td class="has-row-actions" data-colname="<?php esc_attr_e( 'First Used', 'commercestore' ); ?>">
+							<time datetime="<?php echo esc_attr( CS()->utils->date( $address->date_created, null, true )->toDateTimeString() ); ?>"><?php echo cs_date_i18n( CS()->utils->date( $address->date_created, null, true )->toDateTimeString(), 'M. d, Y' ) . '<br>' . cs_date_i18n( strtotime( $address->date_created ), 'H:i' ) . ' ' . cs_get_timezone_abbr(); ?></time>
+							<?php if ( ! empty( $address->is_primary ) ) : ?>
+								<span class="cs-chip"><?php esc_html_e( 'Primary', 'commercestore' ); ?></span>
 			<?php endif; ?>
-			</tbody>
-		</table>
-
-		<h3><?php printf( __( 'Purchased %s', 'commercestore' ), cs_get_label_plural() ); ?></h3>
-		<table class="wp-list-table widefat striped customer-downloads">
-			<thead>
-				<tr>
-					<th class="column-primary"><?php echo cs_get_label_singular(); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if ( ! empty( $downloads ) ) : ?>
-
-					<?php foreach ( $downloads as $download ) : ?>
-
-						<tr>
-							<td class="column-primary"><strong><a href="<?php echo esc_url( admin_url( 'post.php?action=edit&post=' . $download->ID ) ); ?>"><?php echo esc_html( $download->post_title ); ?></a></strong></td>
+							<div class="row-actions">
+								<span class="delete"><a href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete', 'commercestore' ); ?></a></span>
+							</div>
+						</td>
 						</tr>
 
 					<?php endforeach; ?>
-
-				<?php else: ?>
-
-					<tr><td class="no-items"><?php printf( __( 'No %s Found', 'commercestore' ), cs_get_label_plural() ); ?></td></tr>
-
-				<?php endif; ?>
 			</tbody>
 		</table>
-
-		<?php do_action( 'cs_customer_after_tables', $customer ); ?>
-
 	</div>
-
-	<?php do_action( 'cs_customer_card_bottom', $customer ); ?>
-
 	<?php
 }
 
@@ -1031,9 +1055,7 @@ function cs_customer_notes_view( $customer ) {
 	); ?>
 
 	<div id="cs-item-notes-wrapper">
-		<div class="cs-item-header-small">
-			<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo esc_html( $customer->name ); ?></span>
-		</div>
+		<?php cs_render_customer_details_header( $customer ); ?>
 		<h3><?php esc_html_e( 'Notes', 'commercestore' ); ?></h3>
 
 		<?php echo cs_admin_get_notes_pagination( $args ); ?>
@@ -1064,10 +1086,7 @@ function cs_customers_delete_view( $customer ) {
 
 		<form id="delete-customer" method="post" action="<?php echo admin_url( 'edit.php?post_type=download&page=cs-customers&view=delete&id=' . $customer->id ); ?>">
 
-			<div class="cs-item-header-small">
-				<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
-			</div>
-
+			<?php cs_render_customer_details_header( $customer ); ?>
 			<h3><?php esc_html_e( 'Delete', 'commercestore' ); ?></h3>
 
 			<div class="delete-customer">
@@ -1112,10 +1131,7 @@ function cs_customer_tools_view( $customer ) {
 	do_action( 'cs_customer_tools_top', $customer ); ?>
 
 	<div id="cs-item-tools-wrapper">
-		<div class="cs-item-header-small">
-			<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
-		</div>
-
+		<?php cs_render_customer_details_header( $customer ); ?>
 		<h3><?php _e( 'Tools', 'commercestore' ); ?></h3>
 
 		<div class="cs-item-info">

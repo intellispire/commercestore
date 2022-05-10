@@ -551,7 +551,7 @@ class Test_Misc extends CS_UnitTestCase {
 	 * @covers ::cs_get_symlink_dir
 	 */
 	public function test_get_symlink_url() {
-		$this->assertEquals( 'http://example.org/wp-content/uploads/commercestore/symlinks', cs_get_symlink_url() );
+		$this->assertEquals( 'http://example.org/wp-content/uploads/cs/symlinks', cs_get_symlink_url() );
 	}
 
 	public function test_use_skus() {
@@ -835,9 +835,9 @@ class Test_Misc extends CS_UnitTestCase {
 	}
 
 	function test_should_allow_file_download_cs_uploaded_file_url() {
-		$file_details   = array ( 'scheme' => 'https', 'host' => site_url(), 'path' => '/wp-content/uploads/commercestore/2019/04/test-file.jpg' );
+		$file_details   = array ( 'scheme' => 'https', 'host' => site_url(), 'path' => '/wp-content/uploads/cs/2019/04/test-file.jpg' );
 		$schemas        = array ( 0 => 'http', 1 => 'https' );
-		$requested_file = trailingslashit( site_url() ) . 'wp-content/uploads/commercestore/2019/04/test-file.jpg';
+		$requested_file = trailingslashit( site_url() ) . 'wp-content/uploads/cs/2019/04/test-file.jpg';
 
 		$this->assertTrue( cs_local_file_location_is_allowed( $file_details, $schemas, $requested_file ) );
 	}
